@@ -22,11 +22,12 @@
     .section {
         margin-top: 40px;
         padding: 20px;
+        font-size: 20px;
         border-top: 1px solid #ccc;
     }
 
     .section h3 {
-        font-size: 24px;
+        font-size: 20px;
         margin-bottom: 12px;
         text-align: center;
         border-bottom: 2px dashed #ccc;
@@ -81,18 +82,38 @@
         .word { font-size: 20px; }
         .popup-content { font-size: 13px; }
     }
+    .submit-btn {
+    background-color: #0a4d68;
+    color: #fff;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .submit-btn:hover {
+    background-color: #2ca7d8;
+    transform: translateY(-1px);
+    }
+
+    .submit-btn:active {
+    transform: scale(0.98);
+    }
+
     .small-placeholder::placeholder {
     font-size: 10px;
     color: #888;
-}
+    }
 
 </style>
 </head>
 <body>
 
-<div class="navbar">
-    🕌 Quran Ayah Explorer
-</div>
+
 
 
 <div class="section">
@@ -340,23 +361,32 @@
 </div></div>
 <div class="section">
     <h3>🌍 English Translation</h3>
-    <p class="ayah-english">And give good tidings to those who believe and do righteous deeds that they will have gardens [in Paradise] beneath which rivers flow. Whenever they are provided with a provision of fruit therefrom, they will say, &quot;This is what we were provided with before.&quot; And it is given to them in likeness. And they will have therein purified spouses, and they will abide therein eternally.</p>
+    <p class="ayah-english" style="text-align: center; direction: rtl;">And give good tidings to those who believe and do righteous deeds that they will have gardens [in Paradise] beneath which rivers flow. Whenever they are provided with a provision of fruit therefrom, they will say, &quot;This is what we were provided with before.&quot; And it is given to them in likeness. And they will have therein purified spouses, and they will abide therein eternally.</p>
 </div>
 
-        <div class="section"><h3>🎧 Listen to Ayah</h3>
-<div style="text-align: center; margin-top: 10px;">
-    <audio controls style="width: 300px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
-        <source src="https://verses.quran.com/Alafasy/mp3/002025.mp3" type="audio/mpeg">
-        Your browser does not support audio.
-    </audio>
+        <div class="section">
+    <h3>🎧 Listen to Ayah</h3>
+    <div style="text-align: center; margin-top: 10px;">
+        <audio id="ayahAudio" controls style="width: 300px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+            <source src="https://verses.quran.com/Alafasy/mp3/002025.mp3" type="audio/mpeg">
+            Your browser does not support audio.
+        </audio>
+
+        <div style="margin-top: 15px;">
+            <label for="repeatCount" style="font-weight: bold;">🔁 Repeat:</label>
+            <input type="number" id="repeatCount" min="1" max="20" value="1"
+                   style="width: 60px; padding: 6px 8px; margin: 0 10px; border-radius: 5px; border: 1px solid #ccc;">
+            <button onclick="playRepeated()" class="submit-btn">▶️ Play</button>
+        </div>
+    </div>
 </div>
-</div>
+
  <div class="section"><h3>✍️ Write the Arabic Word (Practice Mode)</h3></div>
 <div style="font-size:18px; line-height: 2;">
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="wabashiri"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">And give good news</div>
         <div class="translation">Resumption Part+Verb</div>
@@ -368,7 +398,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="alladhīna"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">(to) those who</div>
         <div class="translation">Rel. Pronoun</div>
@@ -380,7 +410,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="āmanū"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">believe</div>
         <div class="translation">Verb+Pron.</div>
@@ -392,7 +422,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="waʿamilū"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">and do</div>
         <div class="translation">Conj.+Verb+Pron.</div>
@@ -404,7 +434,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="l-ṣāliḥāti"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">[the] righteous deeds</div>
         <div class="translation">Al++Noun</div>
@@ -416,7 +446,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="anna"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">that</div>
         <div class="translation">Accusative Part</div>
@@ -428,7 +458,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="lahum"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">for them</div>
         <div class="translation">Preposition+Pron.</div>
@@ -440,7 +470,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="jannātin"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">(will be) Gardens</div>
         <div class="translation">Noun</div>
@@ -452,7 +482,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="tajrī"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">flow</div>
         <div class="translation">Verb</div>
@@ -464,7 +494,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="min"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">[from]</div>
         <div class="translation">Preposition</div>
@@ -476,7 +506,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="taḥtihā"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">under them</div>
         <div class="translation">Noun+Pron.</div>
@@ -488,7 +518,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="l-anhāru"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">the rivers</div>
         <div class="translation">Al++Noun</div>
@@ -500,7 +530,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="kullamā"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">Every time</div>
         <div class="translation">Time Adverb</div>
@@ -512,7 +542,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="ruziqū"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">they are provided</div>
         <div class="translation">Verb+Pron.</div>
@@ -524,7 +554,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="min&#x27;hā"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">therefrom</div>
         <div class="translation">Preposition+Pron.</div>
@@ -536,7 +566,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="min"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">of</div>
         <div class="translation">Preposition</div>
@@ -548,7 +578,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="thamaratin"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">fruit</div>
         <div class="translation">Noun</div>
@@ -560,7 +590,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="riz&#x27;qan"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">(as) provision</div>
         <div class="translation">Noun</div>
@@ -572,7 +602,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="qālū"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">they (will) say</div>
         <div class="translation">Verb+Pron.</div>
@@ -584,7 +614,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="hādhā"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">This (is)</div>
         <div class="translation">Demonstrative</div>
@@ -596,7 +626,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="alladhī"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">the one which</div>
         <div class="translation">Rel. Pronoun</div>
@@ -608,7 +638,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="ruziq&#x27;nā"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">we were provided</div>
         <div class="translation">Verb+Pron.</div>
@@ -620,7 +650,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="min"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">from</div>
         <div class="translation">Preposition</div>
@@ -632,7 +662,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="qablu"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">before</div>
         <div class="translation">Noun</div>
@@ -644,7 +674,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="wa-utū"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">And they will be given</div>
         <div class="translation">Resumption Part+Verb+Pron.</div>
@@ -656,7 +686,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="bihi"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">therefrom</div>
         <div class="translation">Preposition+Pron.</div>
@@ -668,7 +698,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="mutashābihan"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">(things) in resemblance</div>
         <div class="translation">Noun</div>
@@ -680,7 +710,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="walahum"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">And for them</div>
         <div class="translation">Resumption Part+Preposition+Pron.</div>
@@ -692,7 +722,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="fīhā"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">therein</div>
         <div class="translation">Preposition+Pron.</div>
@@ -704,7 +734,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="azwājun"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">spouses</div>
         <div class="translation">Noun</div>
@@ -716,7 +746,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="muṭahharatun"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">purified</div>
         <div class="translation">Adj</div>
@@ -728,7 +758,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="wahum"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">and they</div>
         <div class="translation">Circumstantial Part+Pron.</div>
@@ -740,7 +770,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="fīhā"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">therein</div>
         <div class="translation">Preposition+Pron.</div>
@@ -752,7 +782,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="khālidūna"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">(will) abide forever</div>
         <div class="translation">Noun</div>
@@ -764,11 +794,16 @@
 
 </div>
 
-<br>
-<button onclick="clearTranslitInputs()" style="margin-top: 10px; background-color:#eee;">🧹 Clear All Inputs</button>
+<div style="display: flex; justify-content: center; gap: 16px; margin-top: 20px;">
+    <button class="submit-btn" onclick="clearTranslitInputs()" style="background-color:#eee; color: #333;">
+        🧹 Clear All Inputs
+    </button>
 
-<br>
-<button onclick="alert('✅ Submission received. Great job!')">Submit</button>
+    <button class="submit-btn" onclick="alert('✅ Submission received. Great job!')">
+        ✅ Submit
+    </button>
+</div>
+
 
 <div class="overlay" id="overlay" onclick="hidePopup()"></div>
 <div class="popup-content" id="popupContent"></div>
@@ -780,7 +815,7 @@ function showPopup(data) {
     let html = "<h3>📌 Morphology Info</h3>";
 
     for (let key in data) {
-        if (typeof data[key] === "string" && data[key].length < 200 && key !== "CAMeL Explanation") {
+        if (typeof data[key] === "string" && data[key].length < 200 && key !== "CAMeL Explanation" && key !== "Audio URL") {
             html += `<b>${key}:</b> ${data[key]}<br/>`;
             if (key === "Buckwalter Transliteration" && data["Explanation"]) {
                 html += `<i>${data["Explanation"]}</i><br/>`;
@@ -819,6 +854,24 @@ function playAudio(url) {
     const audio = new Audio("https://verses.quran.com/" + url);
     audio.play();
 }
+
+function playRepeated() {
+    const audio = document.getElementById('ayahAudio');
+    const repeatCount = parseInt(document.getElementById('repeatCount').value || 1);
+    let currentCount = 0;
+
+    audio.currentTime = 0;
+    audio.play();
+
+    audio.onended = () => {
+        currentCount++;
+        if (currentCount < repeatCount) {
+            audio.currentTime = 0;
+            audio.play();
+        }
+    };
+}
+
 
 function normalize(str) {
     return str

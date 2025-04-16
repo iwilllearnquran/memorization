@@ -22,11 +22,12 @@
     .section {
         margin-top: 40px;
         padding: 20px;
+        font-size: 20px;
         border-top: 1px solid #ccc;
     }
 
     .section h3 {
-        font-size: 24px;
+        font-size: 20px;
         margin-bottom: 12px;
         text-align: center;
         border-bottom: 2px dashed #ccc;
@@ -81,18 +82,38 @@
         .word { font-size: 20px; }
         .popup-content { font-size: 13px; }
     }
+    .submit-btn {
+    background-color: #0a4d68;
+    color: #fff;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .submit-btn:hover {
+    background-color: #2ca7d8;
+    transform: translateY(-1px);
+    }
+
+    .submit-btn:active {
+    transform: scale(0.98);
+    }
+
     .small-placeholder::placeholder {
     font-size: 10px;
     color: #888;
-}
+    }
 
 </style>
 </head>
 <body>
 
-<div class="navbar">
-    🕌 Quran Ayah Explorer
-</div>
+
 
 
 <div class="section">
@@ -193,23 +214,32 @@
 </div></div>
 <div class="section">
     <h3>🌍 English Translation</h3>
-    <p class="ayah-english">How can you disbelieve in Allah when you were lifeless and He brought you to life; then He will cause you to die, then He will bring you [back] to life, and then to Him you will be returned.</p>
+    <p class="ayah-english" style="text-align: center; direction: rtl;">How can you disbelieve in Allah when you were lifeless and He brought you to life; then He will cause you to die, then He will bring you [back] to life, and then to Him you will be returned.</p>
 </div>
 
-        <div class="section"><h3>🎧 Listen to Ayah</h3>
-<div style="text-align: center; margin-top: 10px;">
-    <audio controls style="width: 300px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
-        <source src="https://verses.quran.com/Alafasy/mp3/002028.mp3" type="audio/mpeg">
-        Your browser does not support audio.
-    </audio>
+        <div class="section">
+    <h3>🎧 Listen to Ayah</h3>
+    <div style="text-align: center; margin-top: 10px;">
+        <audio id="ayahAudio" controls style="width: 300px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+            <source src="https://verses.quran.com/Alafasy/mp3/002028.mp3" type="audio/mpeg">
+            Your browser does not support audio.
+        </audio>
+
+        <div style="margin-top: 15px;">
+            <label for="repeatCount" style="font-weight: bold;">🔁 Repeat:</label>
+            <input type="number" id="repeatCount" min="1" max="20" value="1"
+                   style="width: 60px; padding: 6px 8px; margin: 0 10px; border-radius: 5px; border: 1px solid #ccc;">
+            <button onclick="playRepeated()" class="submit-btn">▶️ Play</button>
+        </div>
+    </div>
 </div>
-</div>
+
  <div class="section"><h3>✍️ Write the Arabic Word (Practice Mode)</h3></div>
 <div style="font-size:18px; line-height: 2;">
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="kayfa"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">How</div>
         <div class="translation">Interrogative</div>
@@ -221,7 +251,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="takfurūna"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">(can) you disbelieve</div>
         <div class="translation">Verb+Pron.</div>
@@ -233,7 +263,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="bil-lahi"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">in Allah</div>
         <div class="translation">Preposition+Proper Noun</div>
@@ -245,7 +275,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="wakuntum"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">While you were</div>
         <div class="translation">Circumstantial Part+Verb+Pron.</div>
@@ -257,7 +287,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="amwātan"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">dead</div>
         <div class="translation">Noun</div>
@@ -269,7 +299,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="fa-aḥyākum"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">then He gave you life</div>
         <div class="translation">Conj.+Verb+Pron.</div>
@@ -281,7 +311,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="thumma"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">then</div>
         <div class="translation">Conj.</div>
@@ -293,7 +323,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="yumītukum"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">He will cause you to die</div>
         <div class="translation">Verb+Pron.</div>
@@ -305,7 +335,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="thumma"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">then</div>
         <div class="translation">Conj.</div>
@@ -317,7 +347,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="yuḥ&#x27;yīkum"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">He will give you life</div>
         <div class="translation">Verb+Pron.</div>
@@ -329,7 +359,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="thumma"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">then</div>
         <div class="translation">Conj.</div>
@@ -341,7 +371,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="ilayhi"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">to Him</div>
         <div class="translation">Preposition+Pron.</div>
@@ -353,7 +383,7 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="tur&#x27;jaʿūna"
-        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
 
         <div class="translation">you will be returned</div>
         <div class="translation">Verb+Pron.</div>
@@ -365,11 +395,16 @@
 
 </div>
 
-<br>
-<button onclick="clearTranslitInputs()" style="margin-top: 10px; background-color:#eee;">🧹 Clear All Inputs</button>
+<div style="display: flex; justify-content: center; gap: 16px; margin-top: 20px;">
+    <button class="submit-btn" onclick="clearTranslitInputs()" style="background-color:#eee; color: #333;">
+        🧹 Clear All Inputs
+    </button>
 
-<br>
-<button onclick="alert('✅ Submission received. Great job!')">Submit</button>
+    <button class="submit-btn" onclick="alert('✅ Submission received. Great job!')">
+        ✅ Submit
+    </button>
+</div>
+
 
 <div class="overlay" id="overlay" onclick="hidePopup()"></div>
 <div class="popup-content" id="popupContent"></div>
@@ -381,7 +416,7 @@ function showPopup(data) {
     let html = "<h3>📌 Morphology Info</h3>";
 
     for (let key in data) {
-        if (typeof data[key] === "string" && data[key].length < 200 && key !== "CAMeL Explanation") {
+        if (typeof data[key] === "string" && data[key].length < 200 && key !== "CAMeL Explanation" && key !== "Audio URL") {
             html += `<b>${key}:</b> ${data[key]}<br/>`;
             if (key === "Buckwalter Transliteration" && data["Explanation"]) {
                 html += `<i>${data["Explanation"]}</i><br/>`;
@@ -420,6 +455,24 @@ function playAudio(url) {
     const audio = new Audio("https://verses.quran.com/" + url);
     audio.play();
 }
+
+function playRepeated() {
+    const audio = document.getElementById('ayahAudio');
+    const repeatCount = parseInt(document.getElementById('repeatCount').value || 1);
+    let currentCount = 0;
+
+    audio.currentTime = 0;
+    audio.play();
+
+    audio.onended = () => {
+        currentCount++;
+        if (currentCount < repeatCount) {
+            audio.currentTime = 0;
+            audio.play();
+        }
+    };
+}
+
 
 function normalize(str) {
     return str
