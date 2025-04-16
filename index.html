@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Surah Selector</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        iframe { width: 100%; height: 600px; border: 1px solid #ccc; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<h2>📖 Quran Practice</h2>
+
+<label>Surah:</label>
+<select id="surahSelect">
+    <option value="1">Surah Al-Fatiha</option>
+</select>
+
+<label>Ayah:</label>
+<select id="ayahSelect">
+    <option value="1">Ayah 1</option>
+    <option value="2">Ayah 2</option>
+    <option value="3">Ayah 3</option>
+    <option value="4">Ayah 4</option>
+    <option value="5">Ayah 5</option>
+    <option value="6">Ayah 6</option>
+    <option value="7">Ayah 7</option>
+</select>
+
+<button onclick="loadAyah()">Load Ayah</button>
+
+<iframe id="ayahViewer" src="ayah_1_1.html"></iframe>
+
+<script>
+function loadAyah() {
+    const surah = document.getElementById("surahSelect").value;
+    const ayah = document.getElementById("ayahSelect").value;
+    const path = `ayah_${surah}_${ayah}.html`;
+    document.getElementById("ayahViewer").src = path;
+}
+</script>
+
+</body>
+</html>
