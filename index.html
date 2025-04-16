@@ -1,33 +1,91 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Surah Selector</title>
+    <meta charset="UTF-8">
+    <title>Qur’an Ayah Explorer</title>
     <style>
-        body { font-family: Arial; padding: 20px; }
-        iframe { width: 100%; height: 600px; border: 1px solid #ccc; margin-top: 20px; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7fa;
+            color: #333;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #0a4d68;
+            font-size: 32px;
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-size: 16px;
+            margin-right: 8px;
+        }
+
+        select, button {
+            padding: 10px 14px;
+            font-size: 16px;
+            margin: 10px 8px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+
+        select:hover, button:hover {
+            border-color: #0a4d68;
+        }
+
+        button {
+            background-color: #0a4d68;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2ca7d8;
+        }
+
+        iframe {
+            width: 100%;
+            max-width: 900px;
+            height: 600px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+
+        .selector-box {
+            margin-bottom: 30px;
+        }
     </style>
 </head>
 <body>
 
-<h2>📖 Quran Practice</h2>
+<h2>📖 Qur’an Ayah Explorer</h2>
 
-<label>Surah:</label>
-<select id="surahSelect">
-    <option value="1">Surah Al-Fatiha</option>
-</select>
+<div class="selector-box">
+    <label for="surahSelect">Surah:</label>
+    <select id="surahSelect">
+        <option value="1">Surah Al-Fatiha</option>
+    </select>
 
-<label>Ayah:</label>
-<select id="ayahSelect">
-    <option value="1">Ayah 1</option>
-    <option value="2">Ayah 2</option>
-    <option value="3">Ayah 3</option>
-    <option value="4">Ayah 4</option>
-    <option value="5">Ayah 5</option>
-    <option value="6">Ayah 6</option>
-    <option value="7">Ayah 7</option>
-</select>
+    <label for="ayahSelect">Ayah:</label>
+    <select id="ayahSelect">
+        <option value="1">Ayah 1</option>
+        <option value="2">Ayah 2</option>
+        <option value="3">Ayah 3</option>
+        <option value="4">Ayah 4</option>
+        <option value="5">Ayah 5</option>
+        <option value="6">Ayah 6</option>
+        <option value="7">Ayah 7</option>
+    </select>
 
-<button onclick="loadAyah()">Load Ayah</button>
+    <button onclick="loadAyah()">🔁 Load Ayah</button>
+</div>
 
 <iframe id="ayahViewer" src="ayah_1_1.html"></iframe>
 
