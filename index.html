@@ -2,100 +2,123 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Qur’an Ayah Explorer</title>
+    <title>📖 Quran Practice</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f4f7fa;
-            color: #333;
-            padding: 40px 20px;
+            background: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #0a4d68;
+            color: white;
+            padding: 20px;
             text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            border-bottom: 4px solid #2ca7d8;
         }
-
-        h2 {
-            color: #0a4d68;
-            font-size: 32px;
-            margin-bottom: 30px;
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
         }
-
         label {
+            display: block;
+            margin-top: 20px;
+            font-weight: bold;
             font-size: 16px;
-            margin-right: 8px;
         }
-
         select, button {
-            padding: 10px 14px;
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
             font-size: 16px;
-            margin: 10px 8px;
-            border-radius: 8px;
+            border-radius: 5px;
             border: 1px solid #ccc;
-            outline: none;
         }
-
-        select:hover, button:hover {
-            border-color: #0a4d68;
-        }
-
         button {
             background-color: #0a4d68;
             color: white;
             border: none;
             cursor: pointer;
-            transition: background 0.3s ease;
+            margin-top: 20px;
         }
-
         button:hover {
             background-color: #2ca7d8;
         }
-
         iframe {
             width: 100%;
-            max-width: 900px;
             height: 600px;
             border: none;
-            border-radius: 10px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
             margin-top: 30px;
-        }
-
-        .selector-box {
-            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
     </style>
 </head>
 <body>
 
-<h2>📖 Qur’an Ayah Explorer</h2>
+<div class="navbar">🕌 Quran Ayah Explorer</div>
 
-<div class="selector-box">
+<div class="container">
     <label for="surahSelect">Surah:</label>
-    <select id="surahSelect">
-        <option value="1">Surah Al-Fatiha</option>
-    </select>
+    <select id="surahSelect"></select>
 
     <label for="ayahSelect">Ayah:</label>
-    <select id="ayahSelect">
-        <option value="1">Ayah 1</option>
-        <option value="2">Ayah 2</option>
-        <option value="3">Ayah 3</option>
-        <option value="4">Ayah 4</option>
-        <option value="5">Ayah 5</option>
-        <option value="6">Ayah 6</option>
-        <option value="7">Ayah 7</option>
-    </select>
+    <select id="ayahSelect"></select>
 
-    <button onclick="loadAyah()">🔁 Load Ayah</button>
+    <button onclick="loadAyah()">🔍 Load Ayah</button>
+
+    <iframe id="ayahViewer" src="ayah_1_1.html"></iframe>
 </div>
 
-<iframe id="ayahViewer" src="ayah_1_1.html"></iframe>
-
 <script>
-function loadAyah() {
-    const surah = document.getElementById("surahSelect").value;
-    const ayah = document.getElementById("ayahSelect").value;
-    const path = `ayah_${surah}_${ayah}.html`;
-    document.getElementById("ayahViewer").src = path;
-}
+    const surahSelect = document.getElementById('surahSelect');
+    const ayahSelect = document.getElementById('ayahSelect');
+
+    // Fetch Surah data from Quran.com API
+    fetch('https://api.quran.com/api/v4/chapters')
+        .then(response => response.json())
+        .then(data => {
+            data.chapters.forEach(chapter => {
+                const option = document.createElement('option');
+                option.value = chapter.id;
+                option.textContent = `${chapter.id}. ${chapter.name_simple} (${chapter.name_arabic})`;
+                option.setAttribute('data-ayah-count', chapter.verses_count);
+                surahSelect.appendChild(option);
+            });
+            updateAyahOptions();
+        })
+        .catch(error => console.error('Error fetching Surah data:', error));
+
+    // Update Ayah options based on selected Surah
+    function updateAyahOptions() {
+        const selectedOption = surahSelect.options[surahSelect.selectedIndex];
+        const ayahCount = parseInt(selectedOption.getAttribute('data-ayah-count'), 10);
+        ayahSelect.innerHTML = '';
+        for (let i = 1; i <= ayahCount; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = `Ayah ${i}`;
+            ayahSelect.appendChild(option);
+        }
+    }
+
+    // Load selected Ayah HTML page
+    function loadAyah() {
+        const surah = surahSelect.value;
+        const ayah = ayahSelect.value;
+        const path = `ayah_${surah}_${ayah}.html`;
+        document.getElementById('ayahViewer').src = path;
+    }
+
+    // Update Ayah options when Surah selection changes
+    surahSelect.addEventListener('change', updateAyahOptions);
 </script>
 
 </body>
