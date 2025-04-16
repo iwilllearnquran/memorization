@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ayah Memorization</title>
+<style>
+    body { font-family: Arial, sans-serif; padding: 15px; margin: 0; }
+    .ayah-arabic { font-size: 30px; text-align: right; direction: rtl; margin-bottom: 10px; word-wrap: break-word; }
+    .ayah-english { font-size: 18px; margin-bottom: 20px; }
+    .word {
+        cursor: pointer;
+        margin: 4px 2px;
+        padding: 3px 6px;
+        display: inline-block;
+        border-bottom: 1px dotted gray;
+        font-size: 24px;
+    }
+    .translation {
+        font-size: 12px;
+        color: gray;
+        display: block;
+        margin-top: 2px;
+        line-height: 1;
+        text-align: center;
+    }
+    .popup, .overlay {
+        display: none; position: fixed; top: 0; left: 0;
+        width: 100%; height: 100%; background: rgba(0,0,0,0.5);
+        z-index: 10;
+    }
+    .popup-content {
+        position: absolute; top: 10%; left: 50%;
+        transform: translate(-50%, 0);
+        background: white; padding: 20px; width: 90%;
+        max-height: 80%; overflow-y: auto; z-index: 11;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        font-size: 14px;
+    }
+    .nominative { background-color: #ffe6e6; }   
+    .accusative { background-color: #e6f0ff; }   
+    .genitive   { background-color: #e6ffe6; }   
+    textarea { width: 100%; height: 100px; font-size: 16px; margin-top: 15px; }
+    button { padding: 10px 20px; margin-top: 10px; font-size: 14px; }
+    ul { padding-left: 18px; }
+    @media (max-width: 600px) {
+        .ayah-arabic { font-size: 24px; }
+        .word { font-size: 20px; }
+        .popup-content { font-size: 13px; }
+    }
+    .small-placeholder::placeholder {
+    font-size: 10px;
+    color: #888;
+}
+
+</style>
+</head>
+<body>
+
+<h2>📖 Ayah in Arabic</h2>
+<div class="ayah-arabic">
+
+    <span class="word genitive" onclick="showPopup({&quot;Word&quot;: &quot;الرَّحْمَٰنِ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a adjective, MS, genitive case (jarr - after of).&quot;, &quot;Prefixes&quot;: &quot;prefix - definite article ال (the)&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/001_003_001.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        الرَّحْمَٰنِ
+        <span class="translation">The Most Gracious</span>
+        <span class='translation'>ٱل رَّحْمَٰن</span>
+        <span class='translation'>Al++Adj</span>
+    </span>
+
+    <span class="word genitive" onclick="showPopup({&quot;Word&quot;: &quot;الرَّحِيمِ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a adjective, MS, genitive case (jarr - after of).&quot;, &quot;Prefixes&quot;: &quot;prefix - definite article ال (the)&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/001_003_002.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        الرَّحِيمِ
+        <span class="translation">the Most Merciful</span>
+        <span class='translation'>ٱل رَّحِيم</span>
+        <span class='translation'>Al++Adj</span>
+    </span>
+</div>
+
+<h3>🌍 English Translation</h3>
+<p class="ayah-english">The Entirely Merciful, the Especially Merciful.</p>
+<h3>🧩 Jarr-Majroor Phrases</h3>
+<ul>
+<li>n</li>
+<li>o</li>
+<li>n</li>
+<li>e</li>
+</ul>
+
+        <h3>🎧 Listen to Ayah</h3>
+<audio controls><source src="https://verses.quran.com/Alafasy/mp3/001003.mp3" type="audio/mpeg">Your browser does not support audio.</audio>
+<h3>✍️ Write the Arabic Word (Practice Mode)</h3>
+<div style="font-size:18px; line-height: 2;">
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="al-raḥmāni"
+        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+
+        <div class="translation">The Most Gracious</div>
+        <div class="translation">Al++Adj</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>al-raḥmāni</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="l-raḥīmi"
+        placeholder="Type transliteration" style="width:150px; font-size:14px; text-align:left;" />
+
+        <div class="translation">the Most Merciful</div>
+        <div class="translation">Al++Adj</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>l-raḥīmi</div>
+        </details>
+    </span>
+
+</div>
+
+<br>
+<button onclick="clearTranslitInputs()" style="margin-top: 10px; background-color:#eee;">🧹 Clear All Inputs</button>
+
+<br>
+<button onclick="alert('✅ Submission received. Great job!')">Submit</button>
+
+<div class="overlay" id="overlay" onclick="hidePopup()"></div>
+<div class="popup-content" id="popupContent"></div>
+
+<script>
+function showPopup(data) {
+    let html = "<h3>📌 Morphology Info</h3>";
+
+    for (let key in data) {
+        if (typeof data[key] === "string" && data[key].length < 200 && key !== "CAMeL Explanation") {
+            html += `<b>${key}:</b> ${data[key]}<br/>`;
+            if (key === "Buckwalter Transliteration" && data["Explanation"]) {
+                html += `<i>${data["Explanation"]}</i><br/>`;
+            }
+        }
+    }
+
+    if ("CAMeL Explanation" in data) {
+        html += `<hr><b>CAMeL Feature Breakdown:</b><br/>${data["CAMeL Explanation"]}`;
+    }
+
+    if ("Conjugation Table" in data && data["Conjugation Table"]) {
+        html += `<hr><br/>${data["Conjugation Table"]}`;
+    }
+
+    if ("Muslim Chart" in data && data["Muslim Chart"]) {
+        html += `<hr><b>📈 Muslim Chart:</b><br/>${data["Muslim Chart"]}`;
+    }
+
+    if ("Audio URL" in data && data["Audio URL"]) {
+        html += `<hr><button class='audio-button' onclick="playAudio('${data["Audio URL"]}')">🔊 Play Word Audio</button>`;
+    }
+
+    document.getElementById("popupContent").innerHTML = html;
+    document.getElementById("overlay").style.display = "block";
+    document.getElementById("popupContent").style.display = "block";
+}
+
+function hidePopup() {
+    document.getElementById("overlay").style.display = "none";
+    document.getElementById("popupContent").style.display = "none";
+}
+
+function playAudio(url) {
+    const audio = new Audio("https://verses.quran.com/" + url);
+    audio.play();
+}
+
+function normalize(str) {
+    return str
+        .normalize("NFD") // Decompose accents
+        .replace(/[̀-ͯ]/g, "") // Remove accents
+        .replace(/ʿ/g, "") // Remove ayn
+        .replace(/[^a-z]/gi, "") // Remove non-letter characters
+        .toLowerCase()
+        .trim();
+}
+
+function levenshtein(a, b) {
+    const dp = Array.from({ length: a.length + 1 }, () => []);
+    for (let i = 0; i <= a.length; i++) dp[i][0] = i;
+    for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+    for (let i = 1; i <= a.length; i++) {
+        for (let j = 1; j <= b.length; j++) {
+            dp[i][j] = Math.min(
+                dp[i - 1][j] + 1,
+                dp[i][j - 1] + 1,
+                dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+            );
+        }
+    }
+    return dp[a.length][b.length];
+}
+
+function clearTranslitInputs() {
+    document.querySelectorAll(".translit-input").forEach(input => {
+        input.value = "";
+        input.dispatchEvent(new Event('input')); // triggers background reset
+    });
+}
+
+document.querySelectorAll(".translit-input").forEach(input => {
+    input.addEventListener("input", () => {
+        const expected = normalize(input.dataset.expected || "");
+        const actual = normalize(input.value || "");
+        const block = input.closest(".translit-block");
+
+        const distance = levenshtein(actual, expected);
+        block.style.borderColor = "gray"; // default
+
+        if (!actual) {
+            block.style.backgroundColor = "white";
+        } else if (distance === 0) {
+            block.style.backgroundColor = "#d4edda"; // green
+            block.style.borderColor = "#28a745";
+        } else if (distance <= 2) {
+            block.style.backgroundColor = "#fff3cd"; // yellow
+            block.style.borderColor = "#ffc107";
+        } else {
+            block.style.backgroundColor = "#f8d7da"; // red
+            block.style.borderColor = "#dc3545";
+        }
+    });
+});
+</script>
+
+
+
+</body>
+</html>
