@@ -92,8 +92,11 @@
       }
 
       select {
-        width: 100%;
+        font-size: 14px;
+        padding: 8px;
+        min-width: 80px;
       }
+
 
       iframe {
         height: 85vh;
@@ -154,6 +157,23 @@
         option.setAttribute('data-ayah-count', chapter.verses_count);
         surahSelect.appendChild(option);
       });
+
+      // Ask user if they want to resume
+      window.addEventListener("load", () => {
+        const lastRead = JSON.parse(localStorage.getItem('lastRead'));
+        if (lastRead) {
+          const confirmResume = confirm(`📌 Do you want to resume from Surah ${lastRead.surah}, Ayah ${lastRead.ayah}?`);
+          if (confirmResume) {
+            surahSelect.value = lastRead.surah;
+            updateAyahOptions();
+            setTimeout(() => {
+              ayahSelect.value = lastRead.ayah;
+              loadAyah();
+            }, 100); // slight delay to ensure ayahSelect is populated
+          }
+        }
+      });
+
       updateAyahOptions();
     });
 
@@ -170,15 +190,23 @@
     loadAyah(); // auto-load first ayah of selected surah
   }
 
-  function loadAyah() {
-    const surah = surahSelect.value;
-    const ayah = ayahSelect.value;
-    const path = `ayahs/ayah_${surah}_${ayah}.html`;
-    ayahViewer.src = path;
-    ayahViewer.style.display = 'block';
-    nextArrow.style.display = 'block';
-    prevArrow.style.display = 'block';
+  function saveLastRead(surah, ayah) {
+  localStorage.setItem('lastRead', JSON.stringify({ surah, ayah }));
   }
+
+
+  function loadAyah() {
+  const surah = surahSelect.value;
+  const ayah = ayahSelect.value;
+  const path = `ayahs/ayah_${surah}_${ayah}.html`;
+  ayahViewer.src = path;
+  ayahViewer.style.display = 'block';
+  nextArrow.style.display = 'block';
+  prevArrow.style.display = 'block';
+
+  saveLastRead(surah, ayah); // Save to localStorage
+}
+
 
   function loadNextAyah() {
     let currentSurah = parseInt(surahSelect.value);
