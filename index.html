@@ -158,23 +158,25 @@
         surahSelect.appendChild(option);
       });
 
-      // Ask user if they want to resume
-      window.addEventListener("load", () => {
-        const lastRead = JSON.parse(localStorage.getItem('lastRead'));
-        if (lastRead) {
-          const confirmResume = confirm(`📌 Do you want to resume from Surah ${lastRead.surah}, Ayah ${lastRead.ayah}?`);
-          if (confirmResume) {
-            surahSelect.value = lastRead.surah;
-            updateAyahOptions();
-            setTimeout(() => {
-              ayahSelect.value = lastRead.ayah;
-              loadAyah();
-            }, 100); // slight delay to ensure ayahSelect is populated
-          }
-        }
-      });
+     
 
       updateAyahOptions();
+
+      window.addEventListener("load", () => {
+      const lastRead = JSON.parse(localStorage.getItem('lastRead'));
+      if (lastRead) {
+        const confirmResume = confirm(`📌 Do you want to resume from Surah ${lastRead.surah}, Ayah ${lastRead.ayah}?`);
+        if (confirmResume) {
+          surahSelect.value = lastRead.surah;
+          updateAyahOptions();
+          setTimeout(() => {
+            ayahSelect.value = lastRead.ayah;
+            loadAyah();
+          }, 100);
+        }
+      }
+    });
+
     });
 
   function updateAyahOptions() {
@@ -187,7 +189,6 @@
       option.textContent = `Ayah ${i}`;
       ayahSelect.appendChild(option);
     }
-    loadAyah(); // auto-load first ayah of selected surah
   }
 
   function saveLastRead(surah, ayah) {
