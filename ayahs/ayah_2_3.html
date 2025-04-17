@@ -27,7 +27,7 @@
     }
 
     .section h3 {
-        font-size: 20px;
+        font-size: 18px;
         margin-bottom: 12px;
         text-align: center;
         border-bottom: 2px dashed #ccc;
@@ -109,6 +109,24 @@
     color: #888;
     }
 
+    .confetti {
+  position: relative;
+}
+    .confetti::after {
+  content: "🎉";
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  animation: confettiBurst 0.6s ease-in-out;
+  }
+
+@keyframes confettiBurst {
+  0% { opacity: 0; transform: scale(0.8) translateY(-10px); }
+  50% { opacity: 1; transform: scale(1.1) translateY(0); }
+  100% { opacity: 0; transform: scale(1) translateY(-10px); }
+}
+
+
 </style>
 </head>
 <body>
@@ -176,6 +194,27 @@
         <span class='translation'>Verb+Pron.</span>
     </span>
 
+<div style="margin-top: 20px; text-align: center; font-size: 10px;">
+    <div style="display: inline-flex; justify-content: center; gap: 30px; margin-top: 12px; flex-wrap: wrap;">
+
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 15px; height: 15px; background-color: #ffe6e6; border-radius: 3px; border: 1px solid #ccc;"></div>
+            <span><b>Nominative</b> <i>(Rafʿ / Subject)</i></span>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 15px; height: 15px; background-color: #e6f0ff; border-radius: 3px; border: 1px solid #ccc;"></div>
+            <span><b>Accusative</b> <i>(Naṣb / Object)</i></span>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 15px; height: 15px; background-color: #e6ffe6; border-radius: 3px; border: 1px solid #ccc;"></div>
+            <span><b>Genitive</b> <i>(Jarr / Possession)</i></span>
+        </div>
+
+    </div>
+</div>
+
 </div></div>
 <div class="section">
     <h3>🌍 English Translation</h3>
@@ -204,10 +243,10 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="alladhīna"
-        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
 
-        <div class="translation">Those who</div>
-        <div class="translation">Rel. Pronoun</div>
+        <div class="translation toggle-translation">Those who</div>
         <details style="font-size:10px; color:gray; margin-top:4px;">
             <summary style="cursor:pointer;">show translit</summary>
             <div>alladhīna</div>
@@ -216,10 +255,10 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="yu&#x27;minūna"
-        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
 
-        <div class="translation">believe</div>
-        <div class="translation">Verb+Pron.</div>
+        <div class="translation toggle-translation">believe</div>
         <details style="font-size:10px; color:gray; margin-top:4px;">
             <summary style="cursor:pointer;">show translit</summary>
             <div>yu&#x27;minūna</div>
@@ -228,10 +267,10 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="bil-ghaybi"
-        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
 
-        <div class="translation">in the unseen</div>
-        <div class="translation">Preposition+Al++Noun</div>
+        <div class="translation toggle-translation">in the unseen</div>
         <details style="font-size:10px; color:gray; margin-top:4px;">
             <summary style="cursor:pointer;">show translit</summary>
             <div>bil-ghaybi</div>
@@ -240,10 +279,10 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="wayuqīmūna"
-        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
 
-        <div class="translation">and establish</div>
-        <div class="translation">Conj.+Verb+Pron.</div>
+        <div class="translation toggle-translation">and establish</div>
         <details style="font-size:10px; color:gray; margin-top:4px;">
             <summary style="cursor:pointer;">show translit</summary>
             <div>wayuqīmūna</div>
@@ -252,10 +291,10 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="l-ṣalata"
-        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
 
-        <div class="translation">the prayer</div>
-        <div class="translation">Al++Noun</div>
+        <div class="translation toggle-translation">the prayer</div>
         <details style="font-size:10px; color:gray; margin-top:4px;">
             <summary style="cursor:pointer;">show translit</summary>
             <div>l-ṣalata</div>
@@ -264,10 +303,10 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="wamimmā"
-        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
 
-        <div class="translation">and out of what</div>
-        <div class="translation">Resumption Part+Preposition+Rel. Pronoun</div>
+        <div class="translation toggle-translation">and out of what</div>
         <details style="font-size:10px; color:gray; margin-top:4px;">
             <summary style="cursor:pointer;">show translit</summary>
             <div>wamimmā</div>
@@ -276,10 +315,10 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="razaqnāhum"
-        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
 
-        <div class="translation">We have provided them</div>
-        <div class="translation">Verb+Pron.+Pron.</div>
+        <div class="translation toggle-translation">We have provided them</div>
         <details style="font-size:10px; color:gray; margin-top:4px;">
             <summary style="cursor:pointer;">show translit</summary>
             <div>razaqnāhum</div>
@@ -288,10 +327,10 @@
 
     <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
        <input type="text" class="translit-input small-placeholder" data-expected="yunfiqūna"
-        placeholder="Type transliteration" style="width:150px; font-size:15px; text-align:center;" />
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
 
-        <div class="translation">they spend</div>
-        <div class="translation">Verb+Pron.</div>
+        <div class="translation toggle-translation">they spend</div>
         <details style="font-size:10px; color:gray; margin-top:4px;">
             <summary style="cursor:pointer;">show translit</summary>
             <div>yunfiqūna</div>
@@ -308,7 +347,12 @@
     <button class="submit-btn" onclick="alert('✅ Submission received. Great job!')">
         ✅ Submit
     </button>
+
+    <button class="submit-btn" onclick="toggleTranslations()" style="background-color:#f0f8ff; color: #0a4d68;">
+        👁️ Hide/Show Translations
+    </button>
 </div>
+
 
 
 <div class="overlay" id="overlay" onclick="hidePopup()"></div>
@@ -381,13 +425,17 @@ function playRepeated() {
 
 function normalize(str) {
     return str
-        .normalize("NFD") // Decompose accents
-        .replace(/[̀-ͯ]/g, "") // Remove accents
-        .replace(/ʿ/g, "") // Remove ayn
-        .replace(/[^a-z]/gi, "") // Remove non-letter characters
+        .normalize("NFD")                    // Decompose accents
+        .replace(/[̀-ͯ]/g, "")     // Remove diacritics
+        .replace(/ʿ/g, "")                   // Remove special characters like ʿ
+        .replace(/[^a-z]/gi, "")             // Remove all non-alphabet characters
         .toLowerCase()
         .trim();
 }
+
+
+
+
 
 function levenshtein(a, b) {
     const dp = Array.from({ length: a.length + 1 }, () => []);
@@ -412,6 +460,13 @@ function clearTranslitInputs() {
     });
 }
 
+function toggleTranslations() {
+    document.querySelectorAll(".toggle-translation").forEach(el => {
+        el.style.display = (el.style.display === "none") ? "block" : "none";
+    });
+}
+
+
 document.querySelectorAll(".translit-input").forEach(input => {
     input.addEventListener("input", () => {
         const expected = normalize(input.dataset.expected || "");
@@ -419,13 +474,17 @@ document.querySelectorAll(".translit-input").forEach(input => {
         const block = input.closest(".translit-block");
 
         const distance = levenshtein(actual, expected);
-        block.style.borderColor = "gray"; // default
+        block.style.borderColor = "gray"; // reset
+
+        // Remove any previous confetti
+        block.classList.remove("confetti");
 
         if (!actual) {
             block.style.backgroundColor = "white";
         } else if (distance === 0) {
             block.style.backgroundColor = "#d4edda"; // green
             block.style.borderColor = "#28a745";
+            block.classList.add("confetti");  // 🎉 Trigger confetti
         } else if (distance <= 2) {
             block.style.backgroundColor = "#fff3cd"; // yellow
             block.style.borderColor = "#ffc107";
@@ -435,6 +494,7 @@ document.querySelectorAll(".translit-input").forEach(input => {
         }
     });
 });
+
 </script>
 
 
