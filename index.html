@@ -38,8 +38,7 @@
       font-size: 16px;
       border-radius: 5px;
       border: 1px solid #ccc;
-      min-width: 90px; /* change this */
-      width: 120px; /* Add this */
+      width: 120px;
     }
 
     iframe {
@@ -86,68 +85,54 @@
         font-size: 20px;
         padding: 20px;
       }
-    
+
       .navbar .form-group {
-        flex-direction: row; /* 👈 Keep them side-by-side */
-        flex-wrap: wrap;     /* Allow wrap if space not enough */
+        flex-direction: row;
+        flex-wrap: wrap;
         justify-content: center;
         gap: 8px;
+        max-width: 90vw;
       }
-    
+
       select {
-        width: auto;     /* 👈 Let the content decide width */
-        min-width: 90px; /* 👈 Still keep compact and readable */
+        width: auto;
+        min-width: 80px;
         font-size: 14px;
         padding: 6px 8px;
       }
-    
+
       iframe {
         height: 85vh;
       }
-    
+
       .side-arrow {
         width: 36px;
         height: 36px;
         font-size: 18px;
         line-height: 34px;
       }
-      
-      .navbar .form-group {
-        max-width: 90vw;
-      }
-
     }
-
-    
-
   </style>
 
-<link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
-<link rel="icon" type="image/svg+xml" href="favicon.svg" />
-<link rel="shortcut icon" href="favicon.ico" />
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
-<meta name="apple-mobile-web-app-title" content="Quran Explorer" />
+  <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="shortcut icon" href="favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="Quran Explorer" />
 </head>
 <body>
 
 <div class="navbar">
   🕌 Quran Ayah Explorer
   <div class="form-group">
-    <select id="surahSelect" style="width: 150px;"></select>
-    <select id="ayahSelect" style="width: 80px;"></select>
+    <select id="surahSelect"></select>
+    <select id="ayahSelect"></select>
   </div>
 </div>
 
-<!-- ⬅️ Previous Ayah Button -->
 <div class="side-arrow prev" id="prevArrow" onclick="loadPrevAyah()">←</div>
-
-<!-- ➡️ Next Ayah Button -->
 <div class="side-arrow next" id="nextArrow" onclick="loadNextAyah()">→</div>
-
-<!-- Ayah Viewer -->
 <iframe id="ayahViewer"></iframe>
-
-  
 
 <script>
   const surahSelect = document.getElementById('surahSelect');
@@ -156,11 +141,12 @@
   const nextArrow = document.getElementById('nextArrow');
   const prevArrow = document.getElementById('prevArrow');
 
+  let surahData = [];
 
-  // Fetch all surahs from Quran.com API
   fetch('https://api.quran.com/api/v4/chapters')
     .then(response => response.json())
     .then(data => {
+      surahData = data.chapters;
       data.chapters.forEach(chapter => {
         const option = document.createElement('option');
         option.value = chapter.id;
@@ -169,28 +155,26 @@
         surahSelect.appendChild(option);
       });
 
-     
-
-      updateAyahOptions();
-
-      window.addEventListener("load", () => {
       const lastRead = JSON.parse(localStorage.getItem('lastRead'));
+
       if (lastRead) {
         const confirmResume = confirm(`📌 Do you want to resume from Surah ${lastRead.surah}, Ayah ${lastRead.ayah}?`);
         if (confirmResume) {
           surahSelect.value = lastRead.surah;
-          updateAyahOptions();
-          setTimeout(() => {
+          updateAyahOptions(() => {
             ayahSelect.value = lastRead.ayah;
             loadAyah();
-          }, 100);
+          });
+          return;
         }
       }
+
+      updateAyahOptions(() => {
+        loadAyah();
+      });
     });
 
-    });
-
-  function updateAyahOptions() {
+  function updateAyahOptions(callback) {
     const selectedOption = surahSelect.options[surahSelect.selectedIndex];
     const ayahCount = parseInt(selectedOption.getAttribute('data-ayah-count'), 10);
     ayahSelect.innerHTML = '';
@@ -200,67 +184,97 @@
       option.textContent = `Ayah ${i}`;
       ayahSelect.appendChild(option);
     }
+    if (callback) callback();
   }
 
   function saveLastRead(surah, ayah) {
-  localStorage.setItem('lastRead', JSON.stringify({ surah, ayah }));
+    localStorage.setItem('lastRead', JSON.stringify({ surah, ayah }));
   }
 
-
   function loadAyah() {
-  const surah = surahSelect.value;
-  const ayah = ayahSelect.value;
-  const path = `ayahs/ayah_${surah}_${ayah}.html`;
-  ayahViewer.src = path;
-  ayahViewer.style.display = 'block';
-  nextArrow.style.display = 'block';
-  prevArrow.style.display = 'block';
-
-  saveLastRead(surah, ayah); // Save to localStorage
-}
-
+    const surah = surahSelect.value;
+    const ayah = ayahSelect.value;
+    const path = `ayahs/ayah_${surah}_${ayah}.html`;
+    ayahViewer.src = path;
+    ayahViewer.style.display = 'block';
+    nextArrow.style.display = 'block';
+    prevArrow.style.display = 'block';
+    saveLastRead(surah, ayah);
+  }
 
   function loadNextAyah() {
-    let currentSurah = parseInt(surahSelect.value);
     let currentAyah = parseInt(ayahSelect.value);
     const maxAyahs = parseInt(surahSelect.options[surahSelect.selectedIndex].getAttribute('data-ayah-count'));
 
     if (currentAyah < maxAyahs) {
       ayahSelect.value = currentAyah + 1;
+      loadAyah();
     } else if (surahSelect.selectedIndex < surahSelect.options.length - 1) {
       surahSelect.selectedIndex += 1;
-      updateAyahOptions();
-      return;
+      updateAyahOptions(() => {
+        ayahSelect.value = 1;
+        loadAyah();
+      });
     } else {
       alert("✅ You've reached the last ayah.");
-      return;
     }
-
-    loadAyah();
   }
 
   function loadPrevAyah() {
-    let currentSurah = parseInt(surahSelect.value);
     let currentAyah = parseInt(ayahSelect.value);
 
     if (currentAyah > 1) {
       ayahSelect.value = currentAyah - 1;
+      loadAyah();
     } else if (surahSelect.selectedIndex > 0) {
       surahSelect.selectedIndex -= 1;
-      updateAyahOptions();
-      const newCount = parseInt(surahSelect.options[surahSelect.selectedIndex].getAttribute('data-ayah-count'));
-      ayahSelect.value = newCount;
+      updateAyahOptions(() => {
+        const newCount = parseInt(surahSelect.options[surahSelect.selectedIndex].getAttribute('data-ayah-count'));
+        ayahSelect.value = newCount;
+        loadAyah();
+      });
     } else {
       alert("📖 This is the very first ayah.");
-      return;
     }
-
-    loadAyah();
   }
 
-  surahSelect.addEventListener('change', updateAyahOptions);
+  surahSelect.addEventListener('change', () => {
+    updateAyahOptions(() => loadAyah());
+  });
+
   ayahSelect.addEventListener('change', loadAyah);
+
+  // Swipe Support
+  let touchStartX = null;
+  let touchEndX = null;
+
+  document.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  });
+
+  document.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleGesture();
+  });
+
+  function handleGesture() {
+    if (touchStartX === null || touchEndX === null) return;
+
+    const deltaX = touchEndX - touchStartX;
+
+    if (Math.abs(deltaX) > 60) {
+      if (deltaX < 0) {
+        loadNextAyah();  // swipe left
+      } else {
+        loadPrevAyah();  // swipe right
+      }
+    }
+
+    touchStartX = null;
+    touchEndX = null;
+  }
 </script>
+
 <script>
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('service-worker.js')
