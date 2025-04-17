@@ -86,30 +86,40 @@
         font-size: 20px;
         padding: 20px;
       }
-
+    
       .navbar .form-group {
-        flex-direction: column;
-        gap: 12px;
+        flex-direction: row; /* 👈 Keep them side-by-side */
+        flex-wrap: wrap;     /* Allow wrap if space not enough */
+        justify-content: center;
+        gap: 8px;
       }
-
+    
       select {
+        width: auto;     /* 👈 Let the content decide width */
+        min-width: 90px; /* 👈 Still keep compact and readable */
         font-size: 14px;
-        padding: 8px;
-        min-width: 80px;
+        padding: 6px 8px;
       }
-
-
+    
       iframe {
         height: 85vh;
       }
-
+    
       .side-arrow {
         width: 36px;
         height: 36px;
         font-size: 18px;
         line-height: 34px;
       }
+      
+      .navbar .form-group {
+        max-width: 90vw;
+      }
+
     }
+
+    
+
   </style>
 
 <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
