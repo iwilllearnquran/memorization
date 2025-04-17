@@ -126,12 +126,15 @@
 <!-- Ayah Viewer -->
 <iframe id="ayahViewer"></iframe>
 
+  
+
 <script>
   const surahSelect = document.getElementById('surahSelect');
   const ayahSelect = document.getElementById('ayahSelect');
   const ayahViewer = document.getElementById('ayahViewer');
   const nextArrow = document.getElementById('nextArrow');
   const prevArrow = document.getElementById('prevArrow');
+
 
   // Fetch all surahs from Quran.com API
   fetch('https://api.quran.com/api/v4/chapters')
@@ -210,6 +213,13 @@
 
   surahSelect.addEventListener('change', updateAyahOptions);
   ayahSelect.addEventListener('change', loadAyah);
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('✅ Service Worker registered'))
+      .catch(error => console.error('Service Worker registration failed:', error));
+  }
 </script>
 
 </body>
