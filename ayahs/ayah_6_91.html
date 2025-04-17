@@ -1,0 +1,1187 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ayah Memorization</title>
+<style>
+    body { font-family: Arial, sans-serif; padding: 15px; margin: 0; }
+    .ayah-arabic { font-size: 30px; text-align: right; direction: rtl; margin-bottom: 10px; word-wrap: break-word; }
+    .ayah-english { font-size: 18px; margin-bottom: 20px; }
+    .navbar {
+        background-color: #0a4d68;
+        color: white;
+        padding: 20px 30px;
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+        border-bottom: 6px solid #2ca7d8;
+    }
+
+    .section {
+        margin-top: 40px;
+        padding: 20px;
+        font-size: 20px;
+        border-top: 1px solid #ccc;
+    }
+
+    .section h3 {
+        font-size: 18px;
+        margin-bottom: 12px;
+        text-align: center;
+        border-bottom: 2px dashed #ccc;
+        padding-bottom: 6px;
+    }
+
+
+    .word {
+        cursor: pointer;
+        margin: 4px 2px;
+        padding: 3px 6px;
+        display: inline-block;
+        border-bottom: 1px dotted gray;
+        font-size: 24px;
+    }
+    .translation {
+        font-size: 12px;
+        color: gray;
+        display: block;
+        margin-top: 2px;
+        line-height: 1;
+        text-align: center;
+    }
+    .popup, .overlay {
+        display: none; position: fixed; top: 0; left: 0;
+        width: 100%; height: 100%; background: rgba(0,0,0,0.5);
+        z-index: 10;
+    }
+    .popup-content {
+    display: none;
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    background: white;
+    padding: 20px;
+    width: 90%;
+    max-height: 80%;
+    overflow-y: auto;
+    z-index: 11;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    font-size: 14px;
+    }
+    .nominative { background-color: #ffe6e6; }   
+    .accusative { background-color: #e6f0ff; }   
+    .genitive   { background-color: #e6ffe6; }   
+    textarea { width: 100%; height: 100px; font-size: 16px; margin-top: 15px; }
+    button { padding: 10px 20px; margin-top: 10px; font-size: 14px; }
+    ul { padding-left: 18px; }
+    @media (max-width: 600px) {
+        .ayah-arabic { font-size: 24px; }
+        .word { font-size: 20px; }
+        .popup-content { font-size: 13px; }
+    }
+    .submit-btn {
+    background-color: #0a4d68;
+    color: #fff;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .submit-btn:hover {
+    background-color: #2ca7d8;
+    transform: translateY(-1px);
+    }
+
+    .submit-btn:active {
+    transform: scale(0.98);
+    }
+
+    .small-placeholder::placeholder {
+    font-size: 10px;
+    color: #888;
+    }
+
+    .confetti {
+  position: relative;
+}
+    .confetti::after {
+  content: "🎉";
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  animation: confettiBurst 0.6s ease-in-out;
+  }
+
+@keyframes confettiBurst {
+  0% { opacity: 0; transform: scale(0.8) translateY(-10px); }
+  50% { opacity: 1; transform: scale(1.1) translateY(0); }
+  100% { opacity: 0; transform: scale(1) translateY(-10px); }
+}
+
+
+</style>
+</head>
+<body>
+
+
+
+
+<div class="section">
+    <h3>📖 Surah: Al-An'am(الأنعام) : Ayah 91</h3>
+    <div class="ayah-arabic" style="text-align: center; direction: rtl;">
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;وَمَا&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a negation particle.&quot;, &quot;Prefixes&quot;: &quot;prefix - conjunction وَ (and)&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_001.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        وَمَا
+        <span class="translation">And not</span>
+        <span class='translation'>وَ مَا</span>
+        <span class='translation'>Resumption Part+Neg Part</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;قَدَرُوا۟&quot;, &quot;Quran Morph Info&quot;: &quot;This word is an perfect verb in 3rd person masculine plural (they - male group) form.&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;<h4>📈 Verb Conjugation Table</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Past</th><th>Present</th><th>Jussive (Negation)</th><th>Subjunctive (Future)</th><th>Emphatic Present (Certainty)</th><th>Imperative (Command)</th></tr><tr><td>هُوَ (he)</td><td>قَدَرَ</td><td>يَقْدُرُ</td><td>يَقْدُرْ</td><td>يَقْدُرَ</td><td>يَقْدُرَنَّ</td><td></td></tr><tr><td>هُمَا (they two masc.)</td><td>قَدَرَا</td><td>يَقْدُرَانِ</td><td>يَقْدُرَا</td><td>يَقْدُرَا</td><td>يَقْدُرَانِّ</td><td></td></tr><tr><td>هُمْ (they masc.)</td><td>قَدَرُوا</td><td>يَقْدُرُونَ</td><td>يَقْدُرُوا</td><td>يَقْدُرُوا</td><td>يَقْدُرُنَّ</td><td></td></tr><tr><td>هِيَ (she)</td><td>قَدَرَتْ</td><td>تَقْدُرُ</td><td>تَقْدُرْ</td><td>تَقْدُرَ</td><td>تَقْدُرَنَّ</td><td></td></tr><tr><td>هُمَا (they two fem.)</td><td>قَدَرَتَا</td><td>تَقْدُرَانِ</td><td>تَقْدُرَا</td><td>تَقْدُرَا</td><td>تَقْدُرَانِّ</td><td></td></tr><tr><td>هُنَّ (they fem.)</td><td>قَدَرْنَ</td><td>يَقْدُرْنَ</td><td>يَقْدُرْنَ</td><td>يَقْدُرْنَ</td><td>يَقْدُرْنَانِّ</td><td></td></tr><tr><td>أَنْتَ (you masc.)</td><td>قَدَرْتَ</td><td>تَقْدُرُ</td><td>تَقْدُرْ</td><td>تَقْدُرَ</td><td>تَقْدُرَنَّ</td><td>اُقْدُرْ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>قَدَرْتُمَا</td><td>تَقْدُرَانِ</td><td>تَقْدُرَا</td><td>تَقْدُرَا</td><td>تَقْدُرَانِّ</td><td>اُقْدُرَا</td></tr><tr><td>أَنْتُمْ (you all masc.)</td><td>قَدَرْتُم</td><td>تَقْدُرُونَ</td><td>تَقْدُرُوا</td><td>تَقْدُرُوا</td><td>تَقْدُرُنَّ</td><td>اُقْدُرُوا</td></tr><tr><td>أَنْتِ (you fem.)</td><td>قَدَرْتِ</td><td>تَقْدُرِينَ</td><td>تَقْدُرِي</td><td>تَقْدُرِي</td><td>تَقْدُرِنَّ</td><td>اُقْدُرِي</td></tr><tr><td>أَنْتُمَا (you two fem.)</td><td>قَدَرْتُمَا</td><td>تَقْدُرَانِ</td><td>تَقْدُرَا</td><td>تَقْدُرَا</td><td>تَقْدُرَانِّ</td><td>اُقْدُرَا</td></tr><tr><td>أَنْتُنَّ (you all fem.)</td><td>قَدَرْتُنَّ</td><td>تَقْدُرْنَ</td><td>تَقْدُرْنَ</td><td>تَقْدُرْنَ</td><td>تَقْدُرْنَانِّ</td><td>اُقْدُرْنَ</td></tr><tr><td>أَنَا (I)</td><td>قَدَرْتُ</td><td>أَقْدُرُ</td><td>أَقْدُرْ</td><td>أَقْدُرَ</td><td>أَقْدُرَنَّ</td><td></td></tr><tr><td>نَحْنُ (we)</td><td>قَدَرْنَا</td><td>نَقْدُرُ</td><td>نَقْدُرْ</td><td>نَقْدُرَ</td><td>نَقْدُرَنَّ</td><td></td></tr></table><h4>🔗 Attached Pronouns Table with Examples (كَتَبَ)</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Doer (Past)</th><th>Doer (Present)</th><th>Done-To (Object)</th></tr><tr><td>هُوَ (he)</td><td>ـَ → كَتَبَ</td><td>يَـ → يَكْتُبُ</td><td>ـهُ → كَتَبَهُ</td></tr><tr><td>هُمَا (they two, masc)</td><td>ـَا → كَتَبَا</td><td>يَـ...ـانِ → يَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُمْ (they, masc)</td><td>ـُوا → كَتَبُوا</td><td>يَـ...ـونَ → يَكْتُبُونَ</td><td>ـهُمْ → كَتَبَهُمْ</td></tr><tr><td>هِيَ (she)</td><td>ـَتْ → كَتَبَتْ</td><td>تَـ → تَكْتُبُ</td><td>ـهَا → كَتَبَهَا</td></tr><tr><td>هُمَا (they two, fem)</td><td>ـَتَا → كَتَبَتَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُنَّ (they, fem)</td><td>ـْنَ → كَتَبْنَ</td><td>يَـ...ـنَ → يَكْتُبْنَ</td><td>ـهُنَّ → كَتَبْهُنَّ</td></tr><tr><td>أَنْتَ (you, masc)</td><td>ـْتَ → كَتَبْتَ</td><td>تَـ → تَكْتُبُ</td><td>ـكَ → كَتَبَكَ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُمْ (you all, masc)</td><td>ـْتُمْ → كَتَبْتُمْ</td><td>تَـ...ـونَ → تَكْتُبُونَ</td><td>ـكُمْ → كَتَبَكُمْ</td></tr><tr><td>أَنْتِ (you, fem)</td><td>ـْتِ → كَتَبْتِ</td><td>تَـ...ـينَ → تَكْتُبِينَ</td><td>ـكِ → كَتَبَكِ</td></tr><tr><td>أَنْتُمَا (you two, fem)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُنَّ (you all, fem)</td><td>ـْتُنَّ → كَتَبْتُنَّ</td><td>تَـ...ـنَ → تَكْتُبْنَ</td><td>ـكُنَّ → كَتَبَكُنَّ</td></tr><tr><td>أَنَا (I)</td><td>ـْتُ → كَتَبْتُ</td><td>أَـ → أَكْتُبُ</td><td>ـنِي → كَتَبَنِي</td></tr><tr><td>نَحْنُ (we)</td><td>ـْنَا → كَتَبْنَا</td><td>نَـ → نَكْتُبُ</td><td>ـنَا → كَتَبَنَا</td></tr></table>&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_002.mp3&quot;, &quot;VERB_FORM&quot;: &quot;I - كَتَبَ&quot;})">
+        قَدَرُوا۟
+        <span class="translation">they appraised</span>
+        <span class='translation'>قَدَرَ وا۟</span>
+        <span class='translation'>Verb+Pron.</span>
+    </span>
+
+    <span class="word accusative" style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;اللَّهَ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a proper noun, accusative case (nasb - detail).&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_003.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        اللَّهَ
+        <span class="translation">Allah</span>
+        <span class='translation'>ٱللَّه</span>
+        <span class='translation'>Proper Noun</span>
+    </span>
+
+    <span class="word accusative" style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;حَقَّ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a noun, masculine, accusative case (nasb - detail).&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;<h4>📈 Verb Conjugation Table</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Past</th><th>Present</th><th>Jussive (Negation)</th><th>Subjunctive (Future)</th><th>Emphatic Present (Certainty)</th><th>Imperative (Command)</th></tr><tr><td>هُوَ (he)</td><td>حَقَقَ</td><td>يَحْقَقُ</td><td>يَحْقَقْ</td><td>يَحْقَقَ</td><td>يَحْقَقَنَّ</td><td></td></tr><tr><td>هُمَا (they two masc.)</td><td>حَقَقَا</td><td>يَحْقَقَانِ</td><td>يَحْقَقَا</td><td>يَحْقَقَا</td><td>يَحْقَقَانِّ</td><td></td></tr><tr><td>هُمْ (they masc.)</td><td>حَقَقُوا</td><td>يَحْقَقُونَ</td><td>يَحْقَقُوا</td><td>يَحْقَقُوا</td><td>يَحْقَقُنَّ</td><td></td></tr><tr><td>هِيَ (she)</td><td>حَقَقَتْ</td><td>تَحْقَقُ</td><td>تَحْقَقْ</td><td>تَحْقَقَ</td><td>تَحْقَقَنَّ</td><td></td></tr><tr><td>هُمَا (they two fem.)</td><td>حَقَقَتَا</td><td>تَحْقَقَانِ</td><td>تَحْقَقَا</td><td>تَحْقَقَا</td><td>تَحْقَقَانِّ</td><td></td></tr><tr><td>هُنَّ (they fem.)</td><td>حَقَقْنَ</td><td>يَحْقَقْنَ</td><td>يَحْقَقْنَ</td><td>يَحْقَقْنَ</td><td>يَحْقَقْنَانِّ</td><td></td></tr><tr><td>أَنْتَ (you masc.)</td><td>حَقَقْتَ</td><td>تَحْقَقُ</td><td>تَحْقَقْ</td><td>تَحْقَقَ</td><td>تَحْقَقَنَّ</td><td>اِحْقَقْ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>حَقَقْتُمَا</td><td>تَحْقَقَانِ</td><td>تَحْقَقَا</td><td>تَحْقَقَا</td><td>تَحْقَقَانِّ</td><td>اِحْقَقَا</td></tr><tr><td>أَنْتُمْ (you all masc.)</td><td>حَقَقْتُم</td><td>تَحْقَقُونَ</td><td>تَحْقَقُوا</td><td>تَحْقَقُوا</td><td>تَحْقَقُنَّ</td><td>اِحْقَقُوا</td></tr><tr><td>أَنْتِ (you fem.)</td><td>حَقَقْتِ</td><td>تَحْقَقِينَ</td><td>تَحْقَقِي</td><td>تَحْقَقِي</td><td>تَحْقَقِنَّ</td><td>اِحْقَقِي</td></tr><tr><td>أَنْتُمَا (you two fem.)</td><td>حَقَقْتُمَا</td><td>تَحْقَقَانِ</td><td>تَحْقَقَا</td><td>تَحْقَقَا</td><td>تَحْقَقَانِّ</td><td>اِحْقَقَا</td></tr><tr><td>أَنْتُنَّ (you all fem.)</td><td>حَقَقْتُنَّ</td><td>تَحْقَقْنَ</td><td>تَحْقَقْنَ</td><td>تَحْقَقْنَ</td><td>تَحْقَقْنَانِّ</td><td>اِحْقَقْنَ</td></tr><tr><td>أَنَا (I)</td><td>حَقَقْتُ</td><td>أَحْقَقُ</td><td>أَحْقَقْ</td><td>أَحْقَقَ</td><td>أَحْقَقَنَّ</td><td></td></tr><tr><td>نَحْنُ (we)</td><td>حَقَقْنَا</td><td>نَحْقَقُ</td><td>نَحْقَقْ</td><td>نَحْقَقَ</td><td>نَحْقَقَنَّ</td><td></td></tr></table><h4>🔗 Attached Pronouns Table with Examples (كَتَبَ)</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Doer (Past)</th><th>Doer (Present)</th><th>Done-To (Object)</th></tr><tr><td>هُوَ (he)</td><td>ـَ → كَتَبَ</td><td>يَـ → يَكْتُبُ</td><td>ـهُ → كَتَبَهُ</td></tr><tr><td>هُمَا (they two, masc)</td><td>ـَا → كَتَبَا</td><td>يَـ...ـانِ → يَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُمْ (they, masc)</td><td>ـُوا → كَتَبُوا</td><td>يَـ...ـونَ → يَكْتُبُونَ</td><td>ـهُمْ → كَتَبَهُمْ</td></tr><tr><td>هِيَ (she)</td><td>ـَتْ → كَتَبَتْ</td><td>تَـ → تَكْتُبُ</td><td>ـهَا → كَتَبَهَا</td></tr><tr><td>هُمَا (they two, fem)</td><td>ـَتَا → كَتَبَتَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُنَّ (they, fem)</td><td>ـْنَ → كَتَبْنَ</td><td>يَـ...ـنَ → يَكْتُبْنَ</td><td>ـهُنَّ → كَتَبْهُنَّ</td></tr><tr><td>أَنْتَ (you, masc)</td><td>ـْتَ → كَتَبْتَ</td><td>تَـ → تَكْتُبُ</td><td>ـكَ → كَتَبَكَ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُمْ (you all, masc)</td><td>ـْتُمْ → كَتَبْتُمْ</td><td>تَـ...ـونَ → تَكْتُبُونَ</td><td>ـكُمْ → كَتَبَكُمْ</td></tr><tr><td>أَنْتِ (you, fem)</td><td>ـْتِ → كَتَبْتِ</td><td>تَـ...ـينَ → تَكْتُبِينَ</td><td>ـكِ → كَتَبَكِ</td></tr><tr><td>أَنْتُمَا (you two, fem)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُنَّ (you all, fem)</td><td>ـْتُنَّ → كَتَبْتُنَّ</td><td>تَـ...ـنَ → تَكْتُبْنَ</td><td>ـكُنَّ → كَتَبَكُنَّ</td></tr><tr><td>أَنَا (I)</td><td>ـْتُ → كَتَبْتُ</td><td>أَـ → أَكْتُبُ</td><td>ـنِي → كَتَبَنِي</td></tr><tr><td>نَحْنُ (we)</td><td>ـْنَا → كَتَبْنَا</td><td>نَـ → نَكْتُبُ</td><td>ـنَا → كَتَبَنَا</td></tr></table>&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_004.mp3&quot;, &quot;VERB_FORM&quot;: &quot;I - كَتَبَ&quot;})">
+        حَقَّ
+        <span class="translation">(with) true</span>
+        <span class='translation'>حَقّ</span>
+        <span class='translation'>Noun</span>
+    </span>
+
+    <span class="word genitive" style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;قَدْرِهِۦٓ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a noun, masculine, genitive case (jarr - after of), 3rd person masculine singular (he).&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_005.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        قَدْرِهِۦٓ
+        <span class="translation">[of his] appraisal</span>
+        <span class='translation'>قَدْر هِۦٓ</span>
+        <span class='translation'>Noun+Pron.</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;إِذْ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a conjunction.&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_006.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        إِذْ
+        <span class="translation">when</span>
+        <span class='translation'>إِذ</span>
+        <span class='translation'>Time Adverb</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;قَالُوا۟&quot;, &quot;Quran Morph Info&quot;: &quot;This word is an perfect verb in 3rd person masculine plural (they - male group) form.&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;<h4>📈 Verb Conjugation Table</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Past</th><th>Present</th><th>Jussive (Negation)</th><th>Subjunctive (Future)</th><th>Emphatic Present (Certainty)</th><th>Imperative (Command)</th></tr><tr><td>هُوَ (he)</td><td>قَالَ</td><td>يَقُولُ</td><td>يَقُلْ</td><td>يَقُولَ</td><td>يَقُولَنَّ</td><td></td></tr><tr><td>هُمَا (they two masc.)</td><td>قَالَا</td><td>يَقُولَانِ</td><td>يَقُولَا</td><td>يَقُولَا</td><td>يَقُولَانِّ</td><td></td></tr><tr><td>هُمْ (they masc.)</td><td>قَالُوا</td><td>يَقُولُونَ</td><td>يَقُولُوا</td><td>يَقُولُوا</td><td>يَقُولُنَّ</td><td></td></tr><tr><td>هِيَ (she)</td><td>قَالَتْ</td><td>تَقُولُ</td><td>تَقُلْ</td><td>تَقُولَ</td><td>تَقُولَنَّ</td><td></td></tr><tr><td>هُمَا (they two fem.)</td><td>قَالَتَا</td><td>تَقُولَانِ</td><td>تَقُولَا</td><td>تَقُولَا</td><td>تَقُولَانِّ</td><td></td></tr><tr><td>هُنَّ (they fem.)</td><td>قُلْنَ</td><td>يَقُلْنَ</td><td>يَقُلْنَ</td><td>يَقُلْنَ</td><td>يَقُلْنَانِّ</td><td></td></tr><tr><td>أَنْتَ (you masc.)</td><td>قُلْتَ</td><td>تَقُولُ</td><td>تَقُلْ</td><td>تَقُولَ</td><td>تَقُولَنَّ</td><td>قُلْ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>قُلْتُمَا</td><td>تَقُولَانِ</td><td>تَقُولَا</td><td>تَقُولَا</td><td>تَقُولَانِّ</td><td>قُولَا</td></tr><tr><td>أَنْتُمْ (you all masc.)</td><td>قُلْتُم</td><td>تَقُولُونَ</td><td>تَقُولُوا</td><td>تَقُولُوا</td><td>تَقُولُنَّ</td><td>قُولُوا</td></tr><tr><td>أَنْتِ (you fem.)</td><td>قُلْتِ</td><td>تَقُولِينَ</td><td>تَقُولِي</td><td>تَقُولِي</td><td>تَقُولِنَّ</td><td>قُولِي</td></tr><tr><td>أَنْتُمَا (you two fem.)</td><td>قُلْتُمَا</td><td>تَقُولَانِ</td><td>تَقُولَا</td><td>تَقُولَا</td><td>تَقُولَانِّ</td><td>قُولَا</td></tr><tr><td>أَنْتُنَّ (you all fem.)</td><td>قُلْتُنَّ</td><td>تَقُلْنَ</td><td>تَقُلْنَ</td><td>تَقُلْنَ</td><td>تَقُلْنَانِّ</td><td>قُلْنَ</td></tr><tr><td>أَنَا (I)</td><td>قُلْتُ</td><td>أَقُولُ</td><td>أَقُلْ</td><td>أَقُولَ</td><td>أَقُولَنَّ</td><td></td></tr><tr><td>نَحْنُ (we)</td><td>قُلْنَا</td><td>نَقُولُ</td><td>نَقُلْ</td><td>نَقُولَ</td><td>نَقُولَنَّ</td><td></td></tr></table><h4>🔗 Attached Pronouns Table with Examples (كَتَبَ)</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Doer (Past)</th><th>Doer (Present)</th><th>Done-To (Object)</th></tr><tr><td>هُوَ (he)</td><td>ـَ → كَتَبَ</td><td>يَـ → يَكْتُبُ</td><td>ـهُ → كَتَبَهُ</td></tr><tr><td>هُمَا (they two, masc)</td><td>ـَا → كَتَبَا</td><td>يَـ...ـانِ → يَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُمْ (they, masc)</td><td>ـُوا → كَتَبُوا</td><td>يَـ...ـونَ → يَكْتُبُونَ</td><td>ـهُمْ → كَتَبَهُمْ</td></tr><tr><td>هِيَ (she)</td><td>ـَتْ → كَتَبَتْ</td><td>تَـ → تَكْتُبُ</td><td>ـهَا → كَتَبَهَا</td></tr><tr><td>هُمَا (they two, fem)</td><td>ـَتَا → كَتَبَتَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُنَّ (they, fem)</td><td>ـْنَ → كَتَبْنَ</td><td>يَـ...ـنَ → يَكْتُبْنَ</td><td>ـهُنَّ → كَتَبْهُنَّ</td></tr><tr><td>أَنْتَ (you, masc)</td><td>ـْتَ → كَتَبْتَ</td><td>تَـ → تَكْتُبُ</td><td>ـكَ → كَتَبَكَ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُمْ (you all, masc)</td><td>ـْتُمْ → كَتَبْتُمْ</td><td>تَـ...ـونَ → تَكْتُبُونَ</td><td>ـكُمْ → كَتَبَكُمْ</td></tr><tr><td>أَنْتِ (you, fem)</td><td>ـْتِ → كَتَبْتِ</td><td>تَـ...ـينَ → تَكْتُبِينَ</td><td>ـكِ → كَتَبَكِ</td></tr><tr><td>أَنْتُمَا (you two, fem)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُنَّ (you all, fem)</td><td>ـْتُنَّ → كَتَبْتُنَّ</td><td>تَـ...ـنَ → تَكْتُبْنَ</td><td>ـكُنَّ → كَتَبَكُنَّ</td></tr><tr><td>أَنَا (I)</td><td>ـْتُ → كَتَبْتُ</td><td>أَـ → أَكْتُبُ</td><td>ـنِي → كَتَبَنِي</td></tr><tr><td>نَحْنُ (we)</td><td>ـْنَا → كَتَبْنَا</td><td>نَـ → نَكْتُبُ</td><td>ـنَا → كَتَبَنَا</td></tr></table>&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_007.mp3&quot;, &quot;VERB_FORM&quot;: &quot;I - كَتَبَ&quot;})">
+        قَالُوا۟
+        <span class="translation">they said</span>
+        <span class='translation'>قَالَ وا۟</span>
+        <span class='translation'>Verb+Pron.</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;مَآ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a negation particle.&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_008.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        مَآ
+        <span class="translation">Not</span>
+        <span class='translation'>مَا</span>
+        <span class='translation'>Neg Part</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;أَنزَلَ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is an perfect verb in 3rd person masculine singular (he) form, Imperfect Verb.&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;<h4>📈 Verb Conjugation Table</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Past</th><th>Present</th><th>Jussive (Negation)</th><th>Subjunctive (Future)</th><th>Emphatic Present (Certainty)</th><th>Imperative (Command)</th></tr><tr><td>هُوَ (he)</td><td>أَنْزَلَ</td><td>يُنْزِلُ</td><td>يُنْزِلْ</td><td>يُنْزِلَ</td><td>يُنْزِلَنَّ</td><td></td></tr><tr><td>هُمَا (they two masc.)</td><td>أَنْزَلَا</td><td>يُنْزِلَانِ</td><td>يُنْزِلَا</td><td>يُنْزِلَا</td><td>يُنْزِلَانِّ</td><td></td></tr><tr><td>هُمْ (they masc.)</td><td>أَنْزَلُوا</td><td>يُنْزِلُونَ</td><td>يُنْزِلُوا</td><td>يُنْزِلُوا</td><td>يُنْزِلُنَّ</td><td></td></tr><tr><td>هِيَ (she)</td><td>أَنْزَلَتْ</td><td>تُنْزِلُ</td><td>تُنْزِلْ</td><td>تُنْزِلَ</td><td>تُنْزِلَنَّ</td><td></td></tr><tr><td>هُمَا (they two fem.)</td><td>أَنْزَلَتَا</td><td>تُنْزِلَانِ</td><td>تُنْزِلَا</td><td>تُنْزِلَا</td><td>تُنْزِلَانِّ</td><td></td></tr><tr><td>هُنَّ (they fem.)</td><td>أَنْزَلْنَ</td><td>يُنْزِلْنَ</td><td>يُنْزِلْنَ</td><td>يُنْزِلْنَ</td><td>يُنْزِلْنَانِّ</td><td></td></tr><tr><td>أَنْتَ (you masc.)</td><td>أَنْزَلْتَ</td><td>تُنْزِلُ</td><td>تُنْزِلْ</td><td>تُنْزِلَ</td><td>تُنْزِلَنَّ</td><td>أَنْزِلْ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>أَنْزَلْتُمَا</td><td>تُنْزِلَانِ</td><td>تُنْزِلَا</td><td>تُنْزِلَا</td><td>تُنْزِلَانِّ</td><td>أَنْزِلَا</td></tr><tr><td>أَنْتُمْ (you all masc.)</td><td>أَنْزَلْتُم</td><td>تُنْزِلُونَ</td><td>تُنْزِلُوا</td><td>تُنْزِلُوا</td><td>تُنْزِلُنَّ</td><td>أَنْزِلُوا</td></tr><tr><td>أَنْتِ (you fem.)</td><td>أَنْزَلْتِ</td><td>تُنْزِلِينَ</td><td>تُنْزِلِي</td><td>تُنْزِلِي</td><td>تُنْزِلِنَّ</td><td>أَنْزِلِي</td></tr><tr><td>أَنْتُمَا (you two fem.)</td><td>أَنْزَلْتُمَا</td><td>تُنْزِلَانِ</td><td>تُنْزِلَا</td><td>تُنْزِلَا</td><td>تُنْزِلَانِّ</td><td>أَنْزِلَا</td></tr><tr><td>أَنْتُنَّ (you all fem.)</td><td>أَنْزَلْتُنَّ</td><td>تُنْزِلْنَ</td><td>تُنْزِلْنَ</td><td>تُنْزِلْنَ</td><td>تُنْزِلْنَانِّ</td><td>أَنْزِلْنَ</td></tr><tr><td>أَنَا (I)</td><td>أَنْزَلْتُ</td><td>أُنْزِلُ</td><td>أُنْزِلْ</td><td>أُنْزِلَ</td><td>أُنْزِلَنَّ</td><td></td></tr><tr><td>نَحْنُ (we)</td><td>أَنْزَلْنَا</td><td>نُنْزِلُ</td><td>نُنْزِلْ</td><td>نُنْزِلَ</td><td>نُنْزِلَنَّ</td><td></td></tr></table><h4>🔗 Attached Pronouns Table with Examples (كَتَبَ)</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Doer (Past)</th><th>Doer (Present)</th><th>Done-To (Object)</th></tr><tr><td>هُوَ (he)</td><td>ـَ → كَتَبَ</td><td>يَـ → يَكْتُبُ</td><td>ـهُ → كَتَبَهُ</td></tr><tr><td>هُمَا (they two, masc)</td><td>ـَا → كَتَبَا</td><td>يَـ...ـانِ → يَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُمْ (they, masc)</td><td>ـُوا → كَتَبُوا</td><td>يَـ...ـونَ → يَكْتُبُونَ</td><td>ـهُمْ → كَتَبَهُمْ</td></tr><tr><td>هِيَ (she)</td><td>ـَتْ → كَتَبَتْ</td><td>تَـ → تَكْتُبُ</td><td>ـهَا → كَتَبَهَا</td></tr><tr><td>هُمَا (they two, fem)</td><td>ـَتَا → كَتَبَتَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُنَّ (they, fem)</td><td>ـْنَ → كَتَبْنَ</td><td>يَـ...ـنَ → يَكْتُبْنَ</td><td>ـهُنَّ → كَتَبْهُنَّ</td></tr><tr><td>أَنْتَ (you, masc)</td><td>ـْتَ → كَتَبْتَ</td><td>تَـ → تَكْتُبُ</td><td>ـكَ → كَتَبَكَ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُمْ (you all, masc)</td><td>ـْتُمْ → كَتَبْتُمْ</td><td>تَـ...ـونَ → تَكْتُبُونَ</td><td>ـكُمْ → كَتَبَكُمْ</td></tr><tr><td>أَنْتِ (you, fem)</td><td>ـْتِ → كَتَبْتِ</td><td>تَـ...ـينَ → تَكْتُبِينَ</td><td>ـكِ → كَتَبَكِ</td></tr><tr><td>أَنْتُمَا (you two, fem)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُنَّ (you all, fem)</td><td>ـْتُنَّ → كَتَبْتُنَّ</td><td>تَـ...ـنَ → تَكْتُبْنَ</td><td>ـكُنَّ → كَتَبَكُنَّ</td></tr><tr><td>أَنَا (I)</td><td>ـْتُ → كَتَبْتُ</td><td>أَـ → أَكْتُبُ</td><td>ـنِي → كَتَبَنِي</td></tr><tr><td>نَحْنُ (we)</td><td>ـْنَا → كَتَبْنَا</td><td>نَـ → نَكْتُبُ</td><td>ـنَا → كَتَبَنَا</td></tr></table>&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_009.mp3&quot;, &quot;VERB_FORM&quot;: &quot;IV - أَكْرَمَ&quot;})">
+        أَنزَلَ
+        <span class="translation">revealed</span>
+        <span class='translation'>أَنزَلَ</span>
+        <span class='translation'>Verb</span>
+    </span>
+
+    <span class="word nominative" style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;اللَّهُ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a proper noun, nominative case (rafa).&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_010.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        اللَّهُ
+        <span class="translation">(by) Allah</span>
+        <span class='translation'>ٱللَّه</span>
+        <span class='translation'>Proper Noun</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;عَلَىٰ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a plural.&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_011.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        عَلَىٰ
+        <span class="translation">on</span>
+        <span class='translation'>عَلَىٰ</span>
+        <span class='translation'>Preposition</span>
+    </span>
+
+    <span class="word genitive" style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;بَشَرٍ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a noun, masculine, Indefinite, genitive case (jarr - after of).&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;<h4>📈 Verb Conjugation Table</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Past</th><th>Present</th><th>Jussive (Negation)</th><th>Subjunctive (Future)</th><th>Emphatic Present (Certainty)</th><th>Imperative (Command)</th></tr><tr><td>هُوَ (he)</td><td>بَشَرَ</td><td>يَبْشُرُ</td><td>يَبْشُرْ</td><td>يَبْشُرَ</td><td>يَبْشُرَنَّ</td><td></td></tr><tr><td>هُمَا (they two masc.)</td><td>بَشَرَا</td><td>يَبْشُرَانِ</td><td>يَبْشُرَا</td><td>يَبْشُرَا</td><td>يَبْشُرَانِّ</td><td></td></tr><tr><td>هُمْ (they masc.)</td><td>بَشَرُوا</td><td>يَبْشُرُونَ</td><td>يَبْشُرُوا</td><td>يَبْشُرُوا</td><td>يَبْشُرُنَّ</td><td></td></tr><tr><td>هِيَ (she)</td><td>بَشَرَتْ</td><td>تَبْشُرُ</td><td>تَبْشُرْ</td><td>تَبْشُرَ</td><td>تَبْشُرَنَّ</td><td></td></tr><tr><td>هُمَا (they two fem.)</td><td>بَشَرَتَا</td><td>تَبْشُرَانِ</td><td>تَبْشُرَا</td><td>تَبْشُرَا</td><td>تَبْشُرَانِّ</td><td></td></tr><tr><td>هُنَّ (they fem.)</td><td>بَشَرْنَ</td><td>يَبْشُرْنَ</td><td>يَبْشُرْنَ</td><td>يَبْشُرْنَ</td><td>يَبْشُرْنَانِّ</td><td></td></tr><tr><td>أَنْتَ (you masc.)</td><td>بَشَرْتَ</td><td>تَبْشُرُ</td><td>تَبْشُرْ</td><td>تَبْشُرَ</td><td>تَبْشُرَنَّ</td><td>اُبْشُرْ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>بَشَرْتُمَا</td><td>تَبْشُرَانِ</td><td>تَبْشُرَا</td><td>تَبْشُرَا</td><td>تَبْشُرَانِّ</td><td>اُبْشُرَا</td></tr><tr><td>أَنْتُمْ (you all masc.)</td><td>بَشَرْتُم</td><td>تَبْشُرُونَ</td><td>تَبْشُرُوا</td><td>تَبْشُرُوا</td><td>تَبْشُرُنَّ</td><td>اُبْشُرُوا</td></tr><tr><td>أَنْتِ (you fem.)</td><td>بَشَرْتِ</td><td>تَبْشُرِينَ</td><td>تَبْشُرِي</td><td>تَبْشُرِي</td><td>تَبْشُرِنَّ</td><td>اُبْشُرِي</td></tr><tr><td>أَنْتُمَا (you two fem.)</td><td>بَشَرْتُمَا</td><td>تَبْشُرَانِ</td><td>تَبْشُرَا</td><td>تَبْشُرَا</td><td>تَبْشُرَانِّ</td><td>اُبْشُرَا</td></tr><tr><td>أَنْتُنَّ (you all fem.)</td><td>بَشَرْتُنَّ</td><td>تَبْشُرْنَ</td><td>تَبْشُرْنَ</td><td>تَبْشُرْنَ</td><td>تَبْشُرْنَانِّ</td><td>اُبْشُرْنَ</td></tr><tr><td>أَنَا (I)</td><td>بَشَرْتُ</td><td>أَبْشُرُ</td><td>أَبْشُرْ</td><td>أَبْشُرَ</td><td>أَبْشُرَنَّ</td><td></td></tr><tr><td>نَحْنُ (we)</td><td>بَشَرْنَا</td><td>نَبْشُرُ</td><td>نَبْشُرْ</td><td>نَبْشُرَ</td><td>نَبْشُرَنَّ</td><td></td></tr></table><h4>🔗 Attached Pronouns Table with Examples (كَتَبَ)</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Doer (Past)</th><th>Doer (Present)</th><th>Done-To (Object)</th></tr><tr><td>هُوَ (he)</td><td>ـَ → كَتَبَ</td><td>يَـ → يَكْتُبُ</td><td>ـهُ → كَتَبَهُ</td></tr><tr><td>هُمَا (they two, masc)</td><td>ـَا → كَتَبَا</td><td>يَـ...ـانِ → يَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُمْ (they, masc)</td><td>ـُوا → كَتَبُوا</td><td>يَـ...ـونَ → يَكْتُبُونَ</td><td>ـهُمْ → كَتَبَهُمْ</td></tr><tr><td>هِيَ (she)</td><td>ـَتْ → كَتَبَتْ</td><td>تَـ → تَكْتُبُ</td><td>ـهَا → كَتَبَهَا</td></tr><tr><td>هُمَا (they two, fem)</td><td>ـَتَا → كَتَبَتَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُنَّ (they, fem)</td><td>ـْنَ → كَتَبْنَ</td><td>يَـ...ـنَ → يَكْتُبْنَ</td><td>ـهُنَّ → كَتَبْهُنَّ</td></tr><tr><td>أَنْتَ (you, masc)</td><td>ـْتَ → كَتَبْتَ</td><td>تَـ → تَكْتُبُ</td><td>ـكَ → كَتَبَكَ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُمْ (you all, masc)</td><td>ـْتُمْ → كَتَبْتُمْ</td><td>تَـ...ـونَ → تَكْتُبُونَ</td><td>ـكُمْ → كَتَبَكُمْ</td></tr><tr><td>أَنْتِ (you, fem)</td><td>ـْتِ → كَتَبْتِ</td><td>تَـ...ـينَ → تَكْتُبِينَ</td><td>ـكِ → كَتَبَكِ</td></tr><tr><td>أَنْتُمَا (you two, fem)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُنَّ (you all, fem)</td><td>ـْتُنَّ → كَتَبْتُنَّ</td><td>تَـ...ـنَ → تَكْتُبْنَ</td><td>ـكُنَّ → كَتَبَكُنَّ</td></tr><tr><td>أَنَا (I)</td><td>ـْتُ → كَتَبْتُ</td><td>أَـ → أَكْتُبُ</td><td>ـنِي → كَتَبَنِي</td></tr><tr><td>نَحْنُ (we)</td><td>ـْنَا → كَتَبْنَا</td><td>نَـ → نَكْتُبُ</td><td>ـنَا → كَتَبَنَا</td></tr></table>&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_012.mp3&quot;, &quot;VERB_FORM&quot;: &quot;I - كَتَبَ&quot;})">
+        بَشَرٍ
+        <span class="translation">a human being</span>
+        <span class='translation'>بَشَر</span>
+        <span class='translation'>Noun</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;مِّن&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a plural.&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_013.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        مِّن
+        <span class="translation">[of]</span>
+        <span class='translation'>مِن</span>
+        <span class='translation'>Preposition</span>
+    </span>
+
+    <span class="word genitive" style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;شَىْءٍ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a noun, masculine, Indefinite, genitive case (jarr - after of).&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;<h4>📈 Verb Conjugation Table</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Past</th><th>Present</th><th>Jussive (Negation)</th><th>Subjunctive (Future)</th><th>Emphatic Present (Certainty)</th><th>Imperative (Command)</th></tr><tr><td>هُوَ (he)</td><td>شَيَا</td><td>يَشْيَا</td><td>يَشْيَ</td><td>يَشْيَا</td><td>يَشْيَيَنَّ</td><td></td></tr><tr><td>هُمَا (they two masc.)</td><td>شَيَيَا</td><td>يَشْيَيَانِ</td><td>يَشْيَيَا</td><td>يَشْيَيَا</td><td>يَشْيَيَانِّ</td><td></td></tr><tr><td>هُمْ (they masc.)</td><td>شَيَوْا</td><td>يَشْيَوْنَ</td><td>يَشْيَوْا</td><td>يَشْيَوْا</td><td>يَشْيَوُنَّ</td><td></td></tr><tr><td>هِيَ (she)</td><td>شَيَيَتْ</td><td>تَشْيَا</td><td>تَشْيَ</td><td>تَشْيَا</td><td>تَشْيَيَنَّ</td><td></td></tr><tr><td>هُمَا (they two fem.)</td><td>شَيَيَتَا</td><td>تَشْيَيَانِ</td><td>تَشْيَيَا</td><td>تَشْيَيَا</td><td>تَشْيَيَانِّ</td><td></td></tr><tr><td>هُنَّ (they fem.)</td><td>شَيَيْنَ</td><td>يَشْيَيْنَ</td><td>يَشْيَيْنَ</td><td>يَشْيَيْنَ</td><td>يَشْيَيْنَانِّ</td><td></td></tr><tr><td>أَنْتَ (you masc.)</td><td>شَيَيْتَ</td><td>تَشْيَا</td><td>تَشْيَ</td><td>تَشْيَا</td><td>تَشْيَيَنَّ</td><td>اِشْيَ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>شَيَيْتُمَا</td><td>تَشْيَيَانِ</td><td>تَشْيَيَا</td><td>تَشْيَيَا</td><td>تَشْيَيَانِّ</td><td>اِشْيَيَا</td></tr><tr><td>أَنْتُمْ (you all masc.)</td><td>شَيَيْتُم</td><td>تَشْيَوْنَ</td><td>تَشْيَوْا</td><td>تَشْيَوْا</td><td>تَشْيَوُنَّ</td><td>اِشْيَوْا</td></tr><tr><td>أَنْتِ (you fem.)</td><td>شَيَيْتِ</td><td>تَشْيَيْنَ</td><td>تَشْيَيْ</td><td>تَشْيَيْ</td><td>تَشْيَيِنَّ</td><td>اِشْيَيْ</td></tr><tr><td>أَنْتُمَا (you two fem.)</td><td>شَيَيْتُمَا</td><td>تَشْيَيَانِ</td><td>تَشْيَيَا</td><td>تَشْيَيَا</td><td>تَشْيَيَانِّ</td><td>اِشْيَيَا</td></tr><tr><td>أَنْتُنَّ (you all fem.)</td><td>شَيَيْتُنَّ</td><td>تَشْيَيْنَ</td><td>تَشْيَيْنَ</td><td>تَشْيَيْنَ</td><td>تَشْيَيْنَانِّ</td><td>اِشْيَيْنَ</td></tr><tr><td>أَنَا (I)</td><td>شَيَيْتُ</td><td>أَشْيَا</td><td>أَشْيَ</td><td>أَشْيَا</td><td>أَشْيَيَنَّ</td><td></td></tr><tr><td>نَحْنُ (we)</td><td>شَيَيْنَا</td><td>نَشْيَا</td><td>نَشْيَ</td><td>نَشْيَا</td><td>نَشْيَيَنَّ</td><td></td></tr></table><h4>🔗 Attached Pronouns Table with Examples (كَتَبَ)</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Doer (Past)</th><th>Doer (Present)</th><th>Done-To (Object)</th></tr><tr><td>هُوَ (he)</td><td>ـَ → كَتَبَ</td><td>يَـ → يَكْتُبُ</td><td>ـهُ → كَتَبَهُ</td></tr><tr><td>هُمَا (they two, masc)</td><td>ـَا → كَتَبَا</td><td>يَـ...ـانِ → يَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُمْ (they, masc)</td><td>ـُوا → كَتَبُوا</td><td>يَـ...ـونَ → يَكْتُبُونَ</td><td>ـهُمْ → كَتَبَهُمْ</td></tr><tr><td>هِيَ (she)</td><td>ـَتْ → كَتَبَتْ</td><td>تَـ → تَكْتُبُ</td><td>ـهَا → كَتَبَهَا</td></tr><tr><td>هُمَا (they two, fem)</td><td>ـَتَا → كَتَبَتَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُنَّ (they, fem)</td><td>ـْنَ → كَتَبْنَ</td><td>يَـ...ـنَ → يَكْتُبْنَ</td><td>ـهُنَّ → كَتَبْهُنَّ</td></tr><tr><td>أَنْتَ (you, masc)</td><td>ـْتَ → كَتَبْتَ</td><td>تَـ → تَكْتُبُ</td><td>ـكَ → كَتَبَكَ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُمْ (you all, masc)</td><td>ـْتُمْ → كَتَبْتُمْ</td><td>تَـ...ـونَ → تَكْتُبُونَ</td><td>ـكُمْ → كَتَبَكُمْ</td></tr><tr><td>أَنْتِ (you, fem)</td><td>ـْتِ → كَتَبْتِ</td><td>تَـ...ـينَ → تَكْتُبِينَ</td><td>ـكِ → كَتَبَكِ</td></tr><tr><td>أَنْتُمَا (you two, fem)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُنَّ (you all, fem)</td><td>ـْتُنَّ → كَتَبْتُنَّ</td><td>تَـ...ـنَ → تَكْتُبْنَ</td><td>ـكُنَّ → كَتَبَكُنَّ</td></tr><tr><td>أَنَا (I)</td><td>ـْتُ → كَتَبْتُ</td><td>أَـ → أَكْتُبُ</td><td>ـنِي → كَتَبَنِي</td></tr><tr><td>نَحْنُ (we)</td><td>ـْنَا → كَتَبْنَا</td><td>نَـ → نَكْتُبُ</td><td>ـنَا → كَتَبَنَا</td></tr></table>&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_014.mp3&quot;, &quot;VERB_FORM&quot;: &quot;I - كَتَبَ&quot;})">
+        شَىْءٍ
+        <span class="translation">anything</span>
+        <span class='translation'>شَىْء</span>
+        <span class='translation'>Noun</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;قُلْ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a verb in 2nd person masculine singular (you - male) form, IMPV.&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;<h4>📈 Verb Conjugation Table</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Past</th><th>Present</th><th>Jussive (Negation)</th><th>Subjunctive (Future)</th><th>Emphatic Present (Certainty)</th><th>Imperative (Command)</th></tr><tr><td>هُوَ (he)</td><td>قَالَ</td><td>يَقُولُ</td><td>يَقُلْ</td><td>يَقُولَ</td><td>يَقُولَنَّ</td><td></td></tr><tr><td>هُمَا (they two masc.)</td><td>قَالَا</td><td>يَقُولَانِ</td><td>يَقُولَا</td><td>يَقُولَا</td><td>يَقُولَانِّ</td><td></td></tr><tr><td>هُمْ (they masc.)</td><td>قَالُوا</td><td>يَقُولُونَ</td><td>يَقُولُوا</td><td>يَقُولُوا</td><td>يَقُولُنَّ</td><td></td></tr><tr><td>هِيَ (she)</td><td>قَالَتْ</td><td>تَقُولُ</td><td>تَقُلْ</td><td>تَقُولَ</td><td>تَقُولَنَّ</td><td></td></tr><tr><td>هُمَا (they two fem.)</td><td>قَالَتَا</td><td>تَقُولَانِ</td><td>تَقُولَا</td><td>تَقُولَا</td><td>تَقُولَانِّ</td><td></td></tr><tr><td>هُنَّ (they fem.)</td><td>قُلْنَ</td><td>يَقُلْنَ</td><td>يَقُلْنَ</td><td>يَقُلْنَ</td><td>يَقُلْنَانِّ</td><td></td></tr><tr><td>أَنْتَ (you masc.)</td><td>قُلْتَ</td><td>تَقُولُ</td><td>تَقُلْ</td><td>تَقُولَ</td><td>تَقُولَنَّ</td><td>قُلْ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>قُلْتُمَا</td><td>تَقُولَانِ</td><td>تَقُولَا</td><td>تَقُولَا</td><td>تَقُولَانِّ</td><td>قُولَا</td></tr><tr><td>أَنْتُمْ (you all masc.)</td><td>قُلْتُم</td><td>تَقُولُونَ</td><td>تَقُولُوا</td><td>تَقُولُوا</td><td>تَقُولُنَّ</td><td>قُولُوا</td></tr><tr><td>أَنْتِ (you fem.)</td><td>قُلْتِ</td><td>تَقُولِينَ</td><td>تَقُولِي</td><td>تَقُولِي</td><td>تَقُولِنَّ</td><td>قُولِي</td></tr><tr><td>أَنْتُمَا (you two fem.)</td><td>قُلْتُمَا</td><td>تَقُولَانِ</td><td>تَقُولَا</td><td>تَقُولَا</td><td>تَقُولَانِّ</td><td>قُولَا</td></tr><tr><td>أَنْتُنَّ (you all fem.)</td><td>قُلْتُنَّ</td><td>تَقُلْنَ</td><td>تَقُلْنَ</td><td>تَقُلْنَ</td><td>تَقُلْنَانِّ</td><td>قُلْنَ</td></tr><tr><td>أَنَا (I)</td><td>قُلْتُ</td><td>أَقُولُ</td><td>أَقُلْ</td><td>أَقُولَ</td><td>أَقُولَنَّ</td><td></td></tr><tr><td>نَحْنُ (we)</td><td>قُلْنَا</td><td>نَقُولُ</td><td>نَقُلْ</td><td>نَقُولَ</td><td>نَقُولَنَّ</td><td></td></tr></table><h4>🔗 Attached Pronouns Table with Examples (كَتَبَ)</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Doer (Past)</th><th>Doer (Present)</th><th>Done-To (Object)</th></tr><tr><td>هُوَ (he)</td><td>ـَ → كَتَبَ</td><td>يَـ → يَكْتُبُ</td><td>ـهُ → كَتَبَهُ</td></tr><tr><td>هُمَا (they two, masc)</td><td>ـَا → كَتَبَا</td><td>يَـ...ـانِ → يَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُمْ (they, masc)</td><td>ـُوا → كَتَبُوا</td><td>يَـ...ـونَ → يَكْتُبُونَ</td><td>ـهُمْ → كَتَبَهُمْ</td></tr><tr><td>هِيَ (she)</td><td>ـَتْ → كَتَبَتْ</td><td>تَـ → تَكْتُبُ</td><td>ـهَا → كَتَبَهَا</td></tr><tr><td>هُمَا (they two, fem)</td><td>ـَتَا → كَتَبَتَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُنَّ (they, fem)</td><td>ـْنَ → كَتَبْنَ</td><td>يَـ...ـنَ → يَكْتُبْنَ</td><td>ـهُنَّ → كَتَبْهُنَّ</td></tr><tr><td>أَنْتَ (you, masc)</td><td>ـْتَ → كَتَبْتَ</td><td>تَـ → تَكْتُبُ</td><td>ـكَ → كَتَبَكَ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُمْ (you all, masc)</td><td>ـْتُمْ → كَتَبْتُمْ</td><td>تَـ...ـونَ → تَكْتُبُونَ</td><td>ـكُمْ → كَتَبَكُمْ</td></tr><tr><td>أَنْتِ (you, fem)</td><td>ـْتِ → كَتَبْتِ</td><td>تَـ...ـينَ → تَكْتُبِينَ</td><td>ـكِ → كَتَبَكِ</td></tr><tr><td>أَنْتُمَا (you two, fem)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُنَّ (you all, fem)</td><td>ـْتُنَّ → كَتَبْتُنَّ</td><td>تَـ...ـنَ → تَكْتُبْنَ</td><td>ـكُنَّ → كَتَبَكُنَّ</td></tr><tr><td>أَنَا (I)</td><td>ـْتُ → كَتَبْتُ</td><td>أَـ → أَكْتُبُ</td><td>ـنِي → كَتَبَنِي</td></tr><tr><td>نَحْنُ (we)</td><td>ـْنَا → كَتَبْنَا</td><td>نَـ → نَكْتُبُ</td><td>ـنَا → كَتَبَنَا</td></tr></table>&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_015.mp3&quot;, &quot;VERB_FORM&quot;: &quot;I - كَتَبَ&quot;})">
+        قُلْ
+        <span class="translation">Say</span>
+        <span class='translation'>قَالَ</span>
+        <span class='translation'>Verb</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;مَنْ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a REL.&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_016.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        مَنْ
+        <span class="translation">Who</span>
+        <span class='translation'>مَن</span>
+        <span class='translation'>Interrogative</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;أَنزَلَ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is an perfect verb in 3rd person masculine singular (he) form, Imperfect Verb.&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;<h4>📈 Verb Conjugation Table</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Past</th><th>Present</th><th>Jussive (Negation)</th><th>Subjunctive (Future)</th><th>Emphatic Present (Certainty)</th><th>Imperative (Command)</th></tr><tr><td>هُوَ (he)</td><td>أَنْزَلَ</td><td>يُنْزِلُ</td><td>يُنْزِلْ</td><td>يُنْزِلَ</td><td>يُنْزِلَنَّ</td><td></td></tr><tr><td>هُمَا (they two masc.)</td><td>أَنْزَلَا</td><td>يُنْزِلَانِ</td><td>يُنْزِلَا</td><td>يُنْزِلَا</td><td>يُنْزِلَانِّ</td><td></td></tr><tr><td>هُمْ (they masc.)</td><td>أَنْزَلُوا</td><td>يُنْزِلُونَ</td><td>يُنْزِلُوا</td><td>يُنْزِلُوا</td><td>يُنْزِلُنَّ</td><td></td></tr><tr><td>هِيَ (she)</td><td>أَنْزَلَتْ</td><td>تُنْزِلُ</td><td>تُنْزِلْ</td><td>تُنْزِلَ</td><td>تُنْزِلَنَّ</td><td></td></tr><tr><td>هُمَا (they two fem.)</td><td>أَنْزَلَتَا</td><td>تُنْزِلَانِ</td><td>تُنْزِلَا</td><td>تُنْزِلَا</td><td>تُنْزِلَانِّ</td><td></td></tr><tr><td>هُنَّ (they fem.)</td><td>أَنْزَلْنَ</td><td>يُنْزِلْنَ</td><td>يُنْزِلْنَ</td><td>يُنْزِلْنَ</td><td>يُنْزِلْنَانِّ</td><td></td></tr><tr><td>أَنْتَ (you masc.)</td><td>أَنْزَلْتَ</td><td>تُنْزِلُ</td><td>تُنْزِلْ</td><td>تُنْزِلَ</td><td>تُنْزِلَنَّ</td><td>أَنْزِلْ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>أَنْزَلْتُمَا</td><td>تُنْزِلَانِ</td><td>تُنْزِلَا</td><td>تُنْزِلَا</td><td>تُنْزِلَانِّ</td><td>أَنْزِلَا</td></tr><tr><td>أَنْتُمْ (you all masc.)</td><td>أَنْزَلْتُم</td><td>تُنْزِلُونَ</td><td>تُنْزِلُوا</td><td>تُنْزِلُوا</td><td>تُنْزِلُنَّ</td><td>أَنْزِلُوا</td></tr><tr><td>أَنْتِ (you fem.)</td><td>أَنْزَلْتِ</td><td>تُنْزِلِينَ</td><td>تُنْزِلِي</td><td>تُنْزِلِي</td><td>تُنْزِلِنَّ</td><td>أَنْزِلِي</td></tr><tr><td>أَنْتُمَا (you two fem.)</td><td>أَنْزَلْتُمَا</td><td>تُنْزِلَانِ</td><td>تُنْزِلَا</td><td>تُنْزِلَا</td><td>تُنْزِلَانِّ</td><td>أَنْزِلَا</td></tr><tr><td>أَنْتُنَّ (you all fem.)</td><td>أَنْزَلْتُنَّ</td><td>تُنْزِلْنَ</td><td>تُنْزِلْنَ</td><td>تُنْزِلْنَ</td><td>تُنْزِلْنَانِّ</td><td>أَنْزِلْنَ</td></tr><tr><td>أَنَا (I)</td><td>أَنْزَلْتُ</td><td>أُنْزِلُ</td><td>أُنْزِلْ</td><td>أُنْزِلَ</td><td>أُنْزِلَنَّ</td><td></td></tr><tr><td>نَحْنُ (we)</td><td>أَنْزَلْنَا</td><td>نُنْزِلُ</td><td>نُنْزِلْ</td><td>نُنْزِلَ</td><td>نُنْزِلَنَّ</td><td></td></tr></table><h4>🔗 Attached Pronouns Table with Examples (كَتَبَ)</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Doer (Past)</th><th>Doer (Present)</th><th>Done-To (Object)</th></tr><tr><td>هُوَ (he)</td><td>ـَ → كَتَبَ</td><td>يَـ → يَكْتُبُ</td><td>ـهُ → كَتَبَهُ</td></tr><tr><td>هُمَا (they two, masc)</td><td>ـَا → كَتَبَا</td><td>يَـ...ـانِ → يَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُمْ (they, masc)</td><td>ـُوا → كَتَبُوا</td><td>يَـ...ـونَ → يَكْتُبُونَ</td><td>ـهُمْ → كَتَبَهُمْ</td></tr><tr><td>هِيَ (she)</td><td>ـَتْ → كَتَبَتْ</td><td>تَـ → تَكْتُبُ</td><td>ـهَا → كَتَبَهَا</td></tr><tr><td>هُمَا (they two, fem)</td><td>ـَتَا → كَتَبَتَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُنَّ (they, fem)</td><td>ـْنَ → كَتَبْنَ</td><td>يَـ...ـنَ → يَكْتُبْنَ</td><td>ـهُنَّ → كَتَبْهُنَّ</td></tr><tr><td>أَنْتَ (you, masc)</td><td>ـْتَ → كَتَبْتَ</td><td>تَـ → تَكْتُبُ</td><td>ـكَ → كَتَبَكَ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُمْ (you all, masc)</td><td>ـْتُمْ → كَتَبْتُمْ</td><td>تَـ...ـونَ → تَكْتُبُونَ</td><td>ـكُمْ → كَتَبَكُمْ</td></tr><tr><td>أَنْتِ (you, fem)</td><td>ـْتِ → كَتَبْتِ</td><td>تَـ...ـينَ → تَكْتُبِينَ</td><td>ـكِ → كَتَبَكِ</td></tr><tr><td>أَنْتُمَا (you two, fem)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُنَّ (you all, fem)</td><td>ـْتُنَّ → كَتَبْتُنَّ</td><td>تَـ...ـنَ → تَكْتُبْنَ</td><td>ـكُنَّ → كَتَبَكُنَّ</td></tr><tr><td>أَنَا (I)</td><td>ـْتُ → كَتَبْتُ</td><td>أَـ → أَكْتُبُ</td><td>ـنِي → كَتَبَنِي</td></tr><tr><td>نَحْنُ (we)</td><td>ـْنَا → كَتَبْنَا</td><td>نَـ → نَكْتُبُ</td><td>ـنَا → كَتَبَنَا</td></tr></table>&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_017.mp3&quot;, &quot;VERB_FORM&quot;: &quot;IV - أَكْرَمَ&quot;})">
+        أَنزَلَ
+        <span class="translation">revealed</span>
+        <span class='translation'>أَنزَلَ</span>
+        <span class='translation'>Verb</span>
+    </span>
+
+    <span class="word accusative" style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;الْكِتَٰبَ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a noun, masculine, accusative case (nasb - detail).&quot;, &quot;Prefixes&quot;: &quot;prefix - definite article ال (the)&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_018.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        الْكِتَٰبَ
+        <span class="translation">the Book</span>
+        <span class='translation'>ٱلْ كِتَٰب</span>
+        <span class='translation'>Al++Noun</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;الَّذِى&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a REL, MS.&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_019.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        الَّذِى
+        <span class="translation">which</span>
+        <span class='translation'>ٱلَّذِى</span>
+        <span class='translation'>Rel. Pronoun</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;جَآءَ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is an perfect verb in 3rd person masculine singular (he) form.&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;<h4>📈 Verb Conjugation Table</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Past</th><th>Present</th><th>Jussive (Negation)</th><th>Subjunctive (Future)</th><th>Emphatic Present (Certainty)</th><th>Imperative (Command)</th></tr><tr><td>هُوَ (he)</td><td>جَيَا</td><td>يَجْيَا</td><td>يَجْيَ</td><td>يَجْيَا</td><td>يَجْيَيَنَّ</td><td></td></tr><tr><td>هُمَا (they two masc.)</td><td>جَيَيَا</td><td>يَجْيَيَانِ</td><td>يَجْيَيَا</td><td>يَجْيَيَا</td><td>يَجْيَيَانِّ</td><td></td></tr><tr><td>هُمْ (they masc.)</td><td>جَيَوْا</td><td>يَجْيَوْنَ</td><td>يَجْيَوْا</td><td>يَجْيَوْا</td><td>يَجْيَوُنَّ</td><td></td></tr><tr><td>هِيَ (she)</td><td>جَيَيَتْ</td><td>تَجْيَا</td><td>تَجْيَ</td><td>تَجْيَا</td><td>تَجْيَيَنَّ</td><td></td></tr><tr><td>هُمَا (they two fem.)</td><td>جَيَيَتَا</td><td>تَجْيَيَانِ</td><td>تَجْيَيَا</td><td>تَجْيَيَا</td><td>تَجْيَيَانِّ</td><td></td></tr><tr><td>هُنَّ (they fem.)</td><td>جَيَيْنَ</td><td>يَجْيَيْنَ</td><td>يَجْيَيْنَ</td><td>يَجْيَيْنَ</td><td>يَجْيَيْنَانِّ</td><td></td></tr><tr><td>أَنْتَ (you masc.)</td><td>جَيَيْتَ</td><td>تَجْيَا</td><td>تَجْيَ</td><td>تَجْيَا</td><td>تَجْيَيَنَّ</td><td>اِجْيَ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>جَيَيْتُمَا</td><td>تَجْيَيَانِ</td><td>تَجْيَيَا</td><td>تَجْيَيَا</td><td>تَجْيَيَانِّ</td><td>اِجْيَيَا</td></tr><tr><td>أَنْتُمْ (you all masc.)</td><td>جَيَيْتُم</td><td>تَجْيَوْنَ</td><td>تَجْيَوْا</td><td>تَجْيَوْا</td><td>تَجْيَوُنَّ</td><td>اِجْيَوْا</td></tr><tr><td>أَنْتِ (you fem.)</td><td>جَيَيْتِ</td><td>تَجْيَيْنَ</td><td>تَجْيَيْ</td><td>تَجْيَيْ</td><td>تَجْيَيِنَّ</td><td>اِجْيَيْ</td></tr><tr><td>أَنْتُمَا (you two fem.)</td><td>جَيَيْتُمَا</td><td>تَجْيَيَانِ</td><td>تَجْيَيَا</td><td>تَجْيَيَا</td><td>تَجْيَيَانِّ</td><td>اِجْيَيَا</td></tr><tr><td>أَنْتُنَّ (you all fem.)</td><td>جَيَيْتُنَّ</td><td>تَجْيَيْنَ</td><td>تَجْيَيْنَ</td><td>تَجْيَيْنَ</td><td>تَجْيَيْنَانِّ</td><td>اِجْيَيْنَ</td></tr><tr><td>أَنَا (I)</td><td>جَيَيْتُ</td><td>أَجْيَا</td><td>أَجْيَ</td><td>أَجْيَا</td><td>أَجْيَيَنَّ</td><td></td></tr><tr><td>نَحْنُ (we)</td><td>جَيَيْنَا</td><td>نَجْيَا</td><td>نَجْيَ</td><td>نَجْيَا</td><td>نَجْيَيَنَّ</td><td></td></tr></table><h4>🔗 Attached Pronouns Table with Examples (كَتَبَ)</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Doer (Past)</th><th>Doer (Present)</th><th>Done-To (Object)</th></tr><tr><td>هُوَ (he)</td><td>ـَ → كَتَبَ</td><td>يَـ → يَكْتُبُ</td><td>ـهُ → كَتَبَهُ</td></tr><tr><td>هُمَا (they two, masc)</td><td>ـَا → كَتَبَا</td><td>يَـ...ـانِ → يَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُمْ (they, masc)</td><td>ـُوا → كَتَبُوا</td><td>يَـ...ـونَ → يَكْتُبُونَ</td><td>ـهُمْ → كَتَبَهُمْ</td></tr><tr><td>هِيَ (she)</td><td>ـَتْ → كَتَبَتْ</td><td>تَـ → تَكْتُبُ</td><td>ـهَا → كَتَبَهَا</td></tr><tr><td>هُمَا (they two, fem)</td><td>ـَتَا → كَتَبَتَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُنَّ (they, fem)</td><td>ـْنَ → كَتَبْنَ</td><td>يَـ...ـنَ → يَكْتُبْنَ</td><td>ـهُنَّ → كَتَبْهُنَّ</td></tr><tr><td>أَنْتَ (you, masc)</td><td>ـْتَ → كَتَبْتَ</td><td>تَـ → تَكْتُبُ</td><td>ـكَ → كَتَبَكَ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُمْ (you all, masc)</td><td>ـْتُمْ → كَتَبْتُمْ</td><td>تَـ...ـونَ → تَكْتُبُونَ</td><td>ـكُمْ → كَتَبَكُمْ</td></tr><tr><td>أَنْتِ (you, fem)</td><td>ـْتِ → كَتَبْتِ</td><td>تَـ...ـينَ → تَكْتُبِينَ</td><td>ـكِ → كَتَبَكِ</td></tr><tr><td>أَنْتُمَا (you two, fem)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُنَّ (you all, fem)</td><td>ـْتُنَّ → كَتَبْتُنَّ</td><td>تَـ...ـنَ → تَكْتُبْنَ</td><td>ـكُنَّ → كَتَبَكُنَّ</td></tr><tr><td>أَنَا (I)</td><td>ـْتُ → كَتَبْتُ</td><td>أَـ → أَكْتُبُ</td><td>ـنِي → كَتَبَنِي</td></tr><tr><td>نَحْنُ (we)</td><td>ـْنَا → كَتَبْنَا</td><td>نَـ → نَكْتُبُ</td><td>ـنَا → كَتَبَنَا</td></tr></table>&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_020.mp3&quot;, &quot;VERB_FORM&quot;: &quot;I - كَتَبَ&quot;})">
+        جَآءَ
+        <span class="translation">brought</span>
+        <span class='translation'>جَآءَ</span>
+        <span class='translation'>Verb</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;بِهِۦ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a pronoun in 3rd person masculine singular (he) form.&quot;, &quot;Prefixes&quot;: &quot;prefix - preposition بِ (with, by)&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_021.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        بِهِۦ
+        <span class="translation">[it]</span>
+        <span class='translation'>بِ هِۦ</span>
+        <span class='translation'>Preposition+Pron.</span>
+    </span>
+
+    <span class="word nominative" style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;مُوسَىٰ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a proper noun, masculine, nominative case (rafa).&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_022.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        مُوسَىٰ
+        <span class="translation">Musa</span>
+        <span class='translation'>مُوسَىٰ</span>
+        <span class='translation'>Proper Noun</span>
+    </span>
+
+    <span class="word accusative" style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;نُورًا&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a noun, masculine, Indefinite, accusative case (nasb - detail).&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;<h4>📈 Verb Conjugation Table</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Past</th><th>Present</th><th>Jussive (Negation)</th><th>Subjunctive (Future)</th><th>Emphatic Present (Certainty)</th><th>Imperative (Command)</th></tr><tr><td>هُوَ (he)</td><td>نَوَرَ</td><td>يَنْوَرُ</td><td>يَنْوَرْ</td><td>يَنْوَرَ</td><td>يَنْوَرَنَّ</td><td></td></tr><tr><td>هُمَا (they two masc.)</td><td>نَوَرَا</td><td>يَنْوَرَانِ</td><td>يَنْوَرَا</td><td>يَنْوَرَا</td><td>يَنْوَرَانِّ</td><td></td></tr><tr><td>هُمْ (they masc.)</td><td>نَوَرُوا</td><td>يَنْوَرُونَ</td><td>يَنْوَرُوا</td><td>يَنْوَرُوا</td><td>يَنْوَرُنَّ</td><td></td></tr><tr><td>هِيَ (she)</td><td>نَوَرَتْ</td><td>تَنْوَرُ</td><td>تَنْوَرْ</td><td>تَنْوَرَ</td><td>تَنْوَرَنَّ</td><td></td></tr><tr><td>هُمَا (they two fem.)</td><td>نَوَرَتَا</td><td>تَنْوَرَانِ</td><td>تَنْوَرَا</td><td>تَنْوَرَا</td><td>تَنْوَرَانِّ</td><td></td></tr><tr><td>هُنَّ (they fem.)</td><td>نَوَرْنَ</td><td>يَنْوَرْنَ</td><td>يَنْوَرْنَ</td><td>يَنْوَرْنَ</td><td>يَنْوَرْنَانِّ</td><td></td></tr><tr><td>أَنْتَ (you masc.)</td><td>نَوَرْتَ</td><td>تَنْوَرُ</td><td>تَنْوَرْ</td><td>تَنْوَرَ</td><td>تَنْوَرَنَّ</td><td>اِنْوَرْ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>نَوَرْتُمَا</td><td>تَنْوَرَانِ</td><td>تَنْوَرَا</td><td>تَنْوَرَا</td><td>تَنْوَرَانِّ</td><td>اِنْوَرَا</td></tr><tr><td>أَنْتُمْ (you all masc.)</td><td>نَوَرْتُم</td><td>تَنْوَرُونَ</td><td>تَنْوَرُوا</td><td>تَنْوَرُوا</td><td>تَنْوَرُنَّ</td><td>اِنْوَرُوا</td></tr><tr><td>أَنْتِ (you fem.)</td><td>نَوَرْتِ</td><td>تَنْوَرِينَ</td><td>تَنْوَرِي</td><td>تَنْوَرِي</td><td>تَنْوَرِنَّ</td><td>اِنْوَرِي</td></tr><tr><td>أَنْتُمَا (you two fem.)</td><td>نَوَرْتُمَا</td><td>تَنْوَرَانِ</td><td>تَنْوَرَا</td><td>تَنْوَرَا</td><td>تَنْوَرَانِّ</td><td>اِنْوَرَا</td></tr><tr><td>أَنْتُنَّ (you all fem.)</td><td>نَوَرْتُنَّ</td><td>تَنْوَرْنَ</td><td>تَنْوَرْنَ</td><td>تَنْوَرْنَ</td><td>تَنْوَرْنَانِّ</td><td>اِنْوَرْنَ</td></tr><tr><td>أَنَا (I)</td><td>نَوَرْتُ</td><td>أَنْوَرُ</td><td>أَنْوَرْ</td><td>أَنْوَرَ</td><td>أَنْوَرَنَّ</td><td></td></tr><tr><td>نَحْنُ (we)</td><td>نَوَرْنَا</td><td>نَنْوَرُ</td><td>نَنْوَرْ</td><td>نَنْوَرَ</td><td>نَنْوَرَنَّ</td><td></td></tr></table><h4>🔗 Attached Pronouns Table with Examples (كَتَبَ)</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Doer (Past)</th><th>Doer (Present)</th><th>Done-To (Object)</th></tr><tr><td>هُوَ (he)</td><td>ـَ → كَتَبَ</td><td>يَـ → يَكْتُبُ</td><td>ـهُ → كَتَبَهُ</td></tr><tr><td>هُمَا (they two, masc)</td><td>ـَا → كَتَبَا</td><td>يَـ...ـانِ → يَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُمْ (they, masc)</td><td>ـُوا → كَتَبُوا</td><td>يَـ...ـونَ → يَكْتُبُونَ</td><td>ـهُمْ → كَتَبَهُمْ</td></tr><tr><td>هِيَ (she)</td><td>ـَتْ → كَتَبَتْ</td><td>تَـ → تَكْتُبُ</td><td>ـهَا → كَتَبَهَا</td></tr><tr><td>هُمَا (they two, fem)</td><td>ـَتَا → كَتَبَتَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُنَّ (they, fem)</td><td>ـْنَ → كَتَبْنَ</td><td>يَـ...ـنَ → يَكْتُبْنَ</td><td>ـهُنَّ → كَتَبْهُنَّ</td></tr><tr><td>أَنْتَ (you, masc)</td><td>ـْتَ → كَتَبْتَ</td><td>تَـ → تَكْتُبُ</td><td>ـكَ → كَتَبَكَ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُمْ (you all, masc)</td><td>ـْتُمْ → كَتَبْتُمْ</td><td>تَـ...ـونَ → تَكْتُبُونَ</td><td>ـكُمْ → كَتَبَكُمْ</td></tr><tr><td>أَنْتِ (you, fem)</td><td>ـْتِ → كَتَبْتِ</td><td>تَـ...ـينَ → تَكْتُبِينَ</td><td>ـكِ → كَتَبَكِ</td></tr><tr><td>أَنْتُمَا (you two, fem)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُنَّ (you all, fem)</td><td>ـْتُنَّ → كَتَبْتُنَّ</td><td>تَـ...ـنَ → تَكْتُبْنَ</td><td>ـكُنَّ → كَتَبَكُنَّ</td></tr><tr><td>أَنَا (I)</td><td>ـْتُ → كَتَبْتُ</td><td>أَـ → أَكْتُبُ</td><td>ـنِي → كَتَبَنِي</td></tr><tr><td>نَحْنُ (we)</td><td>ـْنَا → كَتَبْنَا</td><td>نَـ → نَكْتُبُ</td><td>ـنَا → كَتَبَنَا</td></tr></table>&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_023.mp3&quot;, &quot;VERB_FORM&quot;: &quot;I - كَتَبَ&quot;})">
+        نُورًا
+        <span class="translation">(as) a light</span>
+        <span class='translation'>نُور</span>
+        <span class='translation'>Noun</span>
+    </span>
+
+    <span class="word genitive" style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;وَهُدًى&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a noun, masculine, Indefinite, genitive case (jarr - after of).&quot;, &quot;Prefixes&quot;: &quot;prefix - conjunction وَ (and)&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_024.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        وَهُدًى
+        <span class="translation">and guidance</span>
+        <span class='translation'>وَ هُدًى</span>
+        <span class='translation'>Conj.+Noun</span>
+    </span>
+
+    <span class="word genitive" style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;لِّلنَّاسِ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a noun in masculine plural form, genitive case (jarr - after of).&quot;, &quot;Prefixes&quot;: &quot;prefix - emphatic particle لَ (indeed, for emphasis), prefix - definite article ال (the)&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_025.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        لِّلنَّاسِ
+        <span class="translation">for the people</span>
+        <span class='translation'>لِّ ل نَّاس</span>
+        <span class='translation'>Preposition+Al++Noun</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;تَجْعَلُونَهُۥ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is an imperfect verb in 2nd person masculine plural (you all - male group) form, 3rd person masculine singular (he).&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;<h4>📈 Verb Conjugation Table</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Past</th><th>Present</th><th>Jussive (Negation)</th><th>Subjunctive (Future)</th><th>Emphatic Present (Certainty)</th><th>Imperative (Command)</th></tr><tr><td>هُوَ (he)</td><td>جَعَلَ</td><td>يَجْعَلُ</td><td>يَجْعَلْ</td><td>يَجْعَلَ</td><td>يَجْعَلَنَّ</td><td></td></tr><tr><td>هُمَا (they two masc.)</td><td>جَعَلَا</td><td>يَجْعَلَانِ</td><td>يَجْعَلَا</td><td>يَجْعَلَا</td><td>يَجْعَلَانِّ</td><td></td></tr><tr><td>هُمْ (they masc.)</td><td>جَعَلُوا</td><td>يَجْعَلُونَ</td><td>يَجْعَلُوا</td><td>يَجْعَلُوا</td><td>يَجْعَلُنَّ</td><td></td></tr><tr><td>هِيَ (she)</td><td>جَعَلَتْ</td><td>تَجْعَلُ</td><td>تَجْعَلْ</td><td>تَجْعَلَ</td><td>تَجْعَلَنَّ</td><td></td></tr><tr><td>هُمَا (they two fem.)</td><td>جَعَلَتَا</td><td>تَجْعَلَانِ</td><td>تَجْعَلَا</td><td>تَجْعَلَا</td><td>تَجْعَلَانِّ</td><td></td></tr><tr><td>هُنَّ (they fem.)</td><td>جَعَلْنَ</td><td>يَجْعَلْنَ</td><td>يَجْعَلْنَ</td><td>يَجْعَلْنَ</td><td>يَجْعَلْنَانِّ</td><td></td></tr><tr><td>أَنْتَ (you masc.)</td><td>جَعَلْتَ</td><td>تَجْعَلُ</td><td>تَجْعَلْ</td><td>تَجْعَلَ</td><td>تَجْعَلَنَّ</td><td>اِجْعَلْ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>جَعَلْتُمَا</td><td>تَجْعَلَانِ</td><td>تَجْعَلَا</td><td>تَجْعَلَا</td><td>تَجْعَلَانِّ</td><td>اِجْعَلَا</td></tr><tr><td>أَنْتُمْ (you all masc.)</td><td>جَعَلْتُم</td><td>تَجْعَلُونَ</td><td>تَجْعَلُوا</td><td>تَجْعَلُوا</td><td>تَجْعَلُنَّ</td><td>اِجْعَلُوا</td></tr><tr><td>أَنْتِ (you fem.)</td><td>جَعَلْتِ</td><td>تَجْعَلِينَ</td><td>تَجْعَلِي</td><td>تَجْعَلِي</td><td>تَجْعَلِنَّ</td><td>اِجْعَلِي</td></tr><tr><td>أَنْتُمَا (you two fem.)</td><td>جَعَلْتُمَا</td><td>تَجْعَلَانِ</td><td>تَجْعَلَا</td><td>تَجْعَلَا</td><td>تَجْعَلَانِّ</td><td>اِجْعَلَا</td></tr><tr><td>أَنْتُنَّ (you all fem.)</td><td>جَعَلْتُنَّ</td><td>تَجْعَلْنَ</td><td>تَجْعَلْنَ</td><td>تَجْعَلْنَ</td><td>تَجْعَلْنَانِّ</td><td>اِجْعَلْنَ</td></tr><tr><td>أَنَا (I)</td><td>جَعَلْتُ</td><td>أَجْعَلُ</td><td>أَجْعَلْ</td><td>أَجْعَلَ</td><td>أَجْعَلَنَّ</td><td></td></tr><tr><td>نَحْنُ (we)</td><td>جَعَلْنَا</td><td>نَجْعَلُ</td><td>نَجْعَلْ</td><td>نَجْعَلَ</td><td>نَجْعَلَنَّ</td><td></td></tr></table><h4>🔗 Attached Pronouns Table with Examples (كَتَبَ)</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Doer (Past)</th><th>Doer (Present)</th><th>Done-To (Object)</th></tr><tr><td>هُوَ (he)</td><td>ـَ → كَتَبَ</td><td>يَـ → يَكْتُبُ</td><td>ـهُ → كَتَبَهُ</td></tr><tr><td>هُمَا (they two, masc)</td><td>ـَا → كَتَبَا</td><td>يَـ...ـانِ → يَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُمْ (they, masc)</td><td>ـُوا → كَتَبُوا</td><td>يَـ...ـونَ → يَكْتُبُونَ</td><td>ـهُمْ → كَتَبَهُمْ</td></tr><tr><td>هِيَ (she)</td><td>ـَتْ → كَتَبَتْ</td><td>تَـ → تَكْتُبُ</td><td>ـهَا → كَتَبَهَا</td></tr><tr><td>هُمَا (they two, fem)</td><td>ـَتَا → كَتَبَتَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُنَّ (they, fem)</td><td>ـْنَ → كَتَبْنَ</td><td>يَـ...ـنَ → يَكْتُبْنَ</td><td>ـهُنَّ → كَتَبْهُنَّ</td></tr><tr><td>أَنْتَ (you, masc)</td><td>ـْتَ → كَتَبْتَ</td><td>تَـ → تَكْتُبُ</td><td>ـكَ → كَتَبَكَ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُمْ (you all, masc)</td><td>ـْتُمْ → كَتَبْتُمْ</td><td>تَـ...ـونَ → تَكْتُبُونَ</td><td>ـكُمْ → كَتَبَكُمْ</td></tr><tr><td>أَنْتِ (you, fem)</td><td>ـْتِ → كَتَبْتِ</td><td>تَـ...ـينَ → تَكْتُبِينَ</td><td>ـكِ → كَتَبَكِ</td></tr><tr><td>أَنْتُمَا (you two, fem)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُنَّ (you all, fem)</td><td>ـْتُنَّ → كَتَبْتُنَّ</td><td>تَـ...ـنَ → تَكْتُبْنَ</td><td>ـكُنَّ → كَتَبَكُنَّ</td></tr><tr><td>أَنَا (I)</td><td>ـْتُ → كَتَبْتُ</td><td>أَـ → أَكْتُبُ</td><td>ـنِي → كَتَبَنِي</td></tr><tr><td>نَحْنُ (we)</td><td>ـْنَا → كَتَبْنَا</td><td>نَـ → نَكْتُبُ</td><td>ـنَا → كَتَبَنَا</td></tr></table>&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_026.mp3&quot;, &quot;VERB_FORM&quot;: &quot;I - كَتَبَ&quot;})">
+        تَجْعَلُونَهُۥ
+        <span class="translation">You make it</span>
+        <span class='translation'>جَعَلَ ونَ هُۥ</span>
+        <span class='translation'>Verb+Pron.+Pron.</span>
+    </span>
+
+    <span class="word accusative" style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;قَرَاطِيسَ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a noun in masculine plural form, accusative case (nasb - detail).&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;<h4>📈 Verb Conjugation Table</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Past</th><th>Present</th><th>Jussive (Negation)</th><th>Subjunctive (Future)</th><th>Emphatic Present (Certainty)</th><th>Imperative (Command)</th></tr><tr><td>هُوَ (he)</td><td>قَرْطَسَ</td><td>يُقَرْطِسُ</td><td>يُقَرْطِسْ</td><td>يُقَرْطِسَ</td><td>يُقَرْطِسَنَّ</td><td></td></tr><tr><td>هُمَا (they two masc.)</td><td>قَرْطَسَا</td><td>يُقَرْطِسَانِ</td><td>يُقَرْطِسَا</td><td>يُقَرْطِسَا</td><td>يُقَرْطِسَانِّ</td><td></td></tr><tr><td>هُمْ (they masc.)</td><td>قَرْطَسُوا</td><td>يُقَرْطِسُونَ</td><td>يُقَرْطِسُوا</td><td>يُقَرْطِسُوا</td><td>يُقَرْطِسُنَّ</td><td></td></tr><tr><td>هِيَ (she)</td><td>قَرْطَسَتْ</td><td>تُقَرْطِسُ</td><td>تُقَرْطِسْ</td><td>تُقَرْطِسَ</td><td>تُقَرْطِسَنَّ</td><td></td></tr><tr><td>هُمَا (they two fem.)</td><td>قَرْطَسَتَا</td><td>تُقَرْطِسَانِ</td><td>تُقَرْطِسَا</td><td>تُقَرْطِسَا</td><td>تُقَرْطِسَانِّ</td><td></td></tr><tr><td>هُنَّ (they fem.)</td><td>قَرْطَسْنَ</td><td>يُقَرْطِسْنَ</td><td>يُقَرْطِسْنَ</td><td>يُقَرْطِسْنَ</td><td>يُقَرْطِسْنَانِّ</td><td></td></tr><tr><td>أَنْتَ (you masc.)</td><td>قَرْطَسْتَ</td><td>تُقَرْطِسُ</td><td>تُقَرْطِسْ</td><td>تُقَرْطِسَ</td><td>تُقَرْطِسَنَّ</td><td>قَرْطِسْ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>قَرْطَسْتُمَا</td><td>تُقَرْطِسَانِ</td><td>تُقَرْطِسَا</td><td>تُقَرْطِسَا</td><td>تُقَرْطِسَانِّ</td><td>قَرْطِسَا</td></tr><tr><td>أَنْتُمْ (you all masc.)</td><td>قَرْطَسْتُم</td><td>تُقَرْطِسُونَ</td><td>تُقَرْطِسُوا</td><td>تُقَرْطِسُوا</td><td>تُقَرْطِسُنَّ</td><td>قَرْطِسُوا</td></tr><tr><td>أَنْتِ (you fem.)</td><td>قَرْطَسْتِ</td><td>تُقَرْطِسِينَ</td><td>تُقَرْطِسِي</td><td>تُقَرْطِسِي</td><td>تُقَرْطِسِنَّ</td><td>قَرْطِسِي</td></tr><tr><td>أَنْتُمَا (you two fem.)</td><td>قَرْطَسْتُمَا</td><td>تُقَرْطِسَانِ</td><td>تُقَرْطِسَا</td><td>تُقَرْطِسَا</td><td>تُقَرْطِسَانِّ</td><td>قَرْطِسَا</td></tr><tr><td>أَنْتُنَّ (you all fem.)</td><td>قَرْطَسْتُنَّ</td><td>تُقَرْطِسْنَ</td><td>تُقَرْطِسْنَ</td><td>تُقَرْطِسْنَ</td><td>تُقَرْطِسْنَانِّ</td><td>قَرْطِسْنَ</td></tr><tr><td>أَنَا (I)</td><td>قَرْطَسْتُ</td><td>أُقَرْطِسُ</td><td>أُقَرْطِسْ</td><td>أُقَرْطِسَ</td><td>أُقَرْطِسَنَّ</td><td></td></tr><tr><td>نَحْنُ (we)</td><td>قَرْطَسْنَا</td><td>نُقَرْطِسُ</td><td>نُقَرْطِسْ</td><td>نُقَرْطِسَ</td><td>نُقَرْطِسَنَّ</td><td></td></tr></table><h4>🔗 Attached Pronouns Table with Examples (كَتَبَ)</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Doer (Past)</th><th>Doer (Present)</th><th>Done-To (Object)</th></tr><tr><td>هُوَ (he)</td><td>ـَ → كَتَبَ</td><td>يَـ → يَكْتُبُ</td><td>ـهُ → كَتَبَهُ</td></tr><tr><td>هُمَا (they two, masc)</td><td>ـَا → كَتَبَا</td><td>يَـ...ـانِ → يَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُمْ (they, masc)</td><td>ـُوا → كَتَبُوا</td><td>يَـ...ـونَ → يَكْتُبُونَ</td><td>ـهُمْ → كَتَبَهُمْ</td></tr><tr><td>هِيَ (she)</td><td>ـَتْ → كَتَبَتْ</td><td>تَـ → تَكْتُبُ</td><td>ـهَا → كَتَبَهَا</td></tr><tr><td>هُمَا (they two, fem)</td><td>ـَتَا → كَتَبَتَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُنَّ (they, fem)</td><td>ـْنَ → كَتَبْنَ</td><td>يَـ...ـنَ → يَكْتُبْنَ</td><td>ـهُنَّ → كَتَبْهُنَّ</td></tr><tr><td>أَنْتَ (you, masc)</td><td>ـْتَ → كَتَبْتَ</td><td>تَـ → تَكْتُبُ</td><td>ـكَ → كَتَبَكَ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُمْ (you all, masc)</td><td>ـْتُمْ → كَتَبْتُمْ</td><td>تَـ...ـونَ → تَكْتُبُونَ</td><td>ـكُمْ → كَتَبَكُمْ</td></tr><tr><td>أَنْتِ (you, fem)</td><td>ـْتِ → كَتَبْتِ</td><td>تَـ...ـينَ → تَكْتُبِينَ</td><td>ـكِ → كَتَبَكِ</td></tr><tr><td>أَنْتُمَا (you two, fem)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُنَّ (you all, fem)</td><td>ـْتُنَّ → كَتَبْتُنَّ</td><td>تَـ...ـنَ → تَكْتُبْنَ</td><td>ـكُنَّ → كَتَبَكُنَّ</td></tr><tr><td>أَنَا (I)</td><td>ـْتُ → كَتَبْتُ</td><td>أَـ → أَكْتُبُ</td><td>ـنِي → كَتَبَنِي</td></tr><tr><td>نَحْنُ (we)</td><td>ـْنَا → كَتَبْنَا</td><td>نَـ → نَكْتُبُ</td><td>ـنَا → كَتَبَنَا</td></tr></table>&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_027.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        قَرَاطِيسَ
+        <span class="translation">(into) parchments</span>
+        <span class='translation'>قِرْطَاس</span>
+        <span class='translation'>Noun</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;تُبْدُونَهَا&quot;, &quot;Quran Morph Info&quot;: &quot;This word is an imperfect verb in 2nd person masculine plural (you all - male group) form, Imperfect Verb, 3rd person feminine singular (she).&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;<h4>📈 Verb Conjugation Table</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Past</th><th>Present</th><th>Jussive (Negation)</th><th>Subjunctive (Future)</th><th>Emphatic Present (Certainty)</th><th>Imperative (Command)</th></tr><tr><td>هُوَ (he)</td><td>أَبَدَ</td><td>يَأْبُدُ</td><td>يَأْبُدْ</td><td>يَأْبُدَ</td><td>يَأْبُدَنَّ</td><td></td></tr><tr><td>هُمَا (they two masc.)</td><td>أَبَدَا</td><td>يَأْبُدَانِ</td><td>يَأْبُدَا</td><td>يَأْبُدَا</td><td>يَأْبُدَانِّ</td><td></td></tr><tr><td>هُمْ (they masc.)</td><td>أَبَدُوا</td><td>يَأْبُدُونَ</td><td>يَأْبُدُوا</td><td>يَأْبُدُوا</td><td>يَأْبُدُنَّ</td><td></td></tr><tr><td>هِيَ (she)</td><td>أَبَدَتْ</td><td>تَأْبُدُ</td><td>تَأْبُدْ</td><td>تَأْبُدَ</td><td>تَأْبُدَنَّ</td><td></td></tr><tr><td>هُمَا (they two fem.)</td><td>أَبَدَتَا</td><td>تَأْبُدَانِ</td><td>تَأْبُدَا</td><td>تَأْبُدَا</td><td>تَأْبُدَانِّ</td><td></td></tr><tr><td>هُنَّ (they fem.)</td><td>أَبَدْنَ</td><td>يَأْبُدْنَ</td><td>يَأْبُدْنَ</td><td>يَأْبُدْنَ</td><td>يَأْبُدْنَانِّ</td><td></td></tr><tr><td>أَنْتَ (you masc.)</td><td>أَبَدْتَ</td><td>تَأْبُدُ</td><td>تَأْبُدْ</td><td>تَأْبُدَ</td><td>تَأْبُدَنَّ</td><td>اُؤْبُدْ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>أَبَدْتُمَا</td><td>تَأْبُدَانِ</td><td>تَأْبُدَا</td><td>تَأْبُدَا</td><td>تَأْبُدَانِّ</td><td>اُؤْبُدَا</td></tr><tr><td>أَنْتُمْ (you all masc.)</td><td>أَبَدْتُم</td><td>تَأْبُدُونَ</td><td>تَأْبُدُوا</td><td>تَأْبُدُوا</td><td>تَأْبُدُنَّ</td><td>اُؤْبُدُوا</td></tr><tr><td>أَنْتِ (you fem.)</td><td>أَبَدْتِ</td><td>تَأْبُدِينَ</td><td>تَأْبُدِي</td><td>تَأْبُدِي</td><td>تَأْبُدِنَّ</td><td>اُؤْبُدِي</td></tr><tr><td>أَنْتُمَا (you two fem.)</td><td>أَبَدْتُمَا</td><td>تَأْبُدَانِ</td><td>تَأْبُدَا</td><td>تَأْبُدَا</td><td>تَأْبُدَانِّ</td><td>اُؤْبُدَا</td></tr><tr><td>أَنْتُنَّ (you all fem.)</td><td>أَبَدْتُنَّ</td><td>تَأْبُدْنَ</td><td>تَأْبُدْنَ</td><td>تَأْبُدْنَ</td><td>تَأْبُدْنَانِّ</td><td>اُؤْبُدْنَ</td></tr><tr><td>أَنَا (I)</td><td>أَبَدْتُ</td><td>آبُدُ</td><td>آبُدْ</td><td>آبُدَ</td><td>آبُدَنَّ</td><td></td></tr><tr><td>نَحْنُ (we)</td><td>أَبَدْنَا</td><td>نَأْبُدُ</td><td>نَأْبُدْ</td><td>نَأْبُدَ</td><td>نَأْبُدَنَّ</td><td></td></tr></table><h4>🔗 Attached Pronouns Table with Examples (كَتَبَ)</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Doer (Past)</th><th>Doer (Present)</th><th>Done-To (Object)</th></tr><tr><td>هُوَ (he)</td><td>ـَ → كَتَبَ</td><td>يَـ → يَكْتُبُ</td><td>ـهُ → كَتَبَهُ</td></tr><tr><td>هُمَا (they two, masc)</td><td>ـَا → كَتَبَا</td><td>يَـ...ـانِ → يَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُمْ (they, masc)</td><td>ـُوا → كَتَبُوا</td><td>يَـ...ـونَ → يَكْتُبُونَ</td><td>ـهُمْ → كَتَبَهُمْ</td></tr><tr><td>هِيَ (she)</td><td>ـَتْ → كَتَبَتْ</td><td>تَـ → تَكْتُبُ</td><td>ـهَا → كَتَبَهَا</td></tr><tr><td>هُمَا (they two, fem)</td><td>ـَتَا → كَتَبَتَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُنَّ (they, fem)</td><td>ـْنَ → كَتَبْنَ</td><td>يَـ...ـنَ → يَكْتُبْنَ</td><td>ـهُنَّ → كَتَبْهُنَّ</td></tr><tr><td>أَنْتَ (you, masc)</td><td>ـْتَ → كَتَبْتَ</td><td>تَـ → تَكْتُبُ</td><td>ـكَ → كَتَبَكَ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُمْ (you all, masc)</td><td>ـْتُمْ → كَتَبْتُمْ</td><td>تَـ...ـونَ → تَكْتُبُونَ</td><td>ـكُمْ → كَتَبَكُمْ</td></tr><tr><td>أَنْتِ (you, fem)</td><td>ـْتِ → كَتَبْتِ</td><td>تَـ...ـينَ → تَكْتُبِينَ</td><td>ـكِ → كَتَبَكِ</td></tr><tr><td>أَنْتُمَا (you two, fem)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُنَّ (you all, fem)</td><td>ـْتُنَّ → كَتَبْتُنَّ</td><td>تَـ...ـنَ → تَكْتُبْنَ</td><td>ـكُنَّ → كَتَبَكُنَّ</td></tr><tr><td>أَنَا (I)</td><td>ـْتُ → كَتَبْتُ</td><td>أَـ → أَكْتُبُ</td><td>ـنِي → كَتَبَنِي</td></tr><tr><td>نَحْنُ (we)</td><td>ـْنَا → كَتَبْنَا</td><td>نَـ → نَكْتُبُ</td><td>ـنَا → كَتَبَنَا</td></tr></table>&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_028.mp3&quot;, &quot;VERB_FORM&quot;: &quot;I - كَتَبَ&quot;})">
+        تُبْدُونَهَا
+        <span class="translation">you disclose (some of) it</span>
+        <span class='translation'>يُبْدِىَ ونَ هَا</span>
+        <span class='translation'>Verb+Pron.+Pron.</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;وَتُخْفُونَ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is an imperfect verb in 2nd person masculine plural (you all - male group) form, Imperfect Verb.&quot;, &quot;Prefixes&quot;: &quot;prefix - conjunction وَ (and)&quot;, &quot;Conjugation Table&quot;: &quot;<h4>📈 Verb Conjugation Table</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Past</th><th>Present</th><th>Jussive (Negation)</th><th>Subjunctive (Future)</th><th>Emphatic Present (Certainty)</th><th>Imperative (Command)</th></tr><tr><td>هُوَ (he)</td><td>أَخْفَى</td><td>يُخْفِي</td><td>يُخْفِ</td><td>يُخْفِيَ</td><td>يُخْفِيَنَّ</td><td></td></tr><tr><td>هُمَا (they two masc.)</td><td>أَخْفَيَا</td><td>يُخْفِيَانِ</td><td>يُخْفِيَا</td><td>يُخْفِيَا</td><td>يُخْفِيَانِّ</td><td></td></tr><tr><td>هُمْ (they masc.)</td><td>أَخْفَوْا</td><td>يُخْفُونَ</td><td>يُخْفُوا</td><td>يُخْفُوا</td><td>يُخْفُنَّ</td><td></td></tr><tr><td>هِيَ (she)</td><td>أَخْفَتْ</td><td>تُخْفِي</td><td>تُخْفِ</td><td>تُخْفِيَ</td><td>تُخْفِيَنَّ</td><td></td></tr><tr><td>هُمَا (they two fem.)</td><td>أَخْفَتَا</td><td>تُخْفِيَانِ</td><td>تُخْفِيَا</td><td>تُخْفِيَا</td><td>تُخْفِيَانِّ</td><td></td></tr><tr><td>هُنَّ (they fem.)</td><td>أَخْفَيْنَ</td><td>يُخْفِينَ</td><td>يُخْفِينَ</td><td>يُخْفِينَ</td><td>يُخْفِينَانِّ</td><td></td></tr><tr><td>أَنْتَ (you masc.)</td><td>أَخْفَيْتَ</td><td>تُخْفِي</td><td>تُخْفِ</td><td>تُخْفِيَ</td><td>تُخْفِيَنَّ</td><td>أَخْفِ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>أَخْفَيْتُمَا</td><td>تُخْفِيَانِ</td><td>تُخْفِيَا</td><td>تُخْفِيَا</td><td>تُخْفِيَانِّ</td><td>أَخْفِيَا</td></tr><tr><td>أَنْتُمْ (you all masc.)</td><td>أَخْفَيْتُم</td><td>تُخْفُونَ</td><td>تُخْفُوا</td><td>تُخْفُوا</td><td>تُخْفُنَّ</td><td>أَخْفُوا</td></tr><tr><td>أَنْتِ (you fem.)</td><td>أَخْفَيْتِ</td><td>تُخْفِينَ</td><td>تُخْفِي</td><td>تُخْفِي</td><td>تُخْفِنَّ</td><td>أَخْفِي</td></tr><tr><td>أَنْتُمَا (you two fem.)</td><td>أَخْفَيْتُمَا</td><td>تُخْفِيَانِ</td><td>تُخْفِيَا</td><td>تُخْفِيَا</td><td>تُخْفِيَانِّ</td><td>أَخْفِيَا</td></tr><tr><td>أَنْتُنَّ (you all fem.)</td><td>أَخْفَيْتُنَّ</td><td>تُخْفِينَ</td><td>تُخْفِينَ</td><td>تُخْفِينَ</td><td>تُخْفِينَانِّ</td><td>أَخْفِينَ</td></tr><tr><td>أَنَا (I)</td><td>أَخْفَيْتُ</td><td>أُخْفِي</td><td>أُخْفِ</td><td>أُخْفِيَ</td><td>أُخْفِيَنَّ</td><td></td></tr><tr><td>نَحْنُ (we)</td><td>أَخْفَيْنَا</td><td>نُخْفِي</td><td>نُخْفِ</td><td>نُخْفِيَ</td><td>نُخْفِيَنَّ</td><td></td></tr></table><h4>🔗 Attached Pronouns Table with Examples (كَتَبَ)</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Doer (Past)</th><th>Doer (Present)</th><th>Done-To (Object)</th></tr><tr><td>هُوَ (he)</td><td>ـَ → كَتَبَ</td><td>يَـ → يَكْتُبُ</td><td>ـهُ → كَتَبَهُ</td></tr><tr><td>هُمَا (they two, masc)</td><td>ـَا → كَتَبَا</td><td>يَـ...ـانِ → يَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُمْ (they, masc)</td><td>ـُوا → كَتَبُوا</td><td>يَـ...ـونَ → يَكْتُبُونَ</td><td>ـهُمْ → كَتَبَهُمْ</td></tr><tr><td>هِيَ (she)</td><td>ـَتْ → كَتَبَتْ</td><td>تَـ → تَكْتُبُ</td><td>ـهَا → كَتَبَهَا</td></tr><tr><td>هُمَا (they two, fem)</td><td>ـَتَا → كَتَبَتَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُنَّ (they, fem)</td><td>ـْنَ → كَتَبْنَ</td><td>يَـ...ـنَ → يَكْتُبْنَ</td><td>ـهُنَّ → كَتَبْهُنَّ</td></tr><tr><td>أَنْتَ (you, masc)</td><td>ـْتَ → كَتَبْتَ</td><td>تَـ → تَكْتُبُ</td><td>ـكَ → كَتَبَكَ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُمْ (you all, masc)</td><td>ـْتُمْ → كَتَبْتُمْ</td><td>تَـ...ـونَ → تَكْتُبُونَ</td><td>ـكُمْ → كَتَبَكُمْ</td></tr><tr><td>أَنْتِ (you, fem)</td><td>ـْتِ → كَتَبْتِ</td><td>تَـ...ـينَ → تَكْتُبِينَ</td><td>ـكِ → كَتَبَكِ</td></tr><tr><td>أَنْتُمَا (you two, fem)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُنَّ (you all, fem)</td><td>ـْتُنَّ → كَتَبْتُنَّ</td><td>تَـ...ـنَ → تَكْتُبْنَ</td><td>ـكُنَّ → كَتَبَكُنَّ</td></tr><tr><td>أَنَا (I)</td><td>ـْتُ → كَتَبْتُ</td><td>أَـ → أَكْتُبُ</td><td>ـنِي → كَتَبَنِي</td></tr><tr><td>نَحْنُ (we)</td><td>ـْنَا → كَتَبْنَا</td><td>نَـ → نَكْتُبُ</td><td>ـنَا → كَتَبَنَا</td></tr></table>&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_029.mp3&quot;, &quot;VERB_FORM&quot;: &quot;IV - أَكْرَمَ&quot;})">
+        وَتُخْفُونَ
+        <span class="translation">and you conceal</span>
+        <span class='translation'>وَ أُخْفِىَ ونَ</span>
+        <span class='translation'>Conj.+Verb+Pron.</span>
+    </span>
+
+    <span class="word accusative" style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;كَثِيرًا&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a noun, MS, Indefinite, accusative case (nasb - detail).&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;<h4>📈 Verb Conjugation Table</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Past</th><th>Present</th><th>Jussive (Negation)</th><th>Subjunctive (Future)</th><th>Emphatic Present (Certainty)</th><th>Imperative (Command)</th></tr><tr><td>هُوَ (he)</td><td>كَثَرَ</td><td>يَكْثُرُ</td><td>يَكْثُرْ</td><td>يَكْثُرَ</td><td>يَكْثُرَنَّ</td><td></td></tr><tr><td>هُمَا (they two masc.)</td><td>كَثَرَا</td><td>يَكْثُرَانِ</td><td>يَكْثُرَا</td><td>يَكْثُرَا</td><td>يَكْثُرَانِّ</td><td></td></tr><tr><td>هُمْ (they masc.)</td><td>كَثَرُوا</td><td>يَكْثُرُونَ</td><td>يَكْثُرُوا</td><td>يَكْثُرُوا</td><td>يَكْثُرُنَّ</td><td></td></tr><tr><td>هِيَ (she)</td><td>كَثَرَتْ</td><td>تَكْثُرُ</td><td>تَكْثُرْ</td><td>تَكْثُرَ</td><td>تَكْثُرَنَّ</td><td></td></tr><tr><td>هُمَا (they two fem.)</td><td>كَثَرَتَا</td><td>تَكْثُرَانِ</td><td>تَكْثُرَا</td><td>تَكْثُرَا</td><td>تَكْثُرَانِّ</td><td></td></tr><tr><td>هُنَّ (they fem.)</td><td>كَثَرْنَ</td><td>يَكْثُرْنَ</td><td>يَكْثُرْنَ</td><td>يَكْثُرْنَ</td><td>يَكْثُرْنَانِّ</td><td></td></tr><tr><td>أَنْتَ (you masc.)</td><td>كَثَرْتَ</td><td>تَكْثُرُ</td><td>تَكْثُرْ</td><td>تَكْثُرَ</td><td>تَكْثُرَنَّ</td><td>اُكْثُرْ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>كَثَرْتُمَا</td><td>تَكْثُرَانِ</td><td>تَكْثُرَا</td><td>تَكْثُرَا</td><td>تَكْثُرَانِّ</td><td>اُكْثُرَا</td></tr><tr><td>أَنْتُمْ (you all masc.)</td><td>كَثَرْتُم</td><td>تَكْثُرُونَ</td><td>تَكْثُرُوا</td><td>تَكْثُرُوا</td><td>تَكْثُرُنَّ</td><td>اُكْثُرُوا</td></tr><tr><td>أَنْتِ (you fem.)</td><td>كَثَرْتِ</td><td>تَكْثُرِينَ</td><td>تَكْثُرِي</td><td>تَكْثُرِي</td><td>تَكْثُرِنَّ</td><td>اُكْثُرِي</td></tr><tr><td>أَنْتُمَا (you two fem.)</td><td>كَثَرْتُمَا</td><td>تَكْثُرَانِ</td><td>تَكْثُرَا</td><td>تَكْثُرَا</td><td>تَكْثُرَانِّ</td><td>اُكْثُرَا</td></tr><tr><td>أَنْتُنَّ (you all fem.)</td><td>كَثَرْتُنَّ</td><td>تَكْثُرْنَ</td><td>تَكْثُرْنَ</td><td>تَكْثُرْنَ</td><td>تَكْثُرْنَانِّ</td><td>اُكْثُرْنَ</td></tr><tr><td>أَنَا (I)</td><td>كَثَرْتُ</td><td>أَكْثُرُ</td><td>أَكْثُرْ</td><td>أَكْثُرَ</td><td>أَكْثُرَنَّ</td><td></td></tr><tr><td>نَحْنُ (we)</td><td>كَثَرْنَا</td><td>نَكْثُرُ</td><td>نَكْثُرْ</td><td>نَكْثُرَ</td><td>نَكْثُرَنَّ</td><td></td></tr></table><h4>🔗 Attached Pronouns Table with Examples (كَتَبَ)</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Doer (Past)</th><th>Doer (Present)</th><th>Done-To (Object)</th></tr><tr><td>هُوَ (he)</td><td>ـَ → كَتَبَ</td><td>يَـ → يَكْتُبُ</td><td>ـهُ → كَتَبَهُ</td></tr><tr><td>هُمَا (they two, masc)</td><td>ـَا → كَتَبَا</td><td>يَـ...ـانِ → يَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُمْ (they, masc)</td><td>ـُوا → كَتَبُوا</td><td>يَـ...ـونَ → يَكْتُبُونَ</td><td>ـهُمْ → كَتَبَهُمْ</td></tr><tr><td>هِيَ (she)</td><td>ـَتْ → كَتَبَتْ</td><td>تَـ → تَكْتُبُ</td><td>ـهَا → كَتَبَهَا</td></tr><tr><td>هُمَا (they two, fem)</td><td>ـَتَا → كَتَبَتَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُنَّ (they, fem)</td><td>ـْنَ → كَتَبْنَ</td><td>يَـ...ـنَ → يَكْتُبْنَ</td><td>ـهُنَّ → كَتَبْهُنَّ</td></tr><tr><td>أَنْتَ (you, masc)</td><td>ـْتَ → كَتَبْتَ</td><td>تَـ → تَكْتُبُ</td><td>ـكَ → كَتَبَكَ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُمْ (you all, masc)</td><td>ـْتُمْ → كَتَبْتُمْ</td><td>تَـ...ـونَ → تَكْتُبُونَ</td><td>ـكُمْ → كَتَبَكُمْ</td></tr><tr><td>أَنْتِ (you, fem)</td><td>ـْتِ → كَتَبْتِ</td><td>تَـ...ـينَ → تَكْتُبِينَ</td><td>ـكِ → كَتَبَكِ</td></tr><tr><td>أَنْتُمَا (you two, fem)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُنَّ (you all, fem)</td><td>ـْتُنَّ → كَتَبْتُنَّ</td><td>تَـ...ـنَ → تَكْتُبْنَ</td><td>ـكُنَّ → كَتَبَكُنَّ</td></tr><tr><td>أَنَا (I)</td><td>ـْتُ → كَتَبْتُ</td><td>أَـ → أَكْتُبُ</td><td>ـنِي → كَتَبَنِي</td></tr><tr><td>نَحْنُ (we)</td><td>ـْنَا → كَتَبْنَا</td><td>نَـ → نَكْتُبُ</td><td>ـنَا → كَتَبَنَا</td></tr></table>&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_030.mp3&quot;, &quot;VERB_FORM&quot;: &quot;I - كَتَبَ&quot;})">
+        كَثِيرًا
+        <span class="translation">much (of it)</span>
+        <span class='translation'>كَثِير</span>
+        <span class='translation'>Noun</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;وَعُلِّمْتُم&quot;, &quot;Quran Morph Info&quot;: &quot;This word is an perfect verb in 2nd person masculine plural (you all - male group) form, PASS, (II).&quot;, &quot;Prefixes&quot;: &quot;prefix - conjunction وَ (and)&quot;, &quot;Conjugation Table&quot;: &quot;<h4>📈 Verb Conjugation Table</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Past</th><th>Present</th><th>Jussive (Negation)</th><th>Subjunctive (Future)</th><th>Emphatic Present (Certainty)</th><th>Imperative (Command)</th></tr><tr><td>هُوَ (he)</td><td>عَلَّمَ</td><td>يُعَلِّمُ</td><td>يُعَلِّمْ</td><td>يُعَلِّمَ</td><td>يُعَلِّمَنَّ</td><td></td></tr><tr><td>هُمَا (they two masc.)</td><td>عَلَّمَا</td><td>يُعَلِّمَانِ</td><td>يُعَلِّمَا</td><td>يُعَلِّمَا</td><td>يُعَلِّمَانِّ</td><td></td></tr><tr><td>هُمْ (they masc.)</td><td>عَلَّمُوا</td><td>يُعَلِّمُونَ</td><td>يُعَلِّمُوا</td><td>يُعَلِّمُوا</td><td>يُعَلِّمُنَّ</td><td></td></tr><tr><td>هِيَ (she)</td><td>عَلَّمَتْ</td><td>تُعَلِّمُ</td><td>تُعَلِّمْ</td><td>تُعَلِّمَ</td><td>تُعَلِّمَنَّ</td><td></td></tr><tr><td>هُمَا (they two fem.)</td><td>عَلَّمَتَا</td><td>تُعَلِّمَانِ</td><td>تُعَلِّمَا</td><td>تُعَلِّمَا</td><td>تُعَلِّمَانِّ</td><td></td></tr><tr><td>هُنَّ (they fem.)</td><td>عَلَّمْنَ</td><td>يُعَلِّمْنَ</td><td>يُعَلِّمْنَ</td><td>يُعَلِّمْنَ</td><td>يُعَلِّمْنَانِّ</td><td></td></tr><tr><td>أَنْتَ (you masc.)</td><td>عَلَّمْتَ</td><td>تُعَلِّمُ</td><td>تُعَلِّمْ</td><td>تُعَلِّمَ</td><td>تُعَلِّمَنَّ</td><td>عَلِّمْ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>عَلَّمْتُمَا</td><td>تُعَلِّمَانِ</td><td>تُعَلِّمَا</td><td>تُعَلِّمَا</td><td>تُعَلِّمَانِّ</td><td>عَلِّمَا</td></tr><tr><td>أَنْتُمْ (you all masc.)</td><td>عَلَّمْتُم</td><td>تُعَلِّمُونَ</td><td>تُعَلِّمُوا</td><td>تُعَلِّمُوا</td><td>تُعَلِّمُنَّ</td><td>عَلِّمُوا</td></tr><tr><td>أَنْتِ (you fem.)</td><td>عَلَّمْتِ</td><td>تُعَلِّمِينَ</td><td>تُعَلِّمِي</td><td>تُعَلِّمِي</td><td>تُعَلِّمِنَّ</td><td>عَلِّمِي</td></tr><tr><td>أَنْتُمَا (you two fem.)</td><td>عَلَّمْتُمَا</td><td>تُعَلِّمَانِ</td><td>تُعَلِّمَا</td><td>تُعَلِّمَا</td><td>تُعَلِّمَانِّ</td><td>عَلِّمَا</td></tr><tr><td>أَنْتُنَّ (you all fem.)</td><td>عَلَّمْتُنَّ</td><td>تُعَلِّمْنَ</td><td>تُعَلِّمْنَ</td><td>تُعَلِّمْنَ</td><td>تُعَلِّمْنَانِّ</td><td>عَلِّمْنَ</td></tr><tr><td>أَنَا (I)</td><td>عَلَّمْتُ</td><td>أُعَلِّمُ</td><td>أُعَلِّمْ</td><td>أُعَلِّمَ</td><td>أُعَلِّمَنَّ</td><td></td></tr><tr><td>نَحْنُ (we)</td><td>عَلَّمْنَا</td><td>نُعَلِّمُ</td><td>نُعَلِّمْ</td><td>نُعَلِّمَ</td><td>نُعَلِّمَنَّ</td><td></td></tr></table><h4>🔗 Attached Pronouns Table with Examples (كَتَبَ)</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Doer (Past)</th><th>Doer (Present)</th><th>Done-To (Object)</th></tr><tr><td>هُوَ (he)</td><td>ـَ → كَتَبَ</td><td>يَـ → يَكْتُبُ</td><td>ـهُ → كَتَبَهُ</td></tr><tr><td>هُمَا (they two, masc)</td><td>ـَا → كَتَبَا</td><td>يَـ...ـانِ → يَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُمْ (they, masc)</td><td>ـُوا → كَتَبُوا</td><td>يَـ...ـونَ → يَكْتُبُونَ</td><td>ـهُمْ → كَتَبَهُمْ</td></tr><tr><td>هِيَ (she)</td><td>ـَتْ → كَتَبَتْ</td><td>تَـ → تَكْتُبُ</td><td>ـهَا → كَتَبَهَا</td></tr><tr><td>هُمَا (they two, fem)</td><td>ـَتَا → كَتَبَتَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُنَّ (they, fem)</td><td>ـْنَ → كَتَبْنَ</td><td>يَـ...ـنَ → يَكْتُبْنَ</td><td>ـهُنَّ → كَتَبْهُنَّ</td></tr><tr><td>أَنْتَ (you, masc)</td><td>ـْتَ → كَتَبْتَ</td><td>تَـ → تَكْتُبُ</td><td>ـكَ → كَتَبَكَ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُمْ (you all, masc)</td><td>ـْتُمْ → كَتَبْتُمْ</td><td>تَـ...ـونَ → تَكْتُبُونَ</td><td>ـكُمْ → كَتَبَكُمْ</td></tr><tr><td>أَنْتِ (you, fem)</td><td>ـْتِ → كَتَبْتِ</td><td>تَـ...ـينَ → تَكْتُبِينَ</td><td>ـكِ → كَتَبَكِ</td></tr><tr><td>أَنْتُمَا (you two, fem)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُنَّ (you all, fem)</td><td>ـْتُنَّ → كَتَبْتُنَّ</td><td>تَـ...ـنَ → تَكْتُبْنَ</td><td>ـكُنَّ → كَتَبَكُنَّ</td></tr><tr><td>أَنَا (I)</td><td>ـْتُ → كَتَبْتُ</td><td>أَـ → أَكْتُبُ</td><td>ـنِي → كَتَبَنِي</td></tr><tr><td>نَحْنُ (we)</td><td>ـْنَا → كَتَبْنَا</td><td>نَـ → نَكْتُبُ</td><td>ـنَا → كَتَبَنَا</td></tr></table>&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_031.mp3&quot;, &quot;VERB_FORM&quot;: &quot;II - دَرَّسَ&quot;})">
+        وَعُلِّمْتُم
+        <span class="translation">And you were taught</span>
+        <span class='translation'>وَ عَلَّمَ تُم</span>
+        <span class='translation'>Resumption Part+Verb+Pron.</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;مَّا&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a REL.&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_032.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        مَّا
+        <span class="translation">what</span>
+        <span class='translation'>مَا</span>
+        <span class='translation'>Rel. Pronoun</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;لَمْ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a negation particle.&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_033.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        لَمْ
+        <span class="translation">not</span>
+        <span class='translation'>لَم</span>
+        <span class='translation'>Neg Part</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;تَعْلَمُوٓا۟&quot;, &quot;Quran Morph Info&quot;: &quot;This word is an imperfect verb in 2nd person masculine plural (you all - male group) form, jussive mood (command or request under condition).&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;<h4>📈 Verb Conjugation Table</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Past</th><th>Present</th><th>Jussive (Negation)</th><th>Subjunctive (Future)</th><th>Emphatic Present (Certainty)</th><th>Imperative (Command)</th></tr><tr><td>هُوَ (he)</td><td>عَلِمَ</td><td>يَعْلَمُ</td><td>يَعْلَمْ</td><td>يَعْلَمَ</td><td>يَعْلَمَنَّ</td><td></td></tr><tr><td>هُمَا (they two masc.)</td><td>عَلِمَا</td><td>يَعْلَمَانِ</td><td>يَعْلَمَا</td><td>يَعْلَمَا</td><td>يَعْلَمَانِّ</td><td></td></tr><tr><td>هُمْ (they masc.)</td><td>عَلِمُوا</td><td>يَعْلَمُونَ</td><td>يَعْلَمُوا</td><td>يَعْلَمُوا</td><td>يَعْلَمُنَّ</td><td></td></tr><tr><td>هِيَ (she)</td><td>عَلِمَتْ</td><td>تَعْلَمُ</td><td>تَعْلَمْ</td><td>تَعْلَمَ</td><td>تَعْلَمَنَّ</td><td></td></tr><tr><td>هُمَا (they two fem.)</td><td>عَلِمَتَا</td><td>تَعْلَمَانِ</td><td>تَعْلَمَا</td><td>تَعْلَمَا</td><td>تَعْلَمَانِّ</td><td></td></tr><tr><td>هُنَّ (they fem.)</td><td>عَلِمْنَ</td><td>يَعْلَمْنَ</td><td>يَعْلَمْنَ</td><td>يَعْلَمْنَ</td><td>يَعْلَمْنَانِّ</td><td></td></tr><tr><td>أَنْتَ (you masc.)</td><td>عَلِمْتَ</td><td>تَعْلَمُ</td><td>تَعْلَمْ</td><td>تَعْلَمَ</td><td>تَعْلَمَنَّ</td><td>اِعْلَمْ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>عَلِمْتُمَا</td><td>تَعْلَمَانِ</td><td>تَعْلَمَا</td><td>تَعْلَمَا</td><td>تَعْلَمَانِّ</td><td>اِعْلَمَا</td></tr><tr><td>أَنْتُمْ (you all masc.)</td><td>عَلِمْتُم</td><td>تَعْلَمُونَ</td><td>تَعْلَمُوا</td><td>تَعْلَمُوا</td><td>تَعْلَمُنَّ</td><td>اِعْلَمُوا</td></tr><tr><td>أَنْتِ (you fem.)</td><td>عَلِمْتِ</td><td>تَعْلَمِينَ</td><td>تَعْلَمِي</td><td>تَعْلَمِي</td><td>تَعْلَمِنَّ</td><td>اِعْلَمِي</td></tr><tr><td>أَنْتُمَا (you two fem.)</td><td>عَلِمْتُمَا</td><td>تَعْلَمَانِ</td><td>تَعْلَمَا</td><td>تَعْلَمَا</td><td>تَعْلَمَانِّ</td><td>اِعْلَمَا</td></tr><tr><td>أَنْتُنَّ (you all fem.)</td><td>عَلِمْتُنَّ</td><td>تَعْلَمْنَ</td><td>تَعْلَمْنَ</td><td>تَعْلَمْنَ</td><td>تَعْلَمْنَانِّ</td><td>اِعْلَمْنَ</td></tr><tr><td>أَنَا (I)</td><td>عَلِمْتُ</td><td>أَعْلَمُ</td><td>أَعْلَمْ</td><td>أَعْلَمَ</td><td>أَعْلَمَنَّ</td><td></td></tr><tr><td>نَحْنُ (we)</td><td>عَلِمْنَا</td><td>نَعْلَمُ</td><td>نَعْلَمْ</td><td>نَعْلَمَ</td><td>نَعْلَمَنَّ</td><td></td></tr></table><h4>🔗 Attached Pronouns Table with Examples (كَتَبَ)</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Doer (Past)</th><th>Doer (Present)</th><th>Done-To (Object)</th></tr><tr><td>هُوَ (he)</td><td>ـَ → كَتَبَ</td><td>يَـ → يَكْتُبُ</td><td>ـهُ → كَتَبَهُ</td></tr><tr><td>هُمَا (they two, masc)</td><td>ـَا → كَتَبَا</td><td>يَـ...ـانِ → يَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُمْ (they, masc)</td><td>ـُوا → كَتَبُوا</td><td>يَـ...ـونَ → يَكْتُبُونَ</td><td>ـهُمْ → كَتَبَهُمْ</td></tr><tr><td>هِيَ (she)</td><td>ـَتْ → كَتَبَتْ</td><td>تَـ → تَكْتُبُ</td><td>ـهَا → كَتَبَهَا</td></tr><tr><td>هُمَا (they two, fem)</td><td>ـَتَا → كَتَبَتَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُنَّ (they, fem)</td><td>ـْنَ → كَتَبْنَ</td><td>يَـ...ـنَ → يَكْتُبْنَ</td><td>ـهُنَّ → كَتَبْهُنَّ</td></tr><tr><td>أَنْتَ (you, masc)</td><td>ـْتَ → كَتَبْتَ</td><td>تَـ → تَكْتُبُ</td><td>ـكَ → كَتَبَكَ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُمْ (you all, masc)</td><td>ـْتُمْ → كَتَبْتُمْ</td><td>تَـ...ـونَ → تَكْتُبُونَ</td><td>ـكُمْ → كَتَبَكُمْ</td></tr><tr><td>أَنْتِ (you, fem)</td><td>ـْتِ → كَتَبْتِ</td><td>تَـ...ـينَ → تَكْتُبِينَ</td><td>ـكِ → كَتَبَكِ</td></tr><tr><td>أَنْتُمَا (you two, fem)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُنَّ (you all, fem)</td><td>ـْتُنَّ → كَتَبْتُنَّ</td><td>تَـ...ـنَ → تَكْتُبْنَ</td><td>ـكُنَّ → كَتَبَكُنَّ</td></tr><tr><td>أَنَا (I)</td><td>ـْتُ → كَتَبْتُ</td><td>أَـ → أَكْتُبُ</td><td>ـنِي → كَتَبَنِي</td></tr><tr><td>نَحْنُ (we)</td><td>ـْنَا → كَتَبْنَا</td><td>نَـ → نَكْتُبُ</td><td>ـنَا → كَتَبَنَا</td></tr></table>&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_034.mp3&quot;, &quot;VERB_FORM&quot;: &quot;I - كَتَبَ&quot;})">
+        تَعْلَمُوٓا۟
+        <span class="translation">knew</span>
+        <span class='translation'>عَلِمَ وٓا۟</span>
+        <span class='translation'>Verb+Pron.</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;أَنتُمْ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a pronoun in 2nd person masculine plural (you all - male group) form.&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_035.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        أَنتُمْ
+        <span class="translation">you</span>
+        <span class='translation'>أَنتُمْ</span>
+        <span class='translation'>Pron.</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;وَلَآ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a negation particle.&quot;, &quot;Prefixes&quot;: &quot;prefix - conjunction وَ (and)&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_036.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        وَلَآ
+        <span class="translation">and not</span>
+        <span class='translation'>وَ لَا</span>
+        <span class='translation'>Conj.+Neg Part</span>
+    </span>
+
+    <span class="word nominative" style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;ءَابَآؤُكُمْ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a noun in masculine plural form, nominative case (rafa), 2nd person masculine plural (you all - male group).&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_037.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        ءَابَآؤُكُمْ
+        <span class="translation">your forefathers</span>
+        <span class='translation'>آبَاء كُمْ</span>
+        <span class='translation'>Noun+Pron.</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;قُلِ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a verb in 2nd person masculine singular (you - male) form, IMPV.&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;<h4>📈 Verb Conjugation Table</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Past</th><th>Present</th><th>Jussive (Negation)</th><th>Subjunctive (Future)</th><th>Emphatic Present (Certainty)</th><th>Imperative (Command)</th></tr><tr><td>هُوَ (he)</td><td>قَالَ</td><td>يَقُولُ</td><td>يَقُلْ</td><td>يَقُولَ</td><td>يَقُولَنَّ</td><td></td></tr><tr><td>هُمَا (they two masc.)</td><td>قَالَا</td><td>يَقُولَانِ</td><td>يَقُولَا</td><td>يَقُولَا</td><td>يَقُولَانِّ</td><td></td></tr><tr><td>هُمْ (they masc.)</td><td>قَالُوا</td><td>يَقُولُونَ</td><td>يَقُولُوا</td><td>يَقُولُوا</td><td>يَقُولُنَّ</td><td></td></tr><tr><td>هِيَ (she)</td><td>قَالَتْ</td><td>تَقُولُ</td><td>تَقُلْ</td><td>تَقُولَ</td><td>تَقُولَنَّ</td><td></td></tr><tr><td>هُمَا (they two fem.)</td><td>قَالَتَا</td><td>تَقُولَانِ</td><td>تَقُولَا</td><td>تَقُولَا</td><td>تَقُولَانِّ</td><td></td></tr><tr><td>هُنَّ (they fem.)</td><td>قُلْنَ</td><td>يَقُلْنَ</td><td>يَقُلْنَ</td><td>يَقُلْنَ</td><td>يَقُلْنَانِّ</td><td></td></tr><tr><td>أَنْتَ (you masc.)</td><td>قُلْتَ</td><td>تَقُولُ</td><td>تَقُلْ</td><td>تَقُولَ</td><td>تَقُولَنَّ</td><td>قُلْ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>قُلْتُمَا</td><td>تَقُولَانِ</td><td>تَقُولَا</td><td>تَقُولَا</td><td>تَقُولَانِّ</td><td>قُولَا</td></tr><tr><td>أَنْتُمْ (you all masc.)</td><td>قُلْتُم</td><td>تَقُولُونَ</td><td>تَقُولُوا</td><td>تَقُولُوا</td><td>تَقُولُنَّ</td><td>قُولُوا</td></tr><tr><td>أَنْتِ (you fem.)</td><td>قُلْتِ</td><td>تَقُولِينَ</td><td>تَقُولِي</td><td>تَقُولِي</td><td>تَقُولِنَّ</td><td>قُولِي</td></tr><tr><td>أَنْتُمَا (you two fem.)</td><td>قُلْتُمَا</td><td>تَقُولَانِ</td><td>تَقُولَا</td><td>تَقُولَا</td><td>تَقُولَانِّ</td><td>قُولَا</td></tr><tr><td>أَنْتُنَّ (you all fem.)</td><td>قُلْتُنَّ</td><td>تَقُلْنَ</td><td>تَقُلْنَ</td><td>تَقُلْنَ</td><td>تَقُلْنَانِّ</td><td>قُلْنَ</td></tr><tr><td>أَنَا (I)</td><td>قُلْتُ</td><td>أَقُولُ</td><td>أَقُلْ</td><td>أَقُولَ</td><td>أَقُولَنَّ</td><td></td></tr><tr><td>نَحْنُ (we)</td><td>قُلْنَا</td><td>نَقُولُ</td><td>نَقُلْ</td><td>نَقُولَ</td><td>نَقُولَنَّ</td><td></td></tr></table><h4>🔗 Attached Pronouns Table with Examples (كَتَبَ)</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Doer (Past)</th><th>Doer (Present)</th><th>Done-To (Object)</th></tr><tr><td>هُوَ (he)</td><td>ـَ → كَتَبَ</td><td>يَـ → يَكْتُبُ</td><td>ـهُ → كَتَبَهُ</td></tr><tr><td>هُمَا (they two, masc)</td><td>ـَا → كَتَبَا</td><td>يَـ...ـانِ → يَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُمْ (they, masc)</td><td>ـُوا → كَتَبُوا</td><td>يَـ...ـونَ → يَكْتُبُونَ</td><td>ـهُمْ → كَتَبَهُمْ</td></tr><tr><td>هِيَ (she)</td><td>ـَتْ → كَتَبَتْ</td><td>تَـ → تَكْتُبُ</td><td>ـهَا → كَتَبَهَا</td></tr><tr><td>هُمَا (they two, fem)</td><td>ـَتَا → كَتَبَتَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُنَّ (they, fem)</td><td>ـْنَ → كَتَبْنَ</td><td>يَـ...ـنَ → يَكْتُبْنَ</td><td>ـهُنَّ → كَتَبْهُنَّ</td></tr><tr><td>أَنْتَ (you, masc)</td><td>ـْتَ → كَتَبْتَ</td><td>تَـ → تَكْتُبُ</td><td>ـكَ → كَتَبَكَ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُمْ (you all, masc)</td><td>ـْتُمْ → كَتَبْتُمْ</td><td>تَـ...ـونَ → تَكْتُبُونَ</td><td>ـكُمْ → كَتَبَكُمْ</td></tr><tr><td>أَنْتِ (you, fem)</td><td>ـْتِ → كَتَبْتِ</td><td>تَـ...ـينَ → تَكْتُبِينَ</td><td>ـكِ → كَتَبَكِ</td></tr><tr><td>أَنْتُمَا (you two, fem)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُنَّ (you all, fem)</td><td>ـْتُنَّ → كَتَبْتُنَّ</td><td>تَـ...ـنَ → تَكْتُبْنَ</td><td>ـكُنَّ → كَتَبَكُنَّ</td></tr><tr><td>أَنَا (I)</td><td>ـْتُ → كَتَبْتُ</td><td>أَـ → أَكْتُبُ</td><td>ـنِي → كَتَبَنِي</td></tr><tr><td>نَحْنُ (we)</td><td>ـْنَا → كَتَبْنَا</td><td>نَـ → نَكْتُبُ</td><td>ـنَا → كَتَبَنَا</td></tr></table>&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_038.mp3&quot;, &quot;VERB_FORM&quot;: &quot;I - كَتَبَ&quot;})">
+        قُلِ
+        <span class="translation">Say</span>
+        <span class='translation'>قَالَ</span>
+        <span class='translation'>Verb</span>
+    </span>
+
+    <span class="word nominative" style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;اللَّهُ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a proper noun, nominative case (rafa).&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_039.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        اللَّهُ
+        <span class="translation">Allah (revealed it)</span>
+        <span class='translation'>ٱللَّه</span>
+        <span class='translation'>Proper Noun</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;ثُمَّ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a conjunction.&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_040.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        ثُمَّ
+        <span class="translation">Then</span>
+        <span class='translation'>ثُمّ</span>
+        <span class='translation'>Conj.</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;ذَرْهُمْ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a verb in 2nd person masculine singular (you - male) form, IMPV, 3rd person masculine plural (they - male group).&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;<h4>📈 Verb Conjugation Table</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Past</th><th>Present</th><th>Jussive (Negation)</th><th>Subjunctive (Future)</th><th>Emphatic Present (Certainty)</th><th>Imperative (Command)</th></tr><tr><td>هُوَ (he)</td><td>كَتَبَ</td><td>يَكْتُبُ</td><td>يَكْتُبْ</td><td>يَكْتُبَ</td><td>يَكْتُبَنَّ</td><td></td></tr><tr><td>هُمَا (they two masc.)</td><td>كَتَبَا</td><td>يَكْتُبَانِ</td><td>يَكْتُبَا</td><td>يَكْتُبَا</td><td>يَكْتُبَانِّ</td><td></td></tr><tr><td>هُمْ (they masc.)</td><td>كَتَبُوا</td><td>يَكْتُبُونَ</td><td>يَكْتُبُوا</td><td>يَكْتُبُوا</td><td>يَكْتُبُنَّ</td><td></td></tr><tr><td>هِيَ (she)</td><td>كَتَبَتْ</td><td>تَكْتُبُ</td><td>تَكْتُبْ</td><td>تَكْتُبَ</td><td>تَكْتُبَنَّ</td><td></td></tr><tr><td>هُمَا (they two fem.)</td><td>كَتَبَتَا</td><td>تَكْتُبَانِ</td><td>تَكْتُبَا</td><td>تَكْتُبَا</td><td>تَكْتُبَانِّ</td><td></td></tr><tr><td>هُنَّ (they fem.)</td><td>كَتَبْنَ</td><td>يَكْتُبْنَ</td><td>يَكْتُبْنَ</td><td>يَكْتُبْنَ</td><td>يَكْتُبْنَانِّ</td><td></td></tr><tr><td>أَنْتَ (you masc.)</td><td>كَتَبْتَ</td><td>تَكْتُبُ</td><td>تَكْتُبْ</td><td>تَكْتُبَ</td><td>تَكْتُبَنَّ</td><td>اُكْتُبْ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>كَتَبْتُمَا</td><td>تَكْتُبَانِ</td><td>تَكْتُبَا</td><td>تَكْتُبَا</td><td>تَكْتُبَانِّ</td><td>اُكْتُبَا</td></tr><tr><td>أَنْتُمْ (you all masc.)</td><td>كَتَبْتُم</td><td>تَكْتُبُونَ</td><td>تَكْتُبُوا</td><td>تَكْتُبُوا</td><td>تَكْتُبُنَّ</td><td>اُكْتُبُوا</td></tr><tr><td>أَنْتِ (you fem.)</td><td>كَتَبْتِ</td><td>تَكْتُبِينَ</td><td>تَكْتُبِي</td><td>تَكْتُبِي</td><td>تَكْتُبِنَّ</td><td>اُكْتُبِي</td></tr><tr><td>أَنْتُمَا (you two fem.)</td><td>كَتَبْتُمَا</td><td>تَكْتُبَانِ</td><td>تَكْتُبَا</td><td>تَكْتُبَا</td><td>تَكْتُبَانِّ</td><td>اُكْتُبَا</td></tr><tr><td>أَنْتُنَّ (you all fem.)</td><td>كَتَبْتُنَّ</td><td>تَكْتُبْنَ</td><td>تَكْتُبْنَ</td><td>تَكْتُبْنَ</td><td>تَكْتُبْنَانِّ</td><td>اُكْتُبْنَ</td></tr><tr><td>أَنَا (I)</td><td>كَتَبْتُ</td><td>أَكْتُبُ</td><td>أَكْتُبْ</td><td>أَكْتُبَ</td><td>أَكْتُبَنَّ</td><td></td></tr><tr><td>نَحْنُ (we)</td><td>كَتَبْنَا</td><td>نَكْتُبُ</td><td>نَكْتُبْ</td><td>نَكْتُبَ</td><td>نَكْتُبَنَّ</td><td></td></tr></table><h4>🔗 Attached Pronouns Table with Examples (كَتَبَ)</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Doer (Past)</th><th>Doer (Present)</th><th>Done-To (Object)</th></tr><tr><td>هُوَ (he)</td><td>ـَ → كَتَبَ</td><td>يَـ → يَكْتُبُ</td><td>ـهُ → كَتَبَهُ</td></tr><tr><td>هُمَا (they two, masc)</td><td>ـَا → كَتَبَا</td><td>يَـ...ـانِ → يَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُمْ (they, masc)</td><td>ـُوا → كَتَبُوا</td><td>يَـ...ـونَ → يَكْتُبُونَ</td><td>ـهُمْ → كَتَبَهُمْ</td></tr><tr><td>هِيَ (she)</td><td>ـَتْ → كَتَبَتْ</td><td>تَـ → تَكْتُبُ</td><td>ـهَا → كَتَبَهَا</td></tr><tr><td>هُمَا (they two, fem)</td><td>ـَتَا → كَتَبَتَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُنَّ (they, fem)</td><td>ـْنَ → كَتَبْنَ</td><td>يَـ...ـنَ → يَكْتُبْنَ</td><td>ـهُنَّ → كَتَبْهُنَّ</td></tr><tr><td>أَنْتَ (you, masc)</td><td>ـْتَ → كَتَبْتَ</td><td>تَـ → تَكْتُبُ</td><td>ـكَ → كَتَبَكَ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُمْ (you all, masc)</td><td>ـْتُمْ → كَتَبْتُمْ</td><td>تَـ...ـونَ → تَكْتُبُونَ</td><td>ـكُمْ → كَتَبَكُمْ</td></tr><tr><td>أَنْتِ (you, fem)</td><td>ـْتِ → كَتَبْتِ</td><td>تَـ...ـينَ → تَكْتُبِينَ</td><td>ـكِ → كَتَبَكِ</td></tr><tr><td>أَنْتُمَا (you two, fem)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُنَّ (you all, fem)</td><td>ـْتُنَّ → كَتَبْتُنَّ</td><td>تَـ...ـنَ → تَكْتُبْنَ</td><td>ـكُنَّ → كَتَبَكُنَّ</td></tr><tr><td>أَنَا (I)</td><td>ـْتُ → كَتَبْتُ</td><td>أَـ → أَكْتُبُ</td><td>ـنِي → كَتَبَنِي</td></tr><tr><td>نَحْنُ (we)</td><td>ـْنَا → كَتَبْنَا</td><td>نَـ → نَكْتُبُ</td><td>ـنَا → كَتَبَنَا</td></tr></table>&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_041.mp3&quot;, &quot;VERB_FORM&quot;: &quot;I - كَتَبَ&quot;})">
+        ذَرْهُمْ
+        <span class="translation">leave them</span>
+        <span class='translation'>يَذَرَ هُمْ</span>
+        <span class='translation'>Verb+Pron.</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;فِى&quot;, &quot;Quran Morph Info&quot;: &quot;This word is a plural.&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_042.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        فِى
+        <span class="translation">in</span>
+        <span class='translation'>فِى</span>
+        <span class='translation'>Preposition</span>
+    </span>
+
+    <span class="word genitive" style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;خَوْضِهِمْ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is an Verbal Noun, masculine, genitive case (jarr - after of), 3rd person masculine plural (they - male group).&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_043.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;})">
+        خَوْضِهِمْ
+        <span class="translation">their discourse </span>
+        <span class='translation'>خَوْض هِمْ</span>
+        <span class='translation'>Noun+Pron.</span>
+    </span>
+
+    <span class="word " style="text-align: center; direction: rtl;" onclick="showPopup({&quot;Word&quot;: &quot;يَلْعَبُونَ&quot;, &quot;Quran Morph Info&quot;: &quot;This word is an imperfect verb in 3rd person masculine plural (they - male group) form.&quot;, &quot;Prefixes&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;<h4>📈 Verb Conjugation Table</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Past</th><th>Present</th><th>Jussive (Negation)</th><th>Subjunctive (Future)</th><th>Emphatic Present (Certainty)</th><th>Imperative (Command)</th></tr><tr><td>هُوَ (he)</td><td>لَعَبَ</td><td>يَلْعَبُ</td><td>يَلْعَبْ</td><td>يَلْعَبَ</td><td>يَلْعَبَنَّ</td><td></td></tr><tr><td>هُمَا (they two masc.)</td><td>لَعَبَا</td><td>يَلْعَبَانِ</td><td>يَلْعَبَا</td><td>يَلْعَبَا</td><td>يَلْعَبَانِّ</td><td></td></tr><tr><td>هُمْ (they masc.)</td><td>لَعَبُوا</td><td>يَلْعَبُونَ</td><td>يَلْعَبُوا</td><td>يَلْعَبُوا</td><td>يَلْعَبُنَّ</td><td></td></tr><tr><td>هِيَ (she)</td><td>لَعَبَتْ</td><td>تَلْعَبُ</td><td>تَلْعَبْ</td><td>تَلْعَبَ</td><td>تَلْعَبَنَّ</td><td></td></tr><tr><td>هُمَا (they two fem.)</td><td>لَعَبَتَا</td><td>تَلْعَبَانِ</td><td>تَلْعَبَا</td><td>تَلْعَبَا</td><td>تَلْعَبَانِّ</td><td></td></tr><tr><td>هُنَّ (they fem.)</td><td>لَعَبْنَ</td><td>يَلْعَبْنَ</td><td>يَلْعَبْنَ</td><td>يَلْعَبْنَ</td><td>يَلْعَبْنَانِّ</td><td></td></tr><tr><td>أَنْتَ (you masc.)</td><td>لَعَبْتَ</td><td>تَلْعَبُ</td><td>تَلْعَبْ</td><td>تَلْعَبَ</td><td>تَلْعَبَنَّ</td><td>اِلْعَبْ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>لَعَبْتُمَا</td><td>تَلْعَبَانِ</td><td>تَلْعَبَا</td><td>تَلْعَبَا</td><td>تَلْعَبَانِّ</td><td>اِلْعَبَا</td></tr><tr><td>أَنْتُمْ (you all masc.)</td><td>لَعَبْتُم</td><td>تَلْعَبُونَ</td><td>تَلْعَبُوا</td><td>تَلْعَبُوا</td><td>تَلْعَبُنَّ</td><td>اِلْعَبُوا</td></tr><tr><td>أَنْتِ (you fem.)</td><td>لَعَبْتِ</td><td>تَلْعَبِينَ</td><td>تَلْعَبِي</td><td>تَلْعَبِي</td><td>تَلْعَبِنَّ</td><td>اِلْعَبِي</td></tr><tr><td>أَنْتُمَا (you two fem.)</td><td>لَعَبْتُمَا</td><td>تَلْعَبَانِ</td><td>تَلْعَبَا</td><td>تَلْعَبَا</td><td>تَلْعَبَانِّ</td><td>اِلْعَبَا</td></tr><tr><td>أَنْتُنَّ (you all fem.)</td><td>لَعَبْتُنَّ</td><td>تَلْعَبْنَ</td><td>تَلْعَبْنَ</td><td>تَلْعَبْنَ</td><td>تَلْعَبْنَانِّ</td><td>اِلْعَبْنَ</td></tr><tr><td>أَنَا (I)</td><td>لَعَبْتُ</td><td>أَلْعَبُ</td><td>أَلْعَبْ</td><td>أَلْعَبَ</td><td>أَلْعَبَنَّ</td><td></td></tr><tr><td>نَحْنُ (we)</td><td>لَعَبْنَا</td><td>نَلْعَبُ</td><td>نَلْعَبْ</td><td>نَلْعَبَ</td><td>نَلْعَبَنَّ</td><td></td></tr></table><h4>🔗 Attached Pronouns Table with Examples (كَتَبَ)</h4><table border=\&quot;1\&quot; style=\&quot;border-collapse: collapse;\&quot;><tr><th>Pronoun</th><th>Doer (Past)</th><th>Doer (Present)</th><th>Done-To (Object)</th></tr><tr><td>هُوَ (he)</td><td>ـَ → كَتَبَ</td><td>يَـ → يَكْتُبُ</td><td>ـهُ → كَتَبَهُ</td></tr><tr><td>هُمَا (they two, masc)</td><td>ـَا → كَتَبَا</td><td>يَـ...ـانِ → يَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُمْ (they, masc)</td><td>ـُوا → كَتَبُوا</td><td>يَـ...ـونَ → يَكْتُبُونَ</td><td>ـهُمْ → كَتَبَهُمْ</td></tr><tr><td>هِيَ (she)</td><td>ـَتْ → كَتَبَتْ</td><td>تَـ → تَكْتُبُ</td><td>ـهَا → كَتَبَهَا</td></tr><tr><td>هُمَا (they two, fem)</td><td>ـَتَا → كَتَبَتَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـهُمَا → كَتَبَهُمَا</td></tr><tr><td>هُنَّ (they, fem)</td><td>ـْنَ → كَتَبْنَ</td><td>يَـ...ـنَ → يَكْتُبْنَ</td><td>ـهُنَّ → كَتَبْهُنَّ</td></tr><tr><td>أَنْتَ (you, masc)</td><td>ـْتَ → كَتَبْتَ</td><td>تَـ → تَكْتُبُ</td><td>ـكَ → كَتَبَكَ</td></tr><tr><td>أَنْتُمَا (you two)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُمْ (you all, masc)</td><td>ـْتُمْ → كَتَبْتُمْ</td><td>تَـ...ـونَ → تَكْتُبُونَ</td><td>ـكُمْ → كَتَبَكُمْ</td></tr><tr><td>أَنْتِ (you, fem)</td><td>ـْتِ → كَتَبْتِ</td><td>تَـ...ـينَ → تَكْتُبِينَ</td><td>ـكِ → كَتَبَكِ</td></tr><tr><td>أَنْتُمَا (you two, fem)</td><td>ـْتُمَا → كَتَبْتُمَا</td><td>تَـ...ـانِ → تَكْتُبَانِ</td><td>ـكُمَا → كَتَبَكُمَا</td></tr><tr><td>أَنْتُنَّ (you all, fem)</td><td>ـْتُنَّ → كَتَبْتُنَّ</td><td>تَـ...ـنَ → تَكْتُبْنَ</td><td>ـكُنَّ → كَتَبَكُنَّ</td></tr><tr><td>أَنَا (I)</td><td>ـْتُ → كَتَبْتُ</td><td>أَـ → أَكْتُبُ</td><td>ـنِي → كَتَبَنِي</td></tr><tr><td>نَحْنُ (we)</td><td>ـْنَا → كَتَبْنَا</td><td>نَـ → نَكْتُبُ</td><td>ـنَا → كَتَبَنَا</td></tr></table>&quot;, &quot;Audio URL&quot;: &quot;/wbw/006_091_044.mp3&quot;, &quot;VERB_FORM&quot;: &quot;I - كَتَبَ&quot;})">
+        يَلْعَبُونَ
+        <span class="translation">playing</span>
+        <span class='translation'>يَلْعَبْ ونَ</span>
+        <span class='translation'>Verb+Pron.</span>
+    </span>
+
+<div style="margin-top: 20px; text-align: center; font-size: 10px;">
+    <div style="display: inline-flex; justify-content: center; gap: 30px; margin-top: 12px; flex-wrap: wrap;">
+
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 15px; height: 15px; background-color: #ffe6e6; border-radius: 3px; border: 1px solid #ccc;"></div>
+            <span><b>Nominative</b> <i>(Rafʿ / Subject)</i></span>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 15px; height: 15px; background-color: #e6f0ff; border-radius: 3px; border: 1px solid #ccc;"></div>
+            <span><b>Accusative</b> <i>(Naṣb / Object)</i></span>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 15px; height: 15px; background-color: #e6ffe6; border-radius: 3px; border: 1px solid #ccc;"></div>
+            <span><b>Genitive</b> <i>(Jarr / Possession)</i></span>
+        </div>
+
+    </div>
+</div>
+
+</div></div>
+<div class="section">
+    <h3>🌍 English Translation</h3>
+    <p class="ayah-english" style="text-align: center; direction: rtl;">And they did not appraise Allah with true appraisal when they said, &quot;Allah did not reveal to a human being anything.&quot; Say, &quot;Who revealed the Scripture that Moses brought as light and guidance to the people? You [Jews] make it into pages, disclosing [some of] it and concealing much. And you were taught that which you knew not - neither you nor your fathers.&quot; Say, &quot;Allah [revealed it].&quot; Then leave them in their [empty] discourse, amusing themselves.</p>
+</div>
+
+        <div class="section">
+    <h3>🎧 Listen to Ayah</h3>
+    <div style="text-align: center; margin-top: 10px;">
+        <audio id="ayahAudio" controls style="width: 300px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+            <source src="https://verses.quran.com/Alafasy/mp3/006091.mp3" type="audio/mpeg">
+            Your browser does not support audio.
+        </audio>
+
+        <div style="margin-top: 15px;">
+            <label for="repeatCount" style="font-weight: bold;">🔁 Repeat:</label>
+            <input type="number" id="repeatCount" min="1" max="20" value="1"
+                   style="width: 60px; padding: 6px 8px; margin: 0 10px; border-radius: 5px; border: 1px solid #ccc;">
+            <button onclick="playRepeated()" class="submit-btn">▶️ Play</button>
+        </div>
+    </div>
+</div>
+
+ <div class="section"><h3>✍️ Write the Arabic Word (Practice Mode)</h3></div>
+<div style="font-size:18px; line-height: 2;">
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="wamā"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">And not</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>wamā</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="qadarū"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">they appraised</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>qadarū</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="l-laha"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">Allah</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>l-laha</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="ḥaqqa"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">(with) true</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>ḥaqqa</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="qadrihi"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">[of his] appraisal</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>qadrihi</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="idh"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">when</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>idh</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="qālū"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">they said</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>qālū</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="mā"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">Not</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>mā</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="anzala"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">revealed</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>anzala</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="l-lahu"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">(by) Allah</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>l-lahu</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="ʿalā"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">on</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>ʿalā</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="basharin"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">a human being</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>basharin</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="min"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">[of]</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>min</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="shayin"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">anything</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>shayin</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="qul"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">Say</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>qul</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="man"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">Who</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>man</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="anzala"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">revealed</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>anzala</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="l-kitāba"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">the Book</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>l-kitāba</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="alladhī"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">which</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>alladhī</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="jāa"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">brought</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>jāa</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="bihi"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">[it]</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>bihi</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="mūsā"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">Musa</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>mūsā</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="nūran"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">(as) a light</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>nūran</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="wahudan"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">and guidance</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>wahudan</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="lilnnāsi"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">for the people</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>lilnnāsi</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="tajʿalūnahu"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">You make it</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>tajʿalūnahu</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="qarāṭīsa"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">(into) parchments</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>qarāṭīsa</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="tub&#x27;dūnahā"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">you disclose (some of) it</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>tub&#x27;dūnahā</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="watukh&#x27;fūna"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">and you conceal</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>watukh&#x27;fūna</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="kathīran"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">much (of it)</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>kathīran</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="waʿullim&#x27;tum"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">And you were taught</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>waʿullim&#x27;tum</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="mā"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">what</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>mā</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="lam"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">not</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>lam</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="taʿlamū"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">knew</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>taʿlamū</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="antum"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">you</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>antum</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="walā"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">and not</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>walā</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="ābāukum"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">your forefathers</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>ābāukum</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="quli"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">Say</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>quli</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="l-lahu"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">Allah (revealed it)</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>l-lahu</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="thumma"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">Then</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>thumma</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="dharhum"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">leave them</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>dharhum</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="fī"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">in</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>fī</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="khawḍihim"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">their discourse </div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>khawḍihim</div>
+        </details>
+    </span>
+
+    <span class="word translit-block" style="display: inline-block; text-align: center; margin: 8px;">
+       <input type="text" class="translit-input small-placeholder" data-expected="yalʿabūna"
+ placeholder="Type transliteration" 
+ style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+
+        <div class="translation toggle-translation">playing</div>
+        <details style="font-size:10px; color:gray; margin-top:4px;">
+            <summary style="cursor:pointer;">show translit</summary>
+            <div>yalʿabūna</div>
+        </details>
+    </span>
+
+</div>
+
+<div style="display: flex; justify-content: center; gap: 16px; margin-top: 20px;">
+    <button class="submit-btn" onclick="clearTranslitInputs()" style="background-color:#eee; color: #333;">
+        🧹 Clear All Inputs
+    </button>
+
+    <button class="submit-btn" onclick="alert('✅ Submission received. Great job!')">
+        ✅ Submit
+    </button>
+
+    <button class="submit-btn" onclick="toggleTranslations()" style="background-color:#f0f8ff; color: #0a4d68;">
+        👁️ Hide/Show Translations
+    </button>
+</div>
+
+
+
+<div class="overlay" id="overlay" onclick="hidePopup()"></div>
+<div class="popup-content" id="popupContent"></div>
+
+<script>
+
+hidePopup(); // h
+function showPopup(data) {
+    let html = "<h3>📌 Morphology Info</h3>";
+
+    for (let key in data) {
+        if (typeof data[key] === "string" && data[key].length < 200 && key !== "CAMeL Explanation" && key !== "Audio URL") {
+            html += `<b>${key}:</b> ${data[key]}<br/>`;
+            if (key === "Buckwalter Transliteration" && data["Explanation"]) {
+                html += `<i>${data["Explanation"]}</i><br/>`;
+            }
+        }
+    }
+
+    if ("CAMeL Explanation" in data) {
+        html += `<hr><b>CAMeL Feature Breakdown:</b><br/>${data["CAMeL Explanation"]}`;
+    }
+
+    if ("Conjugation Table" in data && data["Conjugation Table"]) {
+        html += `<hr><br/>${data["Conjugation Table"]}`;
+    }
+
+    if ("Muslim Chart" in data && data["Muslim Chart"]) {
+        html += `<hr><b>📈 Muslim Chart:</b><br/>${data["Muslim Chart"]}`;
+    }
+
+    if ("Audio URL" in data && data["Audio URL"]) {
+        html += `<hr><button class='audio-button' onclick="playAudio('${data["Audio URL"]}')">🔊 Play Word Audio</button>`;
+    }
+
+    document.getElementById("popupContent").innerHTML = html;
+    document.getElementById("overlay").style.display = "block";
+    document.getElementById("popupContent").style.display = "block";
+}
+
+function hidePopup() {
+    document.getElementById("popupContent").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+
+}
+
+function playAudio(url) {
+    const audio = new Audio("https://verses.quran.com/" + url);
+    audio.play();
+}
+
+function playRepeated() {
+    const audio = document.getElementById('ayahAudio');
+    const repeatCount = parseInt(document.getElementById('repeatCount').value || 1);
+    let currentCount = 0;
+
+    audio.currentTime = 0;
+    audio.play();
+
+    audio.onended = () => {
+        currentCount++;
+        if (currentCount < repeatCount) {
+            audio.currentTime = 0;
+            audio.play();
+        }
+    };
+}
+
+
+function normalize(str) {
+    return str
+        .normalize("NFD")                    // Decompose accents
+        .replace(/[̀-ͯ]/g, "")     // Remove diacritics
+        .replace(/ʿ/g, "")                   // Remove special characters like ʿ
+        .replace(/[^a-z]/gi, "")             // Remove all non-alphabet characters
+        .toLowerCase()
+        .trim();
+}
+
+
+
+
+
+function levenshtein(a, b) {
+    const dp = Array.from({ length: a.length + 1 }, () => []);
+    for (let i = 0; i <= a.length; i++) dp[i][0] = i;
+    for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+    for (let i = 1; i <= a.length; i++) {
+        for (let j = 1; j <= b.length; j++) {
+            dp[i][j] = Math.min(
+                dp[i - 1][j] + 1,
+                dp[i][j - 1] + 1,
+                dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+            );
+        }
+    }
+    return dp[a.length][b.length];
+}
+
+function clearTranslitInputs() {
+    document.querySelectorAll(".translit-input").forEach(input => {
+        input.value = "";
+        input.dispatchEvent(new Event('input')); // triggers background reset
+    });
+}
+
+function toggleTranslations() {
+    document.querySelectorAll(".toggle-translation").forEach(el => {
+        el.style.display = (el.style.display === "none") ? "block" : "none";
+    });
+}
+
+
+document.querySelectorAll(".translit-input").forEach(input => {
+    input.addEventListener("input", () => {
+        const expected = normalize(input.dataset.expected || "");
+        const actual = normalize(input.value || "");
+        const block = input.closest(".translit-block");
+
+        const distance = levenshtein(actual, expected);
+        block.style.borderColor = "gray"; // reset
+
+        // Remove any previous confetti
+        block.classList.remove("confetti");
+
+        if (!actual) {
+            block.style.backgroundColor = "white";
+        } else if (distance === 0) {
+            block.style.backgroundColor = "#d4edda"; // green
+            block.style.borderColor = "#28a745";
+            block.classList.add("confetti");  // 🎉 Trigger confetti
+        } else if (distance <= 2) {
+            block.style.backgroundColor = "#fff3cd"; // yellow
+            block.style.borderColor = "#ffc107";
+        } else {
+            block.style.backgroundColor = "#f8d7da"; // red
+            block.style.borderColor = "#dc3545";
+        }
+    });
+});
+
+</script>
+
+
+
+</body>
+</html>
