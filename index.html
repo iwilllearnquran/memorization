@@ -1,138 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>📖 Quran Practice</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f9f9f9;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8" />
+  <title>📖 Quran Practice</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
 
-        .navbar {
-            background-color: #0a4d68;
-            color: white;
-            padding: 20px 20px 30px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            border-bottom: 4px solid #2ca7d8;
-        }
+    .navbar {
+      background-color: #0a4d68;
+      color: white;
+      padding: 20px 20px 30px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      border-bottom: 4px solid #2ca7d8;
+    }
 
-        .navbar .form-group {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
-        }
+    .navbar .form-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+    }
 
-        select, button {
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            min-width: 120px;
-        }
+    select {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      min-width: 100px;
+    }
 
-        button {
-            background-color: #ffffff;
-            color: #0a4d68;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-        }
+    iframe {
+      width: 100%;
+      height: 100vh;
+      border: none;
+      display: none;
+    }
 
-        button:hover {
-            background-color: #e3f2f9;
-        }
+    .arrow {
+      text-align: center;
+      font-size: 36px;
+      color: #0a4d68;
+      cursor: pointer;
+      display: none;
+      margin-top: -30px;
+      animation: bounce 1.5s infinite;
+    }
 
-        iframe {
-            width: 100%;
-            height: 100vh;
-            border: none;
-            display: none;
-        }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(10px); }
+    }
 
-        @media (max-width: 600px) {
-            .navbar {
-                font-size: 20px;
-                padding: 20px;
-            }
+    @media (max-width: 600px) {
+      .navbar {
+        font-size: 20px;
+        padding: 20px;
+      }
 
-            .navbar .form-group {
-                flex-direction: column;
-                gap: 12px;
-            }
+      .navbar .form-group {
+        flex-direction: column;
+        gap: 12px;
+      }
 
-            select, button {
-                width: 90%;
-            }
+      select {
+        width: 100%;
+      }
 
-            iframe {
-                height: 90vh;
-            }
-        }
-    </style>
+      iframe {
+        height: 85vh;
+      }
+
+      .arrow {
+        font-size: 28px;
+        margin-top: -20px;
+      }
+    }
+  </style>
 </head>
 <body>
 
 <div class="navbar">
-    🕌 Quran Ayah Explorer
-    <div class="form-group">
-        <select id="surahSelect" style="width: 200px;"></select>
-        <select id="ayahSelect" style="width: 100px;"></select>
-        <button onclick="loadAyah()">🔍 Load</button>
-    </div>
+  🕌 Quran Ayah Explorer
+  <div class="form-group">
+    <select id="surahSelect" style="width: 200px;"></select>
+    <select id="ayahSelect" style="width: 100px;"></select>
+  </div>
 </div>
+
+<div class="arrow" id="nextArrow" onclick="loadNextAyah()">⬇️</div>
 
 <iframe id="ayahViewer"></iframe>
 
 <script>
-    const surahSelect = document.getElementById('surahSelect');
-    const ayahSelect = document.getElementById('ayahSelect');
-    const ayahViewer = document.getElementById('ayahViewer');
+  const surahSelect = document.getElementById('surahSelect');
+  const ayahSelect = document.getElementById('ayahSelect');
+  const ayahViewer = document.getElementById('ayahViewer');
+  const nextArrow = document.getElementById('nextArrow');
 
-    // Fetch Surah data from Quran.com API
-    fetch('https://api.quran.com/api/v4/chapters')
-        .then(response => response.json())
-        .then(data => {
-            data.chapters.forEach(chapter => {
-                const option = document.createElement('option');
-                option.value = chapter.id;
-                option.textContent = `${chapter.id}. ${chapter.name_simple} (${chapter.name_arabic})`;
-                option.setAttribute('data-ayah-count', chapter.verses_count);
-                surahSelect.appendChild(option);
-            });
-            updateAyahOptions();
-        })
-        .catch(error => console.error('Error fetching Surah data:', error));
+  // Fetch Surah metadata
+  fetch('https://api.quran.com/api/v4/chapters')
+    .then(res => res.json())
+    .then(data => {
+      data.chapters.forEach(ch => {
+        const option = document.createElement('option');
+        option.value = ch.id;
+        option.textContent = `${ch.id}. ${ch.name_simple} (${ch.name_arabic})`;
+        option.setAttribute('data-ayah-count', ch.verses_count);
+        surahSelect.appendChild(option);
+      });
+      updateAyahOptions(); // populate ayahSelect on page load
+    });
 
-    function updateAyahOptions() {
-        const selectedOption = surahSelect.options[surahSelect.selectedIndex];
-        const ayahCount = parseInt(selectedOption.getAttribute('data-ayah-count'), 10);
-        ayahSelect.innerHTML = '';
-        for (let i = 1; i <= ayahCount; i++) {
-            const option = document.createElement('option');
-            option.value = i;
-            option.textContent = `Ayah ${i}`;
-            ayahSelect.appendChild(option);
-        }
+  // Update Ayah options when Surah changes
+  function updateAyahOptions() {
+    const selected = surahSelect.options[surahSelect.selectedIndex];
+    const count = parseInt(selected.getAttribute('data-ayah-count'), 10);
+    ayahSelect.innerHTML = '';
+    for (let i = 1; i <= count; i++) {
+      const option = document.createElement('option');
+      option.value = i;
+      option.textContent = `Ayah ${i}`;
+      ayahSelect.appendChild(option);
+    }
+    loadAyah(); // auto-load new ayah
+  }
+
+  function loadAyah() {
+    const surah = surahSelect.value;
+    const ayah = ayahSelect.value;
+    const path = `ayahs/ayah_${surah}_${ayah}.html`;
+    ayahViewer.src = path;
+    ayahViewer.style.display = 'block';
+    nextArrow.style.display = 'block';
+  }
+
+  function loadNextAyah() {
+    let currentSurah = parseInt(surahSelect.value);
+    let currentAyah = parseInt(ayahSelect.value);
+    const maxAyahs = parseInt(surahSelect.options[surahSelect.selectedIndex].getAttribute('data-ayah-count'));
+
+    if (currentAyah < maxAyahs) {
+      ayahSelect.value = currentAyah + 1;
+    } else if (surahSelect.selectedIndex < surahSelect.options.length - 1) {
+      surahSelect.selectedIndex += 1;
+      updateAyahOptions(); // will auto-select first ayah of next surah
+      return;
+    } else {
+      alert("✅ You've reached the last ayah!");
+      return;
     }
 
-    function loadAyah() {
-        const surah = surahSelect.value;
-        const ayah = ayahSelect.value;
-        const path = `ayah_${surah}_${ayah}.html`;
-        ayahViewer.src = path;
-        ayahViewer.style.display = 'block';
-    }
+    loadAyah();
+  }
 
-    surahSelect.addEventListener('change', updateAyahOptions);
+  // Listeners
+  surahSelect.addEventListener('change', updateAyahOptions);
+  ayahSelect.addEventListener('change', loadAyah);
 </script>
 
 </body>
