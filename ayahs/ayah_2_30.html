@@ -888,12 +888,24 @@ function showPopup(data) {
 
     for (let key in data) {
         if (typeof data[key] === "string" && data[key].length < 200 && key !== "CAMeL Explanation" && key !== "Audio URL") {
-            html += `<b>${key}:</b> ${data[key]}<br/>`;
-            if (key === "Buckwalter Transliteration" && data["Explanation"]) {
-                html += `<i>${data["Explanation"]}</i><br/>`;
+            if (key === "Word") {
+                const normalized = data[key].normalize("NFD")
+                    .replace(/[ً-ٟۖ-ٰۭـ]/g, "")
+                    .replace("ٱ", "ا");
+                html += `<b>${key}:</b> ${data[key]} 
+                         <button onclick="openSearchTab('${normalized}')" 
+                            style="margin-left: 8px; font-size: 12px; padding: 2px 6px; border-radius: 5px; background: #eef5ff; border: 1px solid #ccc; cursor: pointer;">
+                            🔍 Look up in Quran
+                         </button><br/>`;
+            } else {
+                html += `<b>${key}:</b> ${data[key]}<br/>`;
             }
         }
     }
+
+
+
+
 
     if ("CAMeL Explanation" in data) {
         html += `<hr><b>CAMeL Feature Breakdown:</b><br/>${data["CAMeL Explanation"]}`;
@@ -1047,6 +1059,14 @@ function playAudio(url) {
     const audio = new Audio("https://verses.quran.com/" + url);
     audio.play();
 }
+
+
+function openSearchTab(normalizedWord) {
+    const url = `search_results.html?q=${encodeURIComponent(normalizedWord)}`;
+    window.open(url, "_blank");
+}
+
+
 
 
 
