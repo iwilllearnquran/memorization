@@ -2,83 +2,59 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>🔍 Quran Search Debug</title>
+  <title>🔍 Quran Word Search</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; background: #fdfdfd; }
-    .result {
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 14px;
-      margin-bottom: 12px;
-      background: #fffaf2;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    }
-    .verse-link {
-      color: #0a4d68;
-      text-decoration: underline;
-      font-weight: bold;
-    }
-    .pagination {
-      margin-top: 20px;
-      text-align: center;
-    }
-    .page-btn {
-      margin: 4px;
-      padding: 6px 12px;
-      border: none;
-      border-radius: 5px;
-      background: #eee;
-      cursor: pointer;
-    }
-    .page-btn.active {
-      background-color: #0a4d68;
-      color: white;
-    }
-    .back-btn {
-      padding: 10px 18px;
+    body { font-family: Arial, sans-serif; margin: 0; background: #f9f9f9; }
+    nav {
       background: #0a4d68;
       color: white;
-      border: none;
-      font-size: 16px;
-      border-radius: 6px;
-      margin-bottom: 20px;
-      cursor: pointer;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .debug-block {
-      font-size: 12px;
-      color: #444;
-      background: #f7f7f7;
-      padding: 6px 10px;
-      border-radius: 6px;
-      margin-top: 8px;
-      white-space: pre-wrap;
+    nav h1 { font-size: 20px; margin: 0; }
+    nav button { background: white; color: #0a4d68; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    .container { padding: 20px; }
+    .meta-info { margin-bottom: 20px; }
+    .result {
+      background: white;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
+    .ayah-text { font-size: 20px; margin: 12px 0; direction: rtl; background: #f0f8ff; padding: 10px; border-radius: 6px; }
+    .highlight { background: yellow; }
+    .pagination { text-align: center; margin-top: 30px; }
+    .page-btn { margin: 3px; padding: 8px 12px; border: none; border-radius: 6px; background: #eee; cursor: pointer; }
+    .page-btn.active { background: #0a4d68; color: white; }
+    .verse-link { color: #0a4d68; font-weight: bold; text-decoration: underline; }
   </style>
 </head>
 <body>
 
-<button class="back-btn" onclick="history.back()">⬅️ Back to Ayah</button>
+<nav>
+  <h1>🔍 Quran Word Search</h1>
+</nav>
 
-<h2>🔍 Search Results for <span id="query-word">—</span></h2>
-<div id="results"></div>
-<div class="pagination" id="pagination"></div>
+<div class="container">
+  <div class="meta-info">
+    <b>Search Word:</b> <span id="query-word">—</span><br>
+    <b>Total Matches:</b> <span id="total-matches">—</span><br>
+    <b>Pages:</b> <span id="total-pages">—</span>
+  </div>
+
+  <div id="results"></div>
+  <div class="pagination" id="pagination"></div>
+</div>
 
 <script>
 const query = new URLSearchParams(window.location.search).get("q");
 document.getElementById("query-word").textContent = query || "—";
 
 const apiBase = "https://api.quran.com/api/v4/search";
-const waqfMarks = new Set([
-  '\u06D6', // ۖ
-  '\u06D7', // ۗ
-  '\u06D8', // ۘ
-  '\u06D9', // ۙ
-  '\u06DA', // ۚ
-  '\u06DB', // ۛ
-  '\u06DC', // ۜ
-  '\u06DE'  // ۞
-]);
-
+const waqfMarks = new Set(['\u06D6','\u06D7','\u06D8','\u06D9','\u06DA','\u06DB','\u06DC','\u06DE']);
 let currentPage = 1;
 let totalPages = 1;
 
@@ -86,8 +62,9 @@ function normalize(text) {
   return text.replace(/[\u064B-\u065F\u06D6-\u06ED\u0670\u0640]/g, "");
 }
 
-function removeWaqf(word) {
-  return !waqfMarks.has(word);
+function highlightWord(text, word) {
+  const regex = new RegExp(`(${normalize(word)})`, 'gi');
+  return text.replace(regex, '<span class="highlight">$1</span>');
 }
 
 async function fetchPage(page = 1) {
@@ -95,6 +72,10 @@ async function fetchPage(page = 1) {
   const data = await res.json();
   const results = data.search.results || [];
   totalPages = data.search.total_pages || 1;
+  const totalMatches = data.search.count || 0;
+
+  document.getElementById("total-matches").textContent = totalMatches;
+  document.getElementById("total-pages").textContent = totalPages;
 
   const container = document.getElementById("results");
   container.innerHTML = "";
@@ -102,48 +83,13 @@ async function fetchPage(page = 1) {
   for (const item of results) {
     const verseKey = item.verse_key;
     const [surah, ayah] = verseKey.split(":");
-    const highlighted = item.words.find(w => w.highlight);
-    const rawWord = highlighted ? highlighted.text : query;
     const fullText = item.text;
-
-    const searchSplitWords = fullText.split(" ").filter(removeWaqf);
-    let foundPosition = -1;
-
-    for (let i = 0; i < searchSplitWords.length; i++) {
-      if (normalize(searchSplitWords[i]) === normalize(rawWord)) {
-        foundPosition = i + 1;
-        break;
-      }
-    }
-
-    let translation = "—", transliteration = "—", apiWordList = "";
-    let camelList = [];
-
-    if (foundPosition !== -1) {
-      const verseURL = `https://api.quran.com/api/v4/verses/by_key/${verseKey}?language=en&words=true&word_fields=translation,transliteration`;
-      const verseData = await fetch(verseURL).then(r => r.json());
-      const verseWords = verseData.verse.words || [];
-
-      const wordObj = verseWords.find(w => w.position === foundPosition);
-      if (wordObj) {
-        translation = wordObj.translation?.text || "—";
-        transliteration = wordObj.transliteration?.text || "—";
-      }
-
-      // Build list of words with position + transliteration for debugging
-      apiWordList = verseWords.map(w => 
-        `[${w.position}] ${w.transliteration?.text || "—"} (${w.text})`
-      ).join("\n");
-    }
+    const highlightedText = highlightWord(normalize(fullText), normalize(query));
 
     container.innerHTML += `
       <div class="result">
-        <b>Word:</b> ${rawWord}<br>
-        <b>Transliteration:</b> ${transliteration}<br>
-        <b>Meaning:</b> ${translation}<br>
-        <b>Full Ayah:</b> <span style="font-size:18px; direction: rtl; display: block; margin: 8px 0;">${fullText}</span>
-        <b>Verse Key:</b> <a class="verse-link" href="ayah_${surah}_${ayah}.html" target="_blank">${verseKey}</a><br>
-
+        <div class="ayah-text">${highlightedText}</div>
+        <b>Verse:</b> <a class="verse-link" href="ayah_${surah}_${ayah}.html" target="_blank">${verseKey}</a>
       </div>
     `;
   }
