@@ -80,7 +80,7 @@
 
 @font-face {
   font-family: 'CustomArabic';
-  src: url('PDMS_SALEEM_QURANFONTQESHIP_0.ttf') format('woff2');
+  src: url('PDMS_SALEEM_QURANFONTQESHIP_0.ttf') format('truetype');
 }
 
 .ayah-arabic {
@@ -442,18 +442,28 @@ p {
   input:checked + .slider:before {
     transform: translateX(20px);
   }
-
-.word-block {
-  display: inline-block;
-  text-align: center;
-  margin: 2px 6px 6px 6px; /* top, right, bottom, left */
-  padding: 6px 10px; /* More inner spacing */
-  cursor: pointer;
-  border-radius: 12px; /* Smoother round edges */
-  border-bottom: 2px dotted #333; /* Dotted line underneath */
-  border: 1px dotted rgba(0, 0, 0, 0.2); /* Subtle dotted line around box */
   
+  .click-animate {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
+
+.click-animate:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+.word-block {  display: inline-block;
+  text-align: center;
+  margin: 2px 6px 6px 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 12px;
+  border-bottom: 2px dotted #333;
+  border: 1px dotted rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* ✨ Soft shadow */
+}
+
 
 .word-block-translit {
   display: inline-block;
@@ -484,6 +494,70 @@ p {
   color: gray;
   line-height: 1.2;
 }
+
+.mode-float-toggle {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  background-color: #0a4d68;
+  color: white;
+  border-radius: 8px 0 0 8px;
+  padding: 12px;
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: background 0.3s;
+}
+
+.mode-float-toggle:hover {
+  background-color: #2ca7d8;
+}
+
+.slider-icon {
+  font-size: 13px;
+  writing-mode: initial;
+  transform: none;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
+
+.mode-float-left {
+  position: fixed;
+  top: 30%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 120px;
+  height: 48px;
+  background-color: #0a4d68;
+  color: white;
+  border-radius: 0 8px 8px 0;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 9999;
+  box-shadow: 2px 4px 8px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease, left 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.mode-float-left.closed {
+  left: -100px; /* hidden with only sliver visible */
+}
+
+.mode-float-left:not(.closed):hover {
+  left: 0;
+}
+
+
+
+
 
 
 
@@ -533,6 +607,10 @@ p {
   </div>
 
 
+<div id="modeToggleFloat" class="mode-float-left closed" onclick="handleFloatClick()" title="Click to switch to Reciting Mode">
+  <div class="slider-icon" id="modeIcon">🧠 Learn </div>
+</div>
+
 
   
 
@@ -540,9 +618,9 @@ p {
 
 
 
-    <div style="text-align: center; direction: rtl;">
+    <div id="learning-mode-content" style="text-align: center; direction: rtl;">
 
-    <span class="word-block genitive " onclick="showPopup({&quot;Word&quot;: &quot;ٱلرَّحْمَٰنِ&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/001_003_001.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Al++Adj&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;})">
+    <span class="word-block click-animate genitive " onclick="showPopup({&quot;Word&quot;: &quot;ٱلرَّحْمَٰنِ&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/001_003_001.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Al++Adj&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;, &quot;Main Verb Grammar&quot;: &quot;&quot;, &quot;root_from_txt&quot;: &quot;ٱل رَّحْمَٰن&quot;, &quot;Meaning Of Verb&quot;: &quot;&quot;})">
     
     <!-- Arabic word only -->
     <span class="word-text">ٱلرَّحْمَٰنِ</span>
@@ -558,7 +636,7 @@ p {
     
 
 
-    <span class="word-block genitive " onclick="showPopup({&quot;Word&quot;: &quot;ٱلرَّحِيمِ&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/001_003_002.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Al++Adj&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;})">
+    <span class="word-block click-animate genitive " onclick="showPopup({&quot;Word&quot;: &quot;ٱلرَّحِيمِ&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/001_003_002.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Al++Adj&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;, &quot;Main Verb Grammar&quot;: &quot;&quot;, &quot;root_from_txt&quot;: &quot;ٱل رَّحِيم&quot;, &quot;Meaning Of Verb&quot;: &quot;&quot;})">
     
     <!-- Arabic word only -->
     <span class="word-text">ٱلرَّحِيمِ</span>
@@ -603,7 +681,13 @@ p {
 
 
 
-</div></div>
+        </div>
+        <div id="reciting-mode-content" class="ayah-arabic" style="display: none; text-align: center; font-size: 28px; direction: rtl; margin: 30px 0;">
+        الرَّحۡمٰنِ الرَّحِيۡمِۙ‏
+        </div>
+
+        </div>
+
 <div class="section dropdown-wrapper" style="text-align: center;">
   <div class="dropdown-container" id="translationDropdown" style="display: inline-block; position: relative;">
 
@@ -623,10 +707,10 @@ p {
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     ">
       <div class="toggle-option" style="padding: 8px 0; cursor: pointer;" onmouseover="this.style.backgroundColor='#2ca7d8'" onmouseout="this.style.backgroundColor='transparent'" onclick="switchTranslation('en')">
-        🇬🇧 English Translation
+        English Translation
       </div>
       <div class="toggle-option" style="padding: 8px 0; cursor: pointer;" onmouseover="this.style.backgroundColor='#2ca7d8'" onmouseout="this.style.backgroundColor='transparent'" onclick="switchTranslation('ur')">
-        🇵🇰 Urdu Translation
+        Urdu Translation
       </div>
     </div>
 
@@ -700,7 +784,7 @@ p {
                 </div>
 
 
-            
+            <div id="transliteration-box" style="font-size:18px; line-height: 2;">
             
              <div class="section dropdown-wrapper">
               <div class="dropdown-container" id="practiceModeDropdown">
@@ -724,7 +808,7 @@ p {
                 </div>
               </div>
 
-              <div style="font-size:18px; line-height: 2;">
+              
 
             
     <span class="word translit-block word-block-translit" style="display: inline-block; text-align: center; margin: 8px;">
@@ -807,13 +891,27 @@ function showPopup(data) {
       `;
     }
 
-    if (data["Translation"]) {
+    if (data["Meaning Of Verb"]) {
       html += `
-        <div><b>Meaning:</b> ${data["Translation"]}</div>
+        <div><b>Meaning Of Verb:</b> ${data["Meaning Of Verb"]}</div>
       `;
     }
-
-
+    
+    
+    
+    if (data["root_from_txt"]) {
+      const tagsFormatted = data["root_from_txt"].split("+").join(" + ");
+      html += `
+        <div><b>Roots:</b> ${tagsFormatted}</div>
+      `;
+    }
+    
+        
+    if (data["Main Verb Grammar"] && data["Main Verb Grammar"] !== "") {
+      html += `
+        <div><b>Main Verb Grammar:</b> ${data["Main Verb Grammar"]}</div>
+      `;
+    }
 
     if (data["tags_joined"]) {
       const tagsFormatted = data["tags_joined"].split("+").join(" + ");
@@ -827,6 +925,7 @@ function showPopup(data) {
         <div><b>Suffixes:</b> ${data["Quran Morph Info"]}</div>
       `;
     }
+    
 
     if (data["count_of_verb"] && data["count_of_verb"] > 0)
     {
@@ -847,14 +946,20 @@ function showPopup(data) {
         <div><b>Verb Form:</b> ${data["VERB_FORM"]}</div>
       `;
     }
-    
+
 
     
     if (data["Conjugation Table"]) {
       html += `
-        <div>${data["Conjugation Table"]}</div>
+      
+      
+
+        <div style="margin-top: 10px;">
+          ${data["Conjugation Table"]}
+        </div>
       `;
     }
+
 
    
     
@@ -1020,6 +1125,88 @@ document.addEventListener("click", function (event) {
 
 
 
+const audioCache = {};
+
+async function playVerbAudio(verb, tense, linkElement) {
+  const key = `${verb}_${tense}`;
+  const iconSpan = linkElement.querySelector(".audio-icon");
+  const baseUrls = [
+    "https://raw.githubusercontent.com/iwilllearnquran/memorization/main/audio/verbs1/",
+    "https://raw.githubusercontent.com/iwilllearnquran/memorization/main/audio/verbs2/",
+    "https://raw.githubusercontent.com/iwilllearnquran/memorization/main/audio/verbs3/",
+    "https://raw.githubusercontent.com/iwilllearnquran/memorization/main/audio/verbs4/"
+  ];
+
+  // If already cached
+  if (audioCache[key]) {
+    const audio = audioCache[key];
+    if (!audio.paused) {
+      audio.pause();
+      if (iconSpan) iconSpan.textContent = "🔊";
+    } else {
+      audio.currentTime = 0;
+      audio.play();
+      if (iconSpan) iconSpan.textContent = "⏸️";
+    }
+    return;
+  }
+
+  // Try finding which repo it lives in
+  for (const base of baseUrls) {
+    const url = `${base}${key}.mp3`;
+    try {
+      const res = await fetch(url, { method: 'HEAD' });
+      if (res.ok) {
+        const audio = new Audio(url);
+        audioCache[key] = audio;
+        audio.play();
+        if (iconSpan) iconSpan.textContent = "⏸️";
+
+        // When it ends, reset icon
+        audio.addEventListener("ended", () => {
+          if (iconSpan) iconSpan.textContent = "🔊";
+        });
+
+        return;
+      }
+    } catch (err) {
+      // Silent fail and continue
+    }
+  }
+
+  alert(`⚠️ Audio for ${verb} (${tense}) not found.`);
+}
+
+
+
+
+function openConjugationInNewTab(tableHTML) {
+  const newTab = window.open();
+  newTab.document.write(`
+    <!DOCTYPE html>
+    <html lang="ar" dir="rtl">
+    <head>
+      <meta charset="UTF-8">
+      <title>📜 Verb Conjugation Table</title>
+      <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #fff; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+        th { background-color: #f2f2f2; }
+      </style>
+    </head>
+    <body>
+      ${tableHTML}
+    </body>
+    </html>
+  `);
+  newTab.document.close();
+}
+
+
+
+
+
 function playAudio(url) {
     const audio = new Audio("https://verses.quran.com/" + url);
     audio.play();
@@ -1037,9 +1224,10 @@ document.addEventListener("click", function (e) {
 
 
 function openSearchTab(normalizedWord) {
-    const url = `search_results.html?q=${encodeURIComponent(normalizedWord)}`;
-    window.open(url, "_blank");
+  const url = `/memorization/search_results.html?q=${encodeURIComponent(normalizedWord)}`;
+  window.open(url, "_blank");
 }
+
 
 
 
@@ -1075,6 +1263,52 @@ function normalize(str) {
         .toLowerCase()
         .trim();
 }
+
+
+
+let currentMode = 'learning';
+let toggleExpanded = false;
+
+function toggleMode(mode) {
+  const learningContent = document.getElementById('learning-mode-content');
+  const recitingContent = document.getElementById('reciting-mode-content');
+  const transliterationBox = document.getElementById('transliteration-box');
+
+  if (mode === 'learning') {
+    learningContent.style.display = 'block';
+    recitingContent.style.display = 'none';
+    if (transliterationBox) transliterationBox.style.display = 'block';
+  } else {
+    learningContent.style.display = 'none';
+    recitingContent.style.display = 'block';
+    if (transliterationBox) transliterationBox.style.display = 'none';
+  }
+
+  // Update icon and tooltip
+  const icon = document.getElementById('modeIcon');
+  const toggleDiv = document.getElementById('modeToggleFloat');
+  const nextMode = mode === 'learning' ? 'Reciting' : 'Learning';
+
+  icon.textContent = mode === 'learning' ? 'Learn 🧠' : 'Recite 🕋';
+  toggleDiv.title = `Click to switch to ${nextMode} Mode`;
+}
+
+function handleFloatClick() {
+  const toggleDiv = document.getElementById('modeToggleFloat');
+
+  // First tap opens (on mobile), second tap switches mode
+  if (!toggleExpanded) {
+    toggleDiv.classList.remove('closed');
+    toggleExpanded = true;
+  } else {
+    currentMode = currentMode === 'learning' ? 'reciting' : 'learning';
+    toggleMode(currentMode);
+    toggleDiv.classList.add('closed');
+    toggleExpanded = false;
+  }
+}
+
+
 
 
 
