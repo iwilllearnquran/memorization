@@ -5,78 +5,63 @@
   <title>Arabic Verb Game</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
   <style>
+    * { box-sizing: border-box; }
     html, body {
       margin: 0;
       padding: 0;
-      overflow: hidden;
-      height: 100%;
       background-color: #0e0f11;
-      color: white;
       font-family: 'Segoe UI', sans-serif;
-      touch-action: none;
+      color: white;
+      height: 100%;
+      overflow: hidden;
     }
-    body {
+    .app {
       display: flex;
       flex-direction: column;
+      height: 100%;
       justify-content: space-between;
+      padding: 10px;
     }
-
     .top-bar {
-      padding: 10px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .progress-wrapper {
+    .heart { color: red; font-size: 18px; }
+    .progress-bar {
+      background: #444;
       flex: 1;
-      margin: 0 10px;
-      background-color: #444;
       height: 8px;
+      margin: 0 10px;
       border-radius: 5px;
       overflow: hidden;
     }
-    .progress {
-      background-color: #90ee90;
-      height: 100%;
-      width: 0%;
-      transition: width 0.3s;
-    }
-    .heart {
-      color: red;
-      font-size: 20px;
-    }
+    .progress { height: 100%; background: #90ee90; width: 0%; }
 
-    .question-section {
-      text-align: center;
-      margin-top: 10vh;
-    }
-    .question-section h2 {
-      font-size: 18px;
-      margin-bottom: 20px;
-    }
-
+    .question-section { text-align: center; margin-top: 5vh; }
+    .question-section h2 { font-size: 18px; margin-bottom: 16px; }
     .card {
       background-color: #38bdf8;
       color: black;
-      margin: 0 auto;
+      font-weight: bold;
       width: 180px;
-      height: 140px;
+      height: 120px;
+      font-size: clamp(32px, 8vw, 48px);
+      border-radius: 20px;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 48px;
-      font-weight: bold;
-      border-radius: 20px;
+      margin: 0 auto;
     }
 
-    .options {
+    .options, .match-columns {
       display: flex;
       flex-direction: column;
       gap: 12px;
-      margin: 40px 20px 20px;
+      padding: 20px;
     }
-    .option-btn {
-      background-color: #1a1c1e;
+    .option-btn, .match-btn {
+      background: #1a1c1e;
       color: white;
       border: 2px solid #444;
       border-radius: 30px;
@@ -85,89 +70,108 @@
       text-align: center;
       cursor: pointer;
     }
-    .option-btn.selected {
-      background-color: #444;
-    }
-    .option-btn.correct {
-      background-color: #28a745;
-    }
-    .option-btn.wrong {
-      background-color: #dc3545;
-    }
+    .option-btn.selected, .match-btn.selected { background-color: #444; }
+    .option-btn.correct, .match-btn.correct { background-color: #28a745; }
+    .option-btn.wrong, .match-btn.wrong { background-color: #dc3545; }
 
-    .bottom-button {
-      text-align: center;
-      margin: 20px;
-    }
     .check-btn {
+      margin: 10px 20px;
       background-color: #00c29e;
       color: white;
       border: none;
       border-radius: 30px;
       font-size: 18px;
-      padding: 12px 30px;
-      width: 100%;
-      max-width: 400px;
-      cursor: pointer;
+      padding: 12px;
+      width: calc(100% - 40px);
     }
-    .check-btn:disabled {
-      background-color: #555;
+    .check-btn:disabled { background-color: #555; }
+    .match-container {
+      display: flex;
+      flex: 1;
+      overflow: auto;
+      justify-content: space-around;
+    }
+    .match-columns {
+      flex: 1;
+    }
+    .bottom {
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .mode-toggle {
+      margin-top: 5px;
+      font-size: 14px;
+      color: #ccc;
+      text-decoration: underline;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-<div class="top-bar">
-  <div class="heart">❤️ x <span id="lives">5</span></div>
-  <div class="progress-wrapper"><div class="progress" id="progressBar"></div></div>
+<div class="app">
+  <div class="top-bar">
+    <div class="heart">❤️ <span id="lives">5</span></div>
+    <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
+    <div class="mode-toggle" onclick="toggleMode()">Switch Mode</div>
+  </div>
+
+  <div id="quizMode">
+    <div class="question-section">
+      <h2 id="questionText">What sound does this make?</h2>
+      <div class="card" id="cardArabic">...</div>
+    </div>
+    <div class="options" id="optionsList"></div>
+    <button class="check-btn" id="checkBtn" onclick="checkAnswer()" disabled>CHECK</button>
+  </div>
+
+  <div id="matchMode" style="display:none;">
+    <div class="match-container">
+      <div class="match-columns" id="leftCol"></div>
+      <div class="match-columns" id="rightCol"></div>
+    </div>
+  </div>
+
+  <div class="bottom" id="statusText"></div>
 </div>
 
-<div class="question-section">
-  <h2 id="questionText">What sound does this make?</h2>
-  <div class="card" id="cardArabic">...</div>
-</div>
-
-<div class="options" id="optionsList"></div>
-
-<div class="bottom-button">
-  <button class="check-btn" id="checkBtn" onclick="checkAnswer()" disabled>CHECK</button>
-</div>
-
-<!-- Load external dataset -->
 <script src="verb_data.js"></script>
 <script>
-let total = 10;
-let current = 0;
-let score = 0;
-let lives = 5;
-let mode = "";
-let correctAnswer = "";
-let selected = null;
+let total = 10, current = 0, score = 0, lives = 5;
+let mode = "quiz"; // or 'match'
+let quizMode = true;
+let correctAnswer = "", selected = null;
+let leftMatch = null, rightMatch = null, matchPairs = [];
 
 function shuffle(arr) {
-  return arr.sort(() => Math.random() - 0.5);
+  return [...arr].sort(() => Math.random() - 0.5);
+}
+
+function toggleMode() {
+  quizMode = !quizMode;
+  document.getElementById("quizMode").style.display = quizMode ? "block" : "none";
+  document.getElementById("matchMode").style.display = quizMode ? "none" : "block";
+  document.getElementById("statusText").innerText = "";
+  if (!quizMode) loadMatch();
+  else loadQuestion();
 }
 
 function loadQuestion() {
   selected = null;
   document.getElementById("checkBtn").disabled = true;
-  const currentData = dataset[current % dataset.length];
-  const others = shuffle(dataset.filter(d => d !== currentData)).slice(0, 2);
-  const options = shuffle([currentData, ...others]);
+  let item = shuffle(dataset)[0];
+  let others = shuffle(dataset.filter(d => d !== item)).slice(0, 2);
+  let options = shuffle([item, ...others]);
 
-  mode = Math.random() > 0.5 ? "A2E" : "E2A";
-  correctAnswer = mode === "A2E" ? currentData.meaning : currentData["3MSAP_root"];
+  let A2E = Math.random() > 0.5;
+  correctAnswer = A2E ? item.meaning : item["3MSAP_root"];
+  document.getElementById("questionText").innerText = A2E ? "What sound does this make?" : "Which Arabic word makes this sound?";
+  document.getElementById("cardArabic").innerText = A2E ? item["3MSAP_root"] : item.meaning;
 
-  document.getElementById("cardArabic").textContent = mode === "A2E" ? currentData["3MSAP_root"] : currentData.meaning;
-  document.getElementById("questionText").textContent = mode === "A2E"
-    ? "What sound does this make?"
-    : "Which Arabic script makes this sound?";
-
-  const optContainer = document.getElementById("optionsList");
-  optContainer.innerHTML = "";
-
+  const list = document.getElementById("optionsList");
+  list.innerHTML = "";
   options.forEach(opt => {
-    const val = mode === "A2E" ? opt.meaning : opt["3MSAP_root"];
+    const val = A2E ? opt.meaning : opt["3MSAP_root"];
     const btn = document.createElement("button");
     btn.className = "option-btn";
     btn.textContent = val;
@@ -177,53 +181,94 @@ function loadQuestion() {
       selected = val;
       document.getElementById("checkBtn").disabled = false;
     };
-    optContainer.appendChild(btn);
+    list.appendChild(btn);
   });
-
   updateProgress();
 }
 
 function checkAnswer() {
   const all = document.querySelectorAll(".option-btn");
   all.forEach(btn => {
-    btn.classList.remove("selected");
     btn.disabled = true;
-    if (btn.textContent === correctAnswer) {
-      btn.classList.add("correct");
-    } else if (btn.textContent === selected) {
-      btn.classList.add("wrong");
-    }
+    btn.classList.remove("selected");
+    if (btn.textContent === correctAnswer) btn.classList.add("correct");
+    else if (btn.textContent === selected) btn.classList.add("wrong");
   });
 
-  if (selected === correctAnswer) {
-    score++;
-  } else {
+  if (selected === correctAnswer) score++;
+  else {
     lives--;
-    document.getElementById("lives").textContent = lives;
+    document.getElementById("lives").innerText = lives;
   }
 
+  current++;
   setTimeout(() => {
-    current++;
-    if (lives <= 0 || current >= total) {
-      endGame();
-    } else {
-      loadQuestion();
-    }
+    if (lives <= 0 || current >= total) endGame();
+    else loadQuestion();
   }, 1200);
 }
 
 function updateProgress() {
-  const pct = (current / total) * 100;
-  document.getElementById("progressBar").style.width = pct + "%";
+  document.getElementById("progressBar").style.width = `${(current / total) * 100}%`;
 }
 
 function endGame() {
-  document.querySelector(".question-section").innerHTML = `<h2>🎯 Final Score: ${Math.round((score / total) * 100)}%</h2>`;
-  document.getElementById("optionsList").innerHTML = "";
-  document.getElementById("checkBtn").style.display = "none";
+  document.querySelector(".app").innerHTML = `<div style="text-align:center;margin-top:40vh;font-size:24px;">🎯 Final Score: ${Math.round((score / total) * 100)}%</div>`;
 }
 
-window.onload = loadQuestion;
+function loadMatch() {
+  matchPairs = shuffle(dataset).slice(0, 5);
+  const leftCol = document.getElementById("leftCol");
+  const rightCol = document.getElementById("rightCol");
+  leftCol.innerHTML = "";
+  rightCol.innerHTML = "";
+  leftMatch = rightMatch = null;
+
+  const lefts = shuffle(matchPairs.map(p => p["3MSAP_root"]));
+  const rights = shuffle(matchPairs.map(p => p.meaning));
+
+  lefts.forEach(l => {
+    const btn = document.createElement("button");
+    btn.className = "match-btn";
+    btn.textContent = l;
+    btn.onclick = () => handleMatchClick(btn, "left", l);
+    leftCol.appendChild(btn);
+  });
+  rights.forEach(r => {
+    const btn = document.createElement("button");
+    btn.className = "match-btn";
+    btn.textContent = r;
+    btn.onclick = () => handleMatchClick(btn, "right", r);
+    rightCol.appendChild(btn);
+  });
+}
+
+function handleMatchClick(btn, side, value) {
+  if (side === "left") {
+    document.querySelectorAll("#leftCol .match-btn").forEach(b => b.classList.remove("selected"));
+    btn.classList.add("selected");
+    leftMatch = value;
+  } else {
+    document.querySelectorAll("#rightCol .match-btn").forEach(b => b.classList.remove("selected"));
+    btn.classList.add("selected");
+    rightMatch = value;
+  }
+
+  if (leftMatch && rightMatch) {
+    const match = matchPairs.find(p => p["3MSAP_root"] === leftMatch && p.meaning === rightMatch);
+    const result = match ? "✅ Correct!" : "❌ Wrong!";
+    document.getElementById("statusText").innerText = result;
+    leftMatch = rightMatch = null;
+    setTimeout(() => {
+      document.getElementById("statusText").innerText = "";
+      document.querySelectorAll(".match-btn").forEach(b => b.classList.remove("selected"));
+    }, 1000);
+  }
+}
+
+window.onload = () => {
+  loadQuestion();
+};
 </script>
 </body>
 </html>
