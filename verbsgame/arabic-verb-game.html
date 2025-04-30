@@ -3,19 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <title>Arabic Verb Game</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
   <style>
-    body {
+    html, body {
       margin: 0;
       padding: 0;
+      overflow: hidden;
+      height: 100%;
       background-color: #0e0f11;
       color: white;
       font-family: 'Segoe UI', sans-serif;
-      height: 100vh;
+      touch-action: none;
+    }
+    body {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
+
     .top-bar {
       padding: 10px 20px;
       display: flex;
@@ -62,7 +67,6 @@
       font-size: 48px;
       font-weight: bold;
       border-radius: 20px;
-      position: relative;
     }
 
     .options {
@@ -120,7 +124,7 @@
 
 <div class="question-section">
   <h2 id="questionText">What sound does this make?</h2>
-  <div class="card" id="cardArabic">دو</div>
+  <div class="card" id="cardArabic">...</div>
 </div>
 
 <div class="options" id="optionsList"></div>
@@ -129,16 +133,10 @@
   <button class="check-btn" id="checkBtn" onclick="checkAnswer()" disabled>CHECK</button>
 </div>
 
+<!-- Load external dataset -->
+<script src="verb_data.js"></script>
 <script>
-const dataset = [
-  { "3MSAP_root": "دُ", "meaning": "du" },
-  { "3MSAP_root": "دَ", "meaning": "da" },
-  { "3MSAP_root": "دُو", "meaning": "duu" },
-  { "3MSAP_root": "دِي", "meaning": "dee" },
-  { "3MSAP_root": "دُود", "meaning": "duud" }
-];
-
-let total = 5;
+let total = 10;
 let current = 0;
 let score = 0;
 let lives = 5;
@@ -227,6 +225,5 @@ function endGame() {
 
 window.onload = loadQuestion;
 </script>
-
 </body>
 </html>
