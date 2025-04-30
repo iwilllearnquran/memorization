@@ -2,226 +2,231 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>📘 Arabic Verb Practice</title>
+  <title>Arabic Verb Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f9fbfd;
       margin: 0;
       padding: 0;
-    }
-    .navbar {
-      background-color: #0a4d68;
+      background-color: #0e0f11;
       color: white;
-      padding: 15px 20px;
-      font-size: 20px;
-      font-weight: bold;
-    }
-    .game-container {
-      margin: 40px auto;
-      background: white;
-      padding: 30px 40px;
-      border-radius: 12px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-      max-width: 600px;
-      width: 100%;
-    }
-    h2 {
-      margin-bottom: 16px;
-      color: #0a4d68;
-      text-align: center;
-    }
-    .question {
-      font-size: 20px;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    .options {
+      font-family: 'Segoe UI', sans-serif;
+      height: 100vh;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      justify-content: space-between;
     }
-    .option-btn {
-      background-color: #e6f0ff;
-      border: 1px solid #ccc;
+    .top-bar {
       padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-      text-align: center;
-      transition: background-color 0.3s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .option-btn.selected {
-      background-color: #cce0ff;
-    }
-    .option-btn.correct {
-      background-color: #a0e8af;
-    }
-    .option-btn.wrong {
-      background-color: #f4a6a6;
-    }
-    .feedback {
-      margin-top: 20px;
-      text-align: center;
-      font-weight: bold;
-      font-size: 18px;
-    }
-    .submit-btn, .next-btn {
-      margin-top: 25px;
-      display: block;
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      background-color: #0a4d68;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    .submit-btn:disabled {
-      background-color: #888;
-      cursor: not-allowed;
-    }
-    .progress-bar {
-      height: 10px;
-      background-color: #d0e4ff;
-      margin-top: 15px;
-      border-radius: 6px;
+    .progress-wrapper {
+      flex: 1;
+      margin: 0 10px;
+      background-color: #444;
+      height: 8px;
+      border-radius: 5px;
       overflow: hidden;
     }
     .progress {
+      background-color: #90ee90;
       height: 100%;
       width: 0%;
-      background-color: #0a4d68;
       transition: width 0.3s;
+    }
+    .heart {
+      color: red;
+      font-size: 20px;
+    }
+
+    .question-section {
+      text-align: center;
+      margin-top: 10vh;
+    }
+    .question-section h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background-color: #38bdf8;
+      color: black;
+      margin: 0 auto;
+      width: 180px;
+      height: 140px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 48px;
+      font-weight: bold;
+      border-radius: 20px;
+      position: relative;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 40px 20px 20px;
+    }
+    .option-btn {
+      background-color: #1a1c1e;
+      color: white;
+      border: 2px solid #444;
+      border-radius: 30px;
+      padding: 12px;
+      font-size: 18px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .option-btn.selected {
+      background-color: #444;
+    }
+    .option-btn.correct {
+      background-color: #28a745;
+    }
+    .option-btn.wrong {
+      background-color: #dc3545;
+    }
+
+    .bottom-button {
+      text-align: center;
+      margin: 20px;
+    }
+    .check-btn {
+      background-color: #00c29e;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 18px;
+      padding: 12px 30px;
+      width: 100%;
+      max-width: 400px;
+      cursor: pointer;
+    }
+    .check-btn:disabled {
+      background-color: #555;
     }
   </style>
 </head>
 <body>
 
-<div class="navbar">📘 Arabic Verb Practice</div>
-
-<div class="game-container">
-  <h2>🔤 Arabic Verb Game</h2>
-  <div class="question" id="question">Loading...</div>
-  <div class="options" id="options"></div>
-  <button class="submit-btn" id="submitBtn" onclick="submitAnswer()" disabled>Submit Answer</button>
-  <div class="feedback" id="feedback"></div>
-  <div class="progress-bar"><div class="progress" id="progress"></div></div>
-  <button class="next-btn" id="nextBtn" onclick="nextQuestion()" style="display:none;">Next ➡️</button>
+<div class="top-bar">
+  <div class="heart">❤️ x <span id="lives">5</span></div>
+  <div class="progress-wrapper"><div class="progress" id="progressBar"></div></div>
 </div>
 
+<div class="question-section">
+  <h2 id="questionText">What sound does this make?</h2>
+  <div class="card" id="cardArabic">دو</div>
+</div>
 
-<script src="verb_data.js"></script>
+<div class="options" id="optionsList"></div>
+
+<div class="bottom-button">
+  <button class="check-btn" id="checkBtn" onclick="checkAnswer()" disabled>CHECK</button>
+</div>
 
 <script>
-let currentIndex = 0;
-let gameWords = [];
-let currentQuestion = {};
-let mode = "";
-const totalQuestions = 10;
-let selectedOption = null;
+const dataset = [
+  { "3MSAP_root": "دُ", "meaning": "du" },
+  { "3MSAP_root": "دَ", "meaning": "da" },
+  { "3MSAP_root": "دُو", "meaning": "duu" },
+  { "3MSAP_root": "دِي", "meaning": "dee" },
+  { "3MSAP_root": "دُود", "meaning": "duud" }
+];
+
+let total = 5;
+let current = 0;
 let score = 0;
+let lives = 5;
+let mode = "";
+let correctAnswer = "";
+let selected = null;
 
 function shuffle(arr) {
   return arr.sort(() => Math.random() - 0.5);
 }
 
-function loadGame() {
-  gameWords = shuffle(dataset).slice(0, totalQuestions);
-  loadQuestion();
-}
-
 function loadQuestion() {
-  if (currentIndex >= totalQuestions) {
-    showFinalScore();
-    return;
-  }
+  selected = null;
+  document.getElementById("checkBtn").disabled = true;
+  const currentData = dataset[current % dataset.length];
+  const others = shuffle(dataset.filter(d => d !== currentData)).slice(0, 2);
+  const options = shuffle([currentData, ...others]);
 
-  selectedOption = null;
-  const questionEl = document.getElementById("question");
-  const optionsEl = document.getElementById("options");
-  const feedback = document.getElementById("feedback");
-  const progress = document.getElementById("progress");
-  const submitBtn = document.getElementById("submitBtn");
-  const nextBtn = document.getElementById("nextBtn");
-
-  feedback.innerHTML = "";
-  optionsEl.innerHTML = "";
-  submitBtn.disabled = true;
-  nextBtn.style.display = "none";
-
-  currentQuestion = gameWords[currentIndex];
   mode = Math.random() > 0.5 ? "A2E" : "E2A";
+  correctAnswer = mode === "A2E" ? currentData.meaning : currentData["3MSAP_root"];
 
-  const others = shuffle(dataset.filter(d => d !== currentQuestion)).slice(0, 3);
-  const options = shuffle([currentQuestion, ...others]);
+  document.getElementById("cardArabic").textContent = mode === "A2E" ? currentData["3MSAP_root"] : currentData.meaning;
+  document.getElementById("questionText").textContent = mode === "A2E"
+    ? "What sound does this make?"
+    : "Which Arabic script makes this sound?";
 
-  questionEl.innerHTML = mode === "A2E"
-    ? `What does <b>${currentQuestion["3MSAP_root"]}</b> mean?`
-    : `Which Arabic word means <b>${currentQuestion.meaning}</b>?`;
+  const optContainer = document.getElementById("optionsList");
+  optContainer.innerHTML = "";
 
-  options.forEach(option => {
+  options.forEach(opt => {
+    const val = mode === "A2E" ? opt.meaning : opt["3MSAP_root"];
     const btn = document.createElement("button");
     btn.className = "option-btn";
-    btn.textContent = mode === "A2E" ? option.meaning : option["3MSAP_root"];
+    btn.textContent = val;
     btn.onclick = () => {
-      document.querySelectorAll('.option-btn').forEach(b => b.classList.remove("selected"));
+      document.querySelectorAll(".option-btn").forEach(b => b.classList.remove("selected"));
       btn.classList.add("selected");
-      selectedOption = option;
-      submitBtn.disabled = false;
+      selected = val;
+      document.getElementById("checkBtn").disabled = false;
     };
-    optionsEl.appendChild(btn);
+    optContainer.appendChild(btn);
   });
 
-  progress.style.width = `${(currentIndex / totalQuestions) * 100}%`;
+  updateProgress();
 }
 
-function submitAnswer() {
-  const feedback = document.getElementById("feedback");
-  const nextBtn = document.getElementById("nextBtn");
-
-  if (!selectedOption) return;
-
-  const isCorrect = (mode === "A2E" && selectedOption.meaning === currentQuestion.meaning)
-                 || (mode === "E2A" && selectedOption["3MSAP_root"] === currentQuestion["3MSAP_root"]);
-
-  document.querySelectorAll('.option-btn').forEach(btn => {
-    const btnValue = btn.textContent;
-    const correctValue = mode === "A2E" ? currentQuestion.meaning : currentQuestion["3MSAP_root"];
-    if (btnValue === correctValue) {
+function checkAnswer() {
+  const all = document.querySelectorAll(".option-btn");
+  all.forEach(btn => {
+    btn.classList.remove("selected");
+    btn.disabled = true;
+    if (btn.textContent === correctAnswer) {
       btn.classList.add("correct");
-    } else if (btn.classList.contains("selected")) {
+    } else if (btn.textContent === selected) {
       btn.classList.add("wrong");
     }
-    btn.disabled = true;
   });
 
-  feedback.innerHTML = isCorrect ? "✅ Correct!" : `❌ Incorrect. Correct answer: ${mode === "A2E" ? currentQuestion.meaning : currentQuestion["3MSAP_root"]}`;
-  feedback.style.color = isCorrect ? "green" : "red";
+  if (selected === correctAnswer) {
+    score++;
+  } else {
+    lives--;
+    document.getElementById("lives").textContent = lives;
+  }
 
-  if (isCorrect) score++;
-
-  nextBtn.style.display = "block";
-  document.getElementById("submitBtn").disabled = true;
+  setTimeout(() => {
+    current++;
+    if (lives <= 0 || current >= total) {
+      endGame();
+    } else {
+      loadQuestion();
+    }
+  }, 1200);
 }
 
-function nextQuestion() {
-  currentIndex++;
-  loadQuestion();
+function updateProgress() {
+  const pct = (current / total) * 100;
+  document.getElementById("progressBar").style.width = pct + "%";
 }
 
-function showFinalScore() {
-  const percent = Math.round((score / totalQuestions) * 100);
-  document.getElementById("question").innerHTML = `🎯 Game Over! Your Score: <b>${percent}%</b>`;
-  document.getElementById("options").innerHTML = "";
-  document.getElementById("feedback").innerHTML = "";
-  document.getElementById("submitBtn").style.display = "none";
-  document.getElementById("nextBtn").style.display = "none";
-  document.querySelector(".progress").style.width = "100%";
+function endGame() {
+  document.querySelector(".question-section").innerHTML = `<h2>🎯 Final Score: ${Math.round((score / total) * 100)}%</h2>`;
+  document.getElementById("optionsList").innerHTML = "";
+  document.getElementById("checkBtn").style.display = "none";
 }
 
-window.onload = loadGame;
+window.onload = loadQuestion;
 </script>
+
 </body>
 </html>
