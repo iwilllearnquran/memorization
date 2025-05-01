@@ -301,8 +301,9 @@ p {
     z-index: 999;
     width: 70px;
     height: 70px;
-    top: auto;   /* ✅ Add */
-    left: auto;  /* ✅ Add */
+    top: calc(100% - 120px);  /* Equivalent to bottom: 50px */
+    left: calc(100% - 100px); /* Equivalent to right: 20px */
+    transform: translate3d(0,0,0);
 }
 
 .verb-highlight {
