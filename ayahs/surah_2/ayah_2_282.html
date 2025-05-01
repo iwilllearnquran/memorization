@@ -154,7 +154,7 @@ p {
     }
     .popup, .overlay {
         display: none; position: fixed; top: 0; left: 0;
-        width: 100%; height: 100%; background: rgba(0,0,0,0.5);
+        inset: 0; background: rgba(0,0,0,0.5);
         z-index: 10;
         
     }
@@ -175,6 +175,7 @@ p {
       width: 94%;
       max-height: 85%;
       overflow-y: auto;
+      overflow-x: auto;
       z-index: 11;
       box-shadow: 0 6px 18px rgba(0,0,0,0.2);
       border-radius: 16px;
@@ -301,8 +302,8 @@ p {
     z-index: 999;
     width: 70px;
     height: 70px;
-    top: calc(100% - 120px);  /* Equivalent to bottom: 50px */
-    left: calc(100% - 100px); /* Equivalent to right: 20px */
+    top: auto;
+    left: auto;
     transform: translate3d(0,0,0);
 }
 
@@ -4587,69 +4588,66 @@ window.onload = function () {
     let repeatCount = 1, currentRepeat = 0, isLooping = false;
 
     // ⬇️ Handle dragging for mouse and touch
-    // Mouse drag
+    // MOUSE
     circularContainer.addEventListener('mousedown', (e) => {
         isDragging = true;
+        circularContainer.style.position = 'absolute';
         offsetX = e.clientX - circularContainer.getBoundingClientRect().left;
         offsetY = e.clientY - circularContainer.getBoundingClientRect().top;
         floatingBtn.style.cursor = 'grabbing';
     });
+
     document.addEventListener('mousemove', (e) => {
-        if (isDragging) {
-            // Get limits
-            const container = circularContainer;
-            const maxLeft = window.innerWidth - container.offsetWidth;
-            const maxTop = window.innerHeight - container.offsetHeight;
+        if (!isDragging) return;
 
-            // Clamp values
-            const newLeft = Math.min(Math.max(0, e.clientX - offsetX), maxLeft);
-            const newTop = Math.min(Math.max(0, e.clientY - offsetY), maxTop);
+        const maxLeft = window.innerWidth - circularContainer.offsetWidth;
+        const maxTop = window.innerHeight - circularContainer.offsetHeight;
 
-            // Apply position
-            container.style.left = `${newLeft}px`;
-            container.style.top = `${newTop}px`;
+        const newLeft = Math.min(Math.max(0, e.clientX - offsetX), maxLeft);
+        const newTop = Math.min(Math.max(0, e.clientY - offsetY), maxTop);
 
-            circularContainer.style.bottom = 'auto';
-            circularContainer.style.right = 'auto';
-        }
+        circularContainer.style.left = `${newLeft}px`;
+        circularContainer.style.top = `${newTop}px`;
+        circularContainer.style.bottom = 'auto';
+        circularContainer.style.right = 'auto';
     });
+
     document.addEventListener('mouseup', () => {
         isDragging = false;
         floatingBtn.style.cursor = 'grab';
     });
-    
-    // Touch drag
+
+    // TOUCH
     circularContainer.addEventListener('touchstart', (e) => {
         isDragging = true;
         const touch = e.touches[0];
         offsetX = touch.clientX - circularContainer.getBoundingClientRect().left;
         offsetY = touch.clientY - circularContainer.getBoundingClientRect().top;
-    }, { passive: false });
+    }, { passive: true });
 
-    
-    
     document.addEventListener('touchmove', (e) => {
-        if (isDragging) {
-            e.preventDefault();
-            const touch = e.touches[0];
+        if (!isDragging) return;
+        const touch = e.touches[0];
+        if (!touch) return;
 
-            const maxLeft = window.innerWidth - container.offsetWidth;
-            const maxTop = window.innerHeight - container.offsetHeight;
+        const maxLeft = window.innerWidth - circularContainer.offsetWidth;
+        const maxTop = window.innerHeight - circularContainer.offsetHeight;
 
-            const newLeft = Math.min(Math.max(0, touch.clientX - offsetX), maxLeft);
-            const newTop = Math.min(Math.max(0, touch.clientY - offsetY), maxTop);
+        const newLeft = Math.min(Math.max(0, touch.clientX - offsetX), maxLeft);
+        const newTop = Math.min(Math.max(0, touch.clientY - offsetY), maxTop);
 
-            container.style.left = `${newLeft}px`;
-            container.style.top = `${newTop}px`;
-
-            circularContainer.style.bottom = 'auto';
-            circularContainer.style.right = 'auto';
-        }
+        circularContainer.style.left = `${newLeft}px`;
+        circularContainer.style.top = `${newTop}px`;
+        circularContainer.style.bottom = 'auto';
+        circularContainer.style.right = 'auto';
     }, { passive: false });
-    
+
     document.addEventListener('touchend', () => {
         isDragging = false;
+        floatingBtn.style.cursor = 'grab';
     });
+
+
 
 
 
