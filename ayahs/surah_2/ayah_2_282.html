@@ -78,6 +78,51 @@
     background-color: #efeee0;
 }
 
+/* bottom navigation */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: #0a4d68;
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 10000;
+}
+.bottom-nav-item {
+  flex: 1;
+  text-align: center;
+  font-size: 24px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+.bottom-nav-item:hover {
+  background: rgba(0,0,0,0.05);
+}
+.bottom-nav-item.active {
+  color: #0a4d68;
+}
+
+/* 2) Turn the emoji glyphs into just white outlines */
+.bottom-nav-item,
+.bottom-nav-item div {
+  color: white;                 /* label text */
+}
+.bottom-nav-item .nav-icon {
+  font-size: 24px;
+  /* remove fill… */
+  -webkit-text-fill-color: transparent;
+  /* …and add a white stroke */
+  -webkit-text-stroke: 1px white;
+  /* keep the outline sharp */
+  text-shadow: none;
+}
+
+
 @font-face {
   font-family: 'CustomArabic';
   src: url('/memorization/PDMS_SALEEM_QURANFONTQESHIP_0.ttf') format('truetype');
@@ -86,6 +131,7 @@
 .ayah-arabic {
   font-family: 'CustomArabic', serif;
 }
+
 
 
 
@@ -2787,12 +2833,13 @@ p {
 
             <!-- 🎧 Floating Audio Player Button -->
             <!-- 🎧 Circular Floating Button with Progress -->
-            <!-- 🎧 Circular Floating Button with Progress -->
+            <!-- 🎧 Circular Floating Button with Progress 
             <div class="circular-container" id="circularContainer">
               <div class="circular-progress" style="--progress: 0%;">
                 <div class="floating-player" id="floatingPlayer" onclick="toggleAudioControls()">▶️</div>
               </div>
             </div>
+            -->
 
 
             
@@ -2836,7 +2883,7 @@ p {
                     <input type="number" id="repeatCount" min="1" max="20" value="1" style="width: 60px; padding: 4px; margin-left: 8px; border-radius: 6px; border: 1px solid #ccc;">
                   </div>
 
-                  <button onclick="playRepeated()" class="play-toggle-btn" id="playToggleBtn" style="width: 100%; margin-top: 8px;">
+                  <button onclick="onPanelPlayClick()" class="play-toggle-btn" id="playToggleBtn" style="width: 100%; margin-top: 8px;">
                     ▶️ Play
                   </button>
                 </div>
@@ -4424,7 +4471,62 @@ p {
 <div class="overlay" id="overlay" onclick="hidePopup()"></div>
 <div class="popup-content" id="popupContent"></div></div>
 
+
+<nav class="bottom-nav">
+  <!-- Mode Toggle -->
+  <!-- Mode Toggle -->
+  <div class="bottom-nav-item" id="navMode" onclick="toggleModeNav()">
+    <span class="nav-icon">🧠</span>
+    <div style="font-size:12px;" id="navModeLabel">Learn</div>
+  </div>
+
+  <!-- Practice Toggle -->
+  <div class="bottom-nav-item" id="navPractice" onclick="togglePracticeNav()">
+    ✍️
+    <div style="font-size:12px;">Practice</div>
+  </div>
+
+    <div class="bottom-nav-item" id="navPlay" onclick="onNavPlayClick()">
+      <span class="nav-icon">▶️</span>
+      <div style="font-size:12px;">Play</div>
+    </div>
+
+
+  <!-- Settings (show Root/Translation/Grammar) -->
+  <div class="bottom-nav-item" id="navSettings" onclick="toggleSettingsNav()">
+    ⚙️
+    <div style="font-size:12px;">Settings</div>
+  </div>
+
+  <!-- Games (leave as-is) -->
+  <div class="bottom-nav-item" id="navGames">
+    🎮
+    <div style="font-size:12px;">Games</div>
+  </div>
+</nav>
+
+
 <script>
+
+const audio      = document.getElementById('ayahAudio');
+const audioPanel = document.getElementById('audioControls');
+const playBtn    = document.getElementById('playToggleBtn');
+const navPlay    = document.getElementById('navPlay');
+
+
+audio.addEventListener('play',  () => {
+  navPlay.querySelector('.nav-icon').textContent = '⏸️';
+  playBtn.textContent = '⏸️ Pause';
+});
+audio.addEventListener('pause', () => {
+  navPlay.querySelector('.nav-icon').textContent = '▶️';
+  playBtn.textContent = '▶️ Play';
+});
+audio.addEventListener('ended', () => {
+  navPlay.querySelector('.nav-icon').textContent = '▶️';
+  playBtn.textContent = '▶️ Play';
+});
+
 
 hidePopup(); // h
 function showPopup(data) {
@@ -4562,15 +4664,50 @@ function showPopup(data) {
 
 }
 
+
+function onNavPlayClick() {
+  if (audio.paused) {
+    // just open the panel
+    audioPanel.style.display = 'block';
+  } else {
+    // audio is playing → pause
+    audio.pause();
+  }
+
+  // highlight nav
+  document.querySelectorAll('.bottom-nav-item').forEach(i => i.classList.remove('active'));
+  navPlay.classList.add('active');
+}
+
+// 5) Hide panel when clicking anywhere outside it or the navPlay button
+document.addEventListener('click', (e) => {
+  // if panel is open and click is outside both the panel and the navPlay icon…
+  if (
+    audioPanel.style.display === 'block' &&
+    !audioPanel.contains(e.target) &&
+    !navPlay.contains(e.target)
+  ) {
+    audioPanel.style.display = 'none';
+    navPlay.classList.remove('active');
+  }
+});
+
+
 window.onload = function () {
+
+    audioPanel.style.display = 'none';
+
 
     floatingBtn = document.getElementById('floatingPlayer');
     playToggleBtn = document.getElementById('playToggleBtn');
-    audioPanel = document.getElementById('audioControls');
-    
-    ayahAudio = document.getElementById('ayahAudio');
+
     const speedSlider = document.getElementById("speedSlider");
     const speedValue = document.getElementById("speedValue");
+    
+    audio.addEventListener('play',  () => document.querySelector('#navPlay .nav-icon').textContent = '⏸️');
+    audio.addEventListener('pause', () => document.querySelector('#navPlay .nav-icon').textContent = '▶️');
+    audio.addEventListener('ended', () => document.querySelector('#navPlay .nav-icon').textContent = '▶️');
+
 
     const speedSelect = document.getElementById("speedSelect");
     speedSelect.addEventListener("change", () => {
@@ -4588,65 +4725,72 @@ window.onload = function () {
     let repeatCount = 1, currentRepeat = 0, isLooping = false;
 
     // ⬇️ Handle dragging for mouse and touch
-    // MOUSE
+    // Mouse drag
     circularContainer.addEventListener('mousedown', (e) => {
         isDragging = true;
-        circularContainer.style.position = 'absolute';
         offsetX = e.clientX - circularContainer.getBoundingClientRect().left;
         offsetY = e.clientY - circularContainer.getBoundingClientRect().top;
         floatingBtn.style.cursor = 'grabbing';
     });
-
+    
     document.addEventListener('mousemove', (e) => {
         if (!isDragging) return;
+        const container = circularContainer.getBoundingClientRect();
 
-        const maxLeft = window.innerWidth - circularContainer.offsetWidth;
-        const maxTop = window.innerHeight - circularContainer.offsetHeight;
+        let left = e.clientX - offsetX;
+        let top = e.clientY - offsetY;
 
-        const newLeft = Math.min(Math.max(0, e.clientX - offsetX), maxLeft);
-        const newTop = Math.min(Math.max(0, e.clientY - offsetY), maxTop);
+        // Restrict within screen
+        left = Math.max(0, Math.min(left, window.innerWidth - container.width));
+        top = Math.max(0, Math.min(top, window.innerHeight - container.height));
 
-        circularContainer.style.left = `${newLeft}px`;
-        circularContainer.style.top = `${newTop}px`;
+        circularContainer.style.left = `${left}px`;
+        circularContainer.style.top = `${top}px`;
         circularContainer.style.bottom = 'auto';
         circularContainer.style.right = 'auto';
     });
-
+    
     document.addEventListener('mouseup', () => {
         isDragging = false;
         floatingBtn.style.cursor = 'grab';
     });
-
-    // TOUCH
+    
+    // Touch drag
     circularContainer.addEventListener('touchstart', (e) => {
         isDragging = true;
         const touch = e.touches[0];
         offsetX = touch.clientX - circularContainer.getBoundingClientRect().left;
         offsetY = touch.clientY - circularContainer.getBoundingClientRect().top;
-    }, { passive: true });
+    }, { passive: false });
 
+    
+    
     document.addEventListener('touchmove', (e) => {
         if (!isDragging) return;
+        e.preventDefault();
+
         const touch = e.touches[0];
-        if (!touch) return;
+        const container = circularContainer.getBoundingClientRect();
 
-        const maxLeft = window.innerWidth - circularContainer.offsetWidth;
-        const maxTop = window.innerHeight - circularContainer.offsetHeight;
+        let left = touch.clientX - offsetX;
+        let top = touch.clientY - offsetY;
 
-        const newLeft = Math.min(Math.max(0, touch.clientX - offsetX), maxLeft);
-        const newTop = Math.min(Math.max(0, touch.clientY - offsetY), maxTop);
+        // Restrict within viewport
+        left = Math.max(0, Math.min(left, window.innerWidth - container.width));
+        top = Math.max(0, Math.min(top, window.innerHeight - container.height));
 
-        circularContainer.style.left = `${newLeft}px`;
-        circularContainer.style.top = `${newTop}px`;
+        circularContainer.style.left = `${left}px`;
+        circularContainer.style.top = `${top}px`;
         circularContainer.style.bottom = 'auto';
         circularContainer.style.right = 'auto';
     }, { passive: false });
-
+    
+    
     document.addEventListener('touchend', () => {
-        isDragging = false;
-        floatingBtn.style.cursor = 'grab';
-    });
-
+    isDragging = false;
+    lastLeft = parseFloat(circularContainer.style.left) || 0;
+    lastTop = parseFloat(circularContainer.style.top) || 0;
+});
 
 
 
@@ -4724,6 +4868,16 @@ document.addEventListener("click", function (event) {
   }
 });
 
+function onPanelPlayClick() {
+  if (audio.paused) {
+    audio.play();
+  } else {
+    audio.pause();
+  }
+  // highlight panel Play (optional)
+  document.querySelectorAll('.bottom-nav-item').forEach(i => i.classList.remove('active'));
+  navPlay.classList.add('active');
+}
 
 
 const audioCache = {};
@@ -5090,11 +5244,95 @@ document.getElementById("audioLangSelect").addEventListener("change", function (
   }
 });
 
+// Hide the old dropdowns/play panel on load
+document.getElementById('ayahDropdownToggle').style.display = 'none';
+document.getElementById('practiceModeDropdown').style.display = 'none';
+audioPanel.style.display = 'none';
+
+// Nav handlers
+function toggleModeNav() {
+  // flip the mode state
+  currentMode = (currentMode === 'learning') ? 'reciting' : 'learning';
+  
+  // show/hide content
+  toggleMode(currentMode);
+  
+  // swap icon & label
+  const icon  = document.querySelector('#navMode .nav-icon');
+  const label = document.getElementById('navModeLabel');
+  if (currentMode === 'learning') {
+    icon.textContent  = '🧠';
+    label.textContent = 'Learn';
+  } else {
+    icon.textContent  = '🕋';
+    label.textContent = 'Recite';
+  }
+  
+  // highlight the active tab
+  document.querySelectorAll('.bottom-nav-item').forEach(i => i.classList.remove('active'));
+  document.getElementById('navMode').classList.add('active');
+}
 
 
+function togglePracticeNav() {
+  const box = document.getElementById('transliteration-box');
+  box.style.display = (box.style.display === 'none') ? 'block' : 'none';
+  document.querySelectorAll('.bottom-nav-item').forEach(i => i.classList.remove('active'));
+  document.getElementById('navPractice').classList.add('active');
+}
+
+function toggleSettingsNav() {
+  const settingsBtn = document.getElementById('navSettings');
+  const existing   = document.getElementById('settingsMenu');
+
+  // If already showing, hide & clear active state
+  if (existing) {
+    existing.remove();
+    settingsBtn.classList.remove('active');
+    return;
+  }
+
+  // Otherwise build & show it
+  const menu = `
+    <div id="settingsMenu" style="
+         position: fixed;
+         bottom: 60px;
+         right: 10px;
+         background: white;
+         border: 1px solid #ccc;
+         border-radius: 8px;
+         padding: 10px;
+         box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+         z-index: 10001;
+       ">
+      <label><input type="checkbox" checked onchange="toggleElements('translation', this.checked)"> Show Translation</label><br>
+      <label><input type="checkbox" onchange="toggleElements('root-tag', this.checked)"> Show Root</label><br>
+      <label><input type="checkbox" onchange="toggleElements('pos-tag', this.checked)"> Show Grammar</label>
+    </div>`;
+
+  document.body.insertAdjacentHTML('beforeend', menu);
+  settingsBtn.classList.add('active');
+
+  // Click-outside to auto-hide
+  setTimeout(() => {
+    document.addEventListener('click', function _hideSettings(e) {
+      if (!document.getElementById('settingsMenu')?.contains(e.target)
+          && !settingsBtn.contains(e.target)) {
+        document.getElementById('settingsMenu').remove();
+        settingsBtn.classList.remove('active');
+        document.removeEventListener('click', _hideSettings);
+      }
+    });
+  }, 0);
+}
+
+
+// initialize nav state
+document.getElementById('navMode').classList.add('active');
 
 
 </script>
+
 
 
 
