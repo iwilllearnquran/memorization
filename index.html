@@ -7,21 +7,34 @@
   <title>📖 Understand Quran Better</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f9f9f9;
+    /* 1) Make html/body fill the screen and remove default margins */
+    html, body {
+      height: 100%;
       margin: 0;
       padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
     }
 
+    /* 2) Flex‐column container fills the screen */
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    /* 3) Sticky navbar at the top */
     .navbar {
+      position: sticky;
+      top: 0;
       background-color: #0a4d68;
       color: white;
-      padding: 20px 20px 30px;
+      padding: 20px;
       text-align: center;
       font-size: 24px;
       font-weight: bold;
       border-bottom: 4px solid #2ca7d8;
+      z-index: 100;
     }
 
     .navbar .form-group {
@@ -41,15 +54,24 @@
       width: 120px;
     }
 
-    iframe {
-      width: 100%;
-      height: 100vh;
-      border: none;
-      display: none;
+    /* 4) Viewer area takes remaining space */
+    .viewer {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
     }
 
+    /* 5) iframe fills its container exactly */
+    .viewer iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* 6) Side arrows positioned inside viewer */
     .side-arrow {
-      position: fixed;
+      position: absolute;
       top: 50%;
       transform: translateY(-50%);
       background-color: white;
@@ -64,7 +86,7 @@
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       cursor: pointer;
       display: none;
-      z-index: 999;
+      z-index: 10;
       transition: background 0.3s ease;
     }
 
@@ -80,35 +102,17 @@
       left: 10px;
     }
 
+    /* 7) Responsive tweaks */
     @media (max-width: 600px) {
       .navbar {
         font-size: 20px;
-        padding: 20px;
+        padding: 16px;
       }
-
-      .navbar .form-group {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 8px;
-        max-width: 90vw;
-      }
-
       select {
-        width: auto;
         min-width: 80px;
         font-size: 14px;
         padding: 6px 8px;
       }
-
-      iframe {
-          width: 100%;
-          height: calc(100vh - 78px);
-          border: none;
-          display: none;
-        }
-
-
       .side-arrow {
         width: 36px;
         height: 36px;
@@ -126,166 +130,138 @@
 </head>
 <body>
 
-<div class="navbar">
-  🕌 Quran Ayah Explorer
-  <div class="form-group">
-    <select id="surahSelect"></select>
-    <select id="ayahSelect"></select>
+  <div class="wrapper">
+    <div class="navbar">
+      🕌 Quran Ayah Explorer
+      <div class="form-group">
+        <select id="surahSelect"></select>
+        <select id="ayahSelect"></select>
+      </div>
+    </div>
+
+    <div class="viewer">
+      <div class="side-arrow prev" id="prevArrow" onclick="loadPrevAyah()">←</div>
+      <div class="side-arrow next" id="nextArrow" onclick="loadNextAyah()">→</div>
+      <iframe id="ayahViewer"></iframe>
+    </div>
   </div>
-</div>
 
-<div class="side-arrow prev" id="prevArrow" onclick="loadPrevAyah()">←</div>
-<div class="side-arrow next" id="nextArrow" onclick="loadNextAyah()">→</div>
-<iframe id="ayahViewer"></iframe>
+  <script>
+    const surahSelect = document.getElementById('surahSelect');
+    const ayahSelect  = document.getElementById('ayahSelect');
+    const ayahViewer  = document.getElementById('ayahViewer');
+    const nextArrow   = document.getElementById('nextArrow');
+    const prevArrow   = document.getElementById('prevArrow');
 
-<script>
-  const surahSelect = document.getElementById('surahSelect');
-  const ayahSelect = document.getElementById('ayahSelect');
-  const ayahViewer = document.getElementById('ayahViewer');
-  const nextArrow = document.getElementById('nextArrow');
-  const prevArrow = document.getElementById('prevArrow');
+    let surahData = [];
 
-  let surahData = [];
+    fetch('https://api.quran.com/api/v4/chapters')
+      .then(res => res.json())
+      .then(data => {
+        surahData = data.chapters;
+        data.chapters.forEach(ch => {
+          const opt = document.createElement('option');
+          opt.value = ch.id;
+          opt.textContent = `${ch.id}. ${ch.name_simple} (${ch.name_arabic})`;
+          opt.setAttribute('data-ayah-count', ch.verses_count);
+          surahSelect.appendChild(opt);
+        });
 
-  fetch('https://api.quran.com/api/v4/chapters')
-    .then(response => response.json())
-    .then(data => {
-      surahData = data.chapters;
-      data.chapters.forEach(chapter => {
-        const option = document.createElement('option');
-        option.value = chapter.id;
-        option.textContent = `${chapter.id}. ${chapter.name_simple} (${chapter.name_arabic})`;
-        option.setAttribute('data-ayah-count', chapter.verses_count);
-        surahSelect.appendChild(option);
-      });
-
-      const lastRead = JSON.parse(localStorage.getItem('lastRead'));
-
-      if (lastRead) {
-        const confirmResume = confirm(`📌 Do you want to resume from Surah ${lastRead.surah}, Ayah ${lastRead.ayah}?`);
-        if (confirmResume) {
-          surahSelect.value = lastRead.surah;
-          updateAyahOptions(() => {
-            ayahSelect.value = lastRead.ayah;
-            loadAyah();
-          });
-          return;
+        const lastRead = JSON.parse(localStorage.getItem('lastRead'));
+        if (lastRead) {
+          if (confirm(`📌 Resume from Surah ${lastRead.surah}, Ayah ${lastRead.ayah}?`)) {
+            surahSelect.value = lastRead.surah;
+            updateAyahOptions(() => {
+              ayahSelect.value = lastRead.ayah;
+              loadAyah();
+            });
+            return;
+          }
         }
+        updateAyahOptions(loadAyah);
+      });
+
+    function updateAyahOptions(cb) {
+      const count = +surahSelect.selectedOptions[0].dataset.ayahCount;
+      ayahSelect.innerHTML = '';
+      for (let i = 1; i <= count; i++) {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = `Ayah ${i}`;
+        ayahSelect.appendChild(opt);
       }
-
-      updateAyahOptions(() => {
-        loadAyah();
-      });
-    });
-
-  function updateAyahOptions(callback) {
-    const selectedOption = surahSelect.options[surahSelect.selectedIndex];
-    const ayahCount = parseInt(selectedOption.getAttribute('data-ayah-count'), 10);
-    ayahSelect.innerHTML = '';
-    for (let i = 1; i <= ayahCount; i++) {
-      const option = document.createElement('option');
-      option.value = i;
-      option.textContent = `Ayah ${i}`;
-      ayahSelect.appendChild(option);
+      if (cb) cb();
     }
-    if (callback) callback();
-  }
 
-  function saveLastRead(surah, ayah) {
-    localStorage.setItem('lastRead', JSON.stringify({ surah, ayah }));
-  }
-
-  function loadAyah() {
-    const surah = surahSelect.value;
-    const ayah = ayahSelect.value;
-    const path = `ayahs/surah_${surah}/ayah_${surah}_${ayah}.html`;
-    ayahViewer.src = path;
-    ayahViewer.style.display = 'block';
-    nextArrow.style.display = 'block';
-    prevArrow.style.display = 'block';
-    saveLastRead(surah, ayah);
-  }
-
-  function loadNextAyah() {
-    let currentAyah = parseInt(ayahSelect.value);
-    const maxAyahs = parseInt(surahSelect.options[surahSelect.selectedIndex].getAttribute('data-ayah-count'));
-
-    if (currentAyah < maxAyahs) {
-      ayahSelect.value = currentAyah + 1;
-      loadAyah();
-    } else if (surahSelect.selectedIndex < surahSelect.options.length - 1) {
-      surahSelect.selectedIndex += 1;
-      updateAyahOptions(() => {
-        ayahSelect.value = 1;
-        loadAyah();
-      });
-    } else {
-      alert("✅ You've reached the last ayah.");
+    function saveLastRead(s, a) {
+      localStorage.setItem('lastRead', JSON.stringify({ surah: s, ayah: a }));
     }
-  }
 
-  function loadPrevAyah() {
-    let currentAyah = parseInt(ayahSelect.value);
-
-    if (currentAyah > 1) {
-      ayahSelect.value = currentAyah - 1;
-      loadAyah();
-    } else if (surahSelect.selectedIndex > 0) {
-      surahSelect.selectedIndex -= 1;
-      updateAyahOptions(() => {
-        const newCount = parseInt(surahSelect.options[surahSelect.selectedIndex].getAttribute('data-ayah-count'));
-        ayahSelect.value = newCount;
-        loadAyah();
-      });
-    } else {
-      alert("📖 This is the very first ayah.");
+    function loadAyah() {
+      const s = surahSelect.value, a = ayahSelect.value;
+      ayahViewer.src = `ayahs/surah_${s}/ayah_${s}_${a}.html`;
+      ayahViewer.style.display = 'block';
+      nextArrow.style.display = 'block';
+      prevArrow.style.display = 'block';
+      saveLastRead(s, a);
     }
-  }
 
-  surahSelect.addEventListener('change', () => {
-    updateAyahOptions(() => loadAyah());
-  });
-
-  ayahSelect.addEventListener('change', loadAyah);
-
-  // Swipe Support
-  let touchStartX = null;
-  let touchEndX = null;
-
-  document.addEventListener('touchstart', (e) => {
-    touchStartX = e.changedTouches[0].screenX;
-  });
-
-  document.addEventListener('touchend', (e) => {
-    touchEndX = e.changedTouches[0].screenX;
-    handleGesture();
-  });
-
-  function handleGesture() {
-    if (touchStartX === null || touchEndX === null) return;
-
-    const deltaX = touchEndX - touchStartX;
-
-    if (Math.abs(deltaX) > 60) {
-      if (deltaX < 0) {
-        loadNextAyah();  // swipe left
+    function loadNextAyah() {
+      let curr = +ayahSelect.value;
+      const max  = +surahSelect.selectedOptions[0].dataset.ayahCount;
+      if (curr < max) {
+        ayahSelect.value = curr + 1;
+        loadAyah();
+      } else if (surahSelect.selectedIndex < surahSelect.options.length - 1) {
+        surahSelect.selectedIndex++;
+        updateAyahOptions(() => {
+          ayahSelect.value = 1;
+          loadAyah();
+        });
       } else {
-        loadPrevAyah();  // swipe right
+        alert("✅ You've reached the last ayah.");
       }
     }
 
-    touchStartX = null;
-    touchEndX = null;
-  }
-</script>
+    function loadPrevAyah() {
+      let curr = +ayahSelect.value;
+      if (curr > 1) {
+        ayahSelect.value = curr - 1;
+        loadAyah();
+      } else if (surahSelect.selectedIndex > 0) {
+        surahSelect.selectedIndex--;
+        updateAyahOptions(() => {
+          const newCount = +surahSelect.selectedOptions[0].dataset.ayahCount;
+          ayahSelect.value = newCount;
+          loadAyah();
+        });
+      } else {
+        alert("📖 This is the very first ayah.");
+      }
+    }
 
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log('✅ Service Worker registered'))
-      .catch(error => console.error('Service Worker registration failed:', error));
-  }
-</script>
+    surahSelect.addEventListener('change', () => updateAyahOptions(loadAyah));
+    ayahSelect.addEventListener('change', loadAyah);
+
+    // Swipe support
+    let startX = null;
+    document.addEventListener('touchstart', e => startX = e.changedTouches[0].screenX);
+    document.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].screenX - startX;
+      if (Math.abs(dx) > 60) {
+        dx < 0 ? loadNextAyah() : loadPrevAyah();
+      }
+      startX = null;
+    });
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log('✅ Service Worker registered'))
+        .catch(err => console.error('Service Worker registration failed:', err));
+    }
+  </script>
 
 </body>
 </html>
