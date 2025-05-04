@@ -6,6 +6,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap CSS (v4.6 or v5.x recommended) -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link
+  href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+  rel="stylesheet"
+/>
+
 <title>Ayah Memorization</title>
 <style>
     body { font-family: Arial, sans-serif; padding: 15px; margin: 0; }
@@ -57,18 +66,127 @@
     }
     
     
-    .dark-mode-toggle {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      z-index: 1000;
-      background: #0a4d68;
-      color: white;
-      padding: 6px 12px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 14px;
-    }
+    @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons+Outlined");
+
+:root {
+  --accent-color: #1fa8f5;
+  --accent-color-fg: #fefefe;
+  --backdrop-color: #89d4fe;
+  --app-content-background-color: #c0d8ec;
+  --inset-shadow: rgba(7, 43, 74, 0.3);
+  --outset-shadow: rgba(223, 240, 255, 0.25);
+  --clay-box-shadow: rgba(7, 43, 74, 0.3);
+  --clay-background-color: #c0d8ec;
+  --clay-fg-color: #444;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+
+.stage {
+  max-width: 400px;
+  width: 400px;
+  margin: 0 auto;
+}
+
+
+
+.tabbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;           /* tall enough to hold the popped-up circle */
+    overflow: visible;      /* show the circle above the track */
+    display: flex;
+    flex-direction: column;
+    z-index: 10000;         /* above page content */
+}
+
+/* 2) The horizontal track: full width, 40px tall, white background */
+.tabbar ul {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;           /* track height */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between; /* first&last to edges, rest even */
+    align-items: center;
+    background-color: #538295;
+}
+
+/* 3) All tabs share available space equally, max out at 60px wide */
+.tabbar li {
+    flex: 1 1 0;            /* grow/shrink equally */
+    max-width: 60px;        /* never wider than circle size */
+    width: auto !important; /* override any old fixed width */
+    height: 40px;           /* match track height */
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #888;
+    background: transparent;/* only the active circle gets a background */
+    cursor: pointer;
+    position: relative;
+    transition:
+      top 0.4s ease-out,
+      border-radius 0.4s ease-out,
+      box-shadow 0.4s ease-out;
+}
+
+/* 4) The popped-up active circle */
+.tab-style5 .active {
+    flex: 0 0 60px;         /* fixed 60×60 px */
+    width: 60px;
+    height: 60px;
+    top: -10px;             /* lift above the track */
+    border-radius: 50%;
+    background-color: var(--clay-background-color);
+    box-shadow:
+      1px 2px 4px var(--clay-box-shadow),
+      2px 4px 8px var(--clay-box-shadow),
+      inset 2px 2px 8px var(--outset-shadow),
+      inset -2px -2px 8px var(--inset-shadow);
+    color: var(--clay-fg-color);
+    z-index: 10001;         /* above the track */
+}
+
+
+.tabbar li span,
+.tabbar li .material-icons-outlined,
+.tabbar li .material-symbols-outlined {
+  color: #fff !important;
+}
+
+/* 5) Enlarge only the icon inside the active circle */
+.tab-style5 .active span {
+    font-size: 2rem;
+}
+
+/* Remove the gray “box” from all inactive tabs */
+.tabbar li:not(.active) {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Ensure the track itself stays white (or whatever your bar color is) */
+.tabbar ul {
+  background-color: #538295;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.25);
+}
+
+
+    
+   
     
     /* Prevent horizontal scrolling on mobile */
     html, body {
@@ -4465,42 +4583,86 @@ p {
 <div class="overlay" id="overlay" onclick="hidePopup()"></div>
 <div class="popup-content" id="popupContent"></div></div>
 
+  <div class="tabbar tab-style5">
+    <ul id="bottomNav" class="flex-center">
 
-<nav class="bottom-nav">
-  <!-- Mode Toggle -->
-  <!-- Mode Toggle -->
-  <div class="bottom-nav-item" id="navMode" onclick="toggleModeNav()" >
-    <span class="nav-icon" style = "font-size: 15px;">🧠</span>
-    <div style="font-size:8px;" id="navModeLabel">Learn</div>
+      <li id="navPractice"  class="practice" data-where="practice" onclick="togglePracticeNav()">
+        <span class="material-icons-outlined">edit</span>
+      </li>
+      <li id="navPlay"      class="services" data-where="services" onclick="onNavPlayClick()">
+        <span class="nav-icon material-icons-outlined">play_arrow</span>
+      </li>
+      <li id="navSettings"  class="about"    data-where="about"    onclick="toggleSettingsNav()">
+        <span class="material-icons-outlined">settings</span>
+      </li>
+      <li id="navGames"     class="help"     data-where="help"      onclick="/* games handler */">
+        <span class="material-icons-outlined">sports_esports</span>
+      </li>
+      <li id="navMode" class="home"  onclick="toggleModeNav(); this.blur()"">
+        <span id="navModeIcon" class="material-icons-outlined">psychology</span>
+      </li>
+
+    </ul>
   </div>
 
-  <!-- Practice Toggle -->
-  <div class="bottom-nav-item" id="navPractice" onclick="togglePracticeNav()" >
-  <span class="nav-icon" style = "font-size: 15px;">✍️</span>
-    <div style="font-size:8px;">Practice</div>
-  </div>
 
-    <div class="bottom-nav-item" id="navPlay" onclick="onNavPlayClick()" >
-      <span class="nav-icon" style = "font-size: 15px;">▶️</span>
-      <div style="font-size:8px;">Play</div>
-    </div>
-
-
-  <!-- Settings (show Root/Translation/Grammar) -->
-  <div class="bottom-nav-item" id="navSettings" onclick="toggleSettingsNav()" >
-    <span class="nav-icon" style = "font-size: 15px;">⚙️</span>
-    <div style="font-size:8px;">Settings</div>
-  </div>
-
-  <!-- Games (leave as-is) -->
-  <div class="bottom-nav-item" id="navGames">
-     <span class="nav-icon" style = "font-size: 15px;">🎮</span>
-     <div style="font-size:8px;">Games</div>
-  </div>
-</nav>
 
 
 <script>
+
+function clearNavActive() {
+  document.querySelectorAll('.tabbar li').forEach(li => 
+    li.classList.remove('active')
+  );
+}
+
+document.querySelectorAll('.tabbar ul').forEach(ul => {
+  ul.querySelectorAll('li').forEach(li => {
+    li.addEventListener('click', e => {
+      // prevent double-handling if you’re also calling toggleXxxNav()
+      e.stopPropagation();
+    });
+  });
+});
+
+const uls = document.querySelectorAll("ul");
+
+uls.forEach((ul) => {
+  const resetClass = ul.parentNode.getAttribute("class");
+  const lis = ul.querySelectorAll("li");
+
+  lis.forEach((li) => {
+    li.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const target = e.currentTarget;
+
+      if (
+        target.classList.contains("active") ||
+        target.classList.contains("follow")
+      ) {
+        return;
+      }
+
+      ul.parentNode.setAttribute(
+        "class",
+        `${resetClass} ${target.getAttribute("data-where")}-style`
+      );
+
+      lis.forEach((item) => clearClass(item, "active"));
+
+      setClass(target, "active");
+    });
+  });
+});
+
+function clearClass(node, className) {
+  node.classList.remove(className);
+}
+
+function setClass(node, className) {
+  node.classList.add(className);
+}
 
 const audio      = document.getElementById('ayahAudio');
 const audioPanel = document.getElementById('audioControls');
@@ -4508,18 +4670,27 @@ const playBtn    = document.getElementById('playToggleBtn');
 const navPlay    = document.getElementById('navPlay');
 
 
-audio.addEventListener('play',  () => {
-  navPlay.querySelector('.nav-icon').textContent = '⏸️';
-  playBtn.textContent = '⏸️ Pause';
-});
+audio.addEventListener('play', () => {
+    // bottom‐nav icon → "pause"
+    navPlay.querySelector('.nav-icon').textContent = 'pause';
+    // panel button icon → "pause"
+    panelIcon.textContent = 'pause';
+    // panel button label
+    playBtn.lastChild.textContent = ' Pause';
+  });
+
 audio.addEventListener('pause', () => {
-  navPlay.querySelector('.nav-icon').textContent = '▶️';
-  playBtn.textContent = '▶️ Play';
-});
+    navPlay.querySelector('.nav-icon').textContent = 'play_arrow';
+    panelIcon.textContent = 'play_arrow';
+    playBtn.lastChild.textContent = ' Play';
+  });
+
 audio.addEventListener('ended', () => {
-  navPlay.querySelector('.nav-icon').textContent = '▶️';
-  playBtn.textContent = '▶️ Play';
-});
+    navPlay.querySelector('.nav-icon').textContent = 'play_arrow';
+    panelIcon.textContent = 'play_arrow';
+    playBtn.lastChild.textContent = ' Play';
+  });
+
 
 
 hidePopup(); // h
@@ -4660,11 +4831,11 @@ function showPopup(data) {
 
 
 function onNavPlayClick() {
+  clearNavActive();
+  document.getElementById('navPlay').classList.add('active');
   if (audio.paused) {
-    // just open the panel
     audioPanel.style.display = 'block';
   } else {
-    // audio is playing → pause
     audio.pause();
   }
 
@@ -4698,9 +4869,22 @@ window.onload = function () {
     const speedSlider = document.getElementById("speedSlider");
     const speedValue = document.getElementById("speedValue");
     
-    audio.addEventListener('play',  () => document.querySelector('#navPlay .nav-icon').textContent = '⏸️');
-    audio.addEventListener('pause', () => document.querySelector('#navPlay .nav-icon').textContent = '▶️');
-    audio.addEventListener('ended', () => document.querySelector('#navPlay .nav-icon').textContent = '▶️');
+    // once your DOM is ready…
+    audio.addEventListener('play', () => {
+      // bottom nav
+      document.querySelector('#navPlay .nav-icon').textContent = 'pause';
+      // panel button (if you’ve got one)
+      document.querySelector('#playToggleBtn .material-icons-outlined').textContent = 'pause';
+    });
+    audio.addEventListener('pause', () => {
+      document.querySelector('#navPlay .nav-icon').textContent = 'play_arrow';
+      document.querySelector('#playToggleBtn .material-icons-outlined').textContent = 'play_arrow';
+    });
+    audio.addEventListener('ended', () => {
+      document.querySelector('#navPlay .nav-icon').textContent = 'play_arrow';
+      document.querySelector('#playToggleBtn .material-icons-outlined').textContent = 'play_arrow';
+    });
+
 
 
     const speedSelect = document.getElementById("speedSelect");
@@ -5244,31 +5428,32 @@ document.getElementById('practiceModeDropdown').style.display = 'none';
 audioPanel.style.display = 'none';
 
 // Nav handlers
+// JS: override your old toggleModeNav with this
+
 function toggleModeNav() {
-  // flip the mode state
-  currentMode = (currentMode === 'learning') ? 'reciting' : 'learning';
-  
-  // show/hide content
-  toggleMode(currentMode);
-  
-  // swap icon & label
-  const icon  = document.querySelector('#navMode .nav-icon');
-  const label = document.getElementById('navModeLabel');
-  if (currentMode === 'learning') {
-    icon.textContent  = '🧠';
-    label.textContent = 'Learn';
-  } else {
-    icon.textContent  = '🕋';
-    label.textContent = 'Recite';
-  }
-  
-  // highlight the active tab
-  document.querySelectorAll('.bottom-nav-item').forEach(i => i.classList.remove('active'));
+  clearNavActive();
   document.getElementById('navMode').classList.add('active');
+
+  currentMode = currentMode === 'learning'
+    ? 'reciting'
+    : 'learning';
+
+  const icon = document.getElementById('navModeIcon');
+  icon.textContent = currentMode === 'learning'
+    ? 'psychology'
+    : 'menu_book';
+
+  toggleMode(currentMode);
+
+  // ✂️ rip focus off *anything* that might have it:
+  document.activeElement.blur();
 }
 
 
+
 function togglePracticeNav() {
+  clearNavActive();
+  document.getElementById('navPractice').classList.add('active');
   const box = document.getElementById('transliteration-box');
   box.style.display = (box.style.display === 'none') ? 'block' : 'none';
   document.querySelectorAll('.bottom-nav-item').forEach(i => i.classList.remove('active'));
@@ -5276,6 +5461,8 @@ function togglePracticeNav() {
 }
 
 function toggleSettingsNav() {
+  clearNavActive();
+  document.getElementById('navSettings').classList.add('active');
   const settingsBtn = document.getElementById('navSettings');
   const existing   = document.getElementById('settingsMenu');
 
@@ -5320,9 +5507,65 @@ function toggleSettingsNav() {
   }, 0);
 }
 
+// A little helper to safely remove an element
+function safeRemove(el) {
+  if (el && el.parentNode) el.parentNode.removeChild(el);
+}
 
-// initialize nav state
-document.getElementById('navMode').classList.add('active');
+// Global click‐outside handler
+document.addEventListener('click', function(e) {
+  // 1) If click is outside the tabbar, clear all tabbar active states
+  const tabbar = document.querySelector('.tabbar');
+  if (!tabbar.contains(e.target)) {
+    clearNavActive();
+  }
+
+  // 2) Hide settings menu if open
+  const settingsMenu = document.getElementById('settingsMenu');
+  if (settingsMenu && !settingsMenu.contains(e.target) &&
+      !document.getElementById('navSettings').contains(e.target)) {
+    safeRemove(settingsMenu);
+    document.getElementById('navSettings').classList.remove('active');
+  }
+
+  // 3) Hide practice dropdown
+  const practiceDD = document.getElementById('practiceModeDropdown');
+  if (practiceDD && !practiceDD.contains(e.target) &&
+      !document.getElementById('navPractice').contains(e.target)) {
+    practiceDD.classList.remove('active');
+  }
+
+  // 4) Hide translation dropdown
+  const transDD = document.getElementById('translationDropdown');
+  if (transDD && !transDD.contains(e.target) &&
+      !document.getElementById('translationDropdown').contains(e.target)) {
+    transDD.classList.remove('active');
+  }
+
+  // 5) Hide your word-info popup
+  const overlay = document.getElementById('overlay');
+  const popup   = document.getElementById('popupContent');
+  if (popup.style.display === 'block' &&
+      !popup.contains(e.target) &&
+      !overlay.contains(e.target)) {
+    hidePopup();
+  }
+
+  // 6) Hide audio controls panel
+  const audioPanel = document.getElementById('audioControls');
+  const navPlay    = document.getElementById('navPlay');
+  if (audioPanel.style.display === 'block' &&
+      !audioPanel.contains(e.target) &&
+      !navPlay.contains(e.target)) {
+    audioPanel.style.display = 'none';
+    navPlay.classList.remove('active');
+  }
+
+  // 7) Finally, if anything still has focus, blur it
+  if (document.activeElement && document.activeElement.blur) {
+    document.activeElement.blur();
+  }
+});
 
 
 </script>
