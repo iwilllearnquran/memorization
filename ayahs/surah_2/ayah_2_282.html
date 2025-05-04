@@ -121,12 +121,13 @@
     justify-content: space-between; /* first&last to edges, rest even */
     align-items: center;
     background-color: #538295;
+    overflow: visible !important;
 }
 
 /* 3) All tabs share available space equally, max out at 60px wide */
 .tabbar li {
     flex: 1 1 0;            /* grow/shrink equally */
-    max-width: 60px;        /* never wider than circle size */
+    max-width: 100px;        /* never wider than circle size */
     width: auto !important; /* override any old fixed width */
     height: 40px;           /* match track height */
     margin: 0;
@@ -145,9 +146,10 @@
 
 /* 4) The popped-up active circle */
 .tab-style5 .active {
-    flex: 0 0 60px;         /* fixed 60×60 px */
-    width: 60px;
-    height: 60px;
+    flex: 0 0 50px;         /* fixed 60×60 px */
+    overflow: visible !important;
+    width: 50px;
+    height: 50px;
     top: -10px;             /* lift above the track */
     border-radius: 50%;
     background-color: var(--clay-background-color);
@@ -166,6 +168,25 @@
 .tabbar li .material-symbols-outlined {
   color: #fff !important;
 }
+
+.tabbar,
+.tabbar ul {
+  overflow: visible !important;
+  /* give the bar a bit of depth */
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* your bar track colour */
+.tabbar ul {
+  background-color: #538295 !important;
+}
+
+/* all icons white by default */
+.tabbar li span,
+.tabbar li .material-icons-outlined {
+  color: white !important;
+}
+
 
 /* 5) Enlarge only the icon inside the active circle */
 .tab-style5 .active span {
