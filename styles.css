@@ -1,0 +1,825 @@
+/*───────────────────────────────────────────────────────────────────────────
+  Tokens & color variables
+───────────────────────────────────────────────────────────────────────────*/
+:root {
+  --grad-start: #538295;
+  --grad-end:   #8aa8b8;
+  --icon-default: #000; /*rgba(255,255,255,0.75); */
+  --icon-hover:   #000;
+  
+}
+
+/*───────────────────────────────────────────────────────────────────────────
+  Global layout
+───────────────────────────────────────────────────────────────────────────*/
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0 3px 0 3px;
+}
+html, body {
+  overflow-x: hidden;
+  background-color: #dfe8eb;
+  height: 100%;
+}
+
+/*───────────────────────────────────────────────────────────────────────────
+  Reusable flex helper
+───────────────────────────────────────────────────────────────────────────*/
+.flex-center {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+/*───────────────────────────────────────────────────────────────────────────
+  Section cards
+───────────────────────────────────────────────────────────────────────────*/
+.section {
+  margin: 20px auto;                  /* Centered vertically with spacing */
+  padding: 20px;
+  font-size: 18px;
+  box-sizing: border-box;
+  border-radius: 16px;
+  background-color: #fffaf6;          /* Updated background */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  width: calc(100% - 24px);           /* Slight margin without causing scroll */
+  max-width: 1200px;                  /* Optional: Keep layout contained */
+  transition: all 0.3s ease-in-out;
+}
+.section:hover {
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+.section h3 {{
+  font-size: 18px;
+  margin: 0 0 12px 0;     /* Remove top margin */
+  text-align: center;
+  border-bottom: 2px dashed #ccc;
+  padding: 6px 0;         /* Add a bit of vertical breathing space */
+}}
+
+/*───────────────────────────────────────────────────────────────────────────
+  Dropdowns
+───────────────────────────────────────────────────────────────────────────*/
+
+.caret-icon {
+  margin-left: 6px;
+}
+
+  .dropdown-wrapper {
+  position: relative;
+  width: 100%;
+  text-align: right;
+  padding-right: 20px;
+  margin-bottom: 10px;
+}
+
+.dropdown-container {
+  position: relative;
+  text-align: center;
+  margin-top: -15px; /* push it slightly upward */
+  margin-bottom: 10px;
+}
+
+
+.dropdown-button {
+  background-color: #0a4d68;
+  color: #fff;
+  font-size: 14px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.3s ease;
+}
+.dropdown-button:hover {
+  background-color: #2ca7d8;
+}
+
+.dropdown-menu-custom {
+  position: absolute;
+  top: 110%; right: 0;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  padding: 16px;
+  font-size: 13px;
+  opacity: 0;
+  transform: scaleY(0.8);
+  transform-origin: top;
+  transition: all 0.3s ease-in-out;
+  pointer-events: none;
+  z-index: 999;
+}
+.dropdown-container.active .dropdown-menu-custom {
+  opacity: 1;
+  transform: scaleY(1);
+  pointer-events: auto;
+}
+
+
+
+/*───────────────────────────────────────────────────────────────────────────
+  Toggle switches inside dropdowns
+───────────────────────────────────────────────────────────────────────────*/
+.toggle-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+  font-size: 15px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+.switch input {
+  opacity: 0;
+  width: 0; height: 0;
+}
+.slider {
+  position: absolute;
+  inset: 0;
+  background: #ccc;
+  border-radius: 24px;
+  transition: 0.3s;
+}
+.slider:before {
+  content: "";
+  position: absolute;
+  width: 18px; height: 18px;
+  left: 3px; bottom: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+input:checked + .slider {
+  background: #0a4d68;
+}
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+/*───────────────────────────────────────────────────────────────────────────
+  Hiding via JS toggles
+───────────────────────────────────────────────────────────────────────────*/
+.hidden-toggle {
+  display: none !important;
+}
+
+/*───────────────────────────────────────────────────────────────────────────
+  Word blocks & grammar highlights
+───────────────────────────────────────────────────────────────────────────*/
+
+.word-block {  
+  display: inline-block;
+  text-align: center;
+  margin: 2px 2px 5px 2px;
+  padding: 6px 10px 1px 10px;
+  cursor: pointer;
+  border-radius: 12px;
+  border-bottom: 2px dotted #333;
+  border: 1px dotted rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* ✨ Soft shadow */
+  background-color: #ffffff;
+}
+.word-block-translit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 170px; /* fixed width */
+  word-wrap: break-word; /* ensures long words wrap */
+  white-space: normal; /* prevents nowrap */
+  overflow-wrap: anywhere; /* ensures even unbreakable strings wrap */
+  margin: 2px 2px 5px 2px; /* top, right, bottom, left */
+  padding: 4px 7px; /* More inner spacing */
+  cursor: pointer;
+  border-radius: 12px; /* Smoother round edges */
+  border-bottom: 2px dotted #333; /* Dotted line underneath */
+  border: 1px dotted rgba(0, 0, 0, 0.2); /* Subtle dotted line around box */
+  background-color: #fffaf6;
+}
+.word-text {
+  display: block;
+  font-size: 28px;
+  margin-top: 0px;
+  direction: rtl;
+  font-family: 'CustomArabic', serif;
+  line-height: 1.43;
+  margin-bottom: 2px;
+}
+.metadata {
+  display: block;
+  font-size: 11px;
+  font-family: 'Arial', sans-serif;
+  color: gray;
+  line-height: 1.8;
+  margin-top: 2px;
+  margin-bottom: 4px;
+}
+.translation {
+  font-size: 12px;
+  color: gray;
+  display: block;
+  margin-top: 0px;
+  line-height: 1;
+  text-align: center;
+  word-break: break-word;
+  margin-bottom: 4px;
+}
+.metadata .translation:last-child {
+  margin-bottom: 0;
+}
+
+
+.click-animate {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.click-animate:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* transliteration input placeholder */
+.translit-input.small-placeholder::placeholder {
+  font-size: 10px;
+  color: #888;
+}
+
+/* grammar-case color coding */
+.nominative  { background: #ffe6e6; }
+.accusative  { background: #e6f0ff; }
+.genitive    { background: #e6ffe6; }
+.verb-highlight { background: #fff3cd; }  /* light yellow */
+
+/*───────────────────────────────────────────────────────────────────────────
+  Submit button / Clear Button
+───────────────────────────────────────────────────────────────────────────*/
+.submit-btn {
+  display: inline-block;
+  background: #0a4d68;
+  color: #fff;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: background 0.3s, transform 0.2s;
+  cursor: pointer;
+}
+.submit-btn:hover {
+  background: #2ca7d8;
+  transform: translateY(-1px);
+}
+.submit-btn:active {
+  transform: scale(0.98);
+}
+/* Erase All Inputs button */
+.btn.btn-sm {
+  /* sizing & spacing */
+  padding: 6px 12px;
+  font-size: 0.875rem;
+  line-height: 1.2;
+  
+  /* colors & background */
+  background-color: #0a4d68;      /* your primary/nav color */
+  color: #ffffff;                 /* white text */
+  border: none;
+  border-radius: 6px;             /* slightly rounded */
+  
+  /* subtle shadow for lift */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+
+  /* smooth transitions */
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+/* Hover state */
+.btn.btn-sm:hover {
+  background-color: #095375;      /* a touch darker */
+  transform: translateY(-1px);
+}
+
+/* Active / pressed state */
+.btn.btn-sm:active {
+  background-color: #08495a;
+  transform: translateY(0);
+}
+
+/* Disabled state */
+.btn.btn-sm:disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+
+/*───────────────────────────────────────────────────────────────────────────
+  Ayah text & translations
+───────────────────────────────────────────────────────────────────────────*/
+.ayah-arabic {
+  font-size: 30px;
+  text-align: right;
+  direction: rtl;
+  margin: 30px 0;
+}
+.ayah-english {
+  font-size: 15px;
+  text-align: center;
+  margin-top: 15px;
+}
+
+/*───────────────────────────────────────────────────────────────────────────
+  Overlay & popup
+───────────────────────────────────────────────────────────────────────────*/
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 10;
+}
+.popup-content {
+  display: none;
+  position: fixed;
+  top: 10%; left: 50%;
+  transform: translateX(-50%);
+  width: 94%; max-height: 85%;
+  background: #fff;
+  padding: 24px;
+  border: 2px solid #0a4d68;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+  overflow-y: auto;
+  z-index: 11;
+}
+
+/*───────────────────────────────────────────────────────────────────────────
+  Audio panel & floating player
+───────────────────────────────────────────────────────────────────────────*/
+/* Popup container centered */
+.audio-controls {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 360px;
+  max-width: 90%;
+  background: #fff;
+  border: 1px solid #538295;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  padding: 20px 24px;
+  z-index: 10001;
+  display: none;              /* shown/hidden by your JS */
+  font-family: Arial, sans-serif;
+}
+
+/* Header */
+.ac-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px;
+  font-size: 18px;
+  color: #538295;
+}
+.ac-header .material-icons-outlined {
+  font-size: 24px;
+}
+
+/* Grid rows: label on left, control on right */
+.ac-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;   /* left column 120px, right column fills remaining */
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.ac-row:last-of-type {
+  margin-bottom: 20px;
+}
+
+/* Labels & icons */
+.ac-row label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  color: #333;
+}
+.ac-row .material-icons-outlined {
+  font-size: 20px;
+  color: #538295;
+}
+
+/* Selects & inputs */
+.ac-row select,
+.ac-row input[type="number"] {
+  width: 100%;
+  max-width:none;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Play button */
+.play-toggle-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 0;
+  background-color: #538295;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: background-color 0.2s, transform 0.2s;
+}
+.play-toggle-btn .material-icons-outlined {
+  font-size: 20px;
+}
+.play-toggle-btn:hover {
+  background-color: #3f6d7e;
+  transform: translateY(-2px);
+}
+
+
+.floating-player.active { opacity: 1; }
+.floating-player:hover  { transform: scale(1.05); }
+
+/* optional circular progress */
+.circular-container {
+  position: fixed;
+  bottom: 50px; right: 20px;
+  width: 70px; height: 70px;
+  z-index: 999;
+}
+.circular-progress {
+  width: 100%; height: 100%;
+  background: conic-gradient(#0a4d68 var(--progress,0%), #ccc 0%);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: --progress 0.2s linear;
+}
+.circular-progress span { font-size: 24px; color: #fff; }
+
+/*───────────────────────────────────────────────────────────────────────────
+  Confetti feedback
+───────────────────────────────────────────────────────────────────────────*/
+@keyframes confettiBurst {
+  0%   { opacity: 0; transform: scale(0.8) translateY(-10px); }
+  50%  { opacity: 1; transform: scale(1.1) translateY(0); }
+ 100%  { opacity: 0; transform: scale(1)   translateY(-10px); }
+}
+
+/* only burst inside transliteration boxes */
+.word-block-translit.confetti::after {
+  content: "🎉";
+  position: absolute;
+  top: -8px;   /* tweak as needed */
+  right: -8px; /* tweak as needed */
+  animation: confettiBurst 0.6s ease-in-out;
+}
+
+
+/*───────────────────────────────────────────────────────────────────────────
+  Learn/Recite toggle rail
+───────────────────────────────────────────────────────────────────────────*/
+.mode-float-left {
+  position: fixed;
+  top: 30%; left: 0;
+  width: 120px; height: 48px;
+  background: #0a4d68; color: #fff;
+  border-radius: 0 8px 8px 0;
+  padding: 10px;
+  cursor: pointer;
+  box-shadow: 2px 4px 8px rgba(0,0,0,0.2);
+  transition: left 0.3s ease;
+  z-index: 9999;
+}
+.mode-float-left.closed { left: -100px; }
+.mode-float-left:not(.closed):hover { left: 0; }
+.slider-icon { font-size: 13px; display: flex; align-items: center; gap: 8px; }
+
+/*───────────────────────────────────────────────────────────────────────────
+  Floating Action Button & Nav
+───────────────────────────────────────────────────────────────────────────*/
+@keyframes float {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+ 50%      { transform: translateX(-50%) translateY(-8px); }
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 16px; left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 32px);
+  max-width: 480px; height: 64px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(40px);
+  border-radius: 32px;
+  display: flex; justify-content: space-around; align-items: center;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  z-index: 10;
+  flex-wrap: wrap;
+  
+}
+
+.nav-item {
+  position: relative;
+  color: var(--icon-default);
+  font-size: 28px;
+  width: 50px; height: 50px;
+  display: flex; align-items: center; justify-content: center;
+  transition: color 0.3s, transform 0.3s;
+  text-decoration: none;
+  overflow: visible;
+  flex-wrap: wrap;
+}
+.nav-item:hover {
+  color: var(--icon-hover);
+  transform: translateY(-4px);
+  text-decoration: none;
+}
+.nav-item.active {
+  color: #fff;
+}
+.nav-item.active::before {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 48px; height: 48px;
+  background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
+  border-radius: 50%;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  z-index: -1;
+}
+
+.fab {
+  position: fixed;
+  bottom: 48px; left: 50%;
+  transform: translateX(-50%);
+  width: 64px; height: 64px;
+  background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
+  border: none; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 36px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  cursor: pointer;
+  animation: float 3s ease-in-out infinite;
+  transition: transform 0.3s, box-shadow 0.3s;
+  z-index: 20;
+}
+.fab:hover {
+  transform: translate(-50%, -4px) scale(1.05);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+}
+.nav-item#playToggleBtn {
+  background: #0a4d68;
+  color: white;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  margin-top: -28px; /* lift it up */
+  position: relative;
+  z-index: 10;
+}
+.nav-item#playToggleBtn.active {
+  background: #09435b;
+}
+.nav-label {
+  display: block;
+  flex-basis: 100%;    /* takes a new “row” in the flex wrapper */
+  margin-top: 1px;
+  font-size: 10px;
+  color: #0a4d68;
+  text-align: center;
+}
+/* Labale goes away */
+
+.bottom-nav .nav-item.active .nav-label {
+  display: none;
+}
+
+
+
+
+
+
+/* ───────────────────────────────────────────────────────────────
+   SETTINGS POPUP (centered + flex rows + on/off switches)
+───────────────────────────────────────────────────────────────*/
+.settings-popup {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  background: #fff;
+  border: 1px solid #538295;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  padding: 20px;
+  z-index: 10001;
+  font-family: Arial, sans-serif;
+}
+
+/* Header */
+.sm-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-size: 18px;
+  color: #538295;
+}
+.sm-header .material-icons-outlined {
+  font-size: 24px;
+}
+
+/* Each row: label on left, switch on right */
+.sm-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-top: 1px solid #eee;
+}
+.sm-row:first-of-type {
+  border-top: none;
+}
+
+/* Label + icon */
+.sm-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  color: #333;
+}
+.sm-label .material-icons-outlined {
+  font-size: 20px;
+  color: #538295;
+}
+
+/* Toggle switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.switch .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  border-radius: 20px;
+  transition: 0.3s;
+}
+.switch .slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+.switch input:checked + .slider {
+  background-color: #538295;
+}
+.switch input:checked + .slider:before {
+  transform: translateX(20px);
+}
+/* ───────────────────────────────────────────
+   AUDIO & SETTINGS IN ONE POPUP
+──────────────────────────────────────────── */
+
+.sm-section-title {
+  margin: 16px 0 8px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #538295;
+  border-top: 1px solid #eee;
+  padding-top: 8px;
+}
+
+select, .settings-popup input[type=number] {
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  min-width: 80px;
+}
+
+/* shrink the native arrow on number input */
+.settings-popup input[type=number]::-webkit-inner-spin-button,
+.settings-popup input[type=number]::-webkit-outer-spin-button {
+  margin: 0;
+}
+
+/* ───────────────────────────────────────────
+  Styles for the new Practice Mode grid 
+──────────────────────────────────────────── */
+
+.practice-heading {
+  text-align: center;
+  font-size: 1.2rem;
+  margin: 16px 0;
+}
+
+.translit-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.word-block-translit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-wrap: anywhere;
+  position: relative;
+}
+
+.translit-input {
+  width: 140px;
+  padding: 8px;
+  font-size: 1rem;
+  text-align: center;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* Floating clear & hide buttons on the left */
+.fab-left {
+  position: fixed;
+  left: 16px;
+  bottom: 24px;
+  background: #0a4d68;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+.fab-left.secondary {
+  background: #555;
+}
+
+/* ───────────────────────────────────────────
+  Practose Header
+──────────────────────────────────────────── */
+
+.practice-header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.practice-title {
+  font-size: 1.25rem;      /* slightly larger */
+  margin: 0;
+  color: #0a4d68;
+}
+
+.practice-desc {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 4px 0 12px;
+}
+
+.practice-header .dropdown-wrapper {
+  margin-top: 8px;
+}
