@@ -22,6 +22,9 @@
 </head>
 <body>
 
+<div class="overlay" id="overlay" onclick="hidePopup()"></div>
+<div class="popup-content" id="popupContent"></div>
+
 <!-- Hidden audio element that togglePlay() uses -->
 <audio id="ayahAudio" src="https://verses.quran.com/Alafasy/mp3/002282.mp3" preload="metadata"></audio>
 <audio id="audio-url-ar" data-src="https://verses.quran.com/Alafasy/mp3/002282.mp3" preload="metadata"></audio>
@@ -3736,12 +3739,13 @@ onclick="this.classList.toggle('active'); event.stopPropagation();">
 
 
 
-<div class="overlay" id="overlay" onclick="hidePopup()"></div>
-<div class="popup-content" id="popupContent"></div></div>
+</div>
 
 
 
 <nav class="bottom-nav">
+
+
 
   <a href="#" id="navPractice" class="nav-item" onclick="togglePracticeNav(); this.blur();">
     <span class="material-icons-outlined">edit</span>
@@ -3765,6 +3769,8 @@ onclick="this.classList.toggle('active'); event.stopPropagation();">
     <span class="nav-label">Games</span>
   </a>
 </nav>
+
+
 
 
 
