@@ -870,6 +870,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const audio         = document.getElementById('ayahAudio');
   const SHOW_DURATION = 3000;
   let   hideTimer;
+  
 
   // auto-hide scheduler
   function scheduleHide() {
@@ -884,13 +885,30 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   // placeholder for re-insertion
-  const placeholder = document.createComment('play-btn-placeholder');
-  nav.insertBefore(placeholder, playBtn);
+  //const placeholder = document.createComment('play-btn-placeholder');
+  //nav.insertBefore(placeholder, playBtn);
+  
+  placeholder = document.createElement('div');
+  placeholder.className = 'nav-item play-btn-placeholder';
+  // copy computed dimensions & margins from the real button
+  const cs = getComputedStyle(playBtn);
+  placeholder.style.cssText = `
+    width:       ${cs.width};
+    height:      ${cs.height};
+    margin-top:  ${cs.marginTop};
+    margin-left: ${cs.marginLeft};
+    margin-right:${cs.marginRight};
+    visibility:  hidden;
+    flex-shrink: 0;
+  `;
 
   // float the button out of the nav into the body
   function floatPlayBtn() {
     if (playBtn.parentNode === nav) {
+      // insert our placeholder before we yank the real button out
+      nav.insertBefore(placeholder, playBtn);
       nav.removeChild(playBtn);
+
       document.body.appendChild(playBtn);
       Object.assign(playBtn.style, {
         position:  'fixed',
@@ -899,7 +917,7 @@ window.addEventListener('DOMContentLoaded', () => {
         transform: 'translateX(-50%)',
         zIndex:    '9999',
       });
-       scheduleHide();
+      scheduleHide();
     }
   }
 
@@ -907,11 +925,10 @@ window.addEventListener('DOMContentLoaded', () => {
   function reattachPlayBtn() {
     if (playBtn.parentNode === document.body) {
       document.body.removeChild(playBtn);
-      // clear any inline styles we added
-      ['position','bottom','left','transform','zIndex'].forEach(prop => {
-        playBtn.style[prop] = '';
-      });
-      nav.insertBefore(playBtn, placeholder);
+      // clear the inline styles
+      ['position','bottom','left','transform','zIndex'].forEach(p => playBtn.style[p] = '');
+      // swap placeholder back out for the real button
+      nav.replaceChild(playBtn, placeholder);
       showNav();
     }
   }

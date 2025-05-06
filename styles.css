@@ -38,16 +38,17 @@ body { min-height: 100vh; }
   Section cards
 ───────────────────────────────────────────────────────────────────────────*/
 .section {
-  margin: 20px auto;                  /* Centered vertically with spacing */
-  padding: 20px;
-  font-size: 18px;
+  margin: 10px;                  /* Centered vertically with spacing */
+  padding: 20px 8px 10px 20px;
+  font-size: 15px;
   box-sizing: border-box;
   border-radius: 16px;
   background-color: #fffaf6;          /* Updated background */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   width: calc(100% - 24px);           /* Slight margin without causing scroll */
-  max-width: 1200px;                  /* Optional: Keep layout contained */
+  max-width: auto;                  /* Optional: Keep layout contained */
   transition: all 0.3s ease-in-out;
+  text-align: center;
 }
 .section:hover {
   box-shadow: 0 6px 18px rgba(0,0,0,0.08);
@@ -72,8 +73,7 @@ body { min-height: 100vh; }
   position: relative;
   width: 100%;
   text-align: right;
-  padding-right: 20px;
-  margin-bottom: 10px;
+
 }
 
 .dropdown-container {
@@ -207,6 +207,7 @@ input:checked + .slider:before {
   border-bottom: 2px dotted #333; /* Dotted line underneath */
   border: 1px dotted rgba(0, 0, 0, 0.2); /* Subtle dotted line around box */
   background-color: #fffaf6;
+  
 }
 .word-text {
   display: block;
@@ -328,16 +329,22 @@ input:checked + .slider:before {
 /*───────────────────────────────────────────────────────────────────────────
   Ayah text & translations
 ───────────────────────────────────────────────────────────────────────────*/
+
+@font-face {
+  font-family: 'CustomArabic';
+  src: url('/memorization/PDMS_SALEEM_QURANFONTQESHIP_0.ttf') format('truetype');
+}
+
 .ayah-arabic {
+  font-family: 'CustomArabic', serif;
   font-size: 30px;
   text-align: right;
   direction: rtl;
-  margin: 30px 0;
 }
+
 .ayah-english {
   font-size: 15px;
   text-align: center;
-  margin-top: 15px;
 }
 
 /*───────────────────────────────────────────────────────────────────────────
@@ -836,9 +843,7 @@ select, .settings-popup input[type=number] {
   margin: 4px 0 12px;
 }
 
-.practice-header .dropdown-wrapper {
-  margin-top: 8px;
-}
+
 
 
 /* ───────────────────────────────────────────
