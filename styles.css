@@ -18,10 +18,12 @@ body {
   padding: 0 3px 0 3px;
 }
 html, body {
-  overflow-x: hidden;
   background-color: #dfe8eb;
-  height: 100%;
 }
+
+html { height: auto; }
+body { min-height: 100vh; }
+
 
 /*───────────────────────────────────────────────────────────────────────────
   Reusable flex helper
@@ -522,54 +524,9 @@ input:checked + .slider:before {
   0%,100% { transform: translateX(-50%) translateY(0); }
  50%      { transform: translateX(-50%) translateY(-8px); }
 }
-
-.bottom-nav {
-  position: fixed;
-  bottom: 16px; left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 32px);
-  max-width: 480px; height: 64px;
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(40px);
-  border-radius: 32px;
-  display: flex; justify-content: space-around; align-items: center;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-  z-index: 10;
-  flex-wrap: wrap;
-  
-}
-
-.nav-item {
-  position: relative;
-  color: var(--icon-default);
-  font-size: 28px;
-  width: 50px; height: 50px;
-  display: flex; align-items: center; justify-content: center;
-  transition: color 0.3s, transform 0.3s;
-  text-decoration: none;
-  overflow: visible;
-  flex-wrap: wrap;
-}
-.nav-item:hover {
-  color: var(--icon-hover);
-  transform: translateY(-4px);
-  text-decoration: none;
-}
-.nav-item.active {
-  color: #fff;
-}
-.nav-item.active::before {
-  content: "";
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 48px; height: 48px;
-  background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
-  border-radius: 50%;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-  z-index: -1;
-}
-
+/*───────────────────────────────────────────────────────────────────────────
+  Floating Action Button & Nav
+───────────────────────────────────────────────────────────────────────────*/
 .fab {
   position: fixed;
   bottom: 48px; left: 50%;
@@ -589,36 +546,95 @@ input:checked + .slider:before {
   transform: translate(-50%, -4px) scale(1.05);
   box-shadow: 0 12px 32px rgba(0,0,0,0.3);
 }
+
+/*───────────────────────────────────────────────────────────────────────────
+  Bottom Nav Base Styles
+───────────────────────────────────────────────────────────────────────────*/
+.bottom-nav {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translate(-50%, 100%); /* start off-screen */
+  opacity: 0;
+  width: calc(100% - 32px);
+  max-width: 480px;
+  height: 64px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(40px);
+  border-radius: 32px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  z-index: 10;
+  flex-wrap: wrap;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+/* When .visible is toggled on, slide it up & fade in */
+.bottom-nav.visible {
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+
+/*───────────────────────────────────────────────────────────────────────────
+  Nav Items
+───────────────────────────────────────────────────────────────────────────*/
+.nav-item {
+  position: relative;
+  color: var(--icon-default);
+  font-size: 28px;
+  width: 50px; height: 50px;
+  display: flex; align-items: center; justify-content: center;
+  transition: color 0.3s, transform 0.3s;
+  text-decoration: none;
+  overflow: visible;
+  flex-wrap: wrap;
+}
+.nav-item:hover {
+  color: var(--icon-hover);
+  transform: translateY(-4px);
+}
+.nav-item.active {
+  color: #fff;
+}
+.nav-item.active::before {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 48px; height: 48px;
+  background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
+  border-radius: 50%;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  z-index: -1;
+}
+
+/* special play button styling */
 .nav-item#playToggleBtn {
   background: #0a4d68;
   color: white;
   border-radius: 50%;
-  width: 56px;
-  height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  width: 56px; height: 56px;
   margin-top: -28px; /* lift it up */
-  position: relative;
-  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 11;
 }
 .nav-item#playToggleBtn.active {
   background: #09435b;
 }
+
+/* labels under icons */
 .nav-label {
   display: block;
-  flex-basis: 100%;    /* takes a new “row” in the flex wrapper */
+  flex-basis: 100%;    /* wrap onto new “row” */
   margin-top: 1px;
   font-size: 10px;
   color: #0a4d68;
   text-align: center;
 }
-/* Labale goes away */
 
-.bottom-nav .nav-item.active .nav-label {
-  display: none;
-}
+
 
 
 
@@ -823,3 +839,23 @@ select, .settings-popup input[type=number] {
 .practice-header .dropdown-wrapper {
   margin-top: 8px;
 }
+
+
+/* ───────────────────────────────────────────
+  Practose Header
+──────────────────────────────────────────── */
+.bottom-nav .nav-item.active .nav-label {
+  display: none !important;
+}
+
+/*–– During playback, hide all items except the play/pause button ––*/
+.bottom-nav.audio-playing .nav-item { 
+  display: none;
+}
+/* leave the playToggleBtn visible */
+.bottom-nav.audio-playing .nav-item#playToggleBtn {
+  display: flex;
+}
+
+
+

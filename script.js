@@ -8,6 +8,8 @@ let panelIcon;
 let floatingBtn;
 let playToggleBtn;
 let currentMode = 'learning';
+let floatingClone = null;
+
 
 
 // 1. toggleElements(type, show)
@@ -205,6 +207,27 @@ function attachSettingsAutoClose(btn, menuEl) {
 }
 
 //10 ── toggleSettingsNav, now with a safe guard around attachSettingsAutoClose ──
+// Helper to show/hide any section by ID
+function toggleSection(id, show) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = show ? 'block' : 'none';
+}
+window.toggleSection = toggleSection;
+
+// Called when user picks panel translation language
+function onPanelLangChange(lang) {
+  const enDiv = document.getElementById('englishTranslation');
+  const urDiv = document.getElementById('urduTranslation');
+  const label = document.getElementById('currentLang');
+
+  enDiv.style.display = lang === 'en' ? 'block' : 'none';
+  urDiv.style.display = lang === 'ur' ? 'block' : 'none';
+  label.innerText = lang === 'en' ? 'English' : 'Urdu';
+}
+window.onPanelLangChange = onPanelLangChange;
+
+
+// Full Settings popup:
 window.toggleSettingsNav = function () {
   clearNavActive();
   const btn = document.getElementById('navSettings');
@@ -219,35 +242,61 @@ window.toggleSettingsNav = function () {
   }
 
   const inPractice = document.getElementById('transliteration-box').style.display === 'block';
+  const inRecite   = currentMode === 'reciting';
 
+  // Build popup HTML
   let menuHTML = `
     <div id="settingsMenu" class="settings-popup">
       <div class="sm-header">
         <i class="material-icons-outlined">settings</i>
         <span>Settings</span>
-      </div>
+      </div>`;
 
-      <!-- DISPLAY TOGGLES -->
+  // Practice Controls
+  if (inPractice) {
+    menuHTML += `
+      <div class="sm-section-title">Practice Controls</div>
+      <div class="sm-row">
+        <button type="button" class="btn btn-sm" onclick="clearTranslitInputs()">
+          Erase All Inputs
+        </button>
+      </div>`;
+  }
+  // Recite-only: translation panel toggle
+  else if (inRecite) {
+    menuHTML += `
       <div class="sm-row">
         <div class="sm-label">
-          <i class="material-icons-outlined">translate</i>
-          <span>Show Translation</span>
+          <i class="material-icons-outlined">language</i>
+          <span>Show Translations Panel</span>
         </div>
         <label class="switch">
-          <input type="checkbox" checked onchange="toggleTranslations()">
+          <input id="toggleAllTrans" type="checkbox"
+                 onchange="toggleSection('translation-section', this.checked)">
           <span class="slider"></span>
         </label>
       </div>`;
-
-  if (!inPractice) {
+  }
+  // Learn-only: word-level toggles
+  else {
     menuHTML += `
+      <div class="sm-row">
+        <div class="sm-label">
+          <i class="material-icons-outlined">translate</i>
+          <span>Show Word Translations</span>
+        </div>
+        <label class="switch">
+          <input id="toggleTrans" type="checkbox" onchange="toggleTranslations()">
+          <span class="slider"></span>
+        </label>
+      </div>
       <div class="sm-row">
         <div class="sm-label">
           <i class="material-icons-outlined">account_tree</i>
           <span>Show Root</span>
         </div>
         <label class="switch">
-          <input type="checkbox" checked onchange="toggleElements('root-tag', this.checked)">
+          <input id="toggleRoot" type="checkbox" onchange="toggleElements('root-tag', this.checked)">
           <span class="slider"></span>
         </label>
       </div>
@@ -257,31 +306,17 @@ window.toggleSettingsNav = function () {
           <span>Show Grammar</span>
         </div>
         <label class="switch">
-          <input type="checkbox" checked onchange="toggleElements('pos-tag', this.checked)">
+          <input id="toggleGram" type="checkbox" onchange="toggleElements('pos-tag', this.checked)">
           <span class="slider"></span>
         </label>
       </div>`;
   }
 
-  if (inPractice) {
-    // proper button row
-    menuHTML += `
-      <div class="sm-section-title">Practice Controls</div>
-      <div class="sm-row">
-        <button type="button" class="btn btn-sm" onclick="clearTranslitInputs()">
-          Erase All Inputs
-        </button>
-      </div>`;
-  }
-
-  // AUDIO SETTINGS (unchanged)
+  // Audio Settings
   menuHTML += `
       <div class="sm-section-title">Audio Settings</div>
       <div class="sm-row">
-        <div class="sm-label">
-          <i class="material-icons-outlined">language</i>
-          <span>Language</span>
-        </div>
+        <div class="sm-label"><i class="material-icons-outlined">language</i><span>Language</span></div>
         <select id="audioLangSelect" onchange="onAudioLangChange(this.value)">
           <option value="ar">Arabic</option>
           <option value="en">English</option>
@@ -289,49 +324,91 @@ window.toggleSettingsNav = function () {
         </select>
       </div>
       <div class="sm-row">
-        <div class="sm-label">
-          <i class="material-icons-outlined">speed</i>
-          <span>Speed</span>
-        </div>
+        <div class="sm-label"><i class="material-icons-outlined">speed</i><span>Speed</span></div>
         <select id="speedSelect" onchange="onSpeedChange(this.value)">
           <option value="0.5">0.5×</option>
           <option value="0.75">0.75×</option>
-          <option value="1" selected>1×</option>
+          <option value="1">1×</option>
           <option value="1.25">1.25×</option>
         </select>
       </div>
       <div class="sm-row">
-        <div class="sm-label">
-          <i class="material-icons-outlined">repeat</i>
-          <span>Repeat</span>
-        </div>
+        <div class="sm-label"><i class="material-icons-outlined">repeat</i><span>Repeat</span></div>
         <input type="number" id="repeatCount" min="1" max="20" value="1"/>
-      </div>
-    </div>`;
+      </div>`;
 
+  // **Always** show panel translation language selector, even in Learn
+  menuHTML += `
+      <div class="sm-section-title">Panel Translations</div>
+      <div class="sm-row">
+        <div class="sm-label">
+          <i class="material-icons-outlined">translate</i>
+          <span>Translation Language</span>
+        </div>
+        <select id="translationLangSelect" onchange="onPanelLangChange(this.value)">
+          <option value="en">English</option>
+          <option value="ur">Urdu</option>
+        </select>
+      </div>`;
+
+  // Close container
+  menuHTML += `</div>`;
+
+  // Insert & wire up
   document.body.insertAdjacentHTML('beforeend', menuHTML);
   const menuEl = document.getElementById('settingsMenu');
   attachSettingsAutoClose(btn, menuEl);
 
-  // sync audio language selector
-  const langSelect = document.getElementById('audioLangSelect');
-  const current = document.getElementById('ayahAudio').src;
-  const arSrc    = document.getElementById('audio-url-ar').dataset.src;
-  const enSrc    = document.getElementById('audio-url-en').dataset.src;
-  const urSrc    = document.getElementById('audio-url-ur').dataset.src;
+  // Sync toggles:
+  if (!inPractice && !inRecite) {
+    document.getElementById('toggleTrans').checked =
+      Array.from(document.querySelectorAll('.toggle-translation'))
+           .some(el => !el.classList.contains('hidden-toggle'));
+    document.getElementById('toggleRoot').checked =
+      Array.from(document.querySelectorAll('.toggle-root'))
+           .some(el => !el.classList.contains('hidden-toggle'));
+    document.getElementById('toggleGram').checked =
+      Array.from(document.querySelectorAll('.toggle-pos'))
+           .some(el => !el.classList.contains('hidden-toggle'));
+  }
 
-  langSelect.value = 
-       current === arSrc ? 'ar'
-     : current === enSrc ? 'en'
-     : current === urSrc ? 'ur'
-     : 'ar';
+  if (inRecite) {
+    const allTrans = document.getElementById('toggleAllTrans');
+    const ts       = document.getElementById('translation-section');
+    if (allTrans) allTrans.checked = ts && ts.style.display !== 'none';
+  }
+
+  // Sync panel language dropdown initial value
+  const currentPanel = document.getElementById('currentLang').innerText.toLowerCase();
+  const panelSelect = document.getElementById('translationLangSelect');
+  if (panelSelect) panelSelect.value = currentPanel === 'urdu' ? 'ur' : 'en';
+
+  // Sync audio selector:
+  const langSelect = document.getElementById('audioLangSelect');
+  const current   = document.getElementById('ayahAudio').src;
+  const arSrc     = document.getElementById('audio-url-ar').dataset.src;
+  const enSrc     = document.getElementById('audio-url-en').dataset.src;
+  const urSrc     = document.getElementById('audio-url-ur').dataset.src;
+  langSelect.value = current === arSrc ? 'ar'
+                   : current === enSrc ? 'en'
+                   : current === urSrc ? 'ur'
+                   : 'ar';
 };
+
+
 
 
 
 // 11. toggleModeNav()
 //     Toggles between "learning" and "reciting" modes globally.
 function toggleModeNav() {
+  // 1) always turn Practice off
+  const pracBox = document.getElementById('transliteration-box');
+  const pracNav = document.getElementById('navPractice');
+  if (pracBox)    pracBox.style.display = 'none';
+  if (pracNav)    pracNav.classList.remove('active');
+
+  // 2) now do the normal Learn/Recite toggle
   clearNavActive();
   const btn = document.getElementById('navMode');
   btn.classList.add('active');
@@ -341,16 +418,25 @@ function toggleModeNav() {
 window.toggleModeNav = toggleModeNav;
 
 // Helper: toggles mode display
+// Helper: toggles learn/recite display (no longer touches practice)
 function toggleMode(mode) {
-  const learn = document.getElementById('learning-mode-content');
-  const recit = document.getElementById('reciting-mode-content');
-  const practice = document.getElementById('transliteration-box');
+  const learn  = document.getElementById('learning-mode-content');
+  const recit  = document.getElementById('reciting-mode-content');
+
+  // Toggle the two main sections
   learn.style.display = mode === 'learning' ? 'block' : 'none';
   recit.style.display = mode === 'reciting' ? 'block' : 'none';
-  if (practice) practice.style.display = mode === 'learning' ? 'block' : 'none';
+
+  // Always hide Practice when switching modes
+  document.getElementById('transliteration-box').style.display = 'none';
+
+  // Update the icon
   document.getElementById('navModeIcon').textContent =
     mode === 'learning' ? 'psychology' : 'menu_book';
 }
+window.toggleMode = toggleMode;
+
+
 
 
 // switch audio source
@@ -443,7 +529,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // 1) Grab the two icons by their real IDs/selectors
   const navPlayIconEl = document.getElementById('navPlayIcon');
-  const panelIconEl   = document.querySelector('#fab .material-icons-outlined');
+  const panelIconEl   = document.querySelector('#playToggleBtn .material-icons-outlined');
 
   // 2) Sanity check—if either is missing, we’ll see it immediately
   if (!navPlayIconEl || !panelIconEl) {
@@ -473,6 +559,7 @@ window.addEventListener('DOMContentLoaded', () => {
 // open/close any dropdown-container when its button is clicked
 document.querySelectorAll('.dropdown-container').forEach(dd => {
   const btn = dd.querySelector('.dropdown-button');
+  if (!btn) return;  
   btn.addEventListener('click', e => {
     e.stopPropagation();
     // close all others
@@ -490,13 +577,13 @@ document.addEventListener('click', () => {
           .forEach(dd => dd.classList.remove('active'));
 });
 
-  
-  clearNavActive();
-  navDesc.style.display = 'none';
+
   
   
   
   initTranslitFeedback();
+  
+
   
   document.querySelectorAll('.translit-input').forEach(input => {
     const key = input.dataset.key;
@@ -508,24 +595,30 @@ document.addEventListener('click', () => {
   });
 
   // 6) Eraser FAB: clear all caches and inputs
-  document.getElementById('clearAll').onclick = () => {
-    document.querySelectorAll('.translit-input').forEach(input => {
-      const key = input.dataset.key;
-      localStorage.removeItem(key);
-      input.value = '';
-      input.dispatchEvent(new Event('input'));
-    });
-  };
+  const clearBtn = document.getElementById('clearAll');
+  if (clearBtn) {
+    clearBtn.onclick = () => {
+      document.querySelectorAll('.translit-input').forEach(input => {
+        const key = input.dataset.key;
+        localStorage.removeItem(key);
+        input.value = '';
+        input.dispatchEvent(new Event('input'));
+      });
+    };
+  }
+  
 
   // 7) Hide/Show Translation FAB
-  document.getElementById('hideTranslations').onclick = () => {
-    document.querySelectorAll('.toggle-translation').forEach(el =>
-      el.classList.toggle('hidden-toggle')
-    );
-    document.querySelectorAll('.show-translit').forEach(el =>
-      el.style.display = el.style.display === 'none' ? 'block' : 'none'
-    );
-  };
+  const hideTranslationsBtn = document.getElementById('hideTranslations');
+  if (hideTranslationsBtn) {
+    hideTranslationsBtn.onclick = () => {
+      document.querySelectorAll('.toggle-translation')
+              .forEach(el => el.classList.toggle('hidden-toggle'));
+      document.querySelectorAll('.show-translit')
+              .forEach(el => el.style.display = el.style.display === 'none' ? 'block' : 'none');
+    };
+  }
+  
    
  document.querySelectorAll('.translit-input').forEach(input => {
     const key = input.dataset.key;
@@ -540,9 +633,12 @@ document.addEventListener('click', () => {
       localStorage.setItem(key, input.value);
       translitHandler({ target: input });
     });
-  });  
+  });
+   
    
 });
+
+
 
 function openSearchTab(normalizedWord) {
   const url = `/memorization/search_results.html?q=${encodeURIComponent(normalizedWord)}`;
@@ -610,6 +706,247 @@ function translitHandler(e) {
 
 
 //games
+
+// Verb audio cache
+const audioCache = {};
+
+async function playVerbAudio(verb, tense, linkElement) {
+  const key       = `${verb}_${tense}`;
+  const iconSpan  = linkElement.querySelector(".audio-icon");
+  const baseUrls  = [
+    "https://raw.githubusercontent.com/iwilllearnquran/memorization/main/audio/verbs1/",
+    "https://raw.githubusercontent.com/iwilllearnquran/memorization/main/audio/verbs2/",
+    "https://raw.githubusercontent.com/iwilllearnquran/memorization/main/audio/verbs3/",
+    "https://raw.githubusercontent.com/iwilllearnquran/memorization/main/audio/verbs4/"
+  ];
+
+  // If already cached, just toggle play/pause
+  if (audioCache[key]) {
+    const audio = audioCache[key];
+    if (!audio.paused) {
+      audio.pause();
+      iconSpan && (iconSpan.textContent = "🔊");
+    } else {
+      audio.currentTime = 0;
+      audio.play();
+      iconSpan && (iconSpan.textContent = "⏸️");
+    }
+    return;
+  }
+
+  // Try each base URL by loading via Audio() and catching 'error'
+  for (const base of baseUrls) {
+    const url = `${base}${key}.mp3`;
+    try {
+      const audio = new Audio();
+      let tried = false;
+
+      // If it loads metadata, we know it's valid
+      const onLoaded = () => {
+        if (tried) return;
+        tried = true;
+        audioCache[key] = audio;
+        audio.play();
+        iconSpan && (iconSpan.textContent = "⏸️");
+        audio.removeEventListener("error", onError);
+        audio.removeEventListener("canplaythrough", onLoaded);
+        audio.addEventListener("ended", () => {
+          iconSpan && (iconSpan.textContent = "🔊");
+        });
+      };
+
+      const onError = () => {
+        audio.removeEventListener("error", onError);
+        audio.removeEventListener("canplaythrough", onLoaded);
+        // move on to next base URL
+      };
+
+      audio.addEventListener("canplaythrough", onLoaded, { once: true });
+      audio.addEventListener("error",          onError,   { once: true });
+
+      // Kick off loading
+      audio.src = url;
+      audio.load();
+
+      // Wait up to 2 seconds to decide if canplaythrough happened
+      await new Promise(res => setTimeout(res, 2000));
+      if (tried) return;        // it did load
+    } catch (e) {
+      // ignore and try next
+    }
+  }
+
+  // nothing worked
+  alert(`⚠️ Audio for "${verb}" (${tense}) not found.`);
+}
+
+/*
+window.addEventListener('DOMContentLoaded', () => {
+  const nav           = document.querySelector('.bottom-nav');
+  const playBtn       = document.getElementById('playToggleBtn');
+  const audio         = document.getElementById('ayahAudio');
+  const SHOW_DURATION = 3000;
+  let   hideTimer;
+
+  // your existing showNav() + scheduleHide() …
+  function scheduleHide() {
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => nav.classList.remove('visible'), SHOW_DURATION);
+  }
+  function showNav() {
+    nav.classList.add('visible');
+    scheduleHide();
+  }
+
+  // --- NEW: audio hook to “pop out” the playBtn ---
+  function floatPlayBtn() {
+    // 1) remove it from the nav
+    nav.removeChild(playBtn);
+    // 2) append to body and fix at bottom-centre
+    document.body.appendChild(playBtn);
+    Object.assign(playBtn.style, {
+      position:   'fixed',
+      bottom:     '16px',
+      left:       '50%',
+      transform:  'translateX(-50%)',
+      zIndex:     9999,
+    });
+    // hide the rest of the nav immediately
+    nav.classList.remove('visible');
+  }
+
+  function reattachPlayBtn() {
+    // remove from body
+    document.body.removeChild(playBtn);
+    // clear the inline styles
+    playBtn.style.position  = '';
+    playBtn.style.bottom    = '';
+    playBtn.style.left      = '';
+    playBtn.style.transform = '';
+    playBtn.style.zIndex    = '';
+    // put back into the nav at its original spot
+    nav.appendChild(playBtn);
+    // then re-show the nav for 3s
+    showNav();
+  }
+
+  // --- wire audio events ---
+  audio.addEventListener('play', () => {
+    floatPlayBtn();
+  });
+  audio.addEventListener('pause', () => {
+    reattachPlayBtn();
+  });
+  audio.addEventListener('ended', () => {
+    reattachPlayBtn();
+  });
+
+  // --- keep your existing logic for load/scroll/settings ---
+  showNav();  // on load
+  window.addEventListener('scroll', showNav, { passive: true });
+
+  document.body.addEventListener('click', e => {
+    if (e.target.closest('#navSettings')) {
+      nav.classList.add('visible');
+      clearTimeout(hideTimer);
+    }
+  });
+
+  new MutationObserver(muts => {
+    muts.forEach(m => {
+      m.removedNodes.forEach(n => {
+        if (n.id === 'settingsMenu') showNav();
+      });
+    });
+  }).observe(document.body, { childList: true });
+
+  document.querySelectorAll('.bottom-nav .nav-item')
+          .forEach(i => i.addEventListener('click', showNav));
+});
+*/
+window.addEventListener('DOMContentLoaded', () => {
+  const nav           = document.querySelector('.bottom-nav');
+  const playBtn       = document.getElementById('playToggleBtn');
+  const audio         = document.getElementById('ayahAudio');
+  const SHOW_DURATION = 3000;
+  let   hideTimer;
+
+  // auto-hide scheduler
+  function scheduleHide() {
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => nav.classList.remove('visible'), SHOW_DURATION);
+  }
+
+  // show nav + restart timer
+  function showNav() {
+    nav.classList.add('visible');
+    scheduleHide();
+  }
+
+  // placeholder for re-insertion
+  const placeholder = document.createComment('play-btn-placeholder');
+  nav.insertBefore(placeholder, playBtn);
+
+  // float the button out of the nav into the body
+  function floatPlayBtn() {
+    if (playBtn.parentNode === nav) {
+      nav.removeChild(playBtn);
+      document.body.appendChild(playBtn);
+      Object.assign(playBtn.style, {
+        position:  'fixed',
+        bottom:    '38px',
+        left:      '50%',
+        transform: 'translateX(-50%)',
+        zIndex:    '9999',
+      });
+       scheduleHide();
+    }
+  }
+
+  // put it back into the nav at the placeholder
+  function reattachPlayBtn() {
+    if (playBtn.parentNode === document.body) {
+      document.body.removeChild(playBtn);
+      // clear any inline styles we added
+      ['position','bottom','left','transform','zIndex'].forEach(prop => {
+        playBtn.style[prop] = '';
+      });
+      nav.insertBefore(playBtn, placeholder);
+      showNav();
+    }
+  }
+
+  // wire audio events
+  audio.addEventListener('play',  () => floatPlayBtn());
+  audio.addEventListener('pause', () => reattachPlayBtn());
+  audio.addEventListener('ended', () => reattachPlayBtn());
+
+  // initial load + scroll
+  showNav();
+  window.addEventListener('scroll', showNav, { passive: true });
+
+  // keep visible while settings are open, re-hide after closing
+  document.body.addEventListener('click', e => {
+    if (e.target.closest('#navSettings')) {
+      nav.classList.add('visible');
+      clearTimeout(hideTimer);
+    }
+  });
+  new MutationObserver(muts => {
+    muts.forEach(m => m.removedNodes.forEach(n => {
+      if (n.id === 'settingsMenu') showNav();
+    }));
+  }).observe(document.body, { childList: true });
+
+  // clicking any nav item also resets the 3s timer
+  document.querySelectorAll('.bottom-nav .nav-item')
+          .forEach(i => i.addEventListener('click', showNav));
+});
+
+
+
+
+
 
 
 
