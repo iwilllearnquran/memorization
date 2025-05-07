@@ -15,14 +15,28 @@
 body {
   font-family: Arial, sans-serif;
   margin: 0;
-  padding: 0 3px 0 3px;
+  padding: 0;
+  overflow-x: hidden;  
+  overflow-y: auto;
+  min-height: calc(100vh + 2px); 
+  
 }
 html, body {
   background-color: #dfe8eb;
+  overflow-y: auto;
+   
 }
 
 html { height: auto; }
-body { min-height: 100vh; }
+
+/*───────────────────────────────────────────────────────────────────────────
+  Ghost SCrol
+───────────────────────────────────────────────────────────────────────────*/
+.ghost-scroll {
+  height: 2px;           /* tiny bit of extra height */
+  width: 1px;            /* doesn’t need to fill the width */
+  visibility: hidden;    /* truly invisible */
+}
 
 
 /*───────────────────────────────────────────────────────────────────────────
@@ -38,18 +52,26 @@ body { min-height: 100vh; }
   Section cards
 ───────────────────────────────────────────────────────────────────────────*/
 .section {
-  margin: 10px;                  /* Centered vertically with spacing */
-  padding: 20px 8px 10px 20px;
+  position: relative;
+  width: 100vw;                    /* span the viewport */
+  left: 50%;                       /* move its left edge to center */
+  transform: translateX(-50%);     /* pull it back left by half its width */ 
+  
+  margin: 0;                       
+  padding: 20px 8px 10px 20px;     
+  box-sizing: border-box;          
   font-size: 15px;
-  box-sizing: border-box;
-  border-radius: 16px;
-  background-color: #fffaf6;          /* Updated background */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  width: calc(100% - 24px);           /* Slight margin without causing scroll */
-  max-width: auto;                  /* Optional: Keep layout contained */
-  transition: all 0.3s ease-in-out;
+  background-color: #fffaf6;       
+  border-radius: 0;                
+  box-shadow: none;                
+
+  /* your bottom line */
+  border-bottom: 1px solid #ccc;
+
   text-align: center;
+  transition: all 0.3s ease-in-out;
 }
+
 .section:hover {
   box-shadow: 0 6px 18px rgba(0,0,0,0.08);
 }
@@ -207,6 +229,7 @@ input:checked + .slider:before {
   border-bottom: 2px dotted #333; /* Dotted line underneath */
   border: 1px dotted rgba(0, 0, 0, 0.2); /* Subtle dotted line around box */
   background-color: #fffaf6;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   
 }
 .word-text {
@@ -252,7 +275,7 @@ input:checked + .slider:before {
 
 /* transliteration input placeholder */
 .translit-input.small-placeholder::placeholder {
-  font-size: 10px;
+  font-size: 8px;
   color: #888;
 }
 
@@ -651,11 +674,32 @@ input:checked + .slider:before {
 /* ───────────────────────────────────────────────────────────────
    SETTINGS POPUP (centered + flex rows + on/off switches)
 ───────────────────────────────────────────────────────────────*/
+/* 1) Define the keyframes for the entrance */
+@keyframes popup-enter {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+
+/* 3) “Show” state triggers the animation */
+.settings-popup.show {
+  animation: popup-enter 0.3s ease-out forwards;
+}
+
 .settings-popup {
   position: fixed;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 80px;               /* sit 80px above the bottom edge (nav height + margin) */
+  top: auto;                  /* unset any top positioning */
   width: 300px;
+  max-width: 90vw;
   background: #fff;
   border: 1px solid #538295;
   border-radius: 8px;
@@ -663,6 +707,13 @@ input:checked + .slider:before {
   padding: 20px;
   z-index: 10001;
   font-family: Arial, sans-serif;
+
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+}
+
+.settings-popup.show {
+  animation: popup-enter 0.3s ease-out forwards;
 }
 
 /* Header */
@@ -770,11 +821,6 @@ select, .settings-popup input[type=number] {
   Styles for the new Practice Mode grid 
 ──────────────────────────────────────────── */
 
-.practice-heading {
-  text-align: center;
-  font-size: 1.2rem;
-  margin: 16px 0;
-}
 
 .translit-grid {
   display: flex;
@@ -793,7 +839,7 @@ select, .settings-popup input[type=number] {
 
 .translit-input {
   width: 140px;
-  padding: 8px;
+  padding: 4px;
   font-size: 1rem;
   text-align: center;
   border-radius: 6px;
@@ -828,20 +874,24 @@ select, .settings-popup input[type=number] {
 
 .practice-header {
   text-align: center;
-  margin-bottom: 16px;
+  background: #e5e1dd;
 }
 
 .practice-title {
-  font-size: 1.25rem;      /* slightly larger */
+  font-size: 1rem;      /* slightly larger */
   margin: 0;
   color: #0a4d68;
 }
 
 .practice-desc {
-  font-size: 0.9rem;
+  font-size: 0.6rem;
   color: #555;
-  margin: 4px 0 12px;
 }
+.practice-heading {
+  text-align: center;
+  font-size: 1rem;
+}
+
 
 
 

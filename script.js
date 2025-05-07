@@ -140,7 +140,11 @@ function togglePracticeNav() {
 
   if (!isOn) {
     // —> TURN ON Practice
-    pracNav.classList.add('active');
+    
+	pracNav.innerHTML = `
+      <span class="material-icons-outlined">more</span>
+      <span class="nav-label">Go Back</span>
+    `;
     // hide all the “original” sections
     [learnSec, recitSec, transSec, gramSec].forEach(el => el && (el.style.display = 'none'));
     // show only transliteration box
@@ -165,6 +169,10 @@ function togglePracticeNav() {
     // bring back the Games & Mode nav-buttons
     gamesNav.style.display = '';
     modeNav.style.display  = '';
+	pracNav.innerHTML = `
+      <span class="material-icons-outlined">edit</span>
+      <span class="nav-label">Practice</span>
+    `;
   }
 }
 window.togglePracticeNav = togglePracticeNav;
@@ -357,6 +365,8 @@ window.toggleSettingsNav = function () {
   // Insert & wire up
   document.body.insertAdjacentHTML('beforeend', menuHTML);
   const menuEl = document.getElementById('settingsMenu');
+  menuEl.getBoundingClientRect();
+  menuEl.classList.add('show');
   attachSettingsAutoClose(btn, menuEl);
 
   // Sync toggles:
@@ -634,6 +644,15 @@ document.addEventListener('click', () => {
       translitHandler({ target: input });
     });
   });
+// Place this once, e.g. in your DOMContentLoaded block:
+document.addEventListener('click', e => {
+  const menu = document.getElementById('settingsMenu');
+  const btn  = document.getElementById('navSettings');
+  if (menu && !menu.contains(e.target) && !btn.contains(e.target)) {
+    menu.remove();
+    btn.classList.remove('active');
+  }
+});
    
    
 });
@@ -683,7 +702,7 @@ function translitHandler(e) {
   const expected = normalize(e.target.dataset.expected || '');
   const actual   = normalize(e.target.value || '');
   const dist     = levenshtein(actual, expected);
-  const block    = e.target.closest('.translit-block');
+  const block    = e.target.closest('.word-block-translit');
 
   block.style.borderColor = 'gray';
   block.classList.remove('confetti');
