@@ -986,6 +986,7 @@ window.toggleGames = function () {
   console.log("🔄 toggleGames called");
 
   const learnSec = document.getElementById("learning-mode-content");
+  const tranSec = document.getElementById("translation-section");
   const gameContainer = document.getElementById("game-mode-content");
 
   if (!gameContainer) {
@@ -995,7 +996,42 @@ window.toggleGames = function () {
 
   // Toggle views
   learnSec.style.display = "none";
+  tranSec.style.display = "none";
   gameContainer.style.display = "block";
+  
+  // Hide other nav items except settings and play button
+const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+navItems.forEach(item => {
+  if (item && item.id !== 'navSettings' && item.id !== 'playToggleBtn') {
+    item.style.display = 'none';
+  }
+});
+
+// Add a temporary "Back" button at the beginning
+let backBtn = document.getElementById('navBackBtn');
+if (!backBtn) {
+  backBtn = document.createElement('div');
+  backBtn.id = 'navBackBtn';
+  backBtn.className = 'nav-item';
+  backBtn.innerHTML = `
+    <span class="material-icons-outlined">arrow_back</span>
+    <span class="nav-label">Back</span>
+  `;
+
+  backBtn.onclick = () => {
+    // Restore nav and mode
+    navItems.forEach(i => (i.style.display = ''));
+    const gameContainer = document.getElementById("game-mode-content");
+    if (gameContainer) gameContainer.style.display = "none";
+    toggleMode('learning');  // switch back to learning mode
+    backBtn.remove(); // remove back button
+  };
+
+  const nav = document.querySelector('.bottom-nav');
+  nav.insertBefore(backBtn, nav.firstChild);  // insert at the top
+}
+
+
 
   if (gameContainer.dataset.initialized === "true") return;
 
@@ -1005,7 +1041,7 @@ window.toggleGames = function () {
   const correctOrder = wordElements.map(el => el.textContent.trim());
 
   gameContainer.innerHTML = `
-    <div class="prompt">Click the words below in correct order</div>
+    <div class="prompt">Arrange the words in correct order</div>
     <div class="slots" id="slotContainer"></div>
     <div class="options" id="optionsContainer"></div>
     <button class="check-btn" onclick="checkAnswer()">✔ Check</button>
