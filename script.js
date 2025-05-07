@@ -980,11 +980,110 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 
+/////GAMES section
+///// GAMES section
+window.toggleGames = function () {
+  console.log("🔄 toggleGames called");
+
+  const learnSec = document.getElementById("learning-mode-content");
+  const gameContainer = document.getElementById("game-mode-content");
+
+  if (!gameContainer) {
+    console.error("❌ game-mode-content not found in DOM.");
+    return;
+  }
+
+  // Toggle views
+  learnSec.style.display = "none";
+  gameContainer.style.display = "block";
+
+  if (gameContainer.dataset.initialized === "true") return;
+
+  console.log("🧩 Injecting game content...");
+
+  const wordElements = Array.from(document.querySelectorAll("#learning-mode-content .word-block"));
+  const correctOrder = wordElements.map(el => el.textContent.trim());
+
+  gameContainer.innerHTML = `
+    <div class="prompt">Click the words below in correct order</div>
+    <div class="slots" id="slotContainer"></div>
+    <div class="options" id="optionsContainer"></div>
+    <button class="check-btn" onclick="checkAnswer()">✔ Check</button>
+    <div class="result" id="resultText"></div>
+  `;
+
+  const optionsContainer = gameContainer.querySelector('#optionsContainer');
+  const slotContainer = gameContainer.querySelector('#slotContainer');
+  const resultText = gameContainer.querySelector('#resultText');
+
+  // Create empty slots
+  correctOrder.forEach(() => {
+    const slot = document.createElement('div');
+    slot.className = 'slot';
+    slotContainer.appendChild(slot);
+  });
+
+  // Shuffle and clone word blocks with all classes & prevent popup
+  const shuffled = [...wordElements].sort(() => 0.5 - Math.random());
+  shuffled.forEach(original => {
+    const box = original.cloneNode(true); // deep clone
+    box.classList.add('word-box');
+    box.removeAttribute('onclick'); // prevent showPopup if set inline
+    box.onclick = null;
+
+    // Also block any showPopup added by addEventListener
+    box.addEventListener('click', (e) => {
+      e.stopPropagation();
+      placeWord(box);
+    });
+
+    optionsContainer.appendChild(box);
+  });
+
+  gameContainer.dataset.initialized = "true";
+
+  // Place word in next empty slot with animation
+  window.placeWord = function (box) {
+    const emptySlot = [...document.querySelectorAll('.slot')].find(s => !s.dataset.word);
+    if (!emptySlot) return;
+
+    const rectFrom = box.getBoundingClientRect();
+    const rectTo = emptySlot.getBoundingClientRect();
+
+    const movingClone = box.cloneNode(true);
+    movingClone.classList.add('clone');
+    movingClone.style.position = 'fixed';
+    movingClone.style.left = `${rectFrom.left}px`;
+    movingClone.style.top = `${rectFrom.top}px`;
+    movingClone.style.width = `${rectFrom.width}px`;
+    movingClone.style.height = `${rectFrom.height}px`;
+    movingClone.style.transition = 'transform 0.4s ease';
+    document.body.appendChild(movingClone);
+
+    requestAnimationFrame(() => {
+      movingClone.style.transform = `translate(${rectTo.left - rectFrom.left}px, ${rectTo.top - rectFrom.top}px)`;
+    });
+
+    setTimeout(() => {
+      movingClone.remove();
+      const arabicText = box.querySelector('.word-text')?.textContent.trim() || box.textContent.trim();
+      emptySlot.textContent = arabicText;
 
 
+      emptySlot.dataset.word = box.textContent.trim();
+      emptySlot.classList.add('filled');
+    }, 400);
 
+    box.remove(); // remove from options
+  };
 
-
-
+  // Answer checking logic
+  window.checkAnswer = function () {
+    const current = [...document.querySelectorAll('.slot')].map(s => s.dataset.word || '');
+    const isCorrect = current.every((w, i) => w === correctOrder[i]);
+    resultText.textContent = isCorrect ? '🎉 Correct! Well done!' : '❌ Not quite right. Try again!';
+    resultText.style.color = isCorrect ? 'green' : 'red';
+  };
+};
 
 

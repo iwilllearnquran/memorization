@@ -914,3 +914,106 @@ select, .settings-popup input[type=number] {
 
 
 
+/*----- GAMES -------*/
+
+
+/*──────────────────────────────────────────────────────────────
+  Game Section Wrapper
+──────────────────────────────────────────────────────────────*/
+
+
+#game-mode-content {
+  direction: rtl;
+  font-family: 'Arial', sans-serif;
+  padding: 20px;
+}
+
+#game-mode-content .prompt {
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+#game-mode-content .options
+{
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 1px;
+  justify-content: center;
+  gap: 0px;
+  margin-bottom: 30px;
+}
+
+#game-mode-content .slots {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 1px;
+  justify-content: center;
+  gap: 0px;
+  margin-bottom: 30px;
+  
+}
+
+#game-mode-content .word-box {
+  background: #fff;
+  border: 2px solid #5398be;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.4s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+#game-mode-content .word-box.used {
+  visibility: hidden;
+}
+
+#game-mode-content .slot {
+  min-width: auto;
+  height: 48px;
+  border-bottom: 1px dashed #666;
+  margin: 2px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  padding: 0 6px;
+  margin: 0 1px;
+}
+
+#game-mode-content .slot.filled {
+  border-color: #2c7c4c;
+}
+
+#game-mode-content .word-box.clone {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  margin: 0;
+  padding: 10px 18px;
+  font-size: 20px;
+  background: white;
+  border: 2px solid #5398be;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.4s ease;
+}
+
+#game-mode-content .check-btn {
+  padding: 10px 20px;
+  font-size: 18px;
+  background-color: #2c7c4c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#game-mode-content .result {
+  margin-top: 20px;
+  font-size: 20px;
+  font-weight: bold;
+}
