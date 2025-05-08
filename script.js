@@ -958,8 +958,21 @@ window.addEventListener('DOMContentLoaded', () => {
   audio.addEventListener('ended', () => reattachPlayBtn());
 
   // initial load + scroll
+  // initial load + scroll
   showNav();
   window.addEventListener('scroll', showNav, { passive: true });
+
+  // NEW: clicking anywhere on the screen brings nav back
+  document.body.addEventListener('click', showNav);
+  
+  // prevent nav reappearing when clicking inputs or popup overlays
+  document.body.addEventListener('click', e => {
+    if (!e.target.closest('input, textarea, .popup')) {
+      showNav();
+    }
+  });
+  
+
 
   // keep visible while settings are open, re-hide after closing
   document.body.addEventListener('click', e => {
@@ -979,6 +992,33 @@ window.addEventListener('DOMContentLoaded', () => {
           .forEach(i => i.addEventListener('click', showNav));
 });
 
+function showToast(message, color = '#333') {
+  const toast = document.createElement('div');
+  toast.textContent = message;
+  toast.style.cssText = `
+    position: fixed;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: ${color};
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  `;
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => toast.style.opacity = 1);
+
+  setTimeout(() => {
+    toast.style.opacity = 0;
+    setTimeout(() => toast.remove(), 300);
+  }, 1800);
+}
+
 
 /////GAMES section
 ///// GAMES section
@@ -994,80 +1034,64 @@ window.toggleGames = function () {
     return;
   }
 
-  // Toggle views
   learnSec.style.display = "none";
   tranSec.style.display = "none";
   gameContainer.style.display = "block";
-  
-  // Hide other nav items except settings and play button
-const navItems = document.querySelectorAll('.bottom-nav .nav-item');
-navItems.forEach(item => {
-  if (item && item.id !== 'navSettings' && item.id !== 'playToggleBtn') {
-    item.style.display = 'none';
+
+  const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+  navItems.forEach(item => {
+    if (item && item.id !== 'navSettings' && item.id !== 'playToggleBtn') {
+      item.style.display = 'none';
+    }
+  });
+
+  let backBtn = document.getElementById('navBackBtn');
+  if (!backBtn) {
+    backBtn = document.createElement('div');
+    backBtn.id = 'navBackBtn';
+    backBtn.className = 'nav-item';
+    backBtn.innerHTML = `
+      <span class="material-icons-outlined">arrow_back</span>
+      <span class="nav-label">Back</span>
+    `;
+    backBtn.onclick = () => {
+      navItems.forEach(i => (i.style.display = ''));
+      if (gameContainer) gameContainer.style.display = "none";
+      toggleMode('learning');
+      backBtn.remove();
+    };
+    document.querySelector('.bottom-nav').insertBefore(backBtn, navItems[0]);
   }
-});
-
-// Add a temporary "Back" button at the beginning
-let backBtn = document.getElementById('navBackBtn');
-if (!backBtn) {
-  backBtn = document.createElement('div');
-  backBtn.id = 'navBackBtn';
-  backBtn.className = 'nav-item';
-  backBtn.innerHTML = `
-    <span class="material-icons-outlined">arrow_back</span>
-    <span class="nav-label">Back</span>
-  `;
-
-  backBtn.onclick = () => {
-    // Restore nav and mode
-    navItems.forEach(i => (i.style.display = ''));
-    const gameContainer = document.getElementById("game-mode-content");
-    if (gameContainer) gameContainer.style.display = "none";
-    toggleMode('learning');  // switch back to learning mode
-    backBtn.remove(); // remove back button
-  };
-
-  const nav = document.querySelector('.bottom-nav');
-  nav.insertBefore(backBtn, nav.firstChild);  // insert at the top
-}
-
-
 
   if (gameContainer.dataset.initialized === "true") return;
 
   console.log("🧩 Injecting game content...");
 
   const wordElements = Array.from(document.querySelectorAll("#learning-mode-content .word-block"));
-  const correctOrder = wordElements.map(el => el.textContent.trim());
+  const correctOrder = wordElements.map(el => el.querySelector('.word-text')?.textContent.trim());
 
   gameContainer.innerHTML = `
     <div class="prompt">Arrange the words in correct order</div>
     <div class="slots" id="slotContainer"></div>
     <div class="options" id="optionsContainer"></div>
-    <button class="check-btn" onclick="checkAnswer()">✔ Check</button>
-    <div class="result" id="resultText"></div>
   `;
 
   const optionsContainer = gameContainer.querySelector('#optionsContainer');
   const slotContainer = gameContainer.querySelector('#slotContainer');
-  const resultText = gameContainer.querySelector('#resultText');
 
-  // Create empty slots
   correctOrder.forEach(() => {
     const slot = document.createElement('div');
     slot.className = 'slot';
     slotContainer.appendChild(slot);
   });
 
-  // Shuffle and clone word blocks with all classes & prevent popup
   const shuffled = [...wordElements].sort(() => 0.5 - Math.random());
   shuffled.forEach(original => {
-    const box = original.cloneNode(true); // deep clone
+    const box = original.cloneNode(true);
     box.classList.add('word-box');
-    box.removeAttribute('onclick'); // prevent showPopup if set inline
+    box.removeAttribute('onclick');
     box.onclick = null;
 
-    // Also block any showPopup added by addEventListener
     box.addEventListener('click', (e) => {
       e.stopPropagation();
       placeWord(box);
@@ -1078,10 +1102,21 @@ if (!backBtn) {
 
   gameContainer.dataset.initialized = "true";
 
-  // Place word in next empty slot with animation
   window.placeWord = function (box) {
     const emptySlot = [...document.querySelectorAll('.slot')].find(s => !s.dataset.word);
     if (!emptySlot) return;
+
+    const slotIndex = [...document.querySelectorAll('.slot')].indexOf(emptySlot);
+    const correctText = correctOrder[slotIndex];
+    const boxText = box.querySelector('.word-text')?.textContent.trim();
+
+    if (boxText !== correctText) {
+      if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+      box.classList.add('shake');
+      setTimeout(() => box.classList.remove('shake'), 400);
+      showToast('❌ Incorrect!', '#c0392b');
+      return;
+    }
 
     const rectFrom = box.getBoundingClientRect();
     const rectTo = emptySlot.getBoundingClientRect();
@@ -1096,29 +1131,47 @@ if (!backBtn) {
     movingClone.style.transition = 'transform 0.4s ease';
     document.body.appendChild(movingClone);
 
+    box.style.visibility = 'hidden';
+
     requestAnimationFrame(() => {
       movingClone.style.transform = `translate(${rectTo.left - rectFrom.left}px, ${rectTo.top - rectFrom.top}px)`;
     });
 
     setTimeout(() => {
       movingClone.remove();
-      const arabicText = box.querySelector('.word-text')?.textContent.trim() || box.textContent.trim();
-      emptySlot.textContent = arabicText;
-
-
-      emptySlot.dataset.word = box.textContent.trim();
+      emptySlot.textContent = boxText;
+      emptySlot.dataset.word = boxText;
       emptySlot.classList.add('filled');
+      box.remove();
     }, 400);
-
-    box.remove(); // remove from options
   };
 
-  // Answer checking logic
-  window.checkAnswer = function () {
-    const current = [...document.querySelectorAll('.slot')].map(s => s.dataset.word || '');
-    const isCorrect = current.every((w, i) => w === correctOrder[i]);
-    resultText.textContent = isCorrect ? '🎉 Correct! Well done!' : '❌ Not quite right. Try again!';
-    resultText.style.color = isCorrect ? 'green' : 'red';
+  // 🍞 Toast Message Function
+  window.showToast = function (message, color = '#333') {
+    const toast = document.createElement('div');
+    toast.textContent = message;
+    toast.style.cssText = `
+      position: fixed;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: ${color};
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    `;
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => toast.style.opacity = 1);
+
+    setTimeout(() => {
+      toast.style.opacity = 0;
+      setTimeout(() => toast.remove(), 300);
+    }, 700);
   };
 };
 
