@@ -10,6 +10,16 @@ let playToggleBtn;
 let currentMode = 'learning';
 let floatingClone = null;
 
+// Add this somewhere globally or before you use `currentAyah`
+const pathMatch = window.location.pathname.match(/ayah_(\d+)_(\d+)/);
+let currentSurah = 1, currentAyah = 1;
+
+if (pathMatch) {
+  currentSurah = parseInt(pathMatch[1], 10);
+  currentAyah = parseInt(pathMatch[2], 10);
+}
+
+
 
 
 // 1. toggleElements(type, show)
@@ -104,6 +114,7 @@ function switchTranslation(lang) {
   const enDiv = document.getElementById('englishTranslation');
   const urDiv = document.getElementById('urduTranslation');
   const label = document.getElementById('currentLang');
+  const translationDropdown = document.getElementById('translationDropdown');
 
   if (lang === 'en') {
     enDiv.style.display = 'block';
@@ -183,13 +194,27 @@ window.togglePracticeNav = togglePracticeNav;
 
 
 // 9. togglePlay()
-//    Toggles play/pause for ayahAudio and updates nav icon.
 function togglePlay() {
   if (!ayahAudio) return console.error('No ayahAudio element');
-  if (ayahAudio.paused) ayahAudio.play(); else ayahAudio.pause();
-  const icon = document.getElementById('navPlayIcon');
-  icon.textContent = ayahAudio.paused ? 'play_arrow' : 'pause';
+
+  if (ayahAudio.paused) {
+    ayahAudio.play();
+    navPlayIcon.textContent = 'pause';
+    panelIcon.textContent   = 'pause';
+
+    ayahAudio.onended = () => {
+      navPlayIcon.textContent = 'play_arrow';
+      panelIcon.textContent   = 'play_arrow';
+    };
+  } else {
+    ayahAudio.pause();
+    navPlayIcon.textContent = 'play_arrow';
+    panelIcon.textContent   = 'play_arrow';
+  }
 }
+
+
+
 window.togglePlay = togglePlay;
 
 
@@ -516,9 +541,8 @@ function audioControlSetup() {
     audio.dataset.repeat = repeatInput.value;
   });
 
-  // ensure play/pause icons always reflect actual state
-  audio.addEventListener('play',  () => { playIcon.textContent = panelIcon.textContent = 'pause'; });
-  audio.addEventListener('pause', () => { playIcon.textContent = panelIcon.textContent = 'play_arrow'; });
+
+
 }
 
 
@@ -538,28 +562,34 @@ window.addEventListener('DOMContentLoaded', () => {
   const translationButton   = translationDropdown.querySelector('.dropdown-button');
 
   // 1) Grab the two icons by their real IDs/selectors
-  const navPlayIconEl = document.getElementById('navPlayIcon');
-  const panelIconEl   = document.querySelector('#playToggleBtn .material-icons-outlined');
+    navPlayIcon = document.getElementById('navPlayIcon');
+    panelIcon   = document.querySelector('#playToggleBtn .material-icons-outlined');
+
 
   // 2) Sanity check—if either is missing, we’ll see it immediately
-  if (!navPlayIconEl || !panelIconEl) {
-    console.error('Icon element not found:', {
-      navPlayIconEl,    // should be the nav bar play/pause icon
-      panelIconEl       // should be the FAB/playToggle button icon
-    });
-    // Don’t proceed, or you’ll keep getting null errors
-    return;
-  }
+  if (!navPlayIcon || !panelIcon) {
+  console.error('Icon element not found:', {
+    navPlayIcon,
+    panelIcon
+  });
+  return;
+}
+
 
   // 3) Attach your audio play/pause listeners only once you know both exist
-  ayahAudio.addEventListener('play', () => {
-    navPlayIconEl.textContent = 'pause';
-    panelIconEl.textContent   = 'pause';
+   ayahAudio.addEventListener('play', () => {
+    navPlayIcon.textContent = 'pause';
+    panelIcon.textContent   = 'pause';
   });
   ayahAudio.addEventListener('pause', () => {
-    navPlayIconEl.textContent = 'play_arrow';
-    panelIconEl.textContent   = 'play_arrow';
+    navPlayIcon.textContent = 'play_arrow';
+    panelIcon.textContent   = 'play_arrow';
   });
+  ayahAudio.addEventListener('ended', () => {
+    navPlayIcon.textContent = 'play_arrow';
+    panelIcon.textContent   = 'play_arrow';
+  });
+
 
 
   //  ---- Insert audio-control hookup here ----
@@ -1019,6 +1049,7 @@ function showToast(message, color = '#333') {
   }, 1800);
 }
 
+let currentGameScreen = "selector"; // selector | arrange | verb
 
 /////GAMES section
 ///// GAMES section
@@ -1037,6 +1068,9 @@ window.toggleGames = function () {
   learnSec.style.display = "none";
   tranSec.style.display = "none";
   gameContainer.style.display = "block";
+  
+  currentGameScreen = "selector";
+
 
   const navItems = document.querySelectorAll('.bottom-nav .nav-item');
   navItems.forEach(item => {
@@ -1054,12 +1088,26 @@ window.toggleGames = function () {
       <span class="material-icons-outlined">arrow_back</span>
       <span class="nav-label">Back</span>
     `;
-    backBtn.onclick = () => {
-      navItems.forEach(i => (i.style.display = ''));
-      if (gameContainer) gameContainer.style.display = "none";
-      toggleMode('learning');
-      backBtn.remove();
-    };
+backBtn.onclick = () => {
+  if (currentGameScreen === "selector") {
+    // From selector → go back to learning mode
+    navItems.forEach(i => (i.style.display = ''));
+    gameContainer.style.display = "none";
+    toggleMode('learning');
+    backBtn.remove();
+  } else {
+    // From inside a game → confirm before going to selector
+    const confirmExit = confirm("Are you sure you want to go back?\nYour game progress will be lost.");
+    if (confirmExit) {
+      document.getElementById("gameSelector").style.display = "block";
+      document.getElementById("arrangeGameContainer").style.display = "none";
+      document.getElementById("verbMatchGame").style.display = "none";
+      currentGameScreen = "selector";
+    }
+  }
+};
+
+    
     document.querySelector('.bottom-nav').insertBefore(backBtn, navItems[0]);
   }
 
@@ -1070,11 +1118,127 @@ window.toggleGames = function () {
   const wordElements = Array.from(document.querySelectorAll("#learning-mode-content .word-block"));
   const correctOrder = wordElements.map(el => el.querySelector('.word-text')?.textContent.trim());
 
-  gameContainer.innerHTML = `
+gameContainer.innerHTML = `
+<div id="gameSelector" style="max-width: 600px; margin: auto; padding: 16px;">
+  <div style="background: #f9f9f9; border: 2px solid #0a4d68; border-radius: 8px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); font-family: 'Roboto', sans-serif;">
+    <h3 style="margin: 0 0 8px; color: #0a4d68;">Arrange Words</h3>
+    <p style="margin: 0 0 12px; direction: ltr !important;">Rearrange the words to match the correct order in the Ayah</p>
+    <button onclick="startArrangeGameFromCard()" style="padding: 8px 16px; background: #0a4d68; color: white; border: none; border-radius: 6px; cursor: pointer;">Play Game</button>
+  </div>
+
+  <div style="background: #f9f9f9; border: 2px solid #0a4d68; border-radius: 8px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); font-family: 'Roboto', sans-serif;">
+    <h3 style="margin: 0 0 8px; color: #0a4d68;">Verb Match</h3>
+    <p style="margin: 0 0 12px; direction: ltr !important;">Match Arabic verbs to their English meanings</p>
+    <button onclick="startVerbGameFromCard()" style="padding: 8px 16px; background: #0a4d68; color: white; border: none; border-radius: 6px; cursor: pointer;">Play Game</button>
+  </div>
+</div>
+
+
+
+  <div id="arrangeGameContainer" style="display: none;">
     <div class="prompt">Arrange the words in correct order</div>
     <div class="slots" id="slotContainer"></div>
     <div class="options" id="optionsContainer"></div>
-  `;
+  </div>
+
+  <div id="verbMatchGame" style="display: none;">
+    <div class="prompt">Match the verb to its meaning</div>
+
+<div style="
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 1px !important;;
+  max-width: 100%;
+  padding: 1px !important;;
+  margin: 1px;
+  box-sizing: border-box;
+">
+  <div id="verbOptions" style="
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+	width: 80px !important;
+  "></div>
+
+  <div id="meaningOptions" style="
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+	
+  "></div>
+</div>
+
+</div>
+
+
+  </div>
+
+  <div id="gameResultPopup" style="
+    display: none;
+    position: fixed;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    padding: 24px 32px;
+    z-index: 10000;
+    max-width: 90%;
+    width: 320px;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    direction: ltr !important;
+    box-sizing: border-box;
+  ">
+    <div id="gameResultMessage" style="
+      font-size: 20px;
+      font-weight: 600;
+      color: #2c7c4c;
+      margin-bottom: 20px;
+    ">
+      Well done! You are one step closer to Jannah, Inshallah! ✨
+    </div>
+    <div style="
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+    ">
+      <button id="nextAyahBtn" style="
+        padding: 8px 16px;
+        font-size: 14px;
+        background: #0a4d68;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      ">➡️ Next</button>
+      <button id="redoGameBtn" style="
+        padding: 8px 16px;
+        font-size: 14px;
+        background: #e0e0e0;
+        color: #333;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      ">🔄 Redo</button>
+    </div>
+  </div>
+
+  <svg id="glassEffect" viewBox="0 0 100 100" style="display:none; position:fixed; width:100px; height:100px; pointer-events:none; z-index:9999;">
+    <circle cx="50" cy="50" r="45" stroke="rgba(0,0,0,0.5)" stroke-width="1" fill="none">
+      <animate attributeName="r" from="1" to="45" dur="0.4s" fill="freeze" />
+      <animate attributeName="opacity" from="1" to="0" dur="0.4s" fill="freeze" />
+    </circle>
+  </svg>
+</div>
+`;
+
+
 
   const optionsContainer = gameContainer.querySelector('#optionsContainer');
   const slotContainer = gameContainer.querySelector('#slotContainer');
@@ -1131,19 +1295,42 @@ window.toggleGames = function () {
     movingClone.style.transition = 'transform 0.4s ease';
     document.body.appendChild(movingClone);
 
-    box.style.visibility = 'hidden';
+    box.style.visibility = 'hidden'; 
+	
+	const dx = (rectTo.left + rectTo.width / 2) - (rectFrom.left + rectFrom.width / 2);
+    const dy = (rectTo.top + rectTo.height / 2) - (rectFrom.top + rectFrom.height / 2);
 
     requestAnimationFrame(() => {
-      movingClone.style.transform = `translate(${rectTo.left - rectFrom.left}px, ${rectTo.top - rectFrom.top}px)`;
+      movingClone.style.transform = `translate(${dx}px, ${dy}px)`;
     });
 
+
     setTimeout(() => {
+	  // Position and show the glass burst
+	  const glassEffect = document.getElementById('glassEffect');
+	  glassEffect.style.left = `${rectTo.left + rectTo.width / 2 - 50}px`;
+	  glassEffect.style.top = `${rectTo.top + rectTo.height / 2 - 50}px`;
+	  glassEffect.style.display = 'block';
+	  
+	  // Restart animation by cloning (forces replay)
+	  const newEffect = glassEffect.cloneNode(true);
+	  glassEffect.remove();
+	  document.body.appendChild(newEffect);
+
       movingClone.remove();
       emptySlot.textContent = boxText;
       emptySlot.dataset.word = boxText;
       emptySlot.classList.add('filled');
       box.remove();
+
+      // ✅ Check if game is complete
+      const allSlotsFilled = [...document.querySelectorAll('.slot')].every(s => s.dataset.word);
+      if (allSlotsFilled) {
+        document.getElementById('gameResultMessage').textContent = ' Well done! You are one step closer to Jannah, Inshallah! ✨';
+        document.getElementById('gameResultPopup').style.display = 'block';
+      }
     }, 400);
+
   };
 
   // 🍞 Toast Message Function
@@ -1173,6 +1360,156 @@ window.toggleGames = function () {
       setTimeout(() => toast.remove(), 300);
     }, 700);
   };
+  
+  document.getElementById('redoGameBtn').onclick = () => {
+  const backBtn = document.getElementById('navBackBtn');
+  if (backBtn) backBtn.remove();
+  gameContainer.dataset.initialized = "false";
+  toggleGames(); // re-initialize
 };
+
+
+
+document.getElementById('nextAyahBtn').onclick = () => {
+  document.getElementById('gameResultPopup').style.display = 'none';
+  currentAyah += 1;
+  window.location.href = `/memorization/surah_${currentSurah}_ayah_${currentAyah}.html`; // or your page format
+};
+
+};
+
+function startArrangeGame() {
+  document.getElementById("arrangeGameContainer").style.display = "block";
+  document.getElementById("verbMatchGame").style.display = "none";
+}
+
+function startVerbGame() {
+  document.getElementById("arrangeGameContainer").style.display = "none";
+  document.getElementById("verbMatchGame").style.display = "flex";
+
+  const verbOptions = document.getElementById("verbOptions");
+  const meaningOptions = document.getElementById("meaningOptions");
+
+  verbOptions.innerHTML = "";
+  meaningOptions.innerHTML = "";
+
+  const currentRank = currentSurah * 1000 + currentAyah;
+
+  const allPairs = Object.entries(VERB_DATA).filter(([_, data]) =>
+    typeof data.rank !== 'undefined' &&
+    !isNaN(Number(data.rank)) &&
+    Number(data.rank) <= currentRank
+  );
+
+  if (allPairs.length === 0) {
+    showToast("ℹ️ No verbs found for this Ayah yet.", "#555");
+    return;
+  }
+
+  const shuffle = arr => arr.sort(() => 0.5 - Math.random());
+
+  const selectedPairs = shuffle(allPairs).slice(0, 5); // ⬅️ only 10 pairs
+
+  let selectedVerb = null;
+  let selectedMeaning = null;
+
+  const verbs = shuffle(selectedPairs.map(([verb]) => verb));
+  const meanings = shuffle(selectedPairs.map(([_, data]) => data.meaning));
+
+  verbs.forEach(verb => {
+    const el = document.createElement("div");
+    el.className = "match-card";
+    el.textContent = verb;
+    el.dataset.verb = verb;
+    el.onclick = () => {
+      if (el.classList.contains("matched")) return;
+      document.querySelectorAll("#verbOptions .match-card").forEach(c => c.classList.remove("selected"));
+      el.classList.add("selected");
+      selectedVerb = el;
+      tryMatch();
+    };
+    verbOptions.appendChild(el);
+  });
+
+  meanings.forEach(meaning => {
+    const el = document.createElement("div");
+    el.className = "match-card";
+    el.textContent = meaning;
+    el.dataset.verb = selectedPairs.find(([verb, data]) => data.meaning === meaning)?.[0];
+    el.onclick = () => {
+      if (el.classList.contains("matched")) return;
+      document.querySelectorAll("#meaningOptions .match-card").forEach(c => c.classList.remove("selected"));
+      el.classList.add("selected");
+      selectedMeaning = el;
+      tryMatch();
+    };
+    meaningOptions.appendChild(el);
+  });
+
+  function tryMatch() {
+    if (!selectedVerb || !selectedMeaning) return;
+
+    const v = selectedVerb.dataset.verb;
+    const m = selectedMeaning.dataset.verb;
+
+    if (v === m) {
+      selectedVerb.classList.add("matched");
+      selectedMeaning.classList.add("matched");
+      selectedVerb.classList.remove("selected");
+      selectedMeaning.classList.remove("selected");
+      selectedVerb.style.background = "#d4edda";
+      selectedMeaning.style.background = "#d4edda";
+      selectedVerb.style.borderColor = "#28a745";
+      selectedMeaning.style.borderColor = "#28a745";
+      showToast("✅ Correct!");
+
+      selectedVerb = null;
+      selectedMeaning = null;
+
+      const allMatched = [...verbOptions.children].every(el => el.classList.contains("matched"));
+      if (allMatched) {
+        document.getElementById("gameResultMessage").textContent = "All matched! 🌟 You’re amazing!";
+        document.getElementById("gameResultPopup").style.display = "block";
+      }
+    } else {
+      selectedVerb.style.background = "#f8d7da";
+      selectedMeaning.style.background = "#f8d7da";
+      selectedVerb.style.borderColor = "#dc3545";
+      selectedMeaning.style.borderColor = "#dc3545";
+      showToast("❌ Try again");
+
+      setTimeout(() => {
+        selectedVerb.style.background = "";
+        selectedMeaning.style.background = "";
+        selectedVerb.style.borderColor = "";
+        selectedMeaning.style.borderColor = "";
+        selectedVerb.classList.remove("selected");
+        selectedMeaning.classList.remove("selected");
+        selectedVerb = null;
+        selectedMeaning = null;
+      }, 800);
+    }
+  }
+}
+
+function startArrangeGameFromCard() {
+  document.getElementById("gameSelector").style.display = "none";
+  document.getElementById("arrangeGameContainer").style.display = "block";
+  document.getElementById("verbMatchGame").style.display = "none";
+  currentGameScreen = "arrange";
+}
+
+function startVerbGameFromCard() {
+  document.getElementById("gameSelector").style.display = "none";
+  document.getElementById("arrangeGameContainer").style.display = "none";
+  document.getElementById("verbMatchGame").style.display = "flex";
+  currentGameScreen = "verb";
+  startVerbGame();
+}
+
+
+
+
+
 
 
