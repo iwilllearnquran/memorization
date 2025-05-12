@@ -644,7 +644,7 @@
     
 
 
-<div style="margin-top: 20px; text-align: center; font-size: 10px;">
+<div style="margin-top: 20px; text-align: center; font-size: 8px;">
     <div style="display: flex; justify-content: center; flex-wrap: wrap; row-gap: 10px; column-gap: 20px; margin-top: 12px;">
 
         <div style="display: flex; align-items: center; gap: 6px;">
@@ -681,19 +681,33 @@
         
           <div id="game-mode-content" style="display:none;">
     <!-- Game layout will be injected here via JS -->
+    
   </div>
 </div>
 
-<div id = "translation-section" class="section" style="text-align: center;"
-onclick="this.classList.toggle('active'); event.stopPropagation();">
+<div id="translation-section" class="section" style="text-align: center;" onclick="this.classList.toggle('active'); event.stopPropagation();">
+  <h2 class="practice-title" style="
+    display: inline-block;
+    padding: 8px 16px;
+    background: #0a4d68;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 12px;
+    font-family: 'Roboto', sans-serif;
+  ">
+    Translation
+  </h2>
 
   <div id="englishTranslation" class="ayah-english" style="text-align: center; display: block;">
     O you who have believed, do not invalidate your charities with reminders or injury as does one who spends his wealth [only] to be seen by the people and does not believe in Allah and the Last Day. His example is like that of a [large] smooth stone upon which is dust and is hit by a downpour that leaves it bare. They are unable [to keep] anything of what they have earned. And Allah does not guide the disbelieving people.
   </div>
-  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none; ">
+  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none;">
     مومنو! اپنے صدقات (وخیرات) احسان رکھنے اور ایذا دینے سے اس شخص کی طرح برباد نہ کردینا۔ جو لوگوں کو دکھاوے کے لئے مال خرچ کرتا ہے اور خدا اور روز آخرت پر ایمان نہیں رکھتا۔ تو اس (کے مال) کی مثال اس چٹان کی سی ہے جس پر تھوڑی سی مٹی پڑی ہو اور اس پر زور کا مینہ برس کر اسے صاف کر ڈالے۔ (اسی طرح) یہ (ریاکار) لوگ اپنے اعمال کا کچھ بھی صلہ حاصل نہیں کرسکیں گے۔ اور خدا ایسے ناشکروں کو ہدایت نہیں دیا کرتا
   </div>
 </div>
+
 
 
 
@@ -1168,8 +1182,8 @@ onclick="this.classList.toggle('active'); event.stopPropagation();">
 
 
 
-
- <script src="/memorization/script.js" defer></script> 
+<script src="/memorization/verb_data.js"></script>
+<script src="/memorization/script.js" defer></script> 
 <div class="ghost-scroll"></div>
 
 </body>

@@ -820,7 +820,7 @@
     
 
 
-<div style="margin-top: 20px; text-align: center; font-size: 10px;">
+<div style="margin-top: 20px; text-align: center; font-size: 8px;">
     <div style="display: flex; justify-content: center; flex-wrap: wrap; row-gap: 10px; column-gap: 20px; margin-top: 12px;">
 
         <div style="display: flex; align-items: center; gap: 6px;">
@@ -857,19 +857,33 @@
         
           <div id="game-mode-content" style="display:none;">
     <!-- Game layout will be injected here via JS -->
+    
   </div>
 </div>
 
-<div id = "translation-section" class="section" style="text-align: center;"
-onclick="this.classList.toggle('active'); event.stopPropagation();">
+<div id="translation-section" class="section" style="text-align: center;" onclick="this.classList.toggle('active'); event.stopPropagation();">
+  <h2 class="practice-title" style="
+    display: inline-block;
+    padding: 8px 16px;
+    background: #0a4d68;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 12px;
+    font-family: 'Roboto', sans-serif;
+  ">
+    Translation
+  </h2>
 
   <div id="englishTranslation" class="ayah-english" style="text-align: center; display: block;">
     Mankind was [of] one religion [before their deviation]; then Allah sent the prophets as bringers of good tidings and warners and sent down with them the Scripture in truth to judge between the people concerning that in which they differed. And none differed over the Scripture except those who were given it - after the clear proofs came to them - out of jealous animosity among themselves. And Allah guided those who believed to the truth concerning that over which they had differed, by His permission. And Allah guides whom He wills to a straight path.
   </div>
-  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none; ">
+  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none;">
     (پہلے تو سب) لوگوں کا ایک ہی مذہب تھا (لیکن وہ آپس میں اختلاف کرنے لگے) تو خدا نے (ان کی طرف) بشارت دینے والے اور ڈر سنانے والے پیغمبر بھیجے اور ان پر سچائی کے ساتھ کتابیں نازل کیں تاکہ جن امور میں لوگ اختلاف کرتے تھے ان کا ان میں فیصلہ کردے۔ اور اس میں اختلاف بھی انہیں لوگوں نے کیا جن کو کتاب دی گئی تھی باوجود یہ کہ ان کے پاس کھلے ہوئے احکام آچکے تھے (اور یہ اختلاف انہوں نے صرف) آپس کی ضد سے (کیا) تو جس امر حق میں وہ اختلاف کرتے تھے خدا نے اپنی مہربانی سے مومنوں کو اس کی راہ دکھا دی۔ اور خدا جس کو چاہتا ہے سیدھا رستہ دکھا دیتا ہے
   </div>
 </div>
+
 
 
 
@@ -1465,8 +1479,8 @@ onclick="this.classList.toggle('active'); event.stopPropagation();">
 
 
 
-
- <script src="/memorization/script.js" defer></script> 
+<script src="/memorization/verb_data.js"></script>
+<script src="/memorization/script.js" defer></script> 
 <div class="ghost-scroll"></div>
 
 </body>

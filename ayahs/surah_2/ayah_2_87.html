@@ -484,7 +484,7 @@
     
 
 
-<div style="margin-top: 20px; text-align: center; font-size: 10px;">
+<div style="margin-top: 20px; text-align: center; font-size: 8px;">
     <div style="display: flex; justify-content: center; flex-wrap: wrap; row-gap: 10px; column-gap: 20px; margin-top: 12px;">
 
         <div style="display: flex; align-items: center; gap: 6px;">
@@ -521,19 +521,33 @@
         
           <div id="game-mode-content" style="display:none;">
     <!-- Game layout will be injected here via JS -->
+    
   </div>
 </div>
 
-<div id = "translation-section" class="section" style="text-align: center;"
-onclick="this.classList.toggle('active'); event.stopPropagation();">
+<div id="translation-section" class="section" style="text-align: center;" onclick="this.classList.toggle('active'); event.stopPropagation();">
+  <h2 class="practice-title" style="
+    display: inline-block;
+    padding: 8px 16px;
+    background: #0a4d68;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 12px;
+    font-family: 'Roboto', sans-serif;
+  ">
+    Translation
+  </h2>
 
   <div id="englishTranslation" class="ayah-english" style="text-align: center; display: block;">
     And We did certainly give Moses the Torah and followed up after him with messengers. And We gave Jesus, the son of Mary, clear proofs and supported him with the Pure Spirit. But is it [not] that every time a messenger came to you, [O Children of Israel], with what your souls did not desire, you were arrogant? And a party [of messengers] you denied and another party you killed.
   </div>
-  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none; ">
+  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none;">
     اور ہم نے موسیٰ کو کتاب عنایت کی اور ان کے پیچھے یکے بعد دیگرے پیغمبر بھیجتے رہے اور عیسیٰ بن مریم کو کھلے نشانات بخشے اور روح القدس (یعنی جبرئیل) سے ان کو مدد دی۔تو جب کوئی پیغمبر تمہارے پاس ایسی باتیں لے کر آئے، جن کو تمہارا جی نہیں چاہتا تھا، تو تم سرکش ہو جاتے رہے، اور ایک گروہ (انبیاء) کو تو جھٹلاتے رہے اور ایک گروہ کو قتل کرتے رہے
   </div>
 </div>
+
 
 
 
@@ -898,8 +912,8 @@ onclick="this.classList.toggle('active'); event.stopPropagation();">
 
 
 
-
- <script src="/memorization/script.js" defer></script> 
+<script src="/memorization/verb_data.js"></script>
+<script src="/memorization/script.js" defer></script> 
 <div class="ghost-scroll"></div>
 
 </body>

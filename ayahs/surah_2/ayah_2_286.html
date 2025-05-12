@@ -820,7 +820,7 @@
     
 
 
-<div style="margin-top: 20px; text-align: center; font-size: 10px;">
+<div style="margin-top: 20px; text-align: center; font-size: 8px;">
     <div style="display: flex; justify-content: center; flex-wrap: wrap; row-gap: 10px; column-gap: 20px; margin-top: 12px;">
 
         <div style="display: flex; align-items: center; gap: 6px;">
@@ -857,19 +857,33 @@
         
           <div id="game-mode-content" style="display:none;">
     <!-- Game layout will be injected here via JS -->
+    
   </div>
 </div>
 
-<div id = "translation-section" class="section" style="text-align: center;"
-onclick="this.classList.toggle('active'); event.stopPropagation();">
+<div id="translation-section" class="section" style="text-align: center;" onclick="this.classList.toggle('active'); event.stopPropagation();">
+  <h2 class="practice-title" style="
+    display: inline-block;
+    padding: 8px 16px;
+    background: #0a4d68;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 12px;
+    font-family: 'Roboto', sans-serif;
+  ">
+    Translation
+  </h2>
 
   <div id="englishTranslation" class="ayah-english" style="text-align: center; display: block;">
     Allah does not charge a soul except [with that within] its capacity. It will have [the consequence of] what [good] it has gained, and it will bear [the consequence of] what [evil] it has earned. &quot;Our Lord, do not impose blame upon us if we have forgotten or erred. Our Lord, and lay not upon us a burden like that which You laid upon those before us. Our Lord, and burden us not with that which we have no ability to bear. And pardon us; and forgive us; and have mercy upon us. You are our protector, so give us victory over the disbelieving people.&quot;
   </div>
-  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none; ">
+  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none;">
     خدا کسی شخص کو اس کی طاقت سے زیادہ تکلیف نہیں دیتا۔ اچھے کام کرے گا تو اس کو ان کا فائدہ ملے گا برے کرے گا تو اسے ان کا نقصان پہنچے گا۔ اے پروردگار اگر ہم سے بھول یا چوک ہوگئی ہو تو ہم سے مؤاخذہ نہ کیجیو۔ اے پروردگار ہم پر ایسا بوجھ نہ ڈالیو جیسا تو نے ہم سے پہلے لوگوں پر ڈالا تھا۔ اے پروردگار جتنا بوجھ اٹھانے کی ہم میں طاقت نہیں اتنا ہمارے سر پر نہ رکھیو۔ اور (اے پروردگار) ہمارے گناہوں سے درگزر کر اور ہمیں بخش دے۔ اور ہم پر رحم فرما۔ تو ہی ہمارا مالک ہے اور ہم کو کافروں پر غالب فرما
   </div>
 </div>
+
 
 
 
@@ -1465,8 +1479,8 @@ onclick="this.classList.toggle('active'); event.stopPropagation();">
 
 
 
-
- <script src="/memorization/script.js" defer></script> 
+<script src="/memorization/verb_data.js"></script>
+<script src="/memorization/script.js" defer></script> 
 <div class="ghost-scroll"></div>
 
 </body>

@@ -1108,7 +1108,7 @@
     
 
 
-<div style="margin-top: 20px; text-align: center; font-size: 10px;">
+<div style="margin-top: 20px; text-align: center; font-size: 8px;">
     <div style="display: flex; justify-content: center; flex-wrap: wrap; row-gap: 10px; column-gap: 20px; margin-top: 12px;">
 
         <div style="display: flex; align-items: center; gap: 6px;">
@@ -1145,19 +1145,33 @@
         
           <div id="game-mode-content" style="display:none;">
     <!-- Game layout will be injected here via JS -->
+    
   </div>
 </div>
 
-<div id = "translation-section" class="section" style="text-align: center;"
-onclick="this.classList.toggle('active'); event.stopPropagation();">
+<div id="translation-section" class="section" style="text-align: center;" onclick="this.classList.toggle('active'); event.stopPropagation();">
+  <h2 class="practice-title" style="
+    display: inline-block;
+    padding: 8px 16px;
+    background: #0a4d68;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 12px;
+    font-family: 'Roboto', sans-serif;
+  ">
+    Translation
+  </h2>
 
   <div id="englishTranslation" class="ayah-english" style="text-align: center; display: block;">
     Or [consider such an example] as the one who passed by a township which had fallen into ruin. He said, &quot;How will Allah bring this to life after its death?&quot; So Allah caused him to die for a hundred years; then He revived him. He said, &quot;How long have you remained?&quot; The man said, &quot;I have remained a day or part of a day.&quot; He said, &quot;Rather, you have remained one hundred years. Look at your food and your drink; it has not changed with time. And look at your donkey; and We will make you a sign for the people. And look at the bones [of this donkey] - how We raise them and then We cover them with flesh.&quot; And when it became clear to him, he said, &quot;I know that Allah is over all things competent.&quot;
   </div>
-  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none; ">
+  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none;">
     یا اسی طرح اس شخص کو (نہیں دیکھا) جسے ایک گاؤں میں جو اپنی چھتوں پر گرا پڑا تھا اتفاق گزر ہوا۔ تو اس نے کہا کہ خدا اس (کے باشندوں) کو مرنے کے بعد کیونکر زندہ کرے گا۔ تو خدا نے اس کی روح قبض کرلی (اور) سو برس تک (اس کو مردہ رکھا) پھر اس کو جلا اٹھایا اور پوچھا تم کتنا عرصہ (مرے) رہے ہو اس نے جواب دیا کہ ایک دن یا اس سے بھی کم۔ خدا نے فرمایا (نہیں) بلکہ سو برس (مرے) رہے ہو۔ اور اپنے کھانے پینے کی چیزوں کو دیکھو کہ (اتنی مدت میں مطلق) سڑی بسی نہیں اور اپنے گدھے کو بھی دیکھو (جو مرا پڑا ہے) غرض (ان باتوں سے) یہ ہے کہ ہم تم کو لوگوں کے لئے (اپنی قدرت کی) نشانی بنائیں اور (ہاں گدھے) کی ہڈیوں کو دیکھو کہ ہم ان کو کیونکر جوڑے دیتے اور ان پر (کس طرح) گوشت پوست چڑھا دیتے ہیں۔ جب یہ واقعات اس کے مشاہدے میں آئے تو بول اٹھا کہ میں یقین کرتا ہوں کہ خدا ہر چیز پر قادر ہے
   </div>
 </div>
+
 
 
 
@@ -1951,8 +1965,8 @@ onclick="this.classList.toggle('active'); event.stopPropagation();">
 
 
 
-
- <script src="/memorization/script.js" defer></script> 
+<script src="/memorization/verb_data.js"></script>
+<script src="/memorization/script.js" defer></script> 
 <div class="ghost-scroll"></div>
 
 </body>

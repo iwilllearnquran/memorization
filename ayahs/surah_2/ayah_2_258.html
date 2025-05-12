@@ -724,7 +724,7 @@
     
 
 
-<div style="margin-top: 20px; text-align: center; font-size: 10px;">
+<div style="margin-top: 20px; text-align: center; font-size: 8px;">
     <div style="display: flex; justify-content: center; flex-wrap: wrap; row-gap: 10px; column-gap: 20px; margin-top: 12px;">
 
         <div style="display: flex; align-items: center; gap: 6px;">
@@ -761,19 +761,33 @@
         
           <div id="game-mode-content" style="display:none;">
     <!-- Game layout will be injected here via JS -->
+    
   </div>
 </div>
 
-<div id = "translation-section" class="section" style="text-align: center;"
-onclick="this.classList.toggle('active'); event.stopPropagation();">
+<div id="translation-section" class="section" style="text-align: center;" onclick="this.classList.toggle('active'); event.stopPropagation();">
+  <h2 class="practice-title" style="
+    display: inline-block;
+    padding: 8px 16px;
+    background: #0a4d68;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 12px;
+    font-family: 'Roboto', sans-serif;
+  ">
+    Translation
+  </h2>
 
   <div id="englishTranslation" class="ayah-english" style="text-align: center; display: block;">
     Have you not considered the one who argued with Abraham about his Lord [merely] because Allah had given him kingship? When Abraham said, &quot;My Lord is the one who gives life and causes death,&quot; he said, &quot;I give life and cause death.&quot; Abraham said, &quot;Indeed, Allah brings up the sun from the east, so bring it up from the west.&quot; So the disbeliever was overwhelmed [by astonishment], and Allah does not guide the wrongdoing people.
   </div>
-  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none; ">
+  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none;">
     بھلا تم نے اس شخص کو نہیں دیکھا جو اس (غرور کے) سبب سے کہ خدا نے اس کو سلطنت بخشی تھی ابراہیم سے پروردگار کے بارے میں جھگڑنے لگا۔ جب ابراہیم نے کہا میرا پروردگار تو وہ ہے جو جلاتا اور مارتا ہے۔ وہ بولا کہ جلا اور مار تو میں بھی سکتا ہوں۔ ابراہیم نے کہا کہ خدا تو سورج کو مشرق سے نکالتا ہے آپ اسے مغرب سے نکال دیجیئے (یہ سن کر) کافر حیران رہ گیا اور خدا بےانصافوں کو ہدایت نہیں دیا کرتا
   </div>
 </div>
+
 
 
 
@@ -1303,8 +1317,8 @@ onclick="this.classList.toggle('active'); event.stopPropagation();">
 
 
 
-
- <script src="/memorization/script.js" defer></script> 
+<script src="/memorization/verb_data.js"></script>
+<script src="/memorization/script.js" defer></script> 
 <div class="ghost-scroll"></div>
 
 </body>

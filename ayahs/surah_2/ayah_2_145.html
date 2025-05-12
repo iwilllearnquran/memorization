@@ -548,7 +548,7 @@
     
 
 
-<div style="margin-top: 20px; text-align: center; font-size: 10px;">
+<div style="margin-top: 20px; text-align: center; font-size: 8px;">
     <div style="display: flex; justify-content: center; flex-wrap: wrap; row-gap: 10px; column-gap: 20px; margin-top: 12px;">
 
         <div style="display: flex; align-items: center; gap: 6px;">
@@ -585,19 +585,33 @@
         
           <div id="game-mode-content" style="display:none;">
     <!-- Game layout will be injected here via JS -->
+    
   </div>
 </div>
 
-<div id = "translation-section" class="section" style="text-align: center;"
-onclick="this.classList.toggle('active'); event.stopPropagation();">
+<div id="translation-section" class="section" style="text-align: center;" onclick="this.classList.toggle('active'); event.stopPropagation();">
+  <h2 class="practice-title" style="
+    display: inline-block;
+    padding: 8px 16px;
+    background: #0a4d68;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 12px;
+    font-family: 'Roboto', sans-serif;
+  ">
+    Translation
+  </h2>
 
   <div id="englishTranslation" class="ayah-english" style="text-align: center; display: block;">
     And if you brought to those who were given the Scripture every sign, they would not follow your qiblah. Nor will you be a follower of their qiblah. Nor would they be followers of one another&#x27;s qiblah. So if you were to follow their desires after what has come to you of knowledge, indeed, you would then be among the wrongdoers.
   </div>
-  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none; ">
+  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none;">
     اور اگر تم ان اہلِ کتاب کے پاس تمام نشانیاں بھی لے کر آؤ، تو بھی یہ تمہارے قبلے کی پیروی نہ کریں۔ اور تم بھی ان کے قبلے کی پیروی کرنے والے نہیں ہو۔ اور ان میں سے بھی بعض بعض کے قبلے کے پیرو نہیں۔ اور اگر تم باوجود اس کے کہ تمہارے پاس دانش (یعنی وحئ خدا) آ چکی ہے، ان کی خواہشوں کے پیچھے چلو گے تو ظالموں میں (داخل) ہو جاؤ گے
   </div>
 </div>
+
 
 
 
@@ -1006,8 +1020,8 @@ onclick="this.classList.toggle('active'); event.stopPropagation();">
 
 
 
-
- <script src="/memorization/script.js" defer></script> 
+<script src="/memorization/verb_data.js"></script>
+<script src="/memorization/script.js" defer></script> 
 <div class="ghost-scroll"></div>
 
 </body>
