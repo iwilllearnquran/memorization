@@ -683,7 +683,10 @@ document.addEventListener('click', e => {
     btn.classList.remove('active');
   }
 });
-   
+
+document.getElementById('googleLoginBtn').onclick = loginWithGoogle;
+
+  
    
 });
 
@@ -1523,7 +1526,6 @@ function startVerbGameFromCard() {
   currentGameScreen = "verb";
   startVerbGame();
 }
-
 
 
 

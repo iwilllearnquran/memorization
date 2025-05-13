@@ -19,8 +19,21 @@
 
 <title>Ayah Memorization</title>
 
+<!-- ✅ Firebase Compat SDKs for static HTML -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js"></script>
+
 </head>
 <body>
+
+
+
+
+
+
+
 
 <div class="overlay" id="overlay" onclick="hidePopup()"></div>
 <div class="popup-content" id="popupContent"></div>
@@ -31,7 +44,7 @@
 <audio id="audio-url-en" data-src="https://cdn.islamic.network/quran/audio/192/en.walk/9.mp3" preload="metadata"></audio>
 <audio id="audio-url-ur" data-src="https://cdn.islamic.network/quran/audio/64/ur.khan/9.mp3" preload="metadata"></audio>
 
-
+<button id="googleLoginBtn">Login with Google2</button>
 
 <div id= "main-grammar-section" class="section">
 <div id="learning-mode-content" style="text-align: center; direction: rtl;">
@@ -343,6 +356,34 @@
 
 
 
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyA8K3idA6lR9sfA_fY23H5f4jHeugzSLm4",
+    authDomain: "quranquest-370c4.firebaseapp.com",
+    projectId: "quranquest-370c4",
+    storageBucket: "quranquest-370c4.appspot.com",
+    messagingSenderId: "167269428719",
+    appId: "1:167269428719:web:4dc5e9dfb91b5805af5a1a",
+    measurementId: "G-D7KR30RKFP"
+  };
+
+  // Make sure firebase is defined (from compat script)
+  firebase.initializeApp(firebaseConfig);
+
+  // Expose login function early
+window.loginWithGoogle = function () {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  firebase.auth().signInWithPopup(provider)
+    .then(result => {
+      const user = result.user;
+      console.log("✅ Logged in as:", user.displayName);
+    })
+    .catch(error => {
+      console.error("❌ Login error:", error);
+    });
+};
+
+</script>
 
 
 <script src="/memorization/verb_data.js"></script>
