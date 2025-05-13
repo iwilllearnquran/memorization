@@ -1369,12 +1369,29 @@ gameContainer.innerHTML = `
 };
 
 
-
 document.getElementById('nextAyahBtn').onclick = () => {
   document.getElementById('gameResultPopup').style.display = 'none';
-  currentAyah += 1;
-  window.location.href = `/memorization/surah_${currentSurah}_ayah_${currentAyah}.html`; // or your page format
+
+  const surahSelect = parent.document.getElementById('surahSelect');
+  const ayahSelect  = parent.document.getElementById('ayahSelect');
+  const surahIndex  = surahSelect.selectedIndex;
+  const currentAyah = +ayahSelect.value;
+  const maxAyahs    = +surahSelect.selectedOptions[0].dataset.ayahCount;
+
+  if (currentAyah < maxAyahs) {
+    ayahSelect.value = currentAyah + 1;
+    parent.loadAyah();
+  } else if (surahIndex < surahSelect.options.length - 1) {
+    surahSelect.selectedIndex = surahIndex + 1;
+    parent.updateAyahOptions(() => {
+      ayahSelect.value = 1;
+      parent.loadAyah();
+    });
+  } else {
+    alert("✅ You've reached the last Ayah.");
+  }
 };
+
 
 };
 
