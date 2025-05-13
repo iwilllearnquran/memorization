@@ -558,8 +558,8 @@ window.addEventListener('DOMContentLoaded', () => {
   floatingBtn   = document.getElementById('floatingPlayer');
   playToggleBtn = document.getElementById('playToggleBtn');
   const translationDropdown = document.getElementById('translationDropdown');
-  const translationMenu     = translationDropdown.querySelector('.dropdown-menu-custom');
-  const translationButton   = translationDropdown.querySelector('.dropdown-button');
+  //const translationMenu     = translationDropdown.querySelector('.dropdown-menu-custom');
+  //const translationButton   = translationDropdown.querySelector('.dropdown-button');
 
   // 1) Grab the two icons by their real IDs/selectors
     navPlayIcon = document.getElementById('navPlayIcon');
