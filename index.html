@@ -11,8 +11,10 @@
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
   <meta name="apple-mobile-web-app-title" content="Quran Explorer" />
   <title>📖 Understand Quran Better</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
   <style>
     body {
       margin: 0;
@@ -99,6 +101,7 @@
   <iframe id="ayahViewer"></iframe>
 </div>
 
+<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script>
@@ -128,6 +131,7 @@
   auth.onAuthStateChanged(updateAuthUI);
 </script>
 
+<!-- Load Surah Cards -->
 <script>
   const container = document.getElementById('surahContainer');
   const iframeBox = document.getElementById('ayahViewerBox');
@@ -146,13 +150,14 @@
         `;
         card.onclick = () => {
           iframeBox.style.display = 'block';
-          iframe.src = `output/surah_${surah.id}/ayah_${surah.id}_1.html`;
+          iframe.src = \`output/surah_\${surah.id}/ayah_\${surah.id}_1.html\`;
         };
         container.appendChild(card);
       });
     });
 </script>
 
+<!-- PWA Support -->
 <script>
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('service-worker.js')
