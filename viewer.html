@@ -142,34 +142,40 @@
           surahSelect.appendChild(opt);
         });
 
-        const urlSurah = getURLParam('surah');
-        const urlAyah = getURLParam('ayah');
-        const lastRead = JSON.parse(localStorage.getItem('lastRead'));
+const urlSurah = getURLParam('surah');
+const urlAyah = getURLParam('ayah');
+const lastRead = JSON.parse(localStorage.getItem('lastRead'));
 
-        if (urlSurah && urlAyah) {
-          surahSelect.value = urlSurah;
-          updateAyahOptions(() => {
-            ayahSelect.value = urlAyah;
-            loadAyah();
-          });
-        } else if (lastRead) {
-          if (confirm(`📌 Resume from Surah ${lastRead.surah}, Ayah ${lastRead.ayah}?`)) {
-            surahSelect.value = lastRead.surah;
-            updateAyahOptions(() => {
-              ayahSelect.value = lastRead.ayah;
-              loadAyah();
-            });
-            return;
-          } else {
-            updateAyahOptions(loadAyah);
-          }
-        } else {
-          updateAyahOptions(() => {
-            ayahSelect.value = 1;
-            loadAyah();
-          });
-        }
-      });
+if (urlSurah && urlAyah) {
+  // Direct URL access — no prompt
+  surahSelect.value = urlSurah;
+  updateAyahOptions(() => {
+    ayahSelect.value = urlAyah;
+    loadAyah();
+  });
+} else if (!sessionStorage.getItem('resumePrompted') && lastRead) {
+  // First time in session — ask to resume
+  if (confirm(`📌 Resume from Surah ${lastRead.surah}, Ayah ${lastRead.ayah}?`)) {
+    surahSelect.value = lastRead.surah;
+    updateAyahOptions(() => {
+      ayahSelect.value = lastRead.ayah;
+      loadAyah();
+    });
+  } else {
+    updateAyahOptions(() => {
+      ayahSelect.value = 1;
+      loadAyah();
+    });
+  }
+  sessionStorage.setItem('resumePrompted', 'true');
+} else {
+  // Already prompted once in session or no history
+  updateAyahOptions(() => {
+    ayahSelect.value = 1;
+    loadAyah();
+  });
+}
+
 
     function updateAyahOptions(cb) {
       const count = +surahSelect.selectedOptions[0].dataset.ayahCount;
