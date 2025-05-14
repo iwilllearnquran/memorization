@@ -1,9 +1,10 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>📖 Quran Viewer</title>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <style>
     html, body {
       height: 100%; margin: 0; padding: 0;
@@ -14,21 +15,35 @@
     .navbar {
       background-color: #0a4d68;
       color: white;
-      padding: 20px;
-      text-align: center;
-      font-size: 20px;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       font-weight: bold;
       border-bottom: 4px solid #2ca7d8;
     }
-    .form-group {
+    .navbar-left, .navbar-center, .navbar-right {
       display: flex;
-      gap: 10px;
+      align-items: center;
+    }
+    .navbar-center {
+      flex: 1;
       justify-content: center;
-      margin-top: 10px;
+      gap: 10px;
     }
     select {
-      padding: 10px; font-size: 16px;
+      padding: 8px; font-size: 14px;
       border-radius: 5px; border: 1px solid #ccc;
+    }
+    .ajr-points {
+      background: white; color: #0a4d68;
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 14px;
+      margin-right: 10px;
+    }
+    .streak-info {
+      font-size: 14px;
     }
     .viewer { flex: 1; position: relative; overflow: hidden; }
     iframe {
@@ -46,10 +61,17 @@
 </head>
 <body>
   <div class="wrapper">
-    <div class="navbar">📖 Quran Viewer</div>
-    <div class="form-group">
-      <select id="surahSelect"></select>
-      <select id="ayahSelect"></select>
+    <div class="navbar">
+      <div class="navbar-left">
+        <div class="ajr-points">Ajr Points: <span id="ajrPoints">0%</span></div>
+      </div>
+      <div class="navbar-center">
+        <select id="surahSelect"></select>
+        <select id="ayahSelect"></select>
+      </div>
+      <div class="navbar-right">
+        <div class="streak-info" id="streakDisplay">🔥 Streak: 0 days</div>
+      </div>
     </div>
     <div class="viewer">
       <div class="side-arrow prev" id="prevArrow" onclick="loadPrevAyah()">←</div>
@@ -57,6 +79,42 @@
       <iframe id="ayahViewer"></iframe>
     </div>
   </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyA8K3idA6lR9sfA_fY23H5f4jHeugzSLm4",
+      authDomain: "quranquest-370c4.firebaseapp.com",
+      projectId: "quranquest-370c4",
+      storageBucket: "quranquest-370c4.appspot.com",
+      messagingSenderId: "167269428719",
+      appId: "1:167269428719:web:4dc5e9dfb91b5805af5a1a",
+      measurementId: "G-D7KR30RKFP"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        document.getElementById('streakDisplay').textContent = `🔥 Streak: ${getStreak()} days`;
+      }
+    });
+
+    function getStreak() {
+      const last = localStorage.getItem('lastLoginDay');
+      const today = new Date().toISOString().split('T')[0];
+      let streak = parseInt(localStorage.getItem('streak') || '0');
+      if (last !== today) {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yStr = yesterday.toISOString().split('T')[0];
+        if (last === yStr) streak++;
+        else streak = 1;
+        localStorage.setItem('streak', streak);
+        localStorage.setItem('lastLoginDay', today);
+      }
+      return streak;
+    }
+  </script>
 
   <script>
     const surahSelect = document.getElementById('surahSelect');
@@ -136,6 +194,7 @@
       nextArrow.style.display = 'block';
       prevArrow.style.display = 'block';
       saveLastRead(s, a);
+      document.getElementById('ajrPoints').textContent = `${Math.floor((a / +surahSelect.selectedOptions[0].dataset.ayahCount) * 100)}%`;
     }
 
     function loadNextAyah() {
