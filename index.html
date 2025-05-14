@@ -1,264 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="manifest" href="manifest.json">
-  <meta charset="UTF-8">
-  <meta name="theme-color" content="#0a4d68">
-  <title>📖 Understand Quran Better</title>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    /* 1) Make html/body fill the screen and remove default margins */
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f9f9f9;
-    }
-
-    /* 2) Flex‐column container fills the screen */
-    .wrapper {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
-
-    /* 3) Sticky navbar at the top */
-    .navbar {
-      position: sticky;
-      top: 0;
-      background-color: #0a4d68;
-      color: white;
-      padding: 20px;
-      text-align: center;
-      font-size: 24px;
-      font-weight: bold;
-      border-bottom: 4px solid #2ca7d8;
-      z-index: 100;
-    }
-
-    .navbar .form-group {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-      margin-top: 20px;
-    }
-
-    select {
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      width: 120px;
-    }
-
-    /* 4) Viewer area takes remaining space */
-    .viewer {
-      flex: 1;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* 5) iframe fills its container exactly */
-    .viewer iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: block;
-    }
-
-    /* 6) Side arrows positioned inside viewer */
-    .side-arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background-color: white;
-      color: #0a4d68;
-      border: 2px solid #0a4d68;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      font-size: 20px;
-      text-align: center;
-      line-height: 36px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      cursor: pointer;
-      display: none;
-      z-index: 10;
-      transition: background 0.3s ease;
-    }
-
-    .side-arrow:hover {
-      background-color: #e3f2f9;
-    }
-
-    .side-arrow.next {
-      right: 10px;
-    }
-
-    .side-arrow.prev {
-      left: 10px;
-    }
-
-    /* 7) Responsive tweaks */
-    @media (max-width: 600px) {
-      .navbar {
-        font-size: 20px;
-        padding: 16px;
-      }
-      select {
-        min-width: 80px;
-        font-size: 14px;
-        padding: 6px 8px;
-      }
-      .side-arrow {
-        width: 36px;
-        height: 36px;
-        font-size: 18px;
-        line-height: 34px;
-      }
-    }
-  </style>
-
+  <meta name="theme-color" content="#0a4d68" />
+  <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="shortcut icon" href="favicon.ico" />
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
   <meta name="apple-mobile-web-app-title" content="Quran Explorer" />
+  <title>📖 Understand Quran Better</title>
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9f9f9;
+      color: #0a4d68;
+    }
+    .navbar {
+      background-color: #0a4d68;
+      color: white;
+      padding: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      border-bottom: 4px solid #2ca7d8;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .navbar-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .auth-btn {
+      background: white;
+      color: #0a4d68;
+      border: none;
+      padding: 8px 14px;
+      font-size: 14px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 20px auto;
+      padding: 0 15px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+    }
+    .surah-card {
+      background: white;
+      padding: 16px;
+      border-radius: 12px;
+      border: 3px solid rgba(10, 77, 104, 0.2);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.3s;
+    }
+    .surah-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+      border-color: rgba(10, 77, 104, 0.35);
+    }
+    .surah-number { font-size: 14px; color: #999; }
+    .surah-english { font-size: 18px; font-weight: bold; margin-top: 8px; }
+    .surah-arabic { font-size: 22px; text-align: right; margin-top: 6px; color: #222; }
+    .ayah-count { font-size: 13px; color: #666; margin-top: 4px; }
+    .viewer {
+      max-width: 1000px;
+      margin: 30px auto;
+      height: 80vh;
+      border: 2px solid #0a4d68;
+      border-radius: 8px;
+      overflow: hidden;
+      display: none;
+    }
+    .viewer iframe {
+      width: 100%; height: 100%; border: none;
+    }
+  </style>
 </head>
 <body>
 
-  <div class="wrapper">
-    <div class="navbar form-group">
-        <select id="surahSelect"></select>
-        <select id="ayahSelect"></select>
-    </div>
-
-    <div class="viewer">
-      <div class="side-arrow prev" id="prevArrow" onclick="loadPrevAyah()">←</div>
-      <div class="side-arrow next" id="nextArrow" onclick="loadNextAyah()">→</div>
-      <iframe id="ayahViewer"></iframe>
-    </div>
+<div class="navbar">
+  <div class="navbar-inner">
+    <div>🕌 Explore Surahs</div>
+    <button id="authBtn" class="auth-btn">Login</button>
   </div>
+</div>
 
-  <script>
-    const surahSelect = document.getElementById('surahSelect');
-    const ayahSelect  = document.getElementById('ayahSelect');
-    const ayahViewer  = document.getElementById('ayahViewer');
-    const nextArrow   = document.getElementById('nextArrow');
-    const prevArrow   = document.getElementById('prevArrow');
+<div class="container" id="surahContainer"></div>
+<div class="viewer" id="ayahViewerBox">
+  <iframe id="ayahViewer"></iframe>
+</div>
 
-    let surahData = [];
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyA8K3idA6lR9sfA_fY23H5f4jHeugzSLm4",
+    authDomain: "quranquest-370c4.firebaseapp.com",
+    projectId: "quranquest-370c4",
+    storageBucket: "quranquest-370c4.appspot.com",
+    messagingSenderId: "167269428719",
+    appId: "1:167269428719:web:4dc5e9dfb91b5805af5a1a"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const authBtn = document.getElementById('authBtn');
+  function updateAuthUI(user) {
+    authBtn.textContent = user ? 'Logout' : 'Login';
+  }
+  authBtn.onclick = () => {
+    const user = auth.currentUser;
+    if (user) {
+      auth.signOut();
+    } else {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider).catch(console.error);
+    }
+  }
+  auth.onAuthStateChanged(updateAuthUI);
+</script>
 
-    fetch('https://api.quran.com/api/v4/chapters')
-      .then(res => res.json())
-      .then(data => {
-        surahData = data.chapters;
-        data.chapters.forEach(ch => {
-          const opt = document.createElement('option');
-          opt.value = ch.id;
-          opt.textContent = `${ch.id}. ${ch.name_simple} (${ch.name_arabic})`;
-          opt.setAttribute('data-ayah-count', ch.verses_count);
-          surahSelect.appendChild(opt);
-        });
-
-        const lastRead = JSON.parse(localStorage.getItem('lastRead'));
-        if (lastRead) {
-          if (confirm(`📌 Resume from Surah ${lastRead.surah}, Ayah ${lastRead.ayah}?`)) {
-            surahSelect.value = lastRead.surah;
-            updateAyahOptions(() => {
-              ayahSelect.value = lastRead.ayah;
-              loadAyah();
-            });
-            return;
-          }
-        }
-        updateAyahOptions(loadAyah);
+<script>
+  const container = document.getElementById('surahContainer');
+  const iframeBox = document.getElementById('ayahViewerBox');
+  const iframe = document.getElementById('ayahViewer');
+  fetch("https://api.quran.com/api/v4/chapters")
+    .then(res => res.json())
+    .then(data => {
+      data.chapters.forEach(surah => {
+        const card = document.createElement('div');
+        card.className = "surah-card";
+        card.innerHTML = `
+          <div class="surah-number">Surah ${surah.id}</div>
+          <div class="surah-english">${surah.name_simple}</div>
+          <div class="surah-arabic">${surah.name_arabic}</div>
+          <div class="ayah-count">${surah.verses_count} Ayahs</div>
+        `;
+        card.onclick = () => {
+          iframeBox.style.display = 'block';
+          iframe.src = `output/surah_${surah.id}/ayah_${surah.id}_1.html`;
+        };
+        container.appendChild(card);
       });
-
-    function updateAyahOptions(cb) {
-      const count = +surahSelect.selectedOptions[0].dataset.ayahCount;
-      ayahSelect.innerHTML = '';
-      for (let i = 1; i <= count; i++) {
-        const opt = document.createElement('option');
-        opt.value = i;
-        opt.textContent = `Ayah ${i}`;
-        ayahSelect.appendChild(opt);
-      }
-      if (cb) cb();
-    }
-
-    function saveLastRead(s, a) {
-      localStorage.setItem('lastRead', JSON.stringify({ surah: s, ayah: a }));
-    }
-
-    function loadAyah() {
-      const s = surahSelect.value, a = ayahSelect.value;
-      ayahViewer.src = `ayahs/surah_${s}/ayah_${s}_${a}.html`;
-      ayahViewer.style.display = 'block';
-      nextArrow.style.display = 'block';
-      prevArrow.style.display = 'block';
-      saveLastRead(s, a);
-    }
-
-    function loadNextAyah() {
-      let curr = +ayahSelect.value;
-      const max  = +surahSelect.selectedOptions[0].dataset.ayahCount;
-      if (curr < max) {
-        ayahSelect.value = curr + 1;
-        loadAyah();
-      } else if (surahSelect.selectedIndex < surahSelect.options.length - 1) {
-        surahSelect.selectedIndex++;
-        updateAyahOptions(() => {
-          ayahSelect.value = 1;
-          loadAyah();
-        });
-      } else {
-        alert("✅ You've reached the last ayah.");
-      }
-    }
-
-    function loadPrevAyah() {
-      let curr = +ayahSelect.value;
-      if (curr > 1) {
-        ayahSelect.value = curr - 1;
-        loadAyah();
-      } else if (surahSelect.selectedIndex > 0) {
-        surahSelect.selectedIndex--;
-        updateAyahOptions(() => {
-          const newCount = +surahSelect.selectedOptions[0].dataset.ayahCount;
-          ayahSelect.value = newCount;
-          loadAyah();
-        });
-      } else {
-        alert("📖 This is the very first ayah.");
-      }
-    }
-
-    surahSelect.addEventListener('change', () => updateAyahOptions(loadAyah));
-    ayahSelect.addEventListener('change', loadAyah);
-
-    // Swipe support
-    let startX = null;
-    document.addEventListener('touchstart', e => startX = e.changedTouches[0].screenX);
-    document.addEventListener('touchend', e => {
-      const dx = e.changedTouches[0].screenX - startX;
-      if (Math.abs(dx) > 60) {
-        dx < 0 ? loadNextAyah() : loadPrevAyah();
-      }
-      startX = null;
     });
-  </script>
+</script>
 
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(() => console.log('✅ Service Worker registered'))
-        .catch(err => console.error('Service Worker registration failed:', err));
-    }
-  </script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('✅ Service Worker registered'))
+      .catch(err => console.error('Service Worker registration failed:', err));
+  }
+</script>
 
 </body>
 </html>
