@@ -1499,8 +1499,8 @@ function startVerbGame() {
       showToast("❌ Try again");
 
       setTimeout(() => {
-        selectedVerb.style.background = "";
-        selectedMeaning.style.background = "";
+        //selectedVerb.style.background = "";
+        //selectedMeaning.style.background = "";
         selectedVerb.style.borderColor = "";
         selectedMeaning.style.borderColor = "";
         selectedVerb.classList.remove("selected");

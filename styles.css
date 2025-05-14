@@ -13,7 +13,7 @@
   Global layout
 ───────────────────────────────────────────────────────────────────────────*/
 body {
-  font-family: Arial, sans-serif;
+  font-family: Arial, sans-serif; 
   margin: 0;
   padding: 0;
   overflow-x: hidden;  
@@ -29,8 +29,25 @@ html, body {
 
 html { height: auto; }
 
-body {
-  background: linear-gradient(to bottom, #d7e8ee 0%, #d7e8ee 40%, #fefefe 100%);
+
+
+*:not(.material-icons):not(.material-icons-outlined):not([class^="material-icons"]):not(.grammar-info):not(.grammar-info *) {
+  font-family: 'Roboto', 'CustomArabic', sans-serif !important;
+}
+
+html, body {
+  font-family: 'Roboto', 'CustomArabic', sans-serif !important;
+}
+
+/*───────────────────────────────────────────────────────────────────────────
+  GRAMMAR INFO
+───────────────────────────────────────────────────────────────────────────*/
+
+.grammar-info {
+  font-size: 8px;
+  font-family: Arial, sans-serif !important;
+  text-align: center;
+  margin-top: 20px;
 }
 
 
@@ -251,7 +268,7 @@ input:checked + .slider:before {
 .metadata {
   display: block;
   font-size: 11px;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Roboto', sans-serif;
   color: gray;
   line-height: 1.8;
   margin-top: 2px;
@@ -362,12 +379,12 @@ input:checked + .slider:before {
 
 @font-face {
   font-family: 'CustomArabic';
-  src: url('/memorization/PDMS_SALEEM_QURANFONTQESHIP_0.ttf') format('truetype');
+  src: url('/PDMS_SALEEM_QURANFONTQESHIP_0.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Roboto';
-  src: url('/memorization/Roboto-SemiBold.ttf') format('truetype');
+  src: url('/Gilroy-Medium.ttf') format('truetype');
 }
 
 .ayah-arabic {
