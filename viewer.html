@@ -57,28 +57,58 @@
       cursor: pointer; display: none;
     }
     .next { right: 10px; } .prev { left: 10px; }
+	
+	
+	.menu-toggle {
+  background: none;
+  color: white;
+  font-size: 22px;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.menu-panel {
+  position: absolute;
+  top: 60px;
+  right: 10px;
+  background: white;
+  color: #0a4d68;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  display: none;
+  z-index: 1000;
+  font-size: 14px;
+  min-width: 180px;
+}
+
+.menu-panel button {
+  margin-top: 10px;
+  padding: 6px 10px;
+  font-size: 14px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
   </style>
 </head>
 <body>
-  <div class="wrapper">
-    <div class="navbar">
-      <div class="navbar-left">
-        <div class="ajr-points">Surah Completion: <span id="ajrPoints">0%</span></div>
-      </div>
-      <div class="navbar-center">
-        <select id="surahSelect"></select>
-        <select id="ayahSelect"></select>
-      </div>
-      <div class="navbar-right">
-        <div class="streak-info" id="streakDisplay">🔥 Streak: 0 days</div>
-      </div>
-    </div>
-    <div class="viewer">
-      <div class="side-arrow prev" id="prevArrow" onclick="loadPrevAyah()">←</div>
-      <div class="side-arrow next" id="nextArrow" onclick="loadNextAyah()">→</div>
-      <iframe id="ayahViewer"></iframe>
-    </div>
-  </div>
+<div class="streak-info" id="streakDisplay">🔥 Streak: 0 days</div>
+<button class="menu-toggle" onclick="toggleMenu()">☰</button>
+</div> <!-- close .navbar-right -->
+
+<!-- Profile Menu Panel -->
+<div class="menu-panel" id="profileMenu">
+  <p><strong>👤 Logged in as:</strong> <span id="userName">Guest</span></p>
+  <p id="userEmail"></p>
+  <button onclick="logout()">Logout</button>
+</div>
+</body>
 
   <script>
     const firebaseConfig = {
@@ -235,6 +265,32 @@
 	  const percent = Math.floor((current / total) * 100);
 	  document.getElementById('ajrPoints').textContent = `${percent}%`;
 	}
+	
+	
+	function toggleMenu() {
+  const menu = document.getElementById('profileMenu');
+  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
+
+function logout() {
+  firebase.auth().signOut().then(() => {
+    alert("Logged out");
+    location.reload();
+  });
+}
+
+auth.onAuthStateChanged(user => {
+  const streak = getStreak();
+  document.getElementById('streakDisplay').textContent = `🔥 Streak: ${streak} day${streak === 1 ? '' : 's'}`;
+  if (user) {
+    document.getElementById('userName').textContent = user.displayName;
+    document.getElementById('userEmail').textContent = user.email;
+  } else {
+    document.getElementById('userName').textContent = 'Guest';
+    document.getElementById('userEmail').textContent = '';
+  }
+});
+
 
 
     surahSelect.addEventListener('change', () => updateAyahOptions(loadAyah));
