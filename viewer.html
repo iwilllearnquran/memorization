@@ -94,10 +94,10 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     auth.onAuthStateChanged(user => {
-      if (user) {
-        document.getElementById('streakDisplay').textContent = `🔥 Streak: ${getStreak()} days`;
-      }
-    });
+	  const streak = getStreak(); // run for everyone
+	  document.getElementById('streakDisplay').textContent = `🔥 Streak: ${streak} day${streak === 1 ? '' : 's'}`;
+	});
+
 
     function getStreak() {
       const last = localStorage.getItem('lastLoginDay');
@@ -191,6 +191,7 @@
       nextArrow.style.display = 'block';
       prevArrow.style.display = 'block';
       saveLastRead(s, a);
+	  updateAjrPoints();
       document.getElementById('ajrPoints').textContent = `${Math.floor((a / +surahSelect.selectedOptions[0].dataset.ayahCount) * 100)}%`;
     }
 
@@ -227,6 +228,14 @@
         alert("📖 This is the very first ayah.");
       }
     }
+	
+	function updateAjrPoints() {
+	  const current = +ayahSelect.value;
+	  const total = +surahSelect.selectedOptions[0].dataset.ayahCount;
+	  const percent = Math.floor((current / total) * 100);
+	  document.getElementById('ajrPoints').textContent = `${percent}%`;
+	}
+
 
     surahSelect.addEventListener('change', () => updateAyahOptions(loadAyah));
     ayahSelect.addEventListener('change', loadAyah);
