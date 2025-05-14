@@ -78,7 +78,7 @@
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyA8K3idA6lR9sfA_fY23H5f4jHeugzSLm4",
-      authDomain: "myquranquest.com",
+      authDomain: "quranquest-370c4.firebaseapp.com",
       projectId: "quranquest-370c4",
       storageBucket: "quranquest-370c4.appspot.com",
       messagingSenderId: "167269428719",
@@ -105,125 +105,36 @@
           alert("Login failed: " + error.message);
         });
     };
-  const surahSelect = document.getElementById('surahSelect');
-  const ayahSelect = document.getElementById('ayahSelect');
-  const ayahViewer = document.getElementById('ayahViewer');
-  const nextArrow = document.getElementById('nextArrow');
-  const prevArrow = document.getElementById('prevArrow');
+  </script>
 
-  function getURLParam(name) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(name);
-  }
-
-  function updateAyahOptions(cb) {
-    const count = +surahSelect.selectedOptions[0].dataset.ayahCount;
-    ayahSelect.innerHTML = '';
-    for (let i = 1; i <= count; i++) {
-      const opt = document.createElement('option');
-      opt.value = i;
-      opt.textContent = `Ayah ${i}`;
-      ayahSelect.appendChild(opt);
-    }
-    if (cb) cb();
-  }
-
-  function saveLastRead(s, a) {
-    localStorage.setItem('lastRead', JSON.stringify({ surah: s, ayah: a }));
-  }
-
-  function loadAyah() {
-    const s = surahSelect.value, a = ayahSelect.value;
-    ayahViewer.src = `ayahs/surah_${s}/ayah_${s}_${a}.html`;
-    ayahViewer.style.display = 'block';
-    nextArrow.style.display = 'block';
-    prevArrow.style.display = 'block';
-    saveLastRead(s, a);
-    document.getElementById('ajrPoints').textContent =
-      `${Math.floor((a / +surahSelect.selectedOptions[0].dataset.ayahCount) * 100)}%`;
-  }
-
-  function loadNextAyah() {
-    let curr = +ayahSelect.value;
-    const max = +surahSelect.selectedOptions[0].dataset.ayahCount;
-    if (curr < max) {
-      ayahSelect.value = curr + 1;
-      loadAyah();
-    } else if (surahSelect.selectedIndex < surahSelect.options.length - 1) {
-      surahSelect.selectedIndex++;
-      updateAyahOptions(() => {
-        ayahSelect.value = 1;
-        loadAyah();
-      });
-    } else {
-      alert("✅ You've reached the last ayah.");
-    }
-  }
-
-  function loadPrevAyah() {
-    let curr = +ayahSelect.value;
-    if (curr > 1) {
-      ayahSelect.value = curr - 1;
-      loadAyah();
-    } else if (surahSelect.selectedIndex > 0) {
-      surahSelect.selectedIndex--;
-      updateAyahOptions(() => {
-        const newCount = +surahSelect.selectedOptions[0].dataset.ayahCount;
-        ayahSelect.value = newCount;
-        loadAyah();
-      });
-    } else {
-      alert("📖 This is the very first ayah.");
-    }
-  }
-
-  fetch('https://api.quran.com/api/v4/chapters')
-    .then(res => res.json())
-    .then(data => {
-      data.chapters.forEach(ch => {
-        const opt = document.createElement('option');
-        opt.value = ch.id;
-        opt.textContent = `${ch.id}. ${ch.name_simple} (${ch.name_arabic})`;
-        opt.setAttribute('data-ayah-count', ch.verses_count);
-        surahSelect.appendChild(opt);
-      });
-
-      const urlSurah = getURLParam('surah');
-      const urlAyah = getURLParam('ayah');
-      const lastRead = JSON.parse(localStorage.getItem('lastRead'));
-
-      if (urlSurah && urlAyah) {
-        // Direct URL access — no prompt
-        surahSelect.value = urlSurah;
-        updateAyahOptions(() => {
-          ayahSelect.value = urlAyah;
-          loadAyah();
-        });
-      } else if (!sessionStorage.getItem('resumePrompted') && lastRead) {
-        if (confirm(`📌 Resume from Surah ${lastRead.surah}, Ayah ${lastRead.ayah}?`)) {
-          surahSelect.value = lastRead.surah;
-          updateAyahOptions(() => {
-            ayahSelect.value = lastRead.ayah;
-            loadAyah();
-          });
-        } else {
-          updateAyahOptions(() => {
-            ayahSelect.value = 1;
-            loadAyah();
-          });
-        }
-        sessionStorage.setItem('resumePrompted', 'true');
-      } else {
-        updateAyahOptions(() => {
-          ayahSelect.value = 1;
-          loadAyah();
-        });
+  <script>
+    const lastRead = JSON.parse(localStorage.getItem('lastRead'));
+    if (lastRead) {
+      const confirmResume = confirm(`📌 Resume from Surah ${lastRead.surah}, Ayah ${lastRead.ayah}?`);
+      if (confirmResume) {
+        window.location.href = `viewer.html?surah=${lastRead.surah}&ayah=${lastRead.ayah}`;
       }
-    });
+    }
 
-  surahSelect.addEventListener('change', () => updateAyahOptions(loadAyah));
-  ayahSelect.addEventListener('change', loadAyah);
-</script>
-
+    fetch("https://api.quran.com/api/v4/chapters")
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById('surahContainer');
+        data.chapters.forEach(surah => {
+          const card = document.createElement('div');
+          card.className = "surah-card";
+          card.innerHTML = `
+            <div class="surah-number">Surah ${surah.id}</div>
+            <div class="surah-english">${surah.name_simple}</div>
+            <div class="surah-arabic">${surah.name_arabic}</div>
+            <div class="ayah-count">${surah.verses_count} Ayahs</div>
+          `;
+          card.onclick = () => {
+            window.location.href = `viewer.html?surah=${surah.id}&ayah=1`;
+          };
+          container.appendChild(card);
+        });
+      });
+  </script>
 </body>
 </html>
