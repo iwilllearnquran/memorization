@@ -15,12 +15,26 @@
   rel="stylesheet"
 />
 
-<link rel="stylesheet" href="/memorization/styles.css">
+<link rel="stylesheet" href="/styles.css">
 
 <title>Ayah Memorization</title>
 
+<!-- ✅ Firebase Compat SDKs for static HTML -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js"></script>
+
+
 </head>
 <body>
+
+
+
+
+
+
+
 
 <div class="overlay" id="overlay" onclick="hidePopup()"></div>
 <div class="popup-content" id="popupContent"></div>
@@ -900,26 +914,26 @@
     
 
 
-<div style="margin-top: 20px; text-align: center; font-size: 10px;">
+<div class = "grammar-info">
     <div style="display: flex; justify-content: center; flex-wrap: wrap; row-gap: 10px; column-gap: 20px; margin-top: 12px;">
 
         <div style="display: flex; align-items: center; gap: 6px;">
-            <div style="width: 15px; height: 15px; background-color: #ffe6e6; border-radius: 3px; border: 1px solid #ccc;"></div>
+            <div style="width: 12px; height: 12px; background-color: #ffe6e6; border-radius: 3px; border: 1px solid #ccc;"></div>
             <span><b>Nominative</b> <i>(Rafʿ / Subject)</i></span>
         </div>
 
         <div style="display: flex; align-items: center; gap: 6px;">
-            <div style="width: 15px; height: 15px; background-color: #e6f0ff; border-radius: 3px; border: 1px solid #ccc;"></div>
+            <div style="width: 12px; height: 12px; background-color: #e6f0ff; border-radius: 3px; border: 1px solid #ccc;"></div>
             <span><b>Accusative</b> <i>(Naṣb / Object)</i></span>
         </div>
 
         <div style="display: flex; align-items: center; gap: 6px;">
-            <div style="width: 15px; height: 15px; background-color: #e6ffe6; border-radius: 3px; border: 1px solid #ccc;"></div>
+            <div style="width: 12px; height: 12px; background-color: #e6ffe6; border-radius: 3px; border: 1px solid #ccc;"></div>
             <span><b>Genitive</b> <i>(Jarr / Possession)</i></span>
         </div>
 
         <div style="display: flex; align-items: center; gap: 6px;">
-            <div style="width: 15px; height: 15px; background-color: #fff3cd; border-radius: 3px; border: 1px solid #ccc;"></div>
+            <div style="width: 12px; height: 12px; background-color: #fff3cd; border-radius: 3px; border: 1px solid #ccc;"></div>
             <span><b>Verb</b> <i>(Fiʿl / Action)</i></span>
         </div>
 
@@ -928,24 +942,42 @@
 
 
 
-
         </div>
         <div id="reciting-mode-content" class="ayah-arabic" style="display: none; text-align: center; font-size: 28px; direction: rtl; ">
         حُرِّمَتۡ عَلَيۡكُمۡ اُمَّهٰتُكُمۡ وَبَنٰتُكُمۡ وَاَخَوٰتُكُمۡ وَعَمّٰتُكُمۡ وَخٰلٰتُكُمۡ وَبَنٰتُ الۡاٰخِ وَبَنٰتُ الۡاُخۡتِ وَاُمَّهٰتُكُمُ الّٰتِىۡۤ اَرۡضَعۡنَكُمۡ وَاَخَوٰتُكُمۡ مِّنَ الرَّضَاعَةِ وَ اُمَّهٰتُ نِسَآٮِٕكُمۡ وَرَبَآٮِٕبُكُمُ الّٰتِىۡ فِىۡ حُجُوۡرِكُمۡ مِّنۡ نِّسَآٮِٕكُمُ الّٰتِىۡ دَخَلۡتُمۡ بِهِنَّ فَاِنۡ لَّمۡ تَكُوۡنُوۡا دَخَلۡتُمۡ بِهِنَّ فَلَا جُنَاحَ عَلَيۡكُمۡ وَحَلَاۤٮِٕلُ اَبۡنَآٮِٕكُمُ الَّذِيۡنَ مِنۡ اَصۡلَابِكُمۡۙ وَاَنۡ تَجۡمَعُوۡا بَيۡنَ الۡاُخۡتَيۡنِ اِلَّا مَا قَدۡ سَلَفَ​ؕ اِنَّ اللّٰهَ كَانَ غَفُوۡرًا رَّحِيۡمًا ۙ‏
         </div>
 
-        </div>
+        
+        
+          <div id="game-mode-content" style="display:none;">
+    <!-- Game layout will be injected here via JS -->
+    
+  </div>
+</div>
 
-<div id = "translation-section" class="section" style="text-align: center;"
-onclick="this.classList.toggle('active'); event.stopPropagation();">
+<div id="translation-section" class="section" style="text-align: center;" onclick="this.classList.toggle('active'); event.stopPropagation();">
+  <h2 class="practice-title" style="
+    display: inline-block;
+    padding: 8px 16px;
+    background: #0a4d68;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 12px;
+    font-family: 'Roboto', sans-serif;
+  ">
+    Translation
+  </h2>
 
   <div id="englishTranslation" class="ayah-english" style="text-align: center; display: block;">
     Prohibited to you [for marriage] are your mothers, your daughters, your sisters, your father&#x27;s sisters, your mother&#x27;s sisters, your brother&#x27;s daughters, your sister&#x27;s daughters, your [milk] mothers who nursed you, your sisters through nursing, your wives&#x27; mothers, and your step-daughters under your guardianship [born] of your wives unto whom you have gone in. But if you have not gone in unto them, there is no sin upon you. And [also prohibited are] the wives of your sons who are from your [own] loins, and that you take [in marriage] two sisters simultaneously, except for what has already occurred. Indeed, Allah is ever Forgiving and Merciful.
   </div>
-  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none; ">
+  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none;">
     تم پر تمہاری مائیں اور بیٹیاں اور بہنیں اور پھوپھیاں اور خالائیں اور بھتیجیاں اور بھانجیاں اور وہ مائیں جنہوں نے تم کو دودھ پلایا ہو اور رضاعی بہنیں اور ساسیں حرام کر دی گئی ہیں اور جن عورتوں سے تم مباشرت کر چکے ہو ان کی لڑکیاں جنہیں تم پرورش کرتے (ہو وہ بھی تم پر حرام ہیں) ہاں اگر ان کے ساتھ تم نے مباشرت نہ کی ہو تو (ان کی لڑکیوں کے ساتھ نکاح کر لینے میں) تم پر کچھ گناہ نہیں اور تمہارے صلبی بیٹوں کی عورتیں بھی اور دو بہنوں کا اکٹھا کرنا بھی (حرام ہے) مگر جو ہو چکا (سو ہو چکا) بے شک خدا بخشنے والا (اور) رحم کرنے والا ہے
   </div>
 </div>
+
 
 
 
@@ -1594,10 +1626,38 @@ onclick="this.classList.toggle('active'); event.stopPropagation();">
 
 
 
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyA8K3idA6lR9sfA_fY23H5f4jHeugzSLm4",
+    authDomain: "quranquest-370c4.firebaseapp.com",
+    projectId: "quranquest-370c4",
+    storageBucket: "quranquest-370c4.appspot.com",
+    messagingSenderId: "167269428719",
+    appId: "1:167269428719:web:4dc5e9dfb91b5805af5a1a",
+    measurementId: "G-D7KR30RKFP"
+  };
+
+  // Make sure firebase is defined (from compat script)
+  firebase.initializeApp(firebaseConfig);
+
+  // Expose login function early
+window.loginWithGoogle = function () {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  firebase.auth().signInWithPopup(provider)
+    .then(result => {
+      const user = result.user;
+      console.log("✅ Logged in as:", user.displayName);
+    })
+    .catch(error => {
+      console.error("❌ Login error:", error);
+    });
+};
+
+</script>
 
 
-
- <script src="/memorization/script.js" defer></script> 
+<script src="/verb_data.js"></script>
+<script src="/script.js" defer></script> 
 <div class="ghost-scroll"></div>
 
 </body>

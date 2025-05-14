@@ -1,17 +1,44 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>📖 Quran Viewer</title>
+
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+
+  <!-- Material Icons -->
+    <link
+  href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+  rel="stylesheet"
+/>
+
   <style>
     html, body {
-      height: 100%; margin: 0; padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', 'CustomArabic', sans-serif !important;
       background: #f9f9f9;
+      overflow-x: hidden;
     }
-    .wrapper { display: flex; flex-direction: column; height: 100%; }
+	
+	*:not(.material-icons):not(.material-icons-outlined):not([class^="material-icons"]):not(.grammar-info):not(.grammar-info *) {
+	  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; !important;
+	}
+	
+	@font-face {
+	  font-family: 'CustomArabic';
+	  src: url('/PDMS_SALEEM_QURANFONTQESHIP_0.ttf') format('truetype');
+	}
+
+	@font-face {
+	  font-family: 'Roboto';
+	  src: url('/Gilroy-Medium.ttf') format('truetype');
+	}
+
     .navbar {
       background-color: #0a4d68;
       color: white;
@@ -21,94 +48,160 @@
       align-items: center;
       font-weight: bold;
       border-bottom: 4px solid #2ca7d8;
+      position: relative;
+      z-index: 2;
     }
+
     .navbar-left, .navbar-center, .navbar-right {
       display: flex;
       align-items: center;
     }
+
     .navbar-center {
       flex: 1;
       justify-content: center;
-      gap: 10px;
+      gap: 5px;
     }
-    select {
-      padding: 8px; font-size: 14px;
-      border-radius: 5px; border: 1px solid #ccc;
+
+    #surahSelect {
+      width: 120px;
+      padding: 8px;
+      font-size: 14px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
     }
-    .ajr-points {
-      background: white; color: #0a4d68;
-      border-radius: 20px;
-      padding: 4px 10px;
+
+    #ayahSelect {
+      width: 60px;
+      padding: 8px;
+      font-size: 14px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .streak-info {
       font-size: 14px;
       margin-right: 10px;
     }
-    .streak-info {
+
+    .menu-toggle {
+      background-color: white;
+      color: #0a4d68;
+      font-size: 22px;
+      border: 2px solid #0a4d68;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+    }
+
+    .profile-drawer {
+      position: fixed;
+      top: 0;
+      left: -1000px;
+      width: 340px;
+      height: 100%;
+      background: white;
+      color: #0a4d68;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+      transition: left 0.3s ease;
+      z-index: 1001;
+      border-right: 1px solid #ccc;
+    }
+
+    .profile-drawer.open {
+      left: 0;
+    }
+
+    .profile-drawer button {
+      margin-top: 12px;
+      padding: 6px 12px;
       font-size: 14px;
+      background-color: #f44336;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
     }
-    .viewer { flex: 1; position: relative; overflow: hidden; }
+
+    .viewer {
+      height: calc(100vh - 60px);
+      position: relative;
+    }
+
     iframe {
-      width: 100%; height: 100%; border: none; display: block;
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
     }
+
     .side-arrow {
-      position: absolute; top: 50%; transform: translateY(-50%);
-      background: white; color: #0a4d68; border: 2px solid #0a4d68;
-      border-radius: 50%; width: 40px; height: 40px;
-      font-size: 20px; text-align: center; line-height: 36px;
-      cursor: pointer; display: none;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: white;
+      color: #0a4d68;
+      border: 2px solid #0a4d68;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+      text-align: center;
+      line-height: 36px;
+      cursor: pointer;
+      display: none;
+      z-index: 1;
     }
-    .next { right: 10px; } .prev { left: 10px; }
+
+    .next { right: 10px; }
+    .prev { left: 10px; }
 	
-	
-	.menu-toggle {
-  background: none;
-  color: white;
-  font-size: 22px;
-  border: none;
-  cursor: pointer;
-  margin-left: 10px;
-}
-
-.menu-panel {
-  position: absolute;
-  top: 60px;
-  right: 10px;
-  background: white;
-  color: #0a4d68;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-  display: none;
-  z-index: 1000;
-  font-size: 14px;
-  min-width: 180px;
-}
-
-.menu-panel button {
-  margin-top: 10px;
-  padding: 6px 10px;
-  font-size: 14px;
-  background-color: #f44336;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
+	  .material-symbols-outlined {
+		font-family: 'Material Symbols Outlined';
+		font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+	  }
   </style>
 </head>
 <body>
-<div class="streak-info" id="streakDisplay">🔥 Streak: 0 days</div>
-<button class="menu-toggle" onclick="toggleMenu()">☰</button>
-</div> <!-- close .navbar-right -->
+  <div class="navbar">
+    <div class="navbar-left">
+      <button class="menu-toggle" onclick="toggleMenu()">
+        <span class="material-icons-outlined">person</span>
+      </button>
+    </div>
+    <div class="navbar-center">
+      <select id="surahSelect"></select>
+      <select id="ayahSelect"></select>
+    </div>
+    <div class="navbar-right">
+      <div class="streak-info" id="streakDisplay">🔥0</div>
+    </div>
+  </div>
 
-<!-- Profile Menu Panel -->
-<div class="menu-panel" id="profileMenu">
-  <p><strong>👤 Logged in as:</strong> <span id="userName">Guest</span></p>
-  <p id="userEmail"></p>
-  <button onclick="logout()">Logout</button>
-</div>
-</body>
+  <!-- Profile Drawer -->
+  <div class="profile-drawer" id="profileMenu">
+    <div style="padding: 16px;">
+      <h3>👤 Profile</h3>
+      <p><strong>Logged in as:</strong> <span id="userName">Guest</span></p>
+      <p id="userEmail"></p>
+      <p><strong>Ajr Points:</strong> <span id="ajrPoints">0%</span></p>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="viewer" onclick="closeMenuIfOpen(event)">
+    <div class="side-arrow prev" id="prevArrow" onclick="loadPrevAyah()">←</div>
+    <div class="side-arrow next" id="nextArrow" onclick="loadNextAyah()">→</div>
+    <iframe id="ayahViewer"></iframe>
+  </div>
 
   <script>
     const firebaseConfig = {
@@ -123,11 +216,18 @@
 
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
-    auth.onAuthStateChanged(user => {
-	  const streak = getStreak(); // run for everyone
-	  document.getElementById('streakDisplay').textContent = `🔥 Streak: ${streak} day${streak === 1 ? '' : 's'}`;
-	});
 
+    auth.onAuthStateChanged(user => {
+      const streak = getStreak();
+      document.getElementById('streakDisplay').textContent = `🔥${streak}`;
+      if (user) {
+        document.getElementById('userName').textContent = user.displayName;
+        document.getElementById('userEmail').textContent = user.email;
+      } else {
+        document.getElementById('userName').textContent = 'Guest';
+        document.getElementById('userEmail').textContent = '';
+      }
+    });
 
     function getStreak() {
       const last = localStorage.getItem('lastLoginDay');
@@ -137,13 +237,31 @@
         const yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
         const yStr = yesterday.toISOString().split('T')[0];
-        if (last === yStr) streak++;
-        else streak = 1;
+        streak = (last === yStr) ? streak + 1 : 1;
         localStorage.setItem('streak', streak);
         localStorage.setItem('lastLoginDay', today);
       }
       return streak;
     }
+
+    function toggleMenu() {
+      document.getElementById('profileMenu').classList.toggle('open');
+    }
+
+    function closeMenuIfOpen(e) {
+      const menu = document.getElementById('profileMenu');
+      if (menu.classList.contains('open') && !menu.contains(e.target) && !e.target.closest('.menu-toggle')) {
+        menu.classList.remove('open');
+      }
+    }
+
+    function logout() {
+      firebase.auth().signOut().then(() => {
+        alert("Logged out");
+        location.reload();
+      });
+    }
+
     const surahSelect = document.getElementById('surahSelect');
     const ayahSelect = document.getElementById('ayahSelect');
     const ayahViewer = document.getElementById('ayahViewer');
@@ -155,12 +273,9 @@
       return urlParams.get(name);
     }
 
-    let surahData = [];
-
     fetch('https://api.quran.com/api/v4/chapters')
       .then(res => res.json())
       .then(data => {
-        surahData = data.chapters;
         data.chapters.forEach(ch => {
           const opt = document.createElement('option');
           opt.value = ch.id;
@@ -187,9 +302,8 @@
               loadAyah();
             });
             return;
-          } else {
-            updateAyahOptions(loadAyah);
           }
+          updateAyahOptions(loadAyah);
         } else {
           updateAyahOptions(() => {
             ayahSelect.value = 1;
@@ -204,7 +318,7 @@
       for (let i = 1; i <= count; i++) {
         const opt = document.createElement('option');
         opt.value = i;
-        opt.textContent = `Ayah ${i}`;
+        opt.textContent = `${i}`;
         ayahSelect.appendChild(opt);
       }
       if (cb) cb();
@@ -221,8 +335,7 @@
       nextArrow.style.display = 'block';
       prevArrow.style.display = 'block';
       saveLastRead(s, a);
-	  updateAjrPoints();
-      document.getElementById('ajrPoints').textContent = `${Math.floor((a / +surahSelect.selectedOptions[0].dataset.ayahCount) * 100)}%`;
+      updateAjrPoints();
     }
 
     function loadNextAyah() {
@@ -250,51 +363,39 @@
       } else if (surahSelect.selectedIndex > 0) {
         surahSelect.selectedIndex--;
         updateAyahOptions(() => {
-          const newCount = +surahSelect.selectedOptions[0].dataset.ayahCount;
-          ayahSelect.value = newCount;
+          ayahSelect.value = +surahSelect.selectedOptions[0].dataset.ayahCount;
           loadAyah();
         });
       } else {
         alert("📖 This is the very first ayah.");
       }
     }
-	
-	function updateAjrPoints() {
-	  const current = +ayahSelect.value;
-	  const total = +surahSelect.selectedOptions[0].dataset.ayahCount;
-	  const percent = Math.floor((current / total) * 100);
-	  document.getElementById('ajrPoints').textContent = `${percent}%`;
-	}
-	
-	
-	function toggleMenu() {
-  const menu = document.getElementById('profileMenu');
-  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-}
 
-function logout() {
-  firebase.auth().signOut().then(() => {
-    alert("Logged out");
-    location.reload();
-  });
-}
+    function updateAjrPoints() {
+      const current = +ayahSelect.value;
+      const total = +surahSelect.selectedOptions[0].dataset.ayahCount;
+      const percent = Math.floor((current / total) * 100);
+      document.getElementById('ajrPoints').textContent = `${percent}%`;
+    }
 
-auth.onAuthStateChanged(user => {
-  const streak = getStreak();
-  document.getElementById('streakDisplay').textContent = `🔥 Streak: ${streak} day${streak === 1 ? '' : 's'}`;
-  if (user) {
-    document.getElementById('userName').textContent = user.displayName;
-    document.getElementById('userEmail').textContent = user.email;
-  } else {
-    document.getElementById('userName').textContent = 'Guest';
-    document.getElementById('userEmail').textContent = '';
+    surahSelect.addEventListener('change', () => updateAyahOptions(loadAyah));
+    ayahSelect.addEventListener('change', loadAyah);
+	
+	
+document.addEventListener('click', function (e) {
+  const drawer = document.getElementById('profileMenu');
+  const toggleBtn = document.querySelector('.menu-toggle');
+
+  if (
+    drawer.classList.contains('open') &&
+    !drawer.contains(e.target) &&
+    !toggleBtn.contains(e.target)
+  ) {
+    drawer.classList.remove('open');
   }
 });
 
 
-
-    surahSelect.addEventListener('change', () => updateAyahOptions(loadAyah));
-    ayahSelect.addEventListener('change', loadAyah);
   </script>
 </body>
 </html>

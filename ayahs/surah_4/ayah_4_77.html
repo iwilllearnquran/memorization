@@ -15,12 +15,26 @@
   rel="stylesheet"
 />
 
-<link rel="stylesheet" href="/memorization/styles.css">
+<link rel="stylesheet" href="/styles.css">
 
 <title>Ayah Memorization</title>
 
+<!-- ✅ Firebase Compat SDKs for static HTML -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js"></script>
+
+
 </head>
 <body>
+
+
+
+
+
+
+
 
 <div class="overlay" id="overlay" onclick="hidePopup()"></div>
 <div class="popup-content" id="popupContent"></div>
@@ -804,26 +818,26 @@
     
 
 
-<div style="margin-top: 20px; text-align: center; font-size: 10px;">
+<div class = "grammar-info">
     <div style="display: flex; justify-content: center; flex-wrap: wrap; row-gap: 10px; column-gap: 20px; margin-top: 12px;">
 
         <div style="display: flex; align-items: center; gap: 6px;">
-            <div style="width: 15px; height: 15px; background-color: #ffe6e6; border-radius: 3px; border: 1px solid #ccc;"></div>
+            <div style="width: 12px; height: 12px; background-color: #ffe6e6; border-radius: 3px; border: 1px solid #ccc;"></div>
             <span><b>Nominative</b> <i>(Rafʿ / Subject)</i></span>
         </div>
 
         <div style="display: flex; align-items: center; gap: 6px;">
-            <div style="width: 15px; height: 15px; background-color: #e6f0ff; border-radius: 3px; border: 1px solid #ccc;"></div>
+            <div style="width: 12px; height: 12px; background-color: #e6f0ff; border-radius: 3px; border: 1px solid #ccc;"></div>
             <span><b>Accusative</b> <i>(Naṣb / Object)</i></span>
         </div>
 
         <div style="display: flex; align-items: center; gap: 6px;">
-            <div style="width: 15px; height: 15px; background-color: #e6ffe6; border-radius: 3px; border: 1px solid #ccc;"></div>
+            <div style="width: 12px; height: 12px; background-color: #e6ffe6; border-radius: 3px; border: 1px solid #ccc;"></div>
             <span><b>Genitive</b> <i>(Jarr / Possession)</i></span>
         </div>
 
         <div style="display: flex; align-items: center; gap: 6px;">
-            <div style="width: 15px; height: 15px; background-color: #fff3cd; border-radius: 3px; border: 1px solid #ccc;"></div>
+            <div style="width: 12px; height: 12px; background-color: #fff3cd; border-radius: 3px; border: 1px solid #ccc;"></div>
             <span><b>Verb</b> <i>(Fiʿl / Action)</i></span>
         </div>
 
@@ -832,24 +846,42 @@
 
 
 
-
         </div>
         <div id="reciting-mode-content" class="ayah-arabic" style="display: none; text-align: center; font-size: 28px; direction: rtl; ">
         اَلَمۡ تَرَ اِلَى الَّذِيۡنَ قِيۡلَ لَهُمۡ كُفُّوۡۤا اَيۡدِيَكُمۡ وَاَقِيۡمُوا الصَّلٰوةَ وَاٰ تُوا الزَّكٰوةَ ۚ فَلَمَّا كُتِبَ عَلَيۡهِمُ الۡقِتَالُ اِذَا فَرِيۡقٌ مِّنۡهُمۡ يَخۡشَوۡنَ النَّاسَ كَخَشۡيَةِ اللّٰهِ اَوۡ اَشَدَّ خَشۡيَةً​ ۚ وَقَالُوۡا رَبَّنَا لِمَ كَتَبۡتَ عَلَيۡنَا الۡقِتَالَ ۚ لَوۡلَاۤ اَخَّرۡتَنَاۤ اِلٰٓى اَجَلٍ قَرِيۡبٍ​ ؕ قُلۡ مَتَاعُ الدُّنۡيَا قَلِيۡلٌ​ ۚ وَالۡاٰخِرَةُ خَيۡرٌ لِّمَنِ اتَّقٰى وَلَا تُظۡلَمُوۡنَ فَتِيۡلًا‏
         </div>
 
-        </div>
+        
+        
+          <div id="game-mode-content" style="display:none;">
+    <!-- Game layout will be injected here via JS -->
+    
+  </div>
+</div>
 
-<div id = "translation-section" class="section" style="text-align: center;"
-onclick="this.classList.toggle('active'); event.stopPropagation();">
+<div id="translation-section" class="section" style="text-align: center;" onclick="this.classList.toggle('active'); event.stopPropagation();">
+  <h2 class="practice-title" style="
+    display: inline-block;
+    padding: 8px 16px;
+    background: #0a4d68;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 12px;
+    font-family: 'Roboto', sans-serif;
+  ">
+    Translation
+  </h2>
 
   <div id="englishTranslation" class="ayah-english" style="text-align: center; display: block;">
     Have you not seen those who were told, &quot;Restrain your hands [from fighting] and establish prayer and give zakah&quot;? But then when fighting was ordained for them, at once a party of them feared men as they fear Allah or with [even] greater fear. They said, &quot;Our Lord, why have You decreed upon us fighting? If only You had postponed [it for] us for a short time.&quot; Say, The enjoyment of this world is little, and the Hereafter is better for he who fears Allah. And injustice will not be done to you, [even] as much as a thread [inside a date seed].&quot;
   </div>
-  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none; ">
+  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none;">
     بھلا تم نے ان لوگوں کو نہیں دیکھا جن کو (پہلے یہ) حکم دیا گیا تھا کہ اپنے ہاتھوں کو (جنگ سے) روکے رہو اور نماز پڑھتے رہو اور زکوٰة دیتے رہو پھر جب ان پر جہاد فرض کردیا گیا تو بعض لوگ ان میں سے لوگوں سے یوں ڈرنے لگے جیسے خدا سے ڈرا کرتے ہیں بلکہ اس سے بھی زیادہ اور بڑبڑانے لگے کہ اے خدا تو نے ہم پر جہاد (جلد) کیوں فرض کردیا تھوڑی مدت اور ہمیں کیوں مہلت نہ دی (اے پیغمبر ان س) ے کہہ دو کہ دنیا کا فائدہ بہت تھوڑا ہے اور بہت اچھی چیز تو پرہیزگار کے لئے (نجات) آخرت ہے اور تم پر دھاگے برابر بھی ظلم نہیں کیا جائے گا
   </div>
 </div>
+
 
 
 
@@ -1432,10 +1464,38 @@ onclick="this.classList.toggle('active'); event.stopPropagation();">
 
 
 
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyA8K3idA6lR9sfA_fY23H5f4jHeugzSLm4",
+    authDomain: "quranquest-370c4.firebaseapp.com",
+    projectId: "quranquest-370c4",
+    storageBucket: "quranquest-370c4.appspot.com",
+    messagingSenderId: "167269428719",
+    appId: "1:167269428719:web:4dc5e9dfb91b5805af5a1a",
+    measurementId: "G-D7KR30RKFP"
+  };
+
+  // Make sure firebase is defined (from compat script)
+  firebase.initializeApp(firebaseConfig);
+
+  // Expose login function early
+window.loginWithGoogle = function () {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  firebase.auth().signInWithPopup(provider)
+    .then(result => {
+      const user = result.user;
+      console.log("✅ Logged in as:", user.displayName);
+    })
+    .catch(error => {
+      console.error("❌ Login error:", error);
+    });
+};
+
+</script>
 
 
-
- <script src="/memorization/script.js" defer></script> 
+<script src="/verb_data.js"></script>
+<script src="/script.js" defer></script> 
 <div class="ghost-scroll"></div>
 
 </body>

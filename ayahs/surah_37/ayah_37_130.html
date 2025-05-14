@@ -1,0 +1,591 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Bootstrap CSS (v4.6 or v5.x recommended) -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<title>Ayah Memorization</title>
+<style>
+    body { font-family: Arial, sans-serif; padding: 15px; margin: 0; }
+    .ayah-arabic { font-size: 30px; text-align: right; direction: rtl; margin-bottom: 10px; word-wrap: break-word; }
+    .ayah-english { font-size: 15px; margin-bottom: 20px; }
+    .navbar {
+        background-color: #0a4d68;
+        color: white;
+        padding: 20px 30px;
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+        border-bottom: 6px solid #2ca7d8;
+    }
+
+
+    /* 🌙 Dark Mode Styling */
+    body.dark-mode {
+      background-color: #121212;
+      color: #f1f1f1;
+    }
+    body.dark-mode .section {
+      background-color: #1e1e1e;
+      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
+    }
+    body.dark-mode .word {
+      border-color: #888;
+    }
+    body.dark-mode .popup-content {
+      background-color: #222;
+      color: #ddd;
+    }
+    body.dark-mode .submit-btn {
+      background-color: #333;
+      color: #eee;
+    }
+    body.dark-mode .navbar {
+      background-color: #333;
+      border-bottom: 6px solid #555;
+    }
+    body.dark-mode .circular-progress span {
+      color: #ddd;
+    }
+    body.dark-mode input,
+    body.dark-mode button {
+      background-color: #222;
+      color: #eee;
+      border: 1px solid #555;
+    }
+    
+    
+    .dark-mode-toggle {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+      background: #0a4d68;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    
+    /* Prevent horizontal scrolling on mobile */
+    html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background-color: #efeee0;
+}
+
+@font-face {
+  font-family: 'CustomArabic';
+  src: url('PDMS_SALEEM_QURANFONTQESHIP_0.ttf') format('woff2');
+}
+
+.ayah-arabic {
+  font-family: 'CustomArabic', serif;
+}
+
+
+
+
+.ayah-english,
+.translation,
+.dropdown-button,
+.toggle-option,
+button,
+h3,
+p {
+  font-family: 'Arial', sans-serif;
+}
+
+
+
+.section {
+  margin: 20px auto;                  /* Centered vertically with spacing */
+  padding: 20px;
+  font-size: 18px;
+  box-sizing: border-box;
+  border-radius: 16px;
+  background-color: #fffaf6;          /* Updated background */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  width: calc(100% - 24px);           /* Slight margin without causing scroll */
+  max-width: 1200px;                  /* Optional: Keep layout contained */
+  transition: all 0.3s ease-in-out;
+}
+
+
+
+    .section:hover {
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    }
+
+
+
+   .section h3 {
+    font-size: 18px;
+    margin: 0 0 12px 0;     /* Remove top margin */
+    text-align: center;
+    border-bottom: 2px dashed #ccc;
+    padding: 6px 0;         /* Add a bit of vertical breathing space */
+}
+
+
+
+    .word {
+        cursor: pointer;
+        margin: 4px 2px;
+        padding: 3px 6px;
+        display: inline-block;
+        border-bottom: 1px dotted gray;
+        font-size: 24px;
+    }
+    .translation {
+        font-size: 12px;
+        color: gray;
+        display: block;
+        margin-top: 2px;
+        line-height: 1;
+        text-align: center;
+    }
+    .popup, .overlay {
+        display: none; position: fixed; top: 0; left: 0;
+        width: 100%; height: 100%; background: rgba(0,0,0,0.5);
+        z-index: 10;
+    }
+    .popup-content {
+    display: none;
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    background: white;
+    padding: 20px;
+    width: 90%;
+    max-height: 80%;
+    overflow-y: auto;
+    z-index: 11;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    font-size: 14px;
+    }
+    .nominative { background-color: #ffe6e6; }   
+    .accusative { background-color: #e6f0ff; }   
+    .genitive   { background-color: #e6ffe6; }   
+    textarea { width: 100%; height: 100px; font-size: 16px; margin-top: 15px; }
+    button { padding: 10px 20px; margin-top: 10px; font-size: 14px; }
+    ul { padding-left: 18px; }
+    @media (max-width: 600px) {
+        .ayah-arabic { font-size: 24px; }
+        .word { font-size: 20px; }
+        .popup-content { font-size: 13px; }
+    }
+    .submit-btn {
+    background-color: #0a4d68;
+    color: #fff;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .submit-btn:hover {
+    background-color: #2ca7d8;
+    transform: translateY(-1px);
+    }
+
+    .submit-btn:active {
+    transform: scale(0.98);
+    }
+
+    .small-placeholder::placeholder {
+    font-size: 10px;
+    color: #888;
+    }
+
+    .confetti {
+  position: relative;
+}
+
+
+.hidden-toggle {
+  display: none !important;
+}
+
+    .confetti::after {
+  content: "🎉";
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  animation: confettiBurst 0.6s ease-in-out;
+  }
+
+  .floating-player {
+    position: static;
+    bottom: 20px;
+    right: 20px;
+    background-color: #0a4d68;
+    color: white;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    z-index: 999;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transition: opacity 0.3s ease, transform 0.2s ease, top 0.2s, left 0.2s;
+    opacity: 0.6;
+    user-select: none;
+    touch-action: none;
+}
+    
+    .floating-player.active {
+        opacity: 1;
+    }
+    
+    .floating-player:hover {
+        background-color: #2ca7d8;
+        transform: scale(1.05);
+    }
+    
+    .audio-controls {
+        display: none;
+        position: fixed;
+        bottom: 100px;
+        right: 20px;
+        background: white;
+        border: 1px solid #ccc;
+        padding: 14px;
+        border-radius: 10px;
+        z-index: 998;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        max-width: 320px;
+    }
+    
+    .play-toggle-btn {
+        padding: 6px 14px;
+        font-size: 14px;
+        border-radius: 8px;
+        background-color: #0a4d68;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    .circular-container {
+    position: fixed;
+    bottom: 50px;
+    right: 20px;
+    z-index: 999;
+    width: 70px;
+    height: 70px;
+}
+
+.verb-highlight {
+    background-color: #fff3cd;  /* light yellow */
+}
+
+
+    .circular-progress {
+        width: 100%;
+        height: 100%;
+        background: conic-gradient(#0a4d68 var(--progress, 0%), #ccc 0%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: --progress 0.2s linear;
+    }
+    
+    .circular-progress span {
+        font-size: 24px;
+        color: white;
+        pointer-events: none;
+    }
+
+  .dropdown-button {
+  background-color: #0a4d68;
+  color: white;
+  font-size: 14px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.3s ease;
+}
+
+  .dropdown-button:hover {
+    background-color: #2ca7d8;
+  }
+  
+  .dropdown-wrapper {
+  position: relative;
+  width: 100%;
+  text-align: right;
+  padding-right: 20px;
+  margin-bottom: 10px;
+}
+
+.dropdown-container {
+  position: relative;
+  text-align: center;
+  margin-top: -15px; /* push it slightly upward */
+  margin-bottom: 10px;
+}
+
+
+.dropdown-container .dropdown-menu-custom {
+  opacity: 0;
+  transform: scaleY(0.8);
+  transform-origin: top;
+  transition: all 0.3s ease-in-out;
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  min-width: 240px;
+  padding: 16px;
+  z-index: 999;
+  font-size: 13px;
+  pointer-events: none;
+}
+
+
+.dropdown-container-tr .dropdown-menu-custom-tr {
+  opacity: 0;
+  transform: scaleY(0.8);
+  transform-origin: top;
+  transition: all 0.3s ease-in-out;
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background-color: #0a4d68;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  min-width: 240px;
+  padding: 16px;
+  z-index: 999;
+  font-size: 13px;
+  pointer-events: none;
+}
+
+.dropdown-container.active .dropdown-menu-custom {
+  opacity: 1;
+  transform: scaleY(1);
+  pointer-events: auto;
+}
+
+
+
+  .toggle-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+    font-size: 15px;
+  }
+
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    border-radius: 24px;
+    transition: 0.3s;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.3s;
+  }
+
+  input:checked + .slider {
+    background-color: #0a4d68;
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(20px);
+  }
+
+.word-block {
+  display: inline-block;
+  text-align: center;
+  margin: 2px 6px 6px 6px; /* top, right, bottom, left */
+  padding: 6px 10px; /* More inner spacing */
+  cursor: pointer;
+  border-radius: 12px; /* Smoother round edges */
+  border-bottom: 2px dotted #333; /* Dotted line underneath */
+  border: 1px dotted rgba(0, 0, 0, 0.2); /* Subtle dotted line around box */
+  
+}
+
+.word-block-translit {
+  display: inline-block;
+  text-align: center;
+  margin: 2px 6px 6px 6px; /* top, right, bottom, left */
+  padding: 6px 10px; /* More inner spacing */
+  cursor: pointer;
+  border-radius: 12px; /* Smoother round edges */
+  border-bottom: 2px dotted #333; /* Dotted line underneath */
+  border: 1px dotted rgba(0, 0, 0, 0.2); /* Subtle dotted line around box */
+  background-color: #fffaf6;
+  
+}
+
+.word-text {
+  display: block;
+  font-size: 28px;
+  direction: rtl;
+  font-family: 'CustomArabic', serif;
+  line-height: 1.8;
+}
+
+.metadata {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+  font-family: 'Arial', sans-serif;
+  color: gray;
+  line-height: 1.2;
+}
+
+
+
+
+@keyframes confettiBurst {
+  0% { opacity: 0; transform: scale(0.8) translateY(-10px); }
+  50% { opacity: 1; transform: scale(1.1) translateY(0); }
+  100% { opacity: 0; transform: scale(1) translateY(-10px); }
+}
+
+
+</style>
+</head>
+<body>
+
+<div class="section dropdown-wrapper">
+  <div class="dropdown-container" id="ayahDropdownToggle">
+    <button class="dropdown-button">
+      📖 Surah: As-Saffat (الصافات) : Ayah 130
+      <span class="caret-icon">▼</span>
+    </button>
+
+    <div class="dropdown-menu-custom">
+      <div class="toggle-option">
+        <span>🔠 Show Translation</span>
+        <label class="switch">
+          <input type="checkbox" checked onchange="toggleElements('translation', this.checked)">
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-option">
+        <span>🔤 Show Grammar</span>
+        <label class="switch">
+          <input type="checkbox" onchange="toggleElements('pos-tag', this.checked)">
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-option">
+        <span>🌱 Show Root Words</span>
+        <label class="switch">
+          <input type="checkbox" onchange="toggleElements('root-tag', this.checked)">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+  </div>
+
+
+
+  
+
+
+
+
+
+    <div style="text-align: center; direction: rtl;">
+
+    <span class="word-block nominative " onclick="showPopup({&quot;Word&quot;: &quot;سَلَٰمٌ&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/037_130_001.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Noun&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;})">
+    
+    <!-- Arabic word only -->
+    <span class="word-text">سَلَٰمٌ</span>
+
+    <!-- Metadata: translation, root, POS -->
+    <span class="metadata">
+        <span class="translation toggle-translation">Peace be</span>
+        <span class="translation toggle-root root-tag hidden-toggle">سَلَٰم</span>
+        <span class="translation toggle-pos pos-tag hidden-toggle">noun</span>
+    </span>
+
+</span>
+    
+
+
+    <span class="word-block  " onclick="showPopup({&quot;Word&quot;: &quot;عَلَىٰٓ&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/037_130_002.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Preposition&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;})">
+    
+    <!-- Arabic word only -->
+    <span class="word-text">عَلَىٰٓ</span>
+
+    <!-- Metadata: translation, root, POS -->
+    <span class="metadata">
+        <span class="translation toggle-translation">upon</span>
+        <span class="translation toggle-root root-tag hidden-toggle">عَلَىٰ</span>
+        <span class="translation toggle-pos pos-tag hidden-toggle">prep</span>
+    </span>
+
+</span>
+    
+
+
+    <span class="word-block genitive " onclick="showPopup({&quot;Word&quot;: &quot;إِلْ&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/037_130_003.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Proper Noun&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;})">
+    
+    <!-- Arabic word only -->
+    <span class="word-text">إِلْ</span>
+
+    <!-- Metadata: translation, root, POS -->
+    <span class="metadata">
+        <span class="translation toggle-translation">Elijah</span>
+        <span class="translation toggle-root root-tag hidden-toggle">إِلْيَاس</span>
+        <span class="translation toggle-pos pos-tag hidden-toggle">pn</span>
+    </span>
+
+</span>
+    
+

@@ -15,12 +15,26 @@
   rel="stylesheet"
 />
 
-<link rel="stylesheet" href="/memorization/styles.css">
+<link rel="stylesheet" href="/styles.css">
 
 <title>Ayah Memorization</title>
 
+<!-- ✅ Firebase Compat SDKs for static HTML -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js"></script>
+
+
 </head>
 <body>
+
+
+
+
+
+
+
 
 <div class="overlay" id="overlay" onclick="hidePopup()"></div>
 <div class="popup-content" id="popupContent"></div>
@@ -1236,26 +1250,26 @@
     
 
 
-<div style="margin-top: 20px; text-align: center; font-size: 10px;">
+<div class = "grammar-info">
     <div style="display: flex; justify-content: center; flex-wrap: wrap; row-gap: 10px; column-gap: 20px; margin-top: 12px;">
 
         <div style="display: flex; align-items: center; gap: 6px;">
-            <div style="width: 15px; height: 15px; background-color: #ffe6e6; border-radius: 3px; border: 1px solid #ccc;"></div>
+            <div style="width: 12px; height: 12px; background-color: #ffe6e6; border-radius: 3px; border: 1px solid #ccc;"></div>
             <span><b>Nominative</b> <i>(Rafʿ / Subject)</i></span>
         </div>
 
         <div style="display: flex; align-items: center; gap: 6px;">
-            <div style="width: 15px; height: 15px; background-color: #e6f0ff; border-radius: 3px; border: 1px solid #ccc;"></div>
+            <div style="width: 12px; height: 12px; background-color: #e6f0ff; border-radius: 3px; border: 1px solid #ccc;"></div>
             <span><b>Accusative</b> <i>(Naṣb / Object)</i></span>
         </div>
 
         <div style="display: flex; align-items: center; gap: 6px;">
-            <div style="width: 15px; height: 15px; background-color: #e6ffe6; border-radius: 3px; border: 1px solid #ccc;"></div>
+            <div style="width: 12px; height: 12px; background-color: #e6ffe6; border-radius: 3px; border: 1px solid #ccc;"></div>
             <span><b>Genitive</b> <i>(Jarr / Possession)</i></span>
         </div>
 
         <div style="display: flex; align-items: center; gap: 6px;">
-            <div style="width: 15px; height: 15px; background-color: #fff3cd; border-radius: 3px; border: 1px solid #ccc;"></div>
+            <div style="width: 12px; height: 12px; background-color: #fff3cd; border-radius: 3px; border: 1px solid #ccc;"></div>
             <span><b>Verb</b> <i>(Fiʿl / Action)</i></span>
         </div>
 
@@ -1264,24 +1278,42 @@
 
 
 
-
         </div>
         <div id="reciting-mode-content" class="ayah-arabic" style="display: none; text-align: center; font-size: 28px; direction: rtl; ">
         ثُمَّ اَنۡزَلَ عَلَيۡكُمۡ مِّنۡۢ بَعۡدِ الۡغَمِّ اَمَنَةً نُّعَاسًا يَّغۡشٰى طَآٮِٕفَةً مِّنۡكُمۡ​ۙ وَطَآٮِٕفَةٌ قَدۡ اَهَمَّتۡهُمۡ اَنۡفُسُهُمۡ يَظُنُّوۡنَ بِاللّٰهِ غَيۡرَ الۡحَـقِّ ظَنَّ الۡجَـاهِلِيَّةِ​ؕ يَقُوۡلُوۡنَ هَلۡ لَّنَا مِنَ الۡاَمۡرِ مِنۡ شَىۡءٍ​ؕ قُلۡ اِنَّ الۡاَمۡرَ كُلَّهٗ لِلّٰهِ​ؕ يُخۡفُوۡنَ فِىۡۤ اَنۡفُسِهِمۡ مَّا لَا يُبۡدُوۡنَ لَكَ​ؕ يَقُوۡلُوۡنَ لَوۡ كَانَ لَنَا مِنَ الۡاَمۡرِ شَىۡءٌ مَّا قُتِلۡنَا هٰهُنَا ​ؕ قُلۡ لَّوۡ كُنۡتُمۡ فِىۡ بُيُوۡتِكُمۡ لَبَرَزَ الَّذِيۡنَ كُتِبَ عَلَيۡهِمُ الۡقَتۡلُ اِلٰى مَضَاجِعِهِمۡ​ۚ وَلِيَبۡتَلِىَ اللّٰهُ مَا فِىۡ صُدُوۡرِكُمۡ وَلِيُمَحِّصَ مَا فِىۡ قُلُوۡبِكُمۡ​ؕ وَاللّٰهُ عَلِيۡمٌۢ بِذَاتِ الصُّدُوۡرِ‏
         </div>
 
-        </div>
+        
+        
+          <div id="game-mode-content" style="display:none;">
+    <!-- Game layout will be injected here via JS -->
+    
+  </div>
+</div>
 
-<div id = "translation-section" class="section" style="text-align: center;"
-onclick="this.classList.toggle('active'); event.stopPropagation();">
+<div id="translation-section" class="section" style="text-align: center;" onclick="this.classList.toggle('active'); event.stopPropagation();">
+  <h2 class="practice-title" style="
+    display: inline-block;
+    padding: 8px 16px;
+    background: #0a4d68;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 12px;
+    font-family: 'Roboto', sans-serif;
+  ">
+    Translation
+  </h2>
 
   <div id="englishTranslation" class="ayah-english" style="text-align: center; display: block;">
     Then after distress, He sent down upon you security [in the form of] drowsiness, overcoming a faction of you, while another faction worried about themselves, thinking of Allah other than the truth - the thought of ignorance, saying, &quot;Is there anything for us [to have done] in this matter?&quot; Say, &quot;Indeed, the matter belongs completely to Allah.&quot; They conceal within themselves what they will not reveal to you. They say, &quot;If there was anything we could have done in the matter, some of us would not have been killed right here.&quot; Say, &quot;Even if you had been inside your houses, those decreed to be killed would have come out to their death beds.&quot; [It was] so that Allah might test what is in your breasts and purify what is in your hearts. And Allah is Knowing of that within the breasts.
   </div>
-  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none; ">
+  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none;">
     پھر خدا نے غم ورنج کے بعد تم پر تسلی نازل فرمائی (یعنی) نیند کہ تم میں سے ایک جماعت پر طاری ہو گئی اور کچھ لوگ جن کو جان کے لالے پڑ رہے تھے خدا کے بارے میں ناحق (ایام) کفر کے سے گمان کرتے تھے اور کہتے تھے بھلا ہمارے اختیار کی کچھ بات ہے؟ تم کہہ دو کہ بےشک سب باتیں خدا ہی کے اختیار میں ہیں یہ لوگ (بہت سی باتیں) دلوں میں مخفی رکھتے ہیں جو تم پر ظاہر نہیں کرتے تھے کہتے تھے کہ ہمارے بس کی بات ہوتی تو ہم یہاں قتل ہی نہ کیے جاتے کہہ دو کہ اگر تم اپنے گھروں میں بھی ہوتے تو جن کی تقدیر میں مارا جانا لکھا تھا وہ اپنی اپنی قتل گاہوں کی طرف ضرور نکل آتے اس سے غرض یہ تھی کہ خدا تمہارے سینوں کی باتوں کو آزمائے اور جو کچھ تمہارے دلوں میں ہے اس کو خالص اور صاف کر دے اور خدا دلوں کی باتوں سے خوب واقف ہے
   </div>
 </div>
+
 
 
 
@@ -2161,10 +2193,38 @@ onclick="this.classList.toggle('active'); event.stopPropagation();">
 
 
 
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyA8K3idA6lR9sfA_fY23H5f4jHeugzSLm4",
+    authDomain: "quranquest-370c4.firebaseapp.com",
+    projectId: "quranquest-370c4",
+    storageBucket: "quranquest-370c4.appspot.com",
+    messagingSenderId: "167269428719",
+    appId: "1:167269428719:web:4dc5e9dfb91b5805af5a1a",
+    measurementId: "G-D7KR30RKFP"
+  };
+
+  // Make sure firebase is defined (from compat script)
+  firebase.initializeApp(firebaseConfig);
+
+  // Expose login function early
+window.loginWithGoogle = function () {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  firebase.auth().signInWithPopup(provider)
+    .then(result => {
+      const user = result.user;
+      console.log("✅ Logged in as:", user.displayName);
+    })
+    .catch(error => {
+      console.error("❌ Login error:", error);
+    });
+};
+
+</script>
 
 
-
- <script src="/memorization/script.js" defer></script> 
+<script src="/verb_data.js"></script>
+<script src="/script.js" defer></script> 
 <div class="ghost-scroll"></div>
 
 </body>

@@ -1,0 +1,368 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Bootstrap CSS (v4.6 or v5.x recommended) -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link
+  href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+  rel="stylesheet"
+/>
+
+<link rel="stylesheet" href="/styles.css">
+
+<title>Ayah Memorization</title>
+
+<!-- ✅ Firebase Compat SDKs for static HTML -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js"></script>
+
+
+</head>
+<body>
+
+
+
+
+
+
+
+
+<div class="overlay" id="overlay" onclick="hidePopup()"></div>
+<div class="popup-content" id="popupContent"></div>
+
+<!-- Hidden audio element that togglePlay() uses -->
+<audio id="ayahAudio" src="https://verses.quran.com/Alafasy/mp3/036044.mp3" preload="metadata"></audio>
+<audio id="audio-url-ar" data-src="https://verses.quran.com/Alafasy/mp3/036044.mp3" preload="metadata"></audio>
+<audio id="audio-url-en" data-src="https://cdn.islamic.network/quran/audio/192/en.walk/3749.mp3" preload="metadata"></audio>
+<audio id="audio-url-ur" data-src="https://cdn.islamic.network/quran/audio/64/ur.khan/3749.mp3" preload="metadata"></audio>
+
+
+
+<div id= "main-grammar-section" class="section">
+<div id="learning-mode-content" style="text-align: center; direction: rtl;">
+
+    <span class="word-block click-animate  " onclick="showPopup({&quot;Word&quot;: &quot;إِلَّا&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/036_044_001.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Restrictive Part&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;, &quot;Main Verb Grammar&quot;: &quot;&quot;, &quot;root_from_txt&quot;: &quot;إِلَّا&quot;, &quot;Meaning Of Verb&quot;: &quot;&quot;})">
+    
+    <!-- Arabic word only -->
+    <span class="word-text">إِلَّا</span>
+
+    <!-- Metadata: translation, root, POS -->
+    <span class="metadata">
+        <span class="translation toggle-translation">Except</span>
+        <span class="translation toggle-root root-tag hidden-toggle">إِلَّا</span>
+        <span class="translation toggle-pos pos-tag hidden-toggle">res</span>
+    </span>
+
+</span>
+    
+
+
+    <span class="word-block click-animate accusative " onclick="showPopup({&quot;Word&quot;: &quot;رَحْمَةً&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/036_044_002.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Noun&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;, &quot;Main Verb Grammar&quot;: &quot;&quot;, &quot;root_from_txt&quot;: &quot;رَحْمَة&quot;, &quot;Meaning Of Verb&quot;: &quot;&quot;})">
+    
+    <!-- Arabic word only -->
+    <span class="word-text">رَحْمَةً</span>
+
+    <!-- Metadata: translation, root, POS -->
+    <span class="metadata">
+        <span class="translation toggle-translation">(by) Mercy</span>
+        <span class="translation toggle-root root-tag hidden-toggle">رَحْمَة</span>
+        <span class="translation toggle-pos pos-tag hidden-toggle">noun</span>
+    </span>
+
+</span>
+    
+
+
+    <span class="word-block click-animate  " onclick="showPopup({&quot;Word&quot;: &quot;مِّنَّا&quot;, &quot;Quran Morph Info&quot;: &quot;has 1 pronoun suffixes -  1st person plural form&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/036_044_003.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Preposition+Pron.&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;, &quot;Main Verb Grammar&quot;: &quot;&quot;, &quot;root_from_txt&quot;: &quot;مِن ا&quot;, &quot;Meaning Of Verb&quot;: &quot;&quot;})">
+    
+    <!-- Arabic word only -->
+    <span class="word-text">مِّنَّا</span>
+
+    <!-- Metadata: translation, root, POS -->
+    <span class="metadata">
+        <span class="translation toggle-translation">from Us</span>
+        <span class="translation toggle-root root-tag hidden-toggle">مِن ا</span>
+        <span class="translation toggle-pos pos-tag hidden-toggle">prep+pron</span>
+    </span>
+
+</span>
+    
+
+
+    <span class="word-block click-animate accusative " onclick="showPopup({&quot;Word&quot;: &quot;وَمَتَٰعًا&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/036_044_004.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Conj.+Noun&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;, &quot;Main Verb Grammar&quot;: &quot;&quot;, &quot;root_from_txt&quot;: &quot;وَ مَتَٰع&quot;, &quot;Meaning Of Verb&quot;: &quot;&quot;})">
+    
+    <!-- Arabic word only -->
+    <span class="word-text">وَمَتَٰعًا</span>
+
+    <!-- Metadata: translation, root, POS -->
+    <span class="metadata">
+        <span class="translation toggle-translation">and provision</span>
+        <span class="translation toggle-root root-tag hidden-toggle">وَ مَتَٰع</span>
+        <span class="translation toggle-pos pos-tag hidden-toggle">conj+noun</span>
+    </span>
+
+</span>
+    
+
+
+    <span class="word-block click-animate  " onclick="showPopup({&quot;Word&quot;: &quot;إِلَىٰ&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/036_044_005.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Preposition&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;, &quot;Main Verb Grammar&quot;: &quot;&quot;, &quot;root_from_txt&quot;: &quot;إِلَىٰ&quot;, &quot;Meaning Of Verb&quot;: &quot;&quot;})">
+    
+    <!-- Arabic word only -->
+    <span class="word-text">إِلَىٰ</span>
+
+    <!-- Metadata: translation, root, POS -->
+    <span class="metadata">
+        <span class="translation toggle-translation">for</span>
+        <span class="translation toggle-root root-tag hidden-toggle">إِلَىٰ</span>
+        <span class="translation toggle-pos pos-tag hidden-toggle">prep</span>
+    </span>
+
+</span>
+    
+
+
+    <span class="word-block click-animate genitive " onclick="showPopup({&quot;Word&quot;: &quot;حِينٍ&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;/wbw/036_044_006.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Noun&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;, &quot;Main Verb Grammar&quot;: &quot;&quot;, &quot;root_from_txt&quot;: &quot;حِين&quot;, &quot;Meaning Of Verb&quot;: &quot;&quot;})">
+    
+    <!-- Arabic word only -->
+    <span class="word-text">حِينٍ</span>
+
+    <!-- Metadata: translation, root, POS -->
+    <span class="metadata">
+        <span class="translation toggle-translation">a time</span>
+        <span class="translation toggle-root root-tag hidden-toggle">حِين</span>
+        <span class="translation toggle-pos pos-tag hidden-toggle">noun</span>
+    </span>
+
+</span>
+    
+
+
+<div class = "grammar-info">
+    <div style="display: flex; justify-content: center; flex-wrap: wrap; row-gap: 10px; column-gap: 20px; margin-top: 12px;">
+
+        <div style="display: flex; align-items: center; gap: 6px;">
+            <div style="width: 12px; height: 12px; background-color: #ffe6e6; border-radius: 3px; border: 1px solid #ccc;"></div>
+            <span><b>Nominative</b> <i>(Rafʿ / Subject)</i></span>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 6px;">
+            <div style="width: 12px; height: 12px; background-color: #e6f0ff; border-radius: 3px; border: 1px solid #ccc;"></div>
+            <span><b>Accusative</b> <i>(Naṣb / Object)</i></span>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 6px;">
+            <div style="width: 12px; height: 12px; background-color: #e6ffe6; border-radius: 3px; border: 1px solid #ccc;"></div>
+            <span><b>Genitive</b> <i>(Jarr / Possession)</i></span>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 6px;">
+            <div style="width: 12px; height: 12px; background-color: #fff3cd; border-radius: 3px; border: 1px solid #ccc;"></div>
+            <span><b>Verb</b> <i>(Fiʿl / Action)</i></span>
+        </div>
+
+    </div>
+</div>
+
+
+
+        </div>
+        <div id="reciting-mode-content" class="ayah-arabic" style="display: none; text-align: center; font-size: 28px; direction: rtl; ">
+        اِلَّا رَحۡمَةً مِّنَّا وَمَتَاعًا اِلٰى حِيۡنٍ‏
+        </div>
+
+        
+        
+          <div id="game-mode-content" style="display:none;">
+    <!-- Game layout will be injected here via JS -->
+    
+  </div>
+</div>
+
+<div id="translation-section" class="section" style="text-align: center;" onclick="this.classList.toggle('active'); event.stopPropagation();">
+  <h2 class="practice-title" style="
+    display: inline-block;
+    padding: 8px 16px;
+    background: #0a4d68;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 12px;
+    font-family: 'Roboto', sans-serif;
+  ">
+    Translation
+  </h2>
+
+  <div id="englishTranslation" class="ayah-english" style="text-align: center; display: block;">
+    Except as a mercy from Us and provision for a time.
+  </div>
+  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none;">
+    مگر یہ ہماری رحمت اور ایک مدت تک کے فائدے ہیں
+  </div>
+</div>
+
+
+
+
+
+            <div id="transliteration-box" class="section" style="display:none; text-align:left">
+                 <div class="section practice-header">
+                    <h2 class="practice-title">✍️ Practice Mode: Write the Arabic Words</h2>
+                    <p class="practice-desc" style="margin-bottom:4px"  >
+                       Type the Arabic word above using English letters. Our check uses fuzzy matching, so small spelling variations may still be accepted.
+                    </p>
+                    <p class="practice-desc">
+                       (Use the <strong>Settings</strong> (⚙️) to clear your inputs or toggle translations on/off).
+                    </p>
+                 </div>
+                 <div class="dropdown-menu-custom">
+                 </div>
+               
+                <span class="word-block-translit " style="display: inline-block; text-align: center; margin: 8px; padding: 5px">
+                   <input type="text" class="translit-input small-placeholder" data-key="translit-44-0" data-expected="illā"
+                      placeholder="Type transliteration" 
+                      style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+                   <div class="translation toggle-translation" style="margin: 2px; font-size:10px">Except</div>
+                   <details style="font-size:10px; color:gray; margin-top:4px;">
+                      <summary style="cursor:pointer;">show translit</summary>
+                      <div>illā</div>
+                   </details>
+                </span>
+
+                <span class="word-block-translit " style="display: inline-block; text-align: center; margin: 8px; padding: 5px">
+                   <input type="text" class="translit-input small-placeholder" data-key="translit-44-1" data-expected="raḥmatan"
+                      placeholder="Type transliteration" 
+                      style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+                   <div class="translation toggle-translation" style="margin: 2px; font-size:10px">(by) Mercy</div>
+                   <details style="font-size:10px; color:gray; margin-top:4px;">
+                      <summary style="cursor:pointer;">show translit</summary>
+                      <div>raḥmatan</div>
+                   </details>
+                </span>
+
+                <span class="word-block-translit " style="display: inline-block; text-align: center; margin: 8px; padding: 5px">
+                   <input type="text" class="translit-input small-placeholder" data-key="translit-44-2" data-expected="minnā"
+                      placeholder="Type transliteration" 
+                      style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+                   <div class="translation toggle-translation" style="margin: 2px; font-size:10px">from Us</div>
+                   <details style="font-size:10px; color:gray; margin-top:4px;">
+                      <summary style="cursor:pointer;">show translit</summary>
+                      <div>minnā</div>
+                   </details>
+                </span>
+
+                <span class="word-block-translit " style="display: inline-block; text-align: center; margin: 8px; padding: 5px">
+                   <input type="text" class="translit-input small-placeholder" data-key="translit-44-3" data-expected="wamatāʿan"
+                      placeholder="Type transliteration" 
+                      style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+                   <div class="translation toggle-translation" style="margin: 2px; font-size:10px">and provision</div>
+                   <details style="font-size:10px; color:gray; margin-top:4px;">
+                      <summary style="cursor:pointer;">show translit</summary>
+                      <div>wamatāʿan</div>
+                   </details>
+                </span>
+
+                <span class="word-block-translit " style="display: inline-block; text-align: center; margin: 8px; padding: 5px">
+                   <input type="text" class="translit-input small-placeholder" data-key="translit-44-4" data-expected="ilā"
+                      placeholder="Type transliteration" 
+                      style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+                   <div class="translation toggle-translation" style="margin: 2px; font-size:10px">for</div>
+                   <details style="font-size:10px; color:gray; margin-top:4px;">
+                      <summary style="cursor:pointer;">show translit</summary>
+                      <div>ilā</div>
+                   </details>
+                </span>
+
+                <span class="word-block-translit " style="display: inline-block; text-align: center; margin: 8px; padding: 5px">
+                   <input type="text" class="translit-input small-placeholder" data-key="translit-44-5" data-expected="ḥīnin"
+                      placeholder="Type transliteration" 
+                      style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+                   <div class="translation toggle-translation" style="margin: 2px; font-size:10px">a time</div>
+                   <details style="font-size:10px; color:gray; margin-top:4px;">
+                      <summary style="cursor:pointer;">show translit</summary>
+                      <div>ḥīnin</div>
+                   </details>
+                </span>
+ 
+</div> 
+
+
+
+<nav class="bottom-nav">
+
+
+
+  <a href="#" id="navPractice" class="nav-item" onclick="togglePracticeNav(); this.blur();">
+    <span class="material-icons-outlined">edit</span>
+    <span class="nav-label">Practice</span>
+  </a>
+    <a href="#" id="navMode" class="nav-item" onclick="toggleModeNav(); this.blur();">
+    <span id="navModeIcon" class="material-icons-outlined">psychology</span>
+    <span class="nav-label">Recite</span>
+  </a>
+
+    <a href="#" id="playToggleBtn" class="nav-item" onclick="togglePlay();">
+    <span class="material-icons-outlined" id="navPlayIcon">play_arrow</span>
+  </a>
+    <a href="#" id="navSettings" class="nav-item" onclick="toggleSettingsNav(); this.blur();">
+    <span class="material-icons-outlined">settings</span>
+    <span class="nav-label">Settings</span>
+  </a>
+
+  <a href="#" id="navGames" class="nav-item" onclick="toggleGames(); this.blur();">
+    <span class="material-icons-outlined">sports_esports</span>
+    <span class="nav-label">Games</span>
+  </a>
+</nav>
+
+
+
+
+
+
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyA8K3idA6lR9sfA_fY23H5f4jHeugzSLm4",
+    authDomain: "quranquest-370c4.firebaseapp.com",
+    projectId: "quranquest-370c4",
+    storageBucket: "quranquest-370c4.appspot.com",
+    messagingSenderId: "167269428719",
+    appId: "1:167269428719:web:4dc5e9dfb91b5805af5a1a",
+    measurementId: "G-D7KR30RKFP"
+  };
+
+  // Make sure firebase is defined (from compat script)
+  firebase.initializeApp(firebaseConfig);
+
+  // Expose login function early
+window.loginWithGoogle = function () {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  firebase.auth().signInWithPopup(provider)
+    .then(result => {
+      const user = result.user;
+      console.log("✅ Logged in as:", user.displayName);
+    })
+    .catch(error => {
+      console.error("❌ Login error:", error);
+    });
+};
+
+</script>
+
+
+<script src="/verb_data.js"></script>
+<script src="/script.js" defer></script> 
+<div class="ghost-scroll"></div>
+
+</body>
+</html>
