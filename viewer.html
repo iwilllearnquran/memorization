@@ -202,6 +202,8 @@
     <div class="side-arrow next" id="nextArrow" onclick="loadNextAyah()">→</div>
     <iframe id="ayahViewer"></iframe>
   </div>
+  <div id="calendarPopup" style="display:none; position: fixed; top: 70px; right: 10px; background: white; border: 1px solid #ccc; box-shadow: 0 4px 8px rgba(0,0,0,0.2); padding: 16px; z-index: 2000; border-radius: 8px;"></div>
+
 
   <script>
     const firebaseConfig = {
@@ -240,6 +242,11 @@
         streak = (last === yStr) ? streak + 1 : 1;
         localStorage.setItem('streak', streak);
         localStorage.setItem('lastLoginDay', today);
+		let loginDays = JSON.parse(localStorage.getItem('loginDays') || '[]');
+		if (!loginDays.includes(today)) {
+		  loginDays.push(today);
+		  localStorage.setItem('loginDays', JSON.stringify(loginDays));
+		}
       }
       return streak;
     }
@@ -394,6 +401,48 @@ document.addEventListener('click', function (e) {
     drawer.classList.remove('open');
   }
 });
+
+
+document.getElementById('streakDisplay').addEventListener('click', showStreakCalendar);
+
+function showStreakCalendar() {
+  const loginDays = JSON.parse(localStorage.getItem('loginDays') || '[]');
+  const calendarDiv = document.getElementById('calendarPopup');
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth(); // 0-indexed
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  let html = `<div style="font-weight:bold; text-align:center; margin-bottom:8px;">${today.toLocaleString('default', { month: 'long' })} ${year}</div>`;
+  html += `<div style="display: grid; grid-template-columns: repeat(7, 28px); gap: 4px; text-align:center;">`;
+
+  // Add weekday headers
+  const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+  for (let d of days) html += `<div style="font-weight:bold;">${d}</div>`;
+
+  const firstDay = new Date(year, month, 1).getDay();
+  for (let i = 0; i < firstDay; i++) html += `<div></div>`;
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const dateStr = `${year}-${(month+1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+    const isActive = loginDays.includes(dateStr);
+    html += `<div style="padding:4px; border-radius:50%; background:${isActive ? '#0a4d68' : '#eee'}; color:${isActive ? 'white' : '#333'}">${day}</div>`;
+  }
+
+  html += `</div>`;
+  calendarDiv.innerHTML = html;
+  calendarDiv.style.display = 'block';
+}
+
+const calendar = document.getElementById('calendarPopup');
+if (
+  calendar.style.display === 'block' &&
+  !calendar.contains(e.target) &&
+  !e.target.closest('#streakDisplay')
+) {
+  calendar.style.display = 'none';
+}
+
 
 
   </script>
