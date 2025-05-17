@@ -1221,10 +1221,7 @@
 
         
         
-          <div id="game-mode-content" style="display:none;">
-    <!-- Game layout will be injected here via JS -->
-    
-  </div>
+
 </div>
 
 <div id="translation-section" class="section" style="text-align: center;" onclick="this.classList.toggle('active'); event.stopPropagation();">
@@ -1250,7 +1247,10 @@
   </div>
 </div>
 
-
+          <div id="game-mode-content" style="display:none;">
+    <!-- Game layout will be injected here via JS -->
+    
+  </div>
 
 
 
@@ -2073,7 +2073,7 @@
     <span class="nav-label">Settings</span>
   </a>
 
-  <a href="#" id="navGames" class="nav-item" onclick="toggleGames(); this.blur();">
+  <a href="#" id="navGames" class="nav-item">
     <span class="material-icons-outlined">sports_esports</span>
     <span class="nav-label">Games</span>
   </a>
@@ -2085,39 +2085,20 @@
 
 
 
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyA8K3idA6lR9sfA_fY23H5f4jHeugzSLm4",
-    authDomain: "quranquest-370c4.firebaseapp.com",
-    projectId: "quranquest-370c4",
-    storageBucket: "quranquest-370c4.appspot.com",
-    messagingSenderId: "167269428719",
-    appId: "1:167269428719:web:4dc5e9dfb91b5805af5a1a",
-    measurementId: "G-D7KR30RKFP"
-  };
 
-  // Make sure firebase is defined (from compat script)
-  firebase.initializeApp(firebaseConfig);
-
-  // Expose login function early
-window.loginWithGoogle = function () {
-  const provider = new firebase.auth.GoogleAuthProvider();
-  firebase.auth().signInWithPopup(provider)
-    .then(result => {
-      const user = result.user;
-      console.log("✅ Logged in as:", user.displayName);
-    })
-    .catch(error => {
-      console.error("❌ Login error:", error);
-    });
-};
-
-</script>
-
-
-<script src="/verb_data.js"></script>
+<script src="/firebase-init.js"></script>
 <script src="/script.js" defer></script> 
-<div class="ghost-scroll"></div>
+
+<script type="module" defer>
+  import { toggleGames } from '/ui/toggleGames.js';
+
+  document
+    .getElementById('navGames')
+    .addEventListener('click', e => {
+      e.preventDefault();
+      toggleGames();
+    });
+</script>
 
 </body>
 </html>

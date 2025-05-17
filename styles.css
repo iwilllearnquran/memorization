@@ -53,15 +53,6 @@ html, body {
 
 
 
-/*───────────────────────────────────────────────────────────────────────────
-  Ghost SCrol
-───────────────────────────────────────────────────────────────────────────*/
-.ghost-scroll {
-  height: 2px;           /* tiny bit of extra height */
-  width: 1px;            /* doesn’t need to fill the width */
-  visibility: hidden;    /* truly invisible */
-}
-
 
 /*───────────────────────────────────────────────────────────────────────────
   Reusable flex helper
@@ -99,13 +90,13 @@ html, body {
 .section:hover {
   box-shadow: 0 6px 18px rgba(0,0,0,0.08);
 }
-.section h3 {{
+.section h3 {
   font-size: 18px;
   margin: 0 0 12px 0;     /* Remove top margin */
   text-align: center;
   border-bottom: 2px dashed #ccc;
   padding: 6px 0;         /* Add a bit of vertical breathing space */
-}}
+}
 
 /*───────────────────────────────────────────────────────────────────────────
   Dropdowns
@@ -1011,7 +1002,8 @@ select, .settings-popup input[type=number] {
 
 
 #game-mode-content .slot.filled {
-  border-color: #2c7c4c;
+  border-color: #b7d8c4;
+  color: #ffffff;
 }
 
 #game-mode-content .word-box.clone {
@@ -1027,6 +1019,19 @@ select, .settings-popup input[type=number] {
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   transition: transform 0.4s ease;
 }
+#game-mode-content .word-block.clone {
+  display: inline-block;
+  text-align: center;
+  margin: 2px 2px 5px 2px;
+  padding: 6px 10px 1px 10px;
+  cursor: pointer;
+  border-radius: 12px;
+  border-bottom: 2px dotted #333;
+  border: 1px dotted rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* ✨ Soft shadow */
+  background-color: #ffffff;
+}
+
 
 #game-mode-content .check-btn {
   padding: 10px 20px;
@@ -1084,13 +1089,7 @@ select, .settings-popup input[type=number] {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-#verbMatchGame {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 20px;
-}
+
 
 #verbOptions, #meaningOptions {
   flex: 1 1 180px;
@@ -1100,14 +1099,12 @@ select, .settings-popup input[type=number] {
   max-width: 200px;
 }
 
-
 #verbMatchGame {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 24px;
   margin-top: 24px;
-  align-items: flex-start;
   flex-direction: row;
 }
 
@@ -1166,14 +1163,65 @@ select, .settings-popup input[type=number] {
   color: white;
 }
 
-
-.match-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: center;
-  margin-top: 20px;
+/* The parent container should be a normal block so the grid can span 100% */
+#verbMatchGame {
+  display: none;       /* hidden by default */
+  width: 100%;         /* take up the full width of its parent */
+  padding: 16px;       /* whatever padding you like */
+  box-sizing: border-box;
 }
+#verbMatchGame.show {
+  display: flex;                /* show as flex when “.show” */
+  justify-content: center;      /* center the grid horizontally */
+  padding: 16px; 
+}
+
+/* Your inner grid: 100px for the Arabic verbs, the rest for the English */
+.match-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 100px !important;
+  gap: 10px !important;
+  max-width: 100% !important;;
+  padding: 10px !important;
+  margin: 10px  !important;
+  box-sizing: border-box  !important;
+  justify-content: center;
+}
+
+
+.match-column-ar,
+.match-column-en {
+  display:        flex !important;
+  flex-direction: column !important;
+  gap:            8px   !important;
+  margin:         0     !important;  /* let the grid’s gap & margin handle spacing */
+  width:          auto  !important;  /* grid now controls column width */
+  min-width:      0     !important;  /* allows the grid to shrink it below content width */
+}
+
+
+
+
+
+/* Card styling */
+.match-card {
+  padding: 8px 12px;
+  border: 1px solid #0a4d68;
+  border-radius: 6px;
+  background: #f9f9f9;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  width: 100%;               /* span its entire column */
+  box-sizing: border-box;    /* include padding/borders in that width */
+}
+
+
+
+/* States (selected, matched, wrong) */
+.match-card.selected { background: #e0f0ff; border-color: #3399ff; }
+.match-card.matched  { background: #d4edda; border-color: #28a745; }
+.match-card.wrong    { background: #f8d7da; border-color: #dc3545; }
+
 
 .match-row {
   display: flex;
@@ -1185,30 +1233,271 @@ select, .settings-popup input[type=number] {
 
 
 
-#arrangeGameContainer .game-header {
-  text-align: center;
-  margin-bottom: 16px;
+
+/* Make each pane a column flex container that starts at the top */
+/* Make each game pane a top-aligned column */
+
+/* Center the game header text */   
+#arrangeGameContainer .prompt {
+  margin: 8px 0;     /* small gap under the header text */
 }
 
-#arrangeGameContainer .game-board .slots,
-#arrangeGameContainer .game-board .options {
+#arrangeGameContainer .slots {
+  margin: 16px 0;    /* gap before your empty slots row */
+}
+
+#arrangeGameContainer .options {
+  margin: 200px 0 100px 0 !important;    /* gap before the draggable words */
+}
+#arrangeGameContainer .game-header {
+  display: flex;
+  align-items: center !important;
+  justify-content: center;
+  gap: 8px;
+  font-size: 24px;
+  color: #fcfafa !important;
+  font-size:  24px;
+ 
+}
+
+
+
+
+
+
+
+#arrangeGameContainer .slots
+{
+  display: flex;
+  flex-wrap: wrap;                /* Allows wrapping to next line */
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto 30px auto;
+  padding: 6px 0;
+  border-bottom: none;            /* No global underline */
+  gap: 0px;                        /* Small space between slots */
+  font-family: 'CustomArabic', serif;
+  font-size: 28px;
+  justify-content: center;
+}
+
+#arrangeGameContainer .options {
   display: flex;
   flex-wrap: wrap;
+  margin: 0 1px;
   justify-content: center;
-  gap: 12px;
-  margin-top: 10px;
+  gap: 0px;
+  margin-bottom: 30px;
 }
 
-#arrangeGameContainer .game-board .slot,
-#arrangeGameContainer .game-board .word-box {
-  min-width: 70px;
-  text-align: center;
-  padding: 8px 12px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #f0f0f0;
+#arrangeGameContainer .slot{
+  min-width: 1px;
+  height: 40px;
+  border-bottom: 1px dashed #efe7e7;
+  margin: 0px 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  padding: 1px;
 }
+#arrangeGameContainer .word-box.clone {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  margin: 0;
+  padding: 10px 18px;
+  font-size: 20px;
+  background: white;
+  border: 2px solid #5398be;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.4s ease;
+}
+
+.game-card {
+  max-width: 600px; margin: auto; padding: 16px;
+  background: #f9f9f9; border: 2px solid #0a4d68;
+   border-radius: 8px;
+   padding: 16px; margin-bottom: 12px; 
+   box-shadow: 0 2px 8px rgba(0,0,0,0.05); 
+   font-family: 'Roboto', sans-serif;
+}
+
+.game-play-btn {
+  display: inline-block !important;
+  padding: 8px 16px !important;
+  background: #0a4d68 !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 6px !important;
+  font-family: inherit !important;
+  font-size: 1rem !important;
+  cursor: pointer !important;
+  transition: transform 0.1s ease box-shadow 0.1s ease !important;
+  box-shadow: 
+    0 4px 0 #083f56   /* hard bottom edge */
+    0 6px 10px rgba(0,0,0,0.2) !important; /* soft drop shadow */
+}
+
+.game-play-btn:hover {
+  transform: translateY(-2px) !important; /* lift up slightly */
+}
+
+.game-play-btn:active {
+  transform: translateY(4px) !important; /* press down */
+  box-shadow: 
+    0 0 0 #083f56 ,      /* remove hard edge */
+    0 2px 6px rgba(0,0,0,0.2) !important; /* softer shadow */
+}
+
+
+
+/* keep the “greyed” look when disabled */
+.game-play-btn:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+/* fully opaque & clickable when enabled */
+.game-play-btn:not(:disabled) {
+  opacity: 1 !important;
+  cursor: pointer !important;
+}
+
+/* optionally, extra styling when active */
+.game-play-btn.active-control {
+  /* e.g. add a glow or stronger shadow */
+  box-shadow:
+    0 6px 0 #083f56,
+    0 8px 14px rgba(0,0,0,0.25) !important;
+}
+
+/* in your main stylesheet */
+.nav-hidden {
+  display: none !important;
+}
+
+
+
+/* in your global stylesheet, after your .game-play-btn rules */
+.game-play-btn:disabled {
+  background:    #cccccc !important;
+  color:         #666666 !important;
+  box-shadow:    none !important;
+  cursor:        not-allowed !important;
+  opacity:       1 !important;  /* overrides any .5 opacity */
+}
+
+
+
+/* visually grey out & block pointer events cursor for “disabled-control” */
+.disabled-control {
+  background:    #cccccc !important;
+  color:         #666666 !important;
+  box-shadow:    none !important;
+  cursor:        not-allowed !important;
+  opacity:       1 !important;
+}
+
+/* but don’t actually disable pointer events so JS can still see clicks */
+.disabled-control {
+  pointer-events: auto !important;
+}
+
+
+/* Stats bar container */
+.game-stats-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;               /* space between Score and Lives sections */
+  direction: ltr !important; /* force left-to-right layout */
+  font-family: inherit;
+  margin: 12px 0;
+}
+
+/* Each section (Score, Lives) */
+.stats-section {
+  display: flex;
+  align-items: center;
+  gap: 4px;                /* tighten up between icon & value / hearts */
+}
+
+/* Score: slightly larger text */
+.score-section .stats-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* Heart icons: red, smaller gap between them */
+.lives-section .stats-heart {
+  color: #ebebeb;
+  font-size: 1.2rem;
+  margin-right: 2px;       /* minimal space between hearts */
+}
+
+/* Remove extra margin on last heart */
+.lives-section .stats-heart:last-child {
+  margin-right: 0;
+}
+
+/* When in game mode, this class makes the container fill the screen */
+:root {
+  /* pick your theme color once */
+  --game-overlay-color: 20, 60, 80;  /* RGB for teal-ish (#143C50) */
+  --game-overlay-opacity: 0.6;      /* 0 = transparent, 1 = solid */
+}
+
+.fullscreen-game {
+  position: fixed !important;
+  top:      0 !important;
+  left:     0 !important;
+  width:    100vw !important;
+  height:   100vh !important;
+
+  /* use your theme with reduced opacity */
+  background: rgba(var(--game-overlay-color), var(--game-overlay-opacity)) !important;
+
+  padding:       30px 10px !important;
+  box-sizing:    border-box !important;
+  overflow:      hidden !important;
+}
+
+
+/* Ensure the parent is fullscreen */
+#gameContainer.fullscreen-game {
+  position: fixed;
+  top:      0;
+  left:     0;
+  width:    100vw;
+  height:   100vh;
+  overflow: hidden;
+}
+
+/* Then make each game‐section cover the entire area */
+.game-section {
+  position:        absolute;  /* layer on top of the container */
+  top:             0;
+  left:            0;
+  width:           100%;
+  height:          100%;
+  padding:         32px;      /* optional gutter */
+  box-sizing:      border-box;
+  overflow-y:      auto;      /* scroll if content is tall */
+  background:      transparent;
+}
+
+/* And when you show one pane, others are hidden by JS */
+.game-section[style*="display: none"] {
+  visibility: hidden;
+}
+
+
+
+
+
+
 
 
 

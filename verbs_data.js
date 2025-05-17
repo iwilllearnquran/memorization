@@ -1,4 +1,4 @@
-const VERB_DATA = {
+export const VERB_DATA = {
   "قَالَ": { rank: 2008, meaning: "to say" },
   "كَانَ": { rank: 2010, meaning: "they used to" },
   "ءَامَنَ": { rank: 2003, meaning: "to believe" },

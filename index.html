@@ -8,6 +8,8 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
   <style>
     body {
       margin: 0;
@@ -183,6 +185,8 @@
   </div>
 <!-- ✅ Use only compat SDKs -->
 
+<script src="/firebase-init.js"></script>
+
   <script>
   const surahSelect = document.getElementById('surahSelect');
   const ayahSelect = document.getElementById('ayahSelect');
@@ -352,24 +356,15 @@
 
 
 
-  // ✅ Firebase Config
-  const firebaseConfig = {
-    apiKey: "AIzaSyBuOs0LRjbcqvJULZlWkUqYdrfmGIJm88w",
-    authDomain: "myquranquest786.firebaseapp.com",
-    projectId: "myquranquest786",
-    storageBucket: "myquranquest786.appspot.com",
-    messagingSenderId: "970275375391",
-    appId: "1:970275375391:web:d1cac99878334834cb482a",
-    measurementId: "G-KL3ZNNX844"
-  };
 
   // ✅ Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   firebase.analytics();
   const auth = firebase.auth();
+  const db = firebase.firestore();
+
 
   // ✅ Login/Logout Logic
-  const loginBtn = document.getElementById('loginBtn');
   const profileMenu = document.getElementById('profileMenu');
   const userName = document.getElementById('userName');
   const userEmail = document.getElementById('userEmail');
@@ -400,22 +395,58 @@ function logout() {
 }
 
 
-  auth.onAuthStateChanged(user => {
-    if (user) {
-      // Show user info
-      userName.textContent = user.displayName || "User";
-      userEmail.textContent = user.email || "";
-      ajrPoints.textContent = '100%';  // Can customize this logic
+auth.onAuthStateChanged(user => {
+  if (!user) {
+    // Logged out
+    userName.textContent = 'Guest';
+    userEmail.textContent = '';
+    ajrPoints.textContent = '0';
+    loginBtn.textContent = '👤 Login';
+    profileMenu.classList.remove('open');
+    document.getElementById('streakDisplay').textContent = '🔥0';
+    return;
+  }
+
+  const userRef = db.collection("users").doc(user.uid);
+
+  // 1️⃣ Ensure the user document exists / update lastLogin
+  userRef.set({
+    name: user.displayName || "User",
+    email: user.email || "",
+    lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+  }, { merge: true });
+
+  // 2️⃣ Read back the ajrPoints & streakHistory and update UI
+  userRef.get()
+    .then(doc => {
+      const data = doc.data() || {};
+
+      // Profile
+      userName.textContent  = data.name  || user.displayName || "User";
+      userEmail.textContent = data.email || user.email || "";
+
+      // Ajr Points
+      const pts = data.ajrPoints ?? 0;
+      ajrPoints.textContent = `${pts}`;
+
+      // Streak: count of days in streakHistory array
+      const history = data.streakHistory || [];
+      document.getElementById('streakDisplay')
+        .textContent = `🔥${history.length}`;
+
+      // Update login button label
       loginBtn.textContent = '👤 ' + (user.displayName?.split(' ')[0] || 'Profile');
-    } else {
-      // Reset to guest state
-      userName.textContent = 'Guest';
-      userEmail.textContent = '';
-      ajrPoints.textContent = '0%';
-      loginBtn.textContent = '👤 Login';
-      profileMenu.classList.remove('open');
-    }
-  });
+    })
+    .catch(err => console.error("❌ Failed to load user data:", err));
+});
+
+
+function getTodayDate() {
+  const d = new Date();
+  return d.toISOString().split('T')[0]; // "2025-05-15"
+}
+
+
 
 
 
