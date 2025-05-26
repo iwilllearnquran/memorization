@@ -6,8 +6,34 @@
   --grad-end:   #8aa8b8;
   --icon-default: #000; /*rgba(255,255,255,0.75); */
   --icon-hover:   #000;
-  
+  --theme-glow-start: #538295;
+  --theme-glow-end:   #8aa8b8;
+  }
+
+
+  /* Morning: warm sunrise */
+.sky-morning {
+  background: linear-gradient(to bottom, #FFD194 0%, #D1913C 100%);
 }
+
+/* Day: bright sky-blue */
+.sky-day {
+  background: linear-gradient(to bottom, #87CEFA 0%, #FFFFFF 100%);
+}
+
+/* Evening: sunset orange/pink */
+.sky-evening {
+  background: linear-gradient(to bottom, #FF5F6D 0%, #FFC371 100%);
+}
+
+/* Night: deep midnight blues */
+.sky-night {
+  background: linear-gradient(359deg,rgba(10, 77, 104, 1) 23%, rgba(108, 148, 164, 1) 67%, rgba(230, 237, 239, 1) 100%);
+}
+/* ensure it fills the viewport */
+
+
+  
 
 /*───────────────────────────────────────────────────────────────────────────
   Global layout
@@ -18,17 +44,16 @@ body {
   padding: 0;
   overflow-x: hidden;  
   overflow-y: auto;
-  min-height: calc(100vh + 2px); 
+  min-height: 100vh;
+  
   
 }
 html, body {
   background-color: #dfe8eb;
   overflow-y: auto;
+  
    
 }
-
-html { height: auto; }
-
 
 
 *:not(.material-icons):not(.material-icons-outlined):not([class^="material-icons"]):not(.grammar-info):not(.grammar-info *) {
@@ -68,11 +93,12 @@ html, body {
 ───────────────────────────────────────────────────────────────────────────*/
 .section {
   position: relative;
-  width: 100vw;                    /* span the viewport */
+  width: 100%;                    /* span the viewport */
   left: 50%;                       /* move its left edge to center */
   transform: translateX(-50%);     /* pull it back left by half its width */ 
   
-  margin: 0;                       
+ 
+  margin: 0 auto;                       
   padding: 20px 8px 10px 20px;     
   box-sizing: border-box;          
   font-size: 15px;
@@ -951,7 +977,11 @@ select, .settings-popup input[type=number] {
 #game-mode-content .prompt {
   margin-bottom: 20px;
   font-size: 15px;
-  font-weight: bold;
+  font-weight: inherit;
+  color: rgb(0, 0, 0);
+  justify-content: center !important;
+  display: grid
+;
 }
 
 #game-mode-content .options
@@ -962,6 +992,13 @@ select, .settings-popup input[type=number] {
   justify-content: center;
   gap: 0px;
   margin-bottom: 30px;
+  background: rgba(255, 255, 255, 0.1); /* translucent white */
+  border-radius: 12px;
+  padding: 16px;
+  margin: 0 10px 30px 10px;
+  box-shadow: 0 15px 500px rgb(255 194 12 / 39%);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgb(224 180 14);
 }
 
 #game-mode-content .slots {
@@ -969,13 +1006,15 @@ select, .settings-popup input[type=number] {
   flex-wrap: wrap;                /* Allows wrapping to next line */
   width: 100%;
   max-width: 100%;
-  margin: 0 auto 30px auto;
-  padding: 6px 0;
-  border-bottom: none;            /* No global underline */
+  margin: 150px auto 0px auto;
+  padding: 6px 0;           /* No global underline */
   gap: 0px;                        /* Small space between slots */
   font-family: 'CustomArabic', serif;
   font-size: 28px;
   justify-content: center;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background-color: rgba(255, 255, 255, 0.6); /* or use transparent if you prefer */
+  border-radius: 6px;          /* No global underline */                        /* Small space between slots */
 }
 
 #optionsContainer .word-box {
@@ -1001,10 +1040,6 @@ select, .settings-popup input[type=number] {
 }
 
 
-#game-mode-content .slot.filled {
-  border-color: #b7d8c4;
-  color: #ffffff;
-}
 
 #game-mode-content .word-box.clone {
   position: fixed;
@@ -1111,24 +1146,13 @@ select, .settings-popup input[type=number] {
 #verbOptions, #meaningOptions {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
   flex: 1;
   min-width: 180px;
   max-width: 240px;
 }
 
-.match-card {
-  width: flex; /* ✅ uniform width */
-  padding: 12px 16px;
-  background: #fff;
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  text-align: center;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  user-select: none;
-}
+
 
 .match-card.selected {
   background-color: #e0f7fa;
@@ -1178,22 +1202,39 @@ select, .settings-popup input[type=number] {
 
 /* Your inner grid: 100px for the Arabic verbs, the rest for the English */
 .match-grid {
+  position: relative !important;
   display: grid !important;
   grid-template-columns: 1fr 100px !important;
-  gap: 10px !important;
-  max-width: 100% !important;;
-  padding: 10px !important;
-  margin: 10px  !important;
-  box-sizing: border-box  !important;
+  z-index: 1000 !important;
+  gap: 20px !important;
+  top: 30px;
+  max-width: 100% !important;
+  padding: 12px !important;
+  margin: 10px 10px 10px 10px !important;
+  box-sizing: border-box !important;
   justify-content: center;
 }
+/* Center the verb controls */
+#verbControls {
+  position: fixed;
+  bottom: 35px;              /* distance from bottom edge */
+  left: 50%;                 
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding: 8px 0;            /* vertical padding */
+  z-index: 1000;
+}
+
+
 
 
 .match-column-ar,
 .match-column-en {
   display:        flex !important;
   flex-direction: column !important;
-  gap:            8px   !important;
+  gap:            20px   !important;
   margin:         0     !important;  /* let the grid’s gap & margin handle spacing */
   width:          auto  !important;  /* grid now controls column width */
   min-width:      0     !important;  /* allows the grid to shrink it below content width */
@@ -1202,17 +1243,34 @@ select, .settings-popup input[type=number] {
 
 
 
-
 /* Card styling */
 .match-card {
+  background: #fff;
+  text-align: center;
+  margin-bottom: 12px !important;
+  font-size: 20px;
+  user-select: none;
   padding: 8px 12px;
-  border: 1px solid #0a4d68;
+  border: 2px solid #c9d1d4;
   border-radius: 6px;
-  background: #f9f9f9;
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
   width: 100%;               /* span its entire column */
   box-sizing: border-box;    /* include padding/borders in that width */
+    /* 3D & depth */
+    transform: translateZ(0) rotateX(0) rotateY(0);
+    transform-style: preserve-3d;
+    box-shadow:
+    0 4px 6px rgba(0,0,0,0.1),
+    0 1px 3px rgba(0,0,0,0.08);
+    
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.match-card:hover {
+  transform: translateZ(20px) rotateX(5deg) rotateY(-5deg);
+  box-shadow: 
+    0 12px 20px rgba(0, 0, 0, 0.2),
+    0 4px 6px rgba(0, 0, 0, 0.15);
 }
 
 
@@ -1242,13 +1300,7 @@ select, .settings-popup input[type=number] {
   margin: 8px 0;     /* small gap under the header text */
 }
 
-#arrangeGameContainer .slots {
-  margin: 16px 0;    /* gap before your empty slots row */
-}
 
-#arrangeGameContainer .options {
-  margin: 200px 0 100px 0 !important;    /* gap before the draggable words */
-}
 #arrangeGameContainer .game-header {
   display: flex;
   align-items: center !important;
@@ -1265,29 +1317,13 @@ select, .settings-popup input[type=number] {
 
 
 
-
-#arrangeGameContainer .slots
-{
-  display: flex;
-  flex-wrap: wrap;                /* Allows wrapping to next line */
-  width: 100%;
-  max-width: 100%;
-  margin: 0 auto 30px auto;
-  padding: 6px 0;
-  border-bottom: none;            /* No global underline */
-  gap: 0px;                        /* Small space between slots */
-  font-family: 'CustomArabic', serif;
-  font-size: 28px;
-  justify-content: center;
-}
-
 #arrangeGameContainer .options {
   display: flex;
   flex-wrap: wrap;
   margin: 0 1px;
   justify-content: center;
   gap: 0px;
-  margin-bottom: 30px;
+  margin: 200px 0 100px 0 !important;    /* gap before the draggable words */
 }
 
 #arrangeGameContainer .slot{
@@ -1315,42 +1351,230 @@ select, .settings-popup input[type=number] {
   transition: transform 0.4s ease;
 }
 
+
+
+:root {
+  --theme-start: #538295;
+  --theme-end:   #8aa8b8;
+}
+
+/* ─── Outer Card ───────────────────────────────────────── */
 .game-card {
-  max-width: 600px; margin: auto; padding: 16px;
-  background: #f9f9f9; border: 2px solid #0a4d68;
-   border-radius: 8px;
-   padding: 16px; margin-bottom: 12px; 
-   box-shadow: 0 2px 8px rgba(0,0,0,0.05); 
-   font-family: 'Roboto', sans-serif;
+  /* size & spacing */
+  max-width: 600px;
+  margin: 50px 40px 12px;           /* shorthand for top/right/bottom */
+  padding: 16px 16px 25px;          /* keep your bottom padding */
+
+  /* look & feel */
+  background: #fff !important;      /* force pure white */
+  border: none !important;          /* drop that old solid border */
+  border-radius: 16px !important;   /* soften the corners */
+  box-shadow: 
+    0 8px 20px rgba(0,0,0,0.05);     /* subtle lift */
+  transition: 
+    transform 0.2s ease, 
+    box-shadow 0.2s ease;
+  font-family: 'Roboto', sans-serif;
+  position: relative;               /* for any pseudo‐elements if needed */
+}
+
+
+/* hover lift */
+.game-card:hover {
+  transform: translateY(-4px) !important; ;
+  box-shadow: 
+    0 12px 28px rgba(0,0,0,0.1);
+}
+
+/* “selected” glow—just add the class `.selected` at runtime */
+.game-card.selected {
+  box-shadow:
+    0 4px 12px rgba(0,0,0,0.1),     /* keep a little depth */
+    0 0 0 4px var(--theme-start);    /* 4px glow outline in your theme color */
+}
+
+/* inner grey box */
+.game-card .details {
+  background: #f5f5f5 !important; ;
+  border-radius: 12px !important; ;
+  padding: 16px !important; ;
+  margin-bottom: 20px !important; ;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.04) !important; ;
+}
+
+/* pill-shaped button */
+.game-card button {
+  background: linear-gradient(135deg, var(--theme-start), var(--theme-end)) !important; ;
+  color: #fff !important; ;
+  padding: 12px 24px !important; ;
+  border: none !important; ;
+  border-radius: 999px !important; ;
+  font-size: 1rem !important; ;
+  font-weight: 600 !important; ;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important; ;
+  transition: transform 0.2s, box-shadow 0.2s !important; ;
+  cursor: pointer !important; ;
+}
+.game-card button:hover {
+  transform: translateY(-2px) !important; ;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12) !important; ;
+}
+.game-card button:active {
+  transform: translateY(0) !important; ;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08) !important; ;
+}
+
+
+
+
+.game-play-btn-verbs {
+  display: inline-block !important;
+  padding: 12px 24px !important;
+  background: #0a4d68 !important;            /* deep blue */
+  color: #fff !important;
+  font-family: inherit !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  border: none !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  position: relative !important;
+  overflow: hidden;
+  transform: perspective(800px) rotateX(2deg) !important; /* 3D tilt effect */
+  transform-style: preserve-3d;
+  box-shadow:
+    0 6px 0 #083f56,                          /* hard shadow edge */
+    0 10px 20px rgba(249, 245, 245, 0.2) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
 }
 
 .game-play-btn {
   display: inline-block !important;
-  padding: 8px 16px !important;
-  background: #0a4d68 !important;
+  padding: 12px 24px !important;
+  background: #0a4d68 !important;            /* deep blue */
   color: #fff !important;
-  border: none !important;
-  border-radius: 6px !important;
   font-family: inherit !important;
   font-size: 1rem !important;
+  font-weight: 600 !important;
+  border: none !important;
+  border-radius: 6px !important;
   cursor: pointer !important;
-  transition: transform 0.1s ease box-shadow 0.1s ease !important;
-  box-shadow: 
-    0 4px 0 #083f56   /* hard bottom edge */
-    0 6px 10px rgba(0,0,0,0.2) !important; /* soft drop shadow */
+  position: relative !important;
+  overflow: hidden;
+  transform: perspective(800px) rotateX(2deg) !important; /* 3D tilt effect */
+  transform-style: preserve-3d;
+  box-shadow:
+    0 6px 0 #083f56,                          /* hard shadow edge */
+    0 10px 20px rgba(249, 245, 245, 0.2) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  animation: bounce 2s infinite ease-in-out !important;
+
+  
 }
 
+/* Slanted shine effect */
+.game-play-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, rgba(255,255,255,0.4), rgba(255,255,255,0));
+  transform: rotateZ(-100deg); /* slant the shine */
+  animation: shine 2.5s infinite !important;
+  pointer-events: none;
+}
+
+@keyframes shine {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 200%;
+  }
+  
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: perspective(800px) rotateX(2deg) translateY(0);
+  }
+  50% {
+    transform: perspective(800px) rotateX(2deg) translateY(-5px);
+  }
+}
+
+/* Hover lifts the button */
 .game-play-btn:hover {
-  transform: translateY(-2px) !important; /* lift up slightly */
+  transform: perspective(800px) rotateX(2deg) translateY(-2px) !important;
 }
 
+/* Active presses it down */
 .game-play-btn:active {
-  transform: translateY(4px) !important; /* press down */
-  box-shadow: 
-    0 0 0 #083f56 ,      /* remove hard edge */
-    0 2px 6px rgba(0,0,0,0.2) !important; /* softer shadow */
+  transform: perspective(800px) rotateX(7deg) translateY(3px) !important;
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.2) !important;
 }
 
+.theme-play-btn {
+  background: linear-gradient(to bottom, #0a4d68, #083f56); /* theme gradient */
+  border: 3px solid #072c3c;
+  border-radius: 12px;
+  padding: 12px 28px;
+  color: #fff;
+  font-family: 'Arial Black', sans-serif;
+  font-size: 1.4rem;
+  font-weight: bold;
+  text-shadow: 1px 1px #000;
+  box-shadow:
+    inset 0 -4px 0 rgba(0, 0, 0, 0.3),
+    0 6px 0 #062c3d,
+    0 8px 15px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.1s ease;
+}
+
+.theme-play-btn:active {
+  transform: translateY(2px);
+  box-shadow:
+    inset 0 -2px 0 rgba(0, 0, 0, 0.4),
+    0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.theme-play-btn .arrow {
+  font-size: 1.3em;
+  transform: translateY(1px);
+}
+
+
+.strip-btn {
+  display: inline-block;
+  width: 100%;
+  max-width: 320px;
+  height: 25px;
+  background-color: #0a4d68;
+  color: #e1f5ff;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+  padding: 0 18px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+  direction: ltr !important; /* ensure text direction is left-to-right */
+  align-items: center !important; /* center the text vertically */
+}
+
+.strip-btn:hover {
+  background-color: #0c5a78;
+  color: white;
+}
 
 
 /* keep the “greyed” look when disabled */
@@ -1406,16 +1630,6 @@ select, .settings-popup input[type=number] {
 }
 
 
-/* Stats bar container */
-.game-stats-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 24px;               /* space between Score and Lives sections */
-  direction: ltr !important; /* force left-to-right layout */
-  font-family: inherit;
-  margin: 12px 0;
-}
 
 /* Each section (Score, Lives) */
 .stats-section {
@@ -1445,8 +1659,8 @@ select, .settings-popup input[type=number] {
 /* When in game mode, this class makes the container fill the screen */
 :root {
   /* pick your theme color once */
-  --game-overlay-color: 20, 60, 80;  /* RGB for teal-ish (#143C50) */
-  --game-overlay-opacity: 0.6;      /* 0 = transparent, 1 = solid */
+  --game-overlay-color:255,250,246;  /* RGB for teal-ish (#143C50) */
+  --game-overlay-opacity: 1;      /* 0 = transparent, 1 = solid */
 }
 
 .fullscreen-game {
@@ -1467,7 +1681,7 @@ select, .settings-popup input[type=number] {
 
 /* Ensure the parent is fullscreen */
 #gameContainer.fullscreen-game {
-  position: fixed;
+  position: absolute;
   top:      0;
   left:     0;
   width:    100vw;
@@ -1482,7 +1696,8 @@ select, .settings-popup input[type=number] {
   left:            0;
   width:           100%;
   height:          100%;
-  padding:         32px;      /* optional gutter */
+  padding:   50px 20px 32px 20px ;      /* optional gutter */
+
   box-sizing:      border-box;
   overflow-y:      auto;      /* scroll if content is tall */
   background:      transparent;
@@ -1496,11 +1711,121 @@ select, .settings-popup input[type=number] {
 
 
 
+@media (max-width: 768px) {
+  /* full-screen background on phones */
+  #verbGameContainer.mobile-bg {
+    background: url('/assets/bg_quiz.jpg')
+                no-repeat center/cover !important;
+    padding:     0 !important;
+    margin:      0 !important;
+    /* ensure you can scroll the contents if they overflow */
+    overflow-y:  auto !important;
+  }
+}
+
+
+
+/*──────────────────────────────────────────────────────────────
+     Game mode controls on index
+──────────────────────────────────────────────────────────────*/
+/* when in game mode, hide nav controls... */
+body.game-mode .dropdowns,
+body.game-mode .prev,
+body.game-mode .next {
+  display: none !important;
+}
+
+/* and show your parent-level stats & return button */
+#gameStatsParent,
+#returnToAyah {
+  display: none;
+}
+body.game-mode #gameStatsParent,
+body.game-mode #returnToAyah {
+  display: flex;      /* or block for the button */
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* style for your parent-level stats */
+#gameStatsParent {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(10,77,104,0.9);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  z-index: 1002;
+}
+
+/* style for your return button */
+#returnToAyah {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0a4d68;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  z-index: 1002;
+  transition: opacity 0.3s ease;
+}
 
 
 
 
+.game-stats-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0; /* or wherever it should go */
+  width: 100vw; /* Viewport width */
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box; /* include padding in width */
+  align-items: center;
+  padding: 6px 12px;
+  z-index: 10;
+  box-sizing: border-box;
+  background-color: #0a4d68;
+  direction: ltr !important; /* force left-to-right layout */
+}
 
 
+.user-pill,
+.score-pill {
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #fffdd0;   /* cream border */
+  border-radius: 9999px;       /* pill shape */
+}
 
 
+.avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.coin {
+  color: #f5b400;
+  font-weight: 600;
+}
+
+.score {
+  color: #f06292 ; /* red for hearts */
+  font-weight: 600;
+}
+
+.divider {
+  color: #999;
+}

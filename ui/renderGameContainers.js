@@ -13,7 +13,7 @@ export function renderGameContainers() {
 
   // 1️⃣ Render selector cards
   console.log('[1️⃣] Rendering selector cards...');
-  GAME_CONFIG.games.forEach(({ type, id, title, description, buttonId , fontFamily, fontSize, textAlign}) => {
+  GAME_CONFIG.games.forEach(({ type, id, title, description, buttonId , fontFamily, fontSize, textAlign, disabled }) => {
     console.log(`   • Creating card for game type="${type}", id="${id}"`);
     const card = document.createElement('div');
     card.id           = id;               // e.g. "arrangeSelector"
@@ -25,25 +25,24 @@ export function renderGameContainers() {
     card.innerHTML    = `
       <h3>${title}</h3>
       <p>${description}</p>
-      <button id="${buttonId}" class="game-play-btn">Play ${title}</button>
+      ${buttonId ? `<button id="${buttonId}" class="game-play-btn">Play ${title}</button>` : ''}
     `;
     container.appendChild(card);
     console.log(`     → Appended card #${id}`);
 
-    const btn = card.querySelector('button');
-    btn.addEventListener('click', () => {
-      console.log(`[🕹] Play button clicked for "${type}"`);
-      // Switch to game view
-      toggleGames(type);
-      // Start the appropriate game logic
-      if (type === 'arrange') {
-        console.log('[🚀] Starting Arrange Game');
-        startArrangeGame();
-      } else if (type === 'verb') {
-        console.log('[🚀] Starting Verb Match Game');
-        startVerbGame();
-      }
-    });
+const btn = card.querySelector('button');
+if (btn) {
+  btn.addEventListener('click', () => {
+    console.log(`[🕹] Play button clicked for "${type}"`);
+    toggleGames(type);
+    if (type === 'arrange') {
+      startArrangeGame();
+    } else if (type === 'verb') {
+      startVerbGame();
+    }
+  });
+}
+
   });
 
   // 2️⃣ Render hidden game panes
@@ -58,14 +57,12 @@ export function renderGameContainers() {
 
     if (type === 'arrange') {
       div.innerHTML = `
-        <div class="prompt">Arrange the words in correct order</div>
         <div class="slots"   id="slotContainer"></div>
         <div class="options" id="optionsContainer"></div>
       `;
       console.log('     → Fill in Arrange UI');
     } else if (type === 'verb') {
       div.innerHTML = `
-        <div class="prompt">Match the verb to its meaning</div>
         <div class="match-grid">
           <div id="meaningOptions" class="match-column-en"></div>
           <div id="verbOptions" class="match-column-ar"></div>

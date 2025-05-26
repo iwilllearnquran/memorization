@@ -1,15 +1,14 @@
-// ui/gameCompletionUI.js
-
-import gameSession from '/state/gameSession.js';
-import { saveScore } from '/services/firestoreService.js';
-import { getAuth }   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { toggleGames }  from '/ui/toggleGames.js';
+import { toggleGames } from '/ui/toggleGames.js';
 
 /**
- * Shows a modal popup when a game completes, with a "Claim Points" button.
- * @param {string} message - The completion message to display.
+ * Shows a modal popup when a game completes or when guest needs to log in.
+ * @param {string} messageHtml - HTML string for the content of the popup.
+ * @param {object} [options]
+ * @param {boolean} [options.hideContinue=false] - if true, hides the Continue button.
  */
-export function showCompletionPopup(message) {
+export function showCompletionPopup(messageHtml, options = {}) {
+  const { hideContinue = false } = options;
+
   // 1️⃣ Create overlay
   const overlay = document.createElement('div');
   overlay.id = 'gameCompletionPopup';
@@ -23,44 +22,40 @@ export function showCompletionPopup(message) {
     zIndex: '10000'
   });
 
-  // 2️⃣ Create popup content
+  // 2️⃣ Create popup container
   const popup = document.createElement('div');
+  popup.id = 'messageBox';
   Object.assign(popup.style, {
     background: '#fff',
     padding: '24px',
     borderRadius: '8px',
     maxWidth: '400px',
+    width: '90%',
     textAlign: 'center',
     boxShadow: '0 2px 10px rgba(0,0,0,0.3)'
   });
-  popup.innerHTML = `
-    <p style="font-size:18px; margin-bottom:16px;">${message}</p>
-    <button id="claimPointsBtn"  class="game-play-btn" style="margin-top: 12px;">
-      Claim Ajr Points
-    </button>
-  `;
-  overlay.appendChild(popup);
-  document.body.appendChild(overlay);
 
-  // 3️⃣ Wire up Claim Points
-document.getElementById('claimPointsBtn')
-    .addEventListener('click', async () => {
-      const user = getAuth().currentUser;
-      if (!user) {
-        alert('Please log in to claim your Ajr points.');
-        return;
-      }
-      try {
-        await saveScore(user.uid, gameSession.score);
-        alert('Ajr points claimed successfully! 🎉');
-      } catch (e) {
-        console.error('Error saving points:', e);
-        alert('Failed to claim points.');
-      }
-      // Remove popup
+  // 3️⃣ Insert HTML message safely
+  const msgContainer = document.createElement('div');
+  msgContainer.innerHTML = messageHtml;
+  msgContainer.style.marginBottom = '16px';
+  popup.appendChild(msgContainer);
+
+  // 4️⃣ Optionally add Continue button
+  if (!hideContinue) {
+    const continueBtn = document.createElement('button');
+    continueBtn.id = 'closePopupBtn';
+    continueBtn.className = 'game-play-btn';
+    continueBtn.textContent = 'Continue';
+    continueBtn.style.marginTop = '12px';
+    popup.appendChild(continueBtn);
+
+    continueBtn.addEventListener('click', () => {
       document.body.removeChild(overlay);
-      
-      // ⬆⬆ After removing, go back to the selector menu:
       toggleGames('selector');
     });
+  }
+
+  overlay.appendChild(popup);
+  document.body.appendChild(overlay);
 }

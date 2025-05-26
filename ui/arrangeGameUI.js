@@ -5,7 +5,7 @@ import { initStats, updateStats } from '/ui/gameStatsUI.js';
 import { showCompletionPopup } from '/ui/gameCompletionUI.js';
 import { showGameOverPopup } from '/ui/gameOverPopup.js';
 
-export function startArrangeGame() {
+export async function startArrangeGame() {
   initStats('#arrangeGameContainer');
   // 1️⃣ Swap panels
   const arrangeUI = $('#arrangeGameContainer');
@@ -16,8 +16,9 @@ export function startArrangeGame() {
   show(arrangeUI);
 
   // 2️⃣ Init session
-  gameSession.init('arrange');
-  updateStats();
+  await gameSession.init('arrange');
+  updateStats();  // Now will show correct Firestore score
+
 
   // 3️⃣ Grab the _real_ word-blocks & derive correctOrder
   const originalBlocks = Array.from(
@@ -161,10 +162,22 @@ function placeWord(box, correctOrder) {
     if (allFilled) {
       gameSession.addPoints(GAME_CONFIG.fullGameBonus);
       updateStats();
+      /**
       showCompletionPopup(
-        `All words arranged! 🌟<br>Your score: ${gameSession.score}`
-      );
+        'You have earned ' +
+        (GAME_CONFIG.fullGameBonus) + ' extra Ajr points for forming a complete ayah!',
+      ); **/
       gameSession.end(true);
+      window.parent.postMessage({
+        type: 'persistStats',
+        score: gameSession.sessionScore,  // total earned this session
+        recordStreak: true                // ask them to record today’s streak too
+      }, '*');
+      window.parent.postMessage({
+        type: 'streakUpdate',
+        date: new Date().toISOString().split('T')[0]
+      }, '*');
+    
     }
   }, 400);
 }

@@ -2,156 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>📖 Quran Explorer</title>
-  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet">
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>📖 Quran Quest</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #f9f9f9;
-      color: #0a4d68;
-    }
-    .navbar {
-      background-color: #0a4d68;
-      color: white;
-      padding: 12px 20px;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: bold;
-      border-bottom: 4px solid #2ca7d8;
-      position: relative;
-      z-index: 2;
-      display: flex;
-    }
-    .navbar-left, .navbar-center, .navbar-right {
-      display: flex;
-      align-items: center;
-    }
-    .navbar-center {
-      flex: 1;
-      justify-content: center;
-      gap: 5px;
-    }
-    #surahSelect, #ayahSelect {
-      padding: 6px;
-      font-size: 14px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    .dropdowns {
-      display: none;
-    }
-    .login-btn {
-      background-color: #ffffff;
-      color: #0a4d68;
-      border: 2px solid #0a4d68;
-      border-radius: 20px;
-      padding: 8px 16px;
-      font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .login-btn:hover {
-      background-color: #e3f2f9;
-    }
-    .container {
-      max-width: 1000px;
-      margin: 20px auto;
-      padding: 0 15px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 16px;
-    }
-    .surah-card {
-      background: white;
-      padding: 16px;
-      border-radius: 12px;
-      border: 3px solid rgba(10, 77, 104, 0.2);
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-      cursor: pointer;
-      transition: transform 0.2s ease, border-color 0.3s;
-    }
-    .surah-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
-      border-color: rgba(10, 77, 104, 0.35);
-    }
-    .surah-number { font-size: 14px; color: #999; }
-    .surah-english { font-size: 18px; font-weight: bold; margin-top: 8px; }
-    .surah-arabic { font-size: 22px; text-align: right; margin-top: 6px; color: #222; }
-    .ayah-count { font-size: 13px; color: #666; margin-top: 4px; }
-    .viewer {
-      display: none;
-      height: calc(100vh - 60px);
-      position: relative;
-    }
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-    .profile-drawer {
-      position: fixed;
-      top: 0;
-      left: -1000px;
-      width: 340px;
-      height: 100%;
-      background: white;
-      color: #0a4d68;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.2);
-      transition: left 0.3s ease;
-      z-index: 1001;
-      border-right: 1px solid #ccc;
-    }
-    .profile-drawer.open {
-      left: 0;
-    }
-    .side-arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: white;
-      color: #0a4d68;
-      border: 2px solid #0a4d68;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      font-size: 20px;
-      text-align: center;
-      line-height: 36px;
-      cursor: pointer;
-      display: none;
-      z-index: 1;
-    }
-    .next { right: 10px; }
-    .prev { left: 10px; }
-    #calendarPopup {
-      display: none;
-      position: fixed;
-      top: 70px;
-      right: 10px;
-      background: white;
-      border: 1px solid #ccc;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      padding: 16px;
-      z-index: 2000;
-      border-radius: 8px;
-    }
-	
-	iframe.fade-out {
-    opacity: 0;
-    transition: opacity 0.2s ease-in-out;
-  }
-  </style>
+  <!-- Firebase compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/index-style.css">
 </head>
 <body>
+
+
+      <!-- Hero banner -->
+
+
   <div class="navbar" id="mainNavbar">
     <div class="navbar-left">
       <button class="login-btn" id="loginBtn">👤</button>
@@ -159,301 +30,91 @@
     <div class="navbar-center dropdowns">
       <select id="surahSelect"></select>
       <select id="ayahSelect"></select>
+      
+    </div>
+    <div id="gameStatsNav">
     </div>
     <div class="navbar-right">
+      
+      <button id="returnToAyah" class="return-btn">Return to Ayah</button>
       <div class="streak-info" id="streakDisplay">🔥0</div>
     </div>
   </div>
 
-  <div class="profile-drawer" id="profileMenu">
-    <div style="padding: 16px;">
-      <h3>👤 Profile</h3>
-      <p><strong>Logged in as:</strong> <span id="userName">Guest</span></p>
-      <p id="userEmail"></p>
-      <p><strong>Ajr Points:</strong> <span id="ajrPoints">0%</span></p>
-      <button onclick="logout()">Logout</button>
+  <!-- HTML -->
+<div id="profileDrawer" class="profile-drawer">
+  <div class="drawer-header">
+    <button id="drawerCloseBtn" aria-label="Close profile drawer">‹‹‹</button>
+    <h3>Your Profile</h3>
+  </div>
+  <div class="drawer-content">
+    <div class="profile-field">
+      <label>Name</label>
+      <span id="userName">Guest</span>
+    </div>
+    <div class="profile-field">
+      <label>Ajr Points</label>
+      <span id="ajrPoints">0</span>
+    </div>
+    <div class="drawer-info">
+      <h4>About Quran Quest</h4>
+      <p>
+        Quran Quest is a fun and interactive way to learn the Quran. 
+        You can track your progress, earn points, and challenge yourself with quizzes.
+        Whether you're a beginner or an advanced learner, Quran Quest has something for everyone.
+        Join us on this spiritual journey and deepen your understanding of the Quran.
+        <br><br>
+        <strong>Note:</strong> This is first version. More features are coming soon.  
+        <br><br>
+      </p>
+    </div>
+    <div class="profile-actions">
+      <button id="logoutBtn">Logout</button>
     </div>
   </div>
+</div>
 
-  <div id="calendarPopup"></div>
 
-  <div class="container" id="surahContainer"></div>
-  <div class="viewer" id="viewer">
-    <div class="side-arrow prev" onclick="navigateAyah(-1)">←</div>
-    <iframe id="ayahViewer"></iframe>
-    <div class="side-arrow next" onclick="navigateAyah(1)">→</div>
+<div id="calendarPopup"></div>
+
+<div id="hero" class="hero">
+  <div class="hero-content">
+
+    <h1>Quran Quest</h1>
+    <p>Learn Quran in a fun, interactive way—anywhere, anytime.</p>
+
+     <p class="hero-subtitle">
+      "The best among you are those who learn the Quran and teach it."<br>
+      -The Prophet (ﷺ)
+    </p>
+        <div class="hero-actions">
+      <button id="startLearningBtn" class="cta-btn">Start Learning</button>
+    </div>
   </div>
-<!-- ✅ Use only compat SDKs -->
+</div>
 
-<script src="/firebase-init.js"></script>
 
-  <script>
-  const surahSelect = document.getElementById('surahSelect');
-  const ayahSelect = document.getElementById('ayahSelect');
-  const viewer = document.getElementById('viewer');
-  const iframe = document.getElementById('ayahViewer');
-  let surahData = [];
+  <div class="container" id="surahContainer">
+    
+  </div>
 
-  let currentSurah = 1;
-  let currentAyah = 1;
 
-  // Profile toggle
-  document.getElementById("loginBtn").onclick = () => {
-    document.getElementById('profileMenu').classList.toggle('open');
-  };
 
-  // Hide profile and calendar on outside click
-  document.addEventListener('click', function (e) {
-    const drawer = document.getElementById('profileMenu');
-    const calendarPopup = document.getElementById('calendarPopup');
-    if (
-      drawer.classList.contains('open') &&
-      !drawer.contains(e.target) &&
-      !e.target.closest('#loginBtn')
-    ) {
-      drawer.classList.remove('open');
-    }
-    if (
-      calendarPopup.style.display === 'block' &&
-      !calendarPopup.contains(e.target) &&
-      !e.target.closest('#streakDisplay')
-    ) {
-      calendarPopup.style.display = 'none';
-    }
-  });
+<div class="viewer" id="viewer">
+  <button class="side-arrow prev" onclick="navigateAyah(-1)">
+    <span></span>
+  </button>
+  <iframe id="ayahViewer"></iframe>
+  <button class="side-arrow next" onclick="navigateAyah(1)">
+    <span></span>
+  </button>
+</div>
 
-  document.getElementById("streakDisplay").addEventListener("click", showStreakCalendar);
 
-  function showStreakCalendar() {
-    const loginDays = JSON.parse(localStorage.getItem('loginDays') || '[]');
-    const calendarDiv = document.getElementById('calendarPopup');
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    let html = `<div style="font-weight:bold; text-align:center; margin-bottom:8px;">${today.toLocaleString('default', { month: 'long' })} ${year}</div>`;
-    html += `<div style="display: grid; grid-template-columns: repeat(7, 28px); gap: 4px; text-align:center;">`;
-
-    const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-    for (let d of days) html += `<div style="font-weight:bold;">${d}</div>`;
-
-    const firstDay = new Date(year, month, 1).getDay();
-    for (let i = 0; i < firstDay; i++) html += `<div></div>`;
-
-    for (let day = 1; day <= daysInMonth; day++) {
-      const dateStr = `${year}-${(month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-      const isActive = loginDays.includes(dateStr);
-      html += `<div style="padding:4px; border-radius:50%; background:${isActive ? '#0a4d68' : '#eee'}; color:${isActive ? 'white' : '#333'}">${day}</div>`;
-    }
-
-    html += `</div>`;
-    calendarDiv.innerHTML = html;
-    calendarDiv.style.display = 'block';
-  }
-
-  function updateAyahOptions(cb) {
-    const count = +surahSelect.selectedOptions[0].dataset.ayahCount;
-    ayahSelect.innerHTML = '';
-    for (let i = 1; i <= count; i++) {
-      const opt = document.createElement('option');
-      opt.value = i;
-      opt.textContent = `${i}`;
-      ayahSelect.appendChild(opt);
-    }
-    if (cb) cb();
-  }
-
-  function loadAyah(surah, ayah) {
-    currentSurah = parseInt(surah);
-    currentAyah = parseInt(ayah);
-    surahSelect.value = currentSurah;
-    updateAyahOptions(() => {
-      ayahSelect.value = currentAyah;
-    });
-    iframe.classList.add('fade-out');
-    setTimeout(() => {
-      iframe.src = `ayahs/surah_${currentSurah}/ayah_${currentSurah}_${currentAyah}.html`;
-    }, 150);
-    setTimeout(() => {
-      iframe.classList.remove('fade-out');
-    }, 100);
-    updateArrowVisibility();
-  }
-
-  function navigateAyah(direction) {
-    const currentSurahIndex = surahData.findIndex(s => s.id == currentSurah);
-    let ayahCount = surahData[currentSurahIndex].verses_count;
-
-    let nextSurah = currentSurah;
-    let nextAyah = currentAyah + direction;
-
-    if (nextAyah < 1) {
-      if (currentSurahIndex === 0) return;
-      nextSurah = surahData[currentSurahIndex - 1].id;
-      nextAyah = surahData[currentSurahIndex - 1].verses_count;
-    } else if (nextAyah > ayahCount) {
-      if (currentSurahIndex === surahData.length - 1) return;
-      nextSurah = surahData[currentSurahIndex + 1].id;
-      nextAyah = 1;
-    }
-
-    loadAyah(nextSurah, nextAyah);
-  }
-
-  function updateArrowVisibility() {
-    const currentSurahIndex = surahData.findIndex(s => s.id == currentSurah);
-    const isFirst = currentSurahIndex === 0 && currentAyah === 1;
-    const isLast = currentSurahIndex === surahData.length - 1 &&
-      currentAyah === surahData[currentSurahIndex].verses_count;
-
-    document.querySelector('.prev').style.display = isFirst ? 'none' : 'block';
-    document.querySelector('.next').style.display = isLast ? 'none' : 'block';
-  }
-
-  fetch("https://api.quran.com/api/v4/chapters")
-    .then(res => res.json())
-    .then(data => {
-      const container = document.getElementById('surahContainer');
-      surahData = data.chapters;
-
-      data.chapters.forEach(surah => {
-        const opt = document.createElement('option');
-        opt.value = surah.id;
-        opt.textContent = `${surah.id}. ${surah.name_simple}`;
-        opt.setAttribute('data-ayah-count', surah.verses_count);
-        surahSelect.appendChild(opt);
-
-        const card = document.createElement('div');
-        card.className = "surah-card";
-        card.innerHTML = `
-          <div class="surah-number">Surah ${surah.id}</div>
-          <div class="surah-english">${surah.name_simple}</div>
-          <div class="surah-arabic">${surah.name_arabic}</div>
-          <div class="ayah-count">${surah.verses_count} Ayahs</div>
-        `;
-        card.onclick = () => {
-          document.getElementById('surahContainer').style.display = 'none';
-          viewer.style.display = 'block';
-          document.querySelector('.dropdowns').style.display = 'flex';
-          loadAyah(surah.id, 1);
-        };
-        container.appendChild(card);
-      });
-    });
-
-  surahSelect.addEventListener('change', () => {
-    const s = surahSelect.value;
-    loadAyah(s, 1);
-  });
-
-  ayahSelect.addEventListener('change', () => {
-    const s = surahSelect.value;
-    const a = ayahSelect.value;
-    loadAyah(s, a);
-  });
   
 
-
-
-
-  // ✅ Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  firebase.analytics();
-  const auth = firebase.auth();
-  const db = firebase.firestore();
-
-
-  // ✅ Login/Logout Logic
-  const profileMenu = document.getElementById('profileMenu');
-  const userName = document.getElementById('userName');
-  const userEmail = document.getElementById('userEmail');
-  const ajrPoints = document.getElementById('ajrPoints');
-
-  loginBtn.onclick = () => {
-    const user = auth.currentUser;
-    if (user) {
-      // If already logged in, toggle profile drawer
-      profileMenu.classList.toggle('open');
-    } else {
-      // Sign in with Google
-      const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider).catch(error => {
-        console.error("Login failed:", error.message);
-      });
-    }
-  };
-
-
-function logout() {
-  auth.signOut().then(() => {
-    console.log("User signed out");
-    // Optional: clear UI or redirect
-  }).catch((error) => {
-    console.error("Sign-out error", error);
-  });
-}
-
-
-auth.onAuthStateChanged(user => {
-  if (!user) {
-    // Logged out
-    userName.textContent = 'Guest';
-    userEmail.textContent = '';
-    ajrPoints.textContent = '0';
-    loginBtn.textContent = '👤 Login';
-    profileMenu.classList.remove('open');
-    document.getElementById('streakDisplay').textContent = '🔥0';
-    return;
-  }
-
-  const userRef = db.collection("users").doc(user.uid);
-
-  // 1️⃣ Ensure the user document exists / update lastLogin
-  userRef.set({
-    name: user.displayName || "User",
-    email: user.email || "",
-    lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
-  }, { merge: true });
-
-  // 2️⃣ Read back the ajrPoints & streakHistory and update UI
-  userRef.get()
-    .then(doc => {
-      const data = doc.data() || {};
-
-      // Profile
-      userName.textContent  = data.name  || user.displayName || "User";
-      userEmail.textContent = data.email || user.email || "";
-
-      // Ajr Points
-      const pts = data.ajrPoints ?? 0;
-      ajrPoints.textContent = `${pts}`;
-
-      // Streak: count of days in streakHistory array
-      const history = data.streakHistory || [];
-      document.getElementById('streakDisplay')
-        .textContent = `🔥${history.length}`;
-
-      // Update login button label
-      loginBtn.textContent = '👤 ' + (user.displayName?.split(' ')[0] || 'Profile');
-    })
-    .catch(err => console.error("❌ Failed to load user data:", err));
-});
-
-
-function getTodayDate() {
-  const d = new Date();
-  return d.toISOString().split('T')[0]; // "2025-05-15"
-}
-
-
-
-
-
-
-
-</script>
-
-
+  <script src="/_private/firebase-init.js" defer></script>
+  <script type="module" src="/index-script.js" defer></script> 
 </body>
 </html>

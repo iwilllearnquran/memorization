@@ -2,6 +2,7 @@ import { GAME_CONFIG }          from '/config/gameConfig.js';
 import { hide, show, $ }        from '/utils/domHelpers.js';
 import gameSession              from '/state/gameSession.js';
 import { renderGameContainers } from '/ui/renderGameContainers.js';
+import { initStats, updateStats } from '/ui/gameStatsUI.js';
 
 
 const { learnSection, translationSection, gameContainer, bottomNav } = GAME_CONFIG.selectors;
@@ -21,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
  * Main entry: modes are 'selector', 'arrange', or 'verb'
  */
 export function toggleGames(mode = 'selector') {
+  initStats("#game-mode-content");
 
   const container = document.querySelector(GAME_CONFIG.selectors.gameContainer);
   document.body.classList.add('game-active');

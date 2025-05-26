@@ -120,17 +120,14 @@ window.toggleTranslations = toggleTranslations;
 function switchTranslation(lang) {
   const enDiv = document.getElementById('englishTranslation');
   const urDiv = document.getElementById('urduTranslation');
-  const label = document.getElementById('currentLang');
   const translationDropdown = document.getElementById('translationDropdown');
 
   if (lang === 'en') {
     enDiv.style.display = 'block';
     urDiv.style.display = 'none';
-    label.innerText    = 'English';
   } else {
     enDiv.style.display = 'none';
     urDiv.style.display = 'block';
-    label.innerText    = 'Urdu';
   }
 
   // close the dropdown
@@ -201,7 +198,12 @@ window.togglePracticeNav = togglePracticeNav;
 
 
 // 9. togglePlay()
-function togglePlay() {
+function togglePlay(e) {
+  e.preventDefault();
+
+  // 2) stop this click from bubbling up to your "back" listener
+  e.stopPropagation();
+  e.stopImmediatePropagation();
   if (!ayahAudio) return console.error('No ayahAudio element');
 
   if (ayahAudio.paused) {
@@ -258,17 +260,20 @@ window.toggleSection = toggleSection;
 function onPanelLangChange(lang) {
   const enDiv = document.getElementById('englishTranslation');
   const urDiv = document.getElementById('urduTranslation');
-  const label = document.getElementById('currentLang');
+
 
   enDiv.style.display = lang === 'en' ? 'block' : 'none';
   urDiv.style.display = lang === 'ur' ? 'block' : 'none';
-  label.innerText = lang === 'en' ? 'English' : 'Urdu';
+
 }
 window.onPanelLangChange = onPanelLangChange;
 
 
 // Full Settings popup:
-window.toggleSettingsNav = function () {
+window.toggleSettingsNav = function (e) {
+  e.preventDefault();
+  e.stopPropagation();
+  e.stopImmediatePropagation();
   clearNavActive();
   const btn = document.getElementById('navSettings');
   btn.classList.add('active');
@@ -421,9 +426,9 @@ window.toggleSettingsNav = function () {
   }
 
   // Sync panel language dropdown initial value
-  const currentPanel = document.getElementById('currentLang').innerText.toLowerCase();
-  const panelSelect = document.getElementById('translationLangSelect');
-  if (panelSelect) panelSelect.value = currentPanel === 'urdu' ? 'ur' : 'en';
+ // const currentPanel = document.getElementById('currentLang').innerText.toLowerCase();
+ // const panelSelect = document.getElementById('translationLangSelect');
+  // (panelSelect) panelSelect.value = currentPanel === 'urdu' ? 'ur' : 'en';
 
   // Sync audio selector:
   const langSelect = document.getElementById('audioLangSelect');
@@ -698,7 +703,7 @@ document.addEventListener('click', e => {
 
 
 function openSearchTab(normalizedWord) {
-  const url = `/memorization/search_results.html?q=${encodeURIComponent(normalizedWord)}`;
+  const url = `/search_results.html?q=${encodeURIComponent(normalizedWord)}`;
   window.open(url, "_blank");
 }
 
@@ -1055,5 +1060,8 @@ function showToast(message, color = '#333') {
     toast.style.opacity = 0;
     setTimeout(() => toast.remove(), 300);
   }, 1800);
+  
 }
+
+
 

@@ -1,0 +1,30 @@
+# 1) Ignore absolutely everything
+**
+
+# 2) Whitelist only the files & folders you want publicly accessible
+!audio/**
+!ayahs/**
+!config/**
+
+!favicon-96x96.png
+!favicon.ico
+!favicon.svg
+
+!index.html
+!index-style.css
+!index-script.js
+
+!manifest.json
+!site.webmanifest
+
+!styles.css
+!script.js
+!search_results.html
+
+!verbs_data.js
+
+!web-app-manifest-192x192.png
+!web-app-manifest-512x512.png
+
+!PDMS_SALEEM_QURANFONTQESHIP_0.ttf
+!Gilroy-Medium.ttf

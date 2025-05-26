@@ -1,0 +1,470 @@
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #eff2f4;
+      color: #0a4d68;
+    }
+
+    html, body {
+      overscroll-behavior-y: none;
+    }
+
+
+    .navbar {
+      background-color: #0a4d68;
+      color: white;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      border-bottom: 4px solid #2ca7d8;
+      position: relative;
+      z-index: 2;
+    }
+    /* when in game-mode, make that bottom border match the nav */
+    body.game-mode .navbar {
+      border-bottom-color: #0a4d68;
+    }
+    .navbar-left,
+    .navbar-center,
+    .navbar-right {
+      display: flex;
+      align-items: center;
+    }
+    .navbar-center {
+      flex: 1;
+      justify-content: center;
+      gap: 5px;
+    }
+    #surahSelect,
+    #ayahSelect {
+      padding: 6px;
+      font-size: 14px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .dropdowns { display: none; }
+    .login-btn {
+      background: #fff;
+      color: #0a4d68;
+      border: 2px solid #0a4d68;
+      border-radius: 20px;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: background .3s;
+    }
+    .login-btn:hover { background: #e3f2f9; }
+
+    .container {
+      max-width: 1000px;
+      margin: 20px auto;
+      padding: 0 15px;
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+    }
+    .surah-card {
+      background: #fff;
+      position: relative;
+      padding: 16px;
+      border-radius: 12px;
+      border: 3px solid rgba(10,77,104,0.2);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      cursor: pointer;
+      transition: transform .2s, border-color .3s;
+    }
+    .surah-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(10,77,104,0.35);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+    }
+
+#mainNavbar {
+  position: relative;
+  height: 60px;      /* adjust to your actual navbar height */
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+
+#returnToAyah {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;         /* shown/hidden by your JS enableGameMode() */
+  z-index: 10;           /* above other items */
+  
+  /* styling */
+  padding: 0.5rem 1rem;
+  background: #fff;
+  color: #0A4D68;
+  border: 2px solid #0a4d68;
+  border-radius: 16px;
+  cursor: pointer;
+  
+}
+
+/* 3. Hover state */
+#returnToAyah:hover {
+  opacity: 0.9;
+}
+
+
+    /* Progress bar sits in the normal flow, indented to match the card’s padding */
+.progress-bar {
+  display: block;
+  width: calc(100% - 10px);   /* full width minus 16px padding on each side */
+  height: 8px;
+  background: #eee;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 12px 16px 0 0;         /* 12px top-gap, 16px left/right to align */
+}
+
+.progress-fill {
+  height: 100%;
+  background: #0a4d68;
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* Optional: if you’re using a label under the bar */
+.progress-label {
+  display: block;
+  font-size: 0.8rem;
+  color: #333;
+  margin: 4px 16px 0;          /* 4px gap, same left/right indent */
+}
+
+    
+
+
+/* “Surah 1” label */
+.surah-number {
+  font-size: 0.875rem;                /* small label */
+  font-weight: 600;
+  color: var(--grad-start);
+  margin-bottom: 8px;
+}
+
+/* English name */
+.surah-english {
+  font-size: 1.25rem;                 /* prominent */
+  font-weight: 700;
+  color: #0a4d68;
+  margin-bottom: 4px;
+}
+
+/* Arabic name */
+.surah-arabic {
+ 
+  font-size: 1.5rem;                  /* larger for readability */
+  color: #3f6d7e;
+  direction: rtl;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+/* Container for the two names */
+.surah-title {
+  display: grid;
+  /* try two auto columns but wrap to one if they can’t both fit min-width */
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.5rem;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+
+/* Prevent each name from breaking awkwardly */
+
+.surah-arabic {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: 'Roboto', serif;
+}
+
+.surah-english{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* On very narrow cards, force single column */
+@media (max-width: 350px) {
+  .surah-title {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+}
+
+
+/* Ayah count */
+.ayah-count {
+  font-size: 0.875rem;                /* match .surah-number */
+  color: #666;
+  font-style: italic;
+  margin-top: 12px;
+}
+
+.surah-ayah-count {
+  font-size: 0.9rem;
+  color: #666;
+  white-space: nowrap;
+  font-style: italic;
+
+}
+
+
+    
+
+    .viewer {
+      display: none;
+      position: relative;
+      height: calc(100vh - 70px);
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }/* Container buttons */
+.side-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  width: 30px;
+  height: 40px;
+  cursor: pointer;
+  z-index: 1;
+  display: flex;
+  /* Place at extreme ends */
+  left: 0;
+  right: 0;
+}
+.side-arrow.prev {
+  left: 3px;
+  right: auto;
+}
+.side-arrow.next {
+  right: 10px;
+  left: auto;
+
+}
+
+.side-arrow span {
+  display: block;
+  width: 24px;
+  height: 24px;
+  border-left: 2px solid #0a4d68;
+  border-bottom: 2px solid #0a4d68;
+  box-sizing: border-box;
+
+  /* rotate by the custom --rot angle */
+  transform: rotate(var(--rot, 45deg));
+
+  /* bounce once, then stay in place */
+  animation: arrow-bounce 14s ease-in-out 1s infinite;
+}
+
+/* left arrow: -135deg → points left */
+.prev {
+  left: 2px;
+  --rot: 45deg;
+}
+
+/* right arrow: 45deg → points right */
+.next {
+  right: 0;
+  --rot: -135deg; 
+}
+
+@keyframes arrow-bounce {
+  0%   { transform: rotate(var(--rot)) translate(0, 0); }
+  20%  { transform: rotate(var(--rot)) translate(-10px, 10px); }
+  40%  { transform: rotate(var(--rot)) translate(0, 0); }
+  100% { transform: rotate(var(--rot)) translate(0, 0); }
+}
+
+
+
+    /* hide these when in game-mode */
+    body.game-mode .dropdowns,
+    body.game-mode .prev,
+    body.game-mode .next {
+      display: none !important;
+    }
+
+    #gameStatsNav {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: #fff;
+    }
+    body.game-mode #gameStatsNav {
+      display: flex !important;
+    }
+
+    .game-alert {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2ca7d8;
+      color: white;
+      padding: .75rem 1.25rem;
+      border-radius: .5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      font-size: 1rem;
+      z-index: 9999;
+      opacity: 0;
+      animation: fadeInOut 3s ease forwards;
+    }
+    @keyframes fadeInOut {
+      0%   { opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    /* CSS */
+.profile-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 300px;           /* or whatever width you prefer */
+  max-width: 80%;         /* for smaller screens */
+  background: #fff;
+  box-shadow: 2px 0 12px rgba(0,0,0,0.1);
+  z-index: 9999;          /* above all other content */
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.profile-drawer.open {
+  transform: translateX(0);
+  overflow-y: auto;  
+}
+
+.drawer-header {
+  position: relative;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.drawer-header h3 {
+  flex: 1;
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.drawer-header button {
+  position: absolute;   /* take it out of the normal flow */
+  top: 16px;            /* match the header’s padding */
+  right: 16px;          /* match the header’s padding */
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.drawer-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;  
+}
+
+.profile-field {
+  margin-bottom: 16px;
+}
+
+.profile-field label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.profile-actions {
+  margin-top: auto;      /* pushes it to the bottom */
+  padding: 0 16px 20px;  /* add bottom padding if you like */
+}
+
+.profile-actions button {
+  width: 100%;
+  padding: 12px;
+  background: #0a4d68;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+
+
+:root {
+  /* Your theme colors */
+  --theme-bg:       #0A4D68;  /* deep teal */
+  --theme-accent:   #2E8BC0;  /* lighter blue */
+  --text-primary:   #FFFFFF;  /* white */
+  --text-secondary: rgba(255,255,255,0.85); /* slightly transparent white */
+  --btn-bg:         #FFFFFF;  /* white button */
+  --btn-text:       var(--theme-bg);
+}
+    
+
+    iframe[src*="firebase"] {
+      display: none !important;
+    }
+
+      /* full-width hero section */
+.hero {
+  background-color: var(--theme-bg);
+  border: 2px solid rgba(18,1,1,0.6);
+  border-radius: 16px;
+  margin: 10px;
+  padding: 30px 20px;
+  text-align: center;
+  color: var(--text-primary);
+}
+
+.hero-subtitle {
+  font-size: 0.7rem !important;
+  font-style: italic;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  margin: 0.25em 0;
+  color: var(--text-primary);
+}
+
+.hero-content > p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5em;
+}
+
+.hero-actions .cta-btn {
+  background-color: var(--btn-bg);
+  color: var(--btn-text);
+  padding: 0.75em 1.5em;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.hero-actions .cta-btn:hover {
+  opacity: 0.9;
+}
+

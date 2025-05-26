@@ -4,6 +4,7 @@ import gameSession     from '/state/gameSession.js';
 
 let statsEl = null;
 
+// 🧱 Initializes the stats bar
 export function initStats(parentSelector) {
   const parent = document.querySelector(parentSelector);
   if (!parent) {
@@ -22,32 +23,28 @@ export function initStats(parentSelector) {
   updateStats();
 }
 
+// 🎯 Updates stats bar in UI only
 export function updateStats() {
   if (!statsEl) return;
 
-  // Score section
-  const scoreHTML = `
-    <div class="stats-section score-section">
-      <span class="stats-icon">✨</span>
-      <span class="stats-label">Points:</span>
-      <span class="stats-value">${gameSession.score}</span>
+  const username  = gameSession.username || 'Player';
+  const avatar    = gameSession.avatar || 'https://via.placeholder.com/24';
+  const ajrPoints = gameSession.score;
+  const lives     = gameSession.lives;
+
+  const userHTML = `
+    <div class="user-pill">
+      <span class="coin">✨${ajrPoints} Ajr Points</span>
     </div>
   `;
 
-  // Lives section
-  const max   = GAME_CONFIG.maxLives;
-  const live  = gameSession.lives;
-  let hearts  = '';
-  for (let i = 1; i <= max; i++) {
-    const icon = i <= live ? 'favorite' : 'favorite_border';
-    hearts += `<span class="stats-heart material-icons-outlined">${icon}</span>`;
-  }
-  const livesHTML = `
-    <div class="stats-section lives-section">
-      <span class="stats-label">Lives:</span>
-      ${hearts}
+  const statsHTML = `
+    <div class="score-pill">
+      <span class="score">♥️${lives} Lives</span>
     </div>
   `;
 
-  statsEl.innerHTML = scoreHTML + livesHTML;
+  statsEl.innerHTML = userHTML + statsHTML;
 }
+
+
