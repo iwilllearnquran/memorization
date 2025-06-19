@@ -95,14 +95,19 @@ async end(success = true) {
   if (!auth.currentUser) {
     // If they've already chosen guest before, skip dialog
     if (localStorage.getItem('isGuest')) {
-      continueAsGuestFlow(pendingPoints);
+      continueAsGuestFlow(pendingPoints, window.currentSurah, window.currentAyah);
+        showGameOverPopup(
+    `Nice work!`,
+    `You've earned ${pendingPoints} points and kept your streak alive.`,
+    true
+  );
       return;
     }
 
     // Otherwise, show dialog and branch on choice
     const choice = await showCompletionDialog(pendingPoints);
     if (choice === 'guest') {
-      continueAsGuestFlow(pendingPoints);
+      continueAsGuestFlow(pendingPoints, window.currentSurah, window.currentAyah);
     } else {
       triggerLoginFlow();
     }
@@ -110,17 +115,24 @@ async end(success = true) {
   }
 
   // 4b. Authenticated user flow
-  try {
-    await saveStatsToFirestore({ score: this.score });
-    const { updated, oldLength, newLength } = await recordStreak();
-    if (updated) StreakUI.renderPopup(true, oldLength, newLength);
-    await addCompletedAyahToFirestore({
-      surah: window.currentSurah,
-      ayah:  window.currentAyah
-    });
-  } catch (err) {
-    console.error('❌ Error ending session:', err);
-  }
+try {
+  await saveStatsToFirestore({ score: this.score });
+  const { updated, oldLength, newLength } = await recordStreak();
+  if (updated) StreakUI.renderPopup(true, oldLength, newLength);
+  await addCompletedAyahToFirestore({
+    surah: window.currentSurah,
+    ayah:  window.currentAyah
+  });
+
+    showGameOverPopup(
+    `Nice work!`,
+    `You've earned ${pendingPoints} points and kept your streak alive.`,
+    true
+  );
+} catch (err) {
+  console.error('❌ Error ending session:', err);
+}
+
 }
   
 
@@ -251,18 +263,30 @@ function showCompletionDialog(pendingPoints) {
 }
 
 // ─── 2. Guest‐flow function ───────────────────────────────────────────────────
-function continueAsGuestFlow(pendingPoints) {
-  console.log('[GameSession] continueAsGuestFlow()');
-  localStorage.setItem('isGuest', '1');
-  initGuestSession();
-  addGuestPoints(pendingPoints);
+function continueAsGuestFlow(points, surah, ayah) {
+  console.log('[Guest] Continuing as guest…');
+  console.log('[Guest] Surah:', surah, 'Ayah:', ayah);
+
+  addGuestPoints(points);
   recordGuestStreak();
-  showGameOverPopup(
-    "Hi, there!",
-    "Your progress is saved locally. Login to never lose progress!",
-    false
-  );
+
+  if (!surah || !ayah) {
+    console.warn('⚠️ Missing surah or ayah, not recording completion.');
+    return;
+  }
+
+  const key = 'completedAyahs';
+  const list = JSON.parse(localStorage.getItem(key) || '[]');
+  const alreadyDone = list.some(x => x.surah === surah && x.ayah === ayah);
+
+  if (!alreadyDone) {
+    list.push({ surah, ayah });
+    localStorage.setItem(key, JSON.stringify(list));
+    console.log(`[Guest] ✅ Completed ayah saved: Surah ${surah}, Ayah ${ayah}`);
+  }
 }
+
+
 
 // ─── 3. Login‐flow function ───────────────────────────────────────────────────
 function triggerLoginFlow() {

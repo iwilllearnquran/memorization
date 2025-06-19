@@ -22,7 +22,9 @@ import {
   registerForNotifications,
   onForegroundMessage,
   getLastReadFromDb,
-  updateLastRead
+  updateLastRead,
+  addPointsToFirestore,
+  recordStreak 
 } from '/services//_private/firestoreService.js';
 
 import {
@@ -143,44 +145,90 @@ async function renderSurahOverview() {
   const chapters = await fetchSurahList();
   surahData = chapters;
 
-  chapters.forEach(s => {
-    // Dropdown option
+  for (const s of chapters) {
     const opt = new Option(`${s.number}. ${s.englishName}`, s.number);
     D.surahSelect.append(opt);
 
-  // Card element
-  const card = document.createElement('div');
-  card.className = 'surah-card';
-  card.innerHTML = `
-  <div class="surah-header">
-    <span class="surah-number">Surah ${s.number}</span>
-    <span class="surah-ayah-count">(${s.ayahCount} verses)</span>
-  </div>
-  <div class="surah-title">
-    <span class="surah-english">${s.englishName}</span>
-    <span class="surah-arabic">${s.arabicName}</span>
-  </div>
-  <div class="progress-bar">
-    <div class="progress-fill" style="width:0%"></div>
-    <div class="progress-label"><small>0% completed</small></div>
-  </div>`;
-
-
-
-    // Click handler: hide overview, show reader
-    card.addEventListener('click', () => {
-      D.surahContainer.style.display   = 'none';
-      D.hero.style.display             = 'none';
-      D.viewer.style.display           = 'block';
-      D.dropdowns.style.display        = 'flex';
-      loadAyah(s.number, 1);
-    });
+    const card = document.createElement('div');
+    card.className = 'surah-card';
+    card.innerHTML = `
+      <div class="surah-header">
+        <span class="surah-number">Surah ${s.number}</span>
+        <span class="surah-ayah-count">(${s.ayahCount} verses)</span>
+      </div>
+      <div class="surah-title">
+        <span class="surah-english">${s.englishName}</span>
+        <span class="surah-arabic">${s.arabicName}</span>
+      </div>
+      <button class="resume-btn" data-surah="${s.number}">▶</button>
+    `;
 
     D.surahContainer.append(card);
-  });
+
+    // 🔍 Progress Debug
+    let completedAyahs = [];
+    if (auth.currentUser) {
+      const snap = await getUserDoc();
+      completedAyahs = (snap.data()?.completedAyahs || []).filter(x => x.surah === s.number);
+      console.log(`🔐 User progress for Surah ${s.number}:`, completedAyahs);
+    } else {
+      const local = JSON.parse(localStorage.getItem('completedAyahs') || '[]');
+      completedAyahs = local.filter(x => x.surah === s.number);
+      console.log(`🕊️ Guest progress for Surah ${s.number}:`, completedAyahs);
+    }
+
+    const completedNumbers = completedAyahs.map(x => x.ayah);
+    console.log(`✅ Completed Ayah numbers for Surah ${s.number}:`, completedNumbers);
+
+    const total = s.ayahCount;
+    let label = '';
+    let nextAyah = null;
+
+    for (let i = 1; i <= total; i++) {
+      if (!completedNumbers.includes(i)) {
+        nextAyah = i;
+        break;
+      }
+    }
+
+    if (nextAyah === null) {
+      label = '🔁 Replay Surah';
+      nextAyah = 1;
+      console.log(`🎉 Surah ${s.number} fully completed.`);
+    } else if (completedNumbers.length === 0) {
+      label = `▶ Start Surah ${s.number}`;
+      console.log(`🆕 Surah ${s.number} not started.`);
+    } else {
+      label = `▶ Resume from Ayah ${nextAyah}`;
+      console.log(`⏯️ Surah ${s.number} partially done. Resuming from Ayah ${nextAyah}`);
+    }
+
+    const resumeBtn = card.querySelector('.resume-btn');
+    resumeBtn.textContent = label;
+    resumeBtn.title = label;
+    resumeBtn.dataset.nextAyah = nextAyah;
+
+    resumeBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      D.surahContainer.style.display = 'none';
+      D.hero.style.display = 'none';
+      D.viewer.style.display = 'block';
+      D.dropdowns.style.display = 'flex';
+      loadAyah(s.number, nextAyah);
+    });
+
+    card.addEventListener('click', () => {
+      D.surahContainer.style.display = 'none';
+      D.hero.style.display = 'none';
+      D.viewer.style.display = 'block';
+      D.dropdowns.style.display = 'flex';
+      loadAyah(s.number, 1);
+    });
+  }
 
   refreshAllProgress();
 }
+
 
 // ————— Update Navigation Arrow Visibility —————
 function updateArrowVisibility() {
@@ -378,14 +426,16 @@ async function refreshAllProgress() {
     completed = JSON.parse(localStorage.getItem('completedAyahs') || '[]');
   }
 
-  document.querySelectorAll('.surah-card').forEach(card => {
-    const num = +card.querySelector('.surah-number').textContent.replace('Surah ', '');
-    const total = surahData.find(s => s.number === num)?.ayahCount || 0;
-    const done  = completed.filter(x => x.surah === num).length;
-    const pct   = total ? Math.round((done/total)*100) : 0;
-    card.querySelector('.progress-fill').style.width = `${pct}%`;
-    card.querySelector('.progress-label small').textContent = `${pct}% completed`;
-  });
+document.querySelectorAll('.surah-card').forEach(card => {
+  const num = +card.querySelector('.surah-number').textContent.replace('Surah ', '');
+  const total = surahData.find(s => s.number === num)?.ayahCount || 0;
+  const done  = completed.filter(x => x.surah === num).length;
+  const pct   = total ? Math.round((done / total) * 100) : 0;
+
+  card.setAttribute('data-progress', pct);
+  card.style.setProperty('--progress', `${pct}%`);
+});
+
 }
 
 // ————— Prevent Screen Dim (Wake Lock) —————
@@ -398,6 +448,9 @@ async function requestWakeLock() {
     }
   } catch {}
 }
+
+// ————— resume button —————
+
 
 // ————— Main Initialization —————
 async function init() {

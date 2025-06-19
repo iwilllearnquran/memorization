@@ -38,12 +38,15 @@ export function showGameOverPopup(title = 'Oh no!',customMessage = 'You’ve run
     maxWidth:     '320px',
     width:        '80%'
   });
-  dialog.innerHTML = `
-    <h2>${title}</h2>
-    <p>${customMessage}</p>
-    <button id="retryBtn" class="game-play-btn-verbs">Retry</button>
-    <button id="newGameBtn" class="game-play-btn-verbs" style="margin-left:8px">New Game</button>
-  `;
+dialog.innerHTML = `
+  <h2 style="margin-bottom: 12px;">${title}</h2>
+  <p style="margin-bottom: 20px;">${customMessage}</p>
+  <div style="display: flex; justify-content: center; gap: 12px;">
+    <button id="retryBtn" class="game-play-btn-verbs">Play Again</button>
+    <button id="newGameBtn" class="game-play-btn-verbs">Different Game</button>
+  </div>
+`;
+
   overlay.appendChild(dialog);
   document.body.appendChild(overlay);
 
