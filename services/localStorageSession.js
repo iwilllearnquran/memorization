@@ -87,22 +87,25 @@ const LAST_READ_KEY = 'quranQuestLastRead';
  */
 export function setGuestLastRead(surah, ayah) {
   localStorage.setItem(
-    LAST_READ_KEY,
-    JSON.stringify({ surah, ayah, at: Date.now() })
+    'lastReadAyah',
+    JSON.stringify({
+      surah,
+      ayah,
+      savedAt: new Date().toISOString()
+    })
   );
 }
+
 
 /**
  * Retrieve last-read Surah/Ayah for guests
  * @returns {{surah:number, ayah:number}|null}
  */
 export function getGuestLastRead() {
-  const json = localStorage.getItem(LAST_READ_KEY);
-  if (!json) return null;
   try {
-    return JSON.parse(json);
+    return JSON.parse(localStorage.getItem('lastReadAyah'));
   } catch {
-    localStorage.removeItem(LAST_READ_KEY);
     return null;
   }
 }
+

@@ -83,10 +83,16 @@ window.showPopup = showPopup;
 // 3. hidePopup()
 //    Hides the morphology popup and overlay.
 function hidePopup() {
-  document.getElementById('popupContent').style.display = 'none';
-  document.getElementById('overlay').style.display = 'none';
+  const popup   = document.getElementById('popupContent');
+  const overlay = document.getElementById('overlay');
+
+  popup.style.display = 'none';
+  overlay.style.display = 'none';
+
+  popup.classList.remove('active');
+  overlay.classList.remove('active');
 }
-window.hidePopup = hidePopup;
+
 
 // 4. playAudio(url)
 //    Plays a word-specific audio snippet.
@@ -701,6 +707,26 @@ document.addEventListener('click', e => {
 });
 
 
+// 📩 Listen for messages from parent (save progress result)
+window.addEventListener('message', e => {
+  const { type, streakUpdated } = e.data || {};
+
+  if (type === 'SAVE_PROGRESS_SUCCESS') {
+    console.log('✅ iframe: progress saved');
+
+    showToast(
+      streakUpdated
+        ? '🔥 Streak updated!'
+        : '💾 Progress saved'
+    );
+  }
+
+  if (type === 'SAVE_PROGRESS_FAILED') {
+    showToast('⚠️ Could not save progress', '#dc3545');
+  }
+});
+
+
 
 function openSearchTab(normalizedWord) {
   const url = `/search_results.html?q=${encodeURIComponent(normalizedWord)}`;
@@ -1062,6 +1088,303 @@ function showToast(message, color = '#333') {
   }, 1800);
   
 }
+
+// ===============================
+// Swipe detection inside iframe → notify parent
+// ===============================
+function initIframeSwipe() {
+  const root = document.body;
+  let startX = 0, startY = 0, isDragging = false;
+
+  // --- Touch (mobile) ---
+  root.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    console.log("📱 iframe touchstart", { startX, startY });
+  }, { passive: true });
+
+  root.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    console.log("📱 iframe touchend", { dx, dy });
+
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+      if (dx < 0) {
+        console.log("👉 Swipe LEFT → next ayah");
+        window.parent.postMessage({ type: "QQ_SWIPE", dir: 1 }, "*");
+      } else {
+        console.log("👈 Swipe RIGHT → previous ayah");
+        window.parent.postMessage({ type: "QQ_SWIPE", dir: -1 }, "*");
+      }
+    }
+  });
+
+  // --- Mouse (desktop) ---
+  root.addEventListener('mousedown', e => {
+    isDragging = true;
+    startX = e.clientX;
+    startY = e.clientY;
+    console.log("🖱️ iframe mousedown", { startX, startY });
+  });
+
+  root.addEventListener('mouseup', e => {
+    if (!isDragging) return;
+    isDragging = false;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    console.log("🖱️ iframe mouseup", { dx, dy });
+
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+      if (dx < 0) {
+        console.log("👉 Mouse swipe LEFT → next ayah");
+        window.parent.postMessage({ type: "QQ_SWIPE", dir: 1 }, "*");
+      } else {
+        console.log("👈 Mouse swipe RIGHT → previous ayah");
+        window.parent.postMessage({ type: "QQ_SWIPE", dir: -1 }, "*");
+      }
+    }
+  });
+
+  root.addEventListener('mouseleave', () => {
+    if (isDragging) console.log("🖱️ iframe drag cancelled");
+    isDragging = false;
+  });
+
+  console.log("✅ iframe swipe detection ready");
+}
+
+window.addEventListener('DOMContentLoaded', initIframeSwipe);
+
+///--- Games Explanation ---
+const grammarExplanations = {
+
+  nominative: `
+    <h3 style="color:#f1948a;"> Nominative (Rafʿ — رَفْع)</h3>
+    <p><b>“The Doer (or the main thing being talked about)”</b></p>
+
+    <p><b>What it means (simple):</b><br>
+    The one <b>doing the action</b> in a sentence.</p>
+
+    <p><b>How to find it:</b></p>
+    <ol>
+      <li>Find the <span style="color:#f0ad4e;font-weight:bold;">action (verb)</span></li>
+      <li>Ask: <b>Who is doing it?</b></li>
+    </ol>
+
+    <p>
+      That word is <b style="color:#f1948a;">Rafʿ (Nominative)</b>.
+    </p>
+
+    <p><b>Important rule:</b><br>
+    If there is <b>no special reason</b> to change a noun, it <b>stays in Rafʿ by default</b>.
+    </p>
+
+    <p><b>Example:</b></p>
+    <p style="font-size:20px;">
+      <span style="color:#f1948a;font-weight:bold;">اللَّهُ</span>
+      <span style="color:#f0ad4e;"> خَلَقَ</span>
+      السَّمَاوَاتِ
+    </p>
+
+    <p>
+      → <span style="color:#f1948a;font-weight:bold;">Allah</span> is doing the action → <b>Rafʿ</b>
+    </p>
+
+    <p><b>In Arabic grammar words:</b><br>
+    Rafʿ = <b>مرفوع</b></p>
+  `,
+
+  accusative: `
+    <h3 style="color:#9ec5fe;">Accusative (Naṣb — نَصْب)</h3>
+    <p><b>“Extra Details”</b></p>
+
+    <p><b>What it means:</b><br>
+    Anything that is <b>not the doer</b>, but gives <b>extra information</b> about the action.
+    </p>
+
+    <p><b>Key rule:</b><br>
+    After finding the <b>action + doer</b>,<br>
+    <b>everything else becomes Naṣb</b>.
+    </p>
+
+    <p><b>What counts as “details”?</b></p>
+    <ul>
+      <li>The object</li>
+      <li>Time</li>
+      <li>Place</li>
+      <li>Manner</li>
+      <li>Reason</li>
+    </ul>
+
+    <p><b>Example:</b></p>
+
+    <p>
+      Action: <span style="color:#f0ad4e;">guides</span><br>
+      Doer: <span style="color:#f1948a;">Allah</span> (Rafʿ)<br>
+      <span style="color:#9ec5fe;font-weight:bold;">People / path</span> → extra info → <b>Naṣb</b>
+    </p>
+
+    <p><b>In Arabic grammar words:</b><br>
+    Naṣb = <b>منصوب</b></p>
+  `,
+
+  genitive: `
+    <h3 style="color:#8fd19e;">Genitive (Jarr — جَرّ)</h3>
+    <p><b>“After of / in / from / with …”</b></p>
+
+    <p><b>What it means:</b><br>
+    A word that comes after:
+    </p>
+
+    <ul>
+      <li>of</li>
+      <li>in</li>
+      <li>from</li>
+      <li>with</li>
+      <li>to</li>
+      <li>for</li>
+    </ul>
+
+    <p>
+      These words are called <b>ḥurūf al-jarr</b> (prepositions).
+    </p>
+
+    <p><b>Big rule:</b><br>
+    Any noun <b>after a preposition is ALWAYS Jarr</b>.
+    </p>
+
+    <p><b>Also includes possession:</b></p>
+    <ul>
+      <li>Book <b>of</b> Allah</li>
+      <li>Mercy <b>of</b> Allah</li>
+    </ul>
+
+    <p>
+      Even if “of” is hidden, you can rephrase to see it.
+    </p>
+
+    <p><b>Example:</b></p>
+    <p style="font-size:20px;">
+      رَسُولُ <span style="color:#8fd19e;font-weight:bold;">اللَّهِ</span>
+    </p>
+
+    <p>
+      “of Allah” → <span style="color:#8fd19e;font-weight:bold;">Allah</span> = <b>Jarr</b>
+    </p>
+
+    <p><b>In Arabic grammar words:</b><br>
+    Jarr = <b>مجرور</b></p>
+  `,
+
+  verb: `
+    <h3 style="color:#f0ad4e;">Verb (Fiʿl — فِعْل)</h3>
+    <p><b>“The Action Itself”</b></p>
+
+    <p><b>What it means:</b><br>
+    A word that has <b>time</b>:
+    </p>
+
+    <ul>
+      <li>Past</li>
+      <li>Present</li>
+      <li>Future</li>
+    </ul>
+
+    <p><b>Test:</b><br>
+    Put <b>“I”</b> before the word:
+    </p>
+
+    <ul>
+      <li>“I ate” ✅ → Verb</li>
+      <li>“I book” ❌ → Not a verb</li>
+    </ul>
+
+    <p><b>Why verbs matter:</b></p>
+    <ul>
+      <li>They decide who is <b>Rafʿ</b></li>
+      <li>They decide what becomes <b>Naṣb</b></li>
+    </ul>
+
+    <p><b>Example:</b></p>
+    <p>
+      Allah <span style="color:#f0ad4e;font-weight:bold;">knows</span>
+      <span style="color:#9ec5fe;font-weight:bold;">everything</span>
+    </p>
+
+    <p>
+      Knows = <b>Fiʿl</b><br>
+      Allah = <b>Rafʿ</b><br>
+      Everything = <b>Naṣb</b>
+    </p>
+  `
+};
+
+
+
+
+function showGrammarPopup(type) {
+  console.log('[GrammarPopup] Requested type:', type);
+
+  const content = grammarExplanations[type];
+  if (!content) {
+    console.warn('[GrammarPopup] No explanation found for type:', type);
+    return;
+  }
+
+  console.log('[GrammarPopup] Found explanation content, length:', content.length);
+
+  // Close any existing popup first
+  console.log('[GrammarPopup] Closing any existing popup');
+  hidePopup();
+
+  const popup   = document.getElementById("popupContent");
+  const overlay = document.getElementById("overlay");
+
+  if (!popup || !overlay) {
+    console.error('[GrammarPopup] Missing popup or overlay element', {
+      popupFound: !!popup,
+      overlayFound: !!overlay
+    });
+    return;
+  }
+
+  console.log('[GrammarPopup] Popup and overlay elements found');
+
+  // Inject content
+  popup.innerHTML = content;
+  console.log('[GrammarPopup] Content injected into popup');
+
+  // Make visible
+  popup.style.display = 'block';
+  overlay.style.display = 'block';
+  console.log('[GrammarPopup] Display styles set to block');
+
+  // Activate animations / classes
+  popup.classList.add("active");
+  overlay.classList.add("active");
+  console.log('[GrammarPopup] Active classes added — popup should now be visible');
+}
+
+// ------- save Progress
+function requestSaveProgress() {
+  console.log('📤 iframe: sending SAVE_PROGRESS', {
+    surah: currentSurah,
+    ayah: currentAyah,
+    recordStreak: true
+  });
+
+  parent.postMessage(
+    {
+      type: 'SAVE_PROGRESS',
+      surah: currentSurah,
+      ayah: currentAyah,
+      recordStreak: true,   // ✅ ADD THIS
+      timestamp: Date.now()
+    },
+    '*'
+  );
+}
+
 
 
 

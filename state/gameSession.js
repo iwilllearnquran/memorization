@@ -115,23 +115,29 @@ async end(success = true) {
   }
 
   // 4b. Authenticated user flow
+// 4b. Authenticated user flow (GAME END)
 try {
+  // ✅ Points only
   await saveStatsToFirestore({ score: this.score });
-  const { updated, oldLength, newLength } = await recordStreak();
-  if (updated) StreakUI.renderPopup(true, oldLength, newLength);
+
+  // ✅ Ayah completion only
   await addCompletedAyahToFirestore({
     surah: window.currentSurah,
     ayah:  window.currentAyah
   });
 
-    showGameOverPopup(
+  // ❌ NO recordStreak here
+  // ❌ NO StreakUI popup here
+
+  showGameOverPopup(
     `Nice work!`,
-    `You've earned ${pendingPoints} points and kept your streak alive.`,
+    `You've earned ${pendingPoints} points.`,
     true
   );
 } catch (err) {
   console.error('❌ Error ending session:', err);
 }
+
 
 }
   

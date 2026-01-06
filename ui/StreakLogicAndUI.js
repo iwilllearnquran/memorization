@@ -139,7 +139,7 @@ const StreakLogicAndUI = (function() {
       init: function({ navSelector, firebaseApp }) {
         if (initialized) return;
         initialized = true;
-  
+
         navEl = document.querySelector(navSelector);
         auth  = firebaseApp.auth();
         db    = firebaseApp.firestore();
@@ -149,62 +149,68 @@ const StreakLogicAndUI = (function() {
             handleGuestStreakUpdate(evt.data.date);
           }
         });
-  
+
         createPopup();
-  
-        // ——— Guest init: load from localStorage & paint nav count ———
+
+        // ——— Guest init ———
         if (!auth.currentUser) {
           history    = JSON.parse(localStorage.getItem('guestStreakHistory') || '[]');
           prevLength = history.length;
           if (navEl) navEl.textContent = `🔥${history.length}`;
         }
-  
-        // Click on navbar opens popup without animation
+
+        // Navbar click → open popup (no animation)
         if (navEl) {
           navEl.addEventListener('click', () => {
             renderPopup(false, null, history.length);
           });
         }
-  
-        // ——— Auth + Firestore path for real users ———
+
+        // ——— Auth + Firestore snapshot ———
         auth.onAuthStateChanged(user => {
-          if (!user) return; 
+          if (!user) return;
+
           userRef = db.collection('users').doc(user.uid);
-  
+
           userRef.onSnapshot(doc => {
-            const data   = doc.data() || {};
+            const data    = doc.data() || {};
             const newHist = data.streakHistory || [];
-  
+
             if (firstSnapshot) {
               prevLength    = newHist.length;
               history       = newHist;
               firstSnapshot = false;
             } else if (newHist.length > prevLength) {
-              // popped a new day onto the streak!
               renderPopup(true, prevLength, newHist.length);
               prevLength = newHist.length;
               history    = newHist;
             } else {
-              // no growth, just update local state
               prevLength = newHist.length;
               history    = newHist;
             }
-  
-            // repaint nav
+
             if (navEl) navEl.textContent = `🔥${history.length}`;
           });
         });
       },
-  
+
+      // ✅ PUBLIC popup trigger (what SAVE_PROGRESS should call)
+      showPopup: function(oldLength, newLength) {
+        console.log('🔥 [StreakUI] showPopup called', { oldLength, newLength });
+        createPopup();
+        renderPopup(true, oldLength, newLength);
+        if (navEl) navEl.textContent = `🔥${newLength}`;
+      },
+
       close: function() {
         const overlay = document.getElementById(OVERLAY_ID);
         if (overlay) overlay.style.display = 'none';
       }
     };
-  
-    return StreakUI;
-  })();
-  
-  // Expose globally & as module export
-  window.StreakUI = StreakLogicAndUI;
-  export { StreakLogicAndUI as StreakUI };
+
+   return StreakUI;
+})();
+
+// Expose globally & as module export
+window.StreakUI = StreakLogicAndUI;
+export { StreakLogicAndUI as StreakUI };

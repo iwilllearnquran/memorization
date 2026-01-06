@@ -75,6 +75,42 @@ html, body {
   margin-top: 20px;
 }
 
+.grammar-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.grammar-item:hover .grammar-label {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.grammar-item:active {
+  opacity: 0.7;
+}
+
+.grammar-label {
+  position: relative;
+}
+
+.grammar-label::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0;
+  height: 2px;
+  background: currentColor;
+  transition: width 0.2s ease;
+}
+
+.grammar-item:hover .grammar-label::after {
+  width: 100%;
+}
+
 
 
 
@@ -1828,4 +1864,28 @@ body.game-mode #returnToAyah {
 
 .divider {
   color: #999;
+}
+
+
+
+.popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.popup.hidden {
+  display: none;
+}
+
+.popup-content {
+  background: #fff;
+  padding: 14px;
+  max-width: 420px;
+  border-radius: 8px;
+  font-size: 12px;
 }

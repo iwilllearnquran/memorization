@@ -106,6 +106,19 @@ async function initStartButton() {
 }
 
 
+//-----------helper
+
+function updateSurahProgressGuest(surah, ayah) {
+  const key = 'completedSurahs_new';
+  const map = JSON.parse(localStorage.getItem(key) || '{}');
+
+  // only move forward
+  if (!map[surah] || ayah > map[surah]) {
+    map[surah] = ayah;
+    localStorage.setItem(key, JSON.stringify(map));
+    console.log(`📊 Progress updated → Surah ${surah}: Ayah ${ayah}`);
+  }
+}
 
 
 // ————— Load and Display a Specific Ayah —————
@@ -130,7 +143,7 @@ async function loadAyah(s, a) {
   }, 150);
 
   // Update navigation arrows
-  updateArrowVisibility();
+  //updateArrowVisibility();
 
   // Persist last-read position
   if (auth.currentUser) {
@@ -139,6 +152,7 @@ async function loadAyah(s, a) {
     setGuestLastRead(s, a);
   }
 }
+
 
 // ————— Render Surah Overview Grid & Dropdown —————
 async function renderSurahOverview() {
@@ -166,40 +180,39 @@ async function renderSurahOverview() {
     D.surahContainer.append(card);
 
     // 🔍 Progress Debug
-    let completedAyahs = [];
+    // 🔍 Progress (Surah-wise)
+    let maxAyahRead = 0;
+
     if (auth.currentUser) {
       const snap = await getUserDoc();
-      completedAyahs = (snap.data()?.completedAyahs || []).filter(x => x.surah === s.number);
-      console.log(`🔐 User progress for Surah ${s.number}:`, completedAyahs);
-    } else {
-      const local = JSON.parse(localStorage.getItem('completedAyahs') || '[]');
-      completedAyahs = local.filter(x => x.surah === s.number);
-      console.log(`🕊️ Guest progress for Surah ${s.number}:`, completedAyahs);
-    }
+      const map = snap.data()?.completedSurahs_new || {};
+      maxAyahRead = map[s.number] || 0;
 
-    const completedNumbers = completedAyahs.map(x => x.ayah);
-    console.log(`✅ Completed Ayah numbers for Surah ${s.number}:`, completedNumbers);
+      console.log(`🔐 User progress → Surah ${s.number}: Ayah ${maxAyahRead}`);
+    } else {
+      const map = JSON.parse(localStorage.getItem('completedSurahs_new') || '{}');
+      maxAyahRead = map[s.number] || 0;
+
+      console.log(`🕊️ Guest progress → Surah ${s.number}: Ayah ${maxAyahRead}`);
+    }
 
     const total = s.ayahCount;
     let label = '';
-    let nextAyah = null;
+    let nextAyah = 1;
 
-    for (let i = 1; i <= total; i++) {
-      if (!completedNumbers.includes(i)) {
-        nextAyah = i;
-        break;
-      }
-    }
+    if (maxAyahRead === 0) {
+      label = `▶ Start Surah ${s.number}`;
+      nextAyah = 1;
+      console.log(`🆕 Surah ${s.number} not started.`);
 
-    if (nextAyah === null) {
+    } else if (maxAyahRead >= total) {
       label = '🔁 Replay Surah';
       nextAyah = 1;
       console.log(`🎉 Surah ${s.number} fully completed.`);
-    } else if (completedNumbers.length === 0) {
-      label = `▶ Start Surah ${s.number}`;
-      console.log(`🆕 Surah ${s.number} not started.`);
+
     } else {
-      label = `▶ Resume from Ayah ${nextAyah}`;
+      label = `▶ Resume from Ayah ${maxAyahRead + 1}`;
+      nextAyah = maxAyahRead + 1;
       console.log(`⏯️ Surah ${s.number} partially done. Resuming from Ayah ${nextAyah}`);
     }
 
@@ -224,26 +237,29 @@ async function renderSurahOverview() {
       D.dropdowns.style.display = 'flex';
       loadAyah(s.number, 1);
     });
-  }
 
+  }
   refreshAllProgress();
 }
 
 
 // ————— Update Navigation Arrow Visibility —————
-function updateArrowVisibility() {
-  const idx = surahData.findIndex(s => s.number === currentSurah);
-  const max = surahData[idx]?.ayahCount || 0;
-  D.prevArrow.style.display = (idx === 0 && currentAyah === 1) ? 'none' : 'block';
-  D.nextArrow.style.display = (idx === surahData.length - 1 && currentAyah === max)
-    ? 'none' : 'block';
-}
+
+// ————— Show/Hide Navigation Arrows Based on Current Ayah —————
+// ————— function updateArrowVisibility() {
+// —————  const idx = surahData.findIndex(s => s.number === currentSurah);
+// —————  const max = surahData[idx]?.ayahCount || 0;
+// —————  D.prevArrow.style.display = (idx === 0 && currentAyah === 1) ? 'none' : 'block';
+// —————  D.nextArrow.style.display = (idx === surahData.length - 1 && currentAyah === max)
+// —————    ? 'none' : 'block';
+// —————}
 
 // ————— Window-Level Navigation Shortcut —————
-window.navigateAyah = dir => {
+window.navigateAyah = (dir) => {
   const idx = surahData.findIndex(s => s.number === currentSurah);
   let ns = currentSurah;
   let na = currentAyah + dir;
+
   if (na < 1) {
     ns = surahData[idx - 1]?.number;
     na = surahData[idx - 1]?.ayahCount;
@@ -251,8 +267,41 @@ window.navigateAyah = dir => {
     ns = surahData[idx + 1]?.number;
     na = 1;
   }
-  if (ns && na) loadAyah(ns, na);
+  if (!ns || !na) return;
+
+  console.log(`📖 navigateAyah: Surah ${ns}, Ayah ${na}, dir=${dir}`);
+
+  const viewer = D.viewer;
+  const oldFrame = D.iframe; // current iframe
+  const newFrame = document.createElement("iframe");
+
+  newFrame.src = `ayahs/surah_${ns}/ayah_${ns}_${na}.html`;
+  newFrame.style.transform = dir === 1 ? "translateX(100%)" : "translateX(-100%)";
+
+  viewer.appendChild(newFrame);
+
+  // trigger animations
+  requestAnimationFrame(() => {
+    oldFrame.style.transform = dir === 1 ? "translateX(-100%)" : "translateX(100%)";
+    newFrame.style.transform = "translateX(0)";
+  });
+
+  // after animation, cleanup
+  setTimeout(() => {
+    viewer.removeChild(oldFrame);
+    newFrame.id = "ayahViewer"; // replace the old iframe
+    D.iframe = newFrame; // update reference
+  }, 300);
+
+  currentSurah = ns;
+  currentAyah = na;
+
+
+  // Update dropdowns
+  syncDropdowns(currentSurah, currentAyah);
+
 };
+
 
 // ————— Game-Mode Toggle Helpers —————
 function enableGameMode() {
@@ -268,7 +317,7 @@ function disableGameMode() {
   D.returnBtn.style.display = 'none';
 }
 
-// ————— Iframe Message Listener (for game events) —————
+// ————— Iframe Message Listener (for game events & swipes) —————
 window.addEventListener('message', async e => {
   const data = e.data || {};
   switch (data.type) {
@@ -282,23 +331,112 @@ window.addEventListener('message', async e => {
       D.loginBtn.click();
       break;
     case 'persistStats': {
-      const { score, recordStreak: shouldStreak } = data;
+      const { score } = data;
+
+      console.log('🎮 persistStats received (points only):', score);
+
       if (!auth.currentUser) {
         addGuestPoints(score);
-        if (shouldStreak) recordGuestStreak();
       } else {
         await addPointsToFirestore(score);
-        if (shouldStreak) {
-          const { oldLength, newLength, updated } = await recordStreak();
-          D.iframe.contentWindow.postMessage({
-            type: 'streakRecorded', oldLength, newLength, updated
-          }, '*');
-        }
       }
+
       break;
     }
+
+
+    case 'QQ_SWIPE': {
+      console.log("📩 Parent received QQ_SWIPE:", data.dir);
+      window.navigateAyah(data.dir);
+      break;
+    }
+
+    case 'SAVE_PROGRESS': {
+      const { surah, ayah, timestamp, recordStreak } = data;
+      console.log('📥 Parent received SAVE_PROGRESS', { surah, ayah, recordStreak });
+
+      try {
+        if (auth.currentUser) {
+          // ✅ Save last read
+          await updateLastRead(surah, ayah);
+
+          // 🔥 Record streak ONLY if asked
+          if (recordStreak) {
+            const { updated, oldLength, newLength } = await recordStreak();
+            console.log('🔥 recordStreak result', { updated, oldLength, newLength });
+
+            // Popup will auto-fire via Firestore snapshot
+            // OR you can force it:
+            // if (updated) StreakUI.showPopup(oldLength, newLength);
+          }
+
+        } else {
+          // Guest flow
+          setGuestLastRead(surah, ayah);
+          updateSurahProgressGuest(surah, ayah);
+
+          if (recordStreak) {
+            const today = new Date().toISOString().split('T')[0];
+
+            console.log('🔥 [SAVE_PROGRESS] Guest streak requested');
+            console.log('📅 [SAVE_PROGRESS] Today =', today);
+            console.log('📤 [SAVE_PROGRESS] Sending streakUpdate → parent/window');
+
+            window.postMessage(
+              {
+                type: 'streakUpdate',
+                date: today
+              },
+              '*'
+            );
+
+            console.log('✅ [SAVE_PROGRESS] streakUpdate message sent');
+          } else {
+            console.log('⏭️ [SAVE_PROGRESS] recordStreak=false → skipping guest streak');
+          }
+
+        }
+
+        // Acknowledge save
+        e.source.postMessage(
+          {
+            type: 'SAVE_PROGRESS_SUCCESS',
+            surah,
+            ayah,
+            savedAt: new Date(timestamp || Date.now()).toISOString()
+          },
+          '*'
+        );
+
+      } catch (err) {
+        console.error('❌ Save progress failed', err);
+
+        e.source.postMessage(
+          { type: 'SAVE_PROGRESS_FAILED', error: err.message },
+          '*'
+        );
+      }
+
+      break;
+    }
+
   }
 });
+
+
+function syncDropdowns(surah, ayah) {
+  if (D.surahSelect) D.surahSelect.value = surah;
+
+  if (D.ayahSelect) {
+    D.ayahSelect.innerHTML = '';
+    const total = surahData.find(x => x.number === surah)?.ayahCount || 0;
+    for (let i = 1; i <= total; i++) {
+      D.ayahSelect.append(new Option(i, i));
+    }
+    D.ayahSelect.value = ayah;
+  }
+}
+
 
 // ————— Bind UI Event Handlers —————
 function bindUIActions() {
@@ -418,25 +556,34 @@ async function handleAuthChange(user) {
 
 // ————— Progress Bar Refresh for Surah Cards —————
 async function refreshAllProgress() {
-  let completed = [];
+  let progressMap = {};
+
   if (auth.currentUser) {
     const snap = await getUserDoc();
-    completed = (snap.data().completedAyahs) || [];
+    progressMap = snap.data()?.completedSurahs_new || {};
   } else {
-    completed = JSON.parse(localStorage.getItem('completedAyahs') || '[]');
+    progressMap = JSON.parse(
+      localStorage.getItem('completedSurahs_new') || '{}'
+    );
   }
 
-document.querySelectorAll('.surah-card').forEach(card => {
-  const num = +card.querySelector('.surah-number').textContent.replace('Surah ', '');
-  const total = surahData.find(s => s.number === num)?.ayahCount || 0;
-  const done  = completed.filter(x => x.surah === num).length;
-  const pct   = total ? Math.round((done / total) * 100) : 0;
+  document.querySelectorAll('.surah-card').forEach(card => {
+    const num = +card.querySelector('.surah-number')
+                     .textContent.replace('Surah ', '');
 
-  card.setAttribute('data-progress', pct);
-  card.style.setProperty('--progress', `${pct}%`);
-});
+    const total = surahData.find(s => s.number === num)?.ayahCount || 0;
+    const reached = progressMap[num] || 0;
 
+    const pct = total
+      ? Math.round((reached / total) * 100)
+      : 0;
+
+    card.setAttribute('data-progress', pct);
+    card.style.setProperty('--progress', `${pct}%`);
+  });
 }
+
+
 
 // ————— Prevent Screen Dim (Wake Lock) —————
 let wakeLock = null;
@@ -465,3 +612,5 @@ async function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
+

@@ -14,3 +14,5 @@ export function logToday() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(streak));
   }
 }
+
+

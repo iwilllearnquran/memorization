@@ -270,10 +270,10 @@ function _addControls() {
       score: gameSession.sessionScore,  // total earned this session
       recordStreak: true                // ask them to record today’s streak too
     }, '*');
-    window.parent.postMessage({
-      type: 'streakUpdate',
-      date: new Date().toISOString().split('T')[0]
-    }, '*');
+   // window.parent.postMessage({
+   //   type: 'streakUpdate',
+   //   date: new Date().toISOString().split('T')[0]
+   // }, '*');
   
 
   });
