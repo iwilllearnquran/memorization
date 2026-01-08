@@ -5,7 +5,10 @@ import { initStats, updateStats } from '/ui/gameStatsUI.js';
 import { showCompletionPopup } from '/ui/gameCompletionUI.js';
 import { showGameOverPopup } from '/ui/gameOverPopup.js';
 
+
+
 export async function startArrangeGame() {
+  
   initStats('#arrangeGameContainer');
   // 1️⃣ Swap panels
   const arrangeUI = $('#arrangeGameContainer');
@@ -16,8 +19,8 @@ export async function startArrangeGame() {
   show(arrangeUI);
 
   // 2️⃣ Init session
-  await gameSession.init('arrange');
-  updateStats();  // Now will show correct Firestore score
+  //await gameSession.init('arrange');
+  //updateStats();  // Now will show correct Firestore score
 
 
   // 3️⃣ Grab the _real_ word-blocks & derive correctOrder
@@ -79,13 +82,6 @@ function placeWord(box, correctOrder) {
     ? span.textContent.trim()
     : box.textContent.trim();
 
-  // 3️⃣ DEBUG: see why it’s “wrong”
-  console.log(
-    'Arrange → slot', slotIndex,
-    'picked:', JSON.stringify(pickedText),
-    ' vs correct:', JSON.stringify(correctText)
-  );
-
   // 4️⃣ Now the test
   if (pickedText !== correctText) {
     if (navigator.vibrate) navigator.vibrate([100,50,100]);
@@ -95,6 +91,7 @@ function placeWord(box, correctOrder) {
     gameSession.loseLife();
     updateStats();
     if (gameSession.lives === 0) {
+      gameSession.end(false);
       showGameOverPopup();
     }
     window.showToast?.('❌ Incorrect!', '#c0392b');
@@ -150,18 +147,18 @@ function placeWord(box, correctOrder) {
 
     // Award points for correct guess
     gameSession.addPoints(GAME_CONFIG.correctActionPoints);
-    updateStats();
+    //guestGameSession.addPoints(GAME_CONFIG.correctActionPoints)
+    //updateStats();
 
 
     const slots = Array.from(document.querySelectorAll('.slot'));
-    console.log('🔍 slot data-words:', slots.map((s,i) => [i, s.dataset.word]));
     const allFilled = slots.every(s => Boolean(s.dataset.word && s.dataset.word.trim()));
-    console.log('🔍 allFilled?', allFilled);
   
     // 5️⃣ Check for game completion
     if (allFilled) {
-      gameSession.addPoints(GAME_CONFIG.fullGameBonus);
-      updateStats();
+      gameSession.addPoints(GAME_CONFIG.fullGameBonus); //--!resue later 
+      //guestGameSession.addPoints(GAME_CONFIG.fullGameBonus)
+      //updateStats();
       /**
       showCompletionPopup(
         'You have earned ' +
@@ -171,7 +168,7 @@ function placeWord(box, correctOrder) {
       window.parent.postMessage({
         type: 'persistStats',
         score: gameSession.sessionScore,  // total earned this session
-        recordStreak: true                // ask them to record today’s streak too
+        recordStreak: false,                // ask them to record today’s streak too
       }, '*');
       //window.parent.postMessage({
        // type: 'streakUpdate',

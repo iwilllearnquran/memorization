@@ -9,6 +9,31 @@ let floatingBtn;
 let playToggleBtn;
 let currentMode = 'learning';
 let floatingClone = null;
+const DEFAULT_SETTINGS = {
+  audioLang: 'ar',
+  speed: '1',
+  repeat: '1',
+  showTranslation: true,
+  showRoot: true,
+  showGrammar: true,
+  panelLang: 'en'
+};
+
+function getSettings() {
+  return {
+    ...DEFAULT_SETTINGS,
+    ...(JSON.parse(localStorage.getItem('qq_settings')) || {})
+  };
+}
+
+function saveSettings(patch) {
+  const current = getSettings();
+  localStorage.setItem('qq_settings', JSON.stringify({
+    ...current,
+    ...patch
+  }));
+}
+
 
 let gameStats = {
   points: 0,
@@ -28,10 +53,14 @@ if (pathMatch) {
 
 
 
-
 // 1. toggleElements(type, show)
 //    Shows or hides elements by class based on type and boolean 'show'.
 function toggleElements(type, show) {
+  saveSettings({
+    showRoot: type === 'root-tag' ? show : getSettings().showRoot,
+    showGrammar: type === 'pos-tag' ? show : getSettings().showGrammar
+  });
+
   const map = { translation: 'toggle-translation', 'root-tag': 'toggle-root', 'pos-tag': 'toggle-pos' };
   const cls = map[type] || type;
   document.querySelectorAll(`.${cls}`).forEach(el => {
@@ -117,8 +146,14 @@ window.clearTranslitInputs = clearTranslitInputs;
 // 6. toggleTranslations()
 //    Toggles visibility of translation hints under inputs.
 function toggleTranslations() {
-  document.querySelectorAll('.toggle-translation').forEach(el => el.classList.toggle('hidden-toggle'));
+  const visible = [...document.querySelectorAll('.toggle-translation')]
+    .some(el => el.classList.contains('hidden-toggle'));
+
+  saveSettings({ showTranslation: visible });
+  document.querySelectorAll('.toggle-translation')
+    .forEach(el => el.classList.toggle('hidden-toggle'));
 }
+
 window.toggleTranslations = toggleTranslations;
 
 // 7. switchTranslation(lang)
@@ -264,6 +299,7 @@ window.toggleSection = toggleSection;
 
 // Called when user picks panel translation language
 function onPanelLangChange(lang) {
+  saveSettings({ panelLang: lang });
   const enDiv = document.getElementById('englishTranslation');
   const urDiv = document.getElementById('urduTranslation');
 
@@ -494,6 +530,7 @@ window.toggleMode = toggleMode;
 
 // switch audio source
 function onAudioLangChange(lang) {
+  saveSettings({ audioLang: lang });
   const audio       = document.getElementById('ayahAudio');
   const navIcon     = document.getElementById('navPlayIcon');
   const panelIconEl = document.querySelector('#playToggleBtn .material-icons-outlined');
@@ -516,6 +553,7 @@ window.onAudioLangChange = onAudioLangChange;
 
 // change playback speed
 function onSpeedChange(speed) {
+  saveSettings({ speed });
   document.getElementById('ayahAudio').playbackRate = parseFloat(speed);
 }
 
@@ -555,6 +593,7 @@ function audioControlSetup() {
 
   // repeat control (you’ll need your own loop logic elsewhere)
   repeatInput?.addEventListener('change', () => {
+    saveSettings({ repeat: repeatInput.value });
     // e.g. store repeat count for your play-loop logic
     audio.dataset.repeat = repeatInput.value;
   });
@@ -567,6 +606,45 @@ function audioControlSetup() {
 
 // Initialize on DOMContentLoaded
 window.addEventListener('DOMContentLoaded', () => {
+// ===============================
+// Restore saved user settings
+// ===============================
+const settings = getSettings();
+
+/* ── Audio ─────────────────── */
+if (settings.audioLang) {
+  onAudioLangChange(settings.audioLang);
+}
+
+if (settings.speed) {
+  onSpeedChange(settings.speed);
+}
+
+const repeatInput = document.getElementById('repeatCount');
+if (repeatInput && settings.repeat) {
+  repeatInput.value = settings.repeat;
+  ayahAudio.dataset.repeat = settings.repeat;
+}
+
+/* ── Word-level toggles ─────── */
+toggleElements('root-tag', settings.showRoot);
+toggleElements('pos-tag', settings.showGrammar);
+
+document.querySelectorAll('.toggle-translation')
+  .forEach(el =>
+    el.classList.toggle('hidden-toggle', !settings.showTranslation)
+  );
+
+/* ── Panel translation language ─ */
+onPanelLangChange(settings.panelLang);
+
+const panelSelect = document.getElementById('translationLangSelect');
+if (panelSelect) {
+  panelSelect.value = settings.panelLang;
+}
+
+
+
   ayahAudio     = document.getElementById('ayahAudio');
   audioPanel    = document.getElementById('audioControls');
   playBtn       = document.getElementById('playToggleBtn');
@@ -725,6 +803,27 @@ window.addEventListener('message', e => {
     showToast('⚠️ Could not save progress', '#dc3545');
   }
 });
+
+function requestSaveProgress() {
+  parent.postMessage(
+    {
+      type: 'SAVE_PROGRESS',
+      surah: currentSurah,
+      ayah: currentAyah,
+      recordStreak: true,
+      timestamp: Date.now()
+    },
+    '*'
+  );
+}
+
+window.addEventListener('message', e => {
+  if (e.data.type === 'REQUEST_SAVE_PROGRESS') {
+    requestSaveProgress();
+  }
+});
+
+
 
 
 
@@ -1106,14 +1205,11 @@ function initIframeSwipe() {
   root.addEventListener('touchend', e => {
     const dx = e.changedTouches[0].clientX - startX;
     const dy = e.changedTouches[0].clientY - startY;
-    console.log("📱 iframe touchend", { dx, dy });
 
     if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
       if (dx < 0) {
-        console.log("👉 Swipe LEFT → next ayah");
         window.parent.postMessage({ type: "QQ_SWIPE", dir: 1 }, "*");
       } else {
-        console.log("👈 Swipe RIGHT → previous ayah");
         window.parent.postMessage({ type: "QQ_SWIPE", dir: -1 }, "*");
       }
     }
@@ -1124,7 +1220,6 @@ function initIframeSwipe() {
     isDragging = true;
     startX = e.clientX;
     startY = e.clientY;
-    console.log("🖱️ iframe mousedown", { startX, startY });
   });
 
   root.addEventListener('mouseup', e => {
@@ -1132,25 +1227,21 @@ function initIframeSwipe() {
     isDragging = false;
     const dx = e.clientX - startX;
     const dy = e.clientY - startY;
-    console.log("🖱️ iframe mouseup", { dx, dy });
 
     if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
       if (dx < 0) {
-        console.log("👉 Mouse swipe LEFT → next ayah");
         window.parent.postMessage({ type: "QQ_SWIPE", dir: 1 }, "*");
       } else {
-        console.log("👈 Mouse swipe RIGHT → previous ayah");
         window.parent.postMessage({ type: "QQ_SWIPE", dir: -1 }, "*");
       }
     }
   });
 
   root.addEventListener('mouseleave', () => {
-    if (isDragging) console.log("🖱️ iframe drag cancelled");
+    if (isDragging) 
     isDragging = false;
   });
 
-  console.log("✅ iframe swipe detection ready");
 }
 
 window.addEventListener('DOMContentLoaded', initIframeSwipe);

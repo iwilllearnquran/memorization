@@ -39,16 +39,14 @@ let isAnimating = false;
  */
 export async function startVerbGame() {
   initStats('#verbGameContainer');
-  console.log(`🔍 VerbGame → S${window.currentSurah}, A${window.currentAyah}`);
   
   hide($('#arrangeGameContainer'));
   show($('#verbGameContainer'));
 
 
   // ✅ Ensure session starts with correct lives & score
-  await gameSession.init('verb', { reset: false });
+  //await gameSession.init('verb', { reset: false });
   updateStats();
-  console.log("✅ Stats updated after Firestore load. Score:", gameSession.score);
 
 
   verbOptions    = document.getElementById('verbOptions');
@@ -90,11 +88,6 @@ function renderVerbSet() {
   // 6️⃣ Matching logic
   async function tryMatch() {
     if (!selVerb || !selMeaning) return;
-
-    console.log(
-      `Comparing IDs → verb:${selVerb.dataset.id}, meaning:${selMeaning.dataset.id}`
-    );
-
     // ✅ Correct match when IDs align
     if (selVerb.dataset.id === selMeaning.dataset.id) {
       [selVerb, selMeaning].forEach(el => {
@@ -129,7 +122,11 @@ function renderVerbSet() {
       });
       gameSession.loseLife();
       updateStats();
-      if (gameSession.lives === 0) showGameOverPopup();
+      if (gameSession.lives === 0) {
+        gameSession.end(false);
+        showGameOverPopup();
+
+      }
       window.showToast('❌ Try again', '#c0392b');
 
       setTimeout(() => {
@@ -264,11 +261,12 @@ function _addControls() {
          Your progress is saved locally and will sync once you log in.`
       );
     }**/
+    const earned = gameSession.sessionScore; // ✅ capture BEFORE end
     await gameSession.end(true);
     window.parent.postMessage({
       type: 'persistStats',
       score: gameSession.sessionScore,  // total earned this session
-      recordStreak: true                // ask them to record today’s streak too
+      recordStreak: false                // ask them to record today’s streak too
     }, '*');
    // window.parent.postMessage({
    //   type: 'streakUpdate',

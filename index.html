@@ -12,6 +12,14 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
+<link
+  href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+  rel="stylesheet"
+/>
 
   <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet">
 
@@ -25,7 +33,9 @@
 
   <div class="navbar" id="mainNavbar">
     <div class="navbar-left">
-      <button class="login-btn" id="loginBtn">👤</button>
+      <!--<button class="login-btn" id="loginBtn">👤</button> -->
+      <button class="menu-btn" id="menuBtn">☰</button>
+
     </div>
     <div class="navbar-center dropdowns">
       <select id="surahSelect"></select>
@@ -42,37 +52,38 @@
   </div>
 
   <!-- HTML -->
-<div id="profileDrawer" class="profile-drawer">
-  <div class="drawer-header">
-    <button id="drawerCloseBtn" aria-label="Close profile drawer">‹‹‹</button>
-    <h3>Your Profile</h3>
+<div id="profileDrawer" class="profile-drawer qq-sidebar">
+
+  <div class="drawer-header qq-sidebar-header">
+    <span class="qq-logo"><span class="material-icons-outlined">mosque</span></span>
+    <span class="qq-title">My Quran Quest</span>
+    <button id="drawerCloseBtn" class="drawer-close">✕</button>
   </div>
-  <div class="drawer-content">
-    <div class="profile-field">
-      <label>Name</label>
-      <span id="userName">Guest</span>
-    </div>
-    <div class="profile-field">
-      <label>Ajr Points</label>
-      <span id="ajrPoints">0</span>
-    </div>
-    <div class="drawer-info">
-      <h4>About Quran Quest</h4>
-      <p>
-        Quran Quest is a fun and interactive way to learn the Quran. 
-        You can track your progress, earn points, and challenge yourself with quizzes.
-        Whether you're a beginner or an advanced learner, Quran Quest has something for everyone.
-        Join us on this spiritual journey and deepen your understanding of the Quran.
-        <br><br>
-        <strong>Note:</strong> This is first version. More features are coming soon.  
-        <br><br>
-      </p>
-    </div>
-    <div class="profile-actions">
-      <button id="logoutBtn">Logout</button>
-    </div>
+
+  <nav class="qq-nav">
+  <button class="qq-nav-item active" id="goHomeBtn" type="button">
+    <span class="material-icons-outlined">home</span>
+    <span>Home</span>
+  </button>
+
+
+    <button class="qq-nav-item" id="learningJourneyBtn">
+      <span class="material-icons-outlined">calendar_month</span> 
+      <span>My Learning Journey</span>
+    </button>
+
+    <button class="qq-nav-item" id="aboutBtn">
+      <span class="material-icons-outlined">info</span> 
+      <span>About</span>
+    </button>
+  </nav>
+
+  <div class="drawer-footer">
+    <p></p>
   </div>
+
 </div>
+
 
 
 <div id="calendarPopup"></div>

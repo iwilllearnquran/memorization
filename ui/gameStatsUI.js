@@ -34,7 +34,7 @@ export function updateStats() {
 
   const userHTML = `
     <div class="user-pill">
-      <span class="coin">✨${ajrPoints} Ajr Points</span>
+      <span class="coin">✨${ajrPoints} Points</span>
     </div>
   `;
 

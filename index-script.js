@@ -45,6 +45,9 @@ const DEFAULT_AYAH  = 1;
 let surahData    = [];
 let currentSurah = DEFAULT_SURAH;
 let currentAyah  = DEFAULT_AYAH;
+let isGameMode = false;
+let isCurrentAyahDirty = false;
+
 
 // Cached DOM elements
 const D = {};
@@ -59,7 +62,6 @@ async function resolveSurahName(num) {
 // ————— Initialize Start/Resume Button —————
 async function initStartButton() {
   const btn = D.startBtn;
-  console.log('📍 initStartButton called; auth.currentUser =', auth.currentUser);
 
   // 1️⃣ Fetch last-read location
   let loc = null;
@@ -91,10 +93,8 @@ async function initStartButton() {
     };
   } else {
     // Start Learning case
-    console.log('📍 No last-read found; defaulting to start learning');
     btn.textContent = 'Start Learning';
     btn.onclick = () => {
-      console.log(`📍 [Button Click] loadAyah(${DEFAULT_SURAH}, ${DEFAULT_AYAH})`);
       // show reader UI
       D.surahContainer.style.display = 'none';
       D.hero.style.display           = 'none';
@@ -126,6 +126,9 @@ async function loadAyah(s, a) {
   currentSurah = s;
   currentAyah  = a;
 
+  isCurrentAyahDirty = true;
+
+
   // Update dropdowns
   D.surahSelect.value = s;
   D.ayahSelect.innerHTML = '';
@@ -151,6 +154,25 @@ async function loadAyah(s, a) {
   } else {
     setGuestLastRead(s, a);
   }
+
+  // 📘 Track learning journey (guest + user)
+  const journey = JSON.parse(localStorage.getItem('learningJourney') || '{}');
+  const today = new Date().toISOString().split('T')[0];
+
+  journey[today] = journey[today] || { items: [] };
+
+  const alreadyRead = journey[today].items.some(
+    x => x.surah === s && x.ayah === a
+  );
+
+  if (!alreadyRead) {
+    journey[today].items.push({ surah: s, ayah: a });
+    localStorage.setItem('learningJourney', JSON.stringify(journey));
+  }
+
+
+
+
 }
 
 
@@ -187,13 +209,9 @@ async function renderSurahOverview() {
       const snap = await getUserDoc();
       const map = snap.data()?.completedSurahs_new || {};
       maxAyahRead = map[s.number] || 0;
-
-      console.log(`🔐 User progress → Surah ${s.number}: Ayah ${maxAyahRead}`);
     } else {
       const map = JSON.parse(localStorage.getItem('completedSurahs_new') || '{}');
       maxAyahRead = map[s.number] || 0;
-
-      console.log(`🕊️ Guest progress → Surah ${s.number}: Ayah ${maxAyahRead}`);
     }
 
     const total = s.ayahCount;
@@ -201,23 +219,40 @@ async function renderSurahOverview() {
     let nextAyah = 1;
 
     if (maxAyahRead === 0) {
-      label = `▶ Start Surah ${s.number}`;
+      label = `
+    <span class="material-symbols-outlined" style="vertical-align:middle;font-size:18px;">
+      book_5 
+    </span>&nbsp;
+     <span>Start Surah ${s.number}</span> 
+  `;
       nextAyah = 1;
-      console.log(`🆕 Surah ${s.number} not started.`);
+      
 
     } else if (maxAyahRead >= total) {
-      label = '🔁 Replay Surah';
-      nextAyah = 1;
-      console.log(`🎉 Surah ${s.number} fully completed.`);
+  label = `
+    <span class="material-icons-outlined" style="vertical-align:middle;font-size:18px;">
+      restart_alt 
+    </span>&nbsp;
+     <span> Repeat Surah</span>
+  `;
+  nextAyah = 1;
+  console.log(`🎉 Surah ${s.number} fully completed.`);
 
     } else {
-      label = `▶ Resume from Ayah ${maxAyahRead + 1}`;
+      label = `
+        <span class="material-symbols-outlined" style="vertical-align:middle;font-size:20px;">
+          play_arrow 
+        </span>&nbsp;
+        <span>Resume from Ayah ${maxAyahRead}</span>
+      `;
       nextAyah = maxAyahRead + 1;
+
       console.log(`⏯️ Surah ${s.number} partially done. Resuming from Ayah ${nextAyah}`);
     }
 
     const resumeBtn = card.querySelector('.resume-btn');
-    resumeBtn.textContent = label;
+    resumeBtn.innerHTML = label;
+
     resumeBtn.title = label;
     resumeBtn.dataset.nextAyah = nextAyah;
 
@@ -256,6 +291,11 @@ async function renderSurahOverview() {
 
 // ————— Window-Level Navigation Shortcut —————
 window.navigateAyah = (dir) => {
+  if (isGameMode) {
+    console.log('⛔ Swipe blocked: game mode active');
+    return;
+  }
+  
   const idx = surahData.findIndex(s => s.number === currentSurah);
   let ns = currentSurah;
   let na = currentAyah + dir;
@@ -268,9 +308,6 @@ window.navigateAyah = (dir) => {
     na = 1;
   }
   if (!ns || !na) return;
-
-  console.log(`📖 navigateAyah: Surah ${ns}, Ayah ${na}, dir=${dir}`);
-
   const viewer = D.viewer;
   const oldFrame = D.iframe; // current iframe
   const newFrame = document.createElement("iframe");
@@ -305,17 +342,24 @@ window.navigateAyah = (dir) => {
 
 // ————— Game-Mode Toggle Helpers —————
 function enableGameMode() {
+  isGameMode = true;
   document.body.classList.add('game-mode');
   D.surahSelect.disabled = true;
   D.ayahSelect.disabled  = true;
   D.returnBtn.style.display = 'block';
 }
 function disableGameMode() {
+  isGameMode = false;
   document.body.classList.remove('game-mode');
   D.surahSelect.disabled = false;
   D.ayahSelect.disabled  = false;
   D.returnBtn.style.display = 'none';
 }
+
+window.addEventListener('pageshow', () => {
+  document.body.classList.remove('modal-open');
+});
+
 
 // ————— Iframe Message Listener (for game events & swipes) —————
 window.addEventListener('message', async e => {
@@ -332,9 +376,6 @@ window.addEventListener('message', async e => {
       break;
     case 'persistStats': {
       const { score } = data;
-
-      console.log('🎮 persistStats received (points only):', score);
-
       if (!auth.currentUser) {
         addGuestPoints(score);
       } else {
@@ -343,13 +384,30 @@ window.addEventListener('message', async e => {
 
       break;
     }
-
-
     case 'QQ_SWIPE': {
-      console.log("📩 Parent received QQ_SWIPE:", data.dir);
-      window.navigateAyah(data.dir);
-      break;
-    }
+
+
+  window.navigateAyah(data.dir);
+
+  // ✅ Track learning journey on swipe
+  const journey = JSON.parse(localStorage.getItem('learningJourney') || '{}');
+  const today = new Date().toISOString().split('T')[0];
+
+  journey[today] = journey[today] || { items: [] };
+
+  const alreadyRead = journey[today].items.some(
+    x => x.surah === currentSurah && x.ayah === currentAyah
+  );
+
+  if (!alreadyRead) {
+    journey[today].items.push({ surah: currentSurah, ayah: currentAyah });
+    localStorage.setItem('learningJourney', JSON.stringify(journey));
+  }
+
+
+    break;
+  }
+
 
     case 'SAVE_PROGRESS': {
       const { surah, ayah, timestamp, recordStreak } = data;
@@ -375,13 +433,10 @@ window.addEventListener('message', async e => {
           setGuestLastRead(surah, ayah);
           updateSurahProgressGuest(surah, ayah);
 
+          isCurrentAyahDirty = false;
+
           if (recordStreak) {
             const today = new Date().toISOString().split('T')[0];
-
-            console.log('🔥 [SAVE_PROGRESS] Guest streak requested');
-            console.log('📅 [SAVE_PROGRESS] Today =', today);
-            console.log('📤 [SAVE_PROGRESS] Sending streakUpdate → parent/window');
-
             window.postMessage(
               {
                 type: 'streakUpdate',
@@ -389,16 +444,14 @@ window.addEventListener('message', async e => {
               },
               '*'
             );
-
-            console.log('✅ [SAVE_PROGRESS] streakUpdate message sent');
           } else {
             console.log('⏭️ [SAVE_PROGRESS] recordStreak=false → skipping guest streak');
           }
 
         }
 
-        // Acknowledge save
-        e.source.postMessage(
+        // 1️⃣ notify PARENT (yourself) → for exit logic
+        window.postMessage(
           {
             type: 'SAVE_PROGRESS_SUCCESS',
             surah,
@@ -407,6 +460,18 @@ window.addEventListener('message', async e => {
           },
           '*'
         );
+
+        // 2️⃣ ALSO notify iframe → for toast UI
+        e.source.postMessage(
+          {
+            type: 'SAVE_PROGRESS_SUCCESS',
+            surah,
+            ayah
+          },
+          '*'
+        );
+
+
 
       } catch (err) {
         console.error('❌ Save progress failed', err);
@@ -419,6 +484,22 @@ window.addEventListener('message', async e => {
 
       break;
     }
+
+    case 'SAVE_PROGRESS_SUCCESS': {
+      isCurrentAyahDirty = false;
+
+      // 🚀 If user wanted to go home after saving
+      if (typeof window.__pendingGoHome === 'function') {
+        const go = window.__pendingGoHome;
+        window.__pendingGoHome = null;
+        go(); // reload AFTER save truly completes
+      }
+
+      break;
+    }
+
+
+
 
   }
 });
@@ -438,6 +519,104 @@ function syncDropdowns(surah, ayah) {
 }
 
 
+function showConfirmPopup({ title, message, onGoHome }) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.55);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:10000;
+  `;
+
+  overlay.innerHTML = `
+    <div style="
+      position:relative;
+      background:#fff;
+      padding:20px;
+      border-radius:12px;
+      max-width:340px;
+      width:85%;
+      text-align:center;
+    ">
+      <!-- ❌ Close -->
+      <button id="popupClose" style="
+        position:absolute;
+        top:8px;
+        right:10px;
+        border:none;
+        background:none;
+        font-size:18px;
+        cursor:pointer;
+        color:#888;
+      ">✕</button>
+
+      <h3>${title}</h3>
+      <p style="font-size:14px;color:#444;line-height:1.5;">
+        ${message}
+      </p>
+
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:18px;">
+        <button id="popupSaveGo" style="
+          padding:8px 14px;
+          border-radius:8px;
+          border:none;
+          background:#0a4d68;
+          color:#fff;
+        ">Save & Go Home</button>
+
+        <button id="popupGoHome" style="
+          padding:8px 14px;
+          border-radius:8px;
+          border:1px solid #ccc;
+          background:#fff;
+        ">Go Home</button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  // ❌ X → stay on ayah
+  overlay.querySelector('#popupClose').onclick = () => overlay.remove();
+
+  // 💾 Save & Go Home
+overlay.querySelector('#popupSaveGo').onclick = () => {
+  // ask iframe to save
+  D.iframe?.contentWindow?.postMessage(
+    { type: 'REQUEST_SAVE_PROGRESS' },
+    '*'
+  );
+
+  // wait for SAVE_PROGRESS_SUCCESS
+  console.log('🟡 Save & Go Home clicked');
+  window.__pendingGoHome = onGoHome;
+  console.log('🟡 pendingGoHome set:', window.__pendingGoHome);
+
+  overlay.remove();
+};
+
+
+  // 🏠 Go Home without saving
+overlay.querySelector('#popupGoHome').onclick = () => {
+  overlay.remove();
+  if (typeof onGoHome === 'function') {
+    onGoHome();
+  }
+};
+
+
+  // click outside → stay
+  overlay.onclick = e => {
+    if (e.target === overlay) overlay.remove();
+  };
+}
+
+
+
+
 // ————— Bind UI Event Handlers —————
 function bindUIActions() {
   // Cache DOM elements
@@ -450,15 +629,16 @@ function bindUIActions() {
   D.iframe         = document.getElementById('ayahViewer');
   D.prevArrow      = document.querySelector('.prev');
   D.nextArrow      = document.querySelector('.next');
-  D.loginBtn       = document.getElementById('loginBtn');
+  //D.loginBtn       = document.getElementById('loginBtn');
   D.returnBtn      = document.getElementById('returnToAyah');
   D.startBtn       = document.getElementById('startLearningBtn');
-  D.nameEl         = document.getElementById('userName');
+  //D.nameEl         = document.getElementById('userName');
   D.ptsEl         = document.getElementById('ajrPoints');
   D.streakEl       = document.getElementById('streakDisplay');
   D.closeBtn       = document.getElementById('drawerCloseBtn');
   D.drawer         = document.getElementById('profileDrawer');
-  D.logoutBtn      = document.getElementById('logoutBtn');
+  const menuBtn = document.getElementById('menuBtn');
+  //D.logoutBtn      = document.getElementById('logoutBtn');
 
 
   // Surah/Ayah dropdown change
@@ -466,6 +646,7 @@ function bindUIActions() {
   D.ayahSelect.addEventListener('change', () => loadAyah(currentSurah, +D.ayahSelect.value));
 
   // Drawer open/close
+  /*
   D.loginBtn.addEventListener('click', () => {
   if (auth.currentUser) {
     // user is logged in → open/close profile drawer
@@ -474,9 +655,9 @@ function bindUIActions() {
     // not logged in → kick off the login flow
     signInWithGoogle();
   }
-});
+}); */
   D.closeBtn.addEventListener('click', () => D.drawer.classList.remove('open'));
-  D.logoutBtn.addEventListener('click', () => { logout(); D.drawer.classList.remove('open'); });
+  //D.logoutBtn.addEventListener('click', () => { logout(); D.drawer.classList.remove('open'); });
 
   // Swipe to close drawer
   let touchStartX = 0;
@@ -490,6 +671,220 @@ function bindUIActions() {
     disableGameMode();
     loadAyah(currentSurah, currentAyah);
   });
+
+
+const profileDrawer = document.getElementById('profileDrawer');
+const drawerCloseBtn = document.getElementById('drawerCloseBtn');
+
+menuBtn.addEventListener('click', () => {
+  profileDrawer.classList.add('open');
+});
+
+drawerCloseBtn.addEventListener('click', () => {
+  profileDrawer.classList.remove('open');
+});
+
+
+document.getElementById('learningJourneyBtn').addEventListener('click', () => {
+  profileDrawer.classList.remove('open');
+
+  const raw = JSON.parse(localStorage.getItem('learningJourney') || '{}');
+  const counts = buildDailyCountsWithZeros(raw);
+
+
+
+  const days = Object.keys(counts);
+
+  if (!days.length) {
+    alert('You haven’t read any ayahs yet 🌱');
+    return;
+  }
+
+  days.sort((a, b) => b.localeCompare(a));
+
+
+  // Build bars
+  let barsHTML = '';
+  let lastMonth = '';
+  let lastYear  = '';
+
+  days.forEach(day => {
+    const dateObj = new Date(day);
+    const count   = counts[day];
+    const MAX_AYAHS_PER_DAY = 300;
+    const MAX_AYAHS_CAP = 300;
+    const MAX_BAR_HEIGHT = 160;
+
+    // last 30 days only
+    const last30Days = days.slice(0, 30);
+
+    // find max ayahs in window
+    let windowMax = 0;
+    last30Days.forEach(d => {
+      windowMax = Math.max(windowMax, counts[d]);
+    });
+
+    // final effective max
+    const effectiveMax = Math.min(
+      MAX_AYAHS_CAP,
+      windowMax || 1 // avoid divide by zero
+    );
+
+    const height = Math.min(
+      (count / effectiveMax) * MAX_BAR_HEIGHT,
+      MAX_BAR_HEIGHT
+    );
+
+
+
+    const month = dateObj.toLocaleString('en-US', { month: 'short' });
+    const dayNum = dateObj.getDate();
+    const year = dateObj.getFullYear();
+
+    let monthLabel = '';
+    let yearLabel  = '';
+
+    if (month !== lastMonth) {
+      monthLabel = month;
+      lastMonth = month;
+    }
+
+    if (year !== lastYear) {
+      yearLabel = year;
+      lastYear = year;
+    }
+barsHTML += `
+  <div class="journeyItem">
+
+    <div class="journeyBarArea">
+      <div class="journeyBarWrap">
+        <div class="journeyCount">${count}</div>
+        <div class="journeyBar" style="height:${height}px"></div>
+      </div>
+    </div>
+
+    <div class="journeyDate">
+    <div class="jd-day">${dayNum}</div>
+      ${monthLabel ? `<div class="jd-month">${monthLabel}</div>` : ''}
+      ${yearLabel ? `<div class="jd-year">${yearLabel}</div>` : ''}
+    </div>
+
+  </div>
+`;
+
+
+  });
+
+  // Create popup
+  const overlay = document.createElement('div');
+  overlay.id = 'journeyOverlay';
+
+  overlay.innerHTML = `
+    <div class="journeyBox">
+      <div class="journeyHeader">
+        <span>Number of verses read</span>
+      </div>
+
+      <div class="journeyChart">
+        ${barsHTML}
+      </div>
+
+      <button class="journeyClose">Close</button>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  // Close handlers
+  overlay.querySelector('.journeyClose').onclick = () => overlay.remove();
+  overlay.onclick = e => {
+    if (e.target === overlay) overlay.remove();
+  };
+});
+
+document.getElementById('goHomeBtn').addEventListener('click', () => {
+  // already on home
+  if (D.hero.style.display === 'block') return;
+
+  const goHome = () => {
+    // real home = reload app
+    window.location.reload();
+  };
+
+  // ✅ Ayah already saved → leave silently
+  if (!isCurrentAyahDirty) {
+    goHome();
+    return;
+  }
+
+  // ❌ Unsaved ayah → ask user
+  showConfirmPopup({
+  title: 'Unsaved Progress',
+  message:
+    'You haven’t saved this ayah yet. What would you like to do?',
+  onGoHome: goHome
+});
+
+});
+
+
+
+
+
+
+
+document.getElementById('aboutBtn').addEventListener('click', () => {
+  profileDrawer.classList.remove('open');
+
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+  `;
+
+  overlay.innerHTML = `
+    <div style="
+      background:#fff;
+      padding:20px;
+      border-radius:12px;
+      max-width:340px;
+      width:85%;
+      text-align:center;
+    ">
+      <h3>About Quran Quest</h3>
+      <p style="font-size:14px; color:#444; line-height:1.5;">
+        Quran Quest is a calm, distraction-free way to learn the Quran
+        through interaction, reflection, and consistency.
+        <br><br>
+        More features coming soon, In shaa Allah 🌙
+      </p>
+      <button id="closeAboutPopup"
+        style="
+          margin-top:14px;
+          padding:8px 16px;
+          border:none;
+          border-radius:8px;
+          background:#0a4d68;
+          color:#fff;
+          cursor:pointer;
+        ">
+        Close
+      </button>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  overlay.querySelector('#closeAboutPopup').onclick = () => overlay.remove();
+  overlay.onclick = e => { if (e.target === overlay) overlay.remove(); };
+});
+
+
 }
 
 // ————— Foreground FCM Message Handling —————
@@ -512,7 +907,7 @@ async function handleAuthChange(user) {
 
   if (!user) {
     // Guest UI
-    D.nameEl.textContent = 'Guest User';
+    //D.nameEl.textContent = 'Guest User';
     D.ptsEl.textContent = localStorage.getItem('guestPoints') || '0';
     D.streakEl.textContent = `🔥${JSON.parse(localStorage.getItem('guestStreakHistory')||'[]').length}`;
     D.loginBtn.textContent = 'Login';
@@ -532,7 +927,7 @@ async function handleAuthChange(user) {
     }
 
   // Real user logged in
-  D.nameEl.textContent = user.displayName;
+  //D.nameEl.textContent = user.displayName;
   D.loginBtn.textContent = '👤';
 
   // Transfer guest stats if new user
@@ -596,11 +991,73 @@ async function requestWakeLock() {
   } catch {}
 }
 
-// ————— resume button —————
+//____________________Journylogic
+
+function normalizeLearningJourney() {
+  const raw = JSON.parse(localStorage.getItem('learningJourney') || '{}');
+  const today = new Date().toISOString().split('T')[0];
+  const cleaned = {};
+
+  for (const date in raw) {
+    const entry = raw[date];
+
+    // If already aggregated → keep
+    if (entry?.count && !entry.items) {
+      cleaned[date] = entry;
+      continue;
+    }
+
+    // Today → keep full items
+    if (date === today && entry?.items) {
+      cleaned[date] = entry;
+      continue;
+    }
+
+    // Old format array OR old day with items → aggregate
+    if (Array.isArray(entry)) {
+      cleaned[date] = { count: entry.length };
+    } else if (entry?.items) {
+      cleaned[date] = { count: entry.items.length };
+    }
+  }
+
+  localStorage.setItem('learningJourney', JSON.stringify(cleaned));
+}
+
+
+function buildDailyCountsWithZeros(raw) {
+  const counts = {};
+  const dates = Object.keys(raw);
+
+  if (!dates.length) return counts;
+
+  const today = new Date().toISOString().split('T')[0];
+  const start = new Date(dates.sort()[0]);
+
+  for (
+    let d = new Date(start);
+    d <= new Date(today);
+    d.setDate(d.getDate() + 1)
+  ) {
+    const key = d.toISOString().split('T')[0];
+
+    if (raw[key]?.count) {
+      counts[key] = raw[key].count;
+    } else if (raw[key]?.items) {
+      counts[key] = raw[key].items.length;
+    } else {
+      counts[key] = 0; // 👈 missing day
+    }
+  }
+
+  return counts;
+}
+
 
 
 // ————— Main Initialization —————
 async function init() {
+  normalizeLearningJourney();
   cacheDOM: bindUIActions();
   setupForegroundMessaging();
   onAuthChange(handleAuthChange);

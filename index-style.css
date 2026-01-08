@@ -170,6 +170,262 @@ body {
   opacity: 0.9;
 }
 
+.menu-btn {
+  font-size: 22px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #e6f2f7;
+}
+
+
+/* -Streak */
+
+@keyframes streakPop {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes gameOverPop {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes modalPop {
+  from {
+    transform: scale(0.92) translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+
+/* global.css */
+body.modal-open {
+  overflow: hidden;
+  touch-action: none;
+}
+
+
+
+
+
+/* ===== Quran Quest Sidebar Drawer ===== */
+
+.profile-drawer.qq-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 100vh;
+  background: linear-gradient(180deg, #041c2c, #062b3f);
+  color: #fff;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-drawer.open {
+  transform: translateX(0);
+}
+
+.qq-sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.qq-logo {
+  font-size: 22px;
+}
+
+.drawer-close {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.qq-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  gap: 6px;
+}
+
+.qq-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: none;
+  border: none;
+  color: #e6f2f7;
+  font-size: 15px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.25s ease;
+}
+
+.qq-nav-item:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+.qq-nav-item.active {
+  background: rgba(255,255,255,0.18);
+  font-weight: 600;
+}
+
+.drawer-footer {
+  margin-top: auto;
+  padding: 14px;
+  font-size: 13px;
+  color: #cfe7ef;
+  opacity: 0.9;
+}
+
+.drawer-header {
+  padding: 14px;
+  font-size: 13px;
+  color: #cfe7ef;
+  opacity: 0.9;
+}
+
+/* ───────── Learning Journey Popup ───────── */
+
+/* Overlay */
+#journeyOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* Popup box */
+.journeyBox {
+  background: #153042;
+  color: #eaf6ff;
+  width: 90vw;
+  max-width: 420px;
+  padding: 16px;
+  border-radius: 14px;
+
+  border: 3px solid rgba(255,255,255,0.08);
+  box-shadow:
+  0 12px 28px rgba(0,0,0,0.35),
+  inset 0 1px 0 rgba(255,255,255,0.04);
+
+}
+
+
+.journeyChart {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 12px;
+}
+
+/* one day */
+.journeyItem {
+  width: 12px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.journeyBarArea {
+  height: 180px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.journeyBarWrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* the bar */
+.journeyBar {
+  width: 14px;
+  background: linear-gradient(to top, #2ecc71, #27ae60);
+  border-radius: 6px;
+}
+
+/* count NOW sticks to bar */
+.journeyCount {
+  margin-bottom: 6px;
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+
+/* 🔓 DATE ZONE — FREE HEIGHT */
+.journeyDate {
+  margin-top: 8px;
+  line-height: 1.1;
+}
+
+.jd-month,
+.jd-year {
+  font-size: 10px;
+  opacity: 0.6;
+}
+
+.jd-day {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+
+
+.journeyClose {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  background: #0a4d68;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+}
+
+
+.journeyHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: #7de0c6;
+}
+
 
     /* Progress bar sits in the normal flow, indented to match the card’s padding */
 .progress-bar {

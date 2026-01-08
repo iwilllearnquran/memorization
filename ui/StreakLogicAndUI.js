@@ -38,61 +38,119 @@ const StreakLogicAndUI = (function() {
   
     // Injects the popup markup into the document
     function createPopup() {
-      if (document.getElementById(OVERLAY_ID)) return;
-      // Confetti canvas
-      createConfettiCanvas();
-      // Overlay
-      const overlay = document.createElement('div');
-      overlay.id = OVERLAY_ID;
-      Object.assign(overlay.style, {
-        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-        background: 'rgba(0,0,0,0.6)', display: 'none',
-        justifyContent: 'center', alignItems: 'center', zIndex: 10000
-      });
-      // Popup container
-      const popup = document.createElement('div');
-      popup.id = POPUP_ID;
-      Object.assign(popup.style, {
-        background: '#fff', borderRadius: '12px', width: '90%', maxWidth: '400px',
-        padding: '24px', position: 'relative', zIndex: 10002
-      });
-      popup.innerHTML = `
-        <button style="position:absolute;top:12px;right:12px;background:none;border:none;font-size:20px;cursor:pointer;" onclick="StreakUI.close()">✕</button>
-        <h2 style="text-align:center;color:#0a4d68;margin-bottom:16px;">Quran Streak</h2>
-        <div id="${COUNT_ID}" style="font-size:3rem;text-align:center;color:#2ca7d8;margin-bottom:8px;">🔥0</div>
-        <p id="${MSG_ID}" style="text-align:center;font-size:1rem;color:#333;margin-bottom:16px;"></p>
+  if (document.getElementById(OVERLAY_ID)) return;
 
-      `;
-      overlay.appendChild(popup);
-      document.body.appendChild(overlay);
-    }
-  
-    // Renders popup UI; if 'animate' is true, runs count-up and confetti
-    function renderPopup(animate, oldCount, newCount) {
-      const overlay = document.getElementById(OVERLAY_ID);
-      if (!overlay) return;
-      const countEl = document.getElementById(COUNT_ID);
-      if (animate && oldCount != null) {
-        let current = oldCount;
-        const step = () => {
-          if (current < newCount) {
-            current++;
-            countEl.textContent = `🔥${current}`;
-            setTimeout(step, 100);
-          }
-        };
-        step();
-      } else {
-        countEl.textContent = `🔥${newCount}`;
+  // 🎉 Confetti canvas (yours)
+  createConfettiCanvas();
+
+  // 🔒 Lock background scroll
+  document.body.classList.add('modal-open');
+
+
+  // Overlay
+  const overlay = document.createElement('div');
+  overlay.id = OVERLAY_ID;
+  Object.assign(overlay.style, {
+    position: 'fixed',
+    inset: 0,
+    background: 'rgba(0,0,0,0.6)',
+    display: 'none',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 10000
+  });
+
+  // Popup
+  const popup = document.createElement('div');
+  popup.id = POPUP_ID;
+  Object.assign(popup.style, {
+    background: '#fff',
+    borderRadius: '16px',
+    width: '90%',
+    maxWidth: '360px',
+    padding: '24px 20px',
+    position: 'relative',
+    boxShadow: '0 12px 30px rgba(0,0,0,0.25)',
+    animation: 'streakPop 0.25s ease-out'
+  });
+
+  popup.innerHTML = `
+    <button
+      style="
+        position:absolute;
+        top:12px;
+        right:12px;
+        background:none;
+        border:none;
+        font-size:20px;
+        cursor:pointer;
+        color:#666;
+      "
+      onclick="StreakUI.close()"
+    >✕</button>
+
+    <h2 style="text-align:center;color:#0’a4d68;margin-bottom:16px;">
+      Quran Streak
+    </h2>
+
+    <div id="${COUNT_ID}"
+         style="font-size:3rem;text-align:center;color:#2ca7d8;margin-bottom:8px;">
+      🔥0
+    </div>
+
+    <p id="${MSG_ID}"
+       style="text-align:center;font-size:1rem;color:#333;margin-bottom:0;">
+    </p>
+  `;
+
+  overlay.appendChild(popup);
+  document.body.appendChild(overlay);
+
+  // click outside → close
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) StreakUI.close();
+  });
+}
+
+function renderPopup(animate, oldCount, newCount) {
+  const overlay = document.getElementById(OVERLAY_ID);
+  if (!overlay) return;
+
+  const countEl = document.getElementById(COUNT_ID);
+
+  if (animate && oldCount != null) {
+    let current = oldCount;
+    const step = () => {
+      if (current < newCount) {
+        current++;
+        countEl.textContent = `🔥${current}`;
+        setTimeout(step, 100);
       }
-      renderMessage(newCount);
-      renderProgress();
-      overlay.style.display = 'flex';
-      if (animate && confettiInstance) {
-        confettiInstance({ particleCount: 100, spread: 70 });
-      }
-    }
+    };
+    step();
+  } else {
+    countEl.textContent = `🔥${newCount}`;
+  }
+
+  renderMessage(newCount);
+  renderProgress();
+
+  overlay.style.display = 'flex';
+
+  if (animate && confettiInstance) {
+    confettiInstance({ particleCount: 120, spread: 70 });
+  }
+}
+
   
+function closePopup() {
+  const overlay = document.getElementById(OVERLAY_ID);
+  if (overlay) overlay.remove();
+
+  // 🔓 Restore scroll
+   document.body.classList.remove('modal-open');
+}
+
 
     // Builds motivational message based on streak
   function renderMessage(streakCount) {

@@ -1,3 +1,7 @@
+
+
+/*
+
 // src/state/gameSession.js
 
 // — Internal UI & config imports
@@ -9,6 +13,7 @@ import { toggleGames } from '/ui/toggleGames.js';
 import { startArrangeGame }    from '/ui/arrangeGameUI.js';
 import { startVerbGame }       from '/ui/verbMatchUI.js';
 import { showGameOverPopup } from '/ui/gameOverPopup.js';
+
 
 // — Firestore & Auth (only used in authenticated flow via postMessage)
 import { auth, loadStatsFromFirestore, saveStatsToFirestore, recordStreak,
@@ -28,8 +33,8 @@ class GameSession {
 
   /**
    * Initialize a new game session: resets lives and scores.
-   * For authenticated users, loads saved total score.
-   */
+   * For authenticated users, loads saved total score.  // */
+  /*
   async init(type) {
     console.log('[GameSession] init() called with type:', type);
     this.type = type;                         // ← remember which game we’re in
@@ -62,14 +67,18 @@ class GameSession {
   /**
    * Award points for a correct action.
    */
+
+  /*
   addPoints(points = GAME_CONFIG.correctActionPoints) {
     this.sessionScore += points;
     if (auth.currentUser) {
       this.score += points;
     } else if (localStorage.getItem('isGuest')) {
       this.score += points;
-      addGuestPoints(points);
-      recordGuestStreak();
+      //addGuestPoints(points);
+      //recordGuestStreak();
+      this.sessionScore += points;
+      updateStats(); // UI only, NO saving
     }
     updateStats();
   }
@@ -77,6 +86,7 @@ class GameSession {
   /**
    * Deduct a life on incorrect action.
    */
+  /*
   loseLife() {
     this.lives = Math.max(0, this.lives - 1);
     updateStats();
@@ -85,6 +95,8 @@ class GameSession {
   /**
    * Ends the session, handling both guest and authenticated flows.
    */
+
+  /*
 async end(success = true) {
   console.log('[GameSession] end()', { success, sessionScore: this.sessionScore });
   if (!success) return;
@@ -108,7 +120,23 @@ async end(success = true) {
     const choice = await showCompletionDialog(pendingPoints);
     if (choice === 'guest') {
       continueAsGuestFlow(pendingPoints, window.currentSurah, window.currentAyah);
-    } else {
+
+      // 🔄 refresh header (points + streak)
+      updateStats();
+
+      // 🎮 return to games UI
+      toggleGames(this.type);
+
+      // ▶️ restart same game
+      if (this.type === 'arrange') {
+        await startArrangeGame();
+      } else if (this.type === 'verb') {
+        await startVerbGame();
+      }
+
+      return;
+    }
+ else {
       triggerLoginFlow();
     }
     return;
@@ -150,6 +178,7 @@ try {
   /**
    * Reset in-memory score/lives if user aborts mid-game.
    */
+  /*
   async resetToBeforeGame() {
     // 1️⃣ Roll back to last saved score & full lives
     this.score        = this.lastSavedScore;
@@ -228,6 +257,7 @@ window.addEventListener('message', e => {
   }
 });
 
+/*
 function showCompletionDialog(pendingPoints) {
   return new Promise(resolve => {
     // Create modal container
@@ -251,6 +281,18 @@ function showCompletionDialog(pendingPoints) {
         </button>
       </div>
     `;
+    
+
+    modal.innerHTML = `
+      <div style="background:#fff; padding:24px; border-radius:8px; text-align:center; max-width:320px;">
+      That was amazing! You’ve earned <strong>${pendingPoints}</strong> points!🎉<br><br>  
+      <button id="continueGuestBtn"
+                style="margin:8px;padding:8px 16px;border:none;background:#0a4d68;color:#fff;border-radius:6px;cursor:pointer;">
+          Continue Learning
+      </button>
+      </div>
+    `;
+
     document.body.append(modal);
 
     // Handle clicks
@@ -263,10 +305,57 @@ function showCompletionDialog(pendingPoints) {
     modal.querySelector('#continueGuestBtn')
       .addEventListener('click', () => {
         modal.remove();
+        goBackToGamesHome();
+        resolve('guest');
+      }, { once: true });
+
+  });
+} */
+
+//
+/*
+// ✅Dummy (temp) GLOBAL helper: go back to games home
+function goBackToGamesHome() {
+  console.log('🏠 Returning to main games page');
+
+  // Show games home / selector
+  toggleGames(); // null = games home (no active game)
+  // Refresh header stats (points + streak)
+  updateStats();
+}
+
+ function showCompletionDialog(pendingPoints) {
+  return new Promise(resolve => {
+    const modal = document.createElement('div');
+    modal.id = 'completionModal';
+    modal.style = `
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6);
+      display:flex; justify-content:center; align-items:center;
+      z-index:1000;
+    `;
+
+    modal.innerHTML = `
+      <div style="background:#fff; padding:24px; border-radius:8px; text-align:center; max-width:320px;">
+        That was amazing! You’ve earned <strong>${pendingPoints}</strong> points 🎉<br><br>
+        <button id="continueGuestBtn"
+          style="margin:8px;padding:8px 16px;border:none;background:#0a4d68;color:#fff;border-radius:6px;cursor:pointer;">
+          Continue Learning
+        </button>
+      </div>
+    `;
+
+    document.body.append(modal);
+
+    modal.querySelector('#continueGuestBtn')
+      .addEventListener('click', () => {
+        modal.remove();
+        goBackToGamesHome();
         resolve('guest');
       }, { once: true });
   });
 }
+
 
 // ─── 2. Guest‐flow function ───────────────────────────────────────────────────
 function continueAsGuestFlow(points, surah, ayah) {
@@ -315,6 +404,66 @@ const onUserLoggedIn = e => {
   }
 };
 
+
+
+
 window.addEventListener('message', onUserLoggedIn);
 
 }
+*/
+
+
+ // src/state/gameSession.js
+
+import guestSession from './guestGameSession.js';
+import userSession from './userGameSession.js';
+import { auth } from '/services/_private/firestoreService.js';
+
+const gameSession = {
+  // ─── active session selector ───
+  get active() {
+    return auth.currentUser ? userSession : guestSession;
+  },
+
+  // ─── lifecycle ───
+  init(type) {
+    return this.active.init(type);
+  },
+
+  end(success) {
+    return this.active.end(success);
+  },
+
+  // ─── gameplay actions ───
+  addPoints(points) {
+    return this.active.addPoints(points);
+  },
+
+  loseLife() {
+    return this.active.loseLife();
+  },
+
+  // ─── resets / aborts ───
+  resetToBeforeGame() {
+    return this.active.resetToBeforeGame?.();
+  },
+
+  restartGameOnly() {
+    return this.active.restartGameOnly?.();
+  },
+
+  // ─── state getters (used by UI) ───
+  get lives() {
+    return this.active.lives;
+  },
+
+  get sessionScore() {
+    return this.active.sessionScore;
+  },
+
+  get score() {
+    return this.active.score;
+  }
+};
+
+export default gameSession;
