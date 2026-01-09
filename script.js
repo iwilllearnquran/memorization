@@ -1411,6 +1411,106 @@ const grammarExplanations = {
 };
 
 
+(function initWordClickHint() {
+  const WORD_KEY  = 'word_click_hint_shown_v1';
+  const SWIPE_KEY = 'swipe_hint_shown_v1';
+
+  if (localStorage.getItem(WORD_KEY)) {
+    console.log('[WordHint] already shown — skipping');
+    return;
+  }
+
+  function start() {
+    if (localStorage.getItem(WORD_KEY)) return;
+
+    function tryInit() {
+      const firstWord = document.querySelector('.word-block');
+      if (!firstWord) return requestAnimationFrame(tryInit);
+
+      console.log('[WordHint] starting immediately after swipe');
+      showWordHint(firstWord);
+    }
+    tryInit();
+  }
+
+  // ✅ Case 1: swipe already finished
+  if (localStorage.getItem(SWIPE_KEY)) {
+    start();
+    return;
+  }
+
+  // ✅ Case 2: swipe finishes NOW (same render)
+  console.log('[WordHint] waiting for swipeHintFinished event');
+
+  window.addEventListener('swipeHintFinished', start, { once: true });
+})();
+
+
+
+
+function showWordHint(wordEl) {
+  console.log('[WordHint] showWordHint called');
+
+  const overlay   = document.getElementById('wordHintOverlay');
+  const hint      = document.getElementById('wordHint');
+  const container = document.getElementById('wordHintLottie');
+
+  if (!overlay || !hint || !container || !window.lottie) {
+    console.warn('[WordHint] Missing overlay / lottie');
+    return;
+  }
+
+  const rect = wordEl.getBoundingClientRect();
+
+  const scale  = 4; // BIG, same size as word
+  const width  = rect.width * scale;
+  const height = rect.height * scale;
+
+  hint.style.width  = `${width}px`;
+  hint.style.height = `${height}px`;
+  hint.style.left   = `${rect.left + rect.width / 2 - width / 2}px`;
+  hint.style.top    = `${rect.top  + rect.height / 2 - height / 2}px`;
+
+  overlay.classList.remove('hidden');
+  container.innerHTML = '';
+
+  const anim = lottie.loadAnimation({
+    container,
+    renderer: 'svg',
+    loop: true,
+    autoplay: true,
+    path: '/utils/assets/tap.json'
+  });
+
+  anim.setSpeed(0.6);
+
+  let loops = 0;
+  anim.addEventListener('loopComplete', () => {
+    loops++;
+    console.log('[WordHint] loop', loops);
+    if (loops >= 2) stop();
+  });
+
+  function stop() {
+    console.log('[WordHint] stopping');
+    anim.destroy();
+    overlay.classList.add('hidden');
+    localStorage.setItem('word_click_hint_shown_v1', '1');
+  }
+
+  // Stop on first word click
+  document.querySelectorAll('.word-block')
+    .forEach(el => el.addEventListener('click', stop, { once: true }));
+
+  setTimeout(stop, 3500);
+}
+
+
+
+
+
+
+
 
 
 function showGrammarPopup(type) {

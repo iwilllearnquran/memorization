@@ -90,13 +90,42 @@ const StreakLogicAndUI = (function() {
     >✕</button>
 
     <h2 style="text-align:center;color:#0’a4d68;margin-bottom:16px;">
-      Quran Streak
+      Quran Reading Streak
     </h2>
 
-    <div id="${COUNT_ID}"
-         style="font-size:3rem;text-align:center;color:#2ca7d8;margin-bottom:8px;">
-      🔥0
-    </div>
+    <div
+  style="
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:12px;
+  "
+>
+  <!-- Guiding light -->
+  <div
+    id="streakLightAnim"
+    style="width:130px;height:130px;flex-shrink:0;margin-right:0px; margin-left:-50px; "
+  ></div>
+
+  <!-- Streak count -->
+  <div
+    id="streakCount"
+    style="
+      font-size:2.4rem;
+      font-weight:600;
+      color:#2ca7d8;
+      line-height:1;
+      margin-left:-40px;   /* ⬅️ KEY FIX */
+      margin-bottom:-50px;  
+     
+    "
+  >
+    0
+  </div>
+</div>
+
+
 
     <p id="${MSG_ID}"
        style="text-align:center;font-size:1rem;color:#333;margin-bottom:0;">
@@ -105,6 +134,18 @@ const StreakLogicAndUI = (function() {
 
   overlay.appendChild(popup);
   document.body.appendChild(overlay);
+
+  // 🌟 Load guiding light animation
+const lightContainer = document.getElementById('streakLightAnim');
+  if (lightContainer && window.lottie) {
+    lottie.loadAnimation({
+      container: lightContainer,
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      path: '/utils/assets/streak.json'
+    });
+  }
 
   // click outside → close
   overlay.addEventListener('click', e => {
@@ -123,13 +164,13 @@ function renderPopup(animate, oldCount, newCount) {
     const step = () => {
       if (current < newCount) {
         current++;
-        countEl.textContent = `🔥${current}`;
+        countEl.textContent = current;
         setTimeout(step, 100);
       }
     };
     step();
   } else {
-    countEl.textContent = `🔥${newCount}`;
+    countEl.textContent = newCount;
   }
 
   renderMessage(newCount);
@@ -158,7 +199,7 @@ function closePopup() {
     let message;
 
     if (streakCount === 0) {
-      message = 'Begin your daily Quran journey today.';
+      message = 'Start reading and save progress to record your streak';
     } else if (streakCount === 1) {
       message = 'This is day 1 of your Quran journey.';
     } else {
@@ -186,7 +227,13 @@ function closePopup() {
         localStorage.setItem('guestStreakHistory', JSON.stringify(history));
         renderPopup(true, prevLength, history.length);
         prevLength = history.length;
-        if (navEl) navEl.textContent = `🔥${history.length}`;
+        if (navEl) navEl.innerHTML = `
+        <span style="display:flex;align-items:center;gap:4px;">
+          <span style="color:#f5c542;">✦</span>
+          ${history.length}
+        </span>
+      `;
+
       }
     }
 

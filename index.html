@@ -11,8 +11,9 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js" defer></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
 
-<link
+  <link
   href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined"
   rel="stylesheet"
 />
@@ -34,8 +35,11 @@
   <div class="navbar" id="mainNavbar">
     <div class="navbar-left">
       <!--<button class="login-btn" id="loginBtn">👤</button> -->
-      <button class="menu-btn" id="menuBtn">☰</button>
+      <button class="menu-btn" id="menuBtn">
+        <div id="menuLottie"></div>
+      </button>
 
+   
     </div>
     <div class="navbar-center dropdowns">
       <select id="surahSelect"></select>
@@ -85,6 +89,14 @@
 </div>
 
 
+<div id="swipeHint" class="swipe-hint hidden">
+  <div class="swipe-content">
+    <div id="swipeLottie"></div>
+    <div class="swipe-text">
+      Swipe left or right to change verses
+    </div>
+  </div>
+</div>
 
 <div id="calendarPopup"></div>
 
@@ -92,7 +104,7 @@
   <div class="hero-content">
 
     <h1>Quran Quest</h1>
-    <p>Learn Quran in a fun, interactive way—anywhere, anytime.</p>
+    <p>Learn Quran in a fun, interactive way, anywhere, anytime.</p>
 
      <p class="hero-subtitle">
       "The best among you are those who learn the Quran and teach it."<br>

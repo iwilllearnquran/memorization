@@ -22,6 +22,10 @@ export function showGameOverPopup(
 
   const isSuccess = resetStats === false;
   const icon = isSuccess ? '💔' : '💖';
+  const animationPath = isSuccess
+  ? '/utils/assets/heartbreak.json'
+  : '/utils/assets/heart.json';
+
   const accentColor = isSuccess ? '#1aa179' : '#0a4d68';
   // prevent duplicates
   if (document.getElementById('gameOverOverlay')) return;
@@ -58,27 +62,21 @@ Object.assign(dialog.style, {
 
   dialog.innerHTML = `
   <!-- Close -->
-  <button
-    id="gameOverClose"
-    style="
-      position:absolute;
-      top:14px;
-      right:14px;
-      border:none;
-      background:none;
-      font-size:22px;
-      color:#999;
-      cursor:pointer;
-    "
-  >✕</button>
 
-<!-- Icon -->
-<div style="
-  font-size:48px;
-  margin-bottom:10px;
-">
-  ${icon}
-</div>
+
+<!-- Lottie Animation -->
+<!-- Lottie container -->
+<div
+  id="gameOverAnim"
+  style="
+    width:96px;
+    height:96px;
+    margin:0 auto 14px;
+  "
+></div>
+
+
+
 
 <!-- Title -->
 <h2 style="
@@ -144,8 +142,18 @@ Object.assign(dialog.style, {
   overlay.appendChild(dialog);
   document.body.appendChild(overlay);
 
-  // ❌ Close (just dismiss)
-  dialog.querySelector('#gameOverClose').onclick = closePopup;
+lottie.loadAnimation({
+  container: overlay.querySelector('#gameOverAnim'),
+  renderer: 'svg',          // IMPORTANT: svg, not canvas
+  loop: true,
+  autoplay: true,
+  path: animationPath
+});
+
+
+
+
+
 
   // 🟢 Retry
   dialog.querySelector('#retryBtn').onclick = async () => {

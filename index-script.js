@@ -47,6 +47,7 @@ let currentSurah = DEFAULT_SURAH;
 let currentAyah  = DEFAULT_AYAH;
 let isGameMode = false;
 let isCurrentAyahDirty = false;
+let pendingSwipeDone = false;
 
 
 // Cached DOM elements
@@ -141,9 +142,24 @@ async function loadAyah(s, a) {
   // Load iframe content with fade animation
   D.iframe.classList.add('fade-out');
   setTimeout(() => {
+    // 👇 attach onload BEFORE setting src
+    D.iframe.onload = () => {
+      console.log('[SwipeHint] iframe onload');
+
+      if (pendingSwipeDone) {
+        console.log('[SwipeHint] sending delayed SWIPE_HINT_DONE');
+        D.iframe.contentWindow.postMessage(
+          { type: 'SWIPE_HINT_DONE' },
+          '*'
+        );
+        pendingSwipeDone = false;
+      }
+    };
+
     D.iframe.src = `ayahs/surah_${s}/ayah_${s}_${a}.html`;
     D.iframe.classList.remove('fade-out');
   }, 150);
+
 
   // Update navigation arrows
   //updateArrowVisibility();
@@ -338,6 +354,139 @@ window.navigateAyah = (dir) => {
   syncDropdowns(currentSurah, currentAyah);
 
 };
+
+
+  const menuAnimation = lottie.loadAnimation({
+    container: document.getElementById('menuLottie'),
+    renderer: 'svg',
+    loop: false,
+    autoplay: true,
+    path: '/utils/assets/hamburger_menu.json'
+  });
+
+  menuAnimation.addEventListener('DOMLoaded', () => {
+    const freezeFrame = Math.floor(menuAnimation.totalFrames / 2);
+
+    menuAnimation.addEventListener('complete', () => {
+      menuAnimation.goToAndStop(freezeFrame, true);
+    });
+  });
+
+
+
+
+const STORAGE_KEY = 'swipe_hint_shown_v1';
+let swipeHintShown = false;
+
+const iframe = document.getElementById('ayahViewer');
+
+if (!iframe) {
+  console.warn('[SwipeHint] ayahViewer iframe not found');
+}
+
+if (iframe && !localStorage.getItem(STORAGE_KEY)) {
+  console.log('[SwipeHint] Initial iframe src:', iframe.getAttribute('src'));
+
+  // If src is already set (hard refresh case)
+  if (iframe.getAttribute('src')) {
+    console.log('[SwipeHint] iframe already has src → showing hint');
+    showSwipeHint();
+  } else {
+    console.log('[SwipeHint] Waiting for iframe src to be set…');
+
+    const observer = new MutationObserver((mutations, obs) => {
+      for (const m of mutations) {
+        if (m.type === 'attributes' && m.attributeName === 'src') {
+          const newSrc = iframe.getAttribute('src');
+          console.log('[SwipeHint] iframe src changed:', newSrc);
+
+          if (newSrc) {
+            showSwipeHint();
+            obs.disconnect();
+            console.log('[SwipeHint] Observer disconnected');
+            return;
+          }
+        }
+      }
+    });
+
+    observer.observe(iframe, {
+      attributes: true,
+      attributeFilter: ['src']
+    });
+  }
+}
+
+
+function showSwipeHint() {
+  if (swipeHintShown) {
+    console.log('[SwipeHint] Already shown, skipping');
+    return;
+  }
+  swipeHintShown = true;
+
+  const overlay   = document.getElementById('swipeHint');
+  const container = document.getElementById('swipeLottie');
+
+  if (!overlay || !container || !window.lottie) {
+    console.warn('[SwipeHint] Missing overlay / lottie');
+    return;
+  }
+
+  console.log('[SwipeHint] Showing swipe animation');
+
+  overlay.classList.remove('hidden');
+
+const MAX_LOOPS = 2;
+let loopCount = 0;
+
+const anim = lottie.loadAnimation({
+  container: document.getElementById('swipeLottie'),
+  renderer: 'svg',
+  loop: true,
+  autoplay: true,
+  path: '/utils/assets/swipe.json'
+});
+
+// slow it down
+anim.setSpeed(0.6);
+
+anim.addEventListener('loopComplete', () => {
+  loopCount++;
+  console.log('[SwipeHint] loop', loopCount);
+
+  if (loopCount >= MAX_LOOPS) {
+    anim.stop();              // freeze
+    anim.goToAndStop(0, true); // stay visible
+  }
+});
+
+
+const hide = reason => {
+  console.log('[SwipeHint] Hiding swipe hint:', reason);
+
+  overlay.classList.add('hidden');
+  anim.destroy();
+
+  localStorage.setItem('swipe_hint_shown_v1', '1');
+
+  // 🔔 Notify same-page listeners
+  window.dispatchEvent(new CustomEvent('swipeHintFinished'));
+};
+
+
+
+  setTimeout(() => hide('timeout'), 4000);
+
+  ['touchstart', 'wheel', 'mousedown'].forEach(evt =>
+    window.addEventListener(evt, () => hide(evt), { once: true })
+  );
+}
+
+
+
+
+
 
 
 // ————— Game-Mode Toggle Helpers —————
