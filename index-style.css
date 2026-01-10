@@ -136,7 +136,7 @@ body {
     }
 .surah-card {
   position: relative;
-  padding: 6px 16px 10px 16px;
+  padding: 12px 16px 12px 16px;
   margin: 1px;
   border-radius: 12px;
   background-color: #f1f1f1;
@@ -526,7 +526,7 @@ body.modal-open {
   font-size: 1.25rem;                 /* prominent */
   font-weight: 700;
   color: #0a4d68;
-  margin-bottom: 4px;
+  margin-top: 4px;
 }
 
 /* Arabic name */
@@ -535,7 +535,6 @@ body.modal-open {
   font-size: 1.5rem;                  /* larger for readability */
   color: #3f6d7e;
   direction: rtl;
-  margin-bottom: 8px;
   line-height: 1.2;
 }
 
@@ -546,7 +545,6 @@ body.modal-open {
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 0.5rem;
   align-items: baseline;
-  margin-bottom: 0.5rem;
 }
 
 /* Prevent each name from breaking awkwardly */

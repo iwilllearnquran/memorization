@@ -1447,7 +1447,6 @@ const grammarExplanations = {
 
 
 
-
 function showWordHint(wordEl) {
   console.log('[WordHint] showWordHint called');
 
@@ -1456,24 +1455,41 @@ function showWordHint(wordEl) {
   const container = document.getElementById('wordHintLottie');
 
   if (!overlay || !hint || !container || !window.lottie) {
-    console.warn('[WordHint] Missing overlay / lottie');
+    console.warn('[WordHint] missing elements');
     return;
   }
 
-  const rect = wordEl.getBoundingClientRect();
-
-  const scale  = 4; // BIG, same size as word
-  const width  = rect.width * scale;
-  const height = rect.height * scale;
-
-  hint.style.width  = `${width}px`;
-  hint.style.height = `${height}px`;
-  hint.style.left   = `${rect.left + rect.width / 2 - width / 2}px`;
-  hint.style.top    = `${rect.top  + rect.height / 2 - height / 2}px`;
-
   overlay.classList.remove('hidden');
-  container.innerHTML = '';
 
+  // 🔁 position function (reusable)
+  function position() {
+    const rect = wordEl.getBoundingClientRect();
+
+    const scrollX = window.scrollX || window.pageXOffset;
+    const scrollY = window.scrollY || window.pageYOffset;
+
+    const scale = 4;
+    const width  = rect.width * scale;
+    const height = rect.height * scale;
+
+    const left = rect.left + scrollX + rect.width / 2 - width / 2;
+    const top  = rect.top  + scrollY + rect.height / 2 - height / 2;
+
+    hint.style.width  = `${width}px`;
+    hint.style.height = `${height}px`;
+    hint.style.left   = `${left}px`;
+    hint.style.top    = `${top}px`;
+
+    console.log('[WordHint] repositioned');
+  }
+
+  // 🧠 wait for layout to settle
+  requestAnimationFrame(() => {
+    requestAnimationFrame(position);
+  });
+
+  // 🎬 lottie
+  container.innerHTML = '';
   const anim = lottie.loadAnimation({
     container,
     renderer: 'svg',
@@ -1481,33 +1497,31 @@ function showWordHint(wordEl) {
     autoplay: true,
     path: '/utils/assets/tap.json'
   });
-
   anim.setSpeed(0.6);
 
-  let loops = 0;
-  anim.addEventListener('loopComplete', () => {
-    loops++;
-    console.log('[WordHint] loop', loops);
-    if (loops >= 2) stop();
+  // 👀 🔑 RESIZE OBSERVER — THIS IS WHERE IT GOES
+  const ro = new ResizeObserver(() => {
+    console.log('[WordHint] word resized → reposition');
+    position();
   });
+  ro.observe(wordEl);
 
-  function stop() {
-    console.log('[WordHint] stopping');
+  // 🧹 CLEANUP
+  function stop(reason) {
+    console.log('[WordHint] stopping:', reason);
+    ro.disconnect();          // 👈 VERY IMPORTANT
     anim.destroy();
     overlay.classList.add('hidden');
     localStorage.setItem('word_click_hint_shown_v1', '1');
   }
 
-  // Stop on first word click
+  // stop on click
   document.querySelectorAll('.word-block')
-    .forEach(el => el.addEventListener('click', stop, { once: true }));
+    .forEach(el => el.addEventListener('click', () => stop('word-click'), { once: true }));
 
-  setTimeout(stop, 3500);
+  // stop after time
+  setTimeout(() => stop('timeout'), 3500);
 }
-
-
-
-
 
 
 

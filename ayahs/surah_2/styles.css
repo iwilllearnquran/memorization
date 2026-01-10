@@ -1,0 +1,1831 @@
+/*───────────────────────────────────────────────────────────────────────────
+  Tokens & color variables
+───────────────────────────────────────────────────────────────────────────*/
+:root {
+  --grad-start: #538295;
+  --grad-end:   #8aa8b8;
+  --icon-default: #000; /*rgba(255,255,255,0.75); */
+  --icon-hover:   #000;
+  --theme-glow-start: #538295;
+  --theme-glow-end:   #8aa8b8;
+  }
+
+
+  /* Morning: warm sunrise */
+.sky-morning {
+  background: linear-gradient(to bottom, #FFD194 0%, #D1913C 100%);
+}
+
+/* Day: bright sky-blue */
+.sky-day {
+  background: linear-gradient(to bottom, #87CEFA 0%, #FFFFFF 100%);
+}
+
+/* Evening: sunset orange/pink */
+.sky-evening {
+  background: linear-gradient(to bottom, #FF5F6D 0%, #FFC371 100%);
+}
+
+/* Night: deep midnight blues */
+.sky-night {
+  background: linear-gradient(359deg,rgba(10, 77, 104, 1) 23%, rgba(108, 148, 164, 1) 67%, rgba(230, 237, 239, 1) 100%);
+}
+/* ensure it fills the viewport */
+
+
+  
+
+/*───────────────────────────────────────────────────────────────────────────
+  Global layout
+───────────────────────────────────────────────────────────────────────────*/
+body {
+  font-family: Arial, sans-serif; 
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;  
+  overflow-y: auto;
+  min-height: 100vh;
+  
+  
+}
+html, body {
+  background-color: #dfe8eb;
+  overflow-y: auto;
+  
+   
+}
+
+
+*:not(.material-icons):not(.material-icons-outlined):not([class^="material-icons"]):not(.grammar-info):not(.grammar-info *) {
+  font-family: 'Roboto', 'CustomArabic', sans-serif !important;
+}
+
+html, body {
+  font-family: 'Roboto', 'CustomArabic', sans-serif !important;
+}
+
+/*───────────────────────────────────────────────────────────────────────────
+  GRAMMAR INFO
+───────────────────────────────────────────────────────────────────────────*/
+
+.grammar-info {
+  font-size: 8px;
+  font-family: Arial, sans-serif !important;
+  text-align: center;
+  margin-top: 20px;
+}
+
+
+
+
+
+/*───────────────────────────────────────────────────────────────────────────
+  Reusable flex helper
+───────────────────────────────────────────────────────────────────────────*/
+.flex-center {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+/*───────────────────────────────────────────────────────────────────────────
+  Section cards
+───────────────────────────────────────────────────────────────────────────*/
+.section {
+  position: relative;
+  width: 100%;                    /* span the viewport */
+  left: 50%;                       /* move its left edge to center */
+  transform: translateX(-50%);     /* pull it back left by half its width */ 
+  
+ 
+  margin: 0 auto;                       
+  padding: 20px 8px 10px 20px;     
+  box-sizing: border-box;          
+  font-size: 15px;
+  background-color: #fffaf6;       
+  border-radius: 0;                
+  box-shadow: none;                
+
+  /* your bottom line */
+  border-bottom: 1px solid #ccc;
+
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+}
+
+.section:hover {
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+.section h3 {
+  font-size: 18px;
+  margin: 0 0 12px 0;     /* Remove top margin */
+  text-align: center;
+  border-bottom: 2px dashed #ccc;
+  padding: 6px 0;         /* Add a bit of vertical breathing space */
+}
+
+/*───────────────────────────────────────────────────────────────────────────
+  Dropdowns
+───────────────────────────────────────────────────────────────────────────*/
+
+.caret-icon {
+  margin-left: 6px;
+}
+
+  .dropdown-wrapper {
+  position: relative;
+  width: 100%;
+  text-align: right;
+
+}
+
+.dropdown-container {
+  position: relative;
+  text-align: center;
+  margin-top: -15px; /* push it slightly upward */
+  margin-bottom: 10px;
+}
+
+
+.dropdown-button {
+  background-color: #0a4d68;
+  color: #fff;
+  font-size: 14px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.3s ease;
+}
+.dropdown-button:hover {
+  background-color: #2ca7d8;
+}
+
+.dropdown-menu-custom {
+  position: absolute;
+  top: 110%; right: 0;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  padding: 16px;
+  font-size: 13px;
+  opacity: 0;
+  transform: scaleY(0.8);
+  transform-origin: top;
+  transition: all 0.3s ease-in-out;
+  pointer-events: none;
+  z-index: 999;
+}
+.dropdown-container.active .dropdown-menu-custom {
+  opacity: 1;
+  transform: scaleY(1);
+  pointer-events: auto;
+}
+
+
+
+/*───────────────────────────────────────────────────────────────────────────
+  Toggle switches inside dropdowns
+───────────────────────────────────────────────────────────────────────────*/
+.toggle-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+  font-size: 15px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+.switch input {
+  opacity: 0;
+  width: 0; height: 0;
+}
+.slider {
+  position: absolute;
+  inset: 0;
+  background: #ccc;
+  border-radius: 24px;
+  transition: 0.3s;
+}
+.slider:before {
+  content: "";
+  position: absolute;
+  width: 18px; height: 18px;
+  left: 3px; bottom: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+input:checked + .slider {
+  background: #0a4d68;
+}
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+/*───────────────────────────────────────────────────────────────────────────
+  Hiding via JS toggles
+───────────────────────────────────────────────────────────────────────────*/
+.hidden-toggle {
+  display: none !important;
+}
+
+/*───────────────────────────────────────────────────────────────────────────
+  Word blocks & grammar highlights
+───────────────────────────────────────────────────────────────────────────*/
+
+.word-block {  
+  display: inline-block;
+  text-align: center;
+  margin: 2px 2px 5px 2px;
+  padding: 6px 10px 1px 10px;
+  cursor: pointer;
+  border-radius: 12px;
+  border-bottom: 2px dotted #333;
+  border: 1px dotted rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* ✨ Soft shadow */
+  background-color: #ffffff;
+}
+.word-block-translit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 170px; /* fixed width */
+  word-wrap: break-word; /* ensures long words wrap */
+  white-space: normal; /* prevents nowrap */
+  overflow-wrap: anywhere; /* ensures even unbreakable strings wrap */
+  margin: 2px 2px 5px 2px; /* top, right, bottom, left */
+  padding: 4px 7px; /* More inner spacing */
+  cursor: pointer;
+  border-radius: 12px; /* Smoother round edges */
+  border-bottom: 2px dotted #333; /* Dotted line underneath */
+  border: 1px dotted rgba(0, 0, 0, 0.2); /* Subtle dotted line around box */
+  background-color: #fffaf6;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  
+}
+.word-text {
+  display: block;
+  font-size: 28px;
+  margin-top: 0px;
+  direction: rtl;
+  font-family: 'CustomArabic', serif;
+  line-height: 1.43;
+  margin-bottom: 2px;
+}
+.metadata {
+  display: block;
+  font-size: 11px;
+  font-family: 'Roboto', sans-serif;
+  color: gray;
+  line-height: 1.8;
+  margin-top: 2px;
+  margin-bottom: 4px;
+}
+.translation {
+  font-size: 12px;
+  color: gray;
+  display: block;
+  margin-top: 0px;
+  line-height: 1;
+  text-align: center;
+  word-break: break-word;
+  margin-bottom: 4px;
+}
+.metadata .translation:last-child {
+  margin-bottom: 0;
+}
+
+
+.click-animate {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.click-animate:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* transliteration input placeholder */
+.translit-input.small-placeholder::placeholder {
+  font-size: 8px;
+  color: #888;
+}
+
+/* grammar-case color coding */
+.nominative  { background: #ffe6e6; }
+.accusative  { background: #e6f0ff; }
+.genitive    { background: #e6ffe6; }
+.verb-highlight { background: #fff3cd; }  /* light yellow */
+
+/*───────────────────────────────────────────────────────────────────────────
+  Submit button / Clear Button
+───────────────────────────────────────────────────────────────────────────*/
+.submit-btn {
+  display: inline-block;
+  background: #0a4d68;
+  color: #fff;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: background 0.3s, transform 0.2s;
+  cursor: pointer;
+}
+.submit-btn:hover {
+  background: #2ca7d8;
+  transform: translateY(-1px);
+}
+.submit-btn:active {
+  transform: scale(0.98);
+}
+/* Erase All Inputs button */
+.btn.btn-sm {
+  /* sizing & spacing */
+  padding: 6px 12px;
+  font-size: 0.875rem;
+  line-height: 1.2;
+  
+  /* colors & background */
+  background-color: #0a4d68;      /* your primary/nav color */
+  color: #ffffff;                 /* white text */
+  border: none;
+  border-radius: 6px;             /* slightly rounded */
+  
+  /* subtle shadow for lift */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+
+  /* smooth transitions */
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+/* Hover state */
+.btn.btn-sm:hover {
+  background-color: #095375;      /* a touch darker */
+  transform: translateY(-1px);
+}
+
+/* Active / pressed state */
+.btn.btn-sm:active {
+  background-color: #08495a;
+  transform: translateY(0);
+}
+
+/* Disabled state */
+.btn.btn-sm:disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+
+/*───────────────────────────────────────────────────────────────────────────
+  Ayah text & translations
+───────────────────────────────────────────────────────────────────────────*/
+
+@font-face {
+  font-family: 'CustomArabic';
+  src: url('/PDMS_SALEEM_QURANFONTQESHIP_0.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('/Gilroy-Medium.ttf') format('truetype');
+}
+
+.ayah-arabic {
+  font-family: 'CustomArabic', serif;
+  font-size: 30px;
+  text-align: right;
+  direction: rtl;
+}
+
+.ayah-english {
+  font-size: 15px;
+  text-align: center;
+}
+
+/*───────────────────────────────────────────────────────────────────────────
+  Overlay & popup
+───────────────────────────────────────────────────────────────────────────*/
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 10;
+}
+.popup-content {
+  display: none;
+  position: fixed;
+  top: 10%; left: 50%;
+  transform: translateX(-50%);
+  width: 94%; max-height: 85%;
+  background: #fff;
+  padding: 24px;
+  border: 2px solid #0a4d68;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+  overflow-y: auto;
+  z-index: 11;
+}
+
+/*───────────────────────────────────────────────────────────────────────────
+  Audio panel & floating player
+───────────────────────────────────────────────────────────────────────────*/
+/* Popup container centered */
+.audio-controls {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 360px;
+  max-width: 90%;
+  background: #fff;
+  border: 1px solid #538295;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  padding: 20px 24px;
+  z-index: 10001;
+  display: none;              /* shown/hidden by your JS */
+  font-family: Arial, sans-serif;
+}
+
+/* Header */
+.ac-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px;
+  font-size: 18px;
+  color: #538295;
+}
+.ac-header .material-icons-outlined {
+  font-size: 24px;
+}
+
+/* Grid rows: label on left, control on right */
+.ac-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;   /* left column 120px, right column fills remaining */
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.ac-row:last-of-type {
+  margin-bottom: 20px;
+}
+
+/* Labels & icons */
+.ac-row label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  color: #333;
+}
+.ac-row .material-icons-outlined {
+  font-size: 20px;
+  color: #538295;
+}
+
+/* Selects & inputs */
+.ac-row select,
+.ac-row input[type="number"] {
+  width: 100%;
+  max-width:none;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Play button */
+.play-toggle-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 0;
+  background-color: #538295;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: background-color 0.2s, transform 0.2s;
+}
+.play-toggle-btn .material-icons-outlined {
+  font-size: 20px;
+}
+.play-toggle-btn:hover {
+  background-color: #3f6d7e;
+  transform: translateY(-2px);
+}
+
+
+.floating-player.active { opacity: 1; }
+.floating-player:hover  { transform: scale(1.05); }
+
+/* optional circular progress */
+.circular-container {
+  position: fixed;
+  bottom: 50px; right: 20px;
+  width: 70px; height: 70px;
+  z-index: 999;
+}
+.circular-progress {
+  width: 100%; height: 100%;
+  background: conic-gradient(#0a4d68 var(--progress,0%), #ccc 0%);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: --progress 0.2s linear;
+}
+.circular-progress span { font-size: 24px; color: #fff; }
+
+/*───────────────────────────────────────────────────────────────────────────
+  Confetti feedback
+───────────────────────────────────────────────────────────────────────────*/
+@keyframes confettiBurst {
+  0%   { opacity: 0; transform: scale(0.8) translateY(-10px); }
+  50%  { opacity: 1; transform: scale(1.1) translateY(0); }
+ 100%  { opacity: 0; transform: scale(1)   translateY(-10px); }
+}
+
+/* only burst inside transliteration boxes */
+.word-block-translit.confetti::after {
+  content: "🎉";
+  position: absolute;
+  top: -8px;   /* tweak as needed */
+  right: -8px; /* tweak as needed */
+  animation: confettiBurst 0.6s ease-in-out;
+}
+
+
+/*───────────────────────────────────────────────────────────────────────────
+  Learn/Recite toggle rail
+───────────────────────────────────────────────────────────────────────────*/
+.mode-float-left {
+  position: fixed;
+  top: 30%; left: 0;
+  width: 120px; height: 48px;
+  background: #0a4d68; color: #fff;
+  border-radius: 0 8px 8px 0;
+  padding: 10px;
+  cursor: pointer;
+  box-shadow: 2px 4px 8px rgba(0,0,0,0.2);
+  transition: left 0.3s ease;
+  z-index: 9999;
+}
+.mode-float-left.closed { left: -100px; }
+.mode-float-left:not(.closed):hover { left: 0; }
+.slider-icon { font-size: 13px; display: flex; align-items: center; gap: 8px; }
+
+/*───────────────────────────────────────────────────────────────────────────
+  Floating Action Button & Nav
+───────────────────────────────────────────────────────────────────────────*/
+@keyframes float {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+ 50%      { transform: translateX(-50%) translateY(-8px); }
+}
+/*───────────────────────────────────────────────────────────────────────────
+  Floating Action Button & Nav
+───────────────────────────────────────────────────────────────────────────*/
+.fab {
+  position: fixed;
+  bottom: 48px; left: 50%;
+  transform: translateX(-50%);
+  width: 64px; height: 64px;
+  background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
+  border: none; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 36px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  cursor: pointer;
+  animation: float 3s ease-in-out infinite;
+  transition: transform 0.3s, box-shadow 0.3s;
+  z-index: 20;
+}
+.fab:hover {
+  transform: translate(-50%, -4px) scale(1.05);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+}
+
+/*───────────────────────────────────────────────────────────────────────────
+  Bottom Nav Base Styles
+───────────────────────────────────────────────────────────────────────────*/
+.bottom-nav {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translate(-50%, 100%); /* start off-screen */
+  opacity: 0;
+  width: calc(100% - 32px);
+  max-width: 480px;
+  height: 64px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(40px);
+  border-radius: 32px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  z-index: 10;
+  flex-wrap: wrap;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+/* When .visible is toggled on, slide it up & fade in */
+.bottom-nav.visible {
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+
+/*───────────────────────────────────────────────────────────────────────────
+  Nav Items
+───────────────────────────────────────────────────────────────────────────*/
+.nav-item {
+  position: relative;
+  color: var(--icon-default);
+  font-size: 28px;
+  width: 50px; height: 50px;
+  display: flex; align-items: center; justify-content: center;
+  transition: color 0.3s, transform 0.3s;
+  text-decoration: none;
+  overflow: visible;
+  flex-wrap: wrap;
+}
+.nav-item:hover {
+  color: var(--icon-hover);
+  transform: translateY(-4px);
+}
+.nav-item.active {
+  color: #fff;
+}
+.nav-item.active::before {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 48px; height: 48px;
+  background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
+  border-radius: 50%;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  z-index: -1;
+}
+
+/* special play button styling */
+.nav-item#playToggleBtn {
+  background: #0a4d68;
+  color: white;
+  border-radius: 50%;
+  width: 56px; height: 56px;
+  margin-top: -28px; /* lift it up */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 11;
+}
+.nav-item#playToggleBtn.active {
+  background: #09435b;
+}
+
+/* labels under icons */
+.nav-label {
+  display: block;
+  flex-basis: 100%;    /* wrap onto new “row” */
+  margin-top: 1px;
+  font-size: 10px;
+  color: #0a4d68;
+  text-align: center;
+}
+
+
+
+
+
+
+
+
+/* ───────────────────────────────────────────────────────────────
+   SETTINGS POPUP (centered + flex rows + on/off switches)
+───────────────────────────────────────────────────────────────*/
+/* 1) Define the keyframes for the entrance */
+@keyframes popup-enter {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+
+/* 3) “Show” state triggers the animation */
+.settings-popup.show {
+  animation: popup-enter 0.3s ease-out forwards;
+}
+
+.settings-popup {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 80px;               /* sit 80px above the bottom edge (nav height + margin) */
+  top: auto;                  /* unset any top positioning */
+  width: 300px;
+  max-width: 90vw;
+  background: #fff;
+  border: 1px solid #538295;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  padding: 20px;
+  z-index: 10001;
+  font-family: Arial, sans-serif;
+
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+}
+
+.settings-popup.show {
+  animation: popup-enter 0.3s ease-out forwards;
+}
+
+/* Header */
+.sm-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-size: 18px;
+  color: #538295;
+}
+.sm-header .material-icons-outlined {
+  font-size: 24px;
+}
+
+/* Each row: label on left, switch on right */
+.sm-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-top: 1px solid #eee;
+}
+.sm-row:first-of-type {
+  border-top: none;
+}
+
+/* Label + icon */
+.sm-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  color: #333;
+}
+.sm-label .material-icons-outlined {
+  font-size: 20px;
+  color: #538295;
+}
+
+/* Toggle switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.switch .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  border-radius: 20px;
+  transition: 0.3s;
+}
+.switch .slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+.switch input:checked + .slider {
+  background-color: #538295;
+}
+.switch input:checked + .slider:before {
+  transform: translateX(20px);
+}
+/* ───────────────────────────────────────────
+   AUDIO & SETTINGS IN ONE POPUP
+──────────────────────────────────────────── */
+
+.sm-section-title {
+  margin: 16px 0 8px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #538295;
+  border-top: 1px solid #eee;
+  padding-top: 8px;
+}
+
+select, .settings-popup input[type=number] {
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  min-width: 80px;
+}
+
+/* shrink the native arrow on number input */
+.settings-popup input[type=number]::-webkit-inner-spin-button,
+.settings-popup input[type=number]::-webkit-outer-spin-button {
+  margin: 0;
+}
+
+/* ───────────────────────────────────────────
+  Styles for the new Practice Mode grid 
+──────────────────────────────────────────── */
+
+
+.translit-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.word-block-translit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-wrap: anywhere;
+  position: relative;
+}
+
+.translit-input {
+  width: 140px;
+  padding: 4px;
+  font-size: 1rem;
+  text-align: center;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* Floating clear & hide buttons on the left */
+.fab-left {
+  position: fixed;
+  left: 16px;
+  bottom: 24px;
+  background: #0a4d68;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+.fab-left.secondary {
+  background: #555;
+}
+
+/* ───────────────────────────────────────────
+  Practose Header
+──────────────────────────────────────────── */
+
+.practice-header {
+  text-align: center;
+  background: #e5e1dd;
+}
+
+.practice-title {
+  font-size: 1rem;      /* slightly larger */
+  margin: 0;
+  color: #0a4d68;
+}
+
+.practice-desc {
+  font-size: 0.6rem;
+  color: #555;
+}
+.practice-heading {
+  text-align: center;
+  font-size: 1rem;
+}
+
+
+
+
+
+/* ───────────────────────────────────────────
+  Practose Header
+──────────────────────────────────────────── */
+.bottom-nav .nav-item.active .nav-label {
+  display: none !important;
+}
+
+/*–– During playback, hide all items except the play/pause button ––*/
+.bottom-nav.audio-playing .nav-item { 
+  display: none;
+}
+/* leave the playToggleBtn visible */
+.bottom-nav.audio-playing .nav-item#playToggleBtn {
+  display: flex;
+}
+
+
+
+/*----- GAMES -------*/
+
+
+/*──────────────────────────────────────────────────────────────
+  Game Section Wrapper
+──────────────────────────────────────────────────────────────*/
+
+
+#game-mode-content {
+  direction: rtl;
+  font-family: 'Arial', sans-serif;
+  padding: 20px;
+}
+
+#game-mode-content .prompt {
+  margin-bottom: 20px;
+  font-size: 15px;
+  font-weight: inherit;
+  color: rgb(0, 0, 0);
+  justify-content: center !important;
+  display: grid
+;
+}
+
+#game-mode-content .options
+{
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 1px;
+  justify-content: center;
+  gap: 0px;
+  margin-bottom: 30px;
+  background: rgba(255, 255, 255, 0.1); /* translucent white */
+  border-radius: 12px;
+  padding: 16px;
+  margin: 0 10px 30px 10px;
+  box-shadow: 0 15px 500px rgb(255 194 12 / 39%);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgb(224 180 14);
+}
+
+#game-mode-content .slots {
+  display: flex;
+  flex-wrap: wrap;                /* Allows wrapping to next line */
+  width: 100%;
+  max-width: 100%;
+  margin: 150px auto 0px auto;
+  padding: 6px 0;           /* No global underline */
+  gap: 0px;                        /* Small space between slots */
+  font-family: 'CustomArabic', serif;
+  font-size: 28px;
+  justify-content: center;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background-color: rgba(255, 255, 255, 0.6); /* or use transparent if you prefer */
+  border-radius: 6px;          /* No global underline */                        /* Small space between slots */
+}
+
+#optionsContainer .word-box {
+  font-size: 70%; /* Reduces size by 30% */
+}
+
+
+#game-mode-content .word-box.used {
+  visibility: hidden;
+}
+
+#game-mode-content .slot {
+  min-width: 1px;
+  height: 40px;
+  border-bottom: 1px dashed #666;
+  margin: 0px 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  padding: 1px;
+
+}
+
+
+
+#game-mode-content .word-box.clone {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  margin: 0;
+  padding: 10px 18px;
+  font-size: 20px;
+  background: white;
+  border: 2px solid #5398be;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.4s ease;
+}
+#game-mode-content .word-block.clone {
+  display: inline-block;
+  text-align: center;
+  margin: 2px 2px 5px 2px;
+  padding: 6px 10px 1px 10px;
+  cursor: pointer;
+  border-radius: 12px;
+  border-bottom: 2px dotted #333;
+  border: 1px dotted rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* ✨ Soft shadow */
+  background-color: #ffffff;
+}
+
+
+#game-mode-content .check-btn {
+  padding: 10px 20px;
+  font-size: 18px;
+  background-color: #2c7c4c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.word-box.collapsed {
+  transform: scale(0.7);
+  opacity: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 0 !important;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+
+#game-mode-content .result {
+  margin-top: 20px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+.shake {
+  animation: shake 0.4s;
+}
+
+#gameResultPopup button:hover {
+  opacity: 0.9;
+}
+#nextAyahBtn:hover {
+  background: #05506d;
+}
+#redoGameBtn:hover {
+  background: #d5d5d5;
+}
+
+
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
+
+#verbOptions, #meaningOptions {
+  flex: 1 1 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 200px;
+}
+
+#verbMatchGame {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 24px;
+  flex-direction: row;
+}
+
+#verbOptions, #meaningOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+  min-width: 180px;
+  max-width: 240px;
+}
+
+
+
+.match-card.selected {
+  background-color: #e0f7fa;
+  border-color: #00796b;
+}
+
+.match-card.matched {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+@media screen and (max-width: 600px) {
+  #verbMatchGame {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+
+#game-mode-content > div:first-child button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  background-color: #eee;
+  color: #333;
+  border: none;
+  margin: 4px;
+}
+
+#game-mode-content > div:first-child button.active {
+  background-color: #0a4d68;
+  color: white;
+}
+
+/* The parent container should be a normal block so the grid can span 100% */
+#verbMatchGame {
+  display: none;       /* hidden by default */
+  width: 100%;         /* take up the full width of its parent */
+  padding: 16px;       /* whatever padding you like */
+  box-sizing: border-box;
+}
+#verbMatchGame.show {
+  display: flex;                /* show as flex when “.show” */
+  justify-content: center;      /* center the grid horizontally */
+  padding: 16px; 
+}
+
+/* Your inner grid: 100px for the Arabic verbs, the rest for the English */
+.match-grid {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: 1fr 100px !important;
+  z-index: 1000 !important;
+  gap: 20px !important;
+  top: 30px;
+  max-width: 100% !important;
+  padding: 12px !important;
+  margin: 10px 10px 10px 10px !important;
+  box-sizing: border-box !important;
+  justify-content: center;
+}
+/* Center the verb controls */
+#verbControls {
+  position: fixed;
+  bottom: 35px;              /* distance from bottom edge */
+  left: 50%;                 
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding: 8px 0;            /* vertical padding */
+  z-index: 1000;
+}
+
+
+
+
+.match-column-ar,
+.match-column-en {
+  display:        flex !important;
+  flex-direction: column !important;
+  gap:            20px   !important;
+  margin:         0     !important;  /* let the grid’s gap & margin handle spacing */
+  width:          auto  !important;  /* grid now controls column width */
+  min-width:      0     !important;  /* allows the grid to shrink it below content width */
+}
+
+
+
+
+/* Card styling */
+.match-card {
+  background: #fff;
+  text-align: center;
+  margin-bottom: 12px !important;
+  font-size: 20px;
+  user-select: none;
+  padding: 8px 12px;
+  border: 2px solid #c9d1d4;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;               /* span its entire column */
+  box-sizing: border-box;    /* include padding/borders in that width */
+    /* 3D & depth */
+    transform: translateZ(0) rotateX(0) rotateY(0);
+    transform-style: preserve-3d;
+    box-shadow:
+    0 4px 6px rgba(0,0,0,0.1),
+    0 1px 3px rgba(0,0,0,0.08);
+    
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.match-card:hover {
+  transform: translateZ(20px) rotateX(5deg) rotateY(-5deg);
+  box-shadow: 
+    0 12px 20px rgba(0, 0, 0, 0.2),
+    0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+
+
+/* States (selected, matched, wrong) */
+.match-card.selected { background: #e0f0ff; border-color: #3399ff; }
+.match-card.matched  { background: #d4edda; border-color: #28a745; }
+.match-card.wrong    { background: #f8d7da; border-color: #dc3545; }
+
+
+.match-row {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+
+
+
+/* Make each pane a column flex container that starts at the top */
+/* Make each game pane a top-aligned column */
+
+/* Center the game header text */   
+#arrangeGameContainer .prompt {
+  margin: 8px 0;     /* small gap under the header text */
+}
+
+
+#arrangeGameContainer .game-header {
+  display: flex;
+  align-items: center !important;
+  justify-content: center;
+  gap: 8px;
+  font-size: 24px;
+  color: #fcfafa !important;
+  font-size:  24px;
+ 
+}
+
+
+
+
+
+
+#arrangeGameContainer .options {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 1px;
+  justify-content: center;
+  gap: 0px;
+  margin: 200px 0 100px 0 !important;    /* gap before the draggable words */
+}
+
+#arrangeGameContainer .slot{
+  min-width: 1px;
+  height: 40px;
+  border-bottom: 1px dashed #efe7e7;
+  margin: 0px 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  padding: 1px;
+}
+#arrangeGameContainer .word-box.clone {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  margin: 0;
+  padding: 10px 18px;
+  font-size: 20px;
+  background: white;
+  border: 2px solid #5398be;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.4s ease;
+}
+
+
+
+:root {
+  --theme-start: #538295;
+  --theme-end:   #8aa8b8;
+}
+
+/* ─── Outer Card ───────────────────────────────────────── */
+.game-card {
+  /* size & spacing */
+  max-width: 600px;
+  margin: 50px 40px 12px;           /* shorthand for top/right/bottom */
+  padding: 16px 16px 25px;          /* keep your bottom padding */
+
+  /* look & feel */
+  background: #fff !important;      /* force pure white */
+  border: none !important;          /* drop that old solid border */
+  border-radius: 16px !important;   /* soften the corners */
+  box-shadow: 
+    0 8px 20px rgba(0,0,0,0.05);     /* subtle lift */
+  transition: 
+    transform 0.2s ease, 
+    box-shadow 0.2s ease;
+  font-family: 'Roboto', sans-serif;
+  position: relative;               /* for any pseudo‐elements if needed */
+}
+
+
+/* hover lift */
+.game-card:hover {
+  transform: translateY(-4px) !important; ;
+  box-shadow: 
+    0 12px 28px rgba(0,0,0,0.1);
+}
+
+/* “selected” glow—just add the class `.selected` at runtime */
+.game-card.selected {
+  box-shadow:
+    0 4px 12px rgba(0,0,0,0.1),     /* keep a little depth */
+    0 0 0 4px var(--theme-start);    /* 4px glow outline in your theme color */
+}
+
+/* inner grey box */
+.game-card .details {
+  background: #f5f5f5 !important; ;
+  border-radius: 12px !important; ;
+  padding: 16px !important; ;
+  margin-bottom: 20px !important; ;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.04) !important; ;
+}
+
+/* pill-shaped button */
+.game-card button {
+  background: linear-gradient(135deg, var(--theme-start), var(--theme-end)) !important; ;
+  color: #fff !important; ;
+  padding: 12px 24px !important; ;
+  border: none !important; ;
+  border-radius: 999px !important; ;
+  font-size: 1rem !important; ;
+  font-weight: 600 !important; ;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important; ;
+  transition: transform 0.2s, box-shadow 0.2s !important; ;
+  cursor: pointer !important; ;
+}
+.game-card button:hover {
+  transform: translateY(-2px) !important; ;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12) !important; ;
+}
+.game-card button:active {
+  transform: translateY(0) !important; ;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08) !important; ;
+}
+
+
+
+
+.game-play-btn-verbs {
+  display: inline-block !important;
+  padding: 12px 24px !important;
+  background: #0a4d68 !important;            /* deep blue */
+  color: #fff !important;
+  font-family: inherit !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  border: none !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  position: relative !important;
+  overflow: hidden;
+  transform: perspective(800px) rotateX(2deg) !important; /* 3D tilt effect */
+  transform-style: preserve-3d;
+  box-shadow:
+    0 6px 0 #083f56,                          /* hard shadow edge */
+    0 10px 20px rgba(249, 245, 245, 0.2) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.game-play-btn {
+  display: inline-block !important;
+  padding: 12px 24px !important;
+  background: #0a4d68 !important;            /* deep blue */
+  color: #fff !important;
+  font-family: inherit !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  border: none !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  position: relative !important;
+  overflow: hidden;
+  transform: perspective(800px) rotateX(2deg) !important; /* 3D tilt effect */
+  transform-style: preserve-3d;
+  box-shadow:
+    0 6px 0 #083f56,                          /* hard shadow edge */
+    0 10px 20px rgba(249, 245, 245, 0.2) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  animation: bounce 2s infinite ease-in-out !important;
+
+  
+}
+
+/* Slanted shine effect */
+.game-play-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, rgba(255,255,255,0.4), rgba(255,255,255,0));
+  transform: rotateZ(-100deg); /* slant the shine */
+  animation: shine 2.5s infinite !important;
+  pointer-events: none;
+}
+
+@keyframes shine {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 200%;
+  }
+  
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: perspective(800px) rotateX(2deg) translateY(0);
+  }
+  50% {
+    transform: perspective(800px) rotateX(2deg) translateY(-5px);
+  }
+}
+
+/* Hover lifts the button */
+.game-play-btn:hover {
+  transform: perspective(800px) rotateX(2deg) translateY(-2px) !important;
+}
+
+/* Active presses it down */
+.game-play-btn:active {
+  transform: perspective(800px) rotateX(7deg) translateY(3px) !important;
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.2) !important;
+}
+
+.theme-play-btn {
+  background: linear-gradient(to bottom, #0a4d68, #083f56); /* theme gradient */
+  border: 3px solid #072c3c;
+  border-radius: 12px;
+  padding: 12px 28px;
+  color: #fff;
+  font-family: 'Arial Black', sans-serif;
+  font-size: 1.4rem;
+  font-weight: bold;
+  text-shadow: 1px 1px #000;
+  box-shadow:
+    inset 0 -4px 0 rgba(0, 0, 0, 0.3),
+    0 6px 0 #062c3d,
+    0 8px 15px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.1s ease;
+}
+
+.theme-play-btn:active {
+  transform: translateY(2px);
+  box-shadow:
+    inset 0 -2px 0 rgba(0, 0, 0, 0.4),
+    0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.theme-play-btn .arrow {
+  font-size: 1.3em;
+  transform: translateY(1px);
+}
+
+
+.strip-btn {
+  display: inline-block;
+  width: 100%;
+  max-width: 320px;
+  height: 25px;
+  background-color: #0a4d68;
+  color: #e1f5ff;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+  padding: 0 18px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+  direction: ltr !important; /* ensure text direction is left-to-right */
+  align-items: center !important; /* center the text vertically */
+}
+
+.strip-btn:hover {
+  background-color: #0c5a78;
+  color: white;
+}
+
+
+/* keep the “greyed” look when disabled */
+.game-play-btn:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+/* fully opaque & clickable when enabled */
+.game-play-btn:not(:disabled) {
+  opacity: 1 !important;
+  cursor: pointer !important;
+}
+
+/* optionally, extra styling when active */
+.game-play-btn.active-control {
+  /* e.g. add a glow or stronger shadow */
+  box-shadow:
+    0 6px 0 #083f56,
+    0 8px 14px rgba(0,0,0,0.25) !important;
+}
+
+/* in your main stylesheet */
+.nav-hidden {
+  display: none !important;
+}
+
+
+
+/* in your global stylesheet, after your .game-play-btn rules */
+.game-play-btn:disabled {
+  background:    #cccccc !important;
+  color:         #666666 !important;
+  box-shadow:    none !important;
+  cursor:        not-allowed !important;
+  opacity:       1 !important;  /* overrides any .5 opacity */
+}
+
+
+
+/* visually grey out & block pointer events cursor for “disabled-control” */
+.disabled-control {
+  background:    #cccccc !important;
+  color:         #666666 !important;
+  box-shadow:    none !important;
+  cursor:        not-allowed !important;
+  opacity:       1 !important;
+}
+
+/* but don’t actually disable pointer events so JS can still see clicks */
+.disabled-control {
+  pointer-events: auto !important;
+}
+
+
+
+/* Each section (Score, Lives) */
+.stats-section {
+  display: flex;
+  align-items: center;
+  gap: 4px;                /* tighten up between icon & value / hearts */
+}
+
+/* Score: slightly larger text */
+.score-section .stats-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* Heart icons: red, smaller gap between them */
+.lives-section .stats-heart {
+  color: #ebebeb;
+  font-size: 1.2rem;
+  margin-right: 2px;       /* minimal space between hearts */
+}
+
+/* Remove extra margin on last heart */
+.lives-section .stats-heart:last-child {
+  margin-right: 0;
+}
+
+/* When in game mode, this class makes the container fill the screen */
+:root {
+  /* pick your theme color once */
+  --game-overlay-color:255,250,246;  /* RGB for teal-ish (#143C50) */
+  --game-overlay-opacity: 1;      /* 0 = transparent, 1 = solid */
+}
+
+.fullscreen-game {
+  position: fixed !important;
+  top:      0 !important;
+  left:     0 !important;
+  width:    100vw !important;
+  height:   100vh !important;
+
+  /* use your theme with reduced opacity */
+  background: rgba(var(--game-overlay-color), var(--game-overlay-opacity)) !important;
+
+  padding:       30px 10px !important;
+  box-sizing:    border-box !important;
+  overflow:      hidden !important;
+}
+
+
+/* Ensure the parent is fullscreen */
+#gameContainer.fullscreen-game {
+  position: absolute;
+  top:      0;
+  left:     0;
+  width:    100vw;
+  height:   100vh;
+  overflow: hidden;
+}
+
+/* Then make each game‐section cover the entire area */
+.game-section {
+  position:        absolute;  /* layer on top of the container */
+  top:             0;
+  left:            0;
+  width:           100%;
+  height:          100%;
+  padding:   50px 20px 32px 20px ;      /* optional gutter */
+
+  box-sizing:      border-box;
+  overflow-y:      auto;      /* scroll if content is tall */
+  background:      transparent;
+}
+
+/* And when you show one pane, others are hidden by JS */
+.game-section[style*="display: none"] {
+  visibility: hidden;
+}
+
+
+
+
+@media (max-width: 768px) {
+  /* full-screen background on phones */
+  #verbGameContainer.mobile-bg {
+    background: url('/assets/bg_quiz.jpg')
+                no-repeat center/cover !important;
+    padding:     0 !important;
+    margin:      0 !important;
+    /* ensure you can scroll the contents if they overflow */
+    overflow-y:  auto !important;
+  }
+}
+
+
+
+/*──────────────────────────────────────────────────────────────
+     Game mode controls on index
+──────────────────────────────────────────────────────────────*/
+/* when in game mode, hide nav controls... */
+body.game-mode .dropdowns,
+body.game-mode .prev,
+body.game-mode .next {
+  display: none !important;
+}
+
+/* and show your parent-level stats & return button */
+#gameStatsParent,
+#returnToAyah {
+  display: none;
+}
+body.game-mode #gameStatsParent,
+body.game-mode #returnToAyah {
+  display: flex;      /* or block for the button */
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* style for your parent-level stats */
+#gameStatsParent {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(10,77,104,0.9);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  z-index: 1002;
+}
+
+/* style for your return button */
+#returnToAyah {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0a4d68;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  z-index: 1002;
+  transition: opacity 0.3s ease;
+}
+
+
+
+
+.game-stats-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0; /* or wherever it should go */
+  width: 100vw; /* Viewport width */
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box; /* include padding in width */
+  align-items: center;
+  padding: 6px 12px;
+  z-index: 10;
+  box-sizing: border-box;
+  background-color: #0a4d68;
+  direction: ltr !important; /* force left-to-right layout */
+}
+
+
+.user-pill,
+.score-pill {
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #fffdd0;   /* cream border */
+  border-radius: 9999px;       /* pill shape */
+}
+
+
+.avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.coin {
+  color: #f5b400;
+  font-weight: 600;
+}
+
+.score {
+  color: #f06292 ; /* red for hearts */
+  font-weight: 600;
+}
+
+.divider {
+  color: #999;
+}
