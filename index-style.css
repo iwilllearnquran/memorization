@@ -5,9 +5,6 @@
       color: #0a4d68;
     }
 
-    html, body {
-      overscroll-behavior-y: none;
-    }
 
     :root {
   --safe-top: env(safe-area-inset-top);
@@ -271,12 +268,6 @@ body {
   }
 }
 
-
-/* global.css */
-body.modal-open {
-  overflow: hidden;
-  touch-action: none;
-}
 
 
 
@@ -606,6 +597,8 @@ body.modal-open {
   transition: transform 0.3s ease;
 }
 
+
+
 .ayah-frame.active {
   z-index: 2;
 }
@@ -802,7 +795,9 @@ body.modal-open {
   cursor: pointer;
 }
 
-
+ html, body {
+      overscroll-behavior-y: none;
+    }
 
 :root {
   /* Your theme colors */

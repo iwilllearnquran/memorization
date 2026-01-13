@@ -13,11 +13,27 @@ const DEFAULT_SETTINGS = {
   audioLang: 'ar',
   speed: '1',
   repeat: '1',
-  showTranslation: true,
+  showWordTranslation: true, // 👈 renamed
   showRoot: true,
   showGrammar: true,
   panelLang: 'en'
 };
+
+
+
+(function applySettingsEarly() {
+  const settings = JSON.parse(localStorage.getItem('qq_settings')) || {};
+  const html = document.documentElement;
+
+  html.classList.toggle('hide-root',        settings.showRoot === false);
+  html.classList.toggle('hide-grammar',     settings.showGrammar === false);
+  html.classList.toggle('hide-word-translation',settings.showWordTranslation === false);
+
+  if (settings.panelLang) {
+    html.setAttribute('data-panel-lang', settings.panelLang);
+  }
+})();
+
 
 function getSettings() {
   return {
@@ -56,18 +72,18 @@ if (pathMatch) {
 // 1. toggleElements(type, show)
 //    Shows or hides elements by class based on type and boolean 'show'.
 function toggleElements(type, show) {
-  saveSettings({
-    showRoot: type === 'root-tag' ? show : getSettings().showRoot,
-    showGrammar: type === 'pos-tag' ? show : getSettings().showGrammar
-  });
+  const html = document.documentElement;
 
-  const map = { translation: 'toggle-translation', 'root-tag': 'toggle-root', 'pos-tag': 'toggle-pos' };
-  const cls = map[type] || type;
-  document.querySelectorAll(`.${cls}`).forEach(el => {
-    el.classList.toggle('hidden-toggle', !show);
-  });
+  if (type === 'root-tag') {
+    html.classList.toggle('hide-root', !show);
+    saveSettings({ showRoot: show });
+  }
+
+  if (type === 'pos-tag') {
+    html.classList.toggle('hide-grammar', !show);
+    saveSettings({ showGrammar: show });
+  }
 }
-window.toggleElements = toggleElements;
 
 // 2. showPopup(data)
 //    Renders and displays the morphology popup with given data.
@@ -146,15 +162,12 @@ window.clearTranslitInputs = clearTranslitInputs;
 // 6. toggleTranslations()
 //    Toggles visibility of translation hints under inputs.
 function toggleTranslations() {
-  const visible = [...document.querySelectorAll('.toggle-translation')]
-    .some(el => el.classList.contains('hidden-toggle'));
-
-  saveSettings({ showTranslation: visible });
-  document.querySelectorAll('.toggle-translation')
-    .forEach(el => el.classList.toggle('hidden-toggle'));
+  const html = document.documentElement;
+  const hidden = html.classList.toggle('hide-word-translation');
+  saveSettings({ showWordTranslation: !hidden });
 }
 
-window.toggleTranslations = toggleTranslations;
+
 
 // 7. switchTranslation(lang)
 //    Switches the displayed translation between English and Urdu.
@@ -300,15 +313,10 @@ window.toggleSection = toggleSection;
 // Called when user picks panel translation language
 function onPanelLangChange(lang) {
   saveSettings({ panelLang: lang });
-  const enDiv = document.getElementById('englishTranslation');
-  const urDiv = document.getElementById('urduTranslation');
-
-
-  enDiv.style.display = lang === 'en' ? 'block' : 'none';
-  urDiv.style.display = lang === 'ur' ? 'block' : 'none';
-
+  document.documentElement.setAttribute('data-panel-lang', lang);
 }
 window.onPanelLangChange = onPanelLangChange;
+
 
 
 // Full Settings popup:
@@ -466,6 +474,21 @@ window.toggleSettingsNav = function (e) {
     const ts       = document.getElementById('translation-section');
     if (allTrans) allTrans.checked = ts && ts.style.display !== 'none';
   }
+
+  const html = document.documentElement;
+
+document.getElementById('toggleRoot').checked =
+  !html.classList.contains('hide-root');
+
+document.getElementById('toggleGram').checked =
+  !html.classList.contains('hide-grammar');
+
+const toggleTrans = document.getElementById('toggleTrans');
+if (toggleTrans) {
+  toggleTrans.checked =
+    !html.classList.contains('hide-word-translation');
+}
+
 
   // Sync panel language dropdown initial value
  // const currentPanel = document.getElementById('currentLang').innerText.toLowerCase();
@@ -630,10 +653,11 @@ if (repeatInput && settings.repeat) {
 toggleElements('root-tag', settings.showRoot);
 toggleElements('pos-tag', settings.showGrammar);
 
-document.querySelectorAll('.toggle-translation')
-  .forEach(el =>
-    el.classList.toggle('hidden-toggle', !settings.showTranslation)
-  );
+document.documentElement.classList.toggle(
+  'hide-word-translation',
+  settings.showWordTranslation === false
+);
+
 
 /* ── Panel translation language ─ */
 onPanelLangChange(settings.panelLang);
@@ -1199,7 +1223,6 @@ function initIframeSwipe() {
   root.addEventListener('touchstart', e => {
     startX = e.touches[0].clientX;
     startY = e.touches[0].clientY;
-    console.log("📱 iframe touchstart", { startX, startY });
   }, { passive: true });
 
   root.addEventListener('touchend', e => {
@@ -1244,7 +1267,42 @@ function initIframeSwipe() {
 
 }
 
-window.addEventListener('DOMContentLoaded', initIframeSwipe);
+window.addEventListener('DOMContentLoaded', () => {
+  initIframeSwipe();      // your existing swipe
+  initScrollEdgeSwipe(); // ✅ reels-like scroll
+});
+
+
+// ===============================
+// Reels-style scroll edge trigger
+// ===============================
+function initScrollEdgeSwipe() {
+  let locked = false;
+
+  window.addEventListener('scroll', () => {
+    if (locked) return;
+
+    const scrollTop    = window.scrollY;
+    const windowH      = window.innerHeight;
+    const docH         = document.documentElement.scrollHeight;
+
+    const nearBottom = scrollTop + windowH >= docH - 40;
+    const nearTop    = scrollTop <= 0;
+
+    if (nearBottom) {
+      locked = true;
+      parent.postMessage({ type: 'QQ_SWIPE', dir: 1 }, '*');
+      setTimeout(() => (locked = false), 700);
+    }
+
+    if (nearTop) {
+      locked = true;
+      parent.postMessage({ type: 'QQ_SWIPE', dir: -1 }, '*');
+      setTimeout(() => (locked = false), 700);
+    }
+  }, { passive: true });
+}
+
 
 ///--- Games Explanation ---
 const grammarExplanations = {

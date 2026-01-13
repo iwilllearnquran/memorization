@@ -272,6 +272,70 @@ html, body {
 }
 
 
+/*───────────────────────────────────────────────────────────────────────────
+  Toggle switches inside dropdowns
+───────────────────────────────────────────────────────────────────────────*/
+
+html.hide-root .toggle-root {
+  display: none !important;
+}
+
+html.hide-grammar .toggle-pos {
+  display: none !important;
+}
+
+
+
+/* Entire translation section */
+html.hide-translation #translation-section {
+  display: none !important;
+}
+
+/* Word-level translations */
+html.hide-word-translation .toggle-translation {
+  display: none !important;
+}
+
+
+html[data-panel-lang="en"] #englishTranslation { display: block; }
+html[data-panel-lang="en"] #urduTranslation    { display: none; }
+
+html[data-panel-lang="ur"] #englishTranslation { display: none; }
+html[data-panel-lang="ur"] #urduTranslation    { display: block; }
+
+/* ===============================
+   Practice Mode (CSS-only layout)
+   =============================== */
+
+html.practice-mode #learning-mode-content,
+html.practice-mode #reciting-mode-content,
+html.practice-mode #translation-section,
+html.practice-mode #main-grammar-section {
+  display: none !important;
+}
+
+html.practice-mode #transliteration-box {
+  display: block !important;
+}
+
+/* default (non-practice) */
+#transliteration-box {
+  display: none;
+}
+
+/* Panel translation visibility (Recite mode) */
+html.hide-panel-translation #translation-section {
+  display: none !important;
+}
+
+/* Panel translation language */
+html[data-panel-lang="en"] #englishTranslation { display: block; }
+html[data-panel-lang="en"] #urduTranslation    { display: none; }
+
+html[data-panel-lang="ur"] #englishTranslation { display: none; }
+html[data-panel-lang="ur"] #urduTranslation    { display: block; }
+
+
 
 /*───────────────────────────────────────────────────────────────────────────
   Toggle switches inside dropdowns

@@ -121,6 +121,14 @@ function updateSurahProgressGuest(surah, ayah) {
   }
 }
 
+// ————— Preload —————
+function preloadAyah(s, a) {
+  const link = document.createElement('link');
+  link.rel = 'prefetch';
+  link.href = `ayahs/surah_${s}/ayah_${s}_${a}.html`;
+  document.head.appendChild(link);
+}
+
 
 // ————— Load and Display a Specific Ayah —————
 async function loadAyah(s, a) {
@@ -141,24 +149,26 @@ async function loadAyah(s, a) {
 
   // Load iframe content with fade animation
   D.iframe.classList.add('fade-out');
-  setTimeout(() => {
-    // 👇 attach onload BEFORE setting src
-    D.iframe.onload = () => {
-      console.log('[SwipeHint] iframe onload');
 
-      if (pendingSwipeDone) {
-        console.log('[SwipeHint] sending delayed SWIPE_HINT_DONE');
-        D.iframe.contentWindow.postMessage(
-          { type: 'SWIPE_HINT_DONE' },
-          '*'
-        );
-        pendingSwipeDone = false;
-      }
-    };
+  // attach onload BEFORE src
+  D.iframe.onload = () => {
+    if (pendingSwipeDone) {
+      D.iframe.contentWindow.postMessage(
+        { type: 'SWIPE_HINT_DONE' },
+        '*'
+      );
+      pendingSwipeDone = false;
+    }
+  };
 
-    D.iframe.src = `ayahs/surah_${s}/ayah_${s}_${a}.html`;
+  // navigate immediately
+  D.iframe.src = `ayahs/surah_${s}/ayah_${s}_${a}.html`;
+
+  /*
+  requestAnimationFrame(() => {
     D.iframe.classList.remove('fade-out');
-  }, 150);
+  });
+*/
 
 
   // Update navigation arrows
@@ -187,6 +197,15 @@ async function loadAyah(s, a) {
   }
 
 
+// 🔮 Preload next ayah for instant swipe
+const idx = surahData.findIndex(x => x.number === s);
+const max = surahData[idx]?.ayahCount || 0;
+
+if (a < max) {
+  preloadAyah(s, a + 1);
+} else if (surahData[idx + 1]) {
+  preloadAyah(surahData[idx + 1].number, 1);
+}
 
 
 }
@@ -344,14 +363,25 @@ window.navigateAyah = (dir) => {
     viewer.removeChild(oldFrame);
     newFrame.id = "ayahViewer"; // replace the old iframe
     D.iframe = newFrame; // update reference
-  }, 300);
+  }, 0);
 
   currentSurah = ns;
   currentAyah = na;
 
+  // 🔮 Preload the NEXT ayah after swipe
+  const idx2 = surahData.findIndex(x => x.number === currentSurah);
+  const max2 = surahData[idx2]?.ayahCount || 0;
+
+  if (currentAyah < max2) {
+    preloadAyah(currentSurah, currentAyah + 1);
+  } else if (surahData[idx2 + 1]) {
+    preloadAyah(surahData[idx2 + 1].number, 1);
+  }
 
   // Update dropdowns
   syncDropdowns(currentSurah, currentAyah);
+
+
 
 };
 
@@ -505,9 +535,7 @@ function disableGameMode() {
   D.returnBtn.style.display = 'none';
 }
 
-window.addEventListener('pageshow', () => {
-  document.body.classList.remove('modal-open');
-});
+
 
 
 // ————— Iframe Message Listener (for game events & swipes) —————
