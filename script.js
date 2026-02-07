@@ -2,6 +2,7 @@
 let ayahAudio;
 let audioPanel;
 let playBtn;
+let wordAudio = new Audio();
 let navPlay;
 let navPlayIcon;       // ← add this
 let panelIcon;
@@ -9,1302 +10,96 @@ let floatingBtn;
 let playToggleBtn;
 let currentMode = 'learning';
 let floatingClone = null;
-const DEFAULT_SETTINGS = {
-  audioLang: 'ar',
-  speed: '1',
-  repeat: '1',
-  showWordTranslation: true, // 👈 renamed
-  showRoot: true,
-  showGrammar: true,
-  panelLang: 'en'
-};
-
-
-
-(function applySettingsEarly() {
-  const settings = JSON.parse(localStorage.getItem('qq_settings')) || {};
-  const html = document.documentElement;
-
-  html.classList.toggle('hide-root',        settings.showRoot === false);
-  html.classList.toggle('hide-grammar',     settings.showGrammar === false);
-  html.classList.toggle('hide-word-translation',settings.showWordTranslation === false);
-
-  if (settings.panelLang) {
-    html.setAttribute('data-panel-lang', settings.panelLang);
-  }
-})();
-
-
-function getSettings() {
-  return {
-    ...DEFAULT_SETTINGS,
-    ...(JSON.parse(localStorage.getItem('qq_settings')) || {})
-  };
-}
-
-function saveSettings(patch) {
-  const current = getSettings();
-  localStorage.setItem('qq_settings', JSON.stringify({
-    ...current,
-    ...patch
-  }));
-}
-
-
-let gameStats = {
-  points: 0,
-  lives: 10,
-  earnedToday: false
-};
-
-
-// Add this somewhere globally or before you use `currentAyah`
-const pathMatch = window.location.pathname.match(/ayah_(\d+)_(\d+)/);
+let currentKey = null;
+const root = document.body;
 let currentSurah = 1, currentAyah = 1;
+const audioCache = {};
+const cleanupFns = [];
+const PARENT_ORIGIN = '*';
+let ticking = false;
+const SHOW_DURATION = 3000;
+let hideTimer = null;
+let iframeDomVersion = 0;
+let lastInitVersion  = -1;
+let remainingRepeats = 1;
+let pendingSwipeProgress = null;
+let swipeRAFActive = false;
+let rafSendProgress = false
+let scrollEl;
+let el;
 
+
+
+
+
+
+let isScrolling = false;
+let scrollEndTimer = null;
+const SCROLL_END_DELAY = 120; // ms
+let allowWordHint = true;
+let allowSaveHint = true;
+let appliedSettingsVersion = 0;
+let holdNavVisible = false;
+let saveHintOverlay;
+let saveHint;
+let saveHintText;
+let saveHintLottie;
+let closeSettingsMenuFn = null;
+let settingsOutsideClickHandler = null;
+
+const DISABLE_CONSOLE_LOGS = true;
+if (DISABLE_CONSOLE_LOGS && typeof console !== 'undefined') {
+  const noop = () => {};
+  console.log = noop;
+  console.info = noop;
+  console.debug = noop;
+  console.warn = noop;
+  console.error = noop;
+  console.group = noop;
+  console.groupCollapsed = noop;
+  console.groupEnd = noop;
+  console.time = noop;
+  console.timeEnd = noop;
+}
+
+
+
+
+const pathMatch = window.location.pathname.match(/ayah_(\d+)_(\d+)/);
 if (pathMatch) {
   currentSurah = parseInt(pathMatch[1], 10);
   currentAyah = parseInt(pathMatch[2], 10);
 }
+console.log('[IFRAME] script.js executed', location.pathname);
 
+/* ============================
+   BOOT APPLY SETTINGS (EARLY)
+============================ */
+(() => {
+  try {
+    const raw = localStorage.getItem('qq_settings');
+    if (!raw) return;
+    const settings = JSON.parse(raw);
+    if (!settings || typeof settings !== 'object') return;
 
-
-// 1. toggleElements(type, show)
-//    Shows or hides elements by class based on type and boolean 'show'.
-function toggleElements(type, show) {
-  const html = document.documentElement;
-
-  if (type === 'root-tag') {
-    html.classList.toggle('hide-root', !show);
-    saveSettings({ showRoot: show });
-  }
-
-  if (type === 'pos-tag') {
-    html.classList.toggle('hide-grammar', !show);
-    saveSettings({ showGrammar: show });
-  }
-}
-
-// 2. showPopup(data)
-//    Renders and displays the morphology popup with given data.
-function showPopup(data) {
-  let htmlContent = `<div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px dashed #ccc;padding-bottom:6px;margin-top:0;">
-    <button onclick="hidePopup()" style="position:absolute;top:-14px;left:-14px;background:none;border:none;color:#0a4d68;font-size:20px;font-weight:bold;cursor:pointer;line-height:1;">×</button>
-    <h3 style="font-size:20px;font-weight:bold;margin:0;">🔍 Word Explanation</h3>
-    ${data['Audio URL'] ? `<button class='audio-button' onclick="playAudio('${data['Audio URL']}')" style="padding:6px 12px;font-size:14px;border-radius:8px;background:#0a4d68;color:white;border:none;cursor:pointer;">🔊 Play Word Audio</button>` : ''}
-  </div>
-  <div style="margin-top:12px;line-height:1.8;font-size:15px;text-align:left;">
-  `;
-
-  if (data['Word']) {
-    const normalized = data['Word'].normalize('NFD').replace(/[ً-ٟۖ-ٰۭـ]/g, '').replace('ٱ', 'ا');
-    htmlContent += `<div style="margin-bottom:10px;"><b style="color:#0a4d68;">Word:</b> <span style="font-size:20px;font-weight:bold;">${data['Word']}</span>
-      <button onclick="openSearchTab('${normalized}')" style="margin-left:8px;font-size:12px;padding:4px 8px;border-radius:6px;background:#eef5ff;border:1px solid #ccc;cursor:pointer;">🔍 Look up in Quran</button>
-    </div>`;
-  }
-  if (data['root_from_txt'] || data['tags_joined']) {
-    const rootText = data['root_from_txt'] ? data['root_from_txt'].split('+').join(' + ') : '';
-    const tagText = data['tags_joined'] ? ` <i>(${data['tags_joined'].split('+').join(' + ')})</i>` : '';
-    if (rootText || tagText) htmlContent += `<div><b>Roots:</b> ${rootText}${tagText}</div>`;
-  }
-  if (data['Meaning Of Verb']) htmlContent += `<div><b>Meaning Of Verb:</b> ${data['Meaning Of Verb']}</div>`;
-  if (data['Main Verb Grammar']) htmlContent += `<div><b>Main Verb Grammar:</b> ${data['Main Verb Grammar']}</div>`;
-  if (data['Quran Morph Info']) htmlContent += `<div><b>Suffixes:</b> ${data['Quran Morph Info']}</div>`;
-  if (data['root_from_gpt']) {
-    const countText = data['count_of_verb'] > 0 ? ` <i>(appears ~${data['count_of_verb']} times)</i>` : '';
-    htmlContent += `<div><b>Root Verb:</b> ${data['root_from_gpt']}${countText}</div>`;
-  }
-  if (data['Conjugation Table']) htmlContent += `<div style="margin-top:10px;">${data['Conjugation Table']}</div>`;
-
-  htmlContent += `</div>`;
-  const popup = document.getElementById('popupContent');
-  const overlay = document.getElementById('overlay');
-  popup.innerHTML = htmlContent;
-  overlay.style.display = 'block';
-  popup.style.display = 'block';
-}
-window.showPopup = showPopup;
-
-// 3. hidePopup()
-//    Hides the morphology popup and overlay.
-function hidePopup() {
-  const popup   = document.getElementById('popupContent');
-  const overlay = document.getElementById('overlay');
-
-  popup.style.display = 'none';
-  overlay.style.display = 'none';
-
-  popup.classList.remove('active');
-  overlay.classList.remove('active');
-}
-
-
-// 4. playAudio(url)
-//    Plays a word-specific audio snippet.
-function playAudio(url) {
-  new Audio(url).play();
-}
-window.playAudio = playAudio;
-
-// 5. clearTranslitInputs()
-//    Clears all practice-mode transliteration input fields.
-function clearTranslitInputs() {
-  document.querySelectorAll('.translit-input').forEach(input => {
-    const key = input.dataset.key;
-    if (key) localStorage.removeItem(key);
-    input.value = '';
-    input.dispatchEvent(new Event('input'));
-  });
-}
-
-window.clearTranslitInputs = clearTranslitInputs;
-
-// 6. toggleTranslations()
-//    Toggles visibility of translation hints under inputs.
-function toggleTranslations() {
-  const html = document.documentElement;
-  const hidden = html.classList.toggle('hide-word-translation');
-  saveSettings({ showWordTranslation: !hidden });
-}
-
-
-
-// 7. switchTranslation(lang)
-//    Switches the displayed translation between English and Urdu.
-function switchTranslation(lang) {
-  const enDiv = document.getElementById('englishTranslation');
-  const urDiv = document.getElementById('urduTranslation');
-  const translationDropdown = document.getElementById('translationDropdown');
-
-  if (lang === 'en') {
-    enDiv.style.display = 'block';
-    urDiv.style.display = 'none';
-  } else {
-    enDiv.style.display = 'none';
-    urDiv.style.display = 'block';
-  }
-
-  // close the dropdown
-  translationDropdown.classList.remove('active');
-}
-window.switchTranslation = switchTranslation;
-
-// 8. togglePracticeNav()
-//    Shows/hides the practice (transliteration) section.
-function togglePracticeNav() {
-  const pracNav    = document.getElementById('navPractice');
-  const gamesNav   = document.getElementById('navGames');
-  const modeNav    = document.getElementById('navMode');
-  const learnSec   = document.getElementById('learning-mode-content');
-  const recitSec   = document.getElementById('reciting-mode-content');
-  const transSec   = document.getElementById('translation-section');
-  const gramSec    = document.getElementById('main-grammar-section');
-  const pracBox    = document.getElementById('transliteration-box');
-
-  // are we already in Practice mode?
-  const isOn = pracBox.style.display === 'block';
-
-  // clear any nav-item .active
-  clearNavActive();
-
-  if (!isOn) {
-    // —> TURN ON Practice
-    
-	pracNav.innerHTML = `
-      <span class="material-icons-outlined">more</span>
-      <span class="nav-label">Go Back</span>
-    `;
-    // hide all the “original” sections
-    [learnSec, recitSec, transSec, gramSec].forEach(el => el && (el.style.display = 'none'));
-    // show only transliteration box
-    pracBox.style.display = 'block';
-    // hide the Games & Mode nav-buttons
-    gamesNav.style.display = 'none';
-    modeNav.style.display  = 'none';
-    // re-initialize feedback
-    initTranslitFeedback();
-
-  } else {
-    // —> TURN OFF Practice → restore original view
-    // remove active
-    pracNav.classList.remove('active');
-    // show the section that was active before (we default back to learning)
-    learnSec.style.display = 'block';
-    recitSec.style.display = 'none';
-    transSec.style.display = 'block';
-    gramSec.style.display  = 'block';
-    // hide practice box
-    pracBox.style.display = 'none';
-    // bring back the Games & Mode nav-buttons
-    gamesNav.style.display = '';
-    modeNav.style.display  = '';
-	pracNav.innerHTML = `
-      <span class="material-icons-outlined">edit</span>
-      <span class="nav-label">Practice</span>
-    `;
-  }
-}
-window.togglePracticeNav = togglePracticeNav;
-
-
-
-
-
-
-// 9. togglePlay()
-function togglePlay(e) {
-  e.preventDefault();
-
-  // 2) stop this click from bubbling up to your "back" listener
-  e.stopPropagation();
-  e.stopImmediatePropagation();
-  if (!ayahAudio) return console.error('No ayahAudio element');
-
-  if (ayahAudio.paused) {
-    ayahAudio.play();
-    navPlayIcon.textContent = 'pause';
-    panelIcon.textContent   = 'pause';
-
-    ayahAudio.onended = () => {
-      navPlayIcon.textContent = 'play_arrow';
-      panelIcon.textContent   = 'play_arrow';
-    };
-  } else {
-    ayahAudio.pause();
-    navPlayIcon.textContent = 'play_arrow';
-    panelIcon.textContent   = 'play_arrow';
-  }
-}
-
-
-
-window.togglePlay = togglePlay;
-
-
-// ── Helper to auto-close the settings popup ──
-function attachSettingsAutoClose(btn, menuEl) {
-  // guard against missing parameters
-  if (!btn || !menuEl) return;
-
-  // prevent clicks inside the menu from bubbling up
-  menuEl.addEventListener('click', e => e.stopPropagation());
-
-  // listener that hides when you click outside
-  function _hide(e) {
-    if (!menuEl.contains(e.target) && !btn.contains(e.target)) {
-      menuEl.remove();
-      btn.classList.remove('active');
-      document.removeEventListener('click', _hide);
+    const html = document.documentElement;
+    html.classList.toggle('hide-root', settings.showRoot === false);
+    html.classList.toggle('hide-grammar', settings.showGrammar === false);
+    html.classList.toggle('hide-word-translation', settings.showWordTranslation === false);
+    if (typeof settings.showPanelTranslation === 'boolean') {
+      html.classList.toggle('hide-panel-translation', !settings.showPanelTranslation);
     }
-  }
-
-  // delay so the same click that opened it doesn’t immediately close it
-  setTimeout(() => document.addEventListener('click', _hide), 0);
-}
-
-//10 ── toggleSettingsNav, now with a safe guard around attachSettingsAutoClose ──
-// Helper to show/hide any section by ID
-function toggleSection(id, show) {
-  const el = document.getElementById(id);
-  if (el) el.style.display = show ? 'block' : 'none';
-}
-window.toggleSection = toggleSection;
-
-// Called when user picks panel translation language
-function onPanelLangChange(lang) {
-  saveSettings({ panelLang: lang });
-  document.documentElement.setAttribute('data-panel-lang', lang);
-}
-window.onPanelLangChange = onPanelLangChange;
-
-
-
-// Full Settings popup:
-window.toggleSettingsNav = function (e) {
-  e.preventDefault();
-  e.stopPropagation();
-  e.stopImmediatePropagation();
-  clearNavActive();
-  const btn = document.getElementById('navSettings');
-  btn.classList.add('active');
-
-  // close if already open
-  const existing = document.getElementById('settingsMenu');
-  if (existing) {
-    existing.remove();
-    btn.classList.remove('active');
-    return;
-  }
-
-  const inPractice = document.getElementById('transliteration-box').style.display === 'block';
-  const inRecite   = currentMode === 'reciting';
-
-  // Build popup HTML
-  let menuHTML = `
-    <div id="settingsMenu" class="settings-popup">
-      <div class="sm-header">
-        <i class="material-icons-outlined">settings</i>
-        <span>Settings</span>
-      </div>`;
-
-  // Practice Controls
-  if (inPractice) {
-    menuHTML += `
-      <div class="sm-section-title">Practice Controls</div>
-      <div class="sm-row">
-        <button type="button" class="btn btn-sm" onclick="clearTranslitInputs()">
-          Erase All Inputs
-        </button>
-      </div>`;
-  }
-  // Recite-only: translation panel toggle
-  else if (inRecite) {
-    menuHTML += `
-      <div class="sm-row">
-        <div class="sm-label">
-          <i class="material-icons-outlined">language</i>
-          <span>Show Translations Panel</span>
-        </div>
-        <label class="switch">
-          <input id="toggleAllTrans" type="checkbox"
-                 onchange="toggleSection('translation-section', this.checked)">
-          <span class="slider"></span>
-        </label>
-      </div>`;
-  }
-  // Learn-only: word-level toggles
-  else {
-    menuHTML += `
-      <div class="sm-row">
-        <div class="sm-label">
-          <i class="material-icons-outlined">translate</i>
-          <span>Show Word Translations</span>
-        </div>
-        <label class="switch">
-          <input id="toggleTrans" type="checkbox" onchange="toggleTranslations()">
-          <span class="slider"></span>
-        </label>
-      </div>
-      <div class="sm-row">
-        <div class="sm-label">
-          <i class="material-icons-outlined">account_tree</i>
-          <span>Show Root</span>
-        </div>
-        <label class="switch">
-          <input id="toggleRoot" type="checkbox" onchange="toggleElements('root-tag', this.checked)">
-          <span class="slider"></span>
-        </label>
-      </div>
-      <div class="sm-row">
-        <div class="sm-label">
-          <i class="material-icons-outlined">format_italic</i>
-          <span>Show Grammar</span>
-        </div>
-        <label class="switch">
-          <input id="toggleGram" type="checkbox" onchange="toggleElements('pos-tag', this.checked)">
-          <span class="slider"></span>
-        </label>
-      </div>`;
-  }
-
-  // Audio Settings
-  menuHTML += `
-      <div class="sm-section-title">Audio Settings</div>
-      <div class="sm-row">
-        <div class="sm-label"><i class="material-icons-outlined">language</i><span>Language</span></div>
-        <select id="audioLangSelect" onchange="onAudioLangChange(this.value)">
-          <option value="ar">Arabic</option>
-          <option value="en">English</option>
-          <option value="ur">Urdu</option>
-        </select>
-      </div>
-      <div class="sm-row">
-        <div class="sm-label"><i class="material-icons-outlined">speed</i><span>Speed</span></div>
-        <select id="speedSelect" onchange="onSpeedChange(this.value)">
-          <option value="0.5">0.5×</option>
-          <option value="0.75">0.75×</option>
-          <option value="1">1×</option>
-          <option value="1.25">1.25×</option>
-        </select>
-      </div>
-      <div class="sm-row">
-        <div class="sm-label"><i class="material-icons-outlined">repeat</i><span>Repeat</span></div>
-        <input type="number" id="repeatCount" min="1" max="20" value="1"/>
-      </div>`;
-
-  // **Always** show panel translation language selector, even in Learn
-  menuHTML += `
-      <div class="sm-section-title">Panel Translations</div>
-      <div class="sm-row">
-        <div class="sm-label">
-          <i class="material-icons-outlined">translate</i>
-          <span>Translation Language</span>
-        </div>
-        <select id="translationLangSelect" onchange="onPanelLangChange(this.value)">
-          <option value="en">English</option>
-          <option value="ur">Urdu</option>
-        </select>
-      </div>`;
-
-  // Close container
-  menuHTML += `</div>`;
-
-  // Insert & wire up
-  document.body.insertAdjacentHTML('beforeend', menuHTML);
-  const menuEl = document.getElementById('settingsMenu');
-  menuEl.getBoundingClientRect();
-  menuEl.classList.add('show');
-  attachSettingsAutoClose(btn, menuEl);
-
-  // Sync toggles:
-  if (!inPractice && !inRecite) {
-    document.getElementById('toggleTrans').checked =
-      Array.from(document.querySelectorAll('.toggle-translation'))
-           .some(el => !el.classList.contains('hidden-toggle'));
-    document.getElementById('toggleRoot').checked =
-      Array.from(document.querySelectorAll('.toggle-root'))
-           .some(el => !el.classList.contains('hidden-toggle'));
-    document.getElementById('toggleGram').checked =
-      Array.from(document.querySelectorAll('.toggle-pos'))
-           .some(el => !el.classList.contains('hidden-toggle'));
-  }
-
-  if (inRecite) {
-    const allTrans = document.getElementById('toggleAllTrans');
-    const ts       = document.getElementById('translation-section');
-    if (allTrans) allTrans.checked = ts && ts.style.display !== 'none';
-  }
-
-  const html = document.documentElement;
-
-document.getElementById('toggleRoot').checked =
-  !html.classList.contains('hide-root');
-
-document.getElementById('toggleGram').checked =
-  !html.classList.contains('hide-grammar');
-
-const toggleTrans = document.getElementById('toggleTrans');
-if (toggleTrans) {
-  toggleTrans.checked =
-    !html.classList.contains('hide-word-translation');
-}
-
-
-  // Sync panel language dropdown initial value
- // const currentPanel = document.getElementById('currentLang').innerText.toLowerCase();
- // const panelSelect = document.getElementById('translationLangSelect');
-  // (panelSelect) panelSelect.value = currentPanel === 'urdu' ? 'ur' : 'en';
-
-  // Sync audio selector:
-  const langSelect = document.getElementById('audioLangSelect');
-  const current   = document.getElementById('ayahAudio').src;
-  const arSrc     = document.getElementById('audio-url-ar').dataset.src;
-  const enSrc     = document.getElementById('audio-url-en').dataset.src;
-  const urSrc     = document.getElementById('audio-url-ur').dataset.src;
-  langSelect.value = current === arSrc ? 'ar'
-                   : current === enSrc ? 'en'
-                   : current === urSrc ? 'ur'
-                   : 'ar';
-};
-
-
-
-
-
-// 11. toggleModeNav()
-//     Toggles between "learning" and "reciting" modes globally.
-function toggleModeNav() {
-  // 1) always turn Practice off
-  const pracBox = document.getElementById('transliteration-box');
-  const pracNav = document.getElementById('navPractice');
-  if (pracBox)    pracBox.style.display = 'none';
-  if (pracNav)    pracNav.classList.remove('active');
-
-  // 2) now do the normal Learn/Recite toggle
-  clearNavActive();
-  const btn = document.getElementById('navMode');
-  btn.classList.add('active');
-  currentMode = currentMode === 'learning' ? 'reciting' : 'learning';
-  toggleMode(currentMode);
-}
-window.toggleModeNav = toggleModeNav;
-
-// Helper: toggles mode display
-// Helper: toggles learn/recite display (no longer touches practice)
-function toggleMode(mode) {
-  const learn  = document.getElementById('learning-mode-content');
-  const recit  = document.getElementById('reciting-mode-content');
-
-  // Toggle the two main sections
-  learn.style.display = mode === 'learning' ? 'block' : 'none';
-  recit.style.display = mode === 'reciting' ? 'block' : 'none';
-
-  // Always hide Practice when switching modes
-  document.getElementById('transliteration-box').style.display = 'none';
-
-  // Update the icon
-  document.getElementById('navModeIcon').textContent =
-    mode === 'learning' ? 'psychology' : 'menu_book';
-}
-window.toggleMode = toggleMode;
-
-
-
-
-// switch audio source
-function onAudioLangChange(lang) {
-  saveSettings({ audioLang: lang });
-  const audio       = document.getElementById('ayahAudio');
-  const navIcon     = document.getElementById('navPlayIcon');
-  const panelIconEl = document.querySelector('#playToggleBtn .material-icons-outlined');
-  
-  // Pause immediately
-  audio.pause();
-  // Reset icons to “play”
-  navIcon.textContent     = 'play_arrow';
-  if (panelIconEl) panelIconEl.textContent = 'play_arrow';
-  
-  // Swap the source
-  const newSrc = document.getElementById(`audio-url-${lang}`).dataset.src;
-  if (newSrc) {
-    audio.src  = newSrc;
-    audio.load();
-  }
-}
-window.onAudioLangChange = onAudioLangChange;
-
-
-// change playback speed
-function onSpeedChange(speed) {
-  saveSettings({ speed });
-  document.getElementById('ayahAudio').playbackRate = parseFloat(speed);
-}
-
-window.onSpeedChange     = onSpeedChange;
-
-// AUDIO CONTROL SETUP
-function audioControlSetup() {
-  const langSelect   = document.getElementById('audioLangSelect');
-  const speedSelect  = document.getElementById('speedSelect');
-  const repeatInput  = document.getElementById('repeatCount');
-  const audio        = document.getElementById('ayahAudio');
-  const playIcon     = document.getElementById('navPlayIcon');
-  const panelIcon    = document.querySelector('#playToggleBtn .material-icons-outlined');
-
-  // whenever we change language, reset speed & repeat, stop audio
-  langSelect?.addEventListener('change', () => {
-    // pause immediately
-    audio.pause();
-    // reset speed & repeat UI
-    if (speedSelect)  speedSelect.value = '1';
-    if (repeatInput)  repeatInput.value = '1';
-    // swap src
-    const newSrc = document.getElementById(`audio-url-${langSelect.value}`)?.dataset.src;
-    if (newSrc) {
-      audio.src = newSrc;
-      audio.load();
+    if (settings.panelLang === 'en' || settings.panelLang === 'ur') {
+      html.setAttribute('data-panel-lang', settings.panelLang);
     }
-    // update icons to “play”
-    playIcon.textContent  = 'play_arrow';
-    panelIcon.textContent = 'play_arrow';
-  });
-
-  // speed control
-  speedSelect?.addEventListener('change', () => {
-    audio.playbackRate = parseFloat(speedSelect.value);
-  });
-
-  // repeat control (you’ll need your own loop logic elsewhere)
-  repeatInput?.addEventListener('change', () => {
-    saveSettings({ repeat: repeatInput.value });
-    // e.g. store repeat count for your play-loop logic
-    audio.dataset.repeat = repeatInput.value;
-  });
-
-
-
-}
-
-
-
-// Initialize on DOMContentLoaded
-window.addEventListener('DOMContentLoaded', () => {
-// ===============================
-// Restore saved user settings
-// ===============================
-const settings = getSettings();
-
-/* ── Audio ─────────────────── */
-if (settings.audioLang) {
-  onAudioLangChange(settings.audioLang);
-}
-
-if (settings.speed) {
-  onSpeedChange(settings.speed);
-}
-
-const repeatInput = document.getElementById('repeatCount');
-if (repeatInput && settings.repeat) {
-  repeatInput.value = settings.repeat;
-  ayahAudio.dataset.repeat = settings.repeat;
-}
-
-/* ── Word-level toggles ─────── */
-toggleElements('root-tag', settings.showRoot);
-toggleElements('pos-tag', settings.showGrammar);
-
-document.documentElement.classList.toggle(
-  'hide-word-translation',
-  settings.showWordTranslation === false
-);
-
-
-/* ── Panel translation language ─ */
-onPanelLangChange(settings.panelLang);
-
-const panelSelect = document.getElementById('translationLangSelect');
-if (panelSelect) {
-  panelSelect.value = settings.panelLang;
-}
-
-
-
-  ayahAudio     = document.getElementById('ayahAudio');
-  audioPanel    = document.getElementById('audioControls');
-  playBtn       = document.getElementById('playToggleBtn');
-  navPlay       = document.getElementById('navPlay');
-  panelIcon     = document.querySelector('#playToggleBtn .material-icons-outlined');
-  navPlayIcon   = document.getElementById('navPlayIcon');   // ← add this
-  floatingBtn   = document.getElementById('floatingPlayer');
-  playToggleBtn = document.getElementById('playToggleBtn');
-  const translationDropdown = document.getElementById('translationDropdown');
-  //const translationMenu     = translationDropdown.querySelector('.dropdown-menu-custom');
-  //const translationButton   = translationDropdown.querySelector('.dropdown-button');
-
-  // 1) Grab the two icons by their real IDs/selectors
-    navPlayIcon = document.getElementById('navPlayIcon');
-    panelIcon   = document.querySelector('#playToggleBtn .material-icons-outlined');
-
-
-  // 2) Sanity check—if either is missing, we’ll see it immediately
-  if (!navPlayIcon || !panelIcon) {
-  console.error('Icon element not found:', {
-    navPlayIcon,
-    panelIcon
-  });
-  return;
-}
-
-
-  // 3) Attach your audio play/pause listeners only once you know both exist
-   ayahAudio.addEventListener('play', () => {
-    navPlayIcon.textContent = 'pause';
-    panelIcon.textContent   = 'pause';
-  });
-  ayahAudio.addEventListener('pause', () => {
-    navPlayIcon.textContent = 'play_arrow';
-    panelIcon.textContent   = 'play_arrow';
-  });
-  ayahAudio.addEventListener('ended', () => {
-    navPlayIcon.textContent = 'play_arrow';
-    panelIcon.textContent   = 'play_arrow';
-  });
-
-
-
-  //  ---- Insert audio-control hookup here ----
-  audioControlSetup();
-
-  //  Dropdown wiring for top toggles
-// open/close any dropdown-container when its button is clicked
-document.querySelectorAll('.dropdown-container').forEach(dd => {
-  const btn = dd.querySelector('.dropdown-button');
-  if (!btn) return;  
-  btn.addEventListener('click', e => {
-    e.stopPropagation();
-    // close all others
-    document.querySelectorAll('.dropdown-container.active').forEach(d => {
-      if (d !== dd) d.classList.remove('active');
-    });
-    // toggle this one
-    dd.classList.toggle('active');
-  });
-});
-
-// close dropdowns when clicking outside
-document.addEventListener('click', () => {
-  document.querySelectorAll('.dropdown-container.active')
-          .forEach(dd => dd.classList.remove('active'));
-});
-
-
-  
-  
-  
-  initTranslitFeedback();
-  
-
-  
-  document.querySelectorAll('.translit-input').forEach(input => {
-    const key = input.dataset.key;
-    input.value = localStorage.getItem(key) || '';
-    input.addEventListener('input', () => {
-      localStorage.setItem(key, input.value);
-      translitHandler({ target: input });
-    });
-  });
-
-  // 6) Eraser FAB: clear all caches and inputs
-  const clearBtn = document.getElementById('clearAll');
-  if (clearBtn) {
-    clearBtn.onclick = () => {
-      document.querySelectorAll('.translit-input').forEach(input => {
-        const key = input.dataset.key;
-        localStorage.removeItem(key);
-        input.value = '';
-        input.dispatchEvent(new Event('input'));
-      });
-    };
+  } catch (err) {
+    // Swallow parse errors to avoid blocking iframe boot.
   }
-  
-
-  // 7) Hide/Show Translation FAB
-  const hideTranslationsBtn = document.getElementById('hideTranslations');
-  if (hideTranslationsBtn) {
-    hideTranslationsBtn.onclick = () => {
-      document.querySelectorAll('.toggle-translation')
-              .forEach(el => el.classList.toggle('hidden-toggle'));
-      document.querySelectorAll('.show-translit')
-              .forEach(el => el.style.display = el.style.display === 'none' ? 'block' : 'none');
-    };
-  }
-  
-   
- document.querySelectorAll('.translit-input').forEach(input => {
-    const key = input.dataset.key;
-    if (!key) return;
-
-    // On load: populate from cache
-    const saved = localStorage.getItem(key);
-    if (saved !== null) input.value = saved;
-
-    // On every input: save and run your feedback logic
-    input.addEventListener('input', () => {
-      localStorage.setItem(key, input.value);
-      translitHandler({ target: input });
-    });
-  });
-// Place this once, e.g. in your DOMContentLoaded block:
-document.addEventListener('click', e => {
-  const menu = document.getElementById('settingsMenu');
-  const btn  = document.getElementById('navSettings');
-  if (menu && !menu.contains(e.target) && !btn.contains(e.target)) {
-    menu.remove();
-    btn.classList.remove('active');
-  }
-});
-
- 
-   
-});
-
-
-// 📩 Listen for messages from parent (save progress result)
-window.addEventListener('message', e => {
-  const { type, streakUpdated } = e.data || {};
-
-  if (type === 'SAVE_PROGRESS_SUCCESS') {
-    console.log('✅ iframe: progress saved');
-
-    showToast(
-      streakUpdated
-        ? '🔥 Streak updated!'
-        : '💾 Progress saved'
-    );
-  }
-
-  if (type === 'SAVE_PROGRESS_FAILED') {
-    showToast('⚠️ Could not save progress', '#dc3545');
-  }
-});
-
-function requestSaveProgress() {
-  parent.postMessage(
-    {
-      type: 'SAVE_PROGRESS',
-      surah: currentSurah,
-      ayah: currentAyah,
-      recordStreak: true,
-      timestamp: Date.now()
-    },
-    '*'
-  );
-}
-
-window.addEventListener('message', e => {
-  if (e.data.type === 'REQUEST_SAVE_PROGRESS') {
-    requestSaveProgress();
-  }
-});
-
-
-
-
-
-function openSearchTab(normalizedWord) {
-  const url = `/search_results.html?q=${encodeURIComponent(normalizedWord)}`;
-  window.open(url, "_blank");
-}
-
-// Clear nav helper
-function clearNavActive() {
-  document.querySelectorAll('.bottom-nav .nav-item').forEach(i => i.classList.remove('active'));
-}
-
-///feedback
-
-function initTranslitFeedback() {
-  document.querySelectorAll('.translit-input').forEach(input => {
-    input.removeEventListener('input', translitHandler);
-    input.addEventListener('input', translitHandler);
-  });
-}
-
-function translitHandler(e) {
-  const normalize = s => s.normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .replace(/ʿ/g, '')
-    .replace(/[^a-z]/gi, '')
-    .toLowerCase().trim();
-
-  const levenshtein = (a, b) => {
-    const dp = Array(a.length+1).fill().map(() => Array(b.length+1));
-    for (let i = 0; i <= a.length; i++) dp[i][0] = i;
-    for (let j = 0; j <= b.length; j++) dp[0][j] = j;
-    for (let i = 1; i <= a.length; i++)
-      for (let j = 1; j <= b.length; j++)
-        dp[i][j] = Math.min(
-          dp[i-1][j] + 1,
-          dp[i][j-1] + 1,
-          dp[i-1][j-1] + (a[i-1] === b[j-1] ? 0 : 1)
-        );
-    return dp[a.length][b.length];
-  };
-
-  const expected = normalize(e.target.dataset.expected || '');
-  const actual   = normalize(e.target.value || '');
-  const dist     = levenshtein(actual, expected);
-  const block    = e.target.closest('.word-block-translit');
-
-  block.style.borderColor = 'gray';
-  block.classList.remove('confetti');
-  if (!actual) {
-    block.style.backgroundColor = 'white';
-  } else if (dist === 0) {
-    block.style.backgroundColor = '#d4edda';
-    block.style.borderColor     = '#28a745';
-    block.classList.add('confetti');
-  } else if (dist <= 2) {
-    block.style.backgroundColor = '#fff3cd';
-    block.style.borderColor     = '#ffc107';
-  } else {
-    block.style.backgroundColor = '#f8d7da';
-    block.style.borderColor     = '#dc3545';
-  }
-}
-
-
-
-
-//games
-
-// Verb audio cache
-const audioCache = {};
-
-async function playVerbAudio(verb, tense, linkElement) {
-  const key       = `${verb}_${tense}`;
-  const iconSpan  = linkElement.querySelector(".audio-icon");
-  const baseUrls  = [
-    "https://raw.githubusercontent.com/iwilllearnquran/memorization/main/audio/verbs1/",
-    "https://raw.githubusercontent.com/iwilllearnquran/memorization/main/audio/verbs2/",
-    "https://raw.githubusercontent.com/iwilllearnquran/memorization/main/audio/verbs3/",
-    "https://raw.githubusercontent.com/iwilllearnquran/memorization/main/audio/verbs4/"
-  ];
-
-  // If already cached, just toggle play/pause
-  if (audioCache[key]) {
-    const audio = audioCache[key];
-    if (!audio.paused) {
-      audio.pause();
-      iconSpan && (iconSpan.textContent = "🔊");
-    } else {
-      audio.currentTime = 0;
-      audio.play();
-      iconSpan && (iconSpan.textContent = "⏸️");
-    }
-    return;
-  }
-
-  // Try each base URL by loading via Audio() and catching 'error'
-  for (const base of baseUrls) {
-    const url = `${base}${key}.mp3`;
-    try {
-      const audio = new Audio();
-      let tried = false;
-
-      // If it loads metadata, we know it's valid
-      const onLoaded = () => {
-        if (tried) return;
-        tried = true;
-        audioCache[key] = audio;
-        audio.play();
-        iconSpan && (iconSpan.textContent = "⏸️");
-        audio.removeEventListener("error", onError);
-        audio.removeEventListener("canplaythrough", onLoaded);
-        audio.addEventListener("ended", () => {
-          iconSpan && (iconSpan.textContent = "🔊");
-        });
-      };
-
-      const onError = () => {
-        audio.removeEventListener("error", onError);
-        audio.removeEventListener("canplaythrough", onLoaded);
-        // move on to next base URL
-      };
-
-      audio.addEventListener("canplaythrough", onLoaded, { once: true });
-      audio.addEventListener("error",          onError,   { once: true });
-
-      // Kick off loading
-      audio.src = url;
-      audio.load();
-
-      // Wait up to 2 seconds to decide if canplaythrough happened
-      await new Promise(res => setTimeout(res, 2000));
-      if (tried) return;        // it did load
-    } catch (e) {
-      // ignore and try next
-    }
-  }
-
-  // nothing worked
-  alert(`⚠️ Audio for "${verb}" (${tense}) not found.`);
-}
-
-/*
-window.addEventListener('DOMContentLoaded', () => {
-  const nav           = document.querySelector('.bottom-nav');
-  const playBtn       = document.getElementById('playToggleBtn');
-  const audio         = document.getElementById('ayahAudio');
-  const SHOW_DURATION = 3000;
-  let   hideTimer;
-
-  // your existing showNav() + scheduleHide() …
-  function scheduleHide() {
-    clearTimeout(hideTimer);
-    hideTimer = setTimeout(() => nav.classList.remove('visible'), SHOW_DURATION);
-  }
-  function showNav() {
-    nav.classList.add('visible');
-    scheduleHide();
-  }
-
-  // --- NEW: audio hook to “pop out” the playBtn ---
-  function floatPlayBtn() {
-    // 1) remove it from the nav
-    nav.removeChild(playBtn);
-    // 2) append to body and fix at bottom-centre
-    document.body.appendChild(playBtn);
-    Object.assign(playBtn.style, {
-      position:   'fixed',
-      bottom:     '16px',
-      left:       '50%',
-      transform:  'translateX(-50%)',
-      zIndex:     9999,
-    });
-    // hide the rest of the nav immediately
-    nav.classList.remove('visible');
-  }
-
-  function reattachPlayBtn() {
-    // remove from body
-    document.body.removeChild(playBtn);
-    // clear the inline styles
-    playBtn.style.position  = '';
-    playBtn.style.bottom    = '';
-    playBtn.style.left      = '';
-    playBtn.style.transform = '';
-    playBtn.style.zIndex    = '';
-    // put back into the nav at its original spot
-    nav.appendChild(playBtn);
-    // then re-show the nav for 3s
-    showNav();
-  }
-
-  // --- wire audio events ---
-  audio.addEventListener('play', () => {
-    floatPlayBtn();
-  });
-  audio.addEventListener('pause', () => {
-    reattachPlayBtn();
-  });
-  audio.addEventListener('ended', () => {
-    reattachPlayBtn();
-  });
-
-  // --- keep your existing logic for load/scroll/settings ---
-  showNav();  // on load
-  window.addEventListener('scroll', showNav, { passive: true });
-
-  document.body.addEventListener('click', e => {
-    if (e.target.closest('#navSettings')) {
-      nav.classList.add('visible');
-      clearTimeout(hideTimer);
-    }
-  });
-
-  new MutationObserver(muts => {
-    muts.forEach(m => {
-      m.removedNodes.forEach(n => {
-        if (n.id === 'settingsMenu') showNav();
-      });
-    });
-  }).observe(document.body, { childList: true });
-
-  document.querySelectorAll('.bottom-nav .nav-item')
-          .forEach(i => i.addEventListener('click', showNav));
-});
-*/
-window.addEventListener('DOMContentLoaded', () => {
-  const nav           = document.querySelector('.bottom-nav');
-  const playBtn       = document.getElementById('playToggleBtn');
-  const audio         = document.getElementById('ayahAudio');
-  const SHOW_DURATION = 3000;
-  let   hideTimer;
-  
-
-  // auto-hide scheduler
-  function scheduleHide() {
-    clearTimeout(hideTimer);
-    hideTimer = setTimeout(() => nav.classList.remove('visible'), SHOW_DURATION);
-  }
-
-  // show nav + restart timer
-  function showNav() {
-    nav.classList.add('visible');
-    scheduleHide();
-  }
-
-  // placeholder for re-insertion
-  //const placeholder = document.createComment('play-btn-placeholder');
-  //nav.insertBefore(placeholder, playBtn);
-  
-  placeholder = document.createElement('div');
-  placeholder.className = 'nav-item play-btn-placeholder';
-  // copy computed dimensions & margins from the real button
-  const cs = getComputedStyle(playBtn);
-  placeholder.style.cssText = `
-    width:       ${cs.width};
-    height:      ${cs.height};
-    margin-top:  ${cs.marginTop};
-    margin-left: ${cs.marginLeft};
-    margin-right:${cs.marginRight};
-    visibility:  hidden;
-    flex-shrink: 0;
-  `;
-
-  // float the button out of the nav into the body
-  function floatPlayBtn() {
-    if (playBtn.parentNode === nav) {
-      // insert our placeholder before we yank the real button out
-      nav.insertBefore(placeholder, playBtn);
-      nav.removeChild(playBtn);
-
-      document.body.appendChild(playBtn);
-      Object.assign(playBtn.style, {
-        position:  'fixed',
-        bottom:    '38px',
-        left:      '50%',
-        transform: 'translateX(-50%)',
-        zIndex:    '9999',
-      });
-      scheduleHide();
-    }
-  }
-
-  // put it back into the nav at the placeholder
-  function reattachPlayBtn() {
-    if (playBtn.parentNode === document.body) {
-      document.body.removeChild(playBtn);
-      // clear the inline styles
-      ['position','bottom','left','transform','zIndex'].forEach(p => playBtn.style[p] = '');
-      // swap placeholder back out for the real button
-      nav.replaceChild(playBtn, placeholder);
-      showNav();
-    }
-  }
-
-  // wire audio events
-  audio.addEventListener('play',  () => floatPlayBtn());
-  audio.addEventListener('pause', () => reattachPlayBtn());
-  audio.addEventListener('ended', () => reattachPlayBtn());
-
-  // initial load + scroll
-  // initial load + scroll
-  showNav();
-  window.addEventListener('scroll', showNav, { passive: true });
-
-  // NEW: clicking anywhere on the screen brings nav back
-  document.body.addEventListener('click', showNav);
-  
-  // prevent nav reappearing when clicking inputs or popup overlays
-  document.body.addEventListener('click', e => {
-    if (!e.target.closest('input, textarea, .popup')) {
-      showNav();
-    }
-  });
-  
-
-
-  // keep visible while settings are open, re-hide after closing
-  document.body.addEventListener('click', e => {
-    if (e.target.closest('#navSettings')) {
-      nav.classList.add('visible');
-      clearTimeout(hideTimer);
-    }
-  });
-  new MutationObserver(muts => {
-    muts.forEach(m => m.removedNodes.forEach(n => {
-      if (n.id === 'settingsMenu') showNav();
-    }));
-  }).observe(document.body, { childList: true });
-
-  // clicking any nav item also resets the 3s timer
-  document.querySelectorAll('.bottom-nav .nav-item')
-          .forEach(i => i.addEventListener('click', showNav));
-});
-
-function showToast(message, color = '#333') {
-  const toast = document.createElement('div');
-  toast.textContent = message;
-  toast.style.cssText = `
-    position: fixed;
-    bottom: 60px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: ${color};
-    color: white;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 14px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    z-index: 9999;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  `;
-  document.body.appendChild(toast);
-  requestAnimationFrame(() => toast.style.opacity = 1);
-
-  setTimeout(() => {
-    toast.style.opacity = 0;
-    setTimeout(() => toast.remove(), 300);
-  }, 1800);
-  
-}
-
-// ===============================
-// Swipe detection inside iframe → notify parent
-// ===============================
-function initIframeSwipe() {
-  const root = document.body;
-  let startX = 0, startY = 0, isDragging = false;
-
-  // --- Touch (mobile) ---
-  root.addEventListener('touchstart', e => {
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-  }, { passive: true });
-
-  root.addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].clientX - startX;
-    const dy = e.changedTouches[0].clientY - startY;
-
-    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
-      if (dx < 0) {
-        window.parent.postMessage({ type: "QQ_SWIPE", dir: 1 }, "*");
-      } else {
-        window.parent.postMessage({ type: "QQ_SWIPE", dir: -1 }, "*");
-      }
-    }
-  });
-
-  // --- Mouse (desktop) ---
-  root.addEventListener('mousedown', e => {
-    isDragging = true;
-    startX = e.clientX;
-    startY = e.clientY;
-  });
-
-  root.addEventListener('mouseup', e => {
-    if (!isDragging) return;
-    isDragging = false;
-    const dx = e.clientX - startX;
-    const dy = e.clientY - startY;
-
-    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
-      if (dx < 0) {
-        window.parent.postMessage({ type: "QQ_SWIPE", dir: 1 }, "*");
-      } else {
-        window.parent.postMessage({ type: "QQ_SWIPE", dir: -1 }, "*");
-      }
-    }
-  });
-
-  root.addEventListener('mouseleave', () => {
-    if (isDragging) 
-    isDragging = false;
-  });
-
-}
-
-window.addEventListener('DOMContentLoaded', () => {
-  initIframeSwipe();      // your existing swipe
-  initScrollEdgeSwipe(); // ✅ reels-like scroll
-});
-
-
-// ===============================
-// Reels-style scroll edge trigger
-// ===============================
-function initScrollEdgeSwipe() {
-  let locked = false;
-
-  window.addEventListener('scroll', () => {
-    if (locked) return;
-
-    const scrollTop    = window.scrollY;
-    const windowH      = window.innerHeight;
-    const docH         = document.documentElement.scrollHeight;
-
-    const nearBottom = scrollTop + windowH >= docH - 40;
-    const nearTop    = scrollTop <= 0;
-
-    if (nearBottom) {
-      locked = true;
-      parent.postMessage({ type: 'QQ_SWIPE', dir: 1 }, '*');
-      setTimeout(() => (locked = false), 700);
-    }
-
-    if (nearTop) {
-      locked = true;
-      parent.postMessage({ type: 'QQ_SWIPE', dir: -1 }, '*');
-      setTimeout(() => (locked = false), 700);
-    }
-  }, { passive: true });
-}
-
-
-///--- Games Explanation ---
+})();
+
+/* ============================
+    GRAMMAR EXPLANATIONS
+============================ */
 const grammarExplanations = {
 
   nominative: `
@@ -1468,186 +263,3029 @@ const grammarExplanations = {
   `
 };
 
+/*************************************************
+ * LOGGER — NAMESPACED DEBUG LOGGING
+ *************************************************/
 
-(function initWordClickHint() {
-  const WORD_KEY  = 'word_click_hint_shown_v1';
-  const SWIPE_KEY = 'swipe_hint_shown_v1';
+const LOG = {
+  ui:     (...args) => console.log('[UI]', ...args),
+  audio:  (...args) => console.log('[AUDIO]', ...args),
+  swipe:  (...args) => console.log('[SWIPE]', ...args),
+  popup:  (...args) => console.log('[POPUP]', ...args),
+  init:   (...args) => console.log('[INIT]', ...args),
+  debug:  (...args) => console.log('[DEBUG]', ...args),
+  iframe: (...args) => console.log('[IFRAME]', ...args), 
+};
 
-  if (localStorage.getItem(WORD_KEY)) {
-    console.log('[WordHint] already shown — skipping');
-    return;
-  }
 
-  function start() {
-    if (localStorage.getItem(WORD_KEY)) return;
 
-    function tryInit() {
-      const firstWord = document.querySelector('.word-block');
-      if (!firstWord) return requestAnimationFrame(tryInit);
+    /* ==========================================================
+   SWIPE ENGINE (MOVED FROM PARENT → IFRAME)
+   Logic preserved 1:1
+========================================================== */
 
-      console.log('[WordHint] starting immediately after swipe');
-      showWordHint(firstWord);
+      let swipeStartX = 0;
+      let swipeStartY = 0;
+      let swipeDX = 0; //distance
+      let swipeStartTime = 0;
+      let isSwiping = false;
+      let swipeCommitted = false;
+      let swipeLocked = false;
+      let swipeDir = 0; // -1 = right, 1 = left
+      let hasPointerCapture = false;
+      let swipeScrollLocked = false;
+
+      function lockSwipeScroll() {
+        if (!swipeScrollLocked) {
+          document.body.style.overflow = 'hidden';
+          swipeScrollLocked = true;
+        }
+      }
+
+      function unlockSwipeScroll() {
+        if (swipeScrollLocked) {
+          document.body.style.overflow = '';
+          swipeScrollLocked = false;
+        }
+      }
+
+
+      // 🔑 SAME FEEL CONSTANTS
+      const SWIPE_DISTANCE = 600;
+      const SWIPE_VELOCITY = 2;
+      const VERTICAL_RATIO = 1.2;
+      const INTENT_DISTANCE = 0;
+      const DRAG_DAMPING = 0.88;
+      let lastSettings = null;
+
+      const SWIPE_IGNORE_SELECTOR = [
+        '.bottom-nav',
+        '#settingsMenu',
+        '.settings-popup',
+        '#overlay',
+        '#popupContent'
+      ].join(',');
+
+      function shouldIgnoreSwipeTarget(target) {
+        if (!(target instanceof Element)) return false;
+        return !!target.closest(SWIPE_IGNORE_SELECTOR);
+      }
+
+      const SWIPE_DEBUG_TAPS = false;
+      function debugSwipeState(label, e) {
+        if (!SWIPE_DEBUG_TAPS) return;
+        const target = e?.target;
+        const tag = target?.tagName;
+        const id = target?.id ? `#${target.id}` : '';
+        const cls = target?.className ? `.${String(target.className).split(' ').join('.')}` : '';
+        console.log(`[SWIPE][DBG] ${label}`, {
+          swipeLocked,
+          isScrolling,
+          isSwiping,
+          swipeDir,
+          target: `${tag || 'unknown'}${id}${cls}`
+        });
+      }
+      
+      let lastSentFrame = 0;
+      let swipeBaseWidth = 0;
+
+      function onSwipePointerDown(e) {
+        debugSwipeState('pointerdown:before', e);
+        if (shouldIgnoreSwipeTarget(e.target)) {
+          debugSwipeState('pointerdown:ignored-target', e);
+          return;
+        }
+        hasPointerCapture = false;
+
+        console.groupCollapsed('%c[SWIPE ↓] pointerdown', 'color:#4CAF50;font-weight:bold');
+
+        console.log('BEFORE', {
+          swipeDir,
+          lastSentFrame,
+          swipeStartX,
+          swipeStartY,
+          isSwiping,
+          swipeCommitted,
+          swipeLocked
+        });
+
+        if (swipeLocked) {
+          if (isScrolling) {
+            console.warn('Swipe ignored → swipeLocked = true');
+            debugSwipeState('pointerdown:blocked-scrolling', e);
+            console.groupEnd();
+            return;
+          }
+          // Clear stale lockouts after taps/clicks.
+          swipeLocked = false;
+          debugSwipeState('pointerdown:cleared-stale-lock', e);
+        }
+
+        // reset state
+        swipeDir = 0;
+        lastSentFrame = 0;
+
+        swipeStartX = e.screenX;
+        swipeStartY = e.screenY;
+        swipeStartTime = performance.now();
+        isSwiping = true;
+        swipeCommitted = false;
+
+        window.parent.postMessage({ type: 'SWIPE_START' }, '*');
+
+        console.log('AFTER', {
+          swipeDir,
+          lastSentFrame,
+          swipeStartX,
+          swipeStartY,
+          isSwiping,
+          swipeCommitted,
+          swipeLocked,
+          time: swipeStartTime.toFixed(1)
+        });
+
+        console.groupEnd();
+      }
+
+      function onSwipePointerMove(e) {
+        debugSwipeState('pointermove', e);
+        if (!isSwiping || swipeLocked) return;
+
+        const dx = e.screenX - swipeStartX;
+        const dy = e.screenY - swipeStartY;
+
+        console.groupCollapsed(
+          `%c[SWIPE →] pointermove`,
+          'color:#03A9F4;font-weight:bold'
+        );
+
+        console.log('Movement', {
+          dx: dx.toFixed(1),
+          dy: dy.toFixed(1),
+          swipeDir,
+          isSwiping
+        });
+
+        /* --------------------------------------------------
+          🚫 Vertical intent → cancel swipe
+        -------------------------------------------------- */
+        if (!swipeDir && Math.abs(dy) > Math.abs(dx) * VERTICAL_RATIO) {
+          console.warn('[SWIPE →] Vertical intent detected → cancelling swipe');
+
+          isSwiping = false;
+          swipeDir = 0;
+          swipeDX = 0;
+          lastSentFrame = 0;
+          unlockSwipeScroll();
+
+          window.parent.postMessage({ type: 'SWIPE_CANCEL' }, '*');
+
+          console.groupEnd();
+          return;
+        }
+
+        /* --------------------------------------------------
+          🔒 Lock horizontal direction (once, intentionally)
+        -------------------------------------------------- */
+        if (!swipeDir && Math.abs(dx) > INTENT_DISTANCE) {
+          swipeDir = dx < 0 ? 1 : -1;
+          lockSwipeScroll();
+
+          console.log('[SWIPE →] Horizontal intent LOCKED', {
+            swipeDir,
+            reason: `|dx| > ${INTENT_DISTANCE}`
+          });
+          if (e.pointerId && el.setPointerCapture) {
+            try {
+              el.setPointerCapture(e.pointerId);
+              hasPointerCapture = true;
+            } catch (err) {}
+          }
+        }
+
+        if (!swipeDir) {
+          console.log(' [SWIPE →] No intent yet → waiting');
+          console.groupEnd();
+          return;
+        }
+
+        /* --------------------------------------------------
+          🧲 Rubber band calculation
+        -------------------------------------------------- */
+        function rubberBand(distance, dimension) {
+          const resistance = 0.55;
+          return (distance * dimension) /
+                (dimension + resistance * Math.abs(distance));
+        }
+
+        const width = swipeBaseWidth || window.innerWidth;
+        const dampedDX = dx * DRAG_DAMPING;
+        swipeDX = dampedDX;
+
+        console.log('[SWIPE →] Drag applied', {
+          rawDX: dx.toFixed(1),
+          dampedDX: swipeDX.toFixed(1),
+          progress: (swipeDX / width).toFixed(3)
+        });
+
+        /* --------------------------------------------------
+          🚀 RAF-throttled progress send
+        -------------------------------------------------- */
+        if (!rafSendProgress) {
+          rafSendProgress = true;
+
+          requestAnimationFrame(() => {
+            rafSendProgress = false;
+
+            // ensure last drag position is applied
+      window.parent.postMessage({
+        type: 'SWIPE_PROGRESS',
+        dir: swipeDir,
+        dx: swipeDX,
+        progress: swipeDX / width,
+        width
+      }, '*');
+
+
+            console.log('[SWIPE →] SWIPE_PROGRESS sent');
+          });
+        }
+
+        console.groupEnd();
+      }
+
+      function onSwipePointerUp(e) {
+    debugSwipeState('pointerup:before', e);
+    unlockSwipeScroll();
+    if (hasPointerCapture && e.pointerId && el.releasePointerCapture) {
+      try { el.releasePointerCapture(e.pointerId); } catch (err) {}
     }
-    tryInit();
-  }
+    hasPointerCapture = false;
 
-  // ✅ Case 1: swipe already finished
-  if (localStorage.getItem(SWIPE_KEY)) {
-    start();
-    return;
-  }
+    console.groupCollapsed(
+      '%c[SWIPE ↑] pointerup',
+      'color:#FF5722;font-weight:bold'
+    );
 
-  // ✅ Case 2: swipe finishes NOW (same render)
-  console.log('[WordHint] waiting for swipeHintFinished event');
-
-  window.addEventListener('swipeHintFinished', start, { once: true });
-})();
-
-
-
-function showWordHint(wordEl) {
-  console.log('[WordHint] showWordHint called');
-
-  const overlay   = document.getElementById('wordHintOverlay');
-  const hint      = document.getElementById('wordHint');
-  const container = document.getElementById('wordHintLottie');
-
-  if (!overlay || !hint || !container || !window.lottie) {
-    console.warn('[WordHint] missing elements');
-    return;
-  }
-
-  overlay.classList.remove('hidden');
-
-  // 🔁 position function (reusable)
-  function position() {
-    const rect = wordEl.getBoundingClientRect();
-
-    const scrollX = window.scrollX || window.pageXOffset;
-    const scrollY = window.scrollY || window.pageYOffset;
-
-    const scale = 4;
-    const width  = rect.width * scale;
-    const height = rect.height * scale;
-
-    const left = rect.left + scrollX + rect.width / 2 - width / 2;
-    const top  = rect.top  + scrollY + rect.height / 2 - height / 2;
-
-    hint.style.width  = `${width}px`;
-    hint.style.height = `${height}px`;
-    hint.style.left   = `${left}px`;
-    hint.style.top    = `${top}px`;
-
-    console.log('[WordHint] repositioned');
-  }
-
-  // 🧠 wait for layout to settle
-  requestAnimationFrame(() => {
-    requestAnimationFrame(position);
-  });
-
-  // 🎬 lottie
-  container.innerHTML = '';
-  const anim = lottie.loadAnimation({
-    container,
-    renderer: 'svg',
-    loop: true,
-    autoplay: true,
-    path: '/utils/assets/tap.json'
-  });
-  anim.setSpeed(0.6);
-
-  // 👀 🔑 RESIZE OBSERVER — THIS IS WHERE IT GOES
-  const ro = new ResizeObserver(() => {
-    console.log('[WordHint] word resized → reposition');
-    position();
-  });
-  ro.observe(wordEl);
-
-  // 🧹 CLEANUP
-  function stop(reason) {
-    console.log('[WordHint] stopping:', reason);
-    ro.disconnect();          // 👈 VERY IMPORTANT
-    anim.destroy();
-    overlay.classList.add('hidden');
-    localStorage.setItem('word_click_hint_shown_v1', '1');
-  }
-
-  // stop on click
-  document.querySelectorAll('.word-block')
-    .forEach(el => el.addEventListener('click', () => stop('word-click'), { once: true }));
-
-  // stop after time
-  setTimeout(() => stop('timeout'), 3500);
-}
-
-
-
-
-
-function showGrammarPopup(type) {
-  console.log('[GrammarPopup] Requested type:', type);
-
-  const content = grammarExplanations[type];
-  if (!content) {
-    console.warn('[GrammarPopup] No explanation found for type:', type);
-    return;
-  }
-
-  console.log('[GrammarPopup] Found explanation content, length:', content.length);
-
-  // Close any existing popup first
-  console.log('[GrammarPopup] Closing any existing popup');
-  hidePopup();
-
-  const popup   = document.getElementById("popupContent");
-  const overlay = document.getElementById("overlay");
-
-  if (!popup || !overlay) {
-    console.error('[GrammarPopup] Missing popup or overlay element', {
-      popupFound: !!popup,
-      overlayFound: !!overlay
+    console.log('State BEFORE decision', {
+      isSwiping,
+      swipeLocked,
+      swipeDir,
+      swipeCommitted
     });
-    return;
-  }
 
-  console.log('[GrammarPopup] Popup and overlay elements found');
+    if (!isSwiping || swipeLocked) {
+      console.warn('PointerUp ignored', { isSwiping, swipeLocked });
+      debugSwipeState('pointerup:ignored', e);
+      console.groupEnd();
+      return;
+    }
 
-  // Inject content
-  popup.innerHTML = content;
-  console.log('[GrammarPopup] Content injected into popup');
+    const dx = e.screenX - swipeStartX;
+    const dy = e.screenY - swipeStartY;
+    const dt = performance.now() - swipeStartTime;
+    const velocity = Math.abs(dx) / dt;
 
-  // Make visible
-  popup.style.display = 'block';
-  overlay.style.display = 'block';
-  console.log('[GrammarPopup] Display styles set to block');
+    console.log('Raw gesture data', {
+      dx: dx.toFixed(1),
+      dy: dy.toFixed(1),
+      dt: dt.toFixed(1),
+      velocity: velocity.toFixed(3)
+    });
 
-  // Activate animations / classes
-  popup.classList.add("active");
-  overlay.classList.add("active");
-  console.log('[GrammarPopup] Active classes added — popup should now be visible');
-}
+    isSwiping = false;
+    unlockSwipeScroll();
 
-// ------- save Progress
-function requestSaveProgress() {
-  console.log('📤 iframe: sending SAVE_PROGRESS', {
-    surah: currentSurah,
-    ayah: currentAyah,
-    recordStreak: true
-  });
+    // Tap without swipe intent: let normal click flow.
+    if (!swipeDir && Math.abs(dx) < INTENT_DISTANCE && Math.abs(dy) < INTENT_DISTANCE) {
+      swipeCommitted = false;
+      console.groupEnd();
+      return;
+    }
 
-  parent.postMessage(
-    {
-      type: 'SAVE_PROGRESS',
-      surah: currentSurah,
-      ayah: currentAyah,
-      recordStreak: true,   // ✅ ADD THIS
-      timestamp: Date.now()
-    },
-    '*'
-  );
-}
+    /* --------------------------------------------------
+      🚫 Vertical wins → cancel
+    -------------------------------------------------- */
+    if (Math.abs(dy) > Math.abs(dx)) {
+      console.warn('Vertical movement wins → CANCEL swipe');
+
+      window.parent.postMessage({ type: 'SWIPE_CANCEL' }, '*');
+
+      swipeDir = 0;
+      swipeCommitted = false;
+
+      console.groupEnd();
+      return;
+    }
+
+    /* --------------------------------------------------
+      🎯 Reels-style commit logic
+    -------------------------------------------------- */
+    const width = swipeBaseWidth || window.innerWidth;
+
+    const distance = Math.abs(dx);
+    const speed = Math.min(velocity, 1.6); // clamp for stability
+
+    const minDist = width * 0.12; // fast swipe
+    const maxDist = width * 0.45; // slow swipe
+
+    const t = Math.min(speed / 1.1, 1); // normalize velocity
+    const requiredDistance = maxDist - (maxDist - minDist) * t;
+    const quickFlick = speed > 0.1 && distance > width * 0.0001; // very short but fast
 
 
+
+    const commitByDistance = distance > requiredDistance;
+    const commitBySpeed = speed > 0.45;
+    const commit = commitByDistance || commitBySpeed || quickFlick;;
+
+    console.log('Commit evaluation', {
+      distance: distance.toFixed(1),
+      requiredDistance: requiredDistance.toFixed(1),
+      speed: speed.toFixed(3),
+      commitByDistance,
+      commitBySpeed,
+      commit
+    });
+
+    /* --------------------------------------------------
+      ✅ Commit OR ❌ Cancel
+    -------------------------------------------------- */
+    if (commit) {
+      swipeCommitted = true;
+      const dir = dx > 0 ? -1 : 1;
+
+      console.log('✅ SWIPE COMMITTED', { dir });
+
+      window.parent.postMessage({
+        type: 'SWIPE_COMMIT',
+        dir
+      }, '*');
+    } else {
+      console.log('↩️ Swipe cancelled → snap back');
+
+      swipeCommitted = false;
+
+      window.parent.postMessage({
+        type: 'SWIPE_CANCEL'
+      }, '*');
+    }
+
+    /* --------------------------------------------------
+      🧹 Cleanup & lockout
+    -------------------------------------------------- */
+    swipeDir = 0;
+    swipeLocked = true;
+
+    console.log('Cleanup', {
+      swipeDir,
+      swipeLocked
+    });
+
+    requestAnimationFrame(() => {
+      swipeLocked = false;
+      debugSwipeState('swipe-unlocked-timeout', e);
+      console.log('Swipe unlocked');
+    });
+
+    console.groupEnd();
+      }
+
+      
+      // SET_SWIPE_WIDTH handled in onParentMessage
+
+
+/*************************************************
+ * Helpers
+ *************************************************/
+      function on(el, event, handler, opts) {
+        el.addEventListener(event, handler, opts);
+        cleanupFns.push(() => el.removeEventListener(event, handler, opts));
+      }
+
+      function resetNavVisibility() {
+        if (!nav) return;
+
+        nav.classList.remove('visible');
+        clearTimeout(hideTimer);
+
+        // optional but clean
+        nav.style.transition = 'none';
+        nav.getBoundingClientRect(); // force reflow
+        nav.style.transition = '';
+      }
+
+      function getSurahAyahFromURL() {
+        const path = window.location.pathname;
+
+        console.log('[URL] Parsing surah/ayah from path:', path);
+
+        const match = path.match(
+          /surah_(\d+)\/ayah_\d+_(\d+)\.html/
+        );
+
+        if (!match) {
+          console.warn('[URL] No surah/ayah match found');
+          return null;
+        }
+
+        const surah = Number(match[1]);
+        const ayah  = Number(match[2]);
+
+        console.log('[URL] Parsed location:', { surah, ayah });
+
+        return { surah, ayah };
+      }
+
+      function notifyParentPracticeMode(isOn) {
+          window.parent.postMessage(
+            {
+              type: 'PRACTICE_MODE',
+              active: isOn
+            },
+            '*' // or restrict to your domain later
+          );
+      }
+
+      function clearNavActive() {
+        document
+          .querySelectorAll('.bottom-nav .nav-item')
+          .forEach(item => item.classList.remove('active'));
+      }
+      window.clearNavActive = clearNavActive;
+
+      function resetApp() {
+        // Run all registered cleanup functions
+        cleanupFns.forEach(fn => {
+          try {
+            fn();
+          } catch (err) {
+            console.warn('[CLEANUP] Error during cleanup', err);
+          }
+        });
+
+        // Clear cleanup registry
+        cleanupFns.length = 0;
+
+        // Reset one-time init guards so re-init works
+        if (typeof initNav === 'function') {
+          initNav.done = false;
+        }
+
+        if (typeof initMessaging === 'function') {
+          initMessaging.done = false;
+        }
+
+        console.log('[INIT] App reset complete');
+        
+        isScrolling = false;
+        swipeLocked = false;
+        isSwiping = false;
+        swipeCommitted = false;
+      }
+
+      function waitForAudioLoad(audio) {
+        return new Promise((resolve, reject) => {
+          audio.addEventListener('canplaythrough', resolve, { once: true });
+          audio.addEventListener('error', reject, { once: true });
+        });
+      }
+
+      function bindAyahScroll() {
+       
+
+        if (!scrollEl) {
+          console.warn('[IFRAME] ayahScroll not found — scroll disabled');
+          return;
+        }
+
+        // prevent duplicate listeners
+        scrollEl.removeEventListener('scroll', onScroll);
+        scrollEl.addEventListener('scroll', onScroll, { passive: true });
+
+        console.log('[IFRAME] ayahScroll scroll listener bound');
+      }
+
+      function bindSwipeEngine() {
+
+        
+        
+        if (!el) {
+          el = document.body;
+        }
+console.log('[SWIPE] Bound to element:', el?.id || el?.tagName);
+
+        el.removeEventListener('pointerdown', onSwipePointerDown, true);
+        el.removeEventListener('pointerup', onSwipePointerUp, true);
+        el.removeEventListener('pointercancel', onSwipePointerUp, true);
+        el.removeEventListener('pointermove', onSwipePointerMove, true);
+
+el.addEventListener('pointerdown', onSwipePointerDown, { passive: false, capture: true });
+el.addEventListener('pointerup', onSwipePointerUp, { passive: false, capture: true });
+el.addEventListener('pointercancel', onSwipePointerUp, { passive: false, capture: true });
+el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture: true });
+
+        // Ensure taps/clicks don’t leave swipe locked.
+        el.removeEventListener('click', unlockSwipeLock, true);
+        el.addEventListener('click', unlockSwipeLock, { capture: true });
+
+        if (SWIPE_DEBUG_TAPS) {
+          document.removeEventListener('click', debugSwipeDocClick, true);
+          document.addEventListener('click', debugSwipeDocClick, { capture: true });
+        }
+
+
+      }
+
+      function unlockSwipeLock() {
+        debugSwipeState('click:unlockSwipeLock', null);
+        if (!isScrolling) {
+          swipeLocked = false;
+        }
+      }
+
+      function debugSwipeDocClick(e) {
+        debugSwipeState('document:click', e);
+      }
+
+/*************************************************
+ * SETTINGS APPLICATION (FROM PARENT)
+ *************************************************/
+      /**
+       * Applies persisted user settings to the iframe UI.
+       * Called when parent sends updated settings.
+       *
+       * @param {Object} settings
+       * @param {boolean} settings.showRoot
+       * @param {boolean} settings.showGrammar
+       * @param {boolean} settings.showWordTranslation
+       * @param {boolean} settings.showPanelTranslation
+       * @param {string}  settings.panelLang
+       * @param {number}  settings.speed
+       */
+      function applySettings(settings) {
+        LOG.iframe('Applying settings', settings);
+        lastSettings = settings || lastSettings;
+
+        const html = document.documentElement;
+
+        // Visibility toggles
+        html.classList.toggle('hide-root', settings.showRoot === false);
+        html.classList.toggle('hide-grammar', settings.showGrammar === false);
+        html.classList.toggle('hide-word-translation', settings.showWordTranslation === false);
+        if (typeof settings.showPanelTranslation === 'boolean') {
+          setPanelTranslationVisible(settings.showPanelTranslation);
+        }
+
+        // Panel translation language
+        if (settings.panelLang) {
+          html.setAttribute('data-panel-lang', settings.panelLang);
+          LOG.ui('Panel language set:', settings.panelLang);
+        }
+
+        // Learning / Reciting mode
+        if (settings.mode === 'learning' || settings.mode === 'reciting') {
+          if (currentMode !== settings.mode) {
+            currentMode = settings.mode;
+            toggleMode(currentMode);
+          } else {
+            toggleMode(currentMode);
+          }
+        }
+
+        // Audio playback speed
+        if (settings.speed && window.ayahAudio) {
+          ayahAudio.playbackRate = parseFloat(settings.speed);
+          LOG.audio('Playback speed set:', settings.speed);
+        }
+      }
+
+      function updateSetting(patch) {
+        window.parent.postMessage({
+          type: 'UPDATE_SETTING',
+          patch
+        }, PARENT_ORIGIN);
+      }
+
+      function applyLastSettings() {
+        if (lastSettings) {
+          applySettings(lastSettings);
+        }
+      }
+
+      function applySettingsFromStorage() {
+        try {
+          const raw = localStorage.getItem('qq_settings');
+          if (!raw) return;
+          const parsed = JSON.parse(raw);
+          applySettings(parsed || {});
+        } catch (err) {
+          console.warn('[SETTINGS] Failed to apply stored settings', err);
+        }
+      }
+
+      function closeSettingsMenu(options = {}) {
+        const { suppressNotify = false } = options;
+        const menuEl = document.getElementById('settingsMenu');
+        if (!menuEl) return false;
+        if (settingsOutsideClickHandler) {
+          document.removeEventListener('click', settingsOutsideClickHandler, true);
+          settingsOutsideClickHandler = null;
+        }
+        menuEl.remove();
+        const btn = document.getElementById('navSettings');
+        if (btn) btn.classList.remove('active');
+        if (!suppressNotify) {
+          parent.postMessage({ type: 'SETTINGS_CLOSED' }, '*');
+        }
+        closeSettingsMenuFn = null;
+        return true;
+      }
+
+      function closeActivePopup(options = {}) {
+        const { suppressNotify = false } = options;
+        if (closeSettingsMenu({ suppressNotify })) return true;
+
+        if (popup && overlay && overlay.style.display !== 'none') {
+          hidePopup({ suppressNotify });
+          return true;
+        }
+        return false;
+      }
+      window.closeActivePopup = closeActivePopup;
+
+/*************************************************
+ * SETTINGS POPUP — MAIN TOGGLE
+ *************************************************/
+
+      /**
+       * Opens / closes the Settings popup.
+       *
+       * Behavior:
+       * - Toggles popup visibility
+       * - Adapts content based on current mode:
+       *   • Practice
+       *   • Reciting
+       *   • Learning
+       * - Syncs UI state with actual settings
+       * - Notifies parent when opened
+       */
+      function toggleSettingsNav(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        clearNavActive();
+
+        const btn = document.getElementById('navSettings');
+        if (!btn) {
+          console.warn('[SETTINGS] navSettings button not found');
+          return;
+        }
+
+        btn.classList.add('active');
+
+        // ---------------------------------------------
+        // Close if already open
+        // ---------------------------------------------
+        const existing = document.getElementById('settingsMenu');
+        if (existing) {
+          console.log('[SETTINGS] Closing existing menu');
+          closeSettingsMenu();
+          return;
+        }
+
+
+        // ---------------------------------------------
+        // Determine current context
+        // ---------------------------------------------
+
+        const inPractice = pracBox && pracBox.style.display === 'block';
+        const inRecite   = currentMode === 'reciting';
+        const translationSection = document.getElementById('translation-section');
+        const html = document.documentElement;
+
+        // Use saved preference when available; fall back to DOM state.
+        let isTranslationVisible = !html.classList.contains('hide-panel-translation');
+        if (lastSettings && typeof lastSettings.showPanelTranslation === 'boolean') {
+          isTranslationVisible = lastSettings.showPanelTranslation;
+        } else if (translationSection) {
+          isTranslationVisible =
+            window.getComputedStyle(translationSection).display !== 'none';
+        }
+
+        console.log('[SETTINGS] Context:', { inPractice, inRecite });
+
+        // ---------------------------------------------
+        // Build popup HTML
+        // ---------------------------------------------
+        let menuHTML = `
+          <div id="settingsMenu" class="settings-popup">
+            <div class="sm-header">
+              <i class="material-icons-outlined">settings</i>
+              <span>Settings</span>
+              <button type="button" class="sm-close-icon" id="settingsCloseTop" aria-label="Close settings">
+                <i class="material-icons-outlined">close</i>
+              </button>
+            </div>
+        `;
+
+        // ===== PRACTICE MODE =====
+        if (inPractice) {
+          menuHTML += `
+            <div class="sm-section-title">Practice Controls</div>
+            <div class="sm-row">
+              <button type="button" class="btn btn-sm">
+                Erase All Inputs
+              </button>
+            </div>
+          `;
+        }
+
+        // ===== RECITING MODE =====
+        else if (inRecite) {
+          menuHTML += ``;
+        }
+
+        // ===== LEARNING MODE =====
+        else {
+          menuHTML += `
+            <div class="sm-row">
+              <div class="sm-label">
+                <i class="material-icons-outlined">translate</i>
+                <span>Show Word Translations</span>
+              </div>
+              <label class="switch">
+                <input id="toggleTrans" type="checkbox">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="sm-row">
+              <div class="sm-label">
+                <i class="material-icons-outlined">account_tree</i>
+                <span>Show Root</span>
+              </div>
+              <label class="switch">
+                <input id="toggleRoot" type="checkbox">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="sm-row">
+              <div class="sm-label">
+                <i class="material-icons-outlined">format_italic</i>
+                <span>Show Grammar</span>
+              </div>
+              <label class="switch">
+                <input id="toggleGram" type="checkbox">
+                <span class="slider"></span>
+              </label>
+            </div>
+          `;
+        }
+
+        // ===== AUDIO SETTINGS =====
+        menuHTML += `
+          <div class="sm-section-title">Audio Settings</div>
+
+          <div class="sm-row">
+            <div class="sm-label">
+              <i class="material-icons-outlined">language</i>
+              <span>Language</span>
+            </div>
+            <select id="audioLangSelect">
+              <option value="ar">Arabic</option>
+              <option value="en">English</option>
+              <option value="ur">Urdu</option>
+            </select>
+          </div>
+
+          <div class="sm-row">
+            <div class="sm-label">
+              <i class="material-icons-outlined">speed</i>
+              <span>Speed</span>
+            </div>
+            <select id="speedSelect">
+              <option value="0.5">0.5×</option>
+              <option value="0.75">0.75×</option>
+              <option value="1">1×</option>
+              <option value="1.25">1.25×</option>
+            </select>
+          </div>
+
+          <div class="sm-row">
+            <div class="sm-label">
+              <i class="material-icons-outlined">repeat</i>
+              <span>Repeat</span>
+            </div>
+            <input type="number" id="repeatCount"
+                  min="1" max="20" value="1"/>
+          </div>
+        `;
+
+        // ===== PANEL TRANSLATIONS =====
+          menuHTML += `
+            <div class="sm-section-title">Translations Panel</div>
+            <div class="sm-row">
+              <div class="sm-label">
+                <i class="material-icons-outlined">language</i>
+                <span>Show Translations</span>
+              </div>
+              <label class="switch">
+                <input
+                  id="toggleAllTrans"
+                  type="checkbox"
+                  ${isTranslationVisible ? 'checked' : ''}
+                >
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="sm-row">
+              <div class="sm-label">
+                <i class="material-icons-outlined">translate</i>
+                <span>Translation Language</span>
+              </div>
+              <select id="translationLangSelect">
+                <option value="en">English</option>
+                <option value="ur">Urdu</option>
+              </select>
+            </div>
+          `;
+
+        menuHTML += `
+            <div class="sm-footer">
+              <button type="button" class="sm-close-btn" id="settingsClose">
+                Close
+              </button>
+            </div>
+          </div>
+        `;
+
+        // ---------------------------------------------
+        // Inject popup into DOM
+        // ---------------------------------------------
+        document.body.insertAdjacentHTML('beforeend', menuHTML);
+        const menuEl = document.getElementById('settingsMenu');
+        
+
+
+        if (!menuEl) {
+          console.error('[SETTINGS] Failed to create settingsMenu');
+          return;
+        }
+
+        // ---------------------------------------------
+        // Wire settings controls (NO inline onclick)
+        // ---------------------------------------------
+
+        menuEl.querySelector('#toggleTrans')
+          ?.addEventListener('change', toggleWordTranslations);
+
+        menuEl.querySelector('#toggleRoot')
+          ?.addEventListener('change', e =>
+            toggleElements('root-tag', e.target.checked)
+          );
+
+        menuEl.querySelector('#toggleGram')
+          ?.addEventListener('change', e =>
+            toggleElements('pos-tag', e.target.checked)
+          );
+
+        menuEl.querySelector('#toggleAllTrans')
+          ?.addEventListener('change', e =>
+            toggleSection('translation-section', e.target.checked)
+          );
+
+        menuEl.querySelector('#audioLangSelect')
+          ?.addEventListener('change', e =>
+            onAudioLangChange(e.target.value)
+          );
+
+        menuEl.querySelector('#speedSelect')
+          ?.addEventListener('change', e =>
+            onSpeedChange(e.target.value)
+          );
+
+        menuEl.querySelector('#translationLangSelect')
+          ?.addEventListener('change', e =>
+            onPanelLangChange(e.target.value)
+          );
+
+        menuEl.querySelector('#repeatCount')
+          ?.addEventListener('change', e => {
+            setRepeatCount(e.target.value, 'settingsPopup');
+          });
+
+
+
+        window.parent.postMessage({ type: 'SETTINGS_OPENED' }, PARENT_ORIGIN);
+
+        // ---------------------------------------------
+        // FORCE repeat value into settings textbox
+        // ---------------------------------------------
+        const repeatBox = menuEl.querySelector('#repeatCount');
+
+        if (repeatBox && ayahAudio) {
+          const repeat =
+            parseInt(ayahAudio.dataset.repeat || '1', 10);
+
+          repeatBox.value = repeat;
+
+          console.log('[SETTINGS][REPEAT] synced textbox →', repeat);
+        }
+
+
+        // Force reflow for animation
+        menuEl.getBoundingClientRect();
+        menuEl.classList.add('show');
+
+        const closeMenu = (options = {}) => {
+          if (!menuEl?.isConnected) return;
+          closeSettingsMenu(options);
+        };
+        closeSettingsMenuFn = closeMenu;
+
+        menuEl.querySelector('#settingsClose')
+          ?.addEventListener('click', e => {
+            e.preventDefault();
+            e.stopPropagation();
+            closeMenu();
+          });
+        menuEl.querySelector('#settingsCloseTop')
+          ?.addEventListener('click', e => {
+            e.preventDefault();
+            e.stopPropagation();
+            closeMenu();
+          });
+
+        attachSettingsAutoClose(btn, menuEl, closeMenu);
+
+        // ---------------------------------------------
+        // Sync toggle states with current UI
+        // ---------------------------------------------
+        rootToggle 		= document.getElementById('toggleRoot');
+        gramToggle 		= document.getElementById('toggleGram');
+        transToggle 	= document.getElementById('toggleTrans');
+
+        
+        if (rootToggle) {
+          rootToggle.checked = !html.classList.contains('hide-root');
+        }
+
+       
+        if (gramToggle) {
+          gramToggle.checked = !html.classList.contains('hide-grammar');
+        }
+
+        
+        if (transToggle) {
+          transToggle.checked =
+            !html.classList.contains('hide-word-translation');
+        }
+
+        if (allTrans) {
+          if (lastSettings && typeof lastSettings.showPanelTranslation === 'boolean') {
+            allTrans.checked = lastSettings.showPanelTranslation;
+          } else {
+            allTrans.checked =
+              !document.documentElement.classList.contains('hide-panel-translation');
+          }
+        }
+
+        // ---------------------------------------------
+        // FORCE audio language dropdown to saved value
+        // ---------------------------------------------
+        const langSelectEl = menuEl.querySelector('#audioLangSelect');
+
+        if (langSelectEl) {
+          const savedLang =
+            window.settings?.audioLang ||
+            ayahAudio?.dataset?.audioLang ||
+            'ar';
+
+          langSelectEl.value = savedLang;
+
+          console.log('[SETTINGS][AUDIO LANG] restored →', savedLang);
+        }
+
+        
+
+        console.log('[SETTINGS] Settings menu opened');
+
+        // ---------------------------------------------
+        // Sync translation language dropdown
+        // ---------------------------------------------
+        const panelLangSelect = menuEl.querySelector('#translationLangSelect');
+
+        if (panelLangSelect) {
+          const currentLang =
+            document.documentElement.getAttribute('data-panel-lang') || 'en';
+
+          panelLangSelect.value = currentLang;
+        }
+      };
+      window.toggleSettingsNav = toggleSettingsNav;
+
+
+      function toggleWordTranslations() {
+        const html = document.documentElement;
+
+        // Toggle visibility class
+        const isHidden = html.classList.toggle('hide-word-translation');
+
+        // Notify parent of updated preference
+        updateSetting({ showWordTranslation: !isHidden });
+      }
+      window.toggleWordTranslations = toggleWordTranslations;
+
+
+      function toggleElements(type, show) {
+        const html = document.documentElement;
+
+        LOG.ui('Toggle element:', type, show);
+
+        if (type === 'root-tag') {
+          html.classList.toggle('hide-root', !show);
+          updateSetting({ showRoot: show });
+        }
+
+        if (type === 'pos-tag') {
+          html.classList.toggle('hide-grammar', !show);
+          updateSetting({ showGrammar: show });
+        }
+      }
+      window.toggleElements = toggleElements;
+
+      function setPanelTranslationVisible(show) {
+        const html = document.documentElement;
+        const shouldShow = !!show;
+        html.classList.toggle('hide-panel-translation', !shouldShow);
+
+        if (shouldShow) {
+          html.classList.remove('hide-translation');
+        }
+
+        const translationSection = document.getElementById('translation-section');
+        if (translationSection) {
+          translationSection.classList.toggle('active', shouldShow);
+          translationSection.style.display = shouldShow ? 'block' : 'none';
+        }
+      }
+
+      function toggleSection(id, show) {
+        if (!id) {
+          console.warn('[UI] toggleSection called without id');
+          return;
+        }
+
+        const el = document.getElementById(id);
+
+        if (!el) {
+          console.warn('[UI] toggleSection: element not found', id);
+          return;
+        }
+
+        if (id === 'translation-section') {
+          setPanelTranslationVisible(!!show);
+          updateSetting({ showPanelTranslation: !!show });
+          return;
+        }
+
+        el.style.display = show ? 'block' : 'none';
+
+        console.log(
+          '[UI] Section',
+          id,
+          show ? 'SHOWN' : 'HIDDEN'
+        );
+      }
+      window.toggleSection = toggleSection;
+
+
+      function attachSettingsAutoClose(btn, menuEl, closeMenu) {
+        function handleOutsideClick(e) {
+          if (!menuEl.contains(e.target) && !btn.contains(e.target)) {
+            closeMenu?.();
+          }
+        }
+
+        if (settingsOutsideClickHandler) {
+          document.removeEventListener('click', settingsOutsideClickHandler, true);
+          settingsOutsideClickHandler = null;
+        }
+        settingsOutsideClickHandler = handleOutsideClick;
+
+        // prevent bubbling inside popup
+        menuEl.addEventListener('click', e => e.stopPropagation());
+
+        // delay avoids immediate close
+        setTimeout(() => {
+          document.addEventListener('click', handleOutsideClick, true);
+        }, 0);
+      }
+
+      function onAudioLangChange(lang) {
+        if (!lang) return;
+
+        console.log('[AUDIO] Language changed →', lang);
+
+        // 🔑 1. Persist language (parent)
+        updateSetting({ audioLang: lang });
+
+        // 🔑 2. Persist language (iframe state)
+        if (ayahAudio) {
+          ayahAudio.dataset.audioLang = lang;
+        }
+
+        // ---------------------------------------------
+        // Reset audio playback + UI
+        // ---------------------------------------------
+        ayahAudio.pause();
+
+        if (navIcon)     navIcon.textContent     = 'play_arrow';
+        if (panelIconEl) panelIconEl.textContent = 'play_arrow';
+
+        // ---------------------------------------------
+        // Swap audio source
+        // ---------------------------------------------
+        const srcEl  = document.getElementById(`audio-url-${lang}`);
+        const newSrc = srcEl?.dataset?.src;
+
+        if (newSrc) {
+          ayahAudio.src = newSrc;
+          ayahAudio.load();
+        } else {
+          console.warn('[AUDIO] No audio source found for lang:', lang);
+        }
+
+        console.log('[AUDIO] Audio language applied & saved:', lang);
+      }
+      window.onAudioLangChange = onAudioLangChange;
+
+
+      function onSpeedChange(speed) {
+        const rate = parseFloat(speed);
+
+        if (Number.isNaN(rate)) {
+          console.warn('[AUDIO] Invalid playback speed:', speed);
+          return;
+        }
+
+        console.log('[AUDIO] Playback speed changed to:', rate);
+
+        // Persist preference in parent
+        updateSetting({ speed: rate });
+        // Apply speed immediately
+        
+        if (!ayahAudio) {
+          console.warn('[AUDIO] ayahAudio element not found');
+          return;
+        }
+
+        ayahAudio.playbackRate = rate;
+      }
+      window.onSpeedChange = onSpeedChange;
+
+
+      function onPanelLangChange(lang) {
+        if (!lang) return;
+
+        console.log('[SETTINGS] Panel language changed:', lang);
+
+        // Save preference
+        updateSetting({ panelLang: lang, showPanelTranslation: true });
+
+        // Apply language
+        document.documentElement.setAttribute('data-panel-lang', lang);
+        setPanelTranslationVisible(true);
+
+        // 🔑 Ensure translation panel is visible
+        const ts = document.getElementById('translation-section');
+        if (ts) {
+          ts.classList.add('active');
+        }
+      }
+
+      window.onPanelLangChange = onPanelLangChange;
+
+/*************************************************
+
+/*************************************************
+ * WORD MORPHOLOGY POPUP
+ *************************************************/
+
+    /**
+     * Renders and displays the word-level morphology popup.
+     * This popup shows roots, grammar, meanings, conjugations, etc.
+     *
+     * Side effects:
+     * - Blocks swipe gestures in parent
+     * - Injects HTML into #popupContent
+     * - Shows overlay + popup
+     *
+     * @param {Object} data - Morphology payload for a word
+     */
+      function showPopup(data) {
+        console.log('[POPUP] showPopup called', data);
+
+        // 🔒 Inform parent to temporarily disable swipe gestures
+        window.parent.postMessage(
+          { type: 'WORD_DETAILS_OPENED' },
+          PARENT_ORIGIN
+        );
+
+        // -----------------------------
+        // Build popup header
+        // -----------------------------
+        let htmlContent = `
+          <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            border-bottom:1px dashed #ccc;
+            padding-bottom:6px;
+            margin-top:0;
+            position:relative;
+          ">
+            <!-- Close button -->
+            <button
+              style="
+                position:absolute;
+                top:-14px;
+                left:-14px;
+                background:none;
+                border:none;
+                color:#0a4d68;
+                font-size:20px;
+                font-weight:bold;
+                cursor:pointer;
+                line-height:1;
+              "
+              aria-label="Close popup"
+            >
+              ×
+            </button>
+
+            <h3 style="font-size:20px;font-weight:bold;margin:0;">
+              🔍 Word Explanation
+            </h3>
+
+            ${
+              data?.['Audio URL']
+                ? `<button
+                    class="audio-button"
+                    onclick="playAudio('${data['Audio URL']}')"
+                    style="
+                      padding:6px 12px;
+                      font-size:14px;
+                      border-radius:8px;
+                      background:#0a4d68;
+                      color:white;
+                      border:none;
+                      cursor:pointer;
+                    "
+                  >
+                    🔊 Play Word Audio
+                  </button>`
+                : ''
+            }
+          </div>
+
+          <div style="
+            margin-top:12px;
+            line-height:1.8;
+            font-size:15px;
+            text-align:left;
+          ">
+        `;
+
+        // -----------------------------
+        // Word + search shortcut
+        // -----------------------------
+        if (data?.Word) {
+          const normalizedWord = data.Word
+            .normalize('NFD')
+            .replace(/[ً-ٟۖ-ٰۭـ]/g, '')
+            .replace('ٱ', 'ا');
+
+          htmlContent += `
+            <div style="margin-bottom:10px;">
+              <b style="color:#0a4d68;">Word:</b>
+              <span style="font-size:20px;font-weight:bold;">
+                ${data.Word}
+              </span>
+              <button
+                onclick="openSearchTab('${normalizedWord}')"
+                style="
+                  margin-left:8px;
+                  font-size:12px;
+                  padding:4px 8px;
+                  border-radius:6px;
+                  background:#eef5ff;
+                  border:1px solid #ccc;
+                  cursor:pointer;
+                "
+              >
+                🔍 Look up in Quran
+              </button>
+            </div>
+          `;
+        }
+
+        // -----------------------------
+        // Roots + grammar tags
+        // -----------------------------
+        if (data?.root_from_txt || data?.tags_joined) {
+          const rootText = data.root_from_txt
+            ? data.root_from_txt.split('+').join(' + ')
+            : '';
+
+          const tagText = data.tags_joined
+            ? ` <i>(${data.tags_joined.split('+').join(' + ')})</i>`
+            : '';
+
+          if (rootText || tagText) {
+            htmlContent += `
+              <div>
+                <b>Roots:</b> ${rootText}${tagText}
+              </div>
+            `;
+          }
+        }
+
+        // -----------------------------
+        // Verb meaning & grammar
+        // -----------------------------
+        if (data?.['Meaning Of Verb']) {
+          htmlContent += `
+            <div>
+              <b>Meaning Of Verb:</b>
+              ${data['Meaning Of Verb']}
+            </div>
+          `;
+        }
+
+        if (data?.['Main Verb Grammar']) {
+          htmlContent += `
+            <div>
+              <b>Main Verb Grammar:</b>
+              ${data['Main Verb Grammar']}
+            </div>
+          `;
+        }
+
+        // -----------------------------
+        // Morphological suffixes
+        // -----------------------------
+        if (data?.['Quran Morph Info']) {
+          htmlContent += `
+            <div>
+              <b>Suffixes:</b>
+              ${data['Quran Morph Info']}
+            </div>
+          `;
+        }
+
+        // -----------------------------
+        // GPT root + frequency
+        // -----------------------------
+        if (data?.root_from_gpt) {
+          const countText =
+            data.count_of_verb > 0
+              ? ` <i>(appears ~${data.count_of_verb} times)</i>`
+              : '';
+
+          htmlContent += `
+            <div>
+              <b>Root Verb:</b>
+              ${data.root_from_gpt}${countText}
+            </div>
+          `;
+        }
+
+        // -----------------------------
+        // Conjugation table (HTML)
+        // -----------------------------
+        if (data?.['Conjugation Table']) {
+          htmlContent += `
+            <div style="margin-top:10px;">
+              ${data['Conjugation Table']}
+            </div>
+          `;
+        }
+
+        // Close content wrapper
+        htmlContent += `</div>`;
+
+        if (!popup || !overlay) {
+          console.error('[POPUP] Missing popupContent or overlay element');
+          return;
+        }
+
+        window.parent.postMessage(
+          { type: 'WORD_DETAILS_OPENED' },
+          PARENT_ORIGIN
+        );
+
+        document.body.classList.add('modal-open');
+        popup.innerHTML = htmlContent;
+        popup.style.display   = 'block';
+        overlay.style.display = 'block';
+
+        console.log('[POPUP] Popup rendered and shown');
+      }
+      window.showPopup = showPopup;
+
+      function hidePopup(options = {}) {
+        console.log('[POPUP] hidePopup called');
+
+        const { suppressNotify = false } = options;
+
+        // Always clear modal state, even if elements are missing.
+        document.body.classList.remove('modal-open');
+
+        if (!popup || !overlay) {
+          console.warn('[POPUP] Cannot hide popup — elements missing', {
+            popupFound: !!popup,
+            overlayFound: !!overlay
+          });
+        } else {
+          // Hide UI
+          popup.style.display   = 'none';
+          overlay.style.display = 'none';
+
+          // Remove animation / active states
+          popup.classList.remove('active');
+          overlay.classList.remove('active');
+        }
+
+        // 🔓 Notify parent to re-enable swipe gestures
+        if (!suppressNotify) {
+          window.parent.postMessage(
+            { type: 'WORD_DETAILS_CLOSED' },
+            PARENT_ORIGIN
+          );
+        }
+
+        console.log('[POPUP] Popup hidden, swipe restored');
+      }
+      window.hidePopup = hidePopup;
+
+      function openSearchTab(normalizedWord) {
+          if (!normalizedWord) {
+            console.warn('[SEARCH] openSearchTab called without word');
+            return;
+          }
+
+          const url = `/search_results.html?q=${encodeURIComponent(normalizedWord)}`;
+          console.log('[SEARCH] Opening search tab:', url);
+
+          window.open(url, '_blank');
+        }
+      window.openSearchTab = openSearchTab;
+
+      function playAudio(url) {
+        if (!url) {
+          console.warn('[AUDIO] playAudio called without URL');
+          return;
+        }
+
+        try {
+          wordAudio.pause();
+          wordAudio.src = url;
+          wordAudio.currentTime = 0;
+          wordAudio.play().catch(err => {
+            console.error('[AUDIO] Word audio play failed', err);
+          });
+        } catch (err) {
+          console.error('[AUDIO] Error playing word audio', err);
+        }
+      }
+      window.playAudio = playAudio;
+
+/*************************************************
+ * AUDIO CONTROLS
+ *************************************************/
+
+      function togglePlay(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        //e.stopImmediatePropagation();
+
+        if (!ayahAudio) return console.error('No ayahAudio element');
+
+        if (ayahAudio.paused) {
+
+          // 🔑 initialize repeat count
+          const repeat = parseInt(ayahAudio.dataset.repeat || '1', 10);
+          remainingRepeats = Math.max(1, repeat);
+
+          ayahAudio.currentTime = 0;
+          ayahAudio.play();
+
+          navPlayIcon.textContent = 'pause';
+          panelIcon.textContent   = 'pause';
+
+        } else {
+          ayahAudio.pause();
+          navPlayIcon.textContent = 'play_arrow';
+          panelIcon.textContent   = 'play_arrow';
+        }
+      }
+      window.togglePlay = togglePlay;
+
+/*************************************************
+ * MODE SWITCH — LEARNING ↔ RECITING (NAV)
+ *************************************************/
+
+      /**
+       * Toggles the global mode between:
+       * - "learning"
+       * - "reciting"
+       *
+       * Rules:
+       * - Practice mode is ALWAYS turned off first
+       * - Nav active state is updated
+       * - Actual UI switch is delegated to toggleMode()
+       */
+      function toggleModeNav() {
+        console.log('[MODE] toggleModeNav called');
+
+        // ---------------------------------------------
+        // Always disable Practice mode first
+        // ---------------------------------------------
+        if (pracBox) {
+          pracBox.style.display = 'none';
+          console.log('[MODE] Practice box hidden');
+        }
+
+        if (pracNav) {
+          pracNav.classList.remove('active');
+        }
+
+        // ---------------------------------------------
+        // Toggle Learning ↔ Reciting
+        // ---------------------------------------------
+        clearNavActive();
+
+        btn   = document.getElementById('navMode');
+        if (!btn) {
+          console.warn('[MODE] navMode button not found');
+          return;
+        }
+
+        btn.classList.add('active');
+
+        // Flip mode
+        const previousMode = currentMode;
+        currentMode = currentMode === 'learning' ? 'reciting' : 'learning';
+
+        console.log('[MODE] Mode changed:', previousMode, '→', currentMode);
+
+        // Delegate UI updates
+        toggleMode(currentMode);
+        updateSetting({ mode: currentMode });
+      }
+      window.toggleModeNav = toggleModeNav;
+
+       /**
+       * Applies UI changes for the given mode.
+       * This function ONLY handles Learn ↔ Recite display.
+       */
+      function toggleMode(mode) {
+        console.log('[MODE] toggleMode called with:', mode);
+
+        if (!learnSection || !recitSection) return;
+        learnSection.style.display =
+          mode === 'learning' ? 'block' : 'none';
+
+        recitSection.style.display =
+          mode === 'reciting' ? 'block' : 'none';
+
+        if (pracBox) pracBox.style.display = 'none';
+
+        document
+          .querySelectorAll('.bottom-nav .nav-item.active')
+          .forEach(el => el.classList.remove('active'));
+
+
+
+        if (mode === 'learning') {
+          const navMode = document.getElementById('navMode');
+          if (navMode) {
+            navMode.classList.remove('active');
+            navMode.blur();              // 🔑 removes focus highlight
+          }
+        }
+
+        // ---------------------------------------------
+        // Update nav icon + label (action-based)
+        // ---------------------------------------------
+        const navModeLabel = document.querySelector('#navMode .nav-label');
+
+        if (modeIcon && navModeLabel) {
+          if (mode === 'reciting') {
+            modeIcon.textContent = 'psychology'; // learn icon
+            navModeLabel.textContent = 'Learn';
+          } else {
+            modeIcon.textContent = 'menu_book';  // recite icon
+            navModeLabel.textContent = 'Recite';
+          }
+        }
+
+        console.log('[MODE] UI + nav applied for mode:', mode);
+      }
+      window.toggleMode = toggleMode;
+
+
+      /*************************************************
+       * AUDIO HANDLER
+       *************************************************/
+
+      function onAyahEnded() {
+        remainingRepeats--;
+
+        if (remainingRepeats > 0) {
+          ayahAudio.currentTime = 0;
+          ayahAudio.play();
+          console.log('[AUDIO] Repeating, remaining:', remainingRepeats);
+        } else {
+          navPlayIcon.textContent = 'play_arrow';
+          panelIcon.textContent   = 'play_arrow';
+          console.log('[AUDIO] Repeat finished');
+        }
+      }
+
+      function onAyahPlay() {
+        navPlayIcon.textContent = 'pause';
+        panelIcon.textContent  = 'pause';
+      }
+
+      function onAyahPause() {
+        navPlayIcon.textContent = 'play_arrow';
+        panelIcon.textContent  = 'play_arrow';
+      }
+
+      function initAudio() {
+        if (!ayahAudio) return;
+        // prevent duplicate listeners
+        ayahAudio.onplay  = null;
+        ayahAudio.onpause = null;
+        ayahAudio.onended = onAyahEnded;
+        on(ayahAudio, 'play',  onAyahPlay);
+        on(ayahAudio, 'pause', onAyahPause);
+        //on(ayahAudio, 'ended', onAyahPause);
+
+        audioControlSetup();
+      }
+
+      function audioControlSetup() {
+        if (!ayahAudio) {
+          console.warn('[AUDIO] ayahAudio element not found — aborting setup');
+          return;
+        }
+        // ---------------------------------------------
+        // Language change → hard reset audio state
+        // ---------------------------------------------
+        const langSelect = document.getElementById('audioLangSelect');
+        langSelect?.addEventListener('change', () => {
+          const lang = langSelect.value;
+          ayahAudio.pause();
+          // Reset UI controls
+          if (speedSelect) speedSelect.value = '1';
+          if (repeatInput) {
+            repeatInput.value = '1';
+            setRepeatCount(1, 'audioLangReset');
+
+          }
+
+          // Swap audio source
+          const srcEl  = document.getElementById(`audio-url-${lang}`);
+          const newSrc = srcEl?.dataset?.src;
+          if (newSrc) {
+            ayahAudio.src = newSrc;
+            ayahAudio.load();
+          } else {
+            console.warn('[AUDIO] No audio source found for language:', lang);
+          }
+          // Reset play icons
+          if (navIcon)   navIcon.textContent   = 'play_arrow';
+          if (panelIcon) panelIcon.textContent = 'play_arrow';
+        });
+
+        // ---------------------------------------------
+        // Playback speed control
+        // ---------------------------------------------
+        speedSelect?.addEventListener('change', () => {
+          const rate = parseFloat(speedSelect.value);
+          if (Number.isNaN(rate)) {
+            console.warn('[AUDIO] Invalid speed value:', speedSelect.value);
+            return;
+          }
+          ayahAudio.playbackRate = rate;
+        });
+
+        // ---------------------------------------------
+        // Repeat count control (preference only)
+        // ---------------------------------------------
+        repeatInput?.addEventListener('change', () => {
+          setRepeatCount(repeatInput.value, 'audioControl');
+        });
+
+      }
+
+      function setRepeatCount(value, source = 'unknown') {
+        const repeat = Math.max(1, parseInt(value, 10) || 1);
+
+        // 🔑 source of truth
+        ayahAudio.dataset.repeat = String(repeat);
+        remainingRepeats = parseInt(ayahAudio.dataset.repeat || '1', 10);
+
+
+        // 🔄 FORCE UI SYNC
+        if (repeatInput) {
+          repeatInput.value = repeat;
+        }
+
+        const settingsRepeat = document.querySelector('#settingsMenu #repeatCount');
+        if (settingsRepeat) {
+          settingsRepeat.value = repeat;
+        }
+
+        console.log(`[REPEAT][SYNC] from ${source}`, {
+          repeat,
+          dataset: ayahAudio.dataset.repeat,
+          remainingRepeats
+        });
+
+        updateSetting({ repeat });
+      }
+
+/*************************************************
+* Transliteration feedback + persistence
+ *************************************************/
+      function initPractice() {
+        document.querySelectorAll('.translit-input').forEach(input => {
+          const key = input.dataset.key;
+          if (!key) return;
+
+          const saved = localStorage.getItem(key);
+          if (saved !== null) input.value = saved;
+
+          input.oninput = () => {
+            localStorage.setItem(key, input.value);
+            translitHandler({ target: input });
+          };
+        });   
+        if (clearBtn) {
+          clearBtn.onclick = clearTranslitInputs;
+        }
+
+        if (hideTranslationsBtn) {
+          hideTranslationsBtn.onclick = () => {
+            document
+              .querySelectorAll('.toggle-translation')
+              .forEach(el => el.classList.toggle('hidden-toggle'));
+
+            document
+              .querySelectorAll('.show-translit')
+              .forEach(el => {
+                el.style.display =
+                  el.style.display === 'none' ? 'block' : 'none';
+              });
+          };
+        }
+      }
+
+      function initTranslitFeedback() {
+        console.log('[PRACTICE] Initializing transliteration feedback');
+
+        document.querySelectorAll('.translit-input').forEach(input => {
+          input.removeEventListener('input', translitHandler);
+          input.addEventListener('input', translitHandler);
+        });
+      }
+      window.initTranslitFeedback = initTranslitFeedback;
+
+      function translitHandler(e) {
+        const input = e?.target;
+        if (!input) return;
+
+        const block = input.closest('.word-block-translit');
+        if (!block) return;
+
+        // ---------------------------------------------
+        // Normalization helper
+        // ---------------------------------------------
+        const normalize = str =>
+          str
+            .normalize('NFD')
+            .replace(/[̀-ͯ]/g, '')     // remove diacritics
+            .replace(/ʿ/g, '')        // remove ayn marker
+            .replace(/[^a-z]/gi, '')  // letters only
+            .toLowerCase()
+            .trim();
+
+        // ---------------------------------------------
+        // Levenshtein distance helper
+        // ---------------------------------------------
+        const levenshtein = (a, b) => {
+          const dp = Array.from({ length: a.length + 1 }, () =>
+            Array(b.length + 1).fill(0)
+          );
+
+          for (let i = 0; i <= a.length; i++) dp[i][0] = i;
+          for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+
+          for (let i = 1; i <= a.length; i++) {
+            for (let j = 1; j <= b.length; j++) {
+              dp[i][j] = Math.min(
+                dp[i - 1][j] + 1,
+                dp[i][j - 1] + 1,
+                dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+              );
+            }
+          }
+
+          return dp[a.length][b.length];
+        };
+
+        // ---------------------------------------------
+        // Compare expected vs actual
+        // ---------------------------------------------
+        const expected = normalize(input.dataset.expected || '');
+        const actual   = normalize(input.value || '');
+        const dist     = levenshtein(actual, expected);
+
+        // Reset styles
+        block.style.borderColor = 'gray';
+        block.classList.remove('confetti');
+
+        // ---------------------------------------------
+        // Visual feedback rules
+        // ---------------------------------------------
+        if (!actual) {
+          // Empty input
+          block.style.backgroundColor = 'white';
+        }
+        else if (dist === 0) {
+          // Correct
+          block.style.backgroundColor = '#d4edda';
+          block.style.borderColor     = '#28a745';
+          block.classList.add('confetti');
+        }
+        else if (dist <= 2) {
+          // Close
+          block.style.backgroundColor = '#fff3cd';
+          block.style.borderColor     = '#ffc107';
+        }
+        else {
+          // Incorrect
+          block.style.backgroundColor = '#f8d7da';
+          block.style.borderColor     = '#dc3545';
+        }
+      }
+      window.translitHandler = translitHandler;
+
+      function togglePracticeNav() {
+        if (!pracNav || !pracBox) {
+          console.warn('[PRACTICE] Required elements missing');
+          return;
+        }
+        const isPracticeOn = pracBox.style.display === 'block';
+        clearNavActive();
+
+        // =====================================================
+        // TURN PRACTICE MODE ON
+        // =====================================================
+        if (!isPracticeOn) {
+          console.log('[PRACTICE] Activating practice mode');
+
+          // Ensure any popups are closed so the view isn't blocked.
+          try { hidePopup(); } catch (err) {}
+
+          // Update nav button to "Go Back"
+          pracNav.innerHTML = `
+            <span class="material-icons-outlined">more</span>
+            <span class="nav-label">Go Back</span>
+          `;
+
+          // Hide all primary content sections
+          [learnSec, recitSec, transSec, gramSec].forEach(el => {
+            if (el) el.style.display = 'none';
+          });
+
+          // Show transliteration box
+          pracBox.style.display = 'block';
+
+          // Hide Games + Mode nav buttons
+          if (gamesNav) gamesNav.style.display = 'none';
+          if (modeNav)  modeNav.style.display  = 'none';
+          if (saveNav)  saveNav.style.display  = 'none';
+
+          // Re-bind transliteration feedback logic
+          initTranslitFeedback();
+
+          // Reset scroll so practice content is visible
+          requestAnimationFrame(() => {
+            if (scrollEl) scrollEl.scrollTop = 0;
+          });
+
+          console.log('[PRACTICE] Practice mode enabled');
+          notifyParentPracticeMode(true);
+          return;
+        }
+
+        // =====================================================
+        // TURN PRACTICE MODE OFF
+        // =====================================================
+        console.log('[PRACTICE] Deactivating practice mode');
+        notifyParentPracticeMode(false);
+
+
+        // Restore default Learning view
+        if (learnSec) learnSec.style.display = 'block';
+        if (recitSec) recitSec.style.display = 'none';
+        if (gramSec)  gramSec.style.display  = 'block';
+
+        // Hide practice box
+        pracBox.style.display = 'none';
+
+        // Restore translation panel visibility based on saved preference
+        if (lastSettings && typeof lastSettings.showPanelTranslation === 'boolean') {
+          setPanelTranslationVisible(lastSettings.showPanelTranslation);
+        } else {
+          setPanelTranslationVisible(
+            !document.documentElement.classList.contains('hide-panel-translation')
+          );
+        }
+
+        // Restore nav buttons
+        if (gamesNav) gamesNav.style.display = '';
+        if (modeNav)  modeNav.style.display  = '';
+        if (saveNav)  saveNav.style.display  = '';
+
+        // Restore nav button label
+        pracNav.innerHTML = `
+          <span class="material-icons-outlined">edit</span>
+          <span class="nav-label">Practice</span>
+        `;
+
+        pracNav.classList.remove('active');
+
+        // Reset scroll after layout changes
+        requestAnimationFrame(() => {
+          if (scrollEl) scrollEl.scrollTop = 0;
+        });
+
+        console.log('[PRACTICE] Practice mode disabled');
+      }
+      window.togglePracticeNav = togglePracticeNav;
+
+      /**
+       * Clears all transliteration input fields used in practice mode.
+       *
+       * Side effects:
+       * - Removes cached values from localStorage
+       * - Clears input values
+       * - Triggers input event to refresh feedback UI
+       */
+      function clearTranslitInputs() {
+        console.log('[PRACTICE] Clearing all transliteration inputs');
+
+        const inputs = document.querySelectorAll('.translit-input');
+
+        if (!inputs.length) {
+          console.warn('[PRACTICE] No transliteration inputs found');
+          return;
+        }
+
+        inputs.forEach(input => {
+          const key = input.dataset.key;
+
+          // Remove persisted value
+          if (key) {
+            localStorage.removeItem(key);
+            console.log('[PRACTICE] Cleared cache key:', key);
+          }
+
+          // Clear UI value
+          input.value = '';
+
+          // Re-trigger validation / feedback logic
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+        });
+
+        console.log('[PRACTICE] Transliteration inputs reset complete');
+      }
+      window.clearTranslitInputs = clearTranslitInputs;
+
+/*************************************************
+ * UI — AUTO-HIDING BOTTOM NAV + FLOATING PLAY BTN
+ *************************************************/
+
+      function initNav() {
+        if (initNav.done) return;
+        initNav.done = true;
+        console.log('[NAV] Initializing auto-hide nav');
+
+        if (!nav || !playBtn || !ayahAudio) {
+          console.warn('[NAV] Missing required elements', { nav, playBtn, ayahAudio });
+          return;
+        }
+        
+        
+        function scheduleHide() {
+          clearTimeout(hideTimer);
+          if (holdNavVisible) return;
+          hideTimer = setTimeout(() => {
+            nav.classList.remove('visible');
+          }, SHOW_DURATION);
+        }
+
+        function showNav() {
+          if (nav.classList.contains('visible')) {
+            // already visible → just extend timer
+            scheduleHide();
+            return;
+          }
+
+          console.log('[NAV] showNav called');
+          nav.classList.add('visible');
+          scheduleHide();
+        }
+
+
+        const placeholder = document.createElement('div');
+        placeholder.className = 'nav-item play-btn-placeholder';
+
+        const cs = getComputedStyle(playBtn);
+        placeholder.style.cssText = `
+          width:       ${cs.width};
+          height:      ${cs.height};
+          margin-top:  ${cs.marginTop};
+          margin-left: ${cs.marginLeft};
+          margin-right:${cs.marginRight};
+          visibility:  hidden;
+          flex-shrink: 0;
+        `;
+
+        // ---------------------------------------------
+        // Float play button when audio plays
+        // ---------------------------------------------
+        function floatPlayBtn() {
+          if (playBtn.parentNode !== nav) return;
+
+          nav.insertBefore(placeholder, playBtn);
+          nav.removeChild(playBtn);
+
+          document.body.appendChild(playBtn);
+          Object.assign(playBtn.style, {
+            position:  'fixed',
+            bottom:    '38px',
+            left:      '50%',
+            transform: 'translateX(-50%)',
+            zIndex:    '9999'
+          });
+
+          scheduleHide();
+        }
+
+        // ---------------------------------------------
+        // Reattach play button back into nav
+        // ---------------------------------------------
+        function reattachPlayBtn() {
+          if (playBtn.parentNode !== document.body) return;
+
+          console.log('[NAV] Reattaching play button');
+
+          document.body.removeChild(playBtn);
+
+          ['position','bottom','left','transform','zIndex']
+            .forEach(p => playBtn.style[p] = '');
+
+          nav.replaceChild(playBtn, placeholder);
+          showNav();
+        }
+
+        // ---------------------------------------------
+        // Audio-driven behavior
+        // ---------------------------------------------
+        on(ayahAudio, 'play',  floatPlayBtn);
+        on(ayahAudio, 'pause', reattachPlayBtn);
+        on(ayahAudio, 'ended', reattachPlayBtn);
+
+
+        // Initial load
+        requestAnimationFrame(() => {
+          requestAnimationFrame(showNav);
+        });
+
+
+        // Scroll reveals nav
+        on(window, 'scroll', showNav, { passive: true });
+
+        // Any click reveals nav
+        on(document.body, 'click', e => {
+          const clickedSettings = e.target.closest('#settingsMenu');
+          const clickedInput    = e.target.closest('input, textarea');
+
+          if (!clickedSettings && !clickedInput) {
+            showNav();
+          }
+        });
+
+        // Keep nav visible while settings are open
+        on(document.body, 'click', e => {
+          if (e.target.closest('#navSettings')) {
+            nav.classList.add('visible');
+            clearTimeout(hideTimer);
+          }
+        });
+
+        // When settings menu closes, restore auto-hide
+        const observer = new MutationObserver(mutations => {
+          mutations.forEach(m =>
+            m.removedNodes.forEach(node => {
+              if (node.id === 'settingsMenu') {
+                showNav();
+              }
+            })
+          );
+        });
+
+        observer.observe(document.body, { childList: true });
+
+        // cleanup
+        cleanupFns.push(() => observer.disconnect());
+
+
+        // Clicking any nav item resets timer
+        nav.querySelectorAll('.nav-item')
+          .forEach(item => on(item, 'click', showNav))
+
+        console.log('[NAV] Auto-hide nav ready');
+
+
+        // Translation section click → show nav
+
+
+        if (translationSection) {
+          on(translationSection, 'click', () => {
+            console.log('[NAV] Translation clicked → show nav');
+            showNav();
+          });
+        }
+        };
+      window.initNav = initNav;
+
+/*************************************************
+ * PROGRESS SAVE REQUEST (IFRAME → PARENT)
+ *************************************************/
+      /**
+       * Sends a SAVE_PROGRESS request to the parent.
+       * Includes streak recording and timestamp.
+       */
+      function requestSaveProgress() {
+        console.log('[IFRAME] Requesting SAVE_PROGRESS', {
+          surah: currentSurah,
+          ayah: currentAyah
+        });
+
+        window.parent.postMessage(
+          {
+            type: 'SAVE_PROGRESS',
+            surah: currentSurah,
+            ayah: currentAyah,
+            recordStreak: true,
+            timestamp: Date.now()
+          },
+          PARENT_ORIGIN
+        );
+      }
+
+/*************************************************
+ * IFRAME ↔ PARENT MESSAGE ROUTER
+ *************************************************/
+
+      function initMessaging() {
+          if (initMessaging.done) return;
+          initMessaging.done = true;
+
+          console.log('[INIT] initMessaging');
+
+          on(window, 'message', onParentMessage);
+      }
+
+      function onParentMessage(e) {
+        const data = e.data || {};
+        const { type } = data;
+        if (!type) return;
+        switch (type) {
+
+          case 'APPLY_SETTINGS': {
+            const nextVersion = Number(data.version || 0);
+            if (nextVersion && nextVersion <= appliedSettingsVersion) {
+              return;
+            }
+            if (nextVersion) {
+              appliedSettingsVersion = nextVersion;
+            }
+            applySettings(data.settings || {});
+            return;
+          }
+
+          case 'SET_SWIPE_WIDTH': {
+            if (data.width) {
+              swipeBaseWidth = data.width;
+              console.log('[SWIPE] Base width set:', swipeBaseWidth);
+            }
+            return;
+          }
+
+          case 'SET_HINT_POLICY': {
+            if (typeof data.allowWordHint === 'boolean') {
+              allowWordHint = data.allowWordHint;
+            }
+            if (typeof data.allowSaveHint === 'boolean') {
+              allowSaveHint = data.allowSaveHint;
+            }
+            return;
+          }
+
+          case 'TRIGGER_WORD_HINT': {
+            triggerWordHintNow();
+            return;
+          }
+
+          case 'TRIGGER_SAVE_HINT': {
+            showSaveHint(saveNav);
+            return;
+          }
+
+          case 'CLOSE_ACTIVE_POPUP': {
+            closeActivePopup({ suppressNotify: true });
+            return;
+          }
+
+          case 'RETURN_TO_AYAH': {
+            if (typeof togglePracticeNav === 'function' && pracBox?.style.display === 'block') {
+              togglePracticeNav();
+            }
+
+            const backBtn = document.getElementById('navBackBtn');
+            if (backBtn) {
+              backBtn.click();
+              return;
+            }
+
+            const gameEl = document.getElementById('game-mode-content');
+            if (gameEl) {
+              gameEl.style.display = 'none';
+              document.body.classList.remove('game-active');
+            }
+            return;
+          }
+
+          // =============================================
+          // Simulated click forwarding (parent → iframe)
+          // =============================================
+          case 'CLICK': {
+            const { x, y } = data;
+
+            if (typeof x !== 'number' || typeof y !== 'number') {
+              console.warn('[IFRAME] CLICK message missing coordinates');
+              return;
+            }
+
+            const el = document.elementFromPoint(x, y);
+            el?.click();
+            return;
+          }
+
+
+          
+
+          // =============================================
+          // Save progress results (parent → iframe)
+          // =============================================
+          case 'SAVE_PROGRESS_SUCCESS': {
+            console.log('[IFRAME] Progress saved successfully');
+
+            showToast(
+              data.streakUpdated
+                ? '🔥 Streak updated!'
+                : '💾 Progress saved'
+            );
+            return;
+          }
+
+          case 'SAVE_PROGRESS_FAILED': {
+            console.warn('[IFRAME] Progress save failed');
+            showToast('⚠️ Could not save progress', '#dc3545');
+            return;
+          }
+
+          // =============================================
+          // Parent requests iframe to save progress
+          // =============================================
+          case 'REQUEST_SAVE_PROGRESS': {
+            requestSaveProgress();
+            return;
+          }
+
+          // =============================================
+          // Unknown / future message types
+          // =============================================
+          default:
+            // console.warn('[IFRAME] Unhandled message type:', type, data);
+            return;
+        }
+      }
+
+/*************************************************
+ * GAMES — VERB AUDIO PLAYBACK (CACHED + FALLBACK)
+ *************************************************/
+
+      /**
+       * Plays verb audio for a given verb + tense.
+       *
+       * Features:
+       * - Caches loaded Audio objects
+       * - Toggles play / pause on repeated clicks
+       * - Tries multiple base URLs as fallback
+       * - Updates UI icon state
+       *
+       * @param {string} verb
+       * @param {string} tense
+       * @param {HTMLElement} linkElement - Clicked element containing `.audio-icon`
+       */
+      async function playVerbAudio(verb, tense, linkElement) {
+        const key = `${verb}_${tense}`;
+        const iconSpan = linkElement?.querySelector('.audio-icon');
+
+        console.log('[VERB_AUDIO] Requested:', key);
+
+        // ---------------------------------------------
+        // Cached audio → toggle play / pause
+        // ---------------------------------------------
+        if (audioCache[key]) {
+          const audio = audioCache[key];
+
+          if (!audio.paused) {
+            audio.pause();
+            iconSpan && (iconSpan.textContent = '🔊');
+          } else {
+            audio.currentTime = 0;
+            Object.values(audioCache).forEach(a => !a.paused && a.pause());
+            audio.play();
+            iconSpan && (iconSpan.textContent = '⏸️');
+          }
+          return;
+        }
+
+        const baseUrls = [
+          'https://raw.githubusercontent.com/iwilllearnquran/memorization/main/audio/verbs1/',
+          'https://raw.githubusercontent.com/iwilllearnquran/memorization/main/audio/verbs2/',
+          'https://raw.githubusercontent.com/iwilllearnquran/memorization/main/audio/verbs3/',
+          'https://raw.githubusercontent.com/iwilllearnquran/memorization/main/audio/verbs4/'
+        ];
+
+        // ---------------------------------------------
+        // Load all candidates in parallel
+        // ---------------------------------------------
+        const candidates = baseUrls.map(base => {
+          const audio = new Audio(`${base}${key}.mp3`);
+          audio.preload = 'auto';
+
+          return waitForAudioLoad(audio)
+            .then(() => audio)
+            .catch(() => null);
+        });
+
+        // ---------------------------------------------
+        // First successful audio wins
+        // ---------------------------------------------
+        const audio = (await Promise.any(
+          candidates.map(p =>
+            p.then(a => {
+              if (!a) throw new Error();
+              return a;
+            })
+          )
+        )).catch(() => null);
+
+        if (!audio) {
+          console.warn('[VERB_AUDIO] Audio not found:', key);
+          alert(`⚠️ Audio for "${verb}" (${tense}) not found.`);
+          return;
+        }
+
+        // ---------------------------------------------
+        // Play & cache
+        // ---------------------------------------------
+        audioCache[key] = audio;
+
+        Object.values(audioCache).forEach(a => !a.paused && a.pause());
+
+        audio.play();
+        iconSpan && (iconSpan.textContent = '⏸️');
+
+        audio.addEventListener('ended', () => {
+          iconSpan && (iconSpan.textContent = '🔊');
+        });
+
+        console.log('[VERB_AUDIO] Playing:', audio.src);
+      }
+
+      window.playVerbAudio = playVerbAudio;
+
+
+/*************************************************
+ * UI — TOAST NOTIFICATION
+ *************************************************/
+
+      /**
+       * Displays a temporary toast message at the bottom
+       * center of the screen.
+       *
+       * @param {string} message - Text to display
+       * @param {string} [color='#333'] - Background color
+       */
+      function showToast(message, color = '#333') {
+        if (!message) {
+          console.warn('[TOAST] showToast called without message');
+          return;
+        }
+
+        console.log('[TOAST] Showing toast:', message);
+
+        const toast = document.createElement('div');
+        toast.textContent = message;
+
+        // Inline styles keep this fully self-contained
+        toast.style.cssText = `
+          position: fixed;
+          bottom: 60px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: ${color};
+          color: white;
+          padding: 8px 16px;
+          border-radius: 20px;
+          font-size: 14px;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+          z-index: 9999;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          pointer-events: none;
+        `;
+
+        document.body.appendChild(toast);
+
+        // Fade in on next frame
+        requestAnimationFrame(() => {
+          toast.style.opacity = '1';
+        });
+
+        // Auto-dismiss after delay
+        const DISPLAY_TIME = 1800;
+        const FADE_TIME    = 300;
+
+        setTimeout(() => {
+          toast.style.opacity = '0';
+
+          setTimeout(() => {
+            toast.remove();
+            console.log('[TOAST] Toast removed');
+          }, FADE_TIME);
+
+        }, DISPLAY_TIME);
+      }
+      window.showToast = showToast;
+
+/*************************************************
+ * SWIPE — TOUCH ONLY (MOBILE)
+ * Left / Right swipe → notify parent
+ *************************************************/
+
+   /*   function initIframeTouchSwipe() {
+        // Only enable on touch devices
+        if (!('ontouchstart' in window)) {
+          console.log('[SWIPE] Touch not supported — skipping touch swipe');
+          return;
+        }
+
+        console.log('[SWIPE] Initializing touch swipe');
+
+        const root = document.body;
+        let startX = 0;
+        let startY = 0;
+
+        root.addEventListener('touchstart', e => {
+          if (e.touches.length !== 1) return;
+
+          startX = e.touches[0].clientX;
+          startY = e.touches[0].clientY;
+        }, { passive: true });
+
+        root.addEventListener('touchend', e => {
+          if (!startX || !startY) return;
+
+          const dx = e.changedTouches[0].clientX - startX;
+          const dy = e.changedTouches[0].clientY - startY;
+
+          // Horizontal swipe only
+          if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) {
+            const dir = dx < 0 ? 1 : -1;
+
+            console.log('[SWIPE] Touch swipe detected:', dir);
+            window.parent.postMessage(
+              { type: 'QQ_SWIPE', dir },
+              PARENT_ORIGIN
+            );
+          }
+
+          startX = startY = 0;
+        }, { passive: true });
+      }
+      window.initIframeTouchSwipe = initIframeTouchSwipe;
+
+
+
+      
+
+
+/*************************************************
+ * GRAMMAR POPUP — SHOW / HIDE
+ *************************************************/
+      function showGrammarPopup(type) {
+        // 🔒 block gesture layer
+        window.parent.postMessage(
+          { type: 'WORD_DETAILS_OPENED' },
+          PARENT_ORIGIN
+        );
+        console.log('[GrammarPopup] Requested type:', type);
+
+        const content = grammarExplanations[type];
+        if (!content) {
+          console.warn('[GrammarPopup] No explanation found for type:', type);
+          return;
+        }
+
+        console.log('[GrammarPopup] Found explanation content, length:', content.length);
+
+        // Close any existing popup first
+        console.log('[GrammarPopup] Closing any existing popup');
+        hidePopup({ suppressNotify: true });
+
+
+
+        if (!popup || !overlay) {
+          console.error('[GrammarPopup] Missing popup or overlay element', {
+            popupFound: !!popup,
+            overlayFound: !!overlay
+          });
+          return;
+        }
+
+        console.log('[GrammarPopup] Popup and overlay elements found');
+
+        // Inject content
+        popup.innerHTML = content;
+        console.log('[GrammarPopup] Content injected into popup');
+
+        // Make visible
+        popup.style.display = 'block';
+        overlay.style.display = 'block';
+        document.body.classList.add('modal-open');
+        console.log('[GrammarPopup] Display styles set to block');
+
+        // Activate animations / classes
+        popup.classList.add("active");
+        overlay.classList.add("active");
+        console.log('[GrammarPopup] Active classes added — popup should now be visible');
+      }
+      window.showGrammarPopup = showGrammarPopup;
+
+/*************************************************
+ * ONBOARDING — WORD CLICK HINT (ONE-TIME)
+ *************************************************/
+
+      function findFirstVerbWord() {
+        const verbEl = document.querySelector('.word-block.verb-highlight');
+        if (verbEl) return verbEl;
+
+        const words = document.querySelectorAll('.word-block');
+        for (const el of words) {
+          const onclick = el.getAttribute('onclick') || '';
+          const match = onclick.match(/\"tags_joined\"\\s*:\\s*\"([^\"]+)\"/);
+          if (match && /\\bverb\\b/i.test(match[1])) {
+            return el;
+          }
+        }
+        return null;
+      }
+
+      function initWordClickHint() {
+        if (!allowWordHint) return;
+        const WORD_KEY  = 'word_click_hint_shown_v1';
+        const SWIPE_KEY = 'swipe_hint_shown_v1';
+
+        if (localStorage.getItem(WORD_KEY)) return;
+
+        function start() {
+          if (localStorage.getItem(WORD_KEY)) return;
+          triggerWordHintNow();
+        }
+
+        if (localStorage.getItem(SWIPE_KEY)) {
+          start();
+          return;
+        }
+
+        // Fallback: if swipe hint never fires (or is skipped), still show word hint.
+        clearTimeout(initWordClickHint.fallbackTimer);
+        initWordClickHint.fallbackTimer = setTimeout(() => {
+          if (!localStorage.getItem(WORD_KEY)) {
+            start();
+          }
+        }, 1800);
+      }
+      window.initWordClickHint = initWordClickHint;
+
+      function triggerWordHintNow() {
+        if (!allowWordHint) return;
+        const WORD_KEY = 'word_click_hint_shown_v1';
+        if (localStorage.getItem(WORD_KEY)) return;
+
+        const firstVerb = findFirstVerbWord();
+        if (!firstVerb) {
+          triggerWordHintNow.retryCount = (triggerWordHintNow.retryCount || 0) + 1;
+          if (triggerWordHintNow.retryCount > 120) {
+            triggerWordHintNow.retryCount = 0;
+            window.parent?.postMessage(
+              { type: 'WORD_HINT_SKIPPED_NO_VERB' },
+              '*'
+            );
+            return;
+          }
+          requestAnimationFrame(triggerWordHintNow);
+          return;
+        }
+        triggerWordHintNow.retryCount = 0;
+        showWordHint(firstVerb);
+      }
+      window.triggerWordHintNow = triggerWordHintNow;
+
+      function ensureSaveHintElements() {
+        if (saveHintOverlay) return;
+        saveHintOverlay = document.getElementById('saveHintOverlay');
+        if (saveHintOverlay) {
+          saveHint = document.getElementById('saveHint');
+          saveHintText = document.getElementById('saveHintText');
+          saveHintLottie = document.getElementById('saveHintLottie');
+          return;
+        }
+
+        saveHintOverlay = document.createElement('div');
+        saveHintOverlay.id = 'saveHintOverlay';
+        saveHintOverlay.className = 'hidden';
+        saveHintOverlay.innerHTML = `
+          <div id="saveHintText" class="save-hint-text">
+            Tap Save to keep your streak alive and mark this ayah as read.
+          </div>
+          <div id="saveHint" class="save-hint">
+            <div id="saveHintLottie"></div>
+          </div>
+        `;
+        document.body.appendChild(saveHintOverlay);
+
+        saveHint = document.getElementById('saveHint');
+        saveHintText = document.getElementById('saveHintText');
+        saveHintLottie = document.getElementById('saveHintLottie');
+      }
+
+      function showSaveHint(targetEl) {
+        const SAVE_KEY = 'save_click_hint_shown_v1';
+        if (localStorage.getItem(SAVE_KEY)) return;
+        if (!allowSaveHint) return;
+
+        ensureSaveHintElements();
+        if (!saveHintOverlay || !saveHint || !saveHintLottie) return;
+
+        const target = targetEl || saveNav;
+        if (!target) {
+          showSaveHint.retryCount = (showSaveHint.retryCount || 0) + 1;
+          if (showSaveHint.retryCount <= 6) {
+            setTimeout(() => showSaveHint(targetEl), 250);
+          }
+          return;
+        }
+        showSaveHint.retryCount = 0;
+
+        holdNavVisible = true;
+        clearTimeout(hideTimer);
+        nav?.classList.add('visible');
+
+        saveHintOverlay.classList.remove('hidden');
+        saveHintOverlay.style.pointerEvents = 'none';
+        window.parent?.postMessage({ type: 'SAVE_HINT_SHOWN' }, '*');
+
+        const SCALE = 2.8;
+        const AUTO_CLOSE = 4200;
+        const hasLottie = !!window.lottie;
+
+        function position() {
+          if (!document.body.contains(target)) return;
+          const rect = target.getBoundingClientRect();
+          const width = rect.width * SCALE;
+          const height = rect.height * SCALE;
+          saveHint.style.width = `${width}px`;
+          saveHint.style.height = `${height}px`;
+          saveHint.style.left = `${rect.left + rect.width / 2 - width / 2}px`;
+          saveHint.style.top = `${rect.top + rect.height / 2 - height / 2}px`;
+        }
+
+        requestAnimationFrame(() => requestAnimationFrame(position));
+
+        saveHintLottie.innerHTML = '';
+        const anim = hasLottie
+          ? lottie.loadAnimation({
+              container: saveHintLottie,
+              renderer: 'svg',
+              loop: true,
+              autoplay: true,
+              path: '/utils/assets/save_click.json'
+            })
+          : null;
+        if (anim) {
+          anim.setSpeed(0.6);
+        }
+
+        const ro = new ResizeObserver(position);
+        ro.observe(target);
+
+        let cleaned = false;
+        function cleanup() {
+          if (cleaned) return;
+          cleaned = true;
+          ro.disconnect();
+          if (anim) anim.destroy();
+          saveHintOverlay.classList.add('hidden');
+          localStorage.setItem(SAVE_KEY, '1');
+          holdNavVisible = false;
+          window.parent?.postMessage({ type: 'SAVE_HINT_DONE' }, '*');
+          if (nav?.classList.contains('visible')) {
+            clearTimeout(hideTimer);
+            hideTimer = setTimeout(() => {
+              if (!holdNavVisible) nav.classList.remove('visible');
+            }, SHOW_DURATION);
+          }
+        }
+
+        target.addEventListener('click', cleanup, { once: true });
+        setTimeout(cleanup, AUTO_CLOSE);
+      }
+      window.showSaveHint = showSaveHint;
+
+      function showWordHint(wordEl) {
+        if (!wordEl) return;
+
+        if (!wordHintOverlay || !hint || !container) return;
+
+        const SCALE        = 4;
+        const AUTO_CLOSE   = 3500;
+        const STORAGE_KEY  = 'word_click_hint_shown_v1';
+
+        wordHintOverlay.classList.remove('hidden');
+        wordHintOverlay.style.pointerEvents = 'none';
+        window.parent?.postMessage({ type: 'WORD_HINT_SHOWN' }, '*');
+
+        // ------------------------------
+        // Position hint over word
+        // ------------------------------
+        function position() {
+          if (!document.body.contains(wordEl)) {
+            cleanup('word-removed');
+            return;
+          }
+
+          const rect = wordEl.getBoundingClientRect();
+
+          const width  = rect.width * SCALE;
+          const height = rect.height * SCALE;
+
+          hint.style.width  = `${width}px`;
+          hint.style.height = `${height}px`;
+          hint.style.left   = `${rect.left + window.scrollX + rect.width / 2 - width / 2}px`;
+          hint.style.top    = `${rect.top  + window.scrollY + rect.height / 2 - height / 2}px`;
+        }
+
+        requestAnimationFrame(() => requestAnimationFrame(position));
+
+        // ------------------------------
+        // Lottie animation
+        // ------------------------------
+        container.innerHTML = '';
+        const anim = window.lottie
+          ? lottie.loadAnimation({
+              container,
+              renderer: 'svg',
+              loop: true,
+              autoplay: true,
+              path: '/utils/assets/tap.json'
+            })
+          : null;
+        if (anim) {
+          anim.setSpeed(0.6);
+        }
+
+        // ------------------------------
+        // Resize observer
+        // ------------------------------
+        const ro = new ResizeObserver(position);
+        ro.observe(wordEl);
+
+        // ------------------------------
+        // Cleanup
+        // ------------------------------
+        let cleaned = false;
+
+        function cleanup(reason) {
+          if (cleaned) return;
+          cleaned = true;
+
+          ro.disconnect();
+          if (anim) anim.destroy();
+
+          wordHintOverlay.classList.add('hidden');
+          localStorage.setItem(STORAGE_KEY, '1');
+          window.parent?.postMessage({ type: 'WORD_HINT_DONE' }, '*');
+
+          document.querySelectorAll('.word-block')
+            .forEach(el => el.removeEventListener('click', onWordClick));
+        }
+
+        function onWordClick() {
+          cleanup('word-click');
+        }
+
+        document.querySelectorAll('.word-block')
+          .forEach(el => el.addEventListener('click', onWordClick, { once: true }));
+
+        setTimeout(() => cleanup('timeout'), AUTO_CLOSE);
+      }
+      window.showWordHint = showWordHint;
+
+/******************************************************
+ *  MAIN IFRAME APP INITIALIZATION - DOM CONTENT LOADED
+ ******************************************************/
+
+      function cacheDOM() {
+        ayahAudio     = document.getElementById('ayahAudio');
+        audioPanel    = document.getElementById('audioControls');
+        playBtn       = document.getElementById('playToggleBtn');
+        navPlay       = document.getElementById('navPlay');
+        navPlayIcon   = document.getElementById('navPlayIcon');
+        floatingBtn   = document.getElementById('floatingPlayer');
+        playToggleBtn = document.getElementById('playToggleBtn');
+        wordHintOverlay = document.getElementById('wordHintOverlay');
+        hint          = document.getElementById('wordHint');
+        container     = document.getElementById('wordHintLottie');
+        scrollEl      = document.getElementById('ayahScroll');
+        el            = document.body;
+        btn           = document.getElementById('navSettings');
+        existing      = document.getElementById('settingsMenu');
+        audio         = document.getElementById('ayahAudio');
+        pracBox 			= document.getElementById('transliteration-box');
+        menuEl 				= document.getElementById('settingsMenu');
+        rootToggle 		= document.getElementById('toggleRoot');
+        gramToggle 		= document.getElementById('toggleGram');
+        transToggle 	= document.getElementById('toggleTrans');
+        allTrans 		  = document.getElementById('toggleAllTrans');
+        ts 					  = document.getElementById('translation-section');
+        langSelect 		= document.getElementById('audioLangSelect');
+        arSrc   			= document.getElementById('audio-url-ar')?.dataset.src;
+        enSrc   			= document.getElementById('audio-url-en')?.dataset.src;
+        urSrc   			= document.getElementById('audio-url-ur')?.dataset.src;
+        popup   			= document.getElementById('popupContent');
+        overlay 			= document.getElementById('overlay');
+        enDiv 				= document.getElementById('englishTranslation');
+        urDiv 				= document.getElementById('urduTranslation');
+        dropdown 			= document.getElementById('translationDropdown');
+        pracNav  			= document.getElementById('navPractice');
+        gamesNav 			= document.getElementById('navGames');
+        modeNav  			= document.getElementById('navMode');
+        learnSec 			= document.getElementById('learning-mode-content');
+        recitSec 			= document.getElementById('reciting-mode-content');
+        transSec 			= document.getElementById('translation-section');
+        gramSec  			= document.getElementById('main-grammar-section');
+        btn 			  	= document.getElementById('navMode');
+        learnSection	= document.getElementById('learning-mode-content');
+        recitSection 	= document.getElementById('reciting-mode-content');
+        modeIcon     	= document.getElementById('navModeIcon');
+        speedSelect 	= document.getElementById('speedSelect');
+        repeatInput 	= document.getElementById('repeatCount');
+        navIcon   		= document.getElementById('navPlayIcon');
+        saveNav  			= document.getElementById('navSaveProgress');
+
+        clearBtn 			 = document.getElementById('clearAll');
+        hideTranslationsBtn = document.getElementById('hideTranslations');
+        translationSection = document.getElementById('translation-section');
+
+
+        panelIcon     = document.querySelector('#playToggleBtn .material-icons-outlined');
+        panelIcon 		= document.querySelector('#playToggleBtn .material-icons-outlined');
+        panelIconEl 	= document.querySelector('#playToggleBtn .material-icons-outlined');
+        nav           = document.querySelector('.bottom-nav');
+
+
+        if (!ayahAudio) {
+          console.warn('[INIT] ayahAudio not found');
+        }
+      }
+
+      function ensureAyahScrollLayout() {
+        const scroll = document.getElementById('ayahScroll');
+        if (!scroll) return;
+
+        // These sections are authored outside #ayahScroll in the HTML.
+        // Move them inside so they are visible/scrollable within the iframe.
+        const ids = [
+          'translation-section',
+          'game-mode-content',
+          'transliteration-box'
+        ];
+
+        ids.forEach(id => {
+          const el = document.getElementById(id);
+          if (el && !scroll.contains(el)) {
+            scroll.appendChild(el);
+          }
+        });
+      }
+
+
+      
+
+      function initIframeApp() {  
+       if (lastInitVersion === iframeDomVersion) {
+          console.log('[INIT] initIframeApp skipped (same DOM)');
+          return;
+        }
+
+        lastInitVersion = iframeDomVersion;
+
+        console.log('[INIT] initIframeApp running for DOM version', iframeDomVersion);
+
+        console.log('[INIT] initIframeApp'              );
+        cacheDOM();
+        if (scrollEl) {
+          document.body.classList.add('has-ayah-scroll');
+        } else {
+          document.body.classList.remove('has-ayah-scroll');
+        }
+        ensureAyahScrollLayout();
+        // Set default translation panel language if missing
+        const html = document.documentElement;
+        if (!html.hasAttribute('data-panel-lang')) {
+          html.setAttribute('data-panel-lang', 'en');
+        }
+
+        setRepeatCount(1, 'init');
+
+
+
+
+        console.log('[INIT] cacheDOM complete'          );
+        initNav();
+        console.log('[INIT] initNav complete'           );
+        initAudio();
+        console.log('[INIT] initAudio complete'         );
+        applySettingsFromStorage();
+        applyLastSettings();
+
+        //initIframeTouchSwipe();
+        //initScrollEdgeSwipe();
+        initPractice();
+        console.log('[INIT] initPractice complete'      );
+        initMessaging();
+        console.log('[INIT] initMessaging complete'     );
+        // Word hint is driven by parent sequencing now.
+        //bindAyahScroll(); 
+        //console.log('[INIT] bindAyahScroll complete'    );
+        bindSwipeEngine();
+        console.log('[INIT] bindSwipeEngine complete'   );
+        if (scrollEl) {
+          scrollEl.scrollTop = 0;
+        }
+      }
+
+      window.addEventListener('DOMContentLoaded', () => {
+        initIframeApp();
+      });
 
 

@@ -41,6 +41,23 @@ const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
+const DEFAULT_STREAK_FREEZES = 2;
+
+function getISTDateStr() {
+  const now = new Date();
+  const utcMs = now.getTime() + now.getTimezoneOffset() * 60000;
+  const istMs = utcMs + 330 * 60000;
+  return new Date(istMs).toISOString().split('T')[0];
+}
+
+function diffDaysUTC(aStr, bStr) {
+  const [ay, am, ad] = aStr.split('-').map(Number);
+  const [by, bm, bd] = bStr.split('-').map(Number);
+  const a = Date.UTC(ay, am - 1, ad);
+  const b = Date.UTC(by, bm - 1, bd);
+  return Math.round((a - b) / 86400000);
+}
+
 // ————— Ensure Anonymous Guest User —————
 export async function ensureGuestUser() {
   const user = auth.currentUser;
@@ -170,35 +187,65 @@ export async function addPointsToFirestore(pointsDelta) {
 
 export async function recordStreak() {
   const userRef  = doc(db, 'users', auth.currentUser.uid);
-  const todayStr = new Date().toISOString().split('T')[0];
+  const todayStr = getISTDateStr();
   const snap0     = await getDoc(userRef);
-  const history0  = (snap0.exists() && snap0.data().streakHistory) || [];
+  const data0     = snap0.exists() ? snap0.data() : {};
+  const history0  = data0.streakHistory || [];
+  const freezes0  = Number.isFinite(data0.streakFreezes) ? data0.streakFreezes : DEFAULT_STREAK_FREEZES;
   const oldLength = history0.length;
   if (history0.includes(todayStr)) {
-    return { updated: false, oldLength, newLength: oldLength };
-  }
-  let shouldAppend = false;
-  if (history0.length > 0) {
-    history0.sort();
-    const diffDays = Math.round((new Date(todayStr) - new Date(history0.pop())) / 86400000);
-    shouldAppend = diffDays === 1;
+    return { updated: false, oldLength, newLength: oldLength, freezes: freezes0 };
   }
   return runTransaction(db, async tx => {
     const snap = await tx.get(userRef);
-    const hist = (snap.exists() && snap.data().streakHistory) || [];
-    if (shouldAppend) {
-      tx.update(userRef, { streakHistory: arrayUnion(todayStr) });
-      return { updated: true, oldLength, newLength: oldLength + 1 };
-    } else {
-      tx.update(userRef, { streakHistory: [todayStr] });
-      return { updated: true, oldLength, newLength: 1 };
+    const data = snap.exists() ? snap.data() : {};
+    const hist = data.streakHistory || [];
+    const freezes = Number.isFinite(data.streakFreezes)
+      ? data.streakFreezes
+      : freezes0;
+
+    if (hist.includes(todayStr)) {
+      return { updated: false, oldLength, newLength: hist.length, freezes };
     }
+
+    let shouldAppend = false;
+    let shouldReset = false;
+    let nextFreezes = freezes;
+
+    if (hist.length > 0) {
+      const lastDate = [...hist].sort().pop();
+      const diffDays = diffDaysUTC(todayStr, lastDate);
+      if (diffDays === 1) {
+        shouldAppend = true;
+      } else if (diffDays > 1 && freezes > 0) {
+        shouldAppend = true;
+        nextFreezes = freezes - 1;
+      } else {
+        shouldReset = true;
+      }
+    } else {
+      shouldReset = true;
+    }
+
+    if (shouldAppend) {
+      tx.update(userRef, {
+        streakHistory: arrayUnion(todayStr),
+        streakFreezes: nextFreezes
+      });
+      return { updated: true, oldLength, newLength: oldLength + 1, freezes: nextFreezes };
+    }
+
+    tx.update(userRef, {
+      streakHistory: [todayStr],
+      streakFreezes: nextFreezes
+    });
+    return { updated: true, oldLength, newLength: 1, freezes: nextFreezes };
   });
 }
 
 export async function resetStreakIfBroken() {
   const userRef  = doc(db, 'users', auth.currentUser.uid);
-  const todayStr = new Date().toISOString().split('T')[0];
+  const todayStr = getISTDateStr();
 
   // 1) Read once outside the transaction
   const snap0     = await getDoc(userRef);
@@ -212,8 +259,7 @@ export async function resetStreakIfBroken() {
   }
   history0.sort();
   const lastDateStr = history0[history0.length - 1];
-  const diffMs      = new Date(todayStr) - new Date(lastDateStr);
-  const diffDays    = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  const diffDays    = diffDaysUTC(todayStr, lastDateStr);
 
   // If the last-streak date is yesterday (diffDays === 1) or today (0), it's unbroken
   if (diffDays <= 1) {

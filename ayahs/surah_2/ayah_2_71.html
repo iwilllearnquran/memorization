@@ -7,15 +7,8 @@
 <!-- Bootstrap CSS (v4.6 or v5.x recommended) -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
-<link
-  href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
-  rel="stylesheet"
-/>
-<link
-  href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
-  rel="stylesheet"
-/>
-
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
 <link rel="stylesheet" href="/styles.css">
 
 <title>Ayah Memorization</title>
@@ -35,15 +28,10 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js"></script>
 
 
+
+
 </head>
 <body>
-
-
-
-
-
-
-
 
 <div class="overlay" id="overlay" onclick="hidePopup()"></div>
 <div class="popup-content" id="popupContent"></div>
@@ -501,7 +489,7 @@
 
 </div>
 
-<div id="translation-section" class="section" style="text-align: center;" onclick="this.classList.toggle('active'); event.stopPropagation();">
+<div id="translation-section" class="section" style="text-align: center;">
 <h2 class="practice-title" style="
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
@@ -512,10 +500,10 @@
     Translation
   </h2>
 
-  <div id="englishTranslation" class="ayah-english" style="text-align: center; display: block;">
+  <div id="englishTranslation" class="ayah-english" style="text-align: center;">
     He said, &quot;He says, &#x27;It is a cow neither trained to plow the earth nor to irrigate the field, one free from fault with no spot upon her.&#x27; &quot; They said, &quot;Now you have come with the truth.&quot; So they slaughtered her, but they could hardly do it.
   </div>
-  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none;">
+  <div id="urduTranslation" class="ayah-english" style="text-align: center;">
     موسیٰ نے کہا کہ خدا فرماتا ہے کہ وہ بیل کام میں لگا ہوا نہ ہو، نہ تو زمین جوتتا ہو اور نہ کھیتی کو پانی دیتا ہو۔ اس میں کسی طرح کا داغ نہ ہو۔ کہنے لگے، اب تم نے سب باتیں درست بتا دیں۔ غرض (بڑی مشکل سے) انہوں نے اس بیل کو ذبح کیا، اور وہ ایسا کرنے والے تھے نہیں
   </div>
 </div>
@@ -817,7 +805,7 @@
     <span class="nav-label">Practice</span>
   </a>
     <a href="#" id="navMode" class="nav-item" onclick="toggleModeNav(); this.blur();">
-    <span id="navModeIcon" class="material-icons-outlined">psychology</span>
+    <span id="navModeIcon" class="material-icons-outlined">menu_book</span>
     <span class="nav-label">Recite</span>
   </a>
 

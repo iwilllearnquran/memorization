@@ -6,15 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap CSS (v4.6 or v5.x recommended) -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link
-  href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
-  rel="stylesheet"
-/>
-<link
-  href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
-  rel="stylesheet"
-/>
-
+<script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
 <link rel="stylesheet" href="/styles.css">
 
 <title>Ayah Memorization</title>
@@ -34,15 +28,10 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js"></script>
 
 
+
+
 </head>
 <body>
-
-
-
-
-
-
-
 
 <div class="overlay" id="overlay" onclick="hidePopup()"></div>
 <div class="popup-content" id="popupContent"></div>
@@ -66,8 +55,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">And an announcement</span>
-        <span class="translation toggle-root root-tag hidden-toggle">وَ أَذَٰن</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">conj+noun</span>
+        <span class="translation toggle-root root-tag ">وَ أَذَٰن</span>
+        <span class="translation toggle-pos pos-tag ">conj+noun</span>
     </span>
 
 </span>
@@ -82,8 +71,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">from Allah</span>
-        <span class="translation toggle-root root-tag hidden-toggle">مِن</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">prep</span>
+        <span class="translation toggle-root root-tag ">مِن</span>
+        <span class="translation toggle-pos pos-tag ">prep</span>
     </span>
 
 </span>
@@ -98,8 +87,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">from Allah</span>
-        <span class="translation toggle-root root-tag hidden-toggle">ٱللَّه</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">pn</span>
+        <span class="translation toggle-root root-tag ">ٱللَّه</span>
+        <span class="translation toggle-pos pos-tag ">pn</span>
     </span>
 
 </span>
@@ -114,8 +103,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">and His Messenger</span>
-        <span class="translation toggle-root root-tag hidden-toggle">وَ رَسُول هِۦٓ</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">conj+noun+pron</span>
+        <span class="translation toggle-root root-tag ">وَ رَسُول هِۦٓ</span>
+        <span class="translation toggle-pos pos-tag ">conj+noun+pron</span>
     </span>
 
 </span>
@@ -130,8 +119,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">to</span>
-        <span class="translation toggle-root root-tag hidden-toggle">إِلَىٰ</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">prep</span>
+        <span class="translation toggle-root root-tag ">إِلَىٰ</span>
+        <span class="translation toggle-pos pos-tag ">prep</span>
     </span>
 
 </span>
@@ -146,8 +135,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">the people</span>
-        <span class="translation toggle-root root-tag hidden-toggle">ٱل نَّاس</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">det+noun</span>
+        <span class="translation toggle-root root-tag ">ٱل نَّاس</span>
+        <span class="translation toggle-pos pos-tag ">det+noun</span>
     </span>
 
 </span>
@@ -162,8 +151,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">(on the) day</span>
-        <span class="translation toggle-root root-tag hidden-toggle">يَوْم</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">noun</span>
+        <span class="translation toggle-root root-tag ">يَوْم</span>
+        <span class="translation toggle-pos pos-tag ">noun</span>
     </span>
 
 </span>
@@ -178,8 +167,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">(of) the greater Pilgrimage</span>
-        <span class="translation toggle-root root-tag hidden-toggle">ٱلْ حَجّ</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">det+noun</span>
+        <span class="translation toggle-root root-tag ">ٱلْ حَجّ</span>
+        <span class="translation toggle-pos pos-tag ">det+noun</span>
     </span>
 
 </span>
@@ -194,8 +183,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">(of) the greater Pilgrimage</span>
-        <span class="translation toggle-root root-tag hidden-toggle">ٱلْ أَكْبَر</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">det+adj</span>
+        <span class="translation toggle-root root-tag ">ٱلْ أَكْبَر</span>
+        <span class="translation toggle-pos pos-tag ">det+adj</span>
     </span>
 
 </span>
@@ -210,8 +199,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">that</span>
-        <span class="translation toggle-root root-tag hidden-toggle">أَنّ</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">acc</span>
+        <span class="translation toggle-root root-tag ">أَنّ</span>
+        <span class="translation toggle-pos pos-tag ">acc</span>
     </span>
 
 </span>
@@ -226,8 +215,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">Allah</span>
-        <span class="translation toggle-root root-tag hidden-toggle">ٱللَّه</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">pn</span>
+        <span class="translation toggle-root root-tag ">ٱللَّه</span>
+        <span class="translation toggle-pos pos-tag ">pn</span>
     </span>
 
 </span>
@@ -242,8 +231,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">(is) free from obligations</span>
-        <span class="translation toggle-root root-tag hidden-toggle">بَرِىٓء</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">adj</span>
+        <span class="translation toggle-root root-tag ">بَرِىٓء</span>
+        <span class="translation toggle-pos pos-tag ">adj</span>
     </span>
 
 </span>
@@ -258,8 +247,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">[of]</span>
-        <span class="translation toggle-root root-tag hidden-toggle">مِن</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">prep</span>
+        <span class="translation toggle-root root-tag ">مِن</span>
+        <span class="translation toggle-pos pos-tag ">prep</span>
     </span>
 
 </span>
@@ -274,8 +263,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">(to) the polytheists</span>
-        <span class="translation toggle-root root-tag hidden-toggle">ٱلْ مُشْرِك</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">det+noun</span>
+        <span class="translation toggle-root root-tag ">ٱلْ مُشْرِك</span>
+        <span class="translation toggle-pos pos-tag ">det+noun</span>
     </span>
 
 </span>
@@ -290,8 +279,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">and (so is) His Messenger</span>
-        <span class="translation toggle-root root-tag hidden-toggle">وَ رَسُول هُۥ</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">conj+noun+pron</span>
+        <span class="translation toggle-root root-tag ">وَ رَسُول هُۥ</span>
+        <span class="translation toggle-pos pos-tag ">conj+noun+pron</span>
     </span>
 
 </span>
@@ -306,8 +295,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">So if</span>
-        <span class="translation toggle-root root-tag hidden-toggle">فَ إِن</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">rem+cond</span>
+        <span class="translation toggle-root root-tag ">فَ إِن</span>
+        <span class="translation toggle-pos pos-tag ">rem+cond</span>
     </span>
 
 </span>
@@ -322,8 +311,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">you repent</span>
-        <span class="translation toggle-root root-tag hidden-toggle">تَابَ تُمْ</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">verb+pron</span>
+        <span class="translation toggle-root root-tag ">تَابَ تُمْ</span>
+        <span class="translation toggle-pos pos-tag ">verb+pron</span>
     </span>
 
 </span>
@@ -338,8 +327,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">then, it is</span>
-        <span class="translation toggle-root root-tag hidden-toggle">فَ هُوَ</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">rem+pron</span>
+        <span class="translation toggle-root root-tag ">فَ هُوَ</span>
+        <span class="translation toggle-pos pos-tag ">rem+pron</span>
     </span>
 
 </span>
@@ -354,8 +343,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">best</span>
-        <span class="translation toggle-root root-tag hidden-toggle">خَيْر</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">noun</span>
+        <span class="translation toggle-root root-tag ">خَيْر</span>
+        <span class="translation toggle-pos pos-tag ">noun</span>
     </span>
 
 </span>
@@ -370,8 +359,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">for you</span>
-        <span class="translation toggle-root root-tag hidden-toggle">لَّ كُمْ</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">prep+pron</span>
+        <span class="translation toggle-root root-tag ">لَّ كُمْ</span>
+        <span class="translation toggle-pos pos-tag ">prep+pron</span>
     </span>
 
 </span>
@@ -386,8 +375,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">But if</span>
-        <span class="translation toggle-root root-tag hidden-toggle">وَ إِن</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">conj+cond</span>
+        <span class="translation toggle-root root-tag ">وَ إِن</span>
+        <span class="translation toggle-pos pos-tag ">conj+cond</span>
     </span>
 
 </span>
@@ -402,8 +391,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">you turn away</span>
-        <span class="translation toggle-root root-tag hidden-toggle">تَوَلَّىٰ تُمْ</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">verb+pron</span>
+        <span class="translation toggle-root root-tag ">تَوَلَّىٰ تُمْ</span>
+        <span class="translation toggle-pos pos-tag ">verb+pron</span>
     </span>
 
 </span>
@@ -418,8 +407,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">then know</span>
-        <span class="translation toggle-root root-tag hidden-toggle">فَ عَلِمَ وٓا۟</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">rem+verb+pron</span>
+        <span class="translation toggle-root root-tag ">فَ عَلِمَ وٓا۟</span>
+        <span class="translation toggle-pos pos-tag ">rem+verb+pron</span>
     </span>
 
 </span>
@@ -434,8 +423,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">that you</span>
-        <span class="translation toggle-root root-tag hidden-toggle">أَنّ كُمْ</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">acc+pron</span>
+        <span class="translation toggle-root root-tag ">أَنّ كُمْ</span>
+        <span class="translation toggle-pos pos-tag ">acc+pron</span>
     </span>
 
 </span>
@@ -450,8 +439,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">(can) not</span>
-        <span class="translation toggle-root root-tag hidden-toggle">غَيْر</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">noun</span>
+        <span class="translation toggle-root root-tag ">غَيْر</span>
+        <span class="translation toggle-pos pos-tag ">noun</span>
     </span>
 
 </span>
@@ -466,8 +455,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">escape</span>
-        <span class="translation toggle-root root-tag hidden-toggle">مُعْجِز</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">noun</span>
+        <span class="translation toggle-root root-tag ">مُعْجِز</span>
+        <span class="translation toggle-pos pos-tag ">noun</span>
     </span>
 
 </span>
@@ -482,8 +471,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">Allah</span>
-        <span class="translation toggle-root root-tag hidden-toggle">ٱللَّه</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">pn</span>
+        <span class="translation toggle-root root-tag ">ٱللَّه</span>
+        <span class="translation toggle-pos pos-tag ">pn</span>
     </span>
 
 </span>
@@ -498,8 +487,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">And give glad tidings</span>
-        <span class="translation toggle-root root-tag hidden-toggle">وَ بُشِّرَ</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">conj+verb</span>
+        <span class="translation toggle-root root-tag ">وَ بُشِّرَ</span>
+        <span class="translation toggle-pos pos-tag ">conj+verb</span>
     </span>
 
 </span>
@@ -514,8 +503,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">(to) those who</span>
-        <span class="translation toggle-root root-tag hidden-toggle">ٱلَّذِى</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">rel</span>
+        <span class="translation toggle-root root-tag ">ٱلَّذِى</span>
+        <span class="translation toggle-pos pos-tag ">rel</span>
     </span>
 
 </span>
@@ -530,8 +519,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">disbelieve</span>
-        <span class="translation toggle-root root-tag hidden-toggle">كَفَرَ وا۟</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">verb+pron</span>
+        <span class="translation toggle-root root-tag ">كَفَرَ وا۟</span>
+        <span class="translation toggle-pos pos-tag ">verb+pron</span>
     </span>
 
 </span>
@@ -546,8 +535,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">of a punishment</span>
-        <span class="translation toggle-root root-tag hidden-toggle">بِ عَذَاب</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">prep+noun</span>
+        <span class="translation toggle-root root-tag ">بِ عَذَاب</span>
+        <span class="translation toggle-pos pos-tag ">prep+noun</span>
     </span>
 
 </span>
@@ -562,8 +551,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">painful</span>
-        <span class="translation toggle-root root-tag hidden-toggle">أَلِيم</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">adj</span>
+        <span class="translation toggle-root root-tag ">أَلِيم</span>
+        <span class="translation toggle-pos pos-tag ">adj</span>
     </span>
 
 </span>
@@ -574,27 +563,38 @@
 <div class="grammar-info">
   <div style="display: flex; justify-content: center; flex-wrap: wrap; row-gap: 10px; column-gap: 20px; margin-top: 12px;">
 
-    <div style="display: flex; align-items: center; gap: 6px;">
+    <!-- Nominative -->
+    <div class="grammar-item" onclick="showGrammarPopup('nominative')"
+         style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
       <div style="width: 12px; height: 12px; background-color: #ffe6e6; border-radius: 3px; border: 1px solid #ccc;"></div>
       <span><b>Nominative</b> <i>(Rafʿ / Subject)</i></span>
     </div>
 
-    <div style="display: flex; align-items: center; gap: 6px;">
+    <!-- Accusative -->
+    <div class="grammar-item" onclick="showGrammarPopup('accusative')"
+         style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
       <div style="width: 12px; height: 12px; background-color: #e6f0ff; border-radius: 3px; border: 1px solid #ccc;"></div>
       <span><b>Accusative</b> <i>(Naṣb / Object)</i></span>
     </div>
 
-    <div style="display: flex; align-items: center; gap: 6px;">
+    <!-- Genitive -->
+    <div class="grammar-item" onclick="showGrammarPopup('genitive')"
+         style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
       <div style="width: 12px; height: 12px; background-color: #e6ffe6; border-radius: 3px; border: 1px solid #ccc;"></div>
       <span><b>Genitive</b> <i>(Jarr / Possession)</i></span>
     </div>
 
-    <div style="display: flex; align-items: center; gap: 6px;">
+    <!-- Verb -->
+    <div class="grammar-item" onclick="showGrammarPopup('verb')"
+         style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
       <div style="width: 12px; height: 12px; background-color: #fff3cd; border-radius: 3px; border: 1px solid #ccc;"></div>
       <span><b>Verb</b> <i>(Fiʿl / Action)</i></span>
     </div>
 
   </div>
+</div>
+
+
 
   <!-- 🔵 PLAY Button -->
   <div style="margin-top: 20px; text-align: center;">
@@ -617,7 +617,7 @@
 
 </div>
 
-<div id="translation-section" class="section" style="text-align: center;" onclick="this.classList.toggle('active'); event.stopPropagation();">
+<div id="translation-section" class="section" style="text-align: center;">
 <h2 class="practice-title" style="
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
@@ -628,10 +628,10 @@
     Translation
   </h2>
 
-  <div id="englishTranslation" class="ayah-english" style="text-align: center; display: block;">
+  <div id="englishTranslation" class="ayah-english" style="text-align: center;">
     And [it is] an announcement from Allah and His Messenger to the people on the day of the greater pilgrimage that Allah is disassociated from the disbelievers, and [so is] His Messenger. So if you repent, that is best for you; but if you turn away - then know that you will not cause failure to Allah. And give tidings to those who disbelieve of a painful punishment.
   </div>
-  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none;">
+  <div id="urduTranslation" class="ayah-english" style="text-align: center;">
     اور حج اکبر کے دن خدا اور اس کے رسول کی طرف سے لوگوں کو آگاہ کیا جاتا ہے کہ خدا مشرکوں سے بیزار ہے اور اس کا رسول بھی (ان سے دستبردار ہے) ۔ پس اگر تم توبہ کرلو تو تمھارے حق میں بہتر ہے۔ اور اگر نہ مانو (اور خدا سے مقابلہ کرو) تو جان رکھو کہ تم خدا کو ہرا نہیں سکو گے اور (اے پیغمبر) کافروں کو دکھ دینے والے عذاب کی خبر سنا دو
   </div>
 </div>
@@ -1021,7 +1021,7 @@
     <span class="nav-label">Practice</span>
   </a>
     <a href="#" id="navMode" class="nav-item" onclick="toggleModeNav(); this.blur();">
-    <span id="navModeIcon" class="material-icons-outlined">psychology</span>
+    <span id="navModeIcon" class="material-icons-outlined">menu_book</span>
     <span class="nav-label">Recite</span>
   </a>
 
@@ -1033,10 +1033,11 @@
     <span class="nav-label">Settings</span>
   </a>
 
-  <a href="#" id="navGames" class="nav-item">
-    <span class="material-icons-outlined">sports_esports</span>
-    <span class="nav-label">Games</span>
-  </a>
+<a href="#" id="navSaveProgress" class="nav-item" onclick="requestSaveProgress(); this.blur();">
+  <span class="material-icons-outlined">bookmark_add</span>
+  <span class="nav-label">Save</span>
+</a>
+
 </nav>
 
 
@@ -1046,7 +1047,7 @@
 
 
 
-<script src="/_private/firebase-init.js"></script>
+
 <script src="/script.js" defer></script> 
 
 <script type="module" defer>
@@ -1066,12 +1067,8 @@
 <script>
   const gameEl = document.getElementById('game-mode-content');
   if (!gameEl) {
-    console.log('[iframe] No #game-mode-content — skipping');
   } else {
-    console.log('[iframe] game-mode-content found — setting up visibility watcher');
-
     function notifyParent(type) {
-      console.log(`[iframe] notifyParent → ${type}`);
       parent.postMessage({ type }, '*');
     }
 
@@ -1082,16 +1079,11 @@
         style.visibility !== 'hidden' &&
         gameEl.offsetWidth > 0 &&
         gameEl.offsetHeight > 0;
-      console.log(
-        `[iframe] checkVisibility → display=${style.display}, visibility=${style.visibility}, ` +
-        `offset=${gameEl.offsetWidth}×${gameEl.offsetHeight} → visible=${isVisible}`
-      );
       notifyParent(isVisible ? 'gamesReady' : 'gameExited');
     }
 
     // Observe both class _and_ style attribute changes
     const observer = new MutationObserver(muts => {
-      console.log('[iframe] MutationObserver fired:', muts);
       checkVisibility();
     });
     observer.observe(gameEl, {
@@ -1101,7 +1093,6 @@
 
     // Initial check (once the DOM is parsed)
     window.addEventListener('DOMContentLoaded', () => {
-      console.log('[iframe] DOMContentLoaded → initial visibility check');
       checkVisibility();
     });
 
@@ -1109,6 +1100,15 @@
     // setInterval(checkVisibility, 500);
   }
 </script>
+                
+  <div id="wordHintOverlay" class="word-hint-overlay hidden">
+    <div class="word-hint-text">
+    Click on each word to view details
+    </div>
+    <div id="wordHint" class="word-hint">
+      <div id="wordHintLottie"></div>
+    </div>
+  </div>
 
 </body>
 </html>

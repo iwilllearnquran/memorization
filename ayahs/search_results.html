@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>🔍 Quran Word Search</title>
+  <title>ðŸ” Quran Word Search</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 0; background: #f9f9f9; }
     nav {
@@ -35,14 +35,14 @@
 <body>
 
 <nav>
-  <h1>🔍 Quran Word Search</h1>
+  <h1>ðŸ” Quran Word Search</h1>
 </nav>
 
 <div class="container">
   <div class="meta-info">
-    <b>Search Word:</b> <span id="query-word">—</span><br>
-    <b>Total Matches:</b> <span id="total-matches">—</span><br>
-    <b>Pages:</b> <span id="total-pages">—</span>
+    <b>Search Word:</b> <span id="query-word">â€”</span><br>
+    <b>Total Matches:</b> <span id="total-matches">â€”</span><br>
+    <b>Pages:</b> <span id="total-pages">â€”</span>
   </div>
 
   <div id="results"></div>
@@ -51,7 +51,7 @@
 
 <script>
 const query = new URLSearchParams(window.location.search).get("q");
-document.getElementById("query-word").textContent = query || "—";
+document.getElementById("query-word").textContent = query || "â€”";
 
 const apiBase = "https://api.quran.com/api/v4/search";
 const waqfMarks = new Set(['\u06D6','\u06D7','\u06D8','\u06D9','\u06DA','\u06DB','\u06DC','\u06DE']);
@@ -118,3 +118,5 @@ fetchPage(currentPage);
 
 </body>
 </html>
+
+

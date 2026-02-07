@@ -7,15 +7,8 @@
 <!-- Bootstrap CSS (v4.6 or v5.x recommended) -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
-<link
-  href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
-  rel="stylesheet"
-/>
-<link
-  href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
-  rel="stylesheet"
-/>
-
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
 <link rel="stylesheet" href="/styles.css">
 
 <title>Ayah Memorization</title>
@@ -35,15 +28,10 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js"></script>
 
 
+
+
 </head>
 <body>
-
-
-
-
-
-
-
 
 <div class="overlay" id="overlay" onclick="hidePopup()"></div>
 <div class="popup-content" id="popupContent"></div>
@@ -67,8 +55,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">This</span>
-        <span class="translation toggle-root root-tag hidden-toggle">هَٰذَا</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">dem</span>
+        <span class="translation toggle-root root-tag ">هَٰذَا</span>
+        <span class="translation toggle-pos pos-tag ">dem</span>
     </span>
 
 </span>
@@ -83,8 +71,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">(is) a declaration</span>
-        <span class="translation toggle-root root-tag hidden-toggle">بَيَان</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">noun</span>
+        <span class="translation toggle-root root-tag ">بَيَان</span>
+        <span class="translation toggle-pos pos-tag ">noun</span>
     </span>
 
 </span>
@@ -99,8 +87,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">for the people</span>
-        <span class="translation toggle-root root-tag hidden-toggle">لِّ ل نَّاس</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">prep+det+noun</span>
+        <span class="translation toggle-root root-tag ">لِّ ل نَّاس</span>
+        <span class="translation toggle-pos pos-tag ">prep+det+noun</span>
     </span>
 
 </span>
@@ -115,8 +103,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">and guidance</span>
-        <span class="translation toggle-root root-tag hidden-toggle">وَ هُدًى</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">conj+noun</span>
+        <span class="translation toggle-root root-tag ">وَ هُدًى</span>
+        <span class="translation toggle-pos pos-tag ">conj+noun</span>
     </span>
 
 </span>
@@ -131,8 +119,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">and admonition</span>
-        <span class="translation toggle-root root-tag hidden-toggle">وَ مَّوْعِظَة</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">conj+noun</span>
+        <span class="translation toggle-root root-tag ">وَ مَّوْعِظَة</span>
+        <span class="translation toggle-pos pos-tag ">conj+noun</span>
     </span>
 
 </span>
@@ -147,8 +135,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">for the God-fearing</span>
-        <span class="translation toggle-root root-tag hidden-toggle">لِّ لْ مُتَّقِين</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">prep+det+noun</span>
+        <span class="translation toggle-root root-tag ">لِّ لْ مُتَّقِين</span>
+        <span class="translation toggle-pos pos-tag ">prep+det+noun</span>
     </span>
 
 </span>
@@ -213,7 +201,7 @@
 
 </div>
 
-<div id="translation-section" class="section" style="text-align: center;" onclick="this.classList.toggle('active'); event.stopPropagation();">
+<div id="translation-section" class="section" style="text-align: center;">
 <h2 class="practice-title" style="
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
@@ -224,10 +212,10 @@
     Translation
   </h2>
 
-  <div id="englishTranslation" class="ayah-english" style="text-align: center; display: block;">
+  <div id="englishTranslation" class="ayah-english" style="text-align: center;">
     This [Qur&#x27;an] is a clear statement to [all] the people and a guidance and instruction for those conscious of Allah.
   </div>
-  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none;">
+  <div id="urduTranslation" class="ayah-english" style="text-align: center;">
     یہ (قرآن) لوگوں کے لیے بیان صریح اور اہلِ تقویٰ کے لیے ہدایت اور نصیحت ہے
   </div>
 </div>
@@ -331,7 +319,7 @@
     <span class="nav-label">Practice</span>
   </a>
     <a href="#" id="navMode" class="nav-item" onclick="toggleModeNav(); this.blur();">
-    <span id="navModeIcon" class="material-icons-outlined">psychology</span>
+    <span id="navModeIcon" class="material-icons-outlined">menu_book</span>
     <span class="nav-label">Recite</span>
   </a>
 
@@ -357,7 +345,7 @@
 
 
 
-<script src="/firebase-init.js"></script>
+
 <script src="/script.js" defer></script> 
 
 <script type="module" defer>

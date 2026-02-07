@@ -13,6 +13,11 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
 
+<link rel="preload" href="/fonts/PDMS_SALEEM_QURANFONTQESHIP_0.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/Gilroy-Medium.woff2" as="font" type="font/woff2" crossorigin>
+
+
+
   <link
   href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined"
   rel="stylesheet"
@@ -22,7 +27,7 @@
   rel="stylesheet"
 />
 
-  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet">
+  
 
   <link rel="stylesheet" href="/index-style.css">
 </head>
@@ -51,8 +56,20 @@
     <div class="navbar-right">
       
       <button id="returnToAyah" class="return-btn">Return to Ayah</button>
-      <div class="streak-info" id="streakDisplay">🔥0</div>
+      <div class="streak-info" id="streakDisplay">&#128293;0</div>
     </div>
+  </div>
+  <div id="surahProgressWrap" aria-hidden="true">
+    <div id="surahProgressFill"></div>
+    <div id="surahProgressMarkers" aria-hidden="true">
+      <span data-pct="10"></span>
+      <span data-pct="35"></span>
+      <span data-pct="50"></span>
+      <span data-pct="90"></span>
+      <span data-pct="100"></span>
+    </div>
+    <button id="surahProgressInfo" type="button" aria-label="Surah progress info"></button>
+    <div id="surahProgressTip" role="status" aria-live="polite"></div>
   </div>
 
   <!-- HTML -->
@@ -124,13 +141,13 @@
 
 
 <div class="viewer" id="viewer">
-  
+  <div id="gestureLayer"></div>
 
-  <iframe id="ayahViewer"></iframe>
-
+  <!-- 🃏 Card wrapper -->
+  <div id="ayahCard" class="ayah-card">
+    <iframe id="ayahViewer"></iframe>
+  </div>
 </div>
-
-
 
   
 

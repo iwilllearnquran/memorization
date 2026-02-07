@@ -7,15 +7,8 @@
 <!-- Bootstrap CSS (v4.6 or v5.x recommended) -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
-<link
-  href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
-  rel="stylesheet"
-/>
-<link
-  href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
-  rel="stylesheet"
-/>
-
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
 <link rel="stylesheet" href="/styles.css">
 
 <title>Ayah Memorization</title>
@@ -35,15 +28,10 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js"></script>
 
 
+
+
 </head>
 <body>
-
-
-
-
-
-
-
 
 <div class="overlay" id="overlay" onclick="hidePopup()"></div>
 <div class="popup-content" id="popupContent"></div>
@@ -67,8 +55,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">Wishes</span>
-        <span class="translation toggle-root root-tag hidden-toggle">أَرَادَ</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">verb</span>
+        <span class="translation toggle-root root-tag ">أَرَادَ</span>
+        <span class="translation toggle-pos pos-tag ">verb</span>
     </span>
 
 </span>
@@ -83,8 +71,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">Allah</span>
-        <span class="translation toggle-root root-tag hidden-toggle">ٱللَّه</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">pn</span>
+        <span class="translation toggle-root root-tag ">ٱللَّه</span>
+        <span class="translation toggle-pos pos-tag ">pn</span>
     </span>
 
 </span>
@@ -99,8 +87,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">to</span>
-        <span class="translation toggle-root root-tag hidden-toggle">أَن</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">sub</span>
+        <span class="translation toggle-root root-tag ">أَن</span>
+        <span class="translation toggle-pos pos-tag ">sub</span>
     </span>
 
 </span>
@@ -115,8 +103,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">lighten</span>
-        <span class="translation toggle-root root-tag hidden-toggle">خَفَّفَ</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">verb</span>
+        <span class="translation toggle-root root-tag ">خَفَّفَ</span>
+        <span class="translation toggle-pos pos-tag ">verb</span>
     </span>
 
 </span>
@@ -131,8 +119,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">for you</span>
-        <span class="translation toggle-root root-tag hidden-toggle">عَن كُمْ</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">prep+pron</span>
+        <span class="translation toggle-root root-tag ">عَن كُمْ</span>
+        <span class="translation toggle-pos pos-tag ">prep+pron</span>
     </span>
 
 </span>
@@ -147,8 +135,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">and was created</span>
-        <span class="translation toggle-root root-tag hidden-toggle">وَ خَلَقَ</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">rem+verb</span>
+        <span class="translation toggle-root root-tag ">وَ خَلَقَ</span>
+        <span class="translation toggle-pos pos-tag ">rem+verb</span>
     </span>
 
 </span>
@@ -163,8 +151,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">the mankind</span>
-        <span class="translation toggle-root root-tag hidden-toggle">ٱلْ إِنسَٰن</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">det+noun</span>
+        <span class="translation toggle-root root-tag ">ٱلْ إِنسَٰن</span>
+        <span class="translation toggle-pos pos-tag ">det+noun</span>
     </span>
 
 </span>
@@ -179,8 +167,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">weak</span>
-        <span class="translation toggle-root root-tag hidden-toggle">ضَعِيف</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">noun</span>
+        <span class="translation toggle-root root-tag ">ضَعِيف</span>
+        <span class="translation toggle-pos pos-tag ">noun</span>
     </span>
 
 </span>
@@ -245,7 +233,7 @@
 
 </div>
 
-<div id="translation-section" class="section" style="text-align: center;" onclick="this.classList.toggle('active'); event.stopPropagation();">
+<div id="translation-section" class="section" style="text-align: center;">
 <h2 class="practice-title" style="
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
@@ -256,10 +244,10 @@
     Translation
   </h2>
 
-  <div id="englishTranslation" class="ayah-english" style="text-align: center; display: block;">
+  <div id="englishTranslation" class="ayah-english" style="text-align: center;">
     And Allah wants to lighten for you [your difficulties]; and mankind was created weak.
   </div>
-  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none;">
+  <div id="urduTranslation" class="ayah-english" style="text-align: center;">
     خدا چاہتا ہے کہ تم پر سے بوجھ ہلکا کرے اور انسان (طبعاً) کمزور پیدا ہوا ہے
   </div>
 </div>
@@ -385,7 +373,7 @@
     <span class="nav-label">Practice</span>
   </a>
     <a href="#" id="navMode" class="nav-item" onclick="toggleModeNav(); this.blur();">
-    <span id="navModeIcon" class="material-icons-outlined">psychology</span>
+    <span id="navModeIcon" class="material-icons-outlined">menu_book</span>
     <span class="nav-label">Recite</span>
   </a>
 
@@ -411,7 +399,7 @@
 
 
 
-<script src="/firebase-init.js"></script>
+
 <script src="/script.js" defer></script> 
 
 <script type="module" defer>

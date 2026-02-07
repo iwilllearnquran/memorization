@@ -11,9 +11,33 @@
 }
 
 
+
+
+
+#viewer iframe {
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+
+
 body {
   margin: 0;
   padding-top: var(--safe-top);
+}
+
+html, body {
+  height: 100%;
+}
+
+html,
+body {
+  overflow-y: auto !important;
+}
+
+body.reader-mode {
+  overflow: hidden !important;
 }
 
 .menu-btn {
@@ -63,6 +87,73 @@ body {
   opacity: 0.75; 
 }
 
+.ayah-card {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  will-change: transform;
+  transform: translateZ(0);
+
+  transform: translate3d(0,0,0);
+
+  backface-visibility: hidden;
+}
+
+.viewer {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #fff;
+}
+
+
+
+#ayahViewer {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #fff;
+}
+
+#gestureLayer {
+  position: absolute; /* or fixed depending on layout */
+  inset: 0;
+  z-index: 0;       /* above iframes so it receives pointer events */
+  touch-action: pan-y;
+  pointer-events: none; /* toggled on/off in code */
+
+
+
+
+}
+
+.ayah-card iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+
+  backface-visibility: hidden;
+  will-change: contents;
+}
+
+
+/* 🔥 CANVAS OVERLAY */
+#swipeCanvas {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: none;
+  pointer-events: none;
+  will-change: transform;
+  background: #fff;
+}
+
+
+.viewer {
+  contain: layout paint;
+}
+
 .swipe-text {
   color: #fff;
   font-size: 15px;
@@ -85,7 +176,7 @@ body {
       justify-content: space-between;
       align-items: center;
       font-weight: bold;
-      border-bottom: 4px solid #2ca7d8;
+      border-bottom: 0;
       position: relative;
       z-index: 2;
     }
@@ -123,6 +214,130 @@ body {
     }
     .login-btn:hover { background: #e3f2f9; }
 
+    #surahProgressWrap {
+      height: 4px;
+      background: rgba(44,167,216,0.25);
+      width: 100%;
+      position: relative;
+      z-index: 12;
+      display: none;
+    }
+
+    body.reader-mode #surahProgressWrap {
+      display: block;
+    }
+
+    #surahProgressFill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #2ca7d8, #5cc8e6);
+      transition: width 0.35s ease;
+    }
+
+    #surahProgressMarkers {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    #surahProgressMarkers span {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 0.5px;
+      background: rgba(255, 255, 255, 0.65);
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
+      transform: translateX(-50%);
+    }
+
+
+    #surahProgressInfo {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 10px;
+      height: 10px;
+      background: #ffffff;
+      border: 2px solid #2ca7d8;
+      border-radius: 999px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+      cursor: pointer;
+      transition: left 0.35s ease;
+      transform: translate(-50%, -50%);
+      z-index: 3;
+      padding: 0;
+    }
+
+    #surahProgressTip {
+      position: absolute;
+      left: 50%;
+      top: 20px;
+      transform: translate(-50%, -120%) scale(0.95);
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(214, 231, 255, 0.9));
+      color: #0a4d68;
+      padding: 12px 18px;
+      border-radius: 16px;
+      font-size: 13px;
+      font-family: 'Poppins', 'Inter', system-ui, sans-serif;
+      letter-spacing: 0.01em;
+      max-width: 280px;
+      width: max-content;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      box-shadow: 0 20px 40px rgba(9, 21, 41, 0.18);
+      border: 1px solid rgba(10, 77, 104, 0.08);
+      z-index: 10050;
+      text-align: left;
+      background-origin: border-box;
+      background-clip: padding-box, border-box;
+      padding: 14px 20px;
+    }
+
+    #surahProgressTip::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: -6px;
+      transform: translateX(-50%);
+      border-width: 0 6px 6px 6px;
+      border-style: solid;
+      border-color: transparent transparent rgba(255, 255, 255, 0.65) transparent;
+    }
+
+    #surahProgressTip.is-visible {
+      opacity: 1;
+      transform: translate(-50%, -90%) scale(1);
+      box-shadow: 0 30px 50px rgba(5, 19, 47, 0.45);
+    }
+
+    .motivation-toast {
+      position: fixed;
+      top: calc(var(--safe-top) + 78px);
+      left: 50%;
+      transform: translate(-50%, -8px);
+      background: rgba(10, 77, 104, 0.92);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 14px;
+      font-size: 13px;
+      line-height: 1.4;
+      box-shadow: 0 12px 24px rgba(8, 18, 24, 0.22);
+      opacity: 0;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      z-index: 10000000;
+      pointer-events: none;
+      text-align: center;
+      width: max-content;
+      max-width: 88vw;
+    }
+
+
+    .motivation-toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
     .container {
       max-width: 1000px;
       margin: 10px auto;
@@ -156,7 +371,7 @@ body {
   width: 100%;
   height: 100%;
   border: none;
-  transition: transform 0.3s ease;
+ 
 }
 
 
@@ -820,7 +1035,7 @@ body {
   border: 2px solid rgba(18,1,1,0.6);
   border-radius: 16px;
   margin: 10px;
-  padding: 30px 20px;
+  padding: 10px 10px 20px 10px;
   text-align: center;
   color: var(--text-primary);
 }
@@ -871,6 +1086,124 @@ body {
   border-radius: 6px;
   cursor: pointer;
   width: 100%;
+}
+
+/* ===== UI polish overrides ===== */
+:root {
+  --ui-radius: 14px;
+  --ui-radius-sm: 10px;
+  --ui-shadow: 0 14px 34px rgba(8, 18, 24, 0.22);
+  --ui-shadow-soft: 0 8px 20px rgba(8, 18, 24, 0.12);
+  --ui-overlay: rgba(6, 16, 26, 0.55);
+}
+
+
+
+.viewer {
+  background: radial-gradient(120% 140% at 50% -10%, #f9fbfc 0%, #eef3f6 55%, #e7edf2 100%);
+}
+
+.ayah-card {
+  background: #fff;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+}
+
+.navbar {
+  border-bottom-width: 2px;
+  box-shadow: 0 6px 18px rgba(4, 18, 26, 0.24);
+  letter-spacing: 0.2px;
+}
+
+#surahSelect,
+#ayahSelect {
+  border-radius: var(--ui-radius-sm);
+  padding: 7px 10px;
+  border: 1px solid rgba(0,0,0,0.12);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.qq-overlay {
+  background: var(--ui-overlay) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+body.drawer-open {
+  overflow: hidden !important;
+}
+
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 16, 26, 0.25);
+  z-index: 10060;
+}
+
+.profile-drawer.qq-sidebar {
+  z-index: 10070;
+}
+
+.qq-modal {
+  border-radius: var(--ui-radius);
+  box-shadow: var(--ui-shadow);
+  border: 1px solid rgba(15, 40, 58, 0.08);
+}
+
+#streakPopup,
+.journeyBox {
+  border-radius: var(--ui-radius);
+  box-shadow: var(--ui-shadow);
+}
+
+.profile-drawer.qq-sidebar {
+  width: 270px;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 4px 0 26px rgba(0,0,0,0.35);
+}
+
+.qq-sidebar-header {
+  padding: 18px 16px;
+}
+
+.drawer-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.1);
+}
+
+.qq-nav-item {
+  border-radius: 12px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.qq-nav-item:hover {
+  transform: translateX(2px);
+}
+
+#returnToAyah,
+#closeAboutPopup,
+#popupSaveGo,
+#popupGoHome,
+.journeyClose,
+.profile-actions button,
+.hero-actions .cta-btn,
+.resume-btn {
+  border-radius: var(--ui-radius) !important;
+  box-shadow: var(--ui-shadow-soft);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+}
+
+#returnToAyah:hover,
+#closeAboutPopup:hover,
+#popupSaveGo:hover,
+#popupGoHome:hover,
+.journeyClose:hover,
+.profile-actions button:hover,
+.hero-actions .cta-btn:hover,
+.resume-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(8, 18, 24, 0.18);
 }
 
 

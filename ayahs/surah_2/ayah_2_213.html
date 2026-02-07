@@ -7,15 +7,8 @@
 <!-- Bootstrap CSS (v4.6 or v5.x recommended) -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
-<link
-  href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
-  rel="stylesheet"
-/>
-<link
-  href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
-  rel="stylesheet"
-/>
-
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
 <link rel="stylesheet" href="/styles.css">
 
 <title>Ayah Memorization</title>
@@ -35,15 +28,10 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js"></script>
 
 
+
+
 </head>
 <body>
-
-
-
-
-
-
-
 
 <div class="overlay" id="overlay" onclick="hidePopup()"></div>
 <div class="popup-content" id="popupContent"></div>
@@ -901,7 +889,7 @@
 
 </div>
 
-<div id="translation-section" class="section" style="text-align: center;" onclick="this.classList.toggle('active'); event.stopPropagation();">
+<div id="translation-section" class="section" style="text-align: center;">
 <h2 class="practice-title" style="
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
@@ -912,10 +900,10 @@
     Translation
   </h2>
 
-  <div id="englishTranslation" class="ayah-english" style="text-align: center; display: block;">
+  <div id="englishTranslation" class="ayah-english" style="text-align: center;">
     Mankind was [of] one religion [before their deviation]; then Allah sent the prophets as bringers of good tidings and warners and sent down with them the Scripture in truth to judge between the people concerning that in which they differed. And none differed over the Scripture except those who were given it - after the clear proofs came to them - out of jealous animosity among themselves. And Allah guided those who believed to the truth concerning that over which they had differed, by His permission. And Allah guides whom He wills to a straight path.
   </div>
-  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none;">
+  <div id="urduTranslation" class="ayah-english" style="text-align: center;">
     (پہلے تو سب) لوگوں کا ایک ہی مذہب تھا (لیکن وہ آپس میں اختلاف کرنے لگے) تو خدا نے (ان کی طرف) بشارت دینے والے اور ڈر سنانے والے پیغمبر بھیجے اور ان پر سچائی کے ساتھ کتابیں نازل کیں تاکہ جن امور میں لوگ اختلاف کرتے تھے ان کا ان میں فیصلہ کردے۔ اور اس میں اختلاف بھی انہیں لوگوں نے کیا جن کو کتاب دی گئی تھی باوجود یہ کہ ان کے پاس کھلے ہوئے احکام آچکے تھے (اور یہ اختلاف انہوں نے صرف) آپس کی ضد سے (کیا) تو جس امر حق میں وہ اختلاف کرتے تھے خدا نے اپنی مہربانی سے مومنوں کو اس کی راہ دکھا دی۔ اور خدا جس کو چاہتا ہے سیدھا رستہ دکھا دیتا ہے
   </div>
 </div>
@@ -1492,7 +1480,7 @@
     <span class="nav-label">Practice</span>
   </a>
     <a href="#" id="navMode" class="nav-item" onclick="toggleModeNav(); this.blur();">
-    <span id="navModeIcon" class="material-icons-outlined">psychology</span>
+    <span id="navModeIcon" class="material-icons-outlined">menu_book</span>
     <span class="nav-label">Recite</span>
   </a>
 

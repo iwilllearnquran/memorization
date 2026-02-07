@@ -5,6 +5,23 @@
  */
 const POINTS_KEY = 'guestPoints';
 const STREAK_KEY = 'guestStreakHistory';
+const STREAK_FREEZE_KEY = 'guestStreakFreezes';
+const DEFAULT_STREAK_FREEZES = 2;
+
+function getISTDateStr() {
+  const now = new Date();
+  const utcMs = now.getTime() + now.getTimezoneOffset() * 60000;
+  const istMs = utcMs + 330 * 60000;
+  return new Date(istMs).toISOString().split('T')[0];
+}
+
+function diffDaysUTC(aStr, bStr) {
+  const [ay, am, ad] = aStr.split('-').map(Number);
+  const [by, bm, bd] = bStr.split('-').map(Number);
+  const a = Date.UTC(ay, am - 1, ad);
+  const b = Date.UTC(by, bm - 1, bd);
+  return Math.round((a - b) / 86400000);
+}
 
 /**
  * Ensure the guest session storage is initialized.
@@ -17,6 +34,9 @@ export function initGuestSession() {
   }
   if (!localStorage.getItem(STREAK_KEY)) {
     localStorage.setItem(STREAK_KEY, JSON.stringify([]));
+  }
+  if (!localStorage.getItem(STREAK_FREEZE_KEY)) {
+    localStorage.setItem(STREAK_FREEZE_KEY, String(DEFAULT_STREAK_FREEZES));
   }
 }
 
@@ -42,20 +62,25 @@ export function addGuestPoints(pointsDelta) {
  */
 export function recordGuestStreak() {
   initGuestSession();
-  const today = new Date().toISOString().split('T')[0];
+  const today = getISTDateStr();
   const history = JSON.parse(localStorage.getItem(STREAK_KEY)) || [];
   const oldLength = history.length;
+  const freezes = parseInt(localStorage.getItem(STREAK_FREEZE_KEY), 10) || 0;
 
   if (history[oldLength - 1] === today) {
-    return { updated: false, oldLength, newLength: oldLength };
+    return { updated: false, oldLength, newLength: oldLength, today, freezes };
   }
 
   let newHistory;
+  let newFreezes = freezes;
   if (oldLength > 0) {
     const lastDate = history[oldLength - 1];
-    const diffDays = Math.round((new Date(today) - new Date(lastDate)) / (1000 * 60 * 60 * 24));
+    const diffDays = diffDaysUTC(today, lastDate);
     if (diffDays === 1) {
       newHistory = [...history, today];
+    } else if (diffDays > 1 && freezes > 0) {
+      newHistory = [...history, today];
+      newFreezes = freezes - 1;
     } else {
       newHistory = [today];
     }
@@ -64,7 +89,19 @@ export function recordGuestStreak() {
   }
 
   localStorage.setItem(STREAK_KEY, JSON.stringify(newHistory));
-  return { updated: true, oldLength, newLength: newHistory.length };
+  localStorage.setItem(STREAK_FREEZE_KEY, String(newFreezes));
+  return {
+    updated: true,
+    oldLength,
+    newLength: newHistory.length,
+    today,
+    freezes: newFreezes
+  };
+}
+
+export function getGuestStreakFreezes() {
+  initGuestSession();
+  return parseInt(localStorage.getItem(STREAK_FREEZE_KEY), 10) || 0;
 }
 
 /**

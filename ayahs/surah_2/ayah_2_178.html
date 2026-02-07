@@ -7,15 +7,8 @@
 <!-- Bootstrap CSS (v4.6 or v5.x recommended) -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
-<link
-  href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
-  rel="stylesheet"
-/>
-<link
-  href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
-  rel="stylesheet"
-/>
-
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
 <link rel="stylesheet" href="/styles.css">
 
 <title>Ayah Memorization</title>
@@ -35,15 +28,10 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js"></script>
 
 
+
+
 </head>
 <body>
-
-
-
-
-
-
-
 
 <div class="overlay" id="overlay" onclick="hidePopup()"></div>
 <div class="popup-content" id="popupContent"></div>
@@ -709,7 +697,7 @@
 
 </div>
 
-<div id="translation-section" class="section" style="text-align: center;" onclick="this.classList.toggle('active'); event.stopPropagation();">
+<div id="translation-section" class="section" style="text-align: center;">
 <h2 class="practice-title" style="
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
@@ -720,10 +708,10 @@
     Translation
   </h2>
 
-  <div id="englishTranslation" class="ayah-english" style="text-align: center; display: block;">
+  <div id="englishTranslation" class="ayah-english" style="text-align: center;">
     O you who have believed, prescribed for you is legal retribution for those murdered - the free for the free, the slave for the slave, and the female for the female. But whoever overlooks from his brother anything, then there should be a suitable follow-up and payment to him with good conduct. This is an alleviation from your Lord and a mercy. But whoever transgresses after that will have a painful punishment.
   </div>
-  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none;">
+  <div id="urduTranslation" class="ayah-english" style="text-align: center;">
     مومنو! تم کو مقتولوں کے بارےمیں قصاص (یعنی خون کے بدلے خون) کا حکم دیا جاتا ہے (اس طرح پر کہ) آزاد کے بدلے آزاد (مارا جائے) اور غلام کے بدلے غلام اور عورت کے بدلے عورت اور قاتل کو اس کے (مقتول) بھائی (کے قصاص میں) سے کچھ معاف کردیا جائے تو (وارث مقتول) کو پسندیدہ طریق سے (قرار داد کی) پیروی (یعنی مطالبہٴ خون بہا) کرنا اور (قاتل کو) خوش خوئی کے ساتھ ادا کرنا چاہیئے یہ پروردگار کی طرف سے تمہارے لئے آسانی اور مہربانی ہے جو اس کے بعد زیادتی کرے اس کے لئے دکھ کا عذاب ہے
   </div>
 </div>
@@ -1168,7 +1156,7 @@
     <span class="nav-label">Practice</span>
   </a>
     <a href="#" id="navMode" class="nav-item" onclick="toggleModeNav(); this.blur();">
-    <span id="navModeIcon" class="material-icons-outlined">psychology</span>
+    <span id="navModeIcon" class="material-icons-outlined">menu_book</span>
     <span class="nav-label">Recite</span>
   </a>
 

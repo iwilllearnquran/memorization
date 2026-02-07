@@ -7,15 +7,8 @@
 <!-- Bootstrap CSS (v4.6 or v5.x recommended) -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
-<link
-  href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
-  rel="stylesheet"
-/>
-<link
-  href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
-  rel="stylesheet"
-/>
-
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
 <link rel="stylesheet" href="/styles.css">
 
 <title>Ayah Memorization</title>
@@ -35,15 +28,10 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js"></script>
 
 
+
+
 </head>
 <body>
-
-
-
-
-
-
-
 
 <div class="overlay" id="overlay" onclick="hidePopup()"></div>
 <div class="popup-content" id="popupContent"></div>
@@ -67,8 +55,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">And not</span>
-        <span class="translation toggle-root root-tag hidden-toggle">وَ مَا</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">rem+neg</span>
+        <span class="translation toggle-root root-tag ">وَ مَا</span>
+        <span class="translation toggle-pos pos-tag ">rem+neg</span>
     </span>
 
 </span>
@@ -83,8 +71,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">is</span>
-        <span class="translation toggle-root root-tag hidden-toggle">كَانَ</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">verb</span>
+        <span class="translation toggle-root root-tag ">كَانَ</span>
+        <span class="translation toggle-pos pos-tag ">verb</span>
     </span>
 
 </span>
@@ -99,8 +87,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">for a soul</span>
-        <span class="translation toggle-root root-tag hidden-toggle">لِ نَفْس</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">prep+noun</span>
+        <span class="translation toggle-root root-tag ">لِ نَفْس</span>
+        <span class="translation toggle-pos pos-tag ">prep+noun</span>
     </span>
 
 </span>
@@ -115,15 +103,15 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">that</span>
-        <span class="translation toggle-root root-tag hidden-toggle">أَن</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">sub</span>
+        <span class="translation toggle-root root-tag ">أَن</span>
+        <span class="translation toggle-pos pos-tag ">sub</span>
     </span>
 
 </span>
     
 
 
-    <span class="word-block click-animate  verb-highlight" onclick="showPopup({&quot;Word&quot;: &quot;تَمُوتَ&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;https://verses.quran.com/wbw/003_145_005.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Verb&quot;, &quot;count_of_verb&quot;: 39.0, &quot;root_from_gpt&quot;: &quot;مَاتَ&quot;, &quot;Main Verb Grammar&quot;: &quot;third person feminine singular&quot;, &quot;root_from_txt&quot;: &quot;مَّاتَ&quot;, &quot;Meaning Of Verb&quot;: &quot;to die&quot;})">
+    <span class="word-block click-animate  verb-highlight" onclick="showPopup({&quot;Word&quot;: &quot;تَمُوتَ&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;\n        <b style=\&quot;font-size:15px; margin-bottom:10px; color:#0a4d68; display:flex; align-items:center; justify-content:space-between;\&quot;>\n         <span>\n          📋 Verb Conjugation Table (Active & Passive)\n            <a id=\&quot;open-new-tab-link\&quot; href=\&quot;/memorization/verbs_tables/مَاتَ.html\&quot; target=\&quot;_blank\&quot; title=\&quot;Open full table in new tab\&quot; style=\&quot;\n              margin-left: 5px;\n              display: inline-flex;\n              align-items: center;\n              font-size: 16px;\n              text-decoration: none;\n            \&quot;>\n              ↗️\n            </a>\n\n\n        </span>\n        </b>\n        <table style =\&quot;box-shadow: 0 2px 6px rgba(0,0,0,0.1);\&quot;>\n          <thead>\n            <tr style=\&quot;background-color: #f2f2f2; text-align: center;\&quot;>\n              <th style=\&quot;padding:4px 6px; border:1px solid #ccc; min-width:160px;\&quot;>\n                Pronoun\n              </th>\n              <th style=\&quot;padding:4px 6px; border:1px solid #ccc;\&quot;>\n                <a href=\&quot;#\&quot; onclick=\&quot;playVerbAudio('مَاتَ', 'past', this); return false;\&quot; style=\&quot;text-decoration:none; color:inherit;\&quot;>\n                  Past (He taught) <span class=\&quot;audio-icon\&quot;>🔊</span>\n                </a>\n              </th>\n              <th style=\&quot;padding:4px 6px; border:1px solid #ccc;\&quot;>\n                <a href=\&quot;#\&quot; onclick=\&quot;playVerbAudio('مَاتَ', 'present', this); return false;\&quot; style=\&quot;text-decoration:none; color:inherit;\&quot;>\n                  Present (He teaches) <span class=\&quot;audio-icon\&quot;>🔊</span>\n                </a>\n              </th>\n              <th style=\&quot;padding:4px 6px; border:1px solid #ccc;\&quot;>Negation (Not teaching)</th>\n              <th style=\&quot;padding:4px 6px; border:1px solid #ccc;\&quot;>Subjunctive (Might teach)</th>\n              <th style=\&quot;padding:4px 6px; border:1px solid #ccc;\&quot;>Emphatic (Must teach)</th>\n              <th style=\&quot;padding:4px 6px; border:1px solid #ccc;\&quot;>Command!</th>\n              <th style=\&quot;padding:4px 6px; border:1px solid #ccc;\&quot;>Past Passive (Was taught)</th>\n              <th style=\&quot;padding:4px 6px; border:1px solid #ccc;\&quot;>Present Passive (Is being taught)</th>\n              <th style=\&quot;padding:4px 6px; border:1px solid #ccc;\&quot;>Jussive Passive (Not being taught)</th>\n              <th style=\&quot;padding:4px 6px; border:1px solid #ccc;\&quot;>Subjunctive Passive (Might be taught)</th>\n              <th style=\&quot;padding:4px 6px; border:1px solid #ccc;\&quot;>Emphatic Passive (Must be taught)</th>\n            </tr>\n          </thead>\n          <tbody>\n        \n        <tr style=\&quot;background-color: #fff8dc; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>هُوَ (he)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مَاتَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَمُوتُ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَمُتْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَمُوتَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَمُوتَنَّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;></td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مِيتَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُمَاتُ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُمَتْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُمَاتَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُمَاتَنَّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #fff8dc; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>هُمَا (those 2 men)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مَاتَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَمُوتَانِ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَمُوتَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَمُوتَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَمُوتَانِّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;></td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مِيتَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُمَاتَانِ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُمَاتَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُمَاتَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُمَاتَانِّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #fff8dc; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>هُمْ (those men)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مَاتُوا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَمُوتُونَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَمُوتُوا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَمُوتُوا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَمُوتُنَّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;></td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مِيتُوا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُمَاتُونَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُمَاتُوا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُمَاتُوا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُمَاتُنَّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #fff8dc; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>هِيَ (she)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مَاتَتْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتُ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُتْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتَنَّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;></td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مِيتَتْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتُ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَتْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتَنَّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #fff8dc; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>هُمَا (those 2 women)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مَاتَتَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتَانِ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتَانِّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;></td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مِيتَتَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتَانِ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتَانِّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #fff8dc; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>هُنَّ (those women)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مُتْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَمُتْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَمُتْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَمُتْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَمُتْنَانِّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;></td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مِتْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُمَتْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُمَتْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُمَتْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُمَتْنَانِّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #e6f0ff; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>أَنْتَ (you masc.)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مُتْتَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتُ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُتْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتَنَّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مُتْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مِتْتَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتُ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَتْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتَنَّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #e6f0ff; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>أَنْتُمَا (you 2 men)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مُتْتُمَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتَانِ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتَانِّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مُوتَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مِتْتُمَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتَانِ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتَانِّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #e6f0ff; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>أَنْتُمْ (you all men)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مُتْتُم</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتُونَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتُوا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتُوا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتُنَّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مُوتُوا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مِتْتُم</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتُونَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتُوا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتُوا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتُنَّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #e6f0ff; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>أَنْتِ (you fem.)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مُتْتِ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتِينَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتِي</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتِي</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتِنَّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مُوتِي</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مِتْتِ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتِينَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتِي</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتِي</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتِنَّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #e6f0ff; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>أَنْتُمَا (you 2 fem.)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مُتْتُمَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتَانِ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُوتَانِّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مُوتَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مِتْتُمَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتَانِ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَاتَانِّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #e6f0ff; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>أَنْتُنَّ (you all fem.)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مُتْتُنَّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُتْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُتْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُتْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَمُتْنَانِّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مُتْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مِتْتُنَّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَتْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَتْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَتْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُمَتْنَانِّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #eaffea; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>أَنَا (I)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مُتْتُ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>أَمُوتُ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>أَمُتْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>أَمُوتَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>أَمُوتَنَّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;></td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مِتْتُ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>أُمَاتُ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>أُمَتْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>أُمَاتَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>أُمَاتَنَّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #eaffea; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>نَحْنُ (we)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مُتْنَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>نَمُوتُ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>نَمُتْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>نَمُوتَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>نَمُوتَنَّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;></td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>مِتْنَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>نُمَاتُ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>نُمَتْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>نُمَاتَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>نُمَاتَنَّ</td>\n        </tr>\n        </tbody></table>\n    <br/><b style=\&quot;font-size: 15px; margin-bottom: 10px; color: #0a4d68;text-align: left;\&quot;>🔗 Attached Pronouns Table with Examples (كَتَبَ)</b>\n    <table style=\&quot;\n        width: 100%;\n        border-collapse: collapse;\n        box-shadow: 0 2px 6px rgba(0,0,0,0.1);\n    \&quot;>\n        <thead>\n            <tr style=\&quot;background-color: #f2f2f2; text-align: center;\&quot;>\n                <th style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;>Pronoun</th>\n                <th style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;>Doer (Past)</th>\n                <th style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;>Doer (Present)</th>\n                <th style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;>Done-To (Object)</th>\n            </tr>\n        </thead>\n        <tbody>\n    \n        <tr style=\&quot;background-color: #fff8dc; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>هُوَ (he)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـَ → كَتَبَ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>يَـ → يَكْتُبُ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـهُ → كَتَبَهُ</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #fff8dc; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>هُمَا (those two men)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـَا → كَتَبَا</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>يَـ...ـانِ → يَكْتُبَانِ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـهُمَا → كَتَبَهُمَا</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #fff8dc; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>هُمْ (those men)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـُوا → كَتَبُوا</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>يَـ...ـونَ → يَكْتُبُونَ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـهُمْ → كَتَبَهُمْ</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #fff8dc; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>هِيَ (she)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـَتْ → كَتَبَتْ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>تَـ → تَكْتُبُ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـهَا → كَتَبَهَا</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #fff8dc; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>هُمَا (those two women)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـَتَا → كَتَبَتَا</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>تَـ...ـانِ → تَكْتُبَانِ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـهُمَا → كَتَبَهُمَا</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #fff8dc; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>هُنَّ (those women)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـْنَ → كَتَبْنَ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>يَـ...ـنَ → يَكْتُبْنَ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـهُنَّ → كَتَبْهُنَّ</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #e6f0ff; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>أَنْتَ (you, masc)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـْتَ → كَتَبْتَ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>تَـ → تَكْتُبُ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـكَ → كَتَبَكَ</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #e6f0ff; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>أَنْتُمَا (you two men)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـْتُمَا → كَتَبْتُمَا</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>تَـ...ـانِ → تَكْتُبَانِ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـكُمَا → كَتَبَكُمَا</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #e6f0ff; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>أَنْتُمْ (you all men)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـْتُمْ → كَتَبْتُمْ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>تَـ...ـونَ → تَكْتُبُونَ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـكُمْ → كَتَبَكُمْ</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #e6f0ff; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>أَنْتِ (you, fem)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـْتِ → كَتَبْتِ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>تَـ...ـينَ → تَكْتُبِينَ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـكِ → كَتَبَكِ</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #e6f0ff; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>أَنْتُمَا (you two women)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـْتُمَا → كَتَبْتُمَا</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>تَـ...ـانِ → تَكْتُبَانِ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـكُمَا → كَتَبَكُمَا</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #e6f0ff; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>أَنْتُنَّ (you all women)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـْتُنَّ → كَتَبْتُنَّ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>تَـ...ـنَ → تَكْتُبْنَ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـكُنَّ → كَتَبَكُنَّ</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #eaffea; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>أَنَا (I)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـْتُ → كَتَبْتُ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>أَـ → أَكْتُبُ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـنِي → كَتَبَنِي</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #eaffea; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>نَحْنُ (we)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـْنَا → كَتَبْنَا</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>نَـ → نَكْتُبُ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـنَا → كَتَبَنَا</b></td>\n        </tr>\n        </tbody></table>&quot;, &quot;Audio URL&quot;: &quot;https://verses.quran.com/wbw/003_145_005.mp3&quot;, &quot;VERB_FORM&quot;: &quot;I - كَتَبَ&quot;, &quot;tags_joined&quot;: &quot;Verb&quot;, &quot;count_of_verb&quot;: 39.0, &quot;root_from_gpt&quot;: &quot;مَاتَ&quot;, &quot;Main Verb Grammar&quot;: &quot;third person feminine singular&quot;, &quot;root_from_txt&quot;: &quot;مَّاتَ&quot;, &quot;Meaning Of Verb&quot;: &quot;to die&quot;})">
     
     <!-- Arabic word only -->
     <span class="word-text">تَمُوتَ</span>
@@ -131,8 +119,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">he dies</span>
-        <span class="translation toggle-root root-tag hidden-toggle">مَّاتَ</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">verb</span>
+        <span class="translation toggle-root root-tag ">مَّاتَ</span>
+        <span class="translation toggle-pos pos-tag ">verb</span>
     </span>
 
 </span>
@@ -147,8 +135,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">except</span>
-        <span class="translation toggle-root root-tag hidden-toggle">إِلَّا</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">res</span>
+        <span class="translation toggle-root root-tag ">إِلَّا</span>
+        <span class="translation toggle-pos pos-tag ">res</span>
     </span>
 
 </span>
@@ -163,8 +151,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">by (the) permission</span>
-        <span class="translation toggle-root root-tag hidden-toggle">بِ إِذْن</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">prep+noun</span>
+        <span class="translation toggle-root root-tag ">بِ إِذْن</span>
+        <span class="translation toggle-pos pos-tag ">prep+noun</span>
     </span>
 
 </span>
@@ -179,8 +167,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">(of) Allah</span>
-        <span class="translation toggle-root root-tag hidden-toggle">ٱللَّه</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">pn</span>
+        <span class="translation toggle-root root-tag ">ٱللَّه</span>
+        <span class="translation toggle-pos pos-tag ">pn</span>
     </span>
 
 </span>
@@ -195,8 +183,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">(at a) decree</span>
-        <span class="translation toggle-root root-tag hidden-toggle">كِتَٰب</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">noun</span>
+        <span class="translation toggle-root root-tag ">كِتَٰب</span>
+        <span class="translation toggle-pos pos-tag ">noun</span>
     </span>
 
 </span>
@@ -211,8 +199,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">determined</span>
-        <span class="translation toggle-root root-tag hidden-toggle">مُّؤَجَّل</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">adj</span>
+        <span class="translation toggle-root root-tag ">مُّؤَجَّل</span>
+        <span class="translation toggle-pos pos-tag ">adj</span>
     </span>
 
 </span>
@@ -227,8 +215,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">And whoever</span>
-        <span class="translation toggle-root root-tag hidden-toggle">وَ مَن</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">rem+cond</span>
+        <span class="translation toggle-root root-tag ">وَ مَن</span>
+        <span class="translation toggle-pos pos-tag ">rem+cond</span>
     </span>
 
 </span>
@@ -243,8 +231,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">desires</span>
-        <span class="translation toggle-root root-tag hidden-toggle">أَرَادَ</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">verb</span>
+        <span class="translation toggle-root root-tag ">أَرَادَ</span>
+        <span class="translation toggle-pos pos-tag ">verb</span>
     </span>
 
 </span>
@@ -259,8 +247,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">reward</span>
-        <span class="translation toggle-root root-tag hidden-toggle">ثَوَاب</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">noun</span>
+        <span class="translation toggle-root root-tag ">ثَوَاب</span>
+        <span class="translation toggle-pos pos-tag ">noun</span>
     </span>
 
 </span>
@@ -275,8 +263,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">(of) the world </span>
-        <span class="translation toggle-root root-tag hidden-toggle">ٱل دُّنْيَا</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">det+noun</span>
+        <span class="translation toggle-root root-tag ">ٱل دُّنْيَا</span>
+        <span class="translation toggle-pos pos-tag ">det+noun</span>
     </span>
 
 </span>
@@ -291,8 +279,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">We will give him</span>
-        <span class="translation toggle-root root-tag hidden-toggle">آتَى هِۦ</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">verb+pron</span>
+        <span class="translation toggle-root root-tag ">آتَى هِۦ</span>
+        <span class="translation toggle-pos pos-tag ">verb+pron</span>
     </span>
 
 </span>
@@ -307,8 +295,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">thereof</span>
-        <span class="translation toggle-root root-tag hidden-toggle">مِن هَا</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">prep+pron</span>
+        <span class="translation toggle-root root-tag ">مِن هَا</span>
+        <span class="translation toggle-pos pos-tag ">prep+pron</span>
     </span>
 
 </span>
@@ -323,8 +311,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">and whoever</span>
-        <span class="translation toggle-root root-tag hidden-toggle">وَ مَن</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">conj+cond</span>
+        <span class="translation toggle-root root-tag ">وَ مَن</span>
+        <span class="translation toggle-pos pos-tag ">conj+cond</span>
     </span>
 
 </span>
@@ -339,8 +327,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">desires</span>
-        <span class="translation toggle-root root-tag hidden-toggle">أَرَادَ</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">verb</span>
+        <span class="translation toggle-root root-tag ">أَرَادَ</span>
+        <span class="translation toggle-pos pos-tag ">verb</span>
     </span>
 
 </span>
@@ -355,8 +343,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">reward</span>
-        <span class="translation toggle-root root-tag hidden-toggle">ثَوَاب</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">noun</span>
+        <span class="translation toggle-root root-tag ">ثَوَاب</span>
+        <span class="translation toggle-pos pos-tag ">noun</span>
     </span>
 
 </span>
@@ -371,8 +359,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">(of) the Hereafter</span>
-        <span class="translation toggle-root root-tag hidden-toggle">ٱلْ آخِر</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">det+noun</span>
+        <span class="translation toggle-root root-tag ">ٱلْ آخِر</span>
+        <span class="translation toggle-pos pos-tag ">det+noun</span>
     </span>
 
 </span>
@@ -387,8 +375,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">We will give him</span>
-        <span class="translation toggle-root root-tag hidden-toggle">آتَى هِۦ</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">verb+pron</span>
+        <span class="translation toggle-root root-tag ">آتَى هِۦ</span>
+        <span class="translation toggle-pos pos-tag ">verb+pron</span>
     </span>
 
 </span>
@@ -403,8 +391,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">thereof</span>
-        <span class="translation toggle-root root-tag hidden-toggle">مِن هَا</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">prep+pron</span>
+        <span class="translation toggle-root root-tag ">مِن هَا</span>
+        <span class="translation toggle-pos pos-tag ">prep+pron</span>
     </span>
 
 </span>
@@ -419,8 +407,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">And We will reward</span>
-        <span class="translation toggle-root root-tag hidden-toggle">وَ سَ جَزَىٰ</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">rem+fut+verb</span>
+        <span class="translation toggle-root root-tag ">وَ سَ جَزَىٰ</span>
+        <span class="translation toggle-pos pos-tag ">rem+fut+verb</span>
     </span>
 
 </span>
@@ -435,8 +423,8 @@
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">the grateful ones</span>
-        <span class="translation toggle-root root-tag hidden-toggle">ٱل شَاكِر</span>
-        <span class="translation toggle-pos pos-tag hidden-toggle">det+noun</span>
+        <span class="translation toggle-root root-tag ">ٱل شَاكِر</span>
+        <span class="translation toggle-pos pos-tag ">det+noun</span>
     </span>
 
 </span>
@@ -501,7 +489,7 @@
 
 </div>
 
-<div id="translation-section" class="section" style="text-align: center;" onclick="this.classList.toggle('active'); event.stopPropagation();">
+<div id="translation-section" class="section" style="text-align: center;">
 <h2 class="practice-title" style="
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
@@ -512,10 +500,10 @@
     Translation
   </h2>
 
-  <div id="englishTranslation" class="ayah-english" style="text-align: center; display: block;">
+  <div id="englishTranslation" class="ayah-english" style="text-align: center;">
     And it is not [possible] for one to die except by permission of Allah at a decree determined. And whoever desires the reward of this world - We will give him thereof; and whoever desires the reward of the Hereafter - We will give him thereof. And we will reward the grateful.
   </div>
-  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none;">
+  <div id="urduTranslation" class="ayah-english" style="text-align: center;">
     اور کسی شخص میں طاقت نہیں کہ خدا کے حکم کے بغیر مر جائے (اس نے موت کا) وقت مقرر کر کے لکھ رکھا ہے اور جو شخص دنیا میں (اپنے اعمال کا) بدلہ چاہے اس کو ہم یہیں بدلہ دے دیں گے اور جو آخرت میں طالبِ ثواب ہو اس کو وہاں اجر عطا کریں گے اور ہم شکر گزاروں کو عنقریب (بہت اچھا) صلہ دیں گے
   </div>
 </div>
@@ -817,7 +805,7 @@
     <span class="nav-label">Practice</span>
   </a>
     <a href="#" id="navMode" class="nav-item" onclick="toggleModeNav(); this.blur();">
-    <span id="navModeIcon" class="material-icons-outlined">psychology</span>
+    <span id="navModeIcon" class="material-icons-outlined">menu_book</span>
     <span class="nav-label">Recite</span>
   </a>
 
@@ -843,7 +831,7 @@
 
 
 
-<script src="/firebase-init.js"></script>
+
 <script src="/script.js" defer></script> 
 
 <script type="module" defer>

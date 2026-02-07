@@ -7,15 +7,8 @@
 <!-- Bootstrap CSS (v4.6 or v5.x recommended) -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
-<link
-  href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
-  rel="stylesheet"
-/>
-<link
-  href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
-  rel="stylesheet"
-/>
-
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
 <link rel="stylesheet" href="/styles.css">
 
 <title>Ayah Memorization</title>
@@ -35,15 +28,10 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js"></script>
 
 
+
+
 </head>
 <body>
-
-
-
-
-
-
-
 
 <div class="overlay" id="overlay" onclick="hidePopup()"></div>
 <div class="popup-content" id="popupContent"></div>
@@ -949,7 +937,7 @@
 
 </div>
 
-<div id="translation-section" class="section" style="text-align: center;" onclick="this.classList.toggle('active'); event.stopPropagation();">
+<div id="translation-section" class="section" style="text-align: center;">
 <h2 class="practice-title" style="
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
@@ -960,10 +948,10 @@
     Translation
   </h2>
 
-  <div id="englishTranslation" class="ayah-english" style="text-align: center; display: block;">
+  <div id="englishTranslation" class="ayah-english" style="text-align: center;">
     Those messengers - some of them We caused to exceed others. Among them were those to whom Allah spoke, and He raised some of them in degree. And We gave Jesus, the Son of Mary, clear proofs, and We supported him with the Pure Spirit. If Allah had willed, those [generations] succeeding them would not have fought each other after the clear proofs had come to them. But they differed, and some of them believed and some of them disbelieved. And if Allah had willed, they would not have fought each other, but Allah does what He intends.
   </div>
-  <div id="urduTranslation" class="ayah-english" style="text-align: center; display: none;">
+  <div id="urduTranslation" class="ayah-english" style="text-align: center;">
     یہ پیغمبر (جو ہم وقتاً فوقتاً بھیجتے رہیں ہیں) ان میں سے ہم نے بعض کو بعض پر فضیلت دی ہے۔ بعض ایسے ہیں جن سے خدا نے گفتگو فرمائی اور بعض کے (دوسرے امور میں) مرتبے بلند کئے۔ اور عیسیٰ بن مریم کو ہم نے کھلی ہوئی نشانیاں عطا کیں اور روح القدس سے ان کو مدد دی۔ اور اگر خداچاہتا تو ان سے پچھلے لوگ اپنے پاس کھلی نشانیاں آنے کے بعد آپس میں نہ لڑتے لیکن انہوں نے اختلاف کیا تو ان میں سے بعض تو ایمان لے آئے اور بعض کافر ہی رہے۔ اور اگر خدا چاہتا تو یہ لوگ باہم جنگ و قتال نہ کرتے۔ لیکن خدا جو چاہتا ہے کرتا ہے
   </div>
 </div>
@@ -1573,7 +1561,7 @@
     <span class="nav-label">Practice</span>
   </a>
     <a href="#" id="navMode" class="nav-item" onclick="toggleModeNav(); this.blur();">
-    <span id="navModeIcon" class="material-icons-outlined">psychology</span>
+    <span id="navModeIcon" class="material-icons-outlined">menu_book</span>
     <span class="nav-label">Recite</span>
   </a>
 
