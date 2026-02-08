@@ -51,6 +51,7 @@ const dragState = {
   raf: 0
 };
 let swipeLockedUntilFrame = 0;
+let swipeTransitionTimer = 0;
 let pendingSwipeFrame = null;
 let pendingSwipeData = null;
 const DISABLE_CONSOLE_LOGS = true;
@@ -794,6 +795,10 @@ case 'SWIPE_START': {
   // Clear any leftover settle/transition so drag can begin immediately.
   isAnimatingSwipe = false;
   swipeLockedUntilFrame = 0;
+  if (swipeTransitionTimer) {
+    clearTimeout(swipeTransitionTimer);
+    swipeTransitionTimer = 0;
+  }
   if (ring.cards.length) {
     ring.cards.forEach(card => {
       card.style.transition = 'none';
@@ -839,6 +844,22 @@ case 'SWIPE_COMMIT': {
   const EASING   = 'cubic-bezier(0.22, 0.61, 0.36, 1)';
 
   isAnimatingSwipe = true;
+  if (swipeTransitionTimer) {
+    clearTimeout(swipeTransitionTimer);
+    swipeTransitionTimer = 0;
+  }
+  let didFinalize = false;
+  const onCommitDone = () => {
+    if (didFinalize) return;
+    didFinalize = true;
+    if (swipeTransitionTimer) {
+      clearTimeout(swipeTransitionTimer);
+      swipeTransitionTimer = 0;
+    }
+    isAnimatingSwipe = false;
+    swipeLockedUntilFrame = performance.now() + 32; // allow settle
+    finalizeSwipe(dir);
+  };
 
   center.style.transition = `transform ${DURATION}ms ${EASING}`;
   side.style.transition   = `transform ${DURATION}ms ${EASING}`;
@@ -849,15 +870,8 @@ case 'SWIPE_COMMIT': {
   side.style.transform =
     `translate3d(0,0,0)`;
 
-  center.addEventListener(
-    'transitionend',
-    () => {
-      isAnimatingSwipe = false;
-      swipeLockedUntilFrame = performance.now() + 32; // allow settle
-      finalizeSwipe(dir);
-    },
-    { once: true }
-  );
+  center.addEventListener('transitionend', onCommitDone, { once: true });
+  swipeTransitionTimer = setTimeout(onCommitDone, DURATION + 80);
 
 
   break;
@@ -916,6 +930,23 @@ case 'SWIPE_CANCEL': {
 
   isAnimatingSwipe = true;
   swipeLockedUntilFrame = performance.now() + DURATION;
+  if (swipeTransitionTimer) {
+    clearTimeout(swipeTransitionTimer);
+    swipeTransitionTimer = 0;
+  }
+  let didCancel = false;
+  const onCancelDone = () => {
+    if (didCancel) return;
+    didCancel = true;
+    if (swipeTransitionTimer) {
+      clearTimeout(swipeTransitionTimer);
+      swipeTransitionTimer = 0;
+    }
+    isAnimatingSwipe = false;
+    [center, left, right].forEach(el => {
+      el.style.transition = 'none';
+    });
+  };
 
   [center, left, right].forEach(el => {
     el.style.transition = `transform ${DURATION}ms ${EASING}`;
@@ -925,16 +956,8 @@ case 'SWIPE_CANCEL': {
   left.style.transform   = `translate3d(-${w}px,0,0)`;
   right.style.transform  = `translate3d(${w}px,0,0)`;
 
-  center.addEventListener(
-    'transitionend',
-    () => {
-      isAnimatingSwipe = false;
-      [center, left, right].forEach(el => {
-        el.style.transition = 'none';
-      });
-    },
-    { once: true }
-  );
+  center.addEventListener('transitionend', onCancelDone, { once: true });
+  swipeTransitionTimer = setTimeout(onCancelDone, DURATION + 80);
 
   break;
   

@@ -1056,10 +1056,6 @@ body.modal-open #ayahScroll {
   padding-bottom: 14px;
 }
 
-.settings-popup.show {
-  animation: popup-enter 0.3s ease-out forwards;
-}
-
 /* Header */
 .sm-header {
   display: flex;
@@ -2187,7 +2183,7 @@ body.game-mode #returnToAyah {
   display: none;
 }
 
-.popup-content {
+.popup .popup-content {
   background: #fff;
   padding: 14px;
   max-width: 420px;
