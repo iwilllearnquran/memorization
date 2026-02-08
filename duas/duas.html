@@ -1,0 +1,301 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Qur’anic Duas</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+:root {
+  --teal-900:#0a4d68;
+  --teal-700:#13728f;
+  --gold-500:#d6a23a;
+  --paper:#fffdf8;
+  --ink:#102a36;
+  --muted:#5f6b76;
+  --shadow:0 14px 34px rgba(10,32,42,.12);
+  --ring:0 0 0 3px rgba(214,162,58,.45);
+}
+
+body {
+  margin:0;
+  font-family:Manrope, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+background:
+    radial-gradient(
+      1200px 600px at 15% -10%,
+      rgba(19, 114, 143, 0.18),
+      transparent 55%
+    ),
+    radial-gradient(
+      900px 500px at 85% 0%,
+      rgba(214, 162, 58, 0.18),
+      transparent 50%
+    ),
+    linear-gradient(
+      180deg,
+      #f6fbfd 0%,
+      #eaf2f6 100%
+    );
+
+  background-attachment: fixed;
+  padding:32px 16px 72px;
+}
+
+.page {
+  max-width:860px;
+  margin:auto;
+}
+
+.app-header {
+  text-align:center;
+  padding:26px 22px;
+  background:#fff;
+  border-radius:26px;
+  box-shadow:var(--shadow);
+  margin-bottom:28px;
+}
+
+.app-title {
+  font-family:"Cormorant Garamond", serif;
+  font-size:32px;
+  color:var(--teal-900);
+  margin:0 0 6px;
+}
+
+.app-subtitle {
+  color:var(--muted);
+  margin:0;
+}
+
+.dua-list {
+  display:grid;
+  gap:22px;
+}
+
+.dua-card {
+  background:var(--paper);
+  border-radius:22px;
+  padding:24px;
+  border:1px solid rgba(10,77,104,.14);
+  box-shadow:var(--shadow);
+  text-align:center;
+  transition:box-shadow .25s ease, transform .25s ease;
+}
+
+.dua-card.playing {
+  box-shadow:var(--shadow), var(--ring);
+  transform:scale(1.01);
+}
+
+.dua-reference {
+  font-size:12px;
+  color:var(--teal-700);
+  margin-bottom:12px;
+  font-weight:600;
+}
+
+.dua-arabic {
+  font-family:"Amiri", serif;
+  font-size:clamp(26px,4vw,34px);
+  direction:rtl;
+  margin-bottom:14px;
+  color:var(--ink);
+}
+
+.dua-divider {
+  width:64px;
+  height:1px;
+  margin:0 auto 14px;
+  background:linear-gradient(90deg,transparent,var(--gold-500),transparent);
+}
+
+.dua-transliteration {
+  font-style:italic;
+  color:var(--muted);
+  margin-bottom:10px;
+}
+
+.dua-translation {
+  line-height:1.7;
+  color:#1a2d3a;
+}
+
+.play-btn {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin:18px auto 0;
+  padding:10px 18px;
+  font-size:13px;
+  font-weight:600;
+  border-radius:999px;
+  border:1px solid rgba(10,77,104,.25);
+  background:rgba(10,77,104,.08);
+  color:var(--teal-900);
+  cursor:pointer;
+  transition:all .2s ease;
+}
+
+.play-btn:hover {
+  background:#0a4d6824;
+}
+
+.play-btn.playing {
+  background:var(--teal-900);
+  color:#fff;
+  border-color:var(--teal-900);
+}
+
+.play-btn .material-icons {
+  font-size:18px;
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+<header class="app-header">
+  <div class="app-title">Qur’anic Duas</div>
+  <div class="app-subtitle">Supplications from the Qur’an</div>
+</header>
+
+<main class="dua-list" id="duaList"></main>
+
+</div>
+
+<script>
+/* ---------------- TEXT CLEANING ---------------- */
+
+function cleanHtml(text) {
+  let t = String(text || "");
+  t = t.replace(/<[^>]*>/g, "");
+  t = t.replace(/\[\d+\]/g, "");
+  t = t.replace(/foot_note=\d+/g, "");
+  t = t.replace(/,\s*\d+/g, ".");
+  t = t.replace(/\.\s*\d+/g, ".");
+  t = t.replace(/\s+/g, " ").trim();
+  t = t.replace(/,\s*$/, ".").trim();
+  if (t) t = t[0].toUpperCase() + t.slice(1);
+  return t;
+}
+
+function removeQuranicSymbols(text) {
+  const pattern =
+    /[ۖۗۘۙۚۛۜ۝۞ۣ۟۠ۡۢۤۥۦۧۨ۩۪ۭ۫۬ۮۯـ\u0660-\u0669\u06F0-\u06F9]/g;
+  return String(text || "")
+    .replace(pattern, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/* ---------------- AUDIO LOGIC ---------------- */
+
+let cards = [];
+let currentAudio = null;
+let currentIndex = -1;
+
+function buildAudioUrl(ref) {
+  const [s, a] = ref.split(":");
+  return `https://everyayah.com/data/Alafasy_128kbps/${s.padStart(3,"0")}${a.padStart(3,"0")}.mp3`;
+}
+
+function setPlay(btn) {
+  btn.classList.remove("playing");
+  btn.innerHTML =
+    `<span class="material-icons">play_arrow</span><span>Play full ayah</span>`;
+}
+
+function setPause(btn) {
+  btn.classList.add("playing");
+  btn.innerHTML =
+    `<span class="material-icons">pause</span><span>Pause</span>`;
+}
+
+function resetUI() {
+  document.querySelectorAll(".dua-card").forEach(c => c.classList.remove("playing"));
+  document.querySelectorAll(".play-btn").forEach(setPlay);
+}
+
+function playIndex(index) {
+  if (index < 0 || index >= cards.length) {
+    if (currentAudio) currentAudio.pause();
+    resetUI();
+    currentAudio = null;
+    currentIndex = -1;
+    return;
+  }
+
+  const { audio, card, btn } = cards[index];
+
+  if (currentAudio === audio) {
+    if (audio.paused) {
+      audio.play();
+      card.classList.add("playing");
+      setPause(btn);
+    } else {
+      audio.pause();
+      card.classList.remove("playing");
+      setPlay(btn);
+    }
+    return;
+  }
+
+  if (currentAudio) currentAudio.pause();
+  resetUI();
+
+  currentAudio = audio;
+  currentIndex = index;
+
+  card.classList.add("playing");
+  setPause(btn);
+  card.scrollIntoView({ behavior: "smooth", block: "center" });
+
+  audio.play();
+  audio.onended = () => playIndex(index + 1);
+}
+
+/* ---------------- LOAD DUAS ---------------- */
+
+fetch("quranwbw_duas.json")
+  .then(res => res.json())
+  .then(duas => {
+    const list = document.getElementById("duaList");
+
+    duas.forEach((d, i) => {
+      const card = document.createElement("div");
+      card.className = "dua-card";
+
+      const btn = document.createElement("button");
+      btn.className = "play-btn";
+      setPlay(btn);
+
+      const audio = new Audio(buildAudioUrl(d.reference));
+      btn.onclick = () => playIndex(i);
+
+      const arabic = removeQuranicSymbols(d.arabic);
+      const transliteration = cleanHtml(d.transliteration);
+      const translation = cleanHtml(d.translation);
+
+      card.innerHTML = `
+        <div class="dua-reference">Qur’an ${d.reference}</div>
+        <div class="dua-arabic">${arabic}</div>
+        <div class="dua-divider"></div>
+        <div class="dua-transliteration">${transliteration}</div>
+        <div class="dua-translation">${translation}</div>
+      `;
+
+      card.appendChild(btn);
+      list.appendChild(card);
+
+      cards.push({ audio, card, btn });
+    });
+  });
+</script>
+
+</body>
+</html>
