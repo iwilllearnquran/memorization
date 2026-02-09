@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>📖 Quran Quest</title>
+  <title> Quran Quest</title>
 
   <!-- Firebase compat SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js" defer></script>
@@ -115,22 +115,34 @@
   </div>
 </div>
 
-<div id="calendarPopup"></div>
 
 <div id="hero" class="hero">
   <div class="hero-content">
 
     <h1>Quran Quest</h1>
-    <p>Learn Quran in a fun, interactive way, anywhere, anytime.</p>
 
-     <p class="hero-subtitle">
-      "The best among you are those who learn the Quran and teach it."<br>
-      -The Prophet (ﷺ)
+
+
+
+    <p class="hero-description">
+      ...where every ayah is its own universe. A divine message from Allah!
     </p>
-        <div class="hero-actions">
+
+    <p class="hero-subtitle">
+      "The best among you are those who learn the Quran and teach it."<br>
+      — The Prophet (ﷺ)
+    </p>
+
+    <div class="hero-actions">
       <button id="startLearningBtn" class="cta-btn">Start Learning</button>
     </div>
+
   </div>
+</div>
+
+
+<div id="duasView" class="duas-view" aria-hidden="true">
+  <iframe id="duasFrame" title="Daily Ramzan Duas" loading="lazy"></iframe>
 </div>
 
 
@@ -150,6 +162,21 @@
 </div>
 
   
+
+<nav class="bottom-nav" id="bottomNav" aria-label="Primary">
+  <div class="bottom-nav-inner">
+    <button class="bottom-nav-btn active" id="navLearnQuran" type="button">
+      <svg class="bottom-nav-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+        <path d="M456,168h-8v-44.977c0-15.027-13.623-26.219-28.109-23.648l-163.892,28.504L92.172,98.992C77.56,96.372,64,107.656,64,122.625V168h-8c-8.836,0-16,7.163-16,16v184c0,8.836,7.164,16,16,16h130.745c13.602,0,19.88,6.625,27.882,14.627c6.001,6.001,14.141,9.373,22.627,9.373c13.566,0,23.924,0,37.49,0c8.487,0,16.626-3.372,22.627-9.373c8-8,14.268-14.627,27.882-14.627H456c8.836,0,16-7.164,16-16V184C472,175.163,464.836,168,456,168z M422.633,115.141c4.748-0.848,9.367,2.787,9.367,7.883v199.109c0,3.891-2.781,7.203-6.609,7.883L264,358.469V142.727L422.633,115.141z M80,122.625c0-4.952,4.446-8.733,9.391-7.883L248,142.711v215.758L86.609,330.016c-3.828-0.68-6.609-3.992-6.609-7.883V122.625z M288.125,267.727c-0.773-4.352,2.133-8.5,6.484-9.266l104-18.336c4.336-0.82,8.5,2.133,9.266,6.484c0.773,4.352-2.133,8.5-6.484,9.266l-104,18.336c-0.469,0.086-0.938,0.125-1.398,0.125C292.18,274.336,288.805,271.609,288.125,267.727z M288.125,227.727c-0.773-4.352,2.133-8.5,6.484-9.266l104-18.336c4.336-0.805,8.5,2.133,9.266,6.484c0.773,4.352-2.133,8.5-6.484,9.266l-104,18.336c-0.469,0.086-0.938,0.125-1.398,0.125C292.18,234.336,288.805,231.609,288.125,227.727z M288.125,187.727c-0.773-4.352,2.133-8.5,6.484-9.266l104-18.336c4.336-0.82,8.5,2.133,9.266,6.484c0.773,4.352-2.133,8.5-6.484,9.266l-104,18.336c-0.469,0.086-0.938,0.125-1.398,0.125C292.18,194.336,288.805,191.609,288.125,187.727z M288.125,307.727c-0.773-4.352,2.133-8.5,6.484-9.266l104-18.336c4.336-0.805,8.5,2.133,9.266,6.484c0.773,4.352-2.133,8.5-6.484,9.266l-104,18.336c-0.469,0.086-0.938,0.125-1.398,0.125C292.18,314.336,288.805,311.609,288.125,307.727z M118.239,218.242c-11.85-14.068-13.889-33.678-3.614-45.243c12.414-13.972,35.529-10.978,49.375,5.462c13.847-11.557,36.961-6.399,49.375,11.951c10.275,15.188,8.235,34.079-3.614,43.968l-32.5,27.125c-7.318,6.108-19.204,4.012-26.522-4.677L118.239,218.242z"/>
+      </svg>
+      <span>Learn Quran</span>
+    </button>
+    <button class="bottom-nav-btn" id="navRamzanDuas" type="button">
+      <span class="material-symbols-outlined" aria-hidden="true">prayer_times</span>
+      <span>Ramzan Duas</span>
+    </button>
+  </div>
+</nav>
 
   <script src="/_private/firebase-init.js" defer></script>
   <script type="module" src="/index-script.js" defer></script> 

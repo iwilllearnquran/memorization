@@ -45,9 +45,74 @@ body {
   overflow-x: hidden;  
   overflow-y: auto;
   min-height: 100vh;
+background:
+  /* TOP glow */
+  radial-gradient(
+    1100px 600px at 20% -10%,
+    rgba(19, 114, 143, 0.22),
+    transparent 55%
+  ),
+
+  radial-gradient(
+    900px 500px at 80% -5%,
+    rgba(214, 162, 58, 0.18),
+    transparent 55%
+  ),
+
+  /* BOTTOM glow (this is the missing magic) */
+  radial-gradient(
+    1200px 700px at 30% 110%,
+    rgba(19, 114, 143, 0.22),
+    transparent 60%
+  ),
+
+  radial-gradient(
+    900px 600px at 75% 105%,
+    rgba(214, 162, 58, 0.18),
+    transparent 60%
+  ),
+
+  /* BASE paper gradient */
+  linear-gradient(
+    180deg,
+    #f8fcfe 0%,
+    #edf5f9 30%,
+    #e4eef4 55%,
+    #d9e7ef 75%,
+    #eef5f8 100%
+  );
+
+
+
+  background-attachment: fixed;
   
   
 }
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(10, 77, 104, 0.035),
+      rgba(10, 77, 104, 0.035) 1px,
+      transparent 1px,
+      transparent 10px
+    );
+  pointer-events: none;
+  opacity: 0.35;
+  z-index: 0;
+}
+
+.page {
+  position: relative;
+  z-index: 1;
+}
+
+
+
 html, body {
   background-color: #dfe8eb;
   overflow-y: auto;

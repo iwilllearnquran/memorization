@@ -2530,6 +2530,19 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
             return;
           }
 
+          case 'PAUSE_ALL_AUDIO': {
+            if (ayahAudio) {
+              ayahAudio.pause();
+            }
+            if (wordAudio) {
+              wordAudio.pause();
+            }
+            Object.values(audioCache).forEach(a => {
+              if (!a.paused) a.pause();
+            });
+            return;
+          }
+
           case 'RETURN_TO_AYAH': {
             if (typeof togglePracticeNav === 'function' && pracBox?.style.display === 'block') {
               togglePracticeNav();

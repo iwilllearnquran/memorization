@@ -1,6 +1,18 @@
 {
   "hosting": {
     "public": ".",
+    "redirects": [
+      {
+        "source": "/duas",
+        "destination": "/?tab=duas",
+        "type": 301
+      },
+      {
+        "source": "/duas/",
+        "destination": "/?tab=duas",
+        "type": 301
+      }
+    ],
     "ignore": [
       "firebase.json",
       "**/.*",

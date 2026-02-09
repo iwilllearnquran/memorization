@@ -26,6 +26,8 @@ const StreakLogicAndUI = (function() {
     let confettiInstance = null;
     let navEl, auth, db;
     let remainingFreezes = MAX_FREEZES;
+    let lastNavOpenAt = 0;
+    const NAV_OPEN_DEBOUNCE_MS = 300;
   
     // Inject confetti canvas behind popup
     function createConfettiCanvas() {
@@ -459,6 +461,11 @@ function closePopup() {
         // Navbar click → open popup (no animation)
         if (navEl) {
           navEl.addEventListener('click', () => {
+            const overlay = document.getElementById(OVERLAY_ID);
+            const alreadyOpen = overlay && overlay.style.display === 'flex';
+            const now = performance.now();
+            if (alreadyOpen || now - lastNavOpenAt < NAV_OPEN_DEBOUNCE_MS) return;
+            lastNavOpenAt = now;
             createPopup();
             renderPopup(false, null, history.length);
           });

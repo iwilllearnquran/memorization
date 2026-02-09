@@ -70,6 +70,8 @@ if (DISABLE_CONSOLE_LOGS && typeof console !== 'undefined') {
 }
 const popupHistoryStack = [];
 let ignoreNextPopState = false;
+let setDuasMode = null;
+let pendingDuaReturn = false;
 
 function pushPopupHistory(closeFn) {
   popupHistoryStack.push(closeFn);
@@ -95,8 +97,14 @@ window.addEventListener('popstate', () => {
     ignoreNextPopState = false;
     return;
   }
-  if (!popupHistoryStack.length) return;
-  closeTopPopupFromBack();
+  if (popupHistoryStack.length) {
+    closeTopPopupFromBack();
+    return;
+  }
+  if (pendingDuaReturn && !isDuasMode && typeof setDuasMode === 'function') {
+    pendingDuaReturn = false;
+    setDuasMode(true);
+  }
 });
 
 
@@ -108,6 +116,8 @@ let currentAyah  = DEFAULT_AYAH;
 let isGameMode = false;
 let isCurrentAyahDirty = false;
 let pendingSwipeDone = false;
+let isDuasMode = false;
+let duasModeState = null;
 let swipeStartX = 0;
 let swipeDir = 0; // -1 = prev, 1 = next
 let swipeStartY = 0;
@@ -749,6 +759,31 @@ switch (data.type) {
     case 'SETTINGS_CLOSED':
     case 'WORD_DETAILS_CLOSED': {
       popPopupHistoryFromChild();
+      break;
+    }
+
+    case 'NAVIGATE_TO_AYAH': {
+      const surah = Number(data.surah);
+      const ayah = Number(data.ayah);
+      if (!Number.isFinite(surah) || !Number.isFinite(ayah)) break;
+
+      pendingDuaReturn = true;
+      history.pushState({ fromDuas: true, surah, ayah }, '');
+
+      if (D.duasFrame?.contentWindow) {
+        D.duasFrame.contentWindow.postMessage({ type: 'PAUSE_DUAS_AUDIO' }, '*');
+      }
+
+      if (typeof setDuasMode === 'function') {
+        setDuasMode(false);
+      }
+
+      if (D.surahContainer) D.surahContainer.style.display = 'none';
+      if (D.hero) D.hero.style.display = 'none';
+      if (D.viewer) D.viewer.style.display = 'block';
+      if (D.dropdowns) D.dropdowns.style.display = 'flex';
+
+      loadAyah(surah, ayah);
       break;
     }
 
@@ -1653,10 +1688,99 @@ case 'SAVE_HINT_DONE': {
         D.progressInfo = document.getElementById('surahProgressInfo');
         D.progressTip = document.getElementById('surahProgressTip');
          D.surahSelect = document.getElementById('surahSelect');
+        D.duasView       = document.getElementById('duasView');
+        D.duasFrame      = document.getElementById('duasFrame');
+        D.navLearnQuran  = document.getElementById('navLearnQuran');
+        D.navRamzanDuas  = document.getElementById('navRamzanDuas');
+        D.bottomNav      = document.getElementById('bottomNav');
 
 
         const menuBtn = document.getElementById('menuBtn');
         let drawerOverlay = null;
+
+        const syncNavHeights = () => {
+          const nav = document.getElementById('mainNavbar');
+          if (nav) {
+            document.body.style.setProperty('--navbar-h', `${nav.offsetHeight}px`);
+          }
+        };
+
+        const setActiveNav = (isDuas) => {
+          if (D.navLearnQuran) D.navLearnQuran.classList.toggle('active', !isDuas);
+          if (D.navRamzanDuas) D.navRamzanDuas.classList.toggle('active', isDuas);
+        };
+
+        const pauseQuranAudio = () => {
+          const activeFrame = getActiveIframe();
+          activeFrame?.contentWindow?.postMessage(
+            { type: 'PAUSE_ALL_AUDIO' },
+            '*'
+          );
+        };
+
+        const pauseDuasAudio = () => {
+          if (D.duasFrame?.contentWindow) {
+            D.duasFrame.contentWindow.postMessage(
+              { type: 'PAUSE_DUAS_AUDIO' },
+              '*'
+            );
+          }
+        };
+
+        setDuasMode = (enabled) => {
+          if (enabled === isDuasMode) return;
+          isDuasMode = enabled;
+          syncNavHeights();
+
+          if (enabled) {
+            requestWakeLock();
+            pendingDuaReturn = false;
+            pauseQuranAudio();
+            duasModeState = {
+              hero: D.hero?.style.display ?? '',
+              surah: D.surahContainer?.style.display ?? '',
+              viewer: D.viewer?.style.display ?? '',
+              dropdowns: D.dropdowns?.style.display ?? ''
+            };
+
+            document.body.classList.add('duas-mode');
+            closeDrawer();
+            if (D.drawer) D.drawer.style.display = 'none';
+            if (menuBtn) menuBtn.style.display = 'none';
+            if (D.duasView) D.duasView.setAttribute('aria-hidden', 'false');
+            if (D.duasFrame && !D.duasFrame.src) {
+              D.duasFrame.src = 'duas/duas.html';
+            }
+
+            if (D.hero) D.hero.style.display = 'none';
+            if (D.surahContainer) D.surahContainer.style.display = 'none';
+            if (D.viewer) D.viewer.style.display = 'none';
+            if (D.dropdowns) D.dropdowns.style.display = 'none';
+            setActiveNav(true);
+          } else {
+            requestWakeLock();
+            pauseDuasAudio();
+            document.body.classList.remove('duas-mode');
+            if (D.drawer) D.drawer.style.display = '';
+            if (menuBtn) menuBtn.style.display = '';
+            if (D.duasView) D.duasView.setAttribute('aria-hidden', 'true');
+
+            if (duasModeState) {
+              if (D.hero) D.hero.style.display = duasModeState.hero;
+              if (D.surahContainer) D.surahContainer.style.display = duasModeState.surah;
+              if (D.viewer) D.viewer.style.display = duasModeState.viewer;
+              if (D.dropdowns) D.dropdowns.style.display = duasModeState.dropdowns;
+              duasModeState = null;
+            } else {
+              if (D.hero) D.hero.style.display = '';
+              if (D.surahContainer) D.surahContainer.style.display = '';
+              if (D.viewer) D.viewer.style.display = '';
+              if (D.dropdowns) D.dropdowns.style.display = '';
+            }
+
+            setActiveNav(false);
+          }
+        };
 
         const closeDrawer = () => {
           D.drawer.classList.remove('open');
@@ -1688,6 +1812,22 @@ case 'SAVE_HINT_DONE': {
             document.body.appendChild(drawerOverlay);
           }
         };
+
+        if (D.navLearnQuran) {
+          D.navLearnQuran.addEventListener('click', () => setDuasMode(false));
+        }
+
+        if (D.navRamzanDuas) {
+          D.navRamzanDuas.addEventListener('click', () => setDuasMode(true));
+        }
+
+        syncNavHeights();
+        window.addEventListener('resize', syncNavHeights);
+
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('tab') === 'duas' || window.location.hash === '#duas') {
+          setDuasMode(true);
+        }
 
 
         /* ------------------------------------------

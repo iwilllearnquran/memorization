@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Qur’anic Duas</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <style>
@@ -19,6 +19,13 @@
   --shadow:0 14px 34px rgba(10,32,42,.12);
   --ring:0 0 0 3px rgba(214,162,58,.45);
 }
+
+@font-face {
+  font-family: 'CustomArabic';
+  src: url('/fonts/PDMS_SALEEM_QURANFONTQESHIP_0.woff2') format('woff2');
+  font-display: swap;       /* 🔥 critical */
+}
+
 
 body {
   margin:0;
@@ -41,32 +48,34 @@ background:
     );
 
   background-attachment: fixed;
-  padding:32px 16px 72px;
+  padding:0;
 }
 
 .page {
-  max-width:860px;
-  margin:auto;
+  max-width:100%;
+  margin:0;
+  padding:16px 15px 40px;
 }
 
 .app-header {
   text-align:center;
-  padding:26px 22px;
-  background:#fff;
-  border-radius:26px;
+  padding:22px 20px;
+  background:linear-gradient(135deg, #0a4d68 0%, #13728f 100%);
+  border-radius:20px;
   box-shadow:var(--shadow);
-  margin-bottom:28px;
+  margin-bottom:10px;
+  border:1px solid rgba(255,255,255,0.18);
 }
 
 .app-title {
   font-family:"Cormorant Garamond", serif;
   font-size:32px;
-  color:var(--teal-900);
+  color:#fff;
   margin:0 0 6px;
 }
 
 .app-subtitle {
-  color:var(--muted);
+  color:rgba(255,255,255,0.85);
   margin:0;
 }
 
@@ -97,8 +106,25 @@ background:
   font-weight:600;
 }
 
+.dua-ref-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(19, 114, 143, 0.5);
+}
+
+.dua-ref-link:hover {
+  color: var(--teal-900);
+  text-decoration-color: rgba(10, 77, 104, 0.8);
+}
+
 .dua-arabic {
-  font-family:"Amiri", serif;
+  font-family:"CustomArabic", serif;
   font-size:clamp(26px,4vw,34px);
   direction:rtl;
   margin-bottom:14px;
@@ -153,6 +179,30 @@ background:
 .play-btn .material-icons {
   font-size:18px;
 }
+
+.dua-share-btn {
+  border: 1px solid rgba(10, 77, 104, 0.25);
+  background: rgba(10, 77, 104, 0.08);
+  color: var(--teal-900);
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease;
+  margin-top: 12px;
+}
+
+.dua-share-btn:hover {
+  background: rgba(10, 77, 104, 0.16);
+}
+
+.dua-share-btn .material-icons {
+  font-size: 18px;
+}
 </style>
 </head>
 
@@ -161,7 +211,7 @@ background:
 
 <header class="app-header">
   <div class="app-title">Qur’anic Duas</div>
-  <div class="app-subtitle">Supplications from the Qur’an</div>
+  <div class="app-subtitle">Powerful Duas from the Qur’an</div>
 </header>
 
 <main class="dua-list" id="duaList"></main>
@@ -169,6 +219,10 @@ background:
 </div>
 
 <script>
+if (window.top === window.self) {
+  window.location.replace('/?tab=duas');
+}
+
 /* ---------------- TEXT CLEANING ---------------- */
 
 function cleanHtml(text) {
@@ -207,7 +261,7 @@ function buildAudioUrl(ref) {
 function setPlay(btn) {
   btn.classList.remove("playing");
   btn.innerHTML =
-    `<span class="material-icons">play_arrow</span><span>Play full ayah</span>`;
+    `<span class="material-icons">play_arrow</span><span>Play full dua</span>`;
 }
 
 function setPause(btn) {
@@ -219,6 +273,217 @@ function setPause(btn) {
 function resetUI() {
   document.querySelectorAll(".dua-card").forEach(c => c.classList.remove("playing"));
   document.querySelectorAll(".play-btn").forEach(setPlay);
+}
+
+function pauseAllDuaAudio() {
+  if (currentAudio) {
+    currentAudio.pause();
+  }
+  resetUI();
+  currentAudio = null;
+  currentIndex = -1;
+}
+
+window.addEventListener("message", e => {
+  if (e?.data?.type === "PAUSE_DUAS_AUDIO") {
+    pauseAllDuaAudio();
+  }
+});
+
+function wrapLines(ctx, text, maxWidth) {
+  const words = String(text || "").split(" ");
+  const lines = [];
+  let line = "";
+  words.forEach(word => {
+    const test = line ? `${line} ${word}` : word;
+    if (ctx.measureText(test).width > maxWidth && line) {
+      lines.push(line);
+      line = word;
+    } else {
+      line = test;
+    }
+  });
+  if (line) lines.push(line);
+  return lines;
+}
+
+async function buildShareCanvas(card) {
+  if (document.fonts?.ready) {
+    try {
+      await document.fonts.ready;
+    } catch (_) {}
+  }
+
+  const reference = card.querySelector(".dua-reference")?.innerText?.trim() || "";
+  const arabic = card.querySelector(".dua-arabic")?.innerText?.trim() || "";
+  const transliteration = card.querySelector(".dua-transliteration")?.innerText?.trim() || "";
+  const translation = card.querySelector(".dua-translation")?.innerText?.trim() || "";
+  const caption = "Qur’anic Duas";
+
+  const width = 1080;
+  const outerPad = 80;
+  const cardPad = 70;
+  const innerWidth = width - outerPad * 2 - cardPad * 2;
+
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+
+  ctx.font = "600 38px 'Manrope', sans-serif";
+  const refLines = wrapLines(ctx, reference, innerWidth);
+  ctx.font = "54px 'CustomArabic', serif";
+  const arabicLines = wrapLines(ctx, arabic, innerWidth);
+  ctx.font = "italic 32px 'Manrope', sans-serif";
+  const translitLines = wrapLines(ctx, transliteration, innerWidth);
+  ctx.font = "32px 'Manrope', sans-serif";
+  const translationLines = wrapLines(ctx, translation, innerWidth);
+
+  const lineHeights = {
+    ref: 44,
+    arabic: 64,
+    translit: 44,
+    translation: 46
+  };
+
+  const gaps = {
+    afterArabic: 22,
+    afterTranslit: 18
+  };
+
+  const contentHeight =
+    refLines.length * lineHeights.ref +
+    arabicLines.length * lineHeights.arabic +
+    gaps.afterArabic +
+    translitLines.length * lineHeights.translit +
+    gaps.afterTranslit +
+    translationLines.length * lineHeights.translation +
+    80;
+
+  const footerHeight = 42;
+  const height = outerPad * 2 + cardPad * 2 + contentHeight + footerHeight + 40;
+  canvas.width = width;
+  canvas.height = height;
+
+  const bg = ctx.createLinearGradient(0, height, 0, 0);
+  bg.addColorStop(0, "#fddb92");
+  bg.addColorStop(1, "#d1fdff");
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, width, height);
+
+  // Subtle floral pattern
+  ctx.save();
+  ctx.globalAlpha = 0.08;
+  ctx.strokeStyle = "#0a4d68";
+  ctx.lineWidth = 1.2;
+  for (let y = 120; y < height; y += 140) {
+    for (let x = 80; x < width; x += 140) {
+      const r = 10;
+      ctx.beginPath();
+      ctx.arc(x, y - r, r, 0, Math.PI * 2);
+      ctx.arc(x + r, y, r, 0, Math.PI * 2);
+      ctx.arc(x, y + r, r, 0, Math.PI * 2);
+      ctx.arc(x - r, y, r, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
+
+  ctx.fillStyle = "#0a4d68";
+  ctx.font = "600 44px 'Cormorant Garamond', serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  ctx.fillText(caption, width / 2, outerPad - 10);
+
+  const cardX = outerPad;
+  const cardY = outerPad + 60;
+  const cardW = width - outerPad * 2;
+  const cardH = height - cardY - outerPad - footerHeight;
+
+  const radius = 36;
+  ctx.fillStyle = "#fffdf8";
+  ctx.shadowColor = "rgba(10, 32, 42, 0.18)";
+  ctx.shadowBlur = 24;
+  ctx.shadowOffsetY = 10;
+  ctx.beginPath();
+  ctx.moveTo(cardX + radius, cardY);
+  ctx.arcTo(cardX + cardW, cardY, cardX + cardW, cardY + cardH, radius);
+  ctx.arcTo(cardX + cardW, cardY + cardH, cardX, cardY + cardH, radius);
+  ctx.arcTo(cardX, cardY + cardH, cardX, cardY, radius);
+  ctx.arcTo(cardX, cardY, cardX + cardW, cardY, radius);
+  ctx.closePath();
+  ctx.fill();
+  ctx.shadowColor = "transparent";
+
+  let cursorY = cardY + cardPad;
+  ctx.textAlign = "center";
+
+  ctx.font = "600 28px 'Manrope', sans-serif";
+  ctx.fillStyle = "#13728f";
+  refLines.forEach(line => {
+    ctx.fillText(line, width / 2, cursorY);
+    cursorY += lineHeights.ref;
+  });
+
+  cursorY += 8;
+  ctx.font = "54px 'CustomArabic', serif";
+  ctx.fillStyle = "#102a36";
+  if (ctx.direction !== undefined) ctx.direction = "rtl";
+  arabicLines.forEach(line => {
+    ctx.fillText(line, width / 2, cursorY);
+    cursorY += lineHeights.arabic;
+  });
+  if (ctx.direction !== undefined) ctx.direction = "ltr";
+
+  cursorY += gaps.afterArabic;
+  ctx.fillStyle = "#5f6b76";
+  ctx.font = "italic 32px 'Manrope', sans-serif";
+  translitLines.forEach(line => {
+    ctx.fillText(line, width / 2, cursorY);
+    cursorY += lineHeights.translit;
+  });
+
+  cursorY += gaps.afterTranslit;
+  ctx.fillStyle = "#1a2d3a";
+  ctx.font = "32px 'Manrope', sans-serif";
+  translationLines.forEach(line => {
+    ctx.fillText(line, width / 2, cursorY);
+    cursorY += lineHeights.translation;
+  });
+
+  ctx.fillStyle = "rgba(10, 77, 104, 0.7)";
+  ctx.font = "italic 24px 'Manrope', sans-serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText("Visit: myquranquest.com/duas", width / 2, height - outerPad + 4);
+
+  return canvas;
+}
+
+async function shareDuaCard(card) {
+  if (!card) return;
+  const canvas = await buildShareCanvas(card);
+
+  const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/png"));
+  if (!blob) return;
+
+  const ref = card.querySelector(".dua-reference")?.innerText?.replace(/\s+/g, "-") || "dua";
+  const file = new File([blob], `${ref}.png`, { type: "image/png" });
+
+  if (navigator.share && navigator.canShare?.({ files: [file] })) {
+    await navigator.share({
+      title: "Qur’anic Duas",
+      text: "Powerful Duas from the Quran. See more at https://myquranquest.com/duas", 
+      files: [file]
+    });
+  } else {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${ref}.png`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
 }
 
 function playIndex(index) {
@@ -282,15 +547,41 @@ fetch("quranwbw_duas.json")
       const translation = cleanHtml(d.translation);
 
       card.innerHTML = `
-        <div class="dua-reference">Qur’an ${d.reference}</div>
+        <div class="dua-reference">
+          <button class="dua-ref-link" type="button" data-ref="${d.reference}">
+            Qur’an ${d.reference}
+          </button>
+        </div>
         <div class="dua-arabic">${arabic}</div>
         <div class="dua-divider"></div>
         <div class="dua-transliteration">${transliteration}</div>
         <div class="dua-translation">${translation}</div>
+        <button class="dua-share-btn" type="button" aria-label="Share dua">
+          <span class="material-icons">ios_share</span>
+          Share
+        </button>
       `;
 
       card.appendChild(btn);
       list.appendChild(card);
+
+      const refBtn = card.querySelector(".dua-ref-link");
+      if (refBtn) {
+        refBtn.addEventListener("click", () => {
+          const [s, a] = String(d.reference || "").split(":").map(Number);
+          if (!Number.isFinite(s) || !Number.isFinite(a)) return;
+          pauseAllDuaAudio();
+          window.parent?.postMessage(
+            { type: "NAVIGATE_TO_AYAH", surah: s, ayah: a },
+            "*"
+          );
+        });
+      }
+
+      const shareBtn = card.querySelector(".dua-share-btn");
+      if (shareBtn) {
+        shareBtn.addEventListener("click", () => shareDuaCard(card));
+      }
 
       cards.push({ audio, card, btn });
     });
@@ -299,3 +590,8 @@ fetch("quranwbw_duas.json")
 
 </body>
 </html>
+@font-face {
+  font-family:"CustomArabic";
+  src:url("/fonts/PDMS_SALEEM_QURANFONTQESHIP_0.woff2") format("woff2");
+  font-display:swap;
+}
