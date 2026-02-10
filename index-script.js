@@ -1693,6 +1693,7 @@ case 'SAVE_HINT_DONE': {
         D.navLearnQuran  = document.getElementById('navLearnQuran');
         D.navRamzanDuas  = document.getElementById('navRamzanDuas');
         D.bottomNav      = document.getElementById('bottomNav');
+        D.randomDuaCard  = document.getElementById('randomDuaCard');
 
 
         const menuBtn = document.getElementById('menuBtn');
@@ -1782,6 +1783,28 @@ case 'SAVE_HINT_DONE': {
           }
         };
 
+        const openDuaFromHero = () => {
+          if (!D.randomDuaCard) return;
+          const ref = D.randomDuaCard.getAttribute('data-ref');
+          if (!ref) return;
+          setDuasMode(true);
+
+          const sendScroll = () => {
+            if (D.duasFrame?.contentWindow) {
+              D.duasFrame.contentWindow.postMessage(
+                { type: 'SCROLL_TO_DUA', reference: ref },
+                '*'
+              );
+            }
+          };
+
+          if (D.duasFrame?.contentWindow && D.duasFrame.src) {
+            sendScroll();
+          } else if (D.duasFrame) {
+            D.duasFrame.addEventListener('load', sendScroll, { once: true });
+          }
+        };
+
         const closeDrawer = () => {
           D.drawer.classList.remove('open');
           document.body.classList.remove('drawer-open');
@@ -1819,6 +1842,16 @@ case 'SAVE_HINT_DONE': {
 
         if (D.navRamzanDuas) {
           D.navRamzanDuas.addEventListener('click', () => setDuasMode(true));
+        }
+
+        if (D.randomDuaCard) {
+          D.randomDuaCard.addEventListener('click', openDuaFromHero);
+          D.randomDuaCard.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              openDuaFromHero();
+            }
+          });
         }
 
         syncNavHeights();

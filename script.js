@@ -47,6 +47,17 @@ let saveHintLottie;
 let closeSettingsMenuFn = null;
 let settingsOutsideClickHandler = null;
 
+const debugLog = (typeof console !== 'undefined' && console.log)
+  ? console.log.bind(console)
+  : null;
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (!debugLog) return;
+  const bodyStyle = getComputedStyle(document.body);
+  debugLog('paddingTop', bodyStyle.paddingTop);
+  debugLog('paddingBottom', bodyStyle.paddingBottom);
+});
+
 const DISABLE_CONSOLE_LOGS = true;
 if (DISABLE_CONSOLE_LOGS && typeof console !== 'undefined') {
   const noop = () => {};

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title> Quran Quest</title>
 
   <!-- Firebase compat SDKs -->
@@ -24,6 +24,10 @@
 />
 <link
   href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600&display=swap"
   rel="stylesheet"
 />
 
@@ -118,6 +122,13 @@
 
 <div id="hero" class="hero">
   <div class="hero-content">
+    <div class="hero-moon" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="72" height="72" viewBox="0 0 256 256" xml:space="preserve">
+        <g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;" transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)">
+          <path d="M 69.491 71.08 c -18.67 3.414 -36.573 -8.953 -39.988 -27.623 S 38.456 6.884 57.126 3.469 c 1.777 -0.325 3.541 -0.463 5.292 -0.511 C 54.979 0.112 46.69 -0.796 38.282 0.742 C 13.839 5.212 -2.353 28.651 2.117 53.094 s 27.909 40.634 52.352 36.164 c 16.252 -2.972 28.847 -14.334 34.155 -28.798 C 83.739 65.803 77.161 69.677 69.491 71.08 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(247,215,127); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round"/>
+        </g>
+      </svg>
+    </div>
 
     <h1>Quran Quest</h1>
 
@@ -132,6 +143,18 @@
       "The best among you are those who learn the Quran and teach it."<br>
       — The Prophet (ﷺ)
     </p>
+
+    <div class="hero-secondary">
+      <button id="learningJourneyHeroBtn" class="hero-chip">Learning Journey</button>
+    </div>
+
+    <div class="hero-dua-card" id="randomDuaCard" data-ref="2:201" role="button" tabindex="0">
+      <div class="hero-dua-title">Ayah of the Day</div>
+      <div class="hero-dua-text">
+        Our Lord, grant us good in this world and good in the Hereafter, and protect us from the torment of the Fire.
+      </div>
+      <div class="hero-dua-meta">Al-Baqarah - 2:201</div>
+    </div>
 
     <div class="hero-actions">
       <button id="startLearningBtn" class="cta-btn">Start Learning</button>

@@ -252,6 +252,7 @@ function removeQuranicSymbols(text) {
 let cards = [];
 let currentAudio = null;
 let currentIndex = -1;
+let pendingScrollRef = null;
 
 function buildAudioUrl(ref) {
   const [s, a] = ref.split(":");
@@ -284,9 +285,32 @@ function pauseAllDuaAudio() {
   currentIndex = -1;
 }
 
+function scrollToDuaByRef(ref) {
+  if (!ref) return false;
+  const refStr = String(ref);
+  const refButtons = document.querySelectorAll(".dua-ref-link");
+  for (const btn of refButtons) {
+    if (btn?.dataset?.ref === refStr) {
+      const card = btn.closest(".dua-card");
+      if (card) {
+        card.scrollIntoView({ behavior: "smooth", block: "center" });
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 window.addEventListener("message", e => {
   if (e?.data?.type === "PAUSE_DUAS_AUDIO") {
     pauseAllDuaAudio();
+    return;
+  }
+  if (e?.data?.type === "SCROLL_TO_DUA") {
+    const ref = e?.data?.reference;
+    if (!scrollToDuaByRef(ref)) {
+      pendingScrollRef = ref;
+    }
   }
 });
 
@@ -460,18 +484,39 @@ async function buildShareCanvas(card) {
 
 async function shareDuaCard(card) {
   if (!card) return;
+
   const canvas = await buildShareCanvas(card);
 
-  const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/png"));
+  /* ---------------- WEBVIEW BRIDGE ---------------- */
+  const dataUrl = canvas.toDataURL("image/png");
+
+  if (window.ReactNativeWebView) {
+    window.ReactNativeWebView.postMessage(
+      JSON.stringify({
+        type: "SHARE_IMAGE",
+        dataUrl
+      })
+    );
+    return; // 🔴 IMPORTANT: stop here for app
+  }
+
+  /* ---------------- NORMAL WEB SHARE ---------------- */
+  const blob = await new Promise(resolve =>
+    canvas.toBlob(resolve, "image/png")
+  );
   if (!blob) return;
 
-  const ref = card.querySelector(".dua-reference")?.innerText?.replace(/\s+/g, "-") || "dua";
+  const ref =
+    card
+      .querySelector(".dua-reference")
+      ?.innerText?.replace(/\s+/g, "-") || "dua";
+
   const file = new File([blob], `${ref}.png`, { type: "image/png" });
 
   if (navigator.share && navigator.canShare?.({ files: [file] })) {
     await navigator.share({
       title: "Qur’anic Duas",
-      text: "Powerful Duas from the Quran. See more at https://myquranquest.com/duas", 
+      text: "Powerful Duas from the Qur’an",
       files: [file]
     });
   } else {
@@ -485,6 +530,7 @@ async function shareDuaCard(card) {
     URL.revokeObjectURL(url);
   }
 }
+
 
 function playIndex(index) {
   if (index < 0 || index >= cards.length) {
@@ -585,13 +631,13 @@ fetch("quranwbw_duas.json")
 
       cards.push({ audio, card, btn });
     });
+    if (pendingScrollRef) {
+      if (scrollToDuaByRef(pendingScrollRef)) {
+        pendingScrollRef = null;
+      }
+    }
   });
 </script>
 
 </body>
 </html>
-@font-face {
-  font-family:"CustomArabic";
-  src:url("/fonts/PDMS_SALEEM_QURANFONTQESHIP_0.woff2") format("woff2");
-  font-display:swap;
-}

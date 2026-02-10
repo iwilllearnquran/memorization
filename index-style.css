@@ -7,7 +7,15 @@
 
 
     :root {
-  --safe-top: env(safe-area-inset-top);
+  --safe-top: env(safe-area-inset-top, 0px);
+  /* Default to 0 to match Android WebView sizing; iOS gets env() below */
+  --safe-bottom: 0px;
+}
+
+@supports (-webkit-touch-callout: none) {
+  :root {
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
 }
 
 
@@ -24,7 +32,9 @@
 
 body {
   margin: 0;
-  padding-top: var(--safe-top);
+  padding-top: var(--safe-top) !important;
+  padding-left: env(safe-area-inset-left, 0px) !important;
+  padding-right: env(safe-area-inset-right, 0px) !important;
   
 }
 
@@ -43,13 +53,13 @@ body.reader-mode {
 
 body {
   --navbar-h: calc(var(--safe-top) + 64px);
-  --bottom-nav-h: 50px;
-  padding-bottom: calc(var(--bottom-nav-h) + env(safe-area-inset-bottom));
+  --bottom-nav-h: 57px;
+  padding-bottom: calc(var(--bottom-nav-h) + var(--safe-bottom)) !important;
 }
 
 body.reader-mode,
 body.duas-mode {
-  padding-bottom: 0;
+  padding-bottom: var(--safe-bottom) !important;
 }
 
 .menu-btn {
@@ -114,8 +124,8 @@ body.duas-mode {
 .viewer {
   position: relative;
   width: 100%;
-  height: calc(100vh - var(--navbar-h) - var(--bottom-nav-h) - env(safe-area-inset-bottom));
-  height: calc(100dvh - var(--navbar-h) - var(--bottom-nav-h) - env(safe-area-inset-bottom));
+  height: calc(100vh - var(--navbar-h) - var(--bottom-nav-h) - var(--safe-bottom));
+  height: calc(100dvh - var(--navbar-h) - var(--bottom-nav-h) - var(--safe-bottom));
   overflow: hidden;
   background: #fff;
 }
@@ -210,10 +220,23 @@ body.duas-mode {
     }
     #surahSelect,
     #ayahSelect {
-      padding: 6px;
+      padding: 6px 10px;
       font-size: 14px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      background: #13728f;
+      color: rgba(255, 255, 255, 0.8);
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
+    }
+    #surahSelect option,
+    #ayahSelect option {
+      background: #0a4d68;
+      color: #fff;
+    }
+    #surahSelect:focus,
+    #ayahSelect:focus {
+      outline: 2px solid rgba(255, 255, 255, 0.7);
+      outline-offset: 2px;
     }
     .dropdowns { display: none; }
     .login-btn {
@@ -359,15 +382,19 @@ body.duas-mode {
       gap: 10px;
       grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
     }
+
+body:not(.reader-mode):not(.duas-mode) .container {
+  padding-bottom: calc(var(--bottom-nav-h) + var(--safe-bottom) + 90px);
+}
 .surah-card {
   position: relative;
   padding: 12px 16px 12px 16px;
   margin: 1px;
-  border-radius: 12px;
-  background-color: #f1f1f1;
-  border: 2px solid #d1d1d1; /* ← subtle grey border */
+  border-radius: 16px;
+  background: #fffdf8;
+  border: 1px solid rgba(10, 77, 104, 0.14);
   transition: background 0.3s ease-in-out, transform 0.2s;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 18px rgba(10, 32, 42, 0.08);
   cursor: pointer;
   overflow: hidden;
 }
@@ -392,7 +419,7 @@ body.duas-mode {
 .surah-card[data-progress] {
   background-image: linear-gradient(
     to right,
-    rgba(10, 77, 104, 0.1) var(--progress, 0%),
+    rgba(10, 77, 104, 0.08) var(--progress, 0%),
     transparent var(--progress, 0%)
   );
 }
@@ -416,8 +443,8 @@ body.duas-mode {
 
     .surah-card:hover {
       transform: translateY(-4px);
-      border-color: rgba(10,77,104,0.35);
-      box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+      border-color: rgba(10,77,104,0.28);
+      box-shadow: 0 12px 24px rgba(10, 32, 42, 0.16);
     }
 
 #mainNavbar {
@@ -841,8 +868,8 @@ body.duas-mode {
     .viewer {
       display: none;
       position: relative;
-      height: calc(100vh - var(--navbar-h) - var(--bottom-nav-h) - env(safe-area-inset-bottom));
-      height: calc(100dvh - var(--navbar-h) - var(--bottom-nav-h) - env(safe-area-inset-bottom));
+      height: calc(100vh - var(--navbar-h) - var(--bottom-nav-h) - var(--safe-bottom));
+      height: calc(100dvh - var(--navbar-h) - var(--bottom-nav-h) - var(--safe-bottom));
     }
     iframe {
       width: 100%;
@@ -1045,13 +1072,152 @@ body.duas-mode {
 
       /* full-width hero section */
 .hero {
-  background-color: var(--theme-bg);
-  border: 2px solid rgba(18,1,1,0.6);
-  border-radius: 16px;
-  margin: 10px;
-  padding: 10px 10px 20px 10px;
+  background: linear-gradient(135deg, #0b536b 0%, #176f83 100%);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  margin: 0;
+  margin-top: calc(-1 * var(--navbar-h));
+  padding: calc(18px + var(--navbar-h)) 18px 72px;
+  min-height: calc(100vh + var(--navbar-h));
+  min-height: calc(100dvh + var(--navbar-h));
   text-align: center;
   color: var(--text-primary);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(255,255,255,0.28) 0 1px, transparent 2px),
+    radial-gradient(circle at 22% 28%, rgba(255,255,255,0.18) 0 1px, transparent 2px),
+    radial-gradient(circle at 80% 25%, rgba(255,255,255,0.22) 0 1px, transparent 2px),
+    radial-gradient(circle at 60% 18%, rgba(255,255,255,0.18) 0 1px, transparent 2px),
+    radial-gradient(circle at 30% 55%, rgba(255,255,255,0.18) 0 1px, transparent 2px),
+    radial-gradient(circle at 40% 62%, rgba(255,255,255,0.16) 0 1px, transparent 2px),
+    radial-gradient(circle at 70% 70%, rgba(255,255,255,0.2) 0 1px, transparent 2px),
+    radial-gradient(circle at 62% 78%, rgba(255,255,255,0.16) 0 1px, transparent 2px),
+    radial-gradient(circle at 10% 70%, rgba(255,255,255,0.18) 0 1px, transparent 2px),
+    radial-gradient(circle at 18% 82%, rgba(255,255,255,0.16) 0 1px, transparent 2px),
+    radial-gradient(circle at 90% 60%, rgba(255,255,255,0.22) 0 1px, transparent 2px),
+    radial-gradient(circle at 45% 30%, rgba(255,255,255,0.2) 0 1px, transparent 2px),
+    radial-gradient(circle at 55% 80%, rgba(255,255,255,0.16) 0 1px, transparent 2px),
+    radial-gradient(circle at 25% 35%, rgba(255,255,255,0.2) 0 1px, transparent 2px),
+    radial-gradient(circle at 35% 20%, rgba(255,255,255,0.18) 0 1px, transparent 2px),
+    radial-gradient(circle at 75% 40%, rgba(255,255,255,0.18) 0 1px, transparent 2px),
+    radial-gradient(circle at 85% 35%, rgba(255,255,255,0.18) 0 1px, transparent 2px);
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+@keyframes heroFloat {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-secondary {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 12px 0 18px;
+}
+
+.hero-chip {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.hero-chip:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+.hero-dua-card {
+  margin: 0 auto 18px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-left: 3px solid #d6a23a;
+  border-radius: 16px;
+  text-align: left;
+  box-shadow: 0 10px 22px rgba(8, 18, 24, 0.22);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hero-dua-card:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 12px 26px rgba(8, 18, 24, 0.26);
+}
+
+.hero-dua-title {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 215, 127, 0.9);
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.hero-dua-text {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.55;
+  margin-bottom: 6px;
+}
+
+.hero-dua-meta {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.hero-moon {
+  width: 72px;
+  height: 72px;
+  margin: 2px auto 14px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  filter: drop-shadow(0 0 14px rgba(247, 215, 127, 0.45));
+  animation: heroFloat 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+.hero-moon::before {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(247,215,127,0.45) 0%, rgba(247,215,127,0.12) 45%, rgba(247,215,127,0) 70%);
+  z-index: 0;
+}
+
+.hero-moon svg {
+  width: 64px;
+  height: 64px;
+  position: relative;
+  z-index: 1;
 }
 
 .hero-subtitle {
@@ -1062,30 +1228,57 @@ body.duas-mode {
 }
 
 .hero h1 {
-  font-size: 2.5rem;
-  margin: 0.25em 0;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 2.7rem;
+  letter-spacing: 0.4px;
+  margin: 0.2em 0 0.35em;
   color: var(--text-primary);
 }
 
 .hero-content > p {
-  font-size: 1.1rem;
-  color: var(--text-secondary);
-  margin-bottom: 1.5em;
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.hero-description {
+  margin-bottom: 1rem;
 }
 
 .hero-actions .cta-btn {
-  background-color: var(--btn-bg);
-  color: var(--btn-text);
-  padding: 0.75em 1.5em;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #f7d77f 0%, #d6a23a 100%);
+  color: #0a4d68;
+  padding: 1em 1.8em;
+  border-radius: 999px;
   border: none;
-  font-size: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.2s ease;
+  box-shadow: 0 10px 28px rgba(10, 77, 104, 0.25);
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .hero-actions .cta-btn:hover {
   opacity: 0.9;
+}
+
+body:not(.reader-mode):not(.duas-mode) .hero-actions {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
+  padding-top: 18px;
+}
+
+body:not(.reader-mode):not(.duas-mode) .hero-actions .cta-btn {
+  width: min(420px, 100%);
+  box-shadow: 0 12px 30px rgba(10, 77, 104, 0.3);
+}
+
+body.reader-mode .hero-actions,
+body.duas-mode .hero-actions {
+  display: none;
 }
 
 .duas-view {
@@ -1095,8 +1288,8 @@ body.duas-mode {
 
 .duas-view iframe {
   width: 100%;
-  height: calc(100vh - var(--navbar-h) - var(--bottom-nav-h) - env(safe-area-inset-bottom));
-  height: calc(100dvh - var(--navbar-h) - var(--bottom-nav-h) - env(safe-area-inset-bottom));
+  height: calc(100vh - var(--navbar-h) - var(--bottom-nav-h) - var(--safe-bottom));
+  height: calc(100dvh - var(--navbar-h) - var(--bottom-nav-h) - var(--safe-bottom));
   border: none;
   border-radius: 0;
   box-shadow: none;
@@ -1133,13 +1326,14 @@ body.duas-mode {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: calc(var(--bottom-nav-h) + env(safe-area-inset-bottom));
+  height: calc(var(--bottom-nav-h) + var(--safe-bottom));
   background: linear-gradient(180deg, #0b5872 0%, #0a4d68 100%);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow:  0 6px 18px rgba(4, 18, 26, 0.24);
   z-index: 1200;
-  padding-bottom: env(safe-area-inset-bottom);
+  padding-bottom: var(--safe-bottom);
 }
+
 
 .bottom-nav-inner {
   display: grid;
@@ -1160,7 +1354,7 @@ body.duas-mode {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 2px;
   cursor: pointer;
   transition: color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
   border-radius: 12px;
@@ -1169,6 +1363,7 @@ body.duas-mode {
 .bottom-nav-btn .material-icons-outlined,
 .bottom-nav-btn .material-symbols-outlined {
   font-size: 22px;
+  transition: transform 0.2s ease;
 }
 
 .bottom-nav-btn .bottom-nav-icon {
@@ -1176,6 +1371,7 @@ body.duas-mode {
   height: 24px;
   display: block;
   fill: currentColor;
+  transition: transform 0.2s ease;
 }
 
 .bottom-nav-btn:hover {
@@ -1195,26 +1391,34 @@ body.duas-mode {
   height: 3px;
   border-radius: 999px;
   background: #ffffff;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 12px rgba(205, 203, 199, 0.85);
+}
+
+.bottom-nav-btn.active .material-icons-outlined,
+.bottom-nav-btn.active .material-symbols-outlined,
+.bottom-nav-btn.active .bottom-nav-icon {
+  transform: scale(1.1);
 }
 
 
 .resume-btn {
   position: initial;
   margin-top: 10px;
-  padding: 6px 12px;
-  font-size: 14px;
+  padding: 14px 18px;
+  font-size: 15px;
+  font-weight: 600;
   background-color: #0a4d68;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 12px;
+  box-shadow: 0 10px 28px rgba(10, 77, 104, 0.25);
   cursor: pointer;
   width: 100%;
 }
 
 /* ===== UI polish overrides ===== */
 :root {
-  --ui-radius: 14px;
+  --ui-radius: 50px;
   --ui-radius-sm: 10px;
   --ui-shadow: 0 14px 34px rgba(8, 18, 24, 0.22);
   --ui-shadow-soft: 0 8px 20px rgba(8, 18, 24, 0.12);
@@ -1237,6 +1441,49 @@ body.duas-mode {
   box-shadow: 0 6px 18px rgba(4, 18, 26, 0.24);
   letter-spacing: 0.2px;
 }
+
+body:not(.reader-mode):not(.duas-mode) .navbar {
+  background: transparent;
+  box-shadow: none;
+  border-bottom: 0;
+}
+
+body:not(.reader-mode):not(.duas-mode) {
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255,255,255,0.08) 0 1px, transparent 2px),
+    radial-gradient(circle at 22% 28%, rgba(255,255,255,0.06) 0 1px, transparent 2px),
+    radial-gradient(circle at 82% 22%, rgba(255,255,255,0.07) 0 1px, transparent 2px),
+    radial-gradient(circle at 60% 18%, rgba(255,255,255,0.06) 0 1px, transparent 2px),
+    radial-gradient(circle at 30% 55%, rgba(255,255,255,0.06) 0 1px, transparent 2px),
+    radial-gradient(circle at 40% 62%, rgba(255,255,255,0.05) 0 1px, transparent 2px),
+    radial-gradient(circle at 70% 70%, rgba(255,255,255,0.07) 0 1px, transparent 2px),
+    radial-gradient(circle at 62% 78%, rgba(255,255,255,0.05) 0 1px, transparent 2px),
+    radial-gradient(circle at 10% 70%, rgba(255,255,255,0.06) 0 1px, transparent 2px),
+    radial-gradient(circle at 18% 82%, rgba(255,255,255,0.05) 0 1px, transparent 2px),
+    radial-gradient(circle at 90% 60%, rgba(255,255,255,0.07) 0 1px, transparent 2px),
+    radial-gradient(circle at 45% 30%, rgba(255,255,255,0.07) 0 1px, transparent 2px),
+    radial-gradient(circle at 55% 80%, rgba(255,255,255,0.05) 0 1px, transparent 2px),
+    radial-gradient(circle at 25% 35%, rgba(255,255,255,0.07) 0 1px, transparent 2px),
+    radial-gradient(circle at 35% 20%, rgba(255,255,255,0.06) 0 1px, transparent 2px),
+    radial-gradient(circle at 75% 40%, rgba(255,255,255,0.06) 0 1px, transparent 2px),
+    radial-gradient(circle at 85% 35%, rgba(255,255,255,0.06) 0 1px, transparent 2px),
+    linear-gradient(135deg, #0b536b 0%, #176f83 100%);
+  background-attachment: fixed;
+}
+
+body:not(.reader-mode):not(.duas-mode) .container {
+  background: transparent;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+body:not(.reader-mode):not(.duas-mode) .hero-content {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 
 #surahSelect,
 #ayahSelect {
