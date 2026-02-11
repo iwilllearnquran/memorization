@@ -2755,6 +2755,83 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
           on(window, 'message', onParentMessage);
       }
 
+      function bindInlineReplacements() {
+        if (bindInlineReplacements.done) return;
+        bindInlineReplacements.done = true;
+
+        const overlayEl = document.getElementById('overlay');
+        if (overlayEl) {
+          overlayEl.addEventListener('click', () => hidePopup());
+        }
+
+        const navPracticeBtn = document.getElementById('navPractice');
+        if (navPracticeBtn) {
+          navPracticeBtn.addEventListener('click', e => {
+            e.preventDefault();
+            togglePracticeNav();
+            navPracticeBtn.blur();
+          });
+        }
+
+        const navModeBtn = document.getElementById('navMode');
+        if (navModeBtn) {
+          navModeBtn.addEventListener('click', e => {
+            e.preventDefault();
+            toggleModeNav();
+            navModeBtn.blur();
+          });
+        }
+
+        const playBtnEl = document.getElementById('playToggleBtn');
+        if (playBtnEl) {
+          playBtnEl.addEventListener('click', e => {
+            e.preventDefault();
+            togglePlay(e);
+          });
+        }
+
+        const navSettingsBtn = document.getElementById('navSettings');
+        if (navSettingsBtn) {
+          navSettingsBtn.addEventListener('click', e => {
+            e.preventDefault();
+            toggleSettingsNav(e);
+            navSettingsBtn.blur();
+          });
+        }
+
+        const saveBtn = document.getElementById('navSaveProgress');
+        if (saveBtn) {
+          saveBtn.addEventListener('click', e => {
+            e.preventDefault();
+            requestSaveProgress();
+            saveBtn.blur();
+          });
+        }
+
+        document.querySelectorAll('.grammar-item[data-grammar]')
+          .forEach(item => {
+            item.addEventListener('click', () => {
+              const type = item.getAttribute('data-grammar');
+              if (type) {
+                showGrammarPopup(type);
+              }
+            });
+          });
+
+        document.body.addEventListener('click', e => {
+          const word = e.target.closest('.word-block[data-popup]');
+          if (!word) return;
+          const raw = word.getAttribute('data-popup');
+          if (!raw) return;
+          try {
+            const data = JSON.parse(raw);
+            showPopup(data);
+          } catch (err) {
+            console.warn('[POPUP] Failed to parse word popup data', err);
+          }
+        });
+      }
+
       function isTrustedParentMessage(e) {
         if (e.source !== window.parent) return false;
         if (RAW_ORIGIN === 'null') {
@@ -3546,6 +3623,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
 
         console.log('[INIT] initIframeApp'              );
         cacheDOM();
+        bindInlineReplacements();
         if (scrollEl) {
           document.body.classList.add('has-ayah-scroll');
         } else {

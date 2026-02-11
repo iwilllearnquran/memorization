@@ -39,6 +39,7 @@ const DEFAULT_SURAH = 1;
 const DEFAULT_AYAH  = 1;
 const STORAGE_KEY = 'swipe_hint_shown_v1';
 const LISTEN_STORAGE_KEY = 'qq_last_listened_auto_swipe_v1';
+const CONTACT_FORM_URL = 'https://docs.google.com/forms/d/e/REPLACE_ME/viewform?embedded=true';
 const iframe = document.getElementById('ayahViewer');
 const aboutBtn = document.getElementById('aboutBtn')
 const ring = {cards: [],};
@@ -1331,6 +1332,12 @@ case 'SAVE_HINT_DONE': {
     case 'SAVE_PROGRESS_SUCCESS': {
       isCurrentAyahDirty = false;
 
+      if (typeof initStartButton === 'function') {
+        initStartButton().catch(err => {
+          console.warn('[INIT] Failed to refresh start button after save', err);
+        });
+      }
+
       // 🚀 Deferred navigation after save
       if (typeof window.__pendingGoHome === 'function') {
         const goHome = window.__pendingGoHome;
@@ -1695,6 +1702,55 @@ case 'SAVE_HINT_DONE': {
       }
 
 /* ==========================================================
+   Contact Us Popup
+   ========================================================== */
+      function openContactPopup() {
+        const existing = document.getElementById('contactOverlay');
+        if (existing) {
+          existing.remove();
+        }
+
+        const overlay = document.createElement('div');
+        overlay.id = 'contactOverlay';
+        overlay.classList.add('qq-overlay');
+        overlay.style.cssText = `
+          position: fixed;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 10000;
+        `;
+
+        overlay.innerHTML = `
+          <div class="qq-modal contact-modal">
+            <div class="contact-header">
+              <span>Contact Us</span>
+              <button type="button" class="contact-close" aria-label="Close contact form">×</button>
+            </div>
+            <iframe
+              class="contact-frame"
+              src="${CONTACT_FORM_URL}"
+              title="Contact form"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+            ></iframe>
+          </div>
+        `;
+
+        document.body.appendChild(overlay);
+
+        const closeBtn = overlay.querySelector('.contact-close');
+        if (closeBtn) {
+          closeBtn.addEventListener('click', () => overlay.remove());
+        }
+
+        overlay.addEventListener('click', e => {
+          if (e.target === overlay) overlay.remove();
+        });
+      }
+
+/* ==========================================================
    Confirm Exit Popup
    ========================================================== */
       function showConfirmPopup({ title, message, onGoHome }) {
@@ -1859,6 +1915,7 @@ case 'SAVE_HINT_DONE': {
         D.bottomNav      = document.getElementById('bottomNav');
         D.randomDuaCard  = document.getElementById('randomDuaCard');
         D.resumeListeningBtn = document.getElementById('resumeListeningHeroBtn');
+        D.contactBtn     = document.getElementById('contactUsBtn');
 
 
         const menuBtn = document.getElementById('menuBtn');
@@ -1991,6 +2048,13 @@ case 'SAVE_HINT_DONE': {
             document.body.appendChild(drawerOverlay);
           }
         };
+
+        if (D.contactBtn) {
+          D.contactBtn.addEventListener('click', () => {
+            closeDrawer();
+            openContactPopup();
+          });
+        }
 
         if (D.navLearnQuran) {
           D.navLearnQuran.addEventListener('click', () => setDuasMode(false));

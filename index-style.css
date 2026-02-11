@@ -615,6 +615,36 @@ body:not(.reader-mode):not(.duas-mode) .container {
   font-size: 13px;
   color: #cfe7ef;
   opacity: 0.9;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.drawer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.drawer-link {
+  color: #cfe7ef;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.drawer-link:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.drawer-contact {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.35);
+  background: rgba(255,255,255,0.08);
+  color: #f7d77f;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .drawer-header {
@@ -639,17 +669,17 @@ body:not(.reader-mode):not(.duas-mode) .container {
 
 /* Popup box */
 .journeyBox {
-  background: linear-gradient(160deg, #0a4d68 0%, #0d5c7b 52%, #0f3a52 100%);
-  color: #eaf6ff;
+  background: #f7fafc;
+  color: #0a4d68;
   width: 90vw;
   max-width: 420px;
   padding: 16px;
-  border-radius: 14px;
+  border-radius: var(--ui-radius);
 
-  border: 1px solid rgba(255,255,255,0.18);
+  border: 1px solid rgba(15, 40, 58, 0.12);
   box-shadow:
-  0 12px 28px rgba(0,0,0,0.35),
-  inset 0 1px 0 rgba(255,255,255,0.04);
+  0 12px 28px rgba(0,0,0,0.22),
+  inset 0 1px 0 rgba(255,255,255,0.6);
 
 }
 
@@ -729,11 +759,12 @@ body:not(.reader-mode):not(.duas-mode) .container {
 
 .journeyHeader {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   font-size: 16px;
   margin-bottom: 12px;
-  color: #f7d77f;
+  color: #0a4d68;
+  text-align: center;
 }
 
 
@@ -1475,7 +1506,7 @@ body.duas-mode {
 
 /* ===== UI polish overrides ===== */
 :root {
-  --ui-radius: 50px;
+  --ui-radius: 30px;
   --ui-radius-sm: 10px;
   --ui-shadow: 0 14px 34px rgba(8, 18, 24, 0.22);
   --ui-shadow-soft: 0 8px 20px rgba(8, 18, 24, 0.12);
@@ -1575,6 +1606,39 @@ body.drawer-open {
   border-radius: var(--ui-radius);
   box-shadow: var(--ui-shadow);
   border: 1px solid rgba(15, 40, 58, 0.08);
+}
+
+.contact-modal {
+  background: #f7fafc;
+  color: #0a4d68;
+  width: 92vw;
+  max-width: 640px;
+  padding: 16px;
+}
+
+.contact-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.contact-close {
+  border: none;
+  background: none;
+  font-size: 20px;
+  color: #0a4d68;
+  cursor: pointer;
+}
+
+.contact-frame {
+  width: 100%;
+  height: 70vh;
+  border: none;
+  border-radius: 10px;
+  background: #fff;
 }
 
 #streakPopup,
