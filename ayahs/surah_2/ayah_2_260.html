@@ -1258,7 +1258,7 @@
   if (!gameEl) {
   } else {
     function notifyParent(type) {
-      parent.postMessage({ type }, '*');
+      parent.postMessage({ type }, (window.location.origin === 'null' ? '*' : window.location.origin));
     }
 
     function checkVisibility() {
@@ -1301,3 +1301,4 @@
 
 </body>
 </html>
+

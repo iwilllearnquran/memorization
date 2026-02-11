@@ -38,12 +38,15 @@ import { fetchSurahList } from '/services/quranApi.js';
 const DEFAULT_SURAH = 1;
 const DEFAULT_AYAH  = 1;
 const STORAGE_KEY = 'swipe_hint_shown_v1';
+const LISTEN_STORAGE_KEY = 'qq_last_listened_auto_swipe_v1';
 const iframe = document.getElementById('ayahViewer');
 const aboutBtn = document.getElementById('aboutBtn')
 const ring = {cards: [],};
 const D = {};
 const SWIPE_IFRAME = '[SWIPE:IFRAME]';
 const SWIPE_PARENT = '[SWIPE:PARENT]';
+const RAW_ORIGIN = window.location.origin;
+const LOCAL_ORIGIN = RAW_ORIGIN === 'null' ? '*' : RAW_ORIGIN;
 const dragState = {
   active: false,
   dx: 0,
@@ -54,6 +57,7 @@ let swipeLockedUntilFrame = 0;
 let swipeTransitionTimer = 0;
 let pendingSwipeFrame = null;
 let pendingSwipeData = null;
+let pendingAutoPlay = false;
 const DISABLE_CONSOLE_LOGS = true;
 if (DISABLE_CONSOLE_LOGS && typeof console !== 'undefined') {
   const noop = () => {};
@@ -106,6 +110,43 @@ window.addEventListener('popstate', () => {
     setDuasMode(true);
   }
 });
+
+function getIframeOrigin(frame) {
+  if (!frame?.src) return RAW_ORIGIN;
+  try {
+    return new URL(frame.src, window.location.href).origin;
+  } catch (err) {
+    return RAW_ORIGIN;
+  }
+}
+
+function postToIframe(frame, message) {
+  if (!frame?.contentWindow) return;
+  const origin = getIframeOrigin(frame);
+  frame.contentWindow.postMessage(message, origin === 'null' ? '*' : origin);
+}
+
+function postToWindow(win, message) {
+  if (!win?.postMessage) return;
+  win.postMessage(message, LOCAL_ORIGIN);
+}
+
+function isKnownIframeSource(source) {
+  if (!source) return false;
+  const frames = Array.from(document.querySelectorAll('iframe'));
+  return frames.some(frame => frame.contentWindow === source);
+}
+
+function isTrustedMessage(e) {
+  if (!e || !e.origin) return false;
+  if (RAW_ORIGIN === 'null') {
+    if (e.origin !== 'null') return false;
+  } else if (e.origin !== RAW_ORIGIN) {
+    return false;
+  }
+  if (e.source === window) return true;
+  return isKnownIframeSource(e.source);
+}
 
 
 
@@ -214,7 +255,8 @@ const DEFAULT_SETTINGS = {
   audioLang: 'ar',
   mode: 'learning',
   speed: '1',
-  repeat: '1'
+  repeat: '1',
+  autoSwipe: true
 };
 let settingsVersion = 0;
 const iframeSettingsVersion = new WeakMap();
@@ -248,11 +290,98 @@ const iframeSettingsVersion = new WeakMap();
           }
 
           iframeSettingsVersion.set(iframe, settingsVersion);
-          iframe.contentWindow?.postMessage(
-            { type: 'APPLY_SETTINGS', settings, version: settingsVersion },
-            '*'
-          );
+          postToIframe(iframe, { type: 'APPLY_SETTINGS', settings, version: settingsVersion });
         });
+      }
+
+/* ==========================================================
+   Auto-Swipe Listening Progress
+========================================================== */
+      function getLastListenedAutoSwipe() {
+        try {
+          const raw = localStorage.getItem(LISTEN_STORAGE_KEY);
+          if (!raw) return null;
+          const parsed = JSON.parse(raw);
+          const surah = Number(parsed?.surah);
+          const ayah = Number(parsed?.ayah);
+          if (!Number.isFinite(surah) || !Number.isFinite(ayah)) return null;
+          return { surah, ayah };
+        } catch (err) {
+          console.warn('[LISTEN] Failed to parse listen progress', err);
+          return null;
+        }
+      }
+
+      function setLastListenedAutoSwipe(surah, ayah) {
+        const payload = {
+          surah: Number(surah),
+          ayah: Number(ayah),
+          timestamp: Date.now()
+        };
+        localStorage.setItem(LISTEN_STORAGE_KEY, JSON.stringify(payload));
+      }
+
+      async function getStartListeningTarget() {
+        const lastListened = getLastListenedAutoSwipe();
+        if (lastListened) return lastListened;
+
+        let lastRead = null;
+        try {
+          if (auth.currentUser) {
+            lastRead = await getLastReadFromDb();
+          } else {
+            lastRead = getGuestLastRead();
+          }
+        } catch (err) {
+          console.warn('[LISTEN] Failed to read last-read', err);
+        }
+
+        if (lastRead?.surah && lastRead?.ayah) {
+          return { surah: Number(lastRead.surah), ayah: Number(lastRead.ayah) };
+        }
+
+        return { surah: DEFAULT_SURAH, ayah: DEFAULT_AYAH };
+      }
+
+      async function updateResumeListeningButton() {
+        const btn = D.resumeListeningBtn || document.getElementById('resumeListeningHeroBtn');
+        if (!btn) return;
+        const labelEl = btn.querySelector('.hero-chip-label');
+        const last = getLastListenedAutoSwipe();
+        if (!last) {
+          btn.disabled = false;
+          if (labelEl) {
+            labelEl.textContent = 'Start Listening';
+          } else {
+            btn.textContent = 'Start Listening';
+          }
+          btn.removeAttribute('data-surah');
+          btn.removeAttribute('data-ayah');
+          btn.title = 'Start auto-swipe listening';
+          return;
+        }
+
+        btn.disabled = false;
+        if (labelEl) {
+          labelEl.textContent = `Resume Listening (${last.surah}:${last.ayah})`;
+        } else {
+          btn.textContent = `Resume Listening (${last.surah}:${last.ayah})`;
+        }
+        btn.dataset.surah = String(last.surah);
+        btn.dataset.ayah = String(last.ayah);
+        btn.title = `Resume listening from ${last.surah}:${last.ayah}`;
+      }
+
+      function requestAutoPlayActiveIframe(reason = 'resumeListening') {
+        const iframe = getActiveIframe();
+        if (!iframe) return;
+        if (iframeReadySet.has(iframe)) {
+          setTimeout(() => {
+            postToIframe(iframe, { type: 'PLAY_AYAH_AUDIO', reason });
+          }, 60);
+        } else {
+          iframe.__pendingAutoPlay = true;
+        }
       }
 
 
@@ -300,7 +429,7 @@ const iframeSettingsVersion = new WeakMap();
             `📍 Resuming from Surah ${lastRead.surah} Ayah ${lastRead.ayah} (${surahName})`
           );
 
-          btn.textContent = `Resume from ${surahName} Ayah ${lastRead.ayah}`;
+          btn.textContent = `Resume Learning (${surahName} : ${lastRead.ayah})`;
 
           btn.onclick = () => {
             console.log(
@@ -393,19 +522,38 @@ const iframeSettingsVersion = new WeakMap();
             ------------------------------------------ */
           const card = document.createElement('div');
           card.className = 'surah-card';
-          card.innerHTML = `
-            <div class="surah-header">
-              <span class="surah-number">Surah ${surah.number}</span>
-              <span class="surah-ayah-count">(${surah.ayahCount} verses)</span>
-            </div>
+          const header = document.createElement('div');
+          header.className = 'surah-header';
 
-            <div class="surah-title">
-              <span class="surah-english">${surah.englishName}</span>
-              <span class="surah-arabic">${surah.arabicName}</span>
-            </div>
+          const numberEl = document.createElement('span');
+          numberEl.className = 'surah-number';
+          numberEl.textContent = `Surah ${surah.number}`;
 
-            <button class="resume-btn" data-surah="${surah.number}">▶</button>
-          `;
+          const ayahCountEl = document.createElement('span');
+          ayahCountEl.className = 'surah-ayah-count';
+          ayahCountEl.textContent = `(${surah.ayahCount} verses)`;
+
+          header.append(numberEl, ayahCountEl);
+
+          const title = document.createElement('div');
+          title.className = 'surah-title';
+
+          const englishEl = document.createElement('span');
+          englishEl.className = 'surah-english';
+          englishEl.textContent = surah.englishName;
+
+          const arabicEl = document.createElement('span');
+          arabicEl.className = 'surah-arabic';
+          arabicEl.textContent = surah.arabicName;
+
+          title.append(englishEl, arabicEl);
+
+          const resumeBtn = document.createElement('button');
+          resumeBtn.className = 'resume-btn';
+          resumeBtn.dataset.surah = String(surah.number);
+          resumeBtn.textContent = '▶';
+
+          card.append(header, title, resumeBtn);
 
           D.surahContainer.append(card);
 
@@ -418,12 +566,12 @@ const iframeSettingsVersion = new WeakMap();
           if (auth.currentUser) {
             const snap = await getUserDoc();
             const progressMap = snap.data()?.completedSurahs_new || {};
-            maxAyahRead = progressMap[surah.number] || 0;
+            maxAyahRead = Number(progressMap[surah.number] || 0);
           } else {
             const progressMap = JSON.parse(
               localStorage.getItem('completedSurahs_new') || '{}'
             );
-            maxAyahRead = progressMap[surah.number] || 0;
+            maxAyahRead = Number(progressMap[surah.number] || 0);
           }
 
 
@@ -478,7 +626,6 @@ const iframeSettingsVersion = new WeakMap();
           /* ------------------------------------------
             Resume button behavior
             ------------------------------------------ */
-          const resumeBtn = card.querySelector('.resume-btn');
           resumeBtn.innerHTML = labelHTML;
           resumeBtn.dataset.nextAyah = nextAyah;
 
@@ -731,6 +878,7 @@ const iframeSettingsVersion = new WeakMap();
    ========================================================== */
    
 window.addEventListener('message', async e => {
+  if (!isTrustedMessage(e)) return;
   const data = e.data || {};
 
 switch (data.type) {
@@ -744,14 +892,32 @@ switch (data.type) {
   break;
 }
 
+    case 'AUTO_SWIPE_PROGRESS': {
+  const surah = Number(data.surah);
+  const ayah = Number(data.ayah);
+  if (Number.isFinite(surah) && Number.isFinite(ayah)) {
+    setLastListenedAutoSwipe(surah, ayah);
+    updateResumeListeningButton();
+  }
+  break;
+}
+
+    case 'AUTO_SWIPE_NEXT': {
+      if (isAnimatingSwipe || dragState.active) break;
+      if (!canMove(1)) {
+        pendingAutoPlay = false;
+        break;
+      }
+      pendingAutoPlay = true;
+      postToWindow(window, { type: 'SWIPE_COMMIT', dir: 1 });
+      break;
+    }
+
     case 'SETTINGS_OPENED':
     case 'WORD_DETAILS_OPENED': {
       pushPopupHistory(() => {
         const activeFrame = getActiveIframe();
-        activeFrame?.contentWindow?.postMessage(
-          { type: 'CLOSE_ACTIVE_POPUP' },
-          '*'
-        );
+        postToIframe(activeFrame, { type: 'CLOSE_ACTIVE_POPUP' });
       });
       break;
     }
@@ -771,7 +937,7 @@ switch (data.type) {
       history.pushState({ fromDuas: true, surah, ayah }, '');
 
       if (D.duasFrame?.contentWindow) {
-        D.duasFrame.contentWindow.postMessage({ type: 'PAUSE_DUAS_AUDIO' }, '*');
+        postToIframe(D.duasFrame, { type: 'PAUSE_DUAS_AUDIO' });
       }
 
       if (typeof setDuasMode === 'function') {
@@ -846,6 +1012,7 @@ case 'SWIPE_START': {
 
 case 'SWIPE_COMMIT': {
   const { dir } = data;
+  const autoPlayRequested = !!(pendingAutoPlay || data.autoPlay);
 
   // 🧹 STOP live drag immediately
   dragState.active = false;
@@ -862,8 +1029,12 @@ case 'SWIPE_COMMIT': {
 
   // ❌ Cannot move → bounce back
   if (!canMove(dir)) {
-    window.postMessage({ type: 'SWIPE_CANCEL' }, '*');
+    if (autoPlayRequested) pendingAutoPlay = false;
+    postToWindow(window, { type: 'SWIPE_CANCEL' });
     return;
+  }
+  if (data.autoPlay) {
+    pendingAutoPlay = true;
   }
 
   const center = ring.cards[1];
@@ -1100,13 +1271,12 @@ case 'SAVE_HINT_DONE': {
           if (recordStreak) {
             const result = recordGuestStreak();
             if (result.updated) {
-              window.postMessage(
+              postToWindow(window,
                 {
                   type: 'streakUpdate',
                   date: result.today,
                   freezes: result.freezes
-                },
-                '*'
+                }
               );
             }
           } else {
@@ -1120,7 +1290,7 @@ case 'SAVE_HINT_DONE': {
         trackLearningJourney(surah, ayah);
 
         /* -------- Notify parent (self) -------- */
-        window.postMessage(
+        postToWindow(window,
           {
             type: 'SAVE_PROGRESS_SUCCESS',
             surah,
@@ -1128,29 +1298,26 @@ case 'SAVE_HINT_DONE': {
             savedAt: new Date(
               timestamp || Date.now()
             ).toISOString()
-          },
-          '*'
+          }
         );
 
         /* -------- Notify iframe (toast UI) -------- */
-        e.source.postMessage(
+        postToWindow(e.source,
           {
             type: 'SAVE_PROGRESS_SUCCESS',
             surah,
             ayah
-          },
-          '*'
+          }
         );
 
       } catch (err) {
         console.error('❌ Save progress failed', err);
 
-        e.source.postMessage(
+        postToWindow(e.source,
           {
             type: 'SAVE_PROGRESS_FAILED',
             error: err.message
-          },
-          '*'
+          }
         );
       }
 
@@ -1620,10 +1787,7 @@ case 'SAVE_HINT_DONE': {
         overlay.querySelector('#popupSaveGo').onclick = () => {
           // Ask iframe to save progress
           const iframe = getActiveIframe();
-          iframe?.contentWindow?.postMessage(
-            { type: 'REQUEST_SAVE_PROGRESS' },
-            '*'
-          );
+          postToIframe(iframe, { type: 'REQUEST_SAVE_PROGRESS' });
 
           console.log('🟡 Save & Go Home clicked');
 
@@ -1694,6 +1858,7 @@ case 'SAVE_HINT_DONE': {
         D.navRamzanDuas  = document.getElementById('navRamzanDuas');
         D.bottomNav      = document.getElementById('bottomNav');
         D.randomDuaCard  = document.getElementById('randomDuaCard');
+        D.resumeListeningBtn = document.getElementById('resumeListeningHeroBtn');
 
 
         const menuBtn = document.getElementById('menuBtn');
@@ -1713,18 +1878,12 @@ case 'SAVE_HINT_DONE': {
 
         const pauseQuranAudio = () => {
           const activeFrame = getActiveIframe();
-          activeFrame?.contentWindow?.postMessage(
-            { type: 'PAUSE_ALL_AUDIO' },
-            '*'
-          );
+          postToIframe(activeFrame, { type: 'PAUSE_ALL_AUDIO' });
         };
 
         const pauseDuasAudio = () => {
           if (D.duasFrame?.contentWindow) {
-            D.duasFrame.contentWindow.postMessage(
-              { type: 'PAUSE_DUAS_AUDIO' },
-              '*'
-            );
+            postToIframe(D.duasFrame, { type: 'PAUSE_DUAS_AUDIO' });
           }
         };
 
@@ -1791,10 +1950,7 @@ case 'SAVE_HINT_DONE': {
 
           const sendScroll = () => {
             if (D.duasFrame?.contentWindow) {
-              D.duasFrame.contentWindow.postMessage(
-                { type: 'SCROLL_TO_DUA', reference: ref },
-                '*'
-              );
+              postToIframe(D.duasFrame, { type: 'SCROLL_TO_DUA', reference: ref });
             }
           };
 
@@ -1976,10 +2132,7 @@ case 'SAVE_HINT_DONE': {
           ------------------------------------------ */
         D.returnBtn.addEventListener('click', () => {
           const iframe = ring.cards?.[1]?.querySelector('iframe');
-          iframe?.contentWindow?.postMessage(
-            { type: 'RETURN_TO_AYAH' },
-            '*'
-          );
+          postToIframe(iframe, { type: 'RETURN_TO_AYAH' });
           disableGameMode();
           loadAyah(currentSurah, currentAyah);
         });
@@ -2114,6 +2267,31 @@ case 'SAVE_HINT_DONE': {
             };
           });
 
+        const journeyHeroBtn = document.getElementById('learningJourneyHeroBtn');
+        if (journeyHeroBtn) {
+          journeyHeroBtn.addEventListener('click', () => {
+            document.getElementById('learningJourneyBtn')?.click();
+          });
+        }
+
+        if (D.resumeListeningBtn) {
+          D.resumeListeningBtn.addEventListener('click', async () => {
+            const target = await getStartListeningTarget();
+            if (!target) return;
+
+            saveSettings({ autoSwipe: true });
+
+            D.surahContainer.style.display = 'none';
+            D.hero.style.display           = 'none';
+            D.viewer.style.display         = 'block';
+            D.dropdowns.style.display      = 'flex';
+
+            loadAyah(target.surah, target.ayah);
+            requestAutoPlayActiveIframe('resumeListening');
+          });
+          updateResumeListeningButton();
+        }
+
 
         /* ==========================================================
           Go Home Button
@@ -2198,13 +2376,7 @@ case 'SAVE_HINT_DONE': {
         // Notify iframe of login
         const activeIframe = getActiveIframe();
         if (activeIframe?.contentWindow) {
-          activeIframe.contentWindow.postMessage(
-            {
-              type: 'userLoggedIn',
-              firstName
-            },
-            '*'
-          );
+          postToIframe(activeIframe, { type: 'userLoggedIn', firstName });
         }
 
         // Transfer guest stats if first login
@@ -2378,10 +2550,7 @@ case 'SAVE_HINT_DONE': {
             currentIndex !== wordHintTriedIndex &&
             !localStorage.getItem('word_click_hint_shown_v1')) {
           wordHintTriedIndex = currentIndex;
-          iframe.contentWindow.postMessage(
-            { type: 'TRIGGER_WORD_HINT' },
-            '*'
-          );
+          postToIframe(iframe, { type: 'TRIGGER_WORD_HINT' });
           return;
         }
 
@@ -2390,10 +2559,7 @@ case 'SAVE_HINT_DONE': {
             currentIndex !== saveHintTriedIndex &&
             !localStorage.getItem('save_click_hint_shown_v1')) {
           saveHintTriedIndex = currentIndex;
-          iframe.contentWindow.postMessage(
-            { type: 'TRIGGER_SAVE_HINT' },
-            '*'
-          );
+          postToIframe(iframe, { type: 'TRIGGER_SAVE_HINT' });
         }
       }
 
@@ -2625,15 +2791,12 @@ async function sendAyahToIframe(iframe, surah, ayah) {
   /* ------------------------------------------
      📤 Inject
   ------------------------------------------ */
-  iframe.contentWindow.postMessage(
-    {
-      type: 'LOAD_AYAH_HTML',
-      surah,
-      ayah,
-      html,
-    },
-    '*'
-  );
+  postToIframe(iframe, {
+    type: 'LOAD_AYAH_HTML',
+    surah,
+    ayah,
+    html,
+  });
 
   console.log('✅ LOAD_AYAH_HTML posted');
 
@@ -2682,14 +2845,11 @@ async function sendAyahToIframe(iframe, surah, ayah) {
 
         const activeFrame = getActiveIframe();
         if (activeFrame?.contentWindow) {
-          activeFrame.contentWindow.postMessage(
-            {
-              type: 'SET_HINT_POLICY',
-              allowWordHint: !isSmallSurah(surahNum),
-              allowSaveHint: true
-            },
-            '*'
-          );
+          postToIframe(activeFrame, {
+            type: 'SET_HINT_POLICY',
+            allowWordHint: !isSmallSurah(surahNum),
+            allowSaveHint: true
+          });
         }
 
         if (localStorage.getItem('swipe_hint_shown_v1') &&
@@ -2763,11 +2923,24 @@ async function sendAyahToIframe(iframe, surah, ayah) {
     // send settings AFTER ready
     const settings = getSettings();
     iframeSettingsVersion.set(iframe, settingsVersion);
-    iframe.contentWindow?.postMessage({
+    postToIframe(iframe, {
       type: 'APPLY_SETTINGS',
       settings,
       version: settingsVersion
-    }, '*');
+    });
+
+    if (iframe.__pendingAyah) {
+      const pending = iframe.__pendingAyah;
+      delete iframe.__pendingAyah;
+      sendAyahToIframe(iframe, pending.surah, pending.ayah);
+    }
+
+    if (iframe.__pendingAutoPlay) {
+      delete iframe.__pendingAutoPlay;
+      setTimeout(() => {
+        postToIframe(iframe, { type: 'PLAY_AYAH_AUDIO', reason: 'autoSwipe' });
+      }, 60);
+    }
   };
 
         iframePool.set(idx, iframe);
@@ -2830,10 +3003,7 @@ async function sendAyahToIframe(iframe, surah, ayah) {
             if (applied < settingsVersion) {
               const settings = getSettings();
               iframeSettingsVersion.set(iframe, settingsVersion);
-              iframe.contentWindow?.postMessage(
-                { type: 'APPLY_SETTINGS', settings, version: settingsVersion },
-                '*'
-              );
+              postToIframe(iframe, { type: 'APPLY_SETTINGS', settings, version: settingsVersion });
             }
           }
         });
@@ -2935,6 +3105,9 @@ function finalizeSwipe(dir) {
         maybeTriggerQueuedHints();
         maybeShowMotivation();
 
+        const shouldAutoPlay = pendingAutoPlay;
+        if (pendingAutoPlay) pendingAutoPlay = false;
+
         // 3️⃣ 🔑 Inject HTML AFTER animation frame settles
         requestAnimationFrame(() => {
         const iframe = ring.cards[1].querySelector('iframe');
@@ -2944,12 +3117,22 @@ function finalizeSwipe(dir) {
           if (!iframe) return;
 
           if (iframeReadySet.has(iframe)) {
-            sendAyahToIframe(iframe, currentSurah, currentAyah);
+            const injectPromise = sendAyahToIframe(iframe, currentSurah, currentAyah);
+            if (shouldAutoPlay) {
+              Promise.resolve(injectPromise).finally(() => {
+                setTimeout(() => {
+                  postToIframe(iframe, { type: 'PLAY_AYAH_AUDIO', reason: 'autoSwipe' });
+                }, 60);
+              });
+            }
           } else {
             iframe.__pendingAyah = {
               surah: currentSurah,
               ayah: currentAyah
             };
+            if (shouldAutoPlay) {
+              iframe.__pendingAutoPlay = true;
+            }
           }
         });
 
@@ -3007,14 +3190,11 @@ function finalizeSwipe(dir) {
 
     log('🖱️ Forwarding click to iframe', { x, y });
 
-    iframe.contentWindow.postMessage(
-      {
-        type: 'CLICK',
-        x,
-        y
-      },
-      '*'
-    );
+    postToIframe(iframe, {
+      type: 'CLICK',
+      x,
+      y
+    });
   }
 
 

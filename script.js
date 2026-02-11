@@ -15,7 +15,8 @@ const root = document.body;
 let currentSurah = 1, currentAyah = 1;
 const audioCache = {};
 const cleanupFns = [];
-const PARENT_ORIGIN = '*';
+const RAW_ORIGIN = window.location.origin;
+const PARENT_ORIGIN = RAW_ORIGIN === 'null' ? '*' : RAW_ORIGIN;
 let ticking = false;
 const SHOW_DURATION = 3000;
 let hideTimer = null;
@@ -72,6 +73,28 @@ if (DISABLE_CONSOLE_LOGS && typeof console !== 'undefined') {
   console.time = noop;
   console.timeEnd = noop;
 }
+
+const RECITE_ICON_SVG = `
+  <svg viewBox="0 0 800 800" aria-hidden="true" focusable="false">
+    <g>
+      <path d="M689.861,762.52H43.427c-11.046,0-20-8.953-20-20v-72.432c0-5.303,2.107-10.391,5.858-14.141c51.399-51.4,119.739-79.707,192.428-79.707c57.578,0,112.424,17.758,158.286,50.689V243.124c0-11.046,8.954-20,20-20c11.045,0,20,8.954,20,20v426.964c0,8.09-4.873,15.383-12.348,18.479c-7.473,3.096-16.075,1.385-21.794-4.336c-88.582-88.582-231.533-90.465-322.431-5.658v43.947h626.434c11.047,0,20,8.955,20,20C709.861,753.566,700.908,762.52,689.861,762.52z"/>
+      <path d="M756.572,762.52h-5.877c-11.047,0-20-8.953-20-20c0-11.045,8.953-20,20-20h5.877c11.047,0,20,8.955,20,20C776.572,753.566,767.619,762.52,756.572,762.52z"/>
+      <path d="M756.576,690.09c-5.205,0-10.318-2.033-14.146-5.859c-67.463-67.461-171.348-86.76-258.504-48.021c-10.094,4.486-21.914-0.061-26.4-10.154s0.061-21.912,10.154-26.398c49.729-22.104,104.445-28.756,158.236-19.238c40.258,7.123,77.848,23,110.656,46.529V139.812c-90.896-84.806-233.848-82.922-322.432,5.657c-7.811,7.811-20.472,7.81-28.283,0c-88.582-88.58-231.533-90.464-322.431-5.657v423.221c0,11.047-8.954,20-20,20s-20-8.953-20-20V131.329c0-5.305,2.107-10.392,5.858-14.142C80.685,65.787,149.023,37.48,221.713,37.48c66.207,0,128.81,23.486,178.286,66.512C449.473,60.969,512.082,37.48,578.285,37.48c0.004,0-0.004,0,0,0c72.691,0,141.029,28.307,192.43,79.706c3.75,3.751,5.857,8.838,5.857,14.143v538.759c0,8.09-4.873,15.383-12.346,18.479C761.752,689.592,759.152,690.09,756.576,690.09z"/>
+      <path d="M324.991,239.373c-2.735,0-5.514-0.564-8.172-1.756c-1.834-0.822-3.703-1.632-5.558-2.405c-10.193-4.255-15.008-15.967-10.753-26.161c4.254-10.193,15.967-15.008,26.16-10.753c2.175,0.908,4.367,1.857,6.518,2.821c10.079,4.52,14.585,16.354,10.065,26.433C339.923,234.972,332.629,239.373,324.991,239.373z"/>
+      <path d="M118.427,239.377c-7.638,0-14.93-4.397-18.259-11.816c-4.522-10.078-0.019-21.913,10.059-26.436c47.997-21.538,100.96-28.667,153.164-20.617c10.916,1.684,18.401,11.898,16.718,22.814c-1.684,10.917-11.901,18.401-22.814,16.719c-44.56-6.871-89.752-0.793-130.69,17.578C123.945,238.813,121.164,239.377,118.427,239.377z"/>
+      <path d="M324.994,379.21c-2.737,0-5.517-0.564-8.176-1.758c-40.946-18.373-86.146-24.45-130.712-17.573c-10.916,1.687-21.131-5.799-22.816-16.716c-1.684-10.916,5.799-21.131,16.716-22.816c52.212-8.057,105.184-0.929,153.187,20.611c10.078,4.522,14.582,16.357,10.06,26.435C339.924,374.812,332.63,379.21,324.994,379.21z"/>
+      <path d="M118.427,379.212c-7.638,0-14.93-4.397-18.259-11.817c-4.522-10.077-0.019-21.913,10.06-26.435c2.171-0.975,4.374-1.928,6.547-2.835c10.193-4.253,21.906,0.563,26.159,10.757c4.253,10.194-0.563,21.906-10.757,26.159c-1.849,0.771-3.724,1.583-5.574,2.413C123.945,378.648,121.164,379.212,118.427,379.212z"/>
+      <path d="M324.992,519.043c-2.737,0-5.52-0.565-8.179-1.76c-1.836-0.824-3.699-1.631-5.537-2.398c-10.193-4.254-15.009-15.966-10.754-26.16c4.253-10.192,15.965-15.008,26.159-10.754c2.164,0.903,4.354,1.852,6.513,2.82c10.077,4.523,14.579,16.359,10.056,26.438C339.919,514.646,332.627,519.043,324.992,519.043z"/>
+      <path d="M118.429,519.047c-7.638,0-14.929-4.398-18.259-11.816c-4.522-10.078-0.019-21.914,10.059-26.436c48.009-21.545,100.987-28.672,153.207-20.609c10.916,1.684,18.399,11.9,16.714,22.816c-1.685,10.916-11.898,18.399-22.817,16.715c-44.572-6.881-89.777-0.805-130.727,17.572C123.948,518.481,121.166,519.047,118.429,519.047z"/>
+      <path d="M475.008,239.373c-7.639,0-14.932-4.4-18.26-11.821c-4.52-10.078-0.014-21.913,10.064-26.433c2.15-0.964,4.344-1.913,6.518-2.821c10.193-4.255,21.906,0.56,26.16,10.753c4.256,10.193-0.559,21.906-10.752,26.161c-1.855,0.773-3.725,1.583-5.559,2.405C480.523,238.808,477.742,239.373,475.008,239.373z"/>
+      <path d="M681.572,239.377c-2.738,0-5.518-0.564-8.178-1.758c-40.939-18.371-86.131-24.45-130.689-17.578c-10.916,1.683-21.131-5.802-22.814-16.719c-1.684-10.916,5.801-21.131,16.717-22.814c52.205-8.051,105.168-0.921,153.164,20.617c10.078,4.522,14.58,16.357,10.059,26.436C696.502,234.979,689.209,239.377,681.572,239.377z"/>
+      <path d="M475.006,379.21c-7.639,0-14.93-4.397-18.26-11.817c-4.521-10.077-0.018-21.913,10.061-26.435c48.004-21.541,100.973-28.668,153.186-20.611c10.918,1.685,18.4,11.9,16.717,22.816c-1.686,10.917-11.9,18.399-22.816,16.716c-44.564-6.877-89.766-0.8-130.711,17.573C480.523,378.646,477.742,379.21,475.006,379.21z"/>
+      <path d="M681.572,379.212c-2.738,0-5.518-0.564-8.176-1.757c-1.852-0.83-3.727-1.642-5.574-2.413c-10.195-4.253-15.01-15.965-10.758-26.159c4.254-10.194,15.967-15.01,26.16-10.757c2.172,0.907,4.375,1.86,6.547,2.835c10.076,4.521,14.58,16.357,10.059,26.435C696.502,374.814,689.209,379.212,681.572,379.212z"/>
+      <path d="M475.008,519.043c-7.637,0-14.928-4.396-18.258-11.814c-4.523-10.078-0.021-21.914,10.055-26.438c2.158-0.969,4.35-1.917,6.514-2.82c10.193-4.254,21.906,0.561,26.158,10.754c4.256,10.194-0.561,21.906-10.754,26.16c-1.838,0.768-3.701,1.574-5.537,2.398C480.527,518.477,477.744,519.043,475.008,519.043z"/>
+      <path d="M681.57,519.047c-2.738,0-5.518-0.565-8.178-1.758c-40.949-18.377-86.154-24.453-130.727-17.572c-10.918,1.684-21.133-5.799-22.816-16.715c-1.686-10.916,5.797-21.133,16.713-22.816c52.221-8.063,105.197-0.936,153.207,20.609c10.078,4.521,14.58,16.357,10.059,26.436C696.5,514.648,689.207,519.047,681.57,519.047z"/>
+    </g>
+  </svg>
+`;
 
 
 
@@ -403,7 +426,7 @@ const LOG = {
         isSwiping = true;
         swipeCommitted = false;
 
-        window.parent.postMessage({ type: 'SWIPE_START' }, '*');
+        window.parent.postMessage({ type: 'SWIPE_START' }, PARENT_ORIGIN);
 
         console.log('AFTER', {
           swipeDir,
@@ -450,7 +473,7 @@ const LOG = {
           lastSentFrame = 0;
           unlockSwipeScroll();
 
-          window.parent.postMessage({ type: 'SWIPE_CANCEL' }, '*');
+          window.parent.postMessage({ type: 'SWIPE_CANCEL' }, PARENT_ORIGIN);
 
           console.groupEnd();
           return;
@@ -516,7 +539,7 @@ const LOG = {
         dx: swipeDX,
         progress: swipeDX / width,
         width
-      }, '*');
+      }, PARENT_ORIGIN);
 
 
             console.log('[SWIPE →] SWIPE_PROGRESS sent');
@@ -581,7 +604,7 @@ const LOG = {
     if (Math.abs(dy) > Math.abs(dx)) {
       console.warn('Vertical movement wins → CANCEL swipe');
 
-      window.parent.postMessage({ type: 'SWIPE_CANCEL' }, '*');
+      window.parent.postMessage({ type: 'SWIPE_CANCEL' }, PARENT_ORIGIN);
 
       swipeDir = 0;
       swipeCommitted = false;
@@ -632,7 +655,7 @@ const LOG = {
       window.parent.postMessage({
         type: 'SWIPE_COMMIT',
         dir
-      }, '*');
+      }, PARENT_ORIGIN);
     } else {
       console.log('↩️ Swipe cancelled → snap back');
 
@@ -640,7 +663,7 @@ const LOG = {
 
       window.parent.postMessage({
         type: 'SWIPE_CANCEL'
-      }, '*');
+      }, PARENT_ORIGIN);
     }
 
     /* --------------------------------------------------
@@ -908,7 +931,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         const btn = document.getElementById('navSettings');
         if (btn) btn.classList.remove('active');
         if (!suppressNotify) {
-          parent.postMessage({ type: 'SETTINGS_CLOSED' }, '*');
+          parent.postMessage({ type: 'SETTINGS_CLOSED' }, PARENT_ORIGIN);
         }
         closeSettingsMenuFn = null;
         return true;
@@ -975,6 +998,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         const inRecite   = currentMode === 'reciting';
         const translationSection = document.getElementById('translation-section');
         const html = document.documentElement;
+        const autoSwipeEnabled = lastSettings?.autoSwipe !== false;
 
         // Use saved preference when available; fall back to DOM state.
         let isTranslationVisible = !html.classList.contains('hide-panel-translation');
@@ -1093,6 +1117,23 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
             <input type="number" id="repeatCount"
                   min="1" max="20" value="1"/>
           </div>
+
+          <div class="sm-row">
+            <div class="sm-label">
+              <i class="material-icons-outlined">swipe</i>
+              <span>Auto Swipe</span>
+            </div>
+            <div class="sm-radio">
+              <label class="radio-option">
+                <input type="radio" name="autoSwipeSetting" id="autoSwipeYes" value="yes" ${autoSwipeEnabled ? 'checked' : ''}>
+                <span>Yes</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="autoSwipeSetting" id="autoSwipeNo" value="no" ${!autoSwipeEnabled ? 'checked' : ''}>
+                <span>No</span>
+              </label>
+            </div>
+          </div>
         `;
 
         // ===== PANEL TRANSLATIONS =====
@@ -1189,6 +1230,20 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
             setRepeatCount(e.target.value, 'settingsPopup');
           });
 
+        menuEl.querySelector('#autoSwipeYes')
+          ?.addEventListener('change', e => {
+            if (e.target.checked) {
+              updateSetting({ autoSwipe: true });
+            }
+          });
+
+        menuEl.querySelector('#autoSwipeNo')
+          ?.addEventListener('change', e => {
+            if (e.target.checked) {
+              updateSetting({ autoSwipe: false });
+            }
+          });
+
 
 
         window.parent.postMessage({ type: 'SETTINGS_OPENED' }, PARENT_ORIGIN);
@@ -1254,6 +1309,13 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         if (transToggle) {
           transToggle.checked =
             !html.classList.contains('hide-word-translation');
+        }
+
+        const autoSwipeYes = menuEl.querySelector('#autoSwipeYes');
+        const autoSwipeNo  = menuEl.querySelector('#autoSwipeNo');
+        if (autoSwipeYes && autoSwipeNo) {
+          autoSwipeYes.checked = autoSwipeEnabled;
+          autoSwipeNo.checked  = !autoSwipeEnabled;
         }
 
         if (allTrans) {
@@ -1487,6 +1549,112 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
  * WORD MORPHOLOGY POPUP
  *************************************************/
 
+      function escapeHtml(value) {
+        return String(value ?? '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/\"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function sanitizeUrl(url) {
+        if (!url) return '';
+        const raw = String(url).trim();
+        if (raw.startsWith('#')) return raw;
+        try {
+          const parsed = new URL(raw, window.location.href);
+          if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+            return parsed.href;
+          }
+        } catch (_) {}
+        return '';
+      }
+
+      function sanitizeStyle(value) {
+        if (!value) return '';
+        return String(value)
+          .replace(/url\s*\([^)]*\)/gi, '')
+          .replace(/expression\s*\(/gi, '');
+      }
+
+      function sanitizeHtml(raw) {
+        if (!raw) return '';
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(`<div>${raw}</div>`, 'text/html');
+        const root = doc.body.firstElementChild || doc.body;
+        const allowedTags = new Set([
+          'div', 'span', 'p', 'b', 'strong', 'i', 'em', 'small',
+          'br', 'hr', 'table', 'thead', 'tbody', 'tr', 'td', 'th',
+          'ul', 'ol', 'li', 'a'
+        ]);
+        const allowedAttrs = new Set([
+          'href', 'src', 'style', 'class', 'id', 'title', 'target', 'rel',
+          'aria-label', 'role', 'colspan', 'rowspan', 'width', 'height',
+          'align', 'valign'
+        ]);
+
+        const scrubNode = node => {
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            const tag = node.tagName.toLowerCase();
+            if (!allowedTags.has(tag)) {
+              const text = doc.createTextNode(node.textContent || '');
+              node.replaceWith(text);
+              return;
+            }
+
+            const onclick = node.getAttribute('onclick');
+            if (onclick) {
+              const match = onclick.match(/playVerbAudio\('([^']+)'\s*,\s*'([^']+)'\s*,\s*this\)/);
+              if (match) {
+                node.setAttribute('data-verb', match[1]);
+                node.setAttribute('data-tense', match[2]);
+              }
+              node.removeAttribute('onclick');
+            }
+
+            for (const attr of Array.from(node.attributes)) {
+              const name = attr.name.toLowerCase();
+              const value = attr.value;
+
+              if (name.startsWith('on')) {
+                node.removeAttribute(attr.name);
+                continue;
+              }
+
+              if (!allowedAttrs.has(name) && !name.startsWith('data-')) {
+                node.removeAttribute(attr.name);
+                continue;
+              }
+
+              if (name === 'href' || name === 'src') {
+                const safe = sanitizeUrl(value);
+                if (!safe) {
+                  node.removeAttribute(attr.name);
+                } else {
+                  node.setAttribute(attr.name, safe);
+                }
+              }
+
+              if (name === 'style') {
+                const safeStyle = sanitizeStyle(value);
+                if (safeStyle) node.setAttribute('style', safeStyle);
+                else node.removeAttribute('style');
+              }
+
+              if (name === 'target' && value === '_blank') {
+                node.setAttribute('rel', 'noopener noreferrer');
+              }
+            }
+          }
+
+          Array.from(node.childNodes).forEach(scrubNode);
+        };
+
+        scrubNode(root);
+        return root.innerHTML;
+      }
+
     /**
      * Renders and displays the word-level morphology popup.
      * This popup shows roots, grammar, meanings, conjugations, etc.
@@ -1506,6 +1674,8 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
           { type: 'WORD_DETAILS_OPENED' },
           PARENT_ORIGIN
         );
+
+        const audioUrl = sanitizeUrl(data?.['Audio URL']);
 
         // -----------------------------
         // Build popup header
@@ -1544,10 +1714,10 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
             </h3>
 
             ${
-              data?.['Audio URL']
+              audioUrl
                 ? `<button
                     class="audio-button"
-                    onclick="playAudio('${data['Audio URL']}')"
+                    data-audio-url="${escapeHtml(audioUrl)}"
                     style="
                       padding:6px 12px;
                       font-size:14px;
@@ -1580,15 +1750,17 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
             .normalize('NFD')
             .replace(/[ً-ٟۖ-ٰۭـ]/g, '')
             .replace('ٱ', 'ا');
+          const safeWord = escapeHtml(data.Word);
 
           htmlContent += `
             <div style="margin-bottom:10px;">
               <b style="color:#0a4d68;">Word:</b>
               <span style="font-size:20px;font-weight:bold;">
-                ${data.Word}
+                ${safeWord}
               </span>
               <button
-                onclick="openSearchTab('${normalizedWord}')"
+                class="word-search-btn"
+                data-search-word="${escapeHtml(normalizedWord)}"
                 style="
                   margin-left:8px;
                   font-size:12px;
@@ -1613,14 +1785,17 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
             ? data.root_from_txt.split('+').join(' + ')
             : '';
 
-          const tagText = data.tags_joined
-            ? ` <i>(${data.tags_joined.split('+').join(' + ')})</i>`
+          const tagTextValue = data.tags_joined
+            ? data.tags_joined.split('+').join(' + ')
+            : '';
+          const tagText = tagTextValue
+            ? ` <i>(${escapeHtml(tagTextValue)})</i>`
             : '';
 
           if (rootText || tagText) {
             htmlContent += `
               <div>
-                <b>Roots:</b> ${rootText}${tagText}
+                <b>Roots:</b> ${escapeHtml(rootText)}${tagText}
               </div>
             `;
           }
@@ -1633,7 +1808,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
           htmlContent += `
             <div>
               <b>Meaning Of Verb:</b>
-              ${data['Meaning Of Verb']}
+              ${escapeHtml(data['Meaning Of Verb'])}
             </div>
           `;
         }
@@ -1642,7 +1817,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
           htmlContent += `
             <div>
               <b>Main Verb Grammar:</b>
-              ${data['Main Verb Grammar']}
+              ${escapeHtml(data['Main Verb Grammar'])}
             </div>
           `;
         }
@@ -1654,7 +1829,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
           htmlContent += `
             <div>
               <b>Suffixes:</b>
-              ${data['Quran Morph Info']}
+              ${escapeHtml(data['Quran Morph Info'])}
             </div>
           `;
         }
@@ -1665,13 +1840,13 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         if (data?.root_from_gpt) {
           const countText =
             data.count_of_verb > 0
-              ? ` <i>(appears ~${data.count_of_verb} times)</i>`
+              ? ` <i>(appears ~${escapeHtml(data.count_of_verb)} times)</i>`
               : '';
 
           htmlContent += `
             <div>
               <b>Root Verb:</b>
-              ${data.root_from_gpt}${countText}
+              ${escapeHtml(data.root_from_gpt)}${countText}
             </div>
           `;
         }
@@ -1680,9 +1855,10 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         // Conjugation table (HTML)
         // -----------------------------
         if (data?.['Conjugation Table']) {
+          const safeTable = sanitizeHtml(data['Conjugation Table']);
           htmlContent += `
             <div style="margin-top:10px;">
-              ${data['Conjugation Table']}
+              ${safeTable}
             </div>
           `;
         }
@@ -1704,6 +1880,38 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         popup.innerHTML = htmlContent;
         popup.style.display   = 'block';
         overlay.style.display = 'block';
+
+        const closeBtn = popup.querySelector('[aria-label="Close popup"]');
+        if (closeBtn) {
+          closeBtn.addEventListener('click', () => hidePopup());
+        }
+
+        const audioBtn = popup.querySelector('.audio-button[data-audio-url]');
+        if (audioBtn) {
+          audioBtn.addEventListener('click', () => {
+            const url = audioBtn.getAttribute('data-audio-url');
+            if (url) playAudio(url);
+          });
+        }
+
+        const searchBtn = popup.querySelector('.word-search-btn');
+        if (searchBtn) {
+          searchBtn.addEventListener('click', () => {
+            const word = searchBtn.getAttribute('data-search-word');
+            if (word) openSearchTab(word);
+          });
+        }
+
+        popup.querySelectorAll('[data-verb][data-tense]').forEach(link => {
+          link.addEventListener('click', evt => {
+            evt.preventDefault();
+            const verb = link.getAttribute('data-verb');
+            const tense = link.getAttribute('data-tense');
+            if (verb && tense) {
+              playVerbAudio(verb, tense, link);
+            }
+          });
+        });
 
         console.log('[POPUP] Popup rendered and shown');
       }
@@ -1753,7 +1961,8 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
           const url = `/search_results.html?q=${encodeURIComponent(normalizedWord)}`;
           console.log('[SEARCH] Opening search tab:', url);
 
-          window.open(url, '_blank');
+          const w = window.open(url, '_blank', 'noopener');
+          if (w) w.opener = null;
         }
       window.openSearchTab = openSearchTab;
 
@@ -1780,6 +1989,27 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
  * AUDIO CONTROLS
  *************************************************/
 
+      function startAyahAudio(options = {}) {
+        const { reset = true } = options;
+        if (!ayahAudio) return console.error('No ayahAudio element');
+
+        if (reset) {
+          const repeat = parseInt(ayahAudio.dataset.repeat || '1', 10);
+          remainingRepeats = Math.max(1, repeat);
+          ayahAudio.currentTime = 0;
+        }
+
+        const playPromise = ayahAudio.play();
+        if (playPromise?.catch) {
+          playPromise.catch(err => {
+            console.warn('[AUDIO] Play failed', err);
+          });
+        }
+
+        navPlayIcon.textContent = 'pause';
+        panelIcon.textContent   = 'pause';
+      }
+
       function togglePlay(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -1788,17 +2018,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         if (!ayahAudio) return console.error('No ayahAudio element');
 
         if (ayahAudio.paused) {
-
-          // 🔑 initialize repeat count
-          const repeat = parseInt(ayahAudio.dataset.repeat || '1', 10);
-          remainingRepeats = Math.max(1, repeat);
-
-          ayahAudio.currentTime = 0;
-          ayahAudio.play();
-
-          navPlayIcon.textContent = 'pause';
-          panelIcon.textContent   = 'pause';
-
+          startAyahAudio({ reset: true });
         } else {
           ayahAudio.pause();
           navPlayIcon.textContent = 'play_arrow';
@@ -1894,21 +2114,28 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         // ---------------------------------------------
         // Update nav icon + label (action-based)
         // ---------------------------------------------
-        const navModeLabel = document.querySelector('#navMode .nav-label');
-
-        if (modeIcon && navModeLabel) {
-          if (mode === 'reciting') {
-            modeIcon.textContent = 'psychology'; // learn icon
-            navModeLabel.textContent = 'Learn';
-          } else {
-            modeIcon.textContent = 'menu_book';  // recite icon
-            navModeLabel.textContent = 'Recite';
-          }
-        }
+        updateNavModeActionUI();
 
         console.log('[MODE] UI + nav applied for mode:', mode);
       }
       window.toggleMode = toggleMode;
+
+      function updateNavModeActionUI() {
+        const navModeLabel = document.querySelector('#navMode .nav-label');
+        if (!modeIcon || !navModeLabel) return;
+
+        if (currentMode === 'reciting') {
+          modeIcon.classList.add('material-icons-outlined');
+          modeIcon.innerHTML = '';
+          modeIcon.textContent = 'psychology'; // learn icon
+          navModeLabel.textContent = 'Learn';
+          return;
+        }
+
+        modeIcon.classList.remove('material-icons-outlined');
+        modeIcon.innerHTML = RECITE_ICON_SVG;
+        navModeLabel.textContent = 'Recite';
+      }
 
 
       /*************************************************
@@ -1926,17 +2153,55 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
           navPlayIcon.textContent = 'play_arrow';
           panelIcon.textContent   = 'play_arrow';
           console.log('[AUDIO] Repeat finished');
+          if (isAutoSwipeEnabled()) {
+            requestAutoSwipeNext();
+          }
         }
       }
 
       function onAyahPlay() {
         navPlayIcon.textContent = 'pause';
         panelIcon.textContent  = 'pause';
+        if (isAutoSwipeEnabled()) {
+          window.parent.postMessage(
+            {
+              type: 'AUTO_SWIPE_PROGRESS',
+              surah: currentSurah,
+              ayah: currentAyah,
+              timestamp: Date.now()
+            },
+            PARENT_ORIGIN
+          );
+        }
       }
 
       function onAyahPause() {
         navPlayIcon.textContent = 'play_arrow';
         panelIcon.textContent  = 'play_arrow';
+      }
+
+      function isAutoSwipeEnabled() {
+        if (lastSettings && typeof lastSettings.autoSwipe === 'boolean') {
+          return lastSettings.autoSwipe;
+        }
+        try {
+          const raw = localStorage.getItem('qq_settings');
+          if (!raw) return true;
+          const parsed = JSON.parse(raw);
+          if (typeof parsed.autoSwipe === 'boolean') {
+            return parsed.autoSwipe;
+          }
+        } catch (err) {
+          console.warn('[SETTINGS] Failed to read autoSwipe', err);
+        }
+        return true;
+      }
+
+      function requestAutoSwipeNext() {
+        window.parent.postMessage(
+          { type: 'AUTO_SWIPE_NEXT' },
+          PARENT_ORIGIN
+        );
       }
 
       function initAudio() {
@@ -2490,7 +2755,16 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
           on(window, 'message', onParentMessage);
       }
 
+      function isTrustedParentMessage(e) {
+        if (e.source !== window.parent) return false;
+        if (RAW_ORIGIN === 'null') {
+          return e.origin === 'null';
+        }
+        return e.origin === RAW_ORIGIN;
+      }
+
       function onParentMessage(e) {
+        if (!isTrustedParentMessage(e)) return;
         const data = e.data || {};
         const { type } = data;
         if (!type) return;
@@ -2551,6 +2825,11 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
             Object.values(audioCache).forEach(a => {
               if (!a.paused) a.pause();
             });
+            return;
+          }
+
+          case 'PLAY_AYAH_AUDIO': {
+            startAyahAudio({ reset: true });
             return;
           }
 
@@ -3016,7 +3295,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
 
         saveHintOverlay.classList.remove('hidden');
         saveHintOverlay.style.pointerEvents = 'none';
-        window.parent?.postMessage({ type: 'SAVE_HINT_SHOWN' }, '*');
+        window.parent?.postMessage({ type: 'SAVE_HINT_SHOWN' }, PARENT_ORIGIN);
 
         const SCALE = 2.8;
         const AUTO_CLOSE = 4200;
@@ -3061,7 +3340,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
           saveHintOverlay.classList.add('hidden');
           localStorage.setItem(SAVE_KEY, '1');
           holdNavVisible = false;
-          window.parent?.postMessage({ type: 'SAVE_HINT_DONE' }, '*');
+          window.parent?.postMessage({ type: 'SAVE_HINT_DONE' }, PARENT_ORIGIN);
           if (nav?.classList.contains('visible')) {
             clearTimeout(hideTimer);
             hideTimer = setTimeout(() => {
@@ -3086,7 +3365,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
 
         wordHintOverlay.classList.remove('hidden');
         wordHintOverlay.style.pointerEvents = 'none';
-        window.parent?.postMessage({ type: 'WORD_HINT_SHOWN' }, '*');
+        window.parent?.postMessage({ type: 'WORD_HINT_SHOWN' }, PARENT_ORIGIN);
 
         // ------------------------------
         // Position hint over word
@@ -3147,7 +3426,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
 
           wordHintOverlay.classList.add('hidden');
           localStorage.setItem(STORAGE_KEY, '1');
-          window.parent?.postMessage({ type: 'WORD_HINT_DONE' }, '*');
+          window.parent?.postMessage({ type: 'WORD_HINT_DONE' }, PARENT_ORIGIN);
 
           document.querySelectorAll('.word-block')
             .forEach(el => el.removeEventListener('click', onWordClick));
@@ -3272,6 +3551,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         } else {
           document.body.classList.remove('has-ayah-scroll');
         }
+        updateNavModeActionUI();
         ensureAyahScrollLayout();
         // Set default translation panel language if missing
         const html = document.documentElement;
@@ -3311,5 +3591,6 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
       window.addEventListener('DOMContentLoaded', () => {
         initIframeApp();
       });
+
 
 

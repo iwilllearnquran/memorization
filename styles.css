@@ -1027,6 +1027,51 @@ body.modal-open #ayahScroll {
   overflow: visible;
   flex-wrap: wrap;
 }
+
+.nav-item svg {
+  width: 26px;
+  height: 26px;
+  fill: currentColor;
+  flex: 0 0 auto;
+  display: block;
+}
+
+.nav-item .material-icons-outlined {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  font-size: 26px;
+  line-height: 1;
+}
+
+#navSettings .material-icons-outlined,
+#navSaveProgress .material-icons-outlined {
+  width: 28px;
+  height: 28px;
+  font-size: 28px;
+}
+
+#navModeIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  line-height: 1;
+}
+
+#navModeIcon svg {
+  width: 24px;
+  height: 24px;
+}
+
+#navPractice .material-icons-outlined {
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+}
 .nav-item:hover {
   color: var(--icon-hover);
   transform: translateY(-4px);
@@ -1257,6 +1302,24 @@ select, .settings-popup input[type=number] {
   border: 1px solid #ccc;
   border-radius: 4px;
   min-width: 80px;
+}
+
+.sm-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.radio-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #333;
+}
+
+.sm-radio input[type=radio] {
+  accent-color: #538295;
 }
 
 /* shrink the native arrow on number input */

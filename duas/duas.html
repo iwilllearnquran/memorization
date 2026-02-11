@@ -223,6 +223,24 @@ if (window.top === window.self) {
   window.location.replace('/?tab=duas');
 }
 
+const RAW_ORIGIN = window.location.origin;
+const PARENT_ORIGIN = RAW_ORIGIN === 'null' ? '*' : RAW_ORIGIN;
+
+function isTrustedParentMessage(e) {
+  if (!e || !e.origin) return false;
+  if (RAW_ORIGIN === 'null') {
+    if (e.origin !== 'null') return false;
+  } else if (e.origin !== RAW_ORIGIN) {
+    return false;
+  }
+  return e.source === window.parent;
+}
+
+function postToParent(message) {
+  if (!window.parent || window.parent === window) return;
+  window.parent.postMessage(message, PARENT_ORIGIN);
+}
+
 /* ---------------- TEXT CLEANING ---------------- */
 
 function cleanHtml(text) {
@@ -302,6 +320,7 @@ function scrollToDuaByRef(ref) {
 }
 
 window.addEventListener("message", e => {
+  if (!isTrustedParentMessage(e)) return;
   if (e?.data?.type === "PAUSE_DUAS_AUDIO") {
     pauseAllDuaAudio();
     return;
@@ -592,39 +611,59 @@ fetch("quranwbw_duas.json")
       const transliteration = cleanHtml(d.transliteration);
       const translation = cleanHtml(d.translation);
 
-      card.innerHTML = `
-        <div class="dua-reference">
-          <button class="dua-ref-link" type="button" data-ref="${d.reference}">
-            Qur’an ${d.reference}
-          </button>
-        </div>
-        <div class="dua-arabic">${arabic}</div>
-        <div class="dua-divider"></div>
-        <div class="dua-transliteration">${transliteration}</div>
-        <div class="dua-translation">${translation}</div>
-        <button class="dua-share-btn" type="button" aria-label="Share dua">
-          <span class="material-icons">ios_share</span>
-          Share
-        </button>
-      `;
+      const refWrap = document.createElement("div");
+      refWrap.className = "dua-reference";
+      const refBtn = document.createElement("button");
+      refBtn.className = "dua-ref-link";
+      refBtn.type = "button";
+      refBtn.dataset.ref = d.reference;
+      refBtn.textContent = `Qur’an ${d.reference}`;
+      refWrap.appendChild(refBtn);
+
+      const arabicEl = document.createElement("div");
+      arabicEl.className = "dua-arabic";
+      arabicEl.textContent = arabic;
+
+      const divider = document.createElement("div");
+      divider.className = "dua-divider";
+
+      const translitEl = document.createElement("div");
+      translitEl.className = "dua-transliteration";
+      translitEl.textContent = transliteration;
+
+      const translationEl = document.createElement("div");
+      translationEl.className = "dua-translation";
+      translationEl.textContent = translation;
+
+      const shareBtn = document.createElement("button");
+      shareBtn.className = "dua-share-btn";
+      shareBtn.type = "button";
+      shareBtn.setAttribute("aria-label", "Share dua");
+      const shareIcon = document.createElement("span");
+      shareIcon.className = "material-icons";
+      shareIcon.textContent = "ios_share";
+      shareBtn.appendChild(shareIcon);
+      shareBtn.appendChild(document.createTextNode(" Share"));
+
+      card.appendChild(refWrap);
+      card.appendChild(arabicEl);
+      card.appendChild(divider);
+      card.appendChild(translitEl);
+      card.appendChild(translationEl);
+      card.appendChild(shareBtn);
 
       card.appendChild(btn);
       list.appendChild(card);
 
-      const refBtn = card.querySelector(".dua-ref-link");
       if (refBtn) {
         refBtn.addEventListener("click", () => {
           const [s, a] = String(d.reference || "").split(":").map(Number);
           if (!Number.isFinite(s) || !Number.isFinite(a)) return;
           pauseAllDuaAudio();
-          window.parent?.postMessage(
-            { type: "NAVIGATE_TO_AYAH", surah: s, ayah: a },
-            "*"
-          );
+          postToParent({ type: "NAVIGATE_TO_AYAH", surah: s, ayah: a });
         });
       }
 
-      const shareBtn = card.querySelector(".dua-share-btn");
       if (shareBtn) {
         shareBtn.addEventListener("click", () => shareDuaCard(card));
       }

@@ -593,6 +593,13 @@ body:not(.reader-mode):not(.duas-mode) .container {
   transition: background 0.25s ease;
 }
 
+.qq-nav-item .nav-svg-icon {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+  flex: 0 0 auto;
+}
+
 .qq-nav-item:hover {
   background: rgba(255,255,255,0.08);
 }
@@ -632,14 +639,14 @@ body:not(.reader-mode):not(.duas-mode) .container {
 
 /* Popup box */
 .journeyBox {
-  background: #153042;
+  background: linear-gradient(160deg, #0a4d68 0%, #0d5c7b 52%, #0f3a52 100%);
   color: #eaf6ff;
   width: 90vw;
   max-width: 420px;
   padding: 16px;
   border-radius: 14px;
 
-  border: 3px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
   box-shadow:
   0 12px 28px rgba(0,0,0,0.35),
   inset 0 1px 0 rgba(255,255,255,0.04);
@@ -678,7 +685,7 @@ body:not(.reader-mode):not(.duas-mode) .container {
 /* the bar */
 .journeyBar {
   width: 14px;
-  background: linear-gradient(to top, #2ecc71, #27ae60);
+  background: linear-gradient(to top, #f7d77f, #d6a23a);
   border-radius: 6px;
 }
 
@@ -713,8 +720,8 @@ body:not(.reader-mode):not(.duas-mode) .container {
   width: 100%;
   margin-top: 12px;
   padding: 10px;
-  background: #0a4d68;
-  color: #fff;
+  background: #f7d77f;
+  color: #0a4d68;
   border: none;
   border-radius: 10px;
 }
@@ -726,7 +733,7 @@ body:not(.reader-mode):not(.duas-mode) .container {
   align-items: center;
   font-size: 16px;
   margin-bottom: 12px;
-  color: #7de0c6;
+  color: #f7d77f;
 }
 
 
@@ -1072,7 +1079,7 @@ body:not(.reader-mode):not(.duas-mode) .container {
 
       /* full-width hero section */
 .hero {
-  background: linear-gradient(135deg, #0b536b 0%, #176f83 100%);
+  background: transparent;
   border: none;
   border-radius: 0;
   box-shadow: none;
@@ -1110,7 +1117,7 @@ body:not(.reader-mode):not(.duas-mode) .container {
     radial-gradient(circle at 75% 40%, rgba(255,255,255,0.18) 0 1px, transparent 2px),
     radial-gradient(circle at 85% 35%, rgba(255,255,255,0.18) 0 1px, transparent 2px);
   pointer-events: none;
-  opacity: 0.35;
+  opacity: 0;
 }
 
 @keyframes heroFloat {
@@ -1133,6 +1140,10 @@ body:not(.reader-mode):not(.duas-mode) .container {
 }
 
 .hero-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1;
   border: 1px solid rgba(255, 255, 255, 0.25);
   background: rgba(255, 255, 255, 0.12);
   color: #fff;
@@ -1144,10 +1155,33 @@ body:not(.reader-mode):not(.duas-mode) .container {
   transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
+.hero-chip-icon {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  flex: 0 0 auto;
+  display: block;
+  transform: translateY(-1px);
+}
+
+body {
+  touch-action: manipulation;
+}
+
+html {
+  touch-action: manipulation;
+}
+
 .hero-chip:hover {
   background: rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.35);
   transform: translateY(-1px);
+}
+
+.hero-chip[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .hero-dua-card {
@@ -1190,12 +1224,13 @@ body:not(.reader-mode):not(.duas-mode) .container {
 .hero-dua-meta {
   font-size: 0.72rem;
   color: rgba(255, 255, 255, 0.6);
+  text-align: center;
 }
 
 .hero-moon {
   width: 72px;
   height: 72px;
-  margin: 2px auto 14px;
+  margin: 0 auto 8px;
   position: relative;
   display: grid;
   place-items: center;
@@ -1224,14 +1259,14 @@ body:not(.reader-mode):not(.duas-mode) .container {
   font-size: 0.7rem !important;
   font-style: italic;
   color: var(--text-secondary);
-  margin-bottom: 0.5rem;
+  margin: 6px auto 0;
 }
 
 .hero h1 {
   font-family: "Cormorant Garamond", serif;
   font-size: 2.7rem;
   letter-spacing: 0.4px;
-  margin: 0.2em 0 0.35em;
+  margin: 0.1em 0 0.2em;
   color: var(--text-primary);
 }
 
@@ -1243,7 +1278,29 @@ body:not(.reader-mode):not(.duas-mode) .container {
 }
 
 .hero-description {
-  margin-bottom: 1rem;
+  margin: 6px auto 14px;
+  padding: 8px 18px;
+  display: inline-block;
+  position: relative;
+  text-align: center;
+}
+
+.hero-description::before,
+.hero-description::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.hero-description::before {
+  top: 0;
+}
+
+.hero-description::after {
+  bottom: 0;
 }
 
 .hero-actions .cta-btn {
@@ -1267,8 +1324,8 @@ body:not(.reader-mode):not(.duas-mode) .hero-actions {
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: auto;
-  padding-top: 18px;
+  margin-top: 8px;
+  padding-top: 6px;
 }
 
 body:not(.reader-mode):not(.duas-mode) .hero-actions .cta-btn {

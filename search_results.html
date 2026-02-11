@@ -97,7 +97,16 @@ async function fetchPage(page = 1) {
   totalPages = data.search.total_pages || 1;
 
   const container = document.getElementById("results");
-  container.innerHTML = "";
+  container.textContent = "";
+
+  const createRow = (labelText, valueText) => {
+    const row = document.createElement("div");
+    const label = document.createElement("b");
+    label.textContent = labelText;
+    row.appendChild(label);
+    row.appendChild(document.createTextNode(` ${valueText}`));
+    return row;
+  };
 
   for (const item of results) {
     const verseKey = item.verse_key;
@@ -136,16 +145,41 @@ async function fetchPage(page = 1) {
       ).join("\n");
     }
 
-    container.innerHTML += `
-      <div class="result">
-        <b>Word:</b> ${rawWord}<br>
-        <b>Transliteration:</b> ${transliteration}<br>
-        <b>Meaning:</b> ${translation}<br>
-        <b>Full Ayah:</b> <span style="font-size:18px; direction: rtl; display: block; margin: 8px 0;">${fullText}</span>
-        <b>Verse Key:</b> <a class="verse-link" href="ayah_${surah}_${ayah}.html" target="_blank">${verseKey}</a><br>
+    const result = document.createElement("div");
+    result.className = "result";
 
-      </div>
-    `;
+    result.appendChild(createRow("Word:", rawWord));
+    result.appendChild(createRow("Transliteration:", transliteration));
+    result.appendChild(createRow("Meaning:", translation));
+
+    const fullRow = document.createElement("div");
+    const fullLabel = document.createElement("b");
+    fullLabel.textContent = "Full Ayah:";
+    const fullTextEl = document.createElement("span");
+    fullTextEl.style.fontSize = "18px";
+    fullTextEl.style.direction = "rtl";
+    fullTextEl.style.display = "block";
+    fullTextEl.style.margin = "8px 0";
+    fullTextEl.textContent = fullText;
+    fullRow.appendChild(fullLabel);
+    fullRow.appendChild(fullTextEl);
+    result.appendChild(fullRow);
+
+    const verseRow = document.createElement("div");
+    const verseLabel = document.createElement("b");
+    verseLabel.textContent = "Verse Key:";
+    const verseLink = document.createElement("a");
+    verseLink.className = "verse-link";
+    verseLink.href = `ayah_${surah}_${ayah}.html`;
+    verseLink.target = "_blank";
+    verseLink.rel = "noopener noreferrer";
+    verseLink.textContent = verseKey;
+    verseRow.appendChild(verseLabel);
+    verseRow.appendChild(document.createTextNode(" "));
+    verseRow.appendChild(verseLink);
+    result.appendChild(verseRow);
+
+    container.appendChild(result);
   }
 
   renderPagination();

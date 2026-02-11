@@ -16,6 +16,8 @@ import { showGameOverPopup } from '/ui/gameOverPopup.js';
 
 
 // — Firestore & Auth (only used in authenticated flow via postMessage)
+const RAW_ORIGIN = window.location.origin;
+const PARENT_ORIGIN = RAW_ORIGIN === 'null' ? '*' : RAW_ORIGIN;
 import { auth, loadStatsFromFirestore, saveStatsToFirestore, recordStreak,
   addCompletedAyahToFirestore 
  } from '/services//_private/firestoreService.js';
@@ -386,7 +388,7 @@ function continueAsGuestFlow(points, surah, ayah) {
 // ─── 3. Login‐flow function ───────────────────────────────────────────────────
 function triggerLoginFlow() {
   console.log('[GameSession] triggerLoginFlow()');
-  window.parent.postMessage({ type: 'loginRequest' }, '*');
+  window.parent.postMessage({ type: 'loginRequest' }, PARENT_ORIGIN);
 
 const onUserLoggedIn = e => {
   if (e.data?.type === 'userLoggedIn') {
