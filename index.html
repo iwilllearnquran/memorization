@@ -4,6 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <title> Quran Quest</title>
+  <script>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('surah') && params.has('ayah')) {
+        document.documentElement.classList.add('pending-ayah');
+      }
+    })();
+  </script>
 
   <!-- Firebase compat SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js" defer></script>
@@ -43,9 +51,13 @@
 
   <div class="navbar" id="mainNavbar">
     <div class="navbar-left">
-      <!--<button class="login-btn" id="loginBtn">👤</button> -->
-      <button class="menu-btn" id="menuBtn">
-        <div id="menuLottie"></div>
+      <!--<button class="login-btn" id="loginBtn">User</button> -->
+      <button class="menu-btn" id="menuBtn" aria-label="Open profile menu">
+        <div id="menuLottie" aria-hidden="true"></div>
+        <span class="material-symbols-outlined menu-home-icon nav-action-icon" aria-hidden="true">cottage</span>
+      </button>
+      <button class="menu-btn recite-home-btn" id="reciteHomeBtn" aria-label="Back to Learn Home">
+        <span class="material-icons-outlined" aria-hidden="true">home</span>
       </button>
 
    
@@ -60,6 +72,9 @@
     <div class="navbar-right">
       
       <button id="returnToAyah" class="return-btn">Return to Ayah</button>
+      <button id="learnSettingsBtn" class="top-settings-btn" type="button" aria-label="Learn settings">
+        <span class="material-symbols-outlined nav-action-icon" aria-hidden="true">tune</span>
+      </button>
       <div class="streak-info" id="streakDisplay">&#128293;0</div>
     </div>
   </div>
@@ -83,6 +98,21 @@
     <span class="qq-logo"><span class="material-icons-outlined">mosque</span></span>
     <span class="qq-title">My Quran Quest</span>
     <button id="drawerCloseBtn" class="drawer-close">✕</button>
+  </div>
+
+  <div class="drawer-user" id="drawerUser">
+    <div id="drawerGreeting" class="drawer-greeting">Assalamualaikum, Guest</div>
+    <div id="drawerSubtext" class="drawer-subtext">
+      Guest mode: your progress stays on this device only. Clearing data or uninstalling will erase it.
+    </div>
+    <div class="drawer-auth-actions">
+      <button id="drawerLoginBtn" class="drawer-auth-btn" type="button">
+        Continue with Google
+      </button>
+      <button id="drawerLogoutBtn" class="drawer-auth-btn secondary" type="button" style="display:none;">
+        Sign out
+      </button>
+    </div>
   </div>
 
   <nav class="qq-nav">
@@ -114,14 +144,23 @@
 
   <div class="drawer-footer">
     <div class="drawer-links">
-      <a class="drawer-link" href="https://instagram.com/" target="_blank" rel="noopener noreferrer">
-        Instagram
+      <a class="drawer-link" href="https://www.instagram.com/my.quran.quest._?igsh=MTNtMnAxMjAzanY3Zg==" target="_blank" rel="noopener noreferrer">
+        <svg class="drawer-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M8 3h8a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8a5 5 0 0 1 5-5zm8 2H8a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3zm-4 2.5A4.5 4.5 0 1 0 12 17a4.5 4.5 0 0 0 0-9zm0 2a2.5 2.5 0 1 1 0 5a2.5 2.5 0 0 1 0-5zm4.75-.75a1 1 0 1 0 0 2a1 1 0 0 0 0-2z"/>
+        </svg>
+        <span>Instagram</span>
       </a>
-      <a class="drawer-link" href="https://youtube.com/" target="_blank" rel="noopener noreferrer">
-        YouTube
+      <a class="drawer-link" href="https://youtube.com/@daily_quran_on_your_feed?si=GM2EIPt_eMUpxNhm" target="_blank" rel="noopener noreferrer">
+        <svg class="drawer-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M8.05 4h7.9a2.5 2.5 0 0 1 2.49 2.28l.4 4.37a2.5 2.5 0 0 1 0 .7l-.4 4.37A2.5 2.5 0 0 1 15.95 18h-7.9a2.5 2.5 0 0 1-2.49-2.28l-.4-4.37a2.5 2.5 0 0 1 0-.7l.4-4.37A2.5 2.5 0 0 1 8.05 4zm2.95 4.5v7l6-3.5-6-3.5z"/>
+        </svg>
+        <span>YouTube</span>
       </a>
-      <a class="drawer-link" href="https://whatsapp.com/channel/" target="_blank" rel="noopener noreferrer">
-        WhatsApp Channel
+      <a class="drawer-link" href="https://whatsapp.com/channel/0029VbCTA0KGU3BFsTZR6L2m" target="_blank" rel="noopener noreferrer">
+        <svg class="drawer-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M12 2a9.5 9.5 0 0 0-8.23 14.24L3 21l4.92-1.56A9.5 9.5 0 1 0 12 2zm0 2a7.5 7.5 0 0 1 6.52 11.21l-.34.57.77 2.56-2.64-.84-.54.32A7.5 7.5 0 1 1 12 4zm3.63 9.86c-.2-.1-1.18-.58-1.36-.64-.18-.07-.31-.1-.44.1-.13.2-.5.64-.61.77-.11.13-.23.15-.43.05-.2-.1-.86-.32-1.64-1.02-.61-.55-1.02-1.24-1.14-1.44-.12-.2-.01-.31.09-.41.1-.1.2-.23.3-.35.1-.12.13-.2.2-.33.07-.13.03-.25-.02-.35-.05-.1-.44-1.07-.6-1.46-.16-.39-.33-.34-.44-.35h-.38c-.13 0-.35.05-.53.25-.18.2-.7.68-.7 1.66 0 .98.72 1.93.82 2.06.1.13 1.42 2.17 3.44 3.04.48.21.86.33 1.15.42.48.15.92.13 1.27.08.39-.06 1.18-.48 1.35-.95.17-.47.17-.88.12-.95-.05-.07-.18-.11-.38-.21z"/>
+        </svg>
+        <span>WhatsApp Channel</span>
       </a>
     </div>
     <button id="contactUsBtn" class="drawer-contact" type="button">
@@ -161,8 +200,9 @@
     <p class="hero-description">
       We treat every verse as its own universe
     </p>
-    <div class="hero-secondary">
-      <button id="learningJourneyHeroBtn" class="hero-chip">
+    <div class="hero-secondary-group">
+      <div class="hero-secondary">
+        <button id="learningJourneyHeroBtn" class="hero-chip">
         <svg class="hero-chip-icon" viewBox="0 0 512 512" aria-hidden="true" focusable="false">
           <g transform="translate(-2048,0)">
             <g transform="translate(2132.93,29.6336)">
@@ -173,14 +213,24 @@
             </g>
           </g>
         </svg>
-        <span>Learning Journey</span>
-      </button>
-      <button id="resumeListeningHeroBtn" class="hero-chip" disabled>
+          <span>Learning Journey</span>
+        </button>
+        <button id="resumeListeningHeroBtn" class="hero-chip" disabled>
         <svg class="hero-chip-icon" viewBox="-0.42 0 53.97 53.97" aria-hidden="true" focusable="false">
           <path d="M917.262,252.585a24.56,24.56,0,0,0-37.659,0,27.515,27.515,0,0,0-2.582,35.156,12.7,12.7,0,0,0,11.618,9.121,1.649,1.649,0,0,0,1.471.9,1.887,1.887,0,0,0,.276-.024l4.479-.778a1.647,1.647,0,0,0,1.367-1.626,1.788,1.788,0,0,0-.023-.28l-4.1-23.618a1.658,1.658,0,0,0-1.627-1.363,1.574,1.574,0,0,0-.321.032l-4.436.772a1.639,1.639,0,0,0-1.366,1.6.176.176,0,0,1,0,.032,12.7,12.7,0,0,0-6.5,6.052,22.7,22.7,0,0,1,2.633-19.244,8.625,8.625,0,0,0,3.387-2.067l.028-.028.027-.032c3.177-3.817,8.6-6.094,14.506-6.094,5.6,0,10.868,2.094,14.08,5.607l.055.062c.09.1.165.182.263.295a8.746,8.746,0,0,0,3.542,2.246,22.7,22.7,0,0,1,2.64,19.259,12.684,12.684,0,0,0-6.506-6.056v-.006a1.646,1.646,0,0,0-1.366-1.626l-4.458-.776a1.488,1.488,0,0,0-.3-.028,1.654,1.654,0,0,0-1.625,1.37l-4.1,23.592a1.631,1.631,0,0,0-.027.3A1.651,1.651,0,0,0,902,296.964l4.488.779a1.677,1.677,0,0,0,.27.023A1.651,1.651,0,0,0,908,297.2l.234.041.067-.378a12.7,12.7,0,0,0,11.54-9.106,27.527,27.527,0,0,0-2.581-35.171ZM890.081,272.3l3.934,22.639-3.5.61-3.935-22.639Zm16.274,23.249-3.5-.61,3.933-22.638,3.506.609-.022.119Z" transform="translate(-871.869 -243.796)"/>
         </svg>
-        <span class="hero-chip-label">Resume Listening</span>
-      </button>
+          <span class="hero-chip-label">Resume Listening</span>
+        </button>
+      </div>
+      <div class="hero-memo-progress">
+        <button id="memorizationHeroBtn" class="hero-chip hero-chip-wide hero-chip-memo" type="button">
+          <span id="memorizationHeroFill" class="hero-chip-fill" aria-hidden="true"></span>
+          <span class="hero-chip-row">
+            <span class="hero-chip-title">Memorization (beta)</span>
+            <span id="memorizationHeroLabel" class="hero-chip-label">Last memorized: --</span>
+          </span>
+        </button>
+      </div>
     </div>
 
     <div class="hero-dua-card" id="randomDuaCard" data-ref="2:201" role="button" tabindex="0">
@@ -192,6 +242,7 @@
     </div>
     <div class="hero-actions">
       <button id="startLearningBtn" class="cta-btn">Start Learning</button>
+      <button id="startRecitingBtn" class="cta-btn cta-btn-secondary" type="button">Start Reciting</button>
     </div>
 
     <p class="hero-subtitle">
@@ -206,6 +257,12 @@
 <div id="duasView" class="duas-view" aria-hidden="true">
   <iframe id="duasFrame" title="Daily Ramzan Duas" loading="lazy"></iframe>
 </div>
+
+<div id="memorizationView" class="memorization-view" aria-hidden="true">
+  <iframe id="memorizationFrame" title="Memorization" loading="lazy"></iframe>
+</div>
+
+<div id="reciteScrollView" class="recite-scroll-view" aria-hidden="true"></div>
 
 
   <div class="container" id="surahContainer">
@@ -233,6 +290,10 @@
       </svg>
       <span>Learn Quran</span>
     </button>
+    <button class="bottom-nav-btn" id="navMemorization" type="button">
+      <span class="material-icons-outlined" aria-hidden="true">psychology</span>
+      <span>Memorization</span>
+    </button>
     <button class="bottom-nav-btn" id="navRamzanDuas" type="button">
       <span class="material-symbols-outlined" aria-hidden="true">prayer_times</span>
       <span>Ramzan Duas</span>
@@ -244,5 +305,6 @@
   <script type="module" src="/index-script.js" defer></script> 
 </body>
 </html>
+
 
 

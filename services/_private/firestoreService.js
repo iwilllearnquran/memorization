@@ -58,6 +58,24 @@ function diffDaysUTC(aStr, bStr) {
   return Math.round((a - b) / 86400000);
 }
 
+function compareAyahRef(a, b) {
+  if (!a || !b) return 0;
+  if (a.surah !== b.surah) return a.surah - b.surah;
+  return a.ayah - b.ayah;
+}
+
+function mergeProgressMap(current = {}, incoming = {}) {
+  const merged = { ...current };
+  Object.entries(incoming).forEach(([key, value]) => {
+    const next = Number(value) || 0;
+    const prev = Number(merged[key]) || 0;
+    if (next > prev) {
+      merged[key] = next;
+    }
+  });
+  return merged;
+}
+
 // ————— Ensure Anonymous Guest User —————
 export async function ensureGuestUser() {
   const user = auth.currentUser;
@@ -173,6 +191,111 @@ export async function saveStatsToFirestore(stats) {
   }
 
   await setDoc(ref, payload, { merge: true });
+}
+
+export async function updateCompletedSurahsProgress(surah, ayah) {
+  if (!auth.currentUser) return;
+  const userRef = doc(db, 'users', auth.currentUser.uid);
+  await runTransaction(db, async tx => {
+    const snap = await tx.get(userRef);
+    const data = snap.exists() ? snap.data() : {};
+    const progressMap = data.completedSurahs_new || {};
+    const current = Number(progressMap[surah]) || 0;
+    if (ayah > current) {
+      progressMap[surah] = ayah;
+      tx.set(userRef, { completedSurahs_new: progressMap }, { merge: true });
+    }
+  });
+}
+
+export async function saveMemorizationData(memoData) {
+  if (!auth.currentUser) return;
+  const userRef = doc(db, 'users', auth.currentUser.uid);
+  await setDoc(userRef, { memorization: memoData }, { merge: true });
+}
+
+export async function getMemorizationData() {
+  if (!auth.currentUser) return null;
+  const snap = await getUserDoc();
+  if (!snap.exists()) return null;
+  return snap.data()?.memorization || null;
+}
+
+export async function mergeGuestData(payload) {
+  if (!auth.currentUser || auth.currentUser.isAnonymous) return;
+  const userRef = doc(db, 'users', auth.currentUser.uid);
+
+  await runTransaction(db, async tx => {
+    const snap = await tx.get(userRef);
+    const data = snap.exists() ? snap.data() : {};
+    const updates = {};
+
+    const guestPoints = Number(payload?.points) || 0;
+    if (guestPoints) {
+      updates.ajrPoints = (Number(data.ajrPoints) || 0) + guestPoints;
+    }
+
+    const guestStreak = Array.isArray(payload?.streakHistory)
+      ? payload.streakHistory
+      : [];
+    if (guestStreak.length) {
+      const mergedStreak = Array.from(new Set([...(data.streakHistory || []), ...guestStreak]));
+      mergedStreak.sort();
+      updates.streakHistory = mergedStreak;
+      const existingFreezes = Number.isFinite(data.streakFreezes)
+        ? data.streakFreezes
+        : DEFAULT_STREAK_FREEZES;
+      const guestFreezes = Number.isFinite(payload?.streakFreezes)
+        ? payload.streakFreezes
+        : existingFreezes;
+      updates.streakFreezes = Math.min(existingFreezes, guestFreezes);
+    }
+
+    if (payload?.completedSurahs) {
+      updates.completedSurahs_new = mergeProgressMap(
+        data.completedSurahs_new || {},
+        payload.completedSurahs
+      );
+    }
+
+    if (payload?.lastRead?.surah && payload?.lastRead?.ayah) {
+      const shouldReplace = !data.lastReadAt || !data.lastSurah || !data.lastAyah;
+      if (shouldReplace) {
+        updates.lastSurah = payload.lastRead.surah;
+        updates.lastAyah = payload.lastRead.ayah;
+        updates.lastReadAt = serverTimestamp();
+      }
+    }
+
+    if (payload?.memorization) {
+      const memo = data.memorization || {};
+      const mergedMemo = { ...memo };
+      if (payload.memorization.unlocked) {
+        const incoming = payload.memorization.unlocked;
+        const current = memo.unlocked || { surah: 1, ayah: 1 };
+        mergedMemo.unlocked =
+          compareAyahRef(incoming, current) > 0 ? incoming : current;
+      }
+
+      if (payload.memorization.listens) {
+        const currentListens = memo.listens || {};
+        mergedMemo.listens = mergeProgressMap(currentListens, payload.memorization.listens);
+      }
+
+      if (payload.memorization.lastProgress) {
+        const incoming = payload.memorization.lastProgress;
+        const current = memo.lastProgress;
+        if (!current || (incoming?.timestamp || 0) > (current?.timestamp || 0)) {
+          mergedMemo.lastProgress = incoming;
+        }
+      }
+
+      updates.memorization = mergedMemo;
+    }
+
+    updates.lastLogin = serverTimestamp();
+    tx.set(userRef, updates, { merge: true });
+  });
 }
 
 export async function addPointsToFirestore(pointsDelta) {

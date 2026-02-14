@@ -1,0 +1,61 @@
+{
+  "generatedAt": "2026-02-14T12:15:30.786607+00:00",
+  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "surah": {
+    "surah": 106,
+    "arabicName": "سُورَةُ قُرَيۡشٍ",
+    "englishName": "Quraish",
+    "englishNameTranslation": "Quraysh",
+    "ayahCount": 4,
+    "ayahs": [
+      {
+        "ayah": 1,
+        "globalAyah": 6194,
+        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ لِإِيلَٰفِ قُرَيْشٍ",
+        "translation_en": "SO THAT the Quraysh might remain secure,",
+        "translation_ur": "قریش کے مانوس کرنے کے سبب",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/106001.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6194.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6194.mp3"
+        }
+      },
+      {
+        "ayah": 2,
+        "globalAyah": 6195,
+        "arabic": "إِۦلَٰفِهِمْ رِحْلَةَ ٱلشِّتَآءِ وَٱلصَّيْفِ",
+        "translation_en": "secure in their winter and summer journeys,",
+        "translation_ur": "(یعنی) ان کو جاڑے اور گرمی کے سفر سے مانوس کرنے کے سبب",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/106002.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6195.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6195.mp3"
+        }
+      },
+      {
+        "ayah": 3,
+        "globalAyah": 6196,
+        "arabic": "فَلْيَعْبُدُوا۟ رَبَّ هَٰذَا ٱلْبَيْتِ",
+        "translation_en": "Let them, therefore, worship the Sustainer of this Temple;",
+        "translation_ur": "لوگوں کو چاہیئے کہ (اس نعمت کے شکر میں) اس گھر کے مالک کی عبادت کریں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/106003.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6196.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6196.mp3"
+        }
+      },
+      {
+        "ayah": 4,
+        "globalAyah": 6197,
+        "arabic": "ٱلَّذِىٓ أَطْعَمَهُم مِّن جُوعٍۢ وَءَامَنَهُم مِّنْ خَوْفٍۭ",
+        "translation_en": "who has given them food against hunger, and made them safe from danger.",
+        "translation_ur": "جس نے ان کو بھوک میں کھانا کھلایا اور خوف سے امن بخشا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/106004.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6197.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6197.mp3"
+        }
+      }
+    ]
+  }
+}

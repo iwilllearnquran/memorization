@@ -1,0 +1,145 @@
+{
+  "generatedAt": "2026-02-14T12:15:08.030293+00:00",
+  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "surah": {
+    "surah": 62,
+    "arabicName": "سُورَةُ الجُمُعَةِ",
+    "englishName": "Al-Jumu'a",
+    "englishNameTranslation": "Friday",
+    "ayahCount": 11,
+    "ayahs": [
+      {
+        "ayah": 1,
+        "globalAyah": 5178,
+        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ يُسَبِّحُ لِلَّهِ مَا فِى ٱلسَّمَٰوَٰتِ وَمَا فِى ٱلْأَرْضِ ٱلْمَلِكِ ٱلْقُدُّوسِ ٱلْعَزِيزِ ٱلْحَكِيمِ",
+        "translation_en": "ALL THAT IS in the heavens and all that is on earth extols the limitless glory of God, the Sovereign Supreme, the Holy, the Almighty, the Wise!",
+        "translation_ur": "جو چیز آسمانوں میں ہے اور جو چیز زمین میں ہے سب خدا کی تسبیح کرتی ہے جو بادشاہ حقیقی پاک ذات زبردست حکمت والا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/062001.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5178.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5178.mp3"
+        }
+      },
+      {
+        "ayah": 2,
+        "globalAyah": 5179,
+        "arabic": "هُوَ ٱلَّذِى بَعَثَ فِى ٱلْأُمِّيِّۦنَ رَسُولًۭا مِّنْهُمْ يَتْلُوا۟ عَلَيْهِمْ ءَايَٰتِهِۦ وَيُزَكِّيهِمْ وَيُعَلِّمُهُمُ ٱلْكِتَٰبَ وَٱلْحِكْمَةَ وَإِن كَانُوا۟ مِن قَبْلُ لَفِى ضَلَٰلٍۢ مُّبِينٍۢ",
+        "translation_en": "He it is who has sent unto the unlettered people an apostle from among themselves, to convey unto them His messages, and to cause them to grow in purity, and to impart unto them the divine writ as well as wisdom - whereas before that they were indeed, most obviously, lost in error",
+        "translation_ur": "وہی تو ہے جس نے ان پڑھوں میں ان ہی میں سے (محمدﷺ) کو پیغمبر (بنا کر) بھیجا جو ان کے سامنے اس کی آیتیں پڑھتے اور ان کو پاک کرتے اور (خدا کی) کتاب اور دانائی سکھاتے ہیں۔ اور اس ے پہلے تو یہ لوگ صریح گمراہی میں تھے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/062002.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5179.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5179.mp3"
+        }
+      },
+      {
+        "ayah": 3,
+        "globalAyah": 5180,
+        "arabic": "وَءَاخَرِينَ مِنْهُمْ لَمَّا يَلْحَقُوا۟ بِهِمْ ۚ وَهُوَ ٱلْعَزِيزُ ٱلْحَكِيمُ",
+        "translation_en": "and [to cause this message to spread] from them unto other people as soon as they come into contact with them: for He alone is almighty, truly wise!",
+        "translation_ur": "اور ان میں سے اور لوگوں کی طرف بھی (ان کو بھیجا ہے) جو ابھی ان (مسلمانوں سے) نہیں ملے۔ اور وہ غالب حکمت والا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/062003.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5180.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5180.mp3"
+        }
+      },
+      {
+        "ayah": 4,
+        "globalAyah": 5181,
+        "arabic": "ذَٰلِكَ فَضْلُ ٱللَّهِ يُؤْتِيهِ مَن يَشَآءُ ۚ وَٱللَّهُ ذُو ٱلْفَضْلِ ٱلْعَظِيمِ",
+        "translation_en": "Such is God's bounty: He grants it to anyone who is willing [to receive it]: for God is limitless in His great bounty.",
+        "translation_ur": "یہ خدا کا فضل ہے جسے چاہتا ہے عطا کرتا ہے۔ اور خدا بڑے فضل کا مالک ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/062004.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5181.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5181.mp3"
+        }
+      },
+      {
+        "ayah": 5,
+        "globalAyah": 5182,
+        "arabic": "مَثَلُ ٱلَّذِينَ حُمِّلُوا۟ ٱلتَّوْرَىٰةَ ثُمَّ لَمْ يَحْمِلُوهَا كَمَثَلِ ٱلْحِمَارِ يَحْمِلُ أَسْفَارًۢا ۚ بِئْسَ مَثَلُ ٱلْقَوْمِ ٱلَّذِينَ كَذَّبُوا۟ بِـَٔايَٰتِ ٱللَّهِ ۚ وَٱللَّهُ لَا يَهْدِى ٱلْقَوْمَ ٱلظَّٰلِمِينَ",
+        "translation_en": "THE PARABLE of those who were graced with the burden of the Torah, and thereafter failed to bear this burden, is that of an ass that carries a load of books [but cannot benefit from them]. Calamitous is the parable of people who are bent on giving the lie to God's messages - for God does not bestow His guidance upon such evildoing folk!",
+        "translation_ur": "جن لوگوں (کے سر) پر تورات لدوائی گئی پھر انہوں نے اس (کے بار تعمیل) کو نہ اٹھایا ان کی مثال گدھے کی سی ہے جن پر بڑی بڑی کتابیں لدی ہوں۔ جو لوگ خدا کی آیتوں کی تکذیب کرتے ہیں ان کی مثال بری ہے۔ اور خدا ظالم لوگوں کو ہدایت نہیں دیتا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/062005.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5182.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5182.mp3"
+        }
+      },
+      {
+        "ayah": 6,
+        "globalAyah": 5183,
+        "arabic": "قُلْ يَٰٓأَيُّهَا ٱلَّذِينَ هَادُوٓا۟ إِن زَعَمْتُمْ أَنَّكُمْ أَوْلِيَآءُ لِلَّهِ مِن دُونِ ٱلنَّاسِ فَتَمَنَّوُا۟ ٱلْمَوْتَ إِن كُنتُمْ صَٰدِقِينَ",
+        "translation_en": "Say: \"O you who follow the Jewish faith! If you claim that you [alone] are close to God, to the exclusion of all other people, then you should be longing for death - if what you say is true!\"",
+        "translation_ur": "کہہ دو کہ اے یہود اگر تم کو دعویٰ ہو کہ تم ہی خدا کے دوست ہو اور لوگ نہیں تو اگر تم سچے ہو تو (ذرا) موت کی آرزو تو کرو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/062006.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5183.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5183.mp3"
+        }
+      },
+      {
+        "ayah": 7,
+        "globalAyah": 5184,
+        "arabic": "وَلَا يَتَمَنَّوْنَهُۥٓ أَبَدًۢا بِمَا قَدَّمَتْ أَيْدِيهِمْ ۚ وَٱللَّهُ عَلِيمٌۢ بِٱلظَّٰلِمِينَ",
+        "translation_en": "But never will they long for it, because [they are aware] of what their hands have wrought in this world; and God has full knowledge of evildoers.",
+        "translation_ur": "اور یہ ان (اعمال) کے سبب جو کرچکے ہیں ہرگز اس کی آرزو نہیں کریں گے۔ اور خدا ظالموں سے خوب واقف ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/062007.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5184.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5184.mp3"
+        }
+      },
+      {
+        "ayah": 8,
+        "globalAyah": 5185,
+        "arabic": "قُلْ إِنَّ ٱلْمَوْتَ ٱلَّذِى تَفِرُّونَ مِنْهُ فَإِنَّهُۥ مُلَٰقِيكُمْ ۖ ثُمَّ تُرَدُّونَ إِلَىٰ عَٰلِمِ ٱلْغَيْبِ وَٱلشَّهَٰدَةِ فَيُنَبِّئُكُم بِمَا كُنتُمْ تَعْمَلُونَ",
+        "translation_en": "Say: \"Behold, the death from which you are fleeing is bound to overtake you - and then you will be brought back unto Him who knows all that is beyond the reach of a created being's perception as well as all that can be witnessed by a creature's senses or mind, whereupon He will make you truly understand all that you were doing [in life].",
+        "translation_ur": "کہہ دو کہ موت جس سے تم گریز کرتے ہو وہ تو تمہارے سامنے آ کر رہے گی۔ پھر تم پوشیدہ اور ظاہر کے جاننے والے (خدا) کی طرف لوٹائے جاؤ گے پھر جو کچھ تم کرتے رہے ہو وہ سب تمہیں بتائے گا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/062008.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5185.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5185.mp3"
+        }
+      },
+      {
+        "ayah": 9,
+        "globalAyah": 5186,
+        "arabic": "يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوٓا۟ إِذَا نُودِىَ لِلصَّلَوٰةِ مِن يَوْمِ ٱلْجُمُعَةِ فَٱسْعَوْا۟ إِلَىٰ ذِكْرِ ٱللَّهِ وَذَرُوا۟ ٱلْبَيْعَ ۚ ذَٰلِكُمْ خَيْرٌۭ لَّكُمْ إِن كُنتُمْ تَعْلَمُونَ",
+        "translation_en": "O YOU who have attained to faith! When the call to prayer is sounded on the day of congregation, hasten to the remembrance of God, and leave all worldly commerce: this is for your own good, if you but knew it.",
+        "translation_ur": "مومنو! جب جمعے کے دن نماز کے لئے اذان دی جائے تو خدا کی یاد (یعنی نماز) کے لئے جلدی کرو اور (خریدو) فروخت ترک کردو۔ اگر سمجھو تو یہ تمہارے حق میں بہتر ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/062009.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5186.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5186.mp3"
+        }
+      },
+      {
+        "ayah": 10,
+        "globalAyah": 5187,
+        "arabic": "فَإِذَا قُضِيَتِ ٱلصَّلَوٰةُ فَٱنتَشِرُوا۟ فِى ٱلْأَرْضِ وَٱبْتَغُوا۟ مِن فَضْلِ ٱللَّهِ وَٱذْكُرُوا۟ ٱللَّهَ كَثِيرًۭا لَّعَلَّكُمْ تُفْلِحُونَ",
+        "translation_en": "And when the prayer is ended, disperse freely on earth and seek to obtain [something] of God's bounty; but remember God often, so that you might attain to a happy state!",
+        "translation_ur": "پھر جب نماز ہوچکے تو اپنی اپنی راہ لو اور خدا کا فضل تلاش کرو اور خدا کو بہت بہت یاد کرتے رہو تاکہ نجات پاؤ",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/062010.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5187.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5187.mp3"
+        }
+      },
+      {
+        "ayah": 11,
+        "globalAyah": 5188,
+        "arabic": "وَإِذَا رَأَوْا۟ تِجَٰرَةً أَوْ لَهْوًا ٱنفَضُّوٓا۟ إِلَيْهَا وَتَرَكُوكَ قَآئِمًۭا ۚ قُلْ مَا عِندَ ٱللَّهِ خَيْرٌۭ مِّنَ ٱللَّهْوِ وَمِنَ ٱلتِّجَٰرَةِ ۚ وَٱللَّهُ خَيْرُ ٱلرَّٰزِقِينَ",
+        "translation_en": "Yet [it does happen that] when people become aware of [an occasion for] worldly gain or a passing delight, they rush headlong towards it, and leave thee standing [and preaching]. Say: \"That which is with God is far better than all passing delight and all gain! And God is the best of providers!\"",
+        "translation_ur": "اور جب یہ لوگ سودا بکتا یا تماشا ہوتا دیکھتے ہیں تو ادھر بھاگ جاتے ہیں اور تمہیں (کھڑے کا) کھڑا چھوڑ جاتے ہیں۔ کہہ دو کہ جو چیز خدا کے ہاں ہے وہ تماشے اور سودے سے کہیں بہتر ہے اور خدا سب سے بہتر رزق دینے والا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/062011.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5188.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5188.mp3"
+        }
+      }
+    ]
+  }
+}

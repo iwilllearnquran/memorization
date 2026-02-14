@@ -1,0 +1,49 @@
+{
+  "generatedAt": "2026-02-14T12:15:31.725196+00:00",
+  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "surah": {
+    "surah": 108,
+    "arabicName": "سُورَةُ الكَوۡثَرِ",
+    "englishName": "Al-Kawthar",
+    "englishNameTranslation": "Abundance",
+    "ayahCount": 3,
+    "ayahs": [
+      {
+        "ayah": 1,
+        "globalAyah": 6205,
+        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ إِنَّآ أَعْطَيْنَٰكَ ٱلْكَوْثَرَ",
+        "translation_en": "BEHOLD, We have bestowed upon thee good in abundance:",
+        "translation_ur": "(اے محمدﷺ) ہم نے تم کو کوثر عطا فرمائی ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/108001.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6205.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6205.mp3"
+        }
+      },
+      {
+        "ayah": 2,
+        "globalAyah": 6206,
+        "arabic": "فَصَلِّ لِرَبِّكَ وَٱنْحَرْ",
+        "translation_en": "hence, pray unto thy Sustainer [alone], and sacrifice [unto Him alone].",
+        "translation_ur": "تو اپنے پروردگار کے لیے نماز پڑھا کرو اور قربانی دیا کرو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/108002.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6206.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6206.mp3"
+        }
+      },
+      {
+        "ayah": 3,
+        "globalAyah": 6207,
+        "arabic": "إِنَّ شَانِئَكَ هُوَ ٱلْأَبْتَرُ",
+        "translation_en": "Verily, he that hates thee has indeed been cut off [from all that is good]!",
+        "translation_ur": "کچھ شک نہیں کہ تمہارا دشمن ہی بےاولاد رہے گا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/108003.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6207.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6207.mp3"
+        }
+      }
+    ]
+  }
+}

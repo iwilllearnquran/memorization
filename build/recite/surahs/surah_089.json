@@ -1,0 +1,373 @@
+{
+  "generatedAt": "2026-02-14T12:15:22.688004+00:00",
+  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "surah": {
+    "surah": 89,
+    "arabicName": "سُورَةُ الفَجۡرِ",
+    "englishName": "Al-Fajr",
+    "englishNameTranslation": "The Dawn",
+    "ayahCount": 30,
+    "ayahs": [
+      {
+        "ayah": 1,
+        "globalAyah": 5994,
+        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ وَٱلْفَجْرِ",
+        "translation_en": "CONSIDER the daybreak",
+        "translation_ur": "فجر کی قسم",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089001.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5994.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5994.mp3"
+        }
+      },
+      {
+        "ayah": 2,
+        "globalAyah": 5995,
+        "arabic": "وَلَيَالٍ عَشْرٍۢ",
+        "translation_en": "and the ten nights!",
+        "translation_ur": "اور دس راتوں کی",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089002.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5995.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5995.mp3"
+        }
+      },
+      {
+        "ayah": 3,
+        "globalAyah": 5996,
+        "arabic": "وَٱلشَّفْعِ وَٱلْوَتْرِ",
+        "translation_en": "Consider the multiple and the One!",
+        "translation_ur": "اور جفت اور طاق کی",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089003.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5996.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5996.mp3"
+        }
+      },
+      {
+        "ayah": 4,
+        "globalAyah": 5997,
+        "arabic": "وَٱلَّيْلِ إِذَا يَسْرِ",
+        "translation_en": "Consider the night as it runs its course!",
+        "translation_ur": "اور رات کی جب جانے لگے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089004.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5997.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5997.mp3"
+        }
+      },
+      {
+        "ayah": 5,
+        "globalAyah": 5998,
+        "arabic": "هَلْ فِى ذَٰلِكَ قَسَمٌۭ لِّذِى حِجْرٍ",
+        "translation_en": "Considering all this - could there be, to anyone endowed with reason, a [more] solemn evidence of the truth?",
+        "translation_ur": "اور بے شک یہ چیزیں عقلمندوں کے نزدیک قسم کھانے کے لائق ہیں کہ (کافروں کو ضرور عذاب ہو گا)",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089005.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5998.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5998.mp3"
+        }
+      },
+      {
+        "ayah": 6,
+        "globalAyah": 5999,
+        "arabic": "أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِعَادٍ",
+        "translation_en": "ART THOU NOT aware of how thy Sustainer has dealt with [the tribe of] ‘Ad,",
+        "translation_ur": "کیا تم نے نہیں دیکھا کہ تمہارے پروردگار نے عاد کے ساتھ کیا کیا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089006.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5999.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5999.mp3"
+        }
+      },
+      {
+        "ayah": 7,
+        "globalAyah": 6000,
+        "arabic": "إِرَمَ ذَاتِ ٱلْعِمَادِ",
+        "translation_en": "[the people of] Iram the many-pillared,",
+        "translation_ur": "(جو) ارم (کہلاتے تھے اتنے) دراز قد",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089007.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6000.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6000.mp3"
+        }
+      },
+      {
+        "ayah": 8,
+        "globalAyah": 6001,
+        "arabic": "ٱلَّتِى لَمْ يُخْلَقْ مِثْلُهَا فِى ٱلْبِلَٰدِ",
+        "translation_en": "the like of whom has never been reared in all the land? –",
+        "translation_ur": "کہ تمام ملک میں ایسے پیدا نہیں ہوئے تھے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089008.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6001.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6001.mp3"
+        }
+      },
+      {
+        "ayah": 9,
+        "globalAyah": 6002,
+        "arabic": "وَثَمُودَ ٱلَّذِينَ جَابُوا۟ ٱلصَّخْرَ بِٱلْوَادِ",
+        "translation_en": "and with [the tribe of] Thamud, who hollowed out rocks in the valley? –",
+        "translation_ur": "اور ثمود کے ساتھ (کیا کیا) جو وادئِ (قریٰ) میں پتھر تراشتے تھے (اور گھر بناتے) تھے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089009.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6002.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6002.mp3"
+        }
+      },
+      {
+        "ayah": 10,
+        "globalAyah": 6003,
+        "arabic": "وَفِرْعَوْنَ ذِى ٱلْأَوْتَادِ",
+        "translation_en": "and with Pharaoh of the [many] tent-poles?",
+        "translation_ur": "اور فرعون کے ساتھ (کیا کیا) جو خیمے اور میخیں رکھتا تھا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089010.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6003.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6003.mp3"
+        }
+      },
+      {
+        "ayah": 11,
+        "globalAyah": 6004,
+        "arabic": "ٱلَّذِينَ طَغَوْا۟ فِى ٱلْبِلَٰدِ",
+        "translation_en": "[It was they] who transgressed all bounds of equity all over their lands,",
+        "translation_ur": "یہ لوگ ملکوں میں سرکش ہو رہے تھے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089011.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6004.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6004.mp3"
+        }
+      },
+      {
+        "ayah": 12,
+        "globalAyah": 6005,
+        "arabic": "فَأَكْثَرُوا۟ فِيهَا ٱلْفَسَادَ",
+        "translation_en": "and brought about great corruption therein:",
+        "translation_ur": "اور ان میں بہت سی خرابیاں کرتے تھے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089012.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6005.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6005.mp3"
+        }
+      },
+      {
+        "ayah": 13,
+        "globalAyah": 6006,
+        "arabic": "فَصَبَّ عَلَيْهِمْ رَبُّكَ سَوْطَ عَذَابٍ",
+        "translation_en": "and therefore thy Sustainer let loose upon them a scourge of suffering:",
+        "translation_ur": "تو تمہارے پروردگار نے ان پر عذاب کا کوڑا نازل کیا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089013.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6006.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6006.mp3"
+        }
+      },
+      {
+        "ayah": 14,
+        "globalAyah": 6007,
+        "arabic": "إِنَّ رَبَّكَ لَبِٱلْمِرْصَادِ",
+        "translation_en": "for, verily, thy Sustainer is ever on the watch!",
+        "translation_ur": "بے شک تمہارا پروردگار تاک میں ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089014.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6007.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6007.mp3"
+        }
+      },
+      {
+        "ayah": 15,
+        "globalAyah": 6008,
+        "arabic": "فَأَمَّا ٱلْإِنسَٰنُ إِذَا مَا ٱبْتَلَىٰهُ رَبُّهُۥ فَأَكْرَمَهُۥ وَنَعَّمَهُۥ فَيَقُولُ رَبِّىٓ أَكْرَمَنِ",
+        "translation_en": "BUT AS FOR man, whenever his Sustainer tries him by His generosity and by letting him enjoy a life of ease, he says, \"My Sustainer has been [justly] generous towards me\";",
+        "translation_ur": "مگر انسان (عجیب مخلوق ہے کہ) جب اس کا پروردگار اس کو آزماتا ہے تو اسے عزت دیتا اور نعمت بخشتا ہے۔ تو کہتا ہے کہ (آہا) میرے پروردگار نے مجھے عزت بخشی",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089015.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6008.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6008.mp3"
+        }
+      },
+      {
+        "ayah": 16,
+        "globalAyah": 6009,
+        "arabic": "وَأَمَّآ إِذَا مَا ٱبْتَلَىٰهُ فَقَدَرَ عَلَيْهِ رِزْقَهُۥ فَيَقُولُ رَبِّىٓ أَهَٰنَنِ",
+        "translation_en": "whereas, whenever He tries him by straitening his means of livelihood, he says, \"My Sustainer has disgraced me!\"",
+        "translation_ur": "اور جب (دوسری طرح) آزماتا ہے کہ اس پر روزی تنگ کر دیتا ہے تو کہتا ہے کہ (ہائے) میرے پروردگار نے مجھے ذلیل کیا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089016.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6009.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6009.mp3"
+        }
+      },
+      {
+        "ayah": 17,
+        "globalAyah": 6010,
+        "arabic": "كَلَّا ۖ بَل لَّا تُكْرِمُونَ ٱلْيَتِيمَ",
+        "translation_en": "But nay, nay, [O men, consider all that you do and fail to do:] you are not generous towards the orphan,",
+        "translation_ur": "نہیں بلکہ تم لوگ یتیم کی خاطر نہیں کرتے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089017.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6010.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6010.mp3"
+        }
+      },
+      {
+        "ayah": 18,
+        "globalAyah": 6011,
+        "arabic": "وَلَا تَحَٰٓضُّونَ عَلَىٰ طَعَامِ ٱلْمِسْكِينِ",
+        "translation_en": "and you do not urge one another to feed the needy,",
+        "translation_ur": "اور نہ مسکین کو کھانا کھلانے کی ترغیب دیتے ہو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089018.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6011.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6011.mp3"
+        }
+      },
+      {
+        "ayah": 19,
+        "globalAyah": 6012,
+        "arabic": "وَتَأْكُلُونَ ٱلتُّرَاثَ أَكْلًۭا لَّمًّۭا",
+        "translation_en": "and you devour the inheritance [of others] with devouring greed,",
+        "translation_ur": "اور میراث کے مال سمیٹ کر کھا جاتے ہو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089019.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6012.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6012.mp3"
+        }
+      },
+      {
+        "ayah": 20,
+        "globalAyah": 6013,
+        "arabic": "وَتُحِبُّونَ ٱلْمَالَ حُبًّۭا جَمًّۭا",
+        "translation_en": "and you love wealth with boundless love!",
+        "translation_ur": "اور مال کو بہت ہی عزیز رکھتے ہو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089020.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6013.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6013.mp3"
+        }
+      },
+      {
+        "ayah": 21,
+        "globalAyah": 6014,
+        "arabic": "كَلَّآ إِذَا دُكَّتِ ٱلْأَرْضُ دَكًّۭا دَكًّۭا",
+        "translation_en": "Nay, but [how will you fare on Judgment Day,] when the earth is crushed with crushing upon crushing,",
+        "translation_ur": "تو جب زمین کی بلندی کوٹ کوٹ کو پست کر دی جائے گی",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089021.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6014.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6014.mp3"
+        }
+      },
+      {
+        "ayah": 22,
+        "globalAyah": 6015,
+        "arabic": "وَجَآءَ رَبُّكَ وَٱلْمَلَكُ صَفًّۭا صَفًّۭا",
+        "translation_en": "and [the majesty of] thy Sustainer stands revealed, as well as [the true nature of] the angels; rank upon rank?",
+        "translation_ur": "اور تمہارا پروردگار (جلوہ فرما ہو گا) اور فرشتے قطار باندھ باندھ کر آ موجود ہوں گے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089022.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6015.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6015.mp3"
+        }
+      },
+      {
+        "ayah": 23,
+        "globalAyah": 6016,
+        "arabic": "وَجِا۟ىٓءَ يَوْمَئِذٍۭ بِجَهَنَّمَ ۚ يَوْمَئِذٍۢ يَتَذَكَّرُ ٱلْإِنسَٰنُ وَأَنَّىٰ لَهُ ٱلذِّكْرَىٰ",
+        "translation_en": "And on that Day hell will be brought [within sight]; on that Day man will remember [all that he did and failed to do]: but what will that remembrance avail him?",
+        "translation_ur": "اور دوزخ اس دن حاضر کی جائے گی تو انسان اس دن متنبہ ہو گا مگر تنبہ (سے) اسے (فائدہ) کہاں (مل سکے گا)",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089023.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6016.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6016.mp3"
+        }
+      },
+      {
+        "ayah": 24,
+        "globalAyah": 6017,
+        "arabic": "يَقُولُ يَٰلَيْتَنِى قَدَّمْتُ لِحَيَاتِى",
+        "translation_en": "He will say, \"Oh, would that I had. provided beforehand for my life [to come]!\"",
+        "translation_ur": "کہے گا کاش میں نے اپنی زندگی (جاودانی کے لیے) کچھ آگے بھیجا ہوتا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089024.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6017.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6017.mp3"
+        }
+      },
+      {
+        "ayah": 25,
+        "globalAyah": 6018,
+        "arabic": "فَيَوْمَئِذٍۢ لَّا يُعَذِّبُ عَذَابَهُۥٓ أَحَدٌۭ",
+        "translation_en": "For, none can make suffer as He will make suffer [the sinners] on that Day,",
+        "translation_ur": "تو اس دن نہ کوئی خدا کے عذاب کی طرح کا (کسی کو) عذاب دے گا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089025.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6018.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6018.mp3"
+        }
+      },
+      {
+        "ayah": 26,
+        "globalAyah": 6019,
+        "arabic": "وَلَا يُوثِقُ وَثَاقَهُۥٓ أَحَدٌۭ",
+        "translation_en": "and none can bind with bonds like His.",
+        "translation_ur": "اور نہ کوئی ویسا جکڑنا جکڑے گا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089026.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6019.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6019.mp3"
+        }
+      },
+      {
+        "ayah": 27,
+        "globalAyah": 6020,
+        "arabic": "يَٰٓأَيَّتُهَا ٱلنَّفْسُ ٱلْمُطْمَئِنَّةُ",
+        "translation_en": "[But unto the righteous God will say,] \"O thou human being that hast attained to inner peace!",
+        "translation_ur": "اے اطمینان پانے والی روح!",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089027.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6020.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6020.mp3"
+        }
+      },
+      {
+        "ayah": 28,
+        "globalAyah": 6021,
+        "arabic": "ٱرْجِعِىٓ إِلَىٰ رَبِّكِ رَاضِيَةًۭ مَّرْضِيَّةًۭ",
+        "translation_en": "Return thou unto thy Sustainer, well-pleased [and] pleasing [Him]:",
+        "translation_ur": "اپنے پروردگار کی طرف لوٹ چل۔ تو اس سے راضی وہ تجھ سے راضی",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089028.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6021.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6021.mp3"
+        }
+      },
+      {
+        "ayah": 29,
+        "globalAyah": 6022,
+        "arabic": "فَٱدْخُلِى فِى عِبَٰدِى",
+        "translation_en": "enter, then, together with My [other true] servants –",
+        "translation_ur": "تو میرے (ممتاز) بندوں میں شامل ہو جا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089029.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6022.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6022.mp3"
+        }
+      },
+      {
+        "ayah": 30,
+        "globalAyah": 6023,
+        "arabic": "وَٱدْخُلِى جَنَّتِى",
+        "translation_en": "yea, enter thou My paradise!\"",
+        "translation_ur": "اور میری بہشت میں داخل ہو جا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/089030.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6023.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6023.mp3"
+        }
+      }
+    ]
+  }
+}

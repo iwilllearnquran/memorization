@@ -1,0 +1,253 @@
+{
+  "generatedAt": "2026-02-14T12:15:23.151339+00:00",
+  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "surah": {
+    "surah": 90,
+    "arabicName": "سُورَةُ البَلَدِ",
+    "englishName": "Al-Balad",
+    "englishNameTranslation": "The City",
+    "ayahCount": 20,
+    "ayahs": [
+      {
+        "ayah": 1,
+        "globalAyah": 6024,
+        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ لَآ أُقْسِمُ بِهَٰذَا ٱلْبَلَدِ",
+        "translation_en": "NAY! I call to witness this land –",
+        "translation_ur": "ہمیں اس شہر (مکہ) کی قسم",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/090001.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6024.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6024.mp3"
+        }
+      },
+      {
+        "ayah": 2,
+        "globalAyah": 6025,
+        "arabic": "وَأَنتَ حِلٌّۢ بِهَٰذَا ٱلْبَلَدِ",
+        "translation_en": "this land in which thou art free to dwell -",
+        "translation_ur": "اور تم اسی شہر میں تو رہتے ہو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/090002.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6025.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6025.mp3"
+        }
+      },
+      {
+        "ayah": 3,
+        "globalAyah": 6026,
+        "arabic": "وَوَالِدٍۢ وَمَا وَلَدَ",
+        "translation_en": "and [I call to witness] parent and offspring:",
+        "translation_ur": "اور باپ (یعنی آدم) اور اس کی اولاد کی قسم",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/090003.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6026.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6026.mp3"
+        }
+      },
+      {
+        "ayah": 4,
+        "globalAyah": 6027,
+        "arabic": "لَقَدْ خَلَقْنَا ٱلْإِنسَٰنَ فِى كَبَدٍ",
+        "translation_en": "Verily, We have created man into [a life of] pain, toil and trial.",
+        "translation_ur": "کہ ہم نے انسان کو تکلیف (کی حالت) میں (رہنے والا) بنایا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/090004.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6027.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6027.mp3"
+        }
+      },
+      {
+        "ayah": 5,
+        "globalAyah": 6028,
+        "arabic": "أَيَحْسَبُ أَن لَّن يَقْدِرَ عَلَيْهِ أَحَدٌۭ",
+        "translation_en": "Does he, then, think that no one has power over him?",
+        "translation_ur": "کیا وہ خیال رکھتا ہے کہ اس پر کوئی قابو نہ پائے گا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/090005.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6028.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6028.mp3"
+        }
+      },
+      {
+        "ayah": 6,
+        "globalAyah": 6029,
+        "arabic": "يَقُولُ أَهْلَكْتُ مَالًۭا لُّبَدًا",
+        "translation_en": "He boasts, \"I have spent wealth abundant!\"",
+        "translation_ur": "کہتا ہے کہ میں نے بہت سا مال برباد کیا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/090006.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6029.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6029.mp3"
+        }
+      },
+      {
+        "ayah": 7,
+        "globalAyah": 6030,
+        "arabic": "أَيَحْسَبُ أَن لَّمْ يَرَهُۥٓ أَحَدٌ",
+        "translation_en": "Does he, then, think that no one sees him?",
+        "translation_ur": "کیا اسے یہ گمان ہے کہ اس کو کسی نے دیکھا نہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/090007.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6030.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6030.mp3"
+        }
+      },
+      {
+        "ayah": 8,
+        "globalAyah": 6031,
+        "arabic": "أَلَمْ نَجْعَل لَّهُۥ عَيْنَيْنِ",
+        "translation_en": "Have We not given him two eyes,",
+        "translation_ur": "بھلا ہم نےاس کو دو آنکھیں نہیں دیں؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/090008.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6031.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6031.mp3"
+        }
+      },
+      {
+        "ayah": 9,
+        "globalAyah": 6032,
+        "arabic": "وَلِسَانًۭا وَشَفَتَيْنِ",
+        "translation_en": "and a tongue, and a pair of lips,",
+        "translation_ur": "اور زبان اور دو ہونٹ (نہیں دیئے)",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/090009.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6032.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6032.mp3"
+        }
+      },
+      {
+        "ayah": 10,
+        "globalAyah": 6033,
+        "arabic": "وَهَدَيْنَٰهُ ٱلنَّجْدَيْنِ",
+        "translation_en": "and shown him the two highways [of good and evil]?",
+        "translation_ur": "(یہ چیزیں بھی دیں) اور اس کو (خیر و شر کے) دونوں رستے بھی دکھا دیئے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/090010.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6033.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6033.mp3"
+        }
+      },
+      {
+        "ayah": 11,
+        "globalAyah": 6034,
+        "arabic": "فَلَا ٱقْتَحَمَ ٱلْعَقَبَةَ",
+        "translation_en": "But he would not try to ascend the steep uphill road...",
+        "translation_ur": "مگر وہ گھاٹی پر سے ہو کر نہ گزرا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/090011.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6034.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6034.mp3"
+        }
+      },
+      {
+        "ayah": 12,
+        "globalAyah": 6035,
+        "arabic": "وَمَآ أَدْرَىٰكَ مَا ٱلْعَقَبَةُ",
+        "translation_en": "And what could make thee conceive what it is, that steep uphill road?",
+        "translation_ur": "اور تم کیا سمجھے کہ گھاٹی کیا ہے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/090012.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6035.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6035.mp3"
+        }
+      },
+      {
+        "ayah": 13,
+        "globalAyah": 6036,
+        "arabic": "فَكُّ رَقَبَةٍ",
+        "translation_en": "[It is] the freeing of one's neck [from the burden of sin],",
+        "translation_ur": "کسی (کی) گردن کا چھڑانا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/090013.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6036.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6036.mp3"
+        }
+      },
+      {
+        "ayah": 14,
+        "globalAyah": 6037,
+        "arabic": "أَوْ إِطْعَٰمٌۭ فِى يَوْمٍۢ ذِى مَسْغَبَةٍۢ",
+        "translation_en": "or the feeding, upon a day of [one's own] hunger,",
+        "translation_ur": "یا بھوک کے دن کھانا کھلانا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/090014.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6037.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6037.mp3"
+        }
+      },
+      {
+        "ayah": 15,
+        "globalAyah": 6038,
+        "arabic": "يَتِيمًۭا ذَا مَقْرَبَةٍ",
+        "translation_en": "of an orphan near of kin,",
+        "translation_ur": "یتیم رشتہ دار کو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/090015.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6038.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6038.mp3"
+        }
+      },
+      {
+        "ayah": 16,
+        "globalAyah": 6039,
+        "arabic": "أَوْ مِسْكِينًۭا ذَا مَتْرَبَةٍۢ",
+        "translation_en": "or of a needy [stranger] lying in the dust –",
+        "translation_ur": "یا فقیر خاکسار کو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/090016.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6039.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6039.mp3"
+        }
+      },
+      {
+        "ayah": 17,
+        "globalAyah": 6040,
+        "arabic": "ثُمَّ كَانَ مِنَ ٱلَّذِينَ ءَامَنُوا۟ وَتَوَاصَوْا۟ بِٱلصَّبْرِ وَتَوَاصَوْا۟ بِٱلْمَرْحَمَةِ",
+        "translation_en": "and being, withal, of those who have attained to faith, and who enjoin upon one another patience in adversity, and enjoin upon one another compassion.",
+        "translation_ur": "پھر ان لوگوں میں بھی (داخل) ہو جو ایمان لائے اور صبر کی نصیحت اور (لوگوں پر) شفقت کرنے کی وصیت کرتے رہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/090017.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6040.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6040.mp3"
+        }
+      },
+      {
+        "ayah": 18,
+        "globalAyah": 6041,
+        "arabic": "أُو۟لَٰٓئِكَ أَصْحَٰبُ ٱلْمَيْمَنَةِ",
+        "translation_en": "Such are they that have attained to righteousness;",
+        "translation_ur": "یہی لوگ صاحب سعادت ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/090018.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6041.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6041.mp3"
+        }
+      },
+      {
+        "ayah": 19,
+        "globalAyah": 6042,
+        "arabic": "وَٱلَّذِينَ كَفَرُوا۟ بِـَٔايَٰتِنَا هُمْ أَصْحَٰبُ ٱلْمَشْـَٔمَةِ",
+        "translation_en": "whereas those who are bent on denying the truth of Our messages – they are such as have lost themselves in evil,",
+        "translation_ur": "اور جنہوں نے ہماری آیتوں کو نہ مانا وہ بدبخت ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/090019.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6042.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6042.mp3"
+        }
+      },
+      {
+        "ayah": 20,
+        "globalAyah": 6043,
+        "arabic": "عَلَيْهِمْ نَارٌۭ مُّؤْصَدَةٌۢ",
+        "translation_en": "[with] fire closing in upon them.",
+        "translation_ur": "یہ لوگ آگ میں بند کر دیئے جائیں گے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/090020.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6043.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6043.mp3"
+        }
+      }
+    ]
+  }
+}

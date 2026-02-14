@@ -1,0 +1,913 @@
+{
+  "generatedAt": "2026-02-14T12:14:30.500497+00:00",
+  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "surah": {
+    "surah": 8,
+    "arabicName": "سُورَةُ الأَنفَالِ",
+    "englishName": "Al-Anfaal",
+    "englishNameTranslation": "The Spoils of War",
+    "ayahCount": 75,
+    "ayahs": [
+      {
+        "ayah": 1,
+        "globalAyah": 1161,
+        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ يَسْـَٔلُونَكَ عَنِ ٱلْأَنفَالِ ۖ قُلِ ٱلْأَنفَالُ لِلَّهِ وَٱلرَّسُولِ ۖ فَٱتَّقُوا۟ ٱللَّهَ وَأَصْلِحُوا۟ ذَاتَ بَيْنِكُمْ ۖ وَأَطِيعُوا۟ ٱللَّهَ وَرَسُولَهُۥٓ إِن كُنتُم مُّؤْمِنِينَ",
+        "translation_en": "HEY WILL ASK thee about the spoils of war. Say: \"All spoils of war belong to God and the Apostle.\" Remain, then, conscious of God, and keep alive the bonds of brotherhood among yourselves, and pay heed unto God and His Apostle, if you are [truly] believers!",
+        "translation_ur": "(اے محمد! مجاہد لوگ) تم سے غنیمت کے مال کے بارے میں دریافت کرتے ہیں کہ (کیا حکم ہے) کہہ دو کہ غنیمت خدا اور اس کے رسول کا مال ہے۔ تو خدا سے ڈرو اور آپس میں صلح رکھو اور اگر ایمان رکھتے ہو تو خدا اور اس کے رسول کے حکم پر چلو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008001.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1161.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1161.mp3"
+        }
+      },
+      {
+        "ayah": 2,
+        "globalAyah": 1162,
+        "arabic": "إِنَّمَا ٱلْمُؤْمِنُونَ ٱلَّذِينَ إِذَا ذُكِرَ ٱللَّهُ وَجِلَتْ قُلُوبُهُمْ وَإِذَا تُلِيَتْ عَلَيْهِمْ ءَايَٰتُهُۥ زَادَتْهُمْ إِيمَٰنًۭا وَعَلَىٰ رَبِّهِمْ يَتَوَكَّلُونَ",
+        "translation_en": "Believers are only they whose hearts tremble with awe whenever God is mentioned, and whose faith is strengthened whenever His messages are conveyed unto them, and who in their Sustainer place their trust -",
+        "translation_ur": "مومن تو وہ ہیں کہ جب خدا کا ذکر کیا جاتا ہے کہ ان کے دل ڈر جاتے ہیں اور جب انہیں اس کی آیتیں پڑھ کر سنائی جاتی ہیں تو ان کا ایمان اور بڑھ جاتا ہے۔ اور وہ اپنے پروردگار پر بھروسہ رکھتے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008002.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1162.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1162.mp3"
+        }
+      },
+      {
+        "ayah": 3,
+        "globalAyah": 1163,
+        "arabic": "ٱلَّذِينَ يُقِيمُونَ ٱلصَّلَوٰةَ وَمِمَّا رَزَقْنَٰهُمْ يُنفِقُونَ",
+        "translation_en": "those who are constant in prayer and spend on others out of what We provide for them as sustenance:",
+        "translation_ur": "(اور) وہ جو نماز پڑھتے ہیں اور جو مال ہم نے ان کو دیا ہے اس میں سے (نیک کاموں میں) خرچ کرتے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008003.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1163.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1163.mp3"
+        }
+      },
+      {
+        "ayah": 4,
+        "globalAyah": 1164,
+        "arabic": "أُو۟لَٰٓئِكَ هُمُ ٱلْمُؤْمِنُونَ حَقًّۭا ۚ لَّهُمْ دَرَجَٰتٌ عِندَ رَبِّهِمْ وَمَغْفِرَةٌۭ وَرِزْقٌۭ كَرِيمٌۭ",
+        "translation_en": "it is they, they who are truly believers! Theirs shall be great dignity in their Sustainer's sight, and forgiveness of sins, and a most excellent sustenance.",
+        "translation_ur": "یہی سچے مومن ہیں اور ان کے لیے پروردگار کے ہاں (بڑے بڑے درجے) اور بخشش اور عزت کی روزی ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008004.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1164.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1164.mp3"
+        }
+      },
+      {
+        "ayah": 5,
+        "globalAyah": 1165,
+        "arabic": "كَمَآ أَخْرَجَكَ رَبُّكَ مِنۢ بَيْتِكَ بِٱلْحَقِّ وَإِنَّ فَرِيقًۭا مِّنَ ٱلْمُؤْمِنِينَ لَكَٰرِهُونَ",
+        "translation_en": "EVEN AS thy Sustainer brought thee forth from thy home [to fight] in the cause of the truth, although some of the believers were averse to it,",
+        "translation_ur": "(ان لوگوں کو اپنے گھروں سے اسی طرح نکلنا چاہیئے تھا) جس طرح تمہارے پروردگار نے تم کو تدبیر کے ساتھ اپنے گھر سے نکالا اور (اس وقت) مومنوں ایک جماعت ناخوش تھی",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008005.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1165.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1165.mp3"
+        }
+      },
+      {
+        "ayah": 6,
+        "globalAyah": 1166,
+        "arabic": "يُجَٰدِلُونَكَ فِى ٱلْحَقِّ بَعْدَمَا تَبَيَّنَ كَأَنَّمَا يُسَاقُونَ إِلَى ٱلْمَوْتِ وَهُمْ يَنظُرُونَ",
+        "translation_en": "[so, too,] they would argue with thee about the truth [itself] after it had become manifest - just as if they were being driven towards death and beheld it with their very eyes.",
+        "translation_ur": "وہ لوگ حق بات میں اس کے ظاہر ہوئے پیچھے تم سے جھگڑنے لگے گویا موت کی طرف دھکیلے جاتے ہیں اور اسے دیکھ رہے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008006.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1166.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1166.mp3"
+        }
+      },
+      {
+        "ayah": 7,
+        "globalAyah": 1167,
+        "arabic": "وَإِذْ يَعِدُكُمُ ٱللَّهُ إِحْدَى ٱلطَّآئِفَتَيْنِ أَنَّهَا لَكُمْ وَتَوَدُّونَ أَنَّ غَيْرَ ذَاتِ ٱلشَّوْكَةِ تَكُونُ لَكُمْ وَيُرِيدُ ٱللَّهُ أَن يُحِقَّ ٱلْحَقَّ بِكَلِمَٰتِهِۦ وَيَقْطَعَ دَابِرَ ٱلْكَٰفِرِينَ",
+        "translation_en": "And, lo, God gave you the promise that one of the two [enemy] hosts would fall to you: and you would have liked to seize the less powerful one, whereas it was God's will to prove the truth to be true in accordance with His words, and to wipe out the last remnant of those who denied the truth -",
+        "translation_ur": "اور (اس وقت کو یاد کرو) جب خدا تم سے وعدہ کرتا تھا کہ (ابوسفیان اور ابوجہل کے) دو گروہوں میں سے ایک گروہ تمہارا (مسخر) ہوجائے گا۔ اور تم چاہتے تھے کہ جو قافلہ بے (شان و) شوکت (یعنی بے ہتھیار ہے) وہ تمہارے ہاتھ آجائے اور خدا چاہتا تھا کہ اپنے فرمان سے حق کو قائم رکھے اور کافروں کی جڑ کاٹ کر (پھینک) دے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008007.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1167.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1167.mp3"
+        }
+      },
+      {
+        "ayah": 8,
+        "globalAyah": 1168,
+        "arabic": "لِيُحِقَّ ٱلْحَقَّ وَيُبْطِلَ ٱلْبَٰطِلَ وَلَوْ كَرِهَ ٱلْمُجْرِمُونَ",
+        "translation_en": "so that He might prove the truth to be true and the false to be false, however hateful this might be to those who were lost in sin.",
+        "translation_ur": "تاکہ سچ کو سچ اور جھوٹ کو جھوٹ کردے۔ گو مشرک ناخوش ہی ہوں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008008.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1168.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1168.mp3"
+        }
+      },
+      {
+        "ayah": 9,
+        "globalAyah": 1169,
+        "arabic": "إِذْ تَسْتَغِيثُونَ رَبَّكُمْ فَٱسْتَجَابَ لَكُمْ أَنِّى مُمِدُّكُم بِأَلْفٍۢ مِّنَ ٱلْمَلَٰٓئِكَةِ مُرْدِفِينَ",
+        "translation_en": "Lo! You were praying unto your Sustainer for aid, whereupon He thus responded to you: \"I shall, verily, aid you with a thousand angels following one upon' another!\"",
+        "translation_ur": "جب تم اپنے پروردگار سے فریاد کرتے تھے تو اس نے تمہاری دعا قبول کرلی (اور فرمایا) کہ (تسلی رکھو) ہم ہزار فرشتوں سے جو ایک دوسرے کے پیچھے آتے جائیں گے تمہاری مدد کریں گے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008009.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1169.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1169.mp3"
+        }
+      },
+      {
+        "ayah": 10,
+        "globalAyah": 1170,
+        "arabic": "وَمَا جَعَلَهُ ٱللَّهُ إِلَّا بُشْرَىٰ وَلِتَطْمَئِنَّ بِهِۦ قُلُوبُكُمْ ۚ وَمَا ٱلنَّصْرُ إِلَّا مِنْ عِندِ ٱللَّهِ ۚ إِنَّ ٱللَّهَ عَزِيزٌ حَكِيمٌ",
+        "translation_en": "And God ordained this only as a glad tiding, and that your hearts should thereby be set at rest-since no succour can come from any save God: verily, God is almighty, wise!",
+        "translation_ur": "اور اس مدد کو خدا نے محض بشارت بنایا تھا کہ تمہارے دل سے اطمینان حاصل کریں۔ اور مدد تو الله ہی کی طرف سے ہے۔ بےشک خدا غالب حکمت والا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008010.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1170.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1170.mp3"
+        }
+      },
+      {
+        "ayah": 11,
+        "globalAyah": 1171,
+        "arabic": "إِذْ يُغَشِّيكُمُ ٱلنُّعَاسَ أَمَنَةًۭ مِّنْهُ وَيُنَزِّلُ عَلَيْكُم مِّنَ ٱلسَّمَآءِ مَآءًۭ لِّيُطَهِّرَكُم بِهِۦ وَيُذْهِبَ عَنكُمْ رِجْزَ ٱلشَّيْطَٰنِ وَلِيَرْبِطَ عَلَىٰ قُلُوبِكُمْ وَيُثَبِّتَ بِهِ ٱلْأَقْدَامَ",
+        "translation_en": "[Remember how it was] when He caused inner calm to enfold you, as an assurance from Him, and sent down upon you water from the skies, so that He might purify you thereby and free you from Satan's unclean whisperings and strengthen your hearts and thus make firm your steps.",
+        "translation_ur": "جب اس نے (تمہاری) تسکین کے لیے اپنی طرف سے تمہیں نیند (کی چادر) اُڑھا دی اور تم پر آسمان سے پانی برسادیا تاکہ تم کو اس سے (نہلا کر) پاک کر دے اور شیطانی نجاست کو تم سے دور کردے۔ اور اس لیے بھی کہ تمہارے دلوں کو مضبوط کردے اور اس سے تمہارے پاؤں جمائے رکھے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008011.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1171.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1171.mp3"
+        }
+      },
+      {
+        "ayah": 12,
+        "globalAyah": 1172,
+        "arabic": "إِذْ يُوحِى رَبُّكَ إِلَى ٱلْمَلَٰٓئِكَةِ أَنِّى مَعَكُمْ فَثَبِّتُوا۟ ٱلَّذِينَ ءَامَنُوا۟ ۚ سَأُلْقِى فِى قُلُوبِ ٱلَّذِينَ كَفَرُوا۟ ٱلرُّعْبَ فَٱضْرِبُوا۟ فَوْقَ ٱلْأَعْنَاقِ وَٱضْرِبُوا۟ مِنْهُمْ كُلَّ بَنَانٍۢ",
+        "translation_en": "Lo! Thy Sustainer inspired the angels [to convey this His message to the believers]: \"I am with you!\" [And He commanded the angels:] \"And, give firmness unto those who have attained to faith [with these words from Me]: `I shall cast terror into the hearts of those who are bent on denying the truth; strike, then, their necks, [O believers,] and strike off every one of their finger-tips!\"",
+        "translation_ur": "جب تمہارا پروردگار فرشتوں کو ارشاد فرماتا تھا کہ میں تمہارے ساتھ ہوں تم مومنوں کو تسلی دو کہ ثابت قدم رہیں۔ میں ابھی ابھی کافروں کے دلوں میں رعب وہیبت ڈالے دیتا ہوں تو ان کے سر مار (کر) اڑا دو اور ان کا پور پور مار (کر توڑ) دو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008012.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1172.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1172.mp3"
+        }
+      },
+      {
+        "ayah": 13,
+        "globalAyah": 1173,
+        "arabic": "ذَٰلِكَ بِأَنَّهُمْ شَآقُّوا۟ ٱللَّهَ وَرَسُولَهُۥ ۚ وَمَن يُشَاقِقِ ٱللَّهَ وَرَسُولَهُۥ فَإِنَّ ٱللَّهَ شَدِيدُ ٱلْعِقَابِ",
+        "translation_en": "This, because they have cut themselves off from God and His Apostle: and as for him who cuts himself off from God and His Apostle - verily, God is severe in retribution.",
+        "translation_ur": "یہ (سزا) اس لیے دی گئی کہ انہوں نے خدا اور اس کے رسول کی مخالفت کی۔ اور جو شخص خدا اور اس کے رسول کی مخالفت کرتا ہے تو خدا بھی سخت عذاب دینے والا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008013.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1173.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1173.mp3"
+        }
+      },
+      {
+        "ayah": 14,
+        "globalAyah": 1174,
+        "arabic": "ذَٰلِكُمْ فَذُوقُوهُ وَأَنَّ لِلْكَٰفِرِينَ عَذَابَ ٱلنَّارِ",
+        "translation_en": "This [for you, O enemies of God]! Taste it, then, [and know] that suffering through fire awaits those who deny the truth!",
+        "translation_ur": "یہ (مزہ تو یہاں) چکھو اور یہ (جانے رہو) کہ کافروں کے لیے (آخرت میں) دوزخ کا عذاب (بھی تیار) ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008014.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1174.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1174.mp3"
+        }
+      },
+      {
+        "ayah": 15,
+        "globalAyah": 1175,
+        "arabic": "يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوٓا۟ إِذَا لَقِيتُمُ ٱلَّذِينَ كَفَرُوا۟ زَحْفًۭا فَلَا تُوَلُّوهُمُ ٱلْأَدْبَارَ",
+        "translation_en": "O YOU who have attained to faith! When you meet in battle those who are bent on denying the truth, advancing in great force, do not turn your backs on them:",
+        "translation_ur": "اے اہل ایمان جب میدان جنگ میں کفار سے تمہار مقابلہ ہو تو ان سے پیٹھ نہ پھیرنا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008015.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1175.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1175.mp3"
+        }
+      },
+      {
+        "ayah": 16,
+        "globalAyah": 1176,
+        "arabic": "وَمَن يُوَلِّهِمْ يَوْمَئِذٍۢ دُبُرَهُۥٓ إِلَّا مُتَحَرِّفًۭا لِّقِتَالٍ أَوْ مُتَحَيِّزًا إِلَىٰ فِئَةٍۢ فَقَدْ بَآءَ بِغَضَبٍۢ مِّنَ ٱللَّهِ وَمَأْوَىٰهُ جَهَنَّمُ ۖ وَبِئْسَ ٱلْمَصِيرُ",
+        "translation_en": "for, whoever on that day turns his back on them-unless it be in a battle manoeuvre or in an endeavour to join another troop [of the believers] - shall indeed have earned the burden of God's condemnation, and his goal shall be hell: and how vile a journey's end!",
+        "translation_ur": "اور جو شخص جنگ کے روز اس صورت کے سوا کہ لڑائی کے لیے کنارے کنارے چلے (یعنی حکمت عملی سے دشمن کو مارے) یا اپنی فوج میں جا ملنا چاہے۔ ان سے پیٹھ پھیرے گا تو (سمجھو کہ) وہ خدا کے غضب میں گرفتار ہوگیا اور اس کا ٹھکانا دوزخ ہے۔ اور وہ بہت ہی بری جگہ ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008016.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1176.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1176.mp3"
+        }
+      },
+      {
+        "ayah": 17,
+        "globalAyah": 1177,
+        "arabic": "فَلَمْ تَقْتُلُوهُمْ وَلَٰكِنَّ ٱللَّهَ قَتَلَهُمْ ۚ وَمَا رَمَيْتَ إِذْ رَمَيْتَ وَلَٰكِنَّ ٱللَّهَ رَمَىٰ ۚ وَلِيُبْلِىَ ٱلْمُؤْمِنِينَ مِنْهُ بَلَآءً حَسَنًا ۚ إِنَّ ٱللَّهَ سَمِيعٌ عَلِيمٌۭ",
+        "translation_en": "And yet, [O believers,] it was not you who slew the enemy, but it was God who slew them; and it was not thou who cast [terror into them, O Prophet], when thou didst cast it, but it was God who cast it: and [He did all this] in order that He might test the believers by a goodly test of His Own or daining. Verily, God is all-hearing, all-knowing!",
+        "translation_ur": "تم لوگوں نے ان (کفار) کو قتل نہیں کیا بلکہ خدا نے انہیں قتل کیا۔ اور (اے محمدﷺ) جس وقت تم نے کنکریاں پھینکی تھیں تو وہ تم نے نہیں پھینکی تھیں بلکہ الله نے پھینکی تھیں۔ اس سے یہ غرض تھی کہ مومنوں کو اپنے (احسانوں) سے اچھی طرح آزمالے۔ بےشک خدا سنتا جانتا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008017.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1177.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1177.mp3"
+        }
+      },
+      {
+        "ayah": 18,
+        "globalAyah": 1178,
+        "arabic": "ذَٰلِكُمْ وَأَنَّ ٱللَّهَ مُوهِنُ كَيْدِ ٱلْكَٰفِرِينَ",
+        "translation_en": "This [was God's purpose] -and also [to show] that God renders vain the artful schemes of those who deny the truth.",
+        "translation_ur": "(بات) یہ (ہے) کچھ شک نہیں کہ خدا کافروں کی تدبیر کو کمزور کر دینے والا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008018.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1178.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1178.mp3"
+        }
+      },
+      {
+        "ayah": 19,
+        "globalAyah": 1179,
+        "arabic": "إِن تَسْتَفْتِحُوا۟ فَقَدْ جَآءَكُمُ ٱلْفَتْحُ ۖ وَإِن تَنتَهُوا۟ فَهُوَ خَيْرٌۭ لَّكُمْ ۖ وَإِن تَعُودُوا۟ نَعُدْ وَلَن تُغْنِىَ عَنكُمْ فِئَتُكُمْ شَيْـًۭٔا وَلَوْ كَثُرَتْ وَأَنَّ ٱللَّهَ مَعَ ٱلْمُؤْمِنِينَ",
+        "translation_en": "If you have been praying for victory, [O believers] - victory has now indeed come unto you. And if you abstain [from sinning], it will be for your own good; but if you revert to it, We shall revoke [Our promise of aid] - and never will your community be of any avail to you, however great its numbers: for, behold, God is [only] with those who believe!",
+        "translation_ur": "(کافرو) اگر تم (محمد صلی الله علیہ وآلہ وسلم پر) فتح چاہتے ہو تو تمہارے پاس فتح آچکی۔ (دیکھو) اگر تم (اپنے افعال سے) باز آجاؤ تو تمہارے حق میں بہتر ہے۔ اور اگر پھر (نافرمانی) کرو گے تو ہم بھی پھر تمہیں عذاب کریں گے اور تمہاری جماعت خواہ کتنی ہی کثیر ہو تمہارے کچھ بھی کام نہ آئے گی۔ اور خدا تو مومنوں کے ساتھ ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008019.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1179.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1179.mp3"
+        }
+      },
+      {
+        "ayah": 20,
+        "globalAyah": 1180,
+        "arabic": "يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوٓا۟ أَطِيعُوا۟ ٱللَّهَ وَرَسُولَهُۥ وَلَا تَوَلَّوْا۟ عَنْهُ وَأَنتُمْ تَسْمَعُونَ",
+        "translation_en": "[Hence,] O you who have attained to faith, pay heed unto God and His Apostle, and do not turn away from Him now that you hear [His message];",
+        "translation_ur": "اے ایمان والو! خدا اور اس کے رسول کے حکم پر چلو اور اس سے روگردانی نہ کرو اور تم سنتے ہو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008020.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1180.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1180.mp3"
+        }
+      },
+      {
+        "ayah": 21,
+        "globalAyah": 1181,
+        "arabic": "وَلَا تَكُونُوا۟ كَٱلَّذِينَ قَالُوا۟ سَمِعْنَا وَهُمْ لَا يَسْمَعُونَ",
+        "translation_en": "and be not like those who say, \"We have heard\", the while they do not hearken.",
+        "translation_ur": "اور ان لوگوں جیسے نہ ہونا جو کہتے ہیں کہ ہم نے حکم (خدا) سن لیا مگر (حقیقت میں) نہیں سنتے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008021.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1181.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1181.mp3"
+        }
+      },
+      {
+        "ayah": 22,
+        "globalAyah": 1182,
+        "arabic": "۞ إِنَّ شَرَّ ٱلدَّوَآبِّ عِندَ ٱللَّهِ ٱلصُّمُّ ٱلْبُكْمُ ٱلَّذِينَ لَا يَعْقِلُونَ",
+        "translation_en": "Verily, the vilest of all creatures in the sight of God are those deaf, those dumb ones who do not use their reason.",
+        "translation_ur": "کچھ شک نہیں کہ خدا کے نزدیک تمام جانداروں سے بدتر بہرے گونگے ہیں جو کچھ نہیں سمجھتے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008022.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1182.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1182.mp3"
+        }
+      },
+      {
+        "ayah": 23,
+        "globalAyah": 1183,
+        "arabic": "وَلَوْ عَلِمَ ٱللَّهُ فِيهِمْ خَيْرًۭا لَّأَسْمَعَهُمْ ۖ وَلَوْ أَسْمَعَهُمْ لَتَوَلَّوا۟ وَّهُم مُّعْرِضُونَ",
+        "translation_en": "For, if God had seen any good in them, He would certainly have made them hear: but [as it is,] even if He had made them hear, they would surely have turned away in their obstinacy.",
+        "translation_ur": "اور اگر خدا ان میں نیکی (کا مادہ) دیکھتا تو ان کو سننے کی توفیق بخشتا۔ اور اگر (بغیر صلاحیت ہدایت کے) سماعت دیتا تو وہ منہ پھیر کر بھاگ جاتے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008023.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1183.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1183.mp3"
+        }
+      },
+      {
+        "ayah": 24,
+        "globalAyah": 1184,
+        "arabic": "يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ ٱسْتَجِيبُوا۟ لِلَّهِ وَلِلرَّسُولِ إِذَا دَعَاكُمْ لِمَا يُحْيِيكُمْ ۖ وَٱعْلَمُوٓا۟ أَنَّ ٱللَّهَ يَحُولُ بَيْنَ ٱلْمَرْءِ وَقَلْبِهِۦ وَأَنَّهُۥٓ إِلَيْهِ تُحْشَرُونَ",
+        "translation_en": "O you who have attained to faith! Respond to the call of God and the Apostle whenever he calls you unto that which will give you life; and know that God intervenes between man and [the desires of] his heart, and that unto Him you shall be gathered.",
+        "translation_ur": "مومنو! خدا اور اس کے رسول کا حکم قبول کرو جب کہ رسول خدا تمہیں ایسے کام کے لیے بلاتے ہیں جو تم کو زندگی (جاوداں) بخشتا ہے۔ اور جان رکھو کہ خدا آدمی اور اس کے دل کے درمیان حامل ہوجاتا ہے اور یہ بھی کہ تم سب اس کے روبرو جمع کیے جاؤ گے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008024.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1184.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1184.mp3"
+        }
+      },
+      {
+        "ayah": 25,
+        "globalAyah": 1185,
+        "arabic": "وَٱتَّقُوا۟ فِتْنَةًۭ لَّا تُصِيبَنَّ ٱلَّذِينَ ظَلَمُوا۟ مِنكُمْ خَآصَّةًۭ ۖ وَٱعْلَمُوٓا۟ أَنَّ ٱللَّهَ شَدِيدُ ٱلْعِقَابِ",
+        "translation_en": "And beware of that temptation to evil which does not befall only those among you who are bent on denying the truth, to the exclusion of others; and know that God is severe in retribution.",
+        "translation_ur": "اور اس فتنے سے ڈرو جو خصوصیت کے ساتھ انہیں لوگوں پر واقع نہ ہوگا جو تم میں گنہگار ہیں۔ اور جان رکھو کہ خدا سخت عذاب دینے والا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008025.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1185.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1185.mp3"
+        }
+      },
+      {
+        "ayah": 26,
+        "globalAyah": 1186,
+        "arabic": "وَٱذْكُرُوٓا۟ إِذْ أَنتُمْ قَلِيلٌۭ مُّسْتَضْعَفُونَ فِى ٱلْأَرْضِ تَخَافُونَ أَن يَتَخَطَّفَكُمُ ٱلنَّاسُ فَـَٔاوَىٰكُمْ وَأَيَّدَكُم بِنَصْرِهِۦ وَرَزَقَكُم مِّنَ ٱلطَّيِّبَٰتِ لَعَلَّكُمْ تَشْكُرُونَ",
+        "translation_en": "And remember the time when you were few [and] helpless on earth, fearful lest people do away with you - whereupon He sheltered you, and strengthened you with His succour, and provided for you sustenance out of the good things of life, so that you might have cause to be grateful.",
+        "translation_ur": "اور اس وقت کو یاد کرو جب تم زمین (مکہ) میں قلیل اور ضعیف سمجھے جاتے تھے اور ڈرتے رہتے تھے کہ لوگ تمہیں اُڑا (نہ) لے جائیں (یعنی بےخان وماں نہ کردیں) تو اس نے تم کو جگہ دی اور اپنی مدد سے تم کو تقویت بخشی اور پاکیزہ چیزیں کھانے کو دیں تاکہ (اس کا) شکر کرو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008026.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1186.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1186.mp3"
+        }
+      },
+      {
+        "ayah": 27,
+        "globalAyah": 1187,
+        "arabic": "يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ لَا تَخُونُوا۟ ٱللَّهَ وَٱلرَّسُولَ وَتَخُونُوٓا۟ أَمَٰنَٰتِكُمْ وَأَنتُمْ تَعْلَمُونَ",
+        "translation_en": "[Hence,] O you who have attained to faith, do not be false to God and the Apostle, and do not knowingly be false to the trust that has been reposed in you;",
+        "translation_ur": "اے ایمان والو! نہ تو خدا اور رسول کی امانت میں خیانت کرو اور نہ اپنی امانتوں میں خیانت کرو اور تم (ان باتوں کو) جانتے ہو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008027.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1187.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1187.mp3"
+        }
+      },
+      {
+        "ayah": 28,
+        "globalAyah": 1188,
+        "arabic": "وَٱعْلَمُوٓا۟ أَنَّمَآ أَمْوَٰلُكُمْ وَأَوْلَٰدُكُمْ فِتْنَةٌۭ وَأَنَّ ٱللَّهَ عِندَهُۥٓ أَجْرٌ عَظِيمٌۭ",
+        "translation_en": "and know that your worldly goods and your children are but a trial and a temptation, and that with God there is a tremendous reward.",
+        "translation_ur": "اور جان رکھو کہ تمہارا مال اور اولاد بڑی آزمائش ہے اور یہ کہ خدا کے پاس (نیکیوں کا) بڑا ثواب ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008028.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1188.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1188.mp3"
+        }
+      },
+      {
+        "ayah": 29,
+        "globalAyah": 1189,
+        "arabic": "يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوٓا۟ إِن تَتَّقُوا۟ ٱللَّهَ يَجْعَل لَّكُمْ فُرْقَانًۭا وَيُكَفِّرْ عَنكُمْ سَيِّـَٔاتِكُمْ وَيَغْفِرْ لَكُمْ ۗ وَٱللَّهُ ذُو ٱلْفَضْلِ ٱلْعَظِيمِ",
+        "translation_en": "O you who have attained to faith! If you remain conscious of God. He will endow you with a standard by which to discern the true from the false, and will efface your bad deeds, and will forgive you your sins: for God is limitless in His great bounty.",
+        "translation_ur": "مومنو! اگر تم خدا سے ڈرو گے تو وہ تمہارے لیے امر فارق پیدا کردے گا (یعنی تم کو ممتاز کردے گا) تو وہ تمہارے گناہ مٹادے گا اور تمہیں بخش دے گا۔ اور خدا بڑا فضل والا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008029.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1189.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1189.mp3"
+        }
+      },
+      {
+        "ayah": 30,
+        "globalAyah": 1190,
+        "arabic": "وَإِذْ يَمْكُرُ بِكَ ٱلَّذِينَ كَفَرُوا۟ لِيُثْبِتُوكَ أَوْ يَقْتُلُوكَ أَوْ يُخْرِجُوكَ ۚ وَيَمْكُرُونَ وَيَمْكُرُ ٱللَّهُ ۖ وَٱللَّهُ خَيْرُ ٱلْمَٰكِرِينَ",
+        "translation_en": "AND [remember, O Prophet,] how those who were bent on denying the truth were scheming against thee, in order to restrain thee [from preaching], or to slay thee, or to drive thee away: thus have they [always] schemed: but God brought their scheming to nought-for God is above all schemers.",
+        "translation_ur": "اور (اے محمدﷺ اس وقت کو یاد کرو) جب کافر لوگ تمہارے بارے میں چال چل رہے تھے کہ تم کو قید کر دیں یا جان سے مار ڈالیں یا (وطن سے) نکال دیں تو (ادھر تو) وہ چال چل رہے تھے اور (اُدھر) خدا چال چل رہا تھا۔ اور خدا سب سے بہتر چال چلنے والا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008030.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1190.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1190.mp3"
+        }
+      },
+      {
+        "ayah": 31,
+        "globalAyah": 1191,
+        "arabic": "وَإِذَا تُتْلَىٰ عَلَيْهِمْ ءَايَٰتُنَا قَالُوا۟ قَدْ سَمِعْنَا لَوْ نَشَآءُ لَقُلْنَا مِثْلَ هَٰذَآ ۙ إِنْ هَٰذَآ إِلَّآ أَسَٰطِيرُ ٱلْأَوَّلِينَ",
+        "translation_en": "And whenever Our messages were conveyed to them, they would say, \"We have heard [all this] before; if we wanted, we could certainly compose sayings like these [ourselves]: they are nothing but fables of ancient times!\"",
+        "translation_ur": "اور جب ان کو ہماری آیتیں پڑھ کر سنائی جاتی ہیں تو کہتے ہیں (یہ کلام) ہم نے سن لیا ہے اگر ہم چاہیں تو اسی طرح کا (کلام) ہم بھی کہہ دیں اور یہ ہے ہی کیا صرف اگلے لوگوں کی حکایتیں ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008031.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1191.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1191.mp3"
+        }
+      },
+      {
+        "ayah": 32,
+        "globalAyah": 1192,
+        "arabic": "وَإِذْ قَالُوا۟ ٱللَّهُمَّ إِن كَانَ هَٰذَا هُوَ ٱلْحَقَّ مِنْ عِندِكَ فَأَمْطِرْ عَلَيْنَا حِجَارَةًۭ مِّنَ ٱلسَّمَآءِ أَوِ ٱئْتِنَا بِعَذَابٍ أَلِيمٍۢ",
+        "translation_en": "And, lo, they would say, \"O God! If this. be indeed the truth from Thee, then rain down upon us stones from the skies, or inflict [some other] grievous suffering on us!\"",
+        "translation_ur": "اور جب انہوں نے کہا کہ اے خدا اگر یہ (قرآن) تیری طرف سے برحق ہے تو ہم پر آسمان سے پتھر برسا یا کوئی اور تکلیف دینے والا عذاب بھیج",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008032.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1192.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1192.mp3"
+        }
+      },
+      {
+        "ayah": 33,
+        "globalAyah": 1193,
+        "arabic": "وَمَا كَانَ ٱللَّهُ لِيُعَذِّبَهُمْ وَأَنتَ فِيهِمْ ۚ وَمَا كَانَ ٱللَّهُ مُعَذِّبَهُمْ وَهُمْ يَسْتَغْفِرُونَ",
+        "translation_en": "But God did not choose thus to chastise them whip thou [O Prophet] wert still among them, nor would God chastise them when they [might yet] ask for forgiveness.",
+        "translation_ur": "اور خدا ایسا نہ تھا کہ جب تک تم ان میں سے تھے انہیں عذاب دیتا۔ اور ایسا نہ تھا کہ وہ بخششیں مانگیں اور انہیں عذاب دے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008033.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1193.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1193.mp3"
+        }
+      },
+      {
+        "ayah": 34,
+        "globalAyah": 1194,
+        "arabic": "وَمَا لَهُمْ أَلَّا يُعَذِّبَهُمُ ٱللَّهُ وَهُمْ يَصُدُّونَ عَنِ ٱلْمَسْجِدِ ٱلْحَرَامِ وَمَا كَانُوٓا۟ أَوْلِيَآءَهُۥٓ ۚ إِنْ أَوْلِيَآؤُهُۥٓ إِلَّا ٱلْمُتَّقُونَ وَلَٰكِنَّ أَكْثَرَهُمْ لَا يَعْلَمُونَ",
+        "translation_en": "But what have they [now] in their favour that God should not chastise them-seeing that they bar [the believers] from the Inviolable House of Worship, although they are not its [rightful] guardians? None but the God-conscious can be its guardians: but of this most of these [evildoers] are unaware;",
+        "translation_ur": "اور (اب) ان کے لیے کون سی وجہ ہے کہ وہ انہیں عذاب نہ دے جب کہ وہ مسجد محترم (میں نماز پڑھنے) سے روکتے ہیں اور وہ اس مسجد کے متولی بھی نہیں۔ اس کے متولی تو صرف پرہیزگار ہیں۔ لیکن ان میں اکثر نہیں جانتے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008034.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1194.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1194.mp3"
+        }
+      },
+      {
+        "ayah": 35,
+        "globalAyah": 1195,
+        "arabic": "وَمَا كَانَ صَلَاتُهُمْ عِندَ ٱلْبَيْتِ إِلَّا مُكَآءًۭ وَتَصْدِيَةًۭ ۚ فَذُوقُوا۟ ٱلْعَذَابَ بِمَا كُنتُمْ تَكْفُرُونَ",
+        "translation_en": "and their prayers before the Temple are nothing but whistling and clapping of hands. Taste then, [O unbelievers,] this chastisement as an outcome of your persistent denial of the truth!",
+        "translation_ur": "اور ان لوگوں کی نماز خانہٴ کعبہ کے پاس سیٹیاں اور تالیاں بجانے کے سوا کچھ نہ تھی۔ تو تم جو کفر کرتے تھے اب اس کے بدلے عذاب (کا مزہ) چکھو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008035.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1195.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1195.mp3"
+        }
+      },
+      {
+        "ayah": 36,
+        "globalAyah": 1196,
+        "arabic": "إِنَّ ٱلَّذِينَ كَفَرُوا۟ يُنفِقُونَ أَمْوَٰلَهُمْ لِيَصُدُّوا۟ عَن سَبِيلِ ٱللَّهِ ۚ فَسَيُنفِقُونَهَا ثُمَّ تَكُونُ عَلَيْهِمْ حَسْرَةًۭ ثُمَّ يُغْلَبُونَ ۗ وَٱلَّذِينَ كَفَرُوٓا۟ إِلَىٰ جَهَنَّمَ يُحْشَرُونَ",
+        "translation_en": "Behold, those who are bent on denying the truth are spending their riches in order to turn others away from the path of God; and they will go on spending them until they become [a source of] intense regret for them; and then they will be overcome! And those who [until their death] have denied the truth shall be gathered unto hell,",
+        "translation_ur": "جو لوگ کافر ہیں اپنا مال خرچ کرتے ہیں کہ (لوگوں کو) خدا کے رستے سے روکیں۔ سو ابھی اور خرچ کریں گے مگر آخر وہ (خرچ کرنا) ان کے لیے (موجب) افسوس ہوگا اور وہ مغلوب ہوجائیں گے۔ اور کافر لوگ دوزخ کی طرف ہانکے جائیں گے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008036.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1196.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1196.mp3"
+        }
+      },
+      {
+        "ayah": 37,
+        "globalAyah": 1197,
+        "arabic": "لِيَمِيزَ ٱللَّهُ ٱلْخَبِيثَ مِنَ ٱلطَّيِّبِ وَيَجْعَلَ ٱلْخَبِيثَ بَعْضَهُۥ عَلَىٰ بَعْضٍۢ فَيَرْكُمَهُۥ جَمِيعًۭا فَيَجْعَلَهُۥ فِى جَهَنَّمَ ۚ أُو۟لَٰٓئِكَ هُمُ ٱلْخَٰسِرُونَ",
+        "translation_en": "so that God might separate the bad from the good, and join the bad with one another, and link them all together [within His condemnation], and then place them in hell. They, they are the lost!",
+        "translation_ur": "تاکہ خدا ناپاک کو پاک سے الگ کر دے اور ناپاک کو ایک دوسرے پر رکھ کر ایک ڈھیر بنا دے۔ پھر اس کو دوزخ میں ڈال دے۔ یہی لوگ خسارہ پانے والے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008037.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1197.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1197.mp3"
+        }
+      },
+      {
+        "ayah": 38,
+        "globalAyah": 1198,
+        "arabic": "قُل لِّلَّذِينَ كَفَرُوٓا۟ إِن يَنتَهُوا۟ يُغْفَرْ لَهُم مَّا قَدْ سَلَفَ وَإِن يَعُودُوا۟ فَقَدْ مَضَتْ سُنَّتُ ٱلْأَوَّلِينَ",
+        "translation_en": "Tell those who are bent on denying the truth that if they desist, all that is past shall be forgiven them; but if they revert [to their wrongdoing], let them remember what happened to the like of them in times gone by.",
+        "translation_ur": "(اے پیغمبر) کفار سے کہہ دو کہ اگر وہ اپنے افعال سے باز آجائیں تو جو ہوچکا وہ انہیں معاف کردیا جائے گا۔ اور اگر پھر (وہی حرکات) کرنے لگیں گے تو اگلے لوگوں کا (جو) طریق جاری ہوچکا ہے (وہی ان کے حق میں برتا جائے گا)",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008038.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1198.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1198.mp3"
+        }
+      },
+      {
+        "ayah": 39,
+        "globalAyah": 1199,
+        "arabic": "وَقَٰتِلُوهُمْ حَتَّىٰ لَا تَكُونَ فِتْنَةٌۭ وَيَكُونَ ٱلدِّينُ كُلُّهُۥ لِلَّهِ ۚ فَإِنِ ٱنتَهَوْا۟ فَإِنَّ ٱللَّهَ بِمَا يَعْمَلُونَ بَصِيرٌۭ",
+        "translation_en": "And fight against them until there is no more oppression and all worship is devoted to God alone. And if they desist-behold, God sees all that they do;",
+        "translation_ur": "اور ان لوگوں سے لڑتے رہو یہاں تک کہ فتنہ (یعنی کفر کا فساد) باقی نہ رہے اور دین سب خدا ہی کا ہوجائے اور اگر باز آجائیں تو خدا ان کے کاموں کو دیکھ رہا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008039.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1199.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1199.mp3"
+        }
+      },
+      {
+        "ayah": 40,
+        "globalAyah": 1200,
+        "arabic": "وَإِن تَوَلَّوْا۟ فَٱعْلَمُوٓا۟ أَنَّ ٱللَّهَ مَوْلَىٰكُمْ ۚ نِعْمَ ٱلْمَوْلَىٰ وَنِعْمَ ٱلنَّصِيرُ",
+        "translation_en": "and if they turn away [from righteousness], know that God is your Lord Supreme: [and] how excellent is this Lord Supreme, and how excellent this Giver of Succour!",
+        "translation_ur": "اور اگر روگردانی کریں تو جان رکھو کہ خدا تمہارا حمایتی ہے۔ (اور) وہ خوب حمایتی اور خوب مددگار ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008040.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1200.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1200.mp3"
+        }
+      },
+      {
+        "ayah": 41,
+        "globalAyah": 1201,
+        "arabic": "۞ وَٱعْلَمُوٓا۟ أَنَّمَا غَنِمْتُم مِّن شَىْءٍۢ فَأَنَّ لِلَّهِ خُمُسَهُۥ وَلِلرَّسُولِ وَلِذِى ٱلْقُرْبَىٰ وَٱلْيَتَٰمَىٰ وَٱلْمَسَٰكِينِ وَٱبْنِ ٱلسَّبِيلِ إِن كُنتُمْ ءَامَنتُم بِٱللَّهِ وَمَآ أَنزَلْنَا عَلَىٰ عَبْدِنَا يَوْمَ ٱلْفُرْقَانِ يَوْمَ ٱلْتَقَى ٱلْجَمْعَانِ ۗ وَٱللَّهُ عَلَىٰ كُلِّ شَىْءٍۢ قَدِيرٌ",
+        "translation_en": "AND KNOW that whatever booty you acquire [in war], one-fifth thereof belongs to God and the Apostle, and the near of kin, and the orphans, and the needy, and the wayfarer. [This you must observe] if you believe in God and in what We bestowed from on high upon Our servant on the day when the true was distinguished from the false - the day when the two hosts met in battle. And God has the power to will anything.",
+        "translation_ur": "اور جان رکھو کہ جو چیز تم (کفار سے) لوٹ کر لاؤ اس میں سے پانچواں حصہ خدا کا اور اس کے رسول کا اور اہل قرابت کا اور یتیموں کا اور محتاجوں کا اور مسافروں کا ہے۔ اگر تم خدا پر اور اس (نصرت) پر ایمان رکھتے ہو جو (حق وباطل میں) فرق کرنے کے دن (یعنی جنگ بدر میں) جس دن دونوں فوجوں میں مڈھ بھیڑ ہوگئی۔ اپنے بندے (محمدﷺ) پر نازل فرمائی۔ اور خدا ہر چیز پر قادر ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008041.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1201.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1201.mp3"
+        }
+      },
+      {
+        "ayah": 42,
+        "globalAyah": 1202,
+        "arabic": "إِذْ أَنتُم بِٱلْعُدْوَةِ ٱلدُّنْيَا وَهُم بِٱلْعُدْوَةِ ٱلْقُصْوَىٰ وَٱلرَّكْبُ أَسْفَلَ مِنكُمْ ۚ وَلَوْ تَوَاعَدتُّمْ لَٱخْتَلَفْتُمْ فِى ٱلْمِيعَٰدِ ۙ وَلَٰكِن لِّيَقْضِىَ ٱللَّهُ أَمْرًۭا كَانَ مَفْعُولًۭا لِّيَهْلِكَ مَنْ هَلَكَ عَنۢ بَيِّنَةٍۢ وَيَحْيَىٰ مَنْ حَىَّ عَنۢ بَيِّنَةٍۢ ۗ وَإِنَّ ٱللَّهَ لَسَمِيعٌ عَلِيمٌ",
+        "translation_en": "[Remember that day] when you were at the near end of the valley [of Badr], and they were at its farthest end, while the caravan was below you. And if you had known that a battle was to take place, you would indeed have refused to accept the challenge: but [the battle was brought about none the less,] so that God might accomplish a thing [which He willed] to be done, [and] that he who would perish might perish in clear evidence of the truth, and that he who would remain alive might live in clear evidence of the truth. And, behold, God is indeed all-hearing, all-knowing.",
+        "translation_ur": "جس وقت تم (مدینے سے) قریب کے ناکے پر تھے اور کافر بعید کے ناکے پر اور قافلہ تم سے نیچے (اتر گیا) تھا۔ اور اگر تم (جنگ کے لیے) آپس میں قرارداد کرلیتے تو وقت معین (پر جمع ہونے) میں تقدیم وتاخیر ہو جاتی۔ لیکن خدا کو منظور تھا کہ جو کام ہو کر رہنے والا تھا اسے کر ہی ڈالے تاکہ جو مرے بصیرت پر (یعنی یقین جان کر) مرے اور جو جیتا رہے وہ بھی بصیرت پر (یعنی حق پہچان کر) جیتا رہے۔ اور کچھ شک نہیں کہ خدا سنتا جانتا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008042.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1202.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1202.mp3"
+        }
+      },
+      {
+        "ayah": 43,
+        "globalAyah": 1203,
+        "arabic": "إِذْ يُرِيكَهُمُ ٱللَّهُ فِى مَنَامِكَ قَلِيلًۭا ۖ وَلَوْ أَرَىٰكَهُمْ كَثِيرًۭا لَّفَشِلْتُمْ وَلَتَنَٰزَعْتُمْ فِى ٱلْأَمْرِ وَلَٰكِنَّ ٱللَّهَ سَلَّمَ ۗ إِنَّهُۥ عَلِيمٌۢ بِذَاتِ ٱلصُّدُورِ",
+        "translation_en": "Lo! God showed them to thee in a dream as few: for, had He shown them to you as many, you would surely have lost heart, and would surely have disagreed with one another about what to do. But God saved [you from this]: verily, He has full knowledge of what is the hearts [of men].",
+        "translation_ur": "اس وقت خدا نے تمہیں خواب میں کافروں کو تھوڑی تعداد میں دکھایا۔ اور اگر بہت کر کے دکھاتا تو تم لوگ جی چھوڑ دیتے اور (جو) کام (درپیش تھا اس) میں جھگڑنے لگتے لیکن خدا نے (تمہیں اس سے) بچا لیا۔ بےشک وہ سینوں کی باتوں تک سے واقف ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008043.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1203.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1203.mp3"
+        }
+      },
+      {
+        "ayah": 44,
+        "globalAyah": 1204,
+        "arabic": "وَإِذْ يُرِيكُمُوهُمْ إِذِ ٱلْتَقَيْتُمْ فِىٓ أَعْيُنِكُمْ قَلِيلًۭا وَيُقَلِّلُكُمْ فِىٓ أَعْيُنِهِمْ لِيَقْضِىَ ٱللَّهُ أَمْرًۭا كَانَ مَفْعُولًۭا ۗ وَإِلَى ٱللَّهِ تُرْجَعُ ٱلْأُمُورُ",
+        "translation_en": "And so, when you met in battle, He made them appear as few in your eyes -just as He made you appear as of little account in their eyes - so that God might accomplish a thing [which He willed] to be done: for all things go back to God [as their source].",
+        "translation_ur": "اور اس وقت جب تم ایک دوسرے کے مقابل ہوئے تو کافروں کو تمہاری نظروں میں تھوڑا کر کے دکھاتا تھا اور تم کو ان کی نگاہوں میں تھوڑا کر کے دکھاتا تھا تاکہ خدا کو جو کام منظور کرنا تھا اسے کر ڈالے۔ اور سب کاموں کا رجوع خدا کی طرف ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008044.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1204.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1204.mp3"
+        }
+      },
+      {
+        "ayah": 45,
+        "globalAyah": 1205,
+        "arabic": "يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوٓا۟ إِذَا لَقِيتُمْ فِئَةًۭ فَٱثْبُتُوا۟ وَٱذْكُرُوا۟ ٱللَّهَ كَثِيرًۭا لَّعَلَّكُمْ تُفْلِحُونَ",
+        "translation_en": "[Hence,] O you who have attained to faith, when you meet a host in battle, be firm, and remember God often; so that you might attain to a happy state!",
+        "translation_ur": "مومنو! جب (کفار کی) کسی جماعت سے تمہارا مقابلہ ہو تو ثابت قدم رہو اور خدا کو بہت یاد کرو تاکہ مراد حاصل کرو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008045.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1205.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1205.mp3"
+        }
+      },
+      {
+        "ayah": 46,
+        "globalAyah": 1206,
+        "arabic": "وَأَطِيعُوا۟ ٱللَّهَ وَرَسُولَهُۥ وَلَا تَنَٰزَعُوا۟ فَتَفْشَلُوا۟ وَتَذْهَبَ رِيحُكُمْ ۖ وَٱصْبِرُوٓا۟ ۚ إِنَّ ٱللَّهَ مَعَ ٱلصَّٰبِرِينَ",
+        "translation_en": "And pay heed unto God and His Apostle, and do not [allow yourselves to] be at variance with one another, lest you lose heart and your moral strength desert you. And be patient in adversity: for, verily, God is with those who are patient in adversity.",
+        "translation_ur": "اور خدا اور اس کے رسول کے حکم پر چلو اور آپس میں جھگڑا نہ کرنا کہ (ایسا کرو گے تو) تم بزدل ہو جاؤ گے اور تمہارا اقبال جاتا رہے گا اور صبر سے کام لو۔ کہ خدا صبر کرنے والوں کا مددگار ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008046.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1206.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1206.mp3"
+        }
+      },
+      {
+        "ayah": 47,
+        "globalAyah": 1207,
+        "arabic": "وَلَا تَكُونُوا۟ كَٱلَّذِينَ خَرَجُوا۟ مِن دِيَٰرِهِم بَطَرًۭا وَرِئَآءَ ٱلنَّاسِ وَيَصُدُّونَ عَن سَبِيلِ ٱللَّهِ ۚ وَٱللَّهُ بِمَا يَعْمَلُونَ مُحِيطٌۭ",
+        "translation_en": "And be not like those [unbelievers] who went forth from their homelands full of self-conceit and a desire to be seen and praised by men for they were trying to turn others away from the path of God -the while God encompassed all their doings [with His might].",
+        "translation_ur": "اور ان لوگوں جیسے نہ ہونا جو اِتراتے ہوئے (یعنی حق کا مقابلہ کرنے کے لیے) اور لوگوں کو دکھانے کے لیے گھروں سے نکل آئے اور لوگوں کو خدا کی راہ سے روکتے ہیں۔ اور جو اعمال یہ کرتے ہیں خدا ان پر احاطہ کئے ہوئے ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008047.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1207.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1207.mp3"
+        }
+      },
+      {
+        "ayah": 48,
+        "globalAyah": 1208,
+        "arabic": "وَإِذْ زَيَّنَ لَهُمُ ٱلشَّيْطَٰنُ أَعْمَٰلَهُمْ وَقَالَ لَا غَالِبَ لَكُمُ ٱلْيَوْمَ مِنَ ٱلنَّاسِ وَإِنِّى جَارٌۭ لَّكُمْ ۖ فَلَمَّا تَرَآءَتِ ٱلْفِئَتَانِ نَكَصَ عَلَىٰ عَقِبَيْهِ وَقَالَ إِنِّى بَرِىٓءٌۭ مِّنكُمْ إِنِّىٓ أَرَىٰ مَا لَا تَرَوْنَ إِنِّىٓ أَخَافُ ٱللَّهَ ۚ وَٱللَّهُ شَدِيدُ ٱلْعِقَابِ",
+        "translation_en": "And, lo, Satan made all their doings seem goodly to them, and said, \"No one can overcome you this day, for, behold, I shall be your protector!\" but as soon as the two hosts came within sight of one another, he turned on his heels and said, \"Behold, I am not responsible for you: behold, I see something that you do not see: behold, I fear God-for God is severe in retribution!\"",
+        "translation_ur": "اور جب شیطانوں نے ان کے اعمال ان کو آراستہ کر کے دکھائے اور کہا کہ آج کے دن لوگوں میں کوئی تم پر غالب نہ ہوگا اور میں تمہارا رفیق ہوں (لیکن) جب دونوں فوجیں ایک دوسرے کے مقابل صف آراء ہوئیں تو پسپا ہو کر چل دیا اور کہنے لگا کہ مجھے تم سے کوئی واسطہ نہیں۔ میں تو ایسی چیزیں دیکھ رہا ہوں جو تم نہیں دیکھ سکتے۔ مجھے تو خدا سے ڈر لگتا ہے۔ اور خدا سخت عذاب کرنے والا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008048.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1208.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1208.mp3"
+        }
+      },
+      {
+        "ayah": 49,
+        "globalAyah": 1209,
+        "arabic": "إِذْ يَقُولُ ٱلْمُنَٰفِقُونَ وَٱلَّذِينَ فِى قُلُوبِهِم مَّرَضٌ غَرَّ هَٰٓؤُلَآءِ دِينُهُمْ ۗ وَمَن يَتَوَكَّلْ عَلَى ٱللَّهِ فَإِنَّ ٱللَّهَ عَزِيزٌ حَكِيمٌۭ",
+        "translation_en": "At the same time, the hypocrites and those in whose hearts was disease were saying, \"Their faith has deluded these [believers]!\" But he who places his trust in God [knows that], verily, God is almighty, wise.",
+        "translation_ur": "اس وقت منافق اور (کافر) جن کے دلوں میں مرض تھا کہتے تھے کہ ان لوگوں کو ان کے دین نے مغرور کر رکھا ہے اور جو شخص خدا پر بھروسہ رکھتا ہے تو خدا غالب حکمت والا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008049.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1209.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1209.mp3"
+        }
+      },
+      {
+        "ayah": 50,
+        "globalAyah": 1210,
+        "arabic": "وَلَوْ تَرَىٰٓ إِذْ يَتَوَفَّى ٱلَّذِينَ كَفَرُوا۟ ۙ ٱلْمَلَٰٓئِكَةُ يَضْرِبُونَ وُجُوهَهُمْ وَأَدْبَٰرَهُمْ وَذُوقُوا۟ عَذَابَ ٱلْحَرِيقِ",
+        "translation_en": "AND IF thou couldst but see [how it will be] when He causes those who are bent on denying the truth to die: the angels will strike their faces: and their backs, and [will say]: \"Taste suffering through fire",
+        "translation_ur": "اور کاش تم اس وقت (کی کیفیت) دیکھو۔ جب فرشتے کافروں کی جانیں نکالتے ہیں ان کے مونہوں اور پیٹھوں پر (کوڑے اور ہتھوڑے وغیرہ) مارتے (ہیں اور کہتے ہیں) کہ (اب) عذاب آتش (کا مزہ) چکھو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008050.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1210.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1210.mp3"
+        }
+      },
+      {
+        "ayah": 51,
+        "globalAyah": 1211,
+        "arabic": "ذَٰلِكَ بِمَا قَدَّمَتْ أَيْدِيكُمْ وَأَنَّ ٱللَّهَ لَيْسَ بِظَلَّٰمٍۢ لِّلْعَبِيدِ",
+        "translation_en": "in return for what your own hands have wrought - for, never does God do the least wrong to His creatures!\"",
+        "translation_ur": "یہ ان (اعمال) کی سزا ہے جو تمہارے ہاتھوں نے آگے بھیجے ہیں۔ اور یہ (جان رکھو) کہ خدا بندوں پر ظلم نہیں کرتا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008051.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1211.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1211.mp3"
+        }
+      },
+      {
+        "ayah": 52,
+        "globalAyah": 1212,
+        "arabic": "كَدَأْبِ ءَالِ فِرْعَوْنَ ۙ وَٱلَّذِينَ مِن قَبْلِهِمْ ۚ كَفَرُوا۟ بِـَٔايَٰتِ ٱللَّهِ فَأَخَذَهُمُ ٱللَّهُ بِذُنُوبِهِمْ ۗ إِنَّ ٱللَّهَ قَوِىٌّۭ شَدِيدُ ٱلْعِقَابِ",
+        "translation_en": "[To them shall happen.] the like of what happened to Pharaoh's people and those who lived before them: they denied the truth of God's messagesand so God took them to task for their sins. Verily, God is powerful, severe in retribution!",
+        "translation_ur": "جیسا حال فرعوینوں اور ان سے پہلے لوگوں کا (ہوا تھا ویسا ہی ان کا ہوا کہ) انہوں نے خدا کی آیتوں سے کفر کیا تو خدا نےان کے گناہوں کی سزا میں ان کو پکڑ لیا۔ بےشک خدا زبردست اور سخت عذاب دینے والا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008052.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1212.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1212.mp3"
+        }
+      },
+      {
+        "ayah": 53,
+        "globalAyah": 1213,
+        "arabic": "ذَٰلِكَ بِأَنَّ ٱللَّهَ لَمْ يَكُ مُغَيِّرًۭا نِّعْمَةً أَنْعَمَهَا عَلَىٰ قَوْمٍ حَتَّىٰ يُغَيِّرُوا۟ مَا بِأَنفُسِهِمْ ۙ وَأَنَّ ٱللَّهَ سَمِيعٌ عَلِيمٌۭ",
+        "translation_en": "This, because God would never change the blessings with which He has graced a people unless they change their inner selves: and [know] that God is all-hearing, all-seeing.",
+        "translation_ur": "یہ اس لیے کہ جو نعمت خدا کسی قوم کو دیا کرتا ہے جب تک وہ خود اپنے دلوں کی حالت نہ بدل ڈالیں خدا اسے نہیں بدلا کرتا۔ اور اس لیے کہ خدا سنتا جانتا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008053.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1213.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1213.mp3"
+        }
+      },
+      {
+        "ayah": 54,
+        "globalAyah": 1214,
+        "arabic": "كَدَأْبِ ءَالِ فِرْعَوْنَ ۙ وَٱلَّذِينَ مِن قَبْلِهِمْ ۚ كَذَّبُوا۟ بِـَٔايَٰتِ رَبِّهِمْ فَأَهْلَكْنَٰهُم بِذُنُوبِهِمْ وَأَغْرَقْنَآ ءَالَ فِرْعَوْنَ ۚ وَكُلٌّۭ كَانُوا۟ ظَٰلِمِينَ",
+        "translation_en": "[To those sinners shall happen] the like of what happened to Pharaoh's people and those who lived before them: they gave the lie to their Sustainer's messages - and so We destroyed them in return for their sins, and caused Pharaoh's people to drown: for they were evildoers all.",
+        "translation_ur": "جیسا حال فرعونیوں اور ان سے پہلے لوگوں کا (ہوا تھا ویسا ہی ان کا ہوا) انہوں نے اپنے پروردگار کی آیتوں کو جھٹلایا تو ہم نے ان کو ان کے گناہوں کے سبب ہلاک کر ڈالا اور فرعونیوں کو ڈبو دیا۔ اور وہ سب ظالم تھے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008054.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1214.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1214.mp3"
+        }
+      },
+      {
+        "ayah": 55,
+        "globalAyah": 1215,
+        "arabic": "إِنَّ شَرَّ ٱلدَّوَآبِّ عِندَ ٱللَّهِ ٱلَّذِينَ كَفَرُوا۟ فَهُمْ لَا يُؤْمِنُونَ",
+        "translation_en": "Verily, the vilest creatures in the sight of God are those who are bent on denying the truth and therefore do not believe.",
+        "translation_ur": "جانداروں میں سب سے بدتر خدا کے نزدیک وہ لوگ ہیں جو کافر ہیں سو وہ ایمان نہیں لاتے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008055.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1215.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1215.mp3"
+        }
+      },
+      {
+        "ayah": 56,
+        "globalAyah": 1216,
+        "arabic": "ٱلَّذِينَ عَٰهَدتَّ مِنْهُمْ ثُمَّ يَنقُضُونَ عَهْدَهُمْ فِى كُلِّ مَرَّةٍۢ وَهُمْ لَا يَتَّقُونَ",
+        "translation_en": "AS FOR THOSE with whom thou hast made a covenant, and who thereupon break their covenant on every occasion, not being conscious of God-",
+        "translation_ur": "جن لوگوں سے تم نے (صلح کا) عہد کیا ہے پھر وہ ہر بار اپنے عہد کو توڑ ڈالتے ہیں اور (خدا سے) نہیں ڈرتے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008056.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1216.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1216.mp3"
+        }
+      },
+      {
+        "ayah": 57,
+        "globalAyah": 1217,
+        "arabic": "فَإِمَّا تَثْقَفَنَّهُمْ فِى ٱلْحَرْبِ فَشَرِّدْ بِهِم مَّنْ خَلْفَهُمْ لَعَلَّهُمْ يَذَّكَّرُونَ",
+        "translation_en": "if thou find them at war [with you], make of them a fearsome example for those who follow them, so that they might take it to heart;",
+        "translation_ur": "اگر تم ان کو لڑائی میں پاؤ تو انہیں ایسی سزا دو کہ جو لوگ ان کے پس پشت ہیں وہ ان کو دیکھ کر بھاگ جائیں عجب نہیں کہ ان کو (اس سے) عبرت ہو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008057.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1217.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1217.mp3"
+        }
+      },
+      {
+        "ayah": 58,
+        "globalAyah": 1218,
+        "arabic": "وَإِمَّا تَخَافَنَّ مِن قَوْمٍ خِيَانَةًۭ فَٱنۢبِذْ إِلَيْهِمْ عَلَىٰ سَوَآءٍ ۚ إِنَّ ٱللَّهَ لَا يُحِبُّ ٱلْخَآئِنِينَ",
+        "translation_en": "or, if thou hast reason to fear treachery from people [with whom thou hast made a covenant], cast it back at them in an equitable manner: for, verily, God does not love the treacherous!",
+        "translation_ur": "اور اگر تم کو کسی قوم سے دغا بازی کا خوف ہو تو (ان کا عہد) انہیں کی طرف پھینک دو (اور) برابر (کا جواب دو) کچھ شک نہیں کہ خدا دغابازوں کو دوست نہیں رکھتا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008058.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1218.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1218.mp3"
+        }
+      },
+      {
+        "ayah": 59,
+        "globalAyah": 1219,
+        "arabic": "وَلَا يَحْسَبَنَّ ٱلَّذِينَ كَفَرُوا۟ سَبَقُوٓا۟ ۚ إِنَّهُمْ لَا يُعْجِزُونَ",
+        "translation_en": "And let them not think - those who are bent on denying the truth -that they shall escapee [God]: behold, they can never frustrate [His purpose].",
+        "translation_ur": "اور کافر یہ نہ خیال کریں کہ وہ بھاگ نکلے ہیں۔ وہ (اپنی چالوں سے ہم کو) ہرگز عاجز نہیں کرسکتے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008059.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1219.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1219.mp3"
+        }
+      },
+      {
+        "ayah": 60,
+        "globalAyah": 1220,
+        "arabic": "وَأَعِدُّوا۟ لَهُم مَّا ٱسْتَطَعْتُم مِّن قُوَّةٍۢ وَمِن رِّبَاطِ ٱلْخَيْلِ تُرْهِبُونَ بِهِۦ عَدُوَّ ٱللَّهِ وَعَدُوَّكُمْ وَءَاخَرِينَ مِن دُونِهِمْ لَا تَعْلَمُونَهُمُ ٱللَّهُ يَعْلَمُهُمْ ۚ وَمَا تُنفِقُوا۟ مِن شَىْءٍۢ فِى سَبِيلِ ٱللَّهِ يُوَفَّ إِلَيْكُمْ وَأَنتُمْ لَا تُظْلَمُونَ",
+        "translation_en": "Hence, make ready against them whatever force and war mounts you are able to muster, so that you might deter thereby the enemies of God, who are your enemies as well, and others besides them of whom you may be unaware, [but] of whom God is aware; and whatever you may expend in God's cause shall be repaid to you in full, and you shall not be wronged.",
+        "translation_ur": "اور جہاں تک ہوسکے (فوج کی جمعیت کے) زور سے اور گھوڑوں کے تیار رکھنے سے ان کے (مقابلے کے) لیے مستعد رہو کہ اس سے خدا کے دشمنوں اور تمہارے دشمنوں اور ان کے سوا اور لوگوں پر جن کو تم نہیں جانتے اور خدا جانتا ہے ہیبت بیٹھی رہے گی۔ اور تم جو کچھ راہ خدا میں خرچ کرو گے اس کا ثواب تم کو پورا پورا دیا جائے گا اور تمہارا ذرا نقصان نہیں کیا جائے گا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008060.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1220.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1220.mp3"
+        }
+      },
+      {
+        "ayah": 61,
+        "globalAyah": 1221,
+        "arabic": "۞ وَإِن جَنَحُوا۟ لِلسَّلْمِ فَٱجْنَحْ لَهَا وَتَوَكَّلْ عَلَى ٱللَّهِ ۚ إِنَّهُۥ هُوَ ٱلسَّمِيعُ ٱلْعَلِيمُ",
+        "translation_en": "But if they incline to peace, incline thou to it as well, and place thy trust in God: verily, He alone is all-hearing, all-knowing!",
+        "translation_ur": "اور اگر یہ لوگ صلح کی طرف مائل ہوں تو تم بھی اس کی طرف مائل ہو جاؤ اور خدا پر بھروسہ رکھو۔ کچھ شک نہیں کہ وہ سب کچھ سنتا (اور) جانتا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008061.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1221.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1221.mp3"
+        }
+      },
+      {
+        "ayah": 62,
+        "globalAyah": 1222,
+        "arabic": "وَإِن يُرِيدُوٓا۟ أَن يَخْدَعُوكَ فَإِنَّ حَسْبَكَ ٱللَّهُ ۚ هُوَ ٱلَّذِىٓ أَيَّدَكَ بِنَصْرِهِۦ وَبِٱلْمُؤْمِنِينَ",
+        "translation_en": "And should they seek but to deceive thee [by their show of peace] - behold, God is enough for thee! He it is who has strengthened thee with His succour, and by giving thee believing followers",
+        "translation_ur": "اور اگر یہ چاہیں کہ تم کو فریب دیں تو خدا تمہیں کفایت کرے گا۔ وہی تو ہے جس نے تم کو اپنی مدد سے اور مسلمانوں (کی جمعیت) سے تقویت بخشی",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008062.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1222.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1222.mp3"
+        }
+      },
+      {
+        "ayah": 63,
+        "globalAyah": 1223,
+        "arabic": "وَأَلَّفَ بَيْنَ قُلُوبِهِمْ ۚ لَوْ أَنفَقْتَ مَا فِى ٱلْأَرْضِ جَمِيعًۭا مَّآ أَلَّفْتَ بَيْنَ قُلُوبِهِمْ وَلَٰكِنَّ ٱللَّهَ أَلَّفَ بَيْنَهُمْ ۚ إِنَّهُۥ عَزِيزٌ حَكِيمٌۭ",
+        "translation_en": "whose hearts He has brought together: [for,] if thou hadst expended all that is on earth, thou couldst not have brought their hearts together [by thyself]: but God did bring them together. Verily, He is almighty, wise.",
+        "translation_ur": "اور ان کے دلوں میں الفت پیدا کردی۔ اور اگر تم دنیا بھر کی دولت خرچ کرتے تب بھی ان کے دلوں میں الفت نہ پیدا کرسکتے۔ مگر خدا ہی نے ان میں الفت ڈال دی۔ بےشک وہ زبردست (اور) حکمت والا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008063.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1223.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1223.mp3"
+        }
+      },
+      {
+        "ayah": 64,
+        "globalAyah": 1224,
+        "arabic": "يَٰٓأَيُّهَا ٱلنَّبِىُّ حَسْبُكَ ٱللَّهُ وَمَنِ ٱتَّبَعَكَ مِنَ ٱلْمُؤْمِنِينَ",
+        "translation_en": "O Prophet! God is enough for thee and those of the believers who follow thee!",
+        "translation_ur": "اے نبی! خدا تم کو اور مومنوں کو جو تمہارے پیرو ہیں کافی ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008064.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1224.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1224.mp3"
+        }
+      },
+      {
+        "ayah": 65,
+        "globalAyah": 1225,
+        "arabic": "يَٰٓأَيُّهَا ٱلنَّبِىُّ حَرِّضِ ٱلْمُؤْمِنِينَ عَلَى ٱلْقِتَالِ ۚ إِن يَكُن مِّنكُمْ عِشْرُونَ صَٰبِرُونَ يَغْلِبُوا۟ مِا۟ئَتَيْنِ ۚ وَإِن يَكُن مِّنكُم مِّا۟ئَةٌۭ يَغْلِبُوٓا۟ أَلْفًۭا مِّنَ ٱلَّذِينَ كَفَرُوا۟ بِأَنَّهُمْ قَوْمٌۭ لَّا يَفْقَهُونَ",
+        "translation_en": "O Prophet! Inspire the believers to conquer all fear of death when fighting, [so that,] if there be twenty of you who are patient in adversity, they might overcome two hundred; and [that,] if there be one hundred of you, they might overcome one thousand of those who are bent on denying the truth, because they are people who cannot grasp it.",
+        "translation_ur": "اے نبی! مسلمانوں کو جہاد کی ترغیب دو۔ اور اگر تم بیس آدمی ثابت قدم رہنے والے ہوں گے تو دو سو کافروں پر غالب رہیں گے۔ اور اگر سو (ایسے) ہوں گے تو ہزار پر غالب رہیں گے۔ اس لیے کہ کافر ایسے لوگ ہیں کہ کچھ بھی سمجھ نہیں رکھتے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008065.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1225.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1225.mp3"
+        }
+      },
+      {
+        "ayah": 66,
+        "globalAyah": 1226,
+        "arabic": "ٱلْـَٰٔنَ خَفَّفَ ٱللَّهُ عَنكُمْ وَعَلِمَ أَنَّ فِيكُمْ ضَعْفًۭا ۚ فَإِن يَكُن مِّنكُم مِّا۟ئَةٌۭ صَابِرَةٌۭ يَغْلِبُوا۟ مِا۟ئَتَيْنِ ۚ وَإِن يَكُن مِّنكُمْ أَلْفٌۭ يَغْلِبُوٓا۟ أَلْفَيْنِ بِإِذْنِ ٱللَّهِ ۗ وَٱللَّهُ مَعَ ٱلصَّٰبِرِينَ",
+        "translation_en": "For the time being, [however,] God has lightened your burden. for He knows that you are weak: and so, if there be one hundred of you who are patient in adversity, they should [be able to]' overcome two hundred; and if there be one thousand of you, they should [be able to] overcome two thousand by God's leave: for God is with those who are patient in adversity.",
+        "translation_ur": "اب خدا نے تم پر سے بوجھ ہلکا کر دیا اور معلوم کرلیا کہ (ابھی) تم میں کسی قدر کمزوری ہے۔ پس اگر تم میں ایک سو ثابت قدم رہنے والے ہوں گے تو دو سو پر غالب رہیں گے۔ اور اگر ایک ہزار ہوں گے تو خدا کے حکم سے دو ہزار پر غالب رہیں گے۔ اور خدا ثابت قدم رہنے والوں کا مدد گار ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008066.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1226.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1226.mp3"
+        }
+      },
+      {
+        "ayah": 67,
+        "globalAyah": 1227,
+        "arabic": "مَا كَانَ لِنَبِىٍّ أَن يَكُونَ لَهُۥٓ أَسْرَىٰ حَتَّىٰ يُثْخِنَ فِى ٱلْأَرْضِ ۚ تُرِيدُونَ عَرَضَ ٱلدُّنْيَا وَٱللَّهُ يُرِيدُ ٱلْءَاخِرَةَ ۗ وَٱللَّهُ عَزِيزٌ حَكِيمٌۭ",
+        "translation_en": "IT DOES NOT behove a prophet to keep captives unless he has battled strenuously on earth. You may desire the fleeting gains of this world-but God desires [for you the good of] the life to come: and God is almighty, wise.",
+        "translation_ur": "پیغمبر کو شایان نہیں کہ اس کے قبضے میں قیدی رہیں جب تک (کافروں کو قتل کر کے) زمین میں کثرت سے خون (نہ) بہا دے۔ تم لوگ دنیا کے مال کے طالب ہو۔ اور خدا آخرت (کی بھلائی) چاہتا ہے۔ اور خدا غالب حکمت والا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008067.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1227.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1227.mp3"
+        }
+      },
+      {
+        "ayah": 68,
+        "globalAyah": 1228,
+        "arabic": "لَّوْلَا كِتَٰبٌۭ مِّنَ ٱللَّهِ سَبَقَ لَمَسَّكُمْ فِيمَآ أَخَذْتُمْ عَذَابٌ عَظِيمٌۭ",
+        "translation_en": "Had it not been for a decree from God that had already gone forth, there would indeed have befallen you a tremendous chastisement on account of all [the captives] that you took.",
+        "translation_ur": "اگر خدا کا حکم پہلے نہ ہوچکا ہوتا تو جو (فدیہ) تم نے لیا ہے اس کے بدلے تم پر بڑا عذاب نازل ہوتا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008068.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1228.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1228.mp3"
+        }
+      },
+      {
+        "ayah": 69,
+        "globalAyah": 1229,
+        "arabic": "فَكُلُوا۟ مِمَّا غَنِمْتُمْ حَلَٰلًۭا طَيِّبًۭا ۚ وَٱتَّقُوا۟ ٱللَّهَ ۚ إِنَّ ٱللَّهَ غَفُورٌۭ رَّحِيمٌۭ",
+        "translation_en": "Enjoy, then, all that is lawful and good among the things which you have gained in war, and remain conscious of God: verily, God is much-forgiving, a dispenser of grace.",
+        "translation_ur": "تو جو مالِ غنیمت تمہیں ملا ہے اسے کھاؤ (کہ وہ تمہارے لیے) حلال طیب رہے اور خدا سے ڈرتے رہو۔ بےشک خدا بخشنے والا مہربان ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008069.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1229.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1229.mp3"
+        }
+      },
+      {
+        "ayah": 70,
+        "globalAyah": 1230,
+        "arabic": "يَٰٓأَيُّهَا ٱلنَّبِىُّ قُل لِّمَن فِىٓ أَيْدِيكُم مِّنَ ٱلْأَسْرَىٰٓ إِن يَعْلَمِ ٱللَّهُ فِى قُلُوبِكُمْ خَيْرًۭا يُؤْتِكُمْ خَيْرًۭا مِّمَّآ أُخِذَ مِنكُمْ وَيَغْفِرْ لَكُمْ ۗ وَٱللَّهُ غَفُورٌۭ رَّحِيمٌۭ",
+        "translation_en": "[Hence,] O Prophet, say unto the captives who are in your hands: \"If God finds any good in your hearts, He will give you something better than all that has been taken from you, and will forgive you your sins: for God is much-forgiving, a dispenser of grace.\"",
+        "translation_ur": "اے پیغمبر جو قیدی تمہارے ہاتھ میں (گرفتار) ہیں ان سے کہہ دو کہ اگر خدا تمہارے دلوں میں نیکی معلوم کرے گا تو جو (مال) تم سے چھن گیا ہے اس سے بہتر تمہیں عنایت فرمائے گا اور تمہارے گناہ بھی معاف کر دے گا اور خدا بخشنے والا مہربان ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008070.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1230.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1230.mp3"
+        }
+      },
+      {
+        "ayah": 71,
+        "globalAyah": 1231,
+        "arabic": "وَإِن يُرِيدُوا۟ خِيَانَتَكَ فَقَدْ خَانُوا۟ ٱللَّهَ مِن قَبْلُ فَأَمْكَنَ مِنْهُمْ ۗ وَٱللَّهُ عَلِيمٌ حَكِيمٌ",
+        "translation_en": "And should they but seek to play false with thee -well, they were false to God [Himself] ere this: but He gave [the believers] mastery over them. And God is all-knowing, wise.",
+        "translation_ur": "اور اگر یہ لوگ تم سے دغا کرنا چاہیں گے تو یہ پہلے ہی خدا سے دغا کرچکے ہیں تو اس نے ان کو (تمہارے) قبضے میں کر دیا۔ اور خدا دانا حکمت والا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008071.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1231.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1231.mp3"
+        }
+      },
+      {
+        "ayah": 72,
+        "globalAyah": 1232,
+        "arabic": "إِنَّ ٱلَّذِينَ ءَامَنُوا۟ وَهَاجَرُوا۟ وَجَٰهَدُوا۟ بِأَمْوَٰلِهِمْ وَأَنفُسِهِمْ فِى سَبِيلِ ٱللَّهِ وَٱلَّذِينَ ءَاوَوا۟ وَّنَصَرُوٓا۟ أُو۟لَٰٓئِكَ بَعْضُهُمْ أَوْلِيَآءُ بَعْضٍۢ ۚ وَٱلَّذِينَ ءَامَنُوا۟ وَلَمْ يُهَاجِرُوا۟ مَا لَكُم مِّن وَلَٰيَتِهِم مِّن شَىْءٍ حَتَّىٰ يُهَاجِرُوا۟ ۚ وَإِنِ ٱسْتَنصَرُوكُمْ فِى ٱلدِّينِ فَعَلَيْكُمُ ٱلنَّصْرُ إِلَّا عَلَىٰ قَوْمٍۭ بَيْنَكُمْ وَبَيْنَهُم مِّيثَٰقٌۭ ۗ وَٱللَّهُ بِمَا تَعْمَلُونَ بَصِيرٌۭ",
+        "translation_en": "BEHOLD, as for those who have attained to faith, and who have forsaken the domain of evil and are striving hard, with their possessions and their lives, in God's cause, as well as those who shelter and succour [them] - these are [truly] the friends and protectors of one another. But as for those who have come to believe without having migrated [to your country] - you are in no wise responsible for their protection until such a time as they migrate [to you]. Yet, if they ask you for succour against religious persecution, it is your duty to give [them] this succour-except against a people between whom and yourselves there is a covenant: for God sees all that you do.",
+        "translation_ur": "جو لوگ ایمان لائے اور وطن سے ہجرت کر گئے اور خدا کی راہ میں اپنے مال اور جان سے لڑے وہ اور جنہوں نے (ہجرت کرنے والوں کو) جگہ دی اور ان کی مدد کی وہ آپس میں ایک دوسرے کے رفیق ہیں۔ اور جو لوگ ایمان تو لے آئے لیکن ہجرت نہیں کی تو جب تک وہ ہجرت نہ کریں تم کو ان کی رفاقت سے کچھ سروکار نہیں۔ اور اگر وہ تم سے دین (کے معاملات) میں مدد طلب کریں تو تم کو مدد کرنی لازم ہوگی۔ مگر ان لوگوں کے مقابلے میں کہ تم میں اور ان میں (صلح کا) عہد ہو (مدد نہیں کرنی چاہیئے) اور خدا تمہارے سب کاموں کو دیکھ رہا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008072.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1232.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1232.mp3"
+        }
+      },
+      {
+        "ayah": 73,
+        "globalAyah": 1233,
+        "arabic": "وَٱلَّذِينَ كَفَرُوا۟ بَعْضُهُمْ أَوْلِيَآءُ بَعْضٍ ۚ إِلَّا تَفْعَلُوهُ تَكُن فِتْنَةٌۭ فِى ٱلْأَرْضِ وَفَسَادٌۭ كَبِيرٌۭ",
+        "translation_en": "With all this, [remember that] those who are bent on denying the truth are allies of one another; and unless you act likewise [among yourselves], oppression will reign on earth, and great corruption.",
+        "translation_ur": "اور جو لوگ کافر ہیں (وہ بھی) ایک دوسرے کے رفیق ہیں۔ تو (مومنو) اگر تم یہ (کام) نہ کرو گے تو ملک میں فتنہ برپا ہو جائے گا اور بڑا فساد مچے گا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008073.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1233.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1233.mp3"
+        }
+      },
+      {
+        "ayah": 74,
+        "globalAyah": 1234,
+        "arabic": "وَٱلَّذِينَ ءَامَنُوا۟ وَهَاجَرُوا۟ وَجَٰهَدُوا۟ فِى سَبِيلِ ٱللَّهِ وَٱلَّذِينَ ءَاوَوا۟ وَّنَصَرُوٓا۟ أُو۟لَٰٓئِكَ هُمُ ٱلْمُؤْمِنُونَ حَقًّۭا ۚ لَّهُم مَّغْفِرَةٌۭ وَرِزْقٌۭ كَرِيمٌۭ",
+        "translation_en": "And they who have attained to faith, and who have forsaken the domain of evil and are striving hard in God's cause, as well as those who shelter and succour [them]-it is they, they who are truly believers! Forgiveness of sins awaits them, and a most excellent sustenance.",
+        "translation_ur": "اور جو لوگ ایمان لائے اور وطن سے ہجرت کر گئے اور خدا کی راہ میں لڑائیاں کرتے رہے اور جنہوں نے (ہجرت کرنے والوں کو) جگہ دی اور ان کی مدد کی۔ یہی لوگ سچے مسلمان ہیں۔ ان کے لیے (خدا کے ہاں) بخشش اور عزت کی روزی ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008074.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1234.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1234.mp3"
+        }
+      },
+      {
+        "ayah": 75,
+        "globalAyah": 1235,
+        "arabic": "وَٱلَّذِينَ ءَامَنُوا۟ مِنۢ بَعْدُ وَهَاجَرُوا۟ وَجَٰهَدُوا۟ مَعَكُمْ فَأُو۟لَٰٓئِكَ مِنكُمْ ۚ وَأُو۟لُوا۟ ٱلْأَرْحَامِ بَعْضُهُمْ أَوْلَىٰ بِبَعْضٍۢ فِى كِتَٰبِ ٱللَّهِ ۗ إِنَّ ٱللَّهَ بِكُلِّ شَىْءٍ عَلِيمٌۢ",
+        "translation_en": "And as for those who henceforth come to believe, and who forsake the domain of evil and strive hard [in God's cause] together with you - these [too] shall belong to you; and they who are [thus] closely related have the highest claim on one another in [accordance with] God's decree. Verily, God has full knowledge of everything.",
+        "translation_ur": "اور جو لوگ بعد میں ایمان لائے اور وطن سے ہجرت کرگئے اور تمہارے ساتھ ہو کر جہاد کرتے رہے وہ بھی تم ہی میں سے ہیں۔ اور رشتہ دار خدا کے حکم کی رو سے ایک دوسرے کے زیادہ حقدار ہیں۔ کچھ شک نہیں کہ خدا ہر چیز سے واقف ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/008075.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1235.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1235.mp3"
+        }
+      }
+    ]
+  }
+}

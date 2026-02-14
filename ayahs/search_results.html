@@ -50,7 +50,7 @@
 </div>
 
 <script>
-const query = new URLSearchParams(window.location.search).get("q");
+const query = new URLSearchParams(window.location.search).get("q") || "";
 document.getElementById("query-word").textContent = query || "â€”";
 
 const apiBase = "https://api.quran.com/api/v4/search";
@@ -58,13 +58,84 @@ const waqfMarks = new Set(['\u06D6','\u06D7','\u06D8','\u06D9','\u06DA','\u06DB'
 let currentPage = 1;
 let totalPages = 1;
 
+const DIACRITICS_RE = /[\u064B-\u065F\u06D6-\u06ED\u0670\u0640]/;
+const DIACRITICS_RE_GLOBAL = /[\u064B-\u065F\u06D6-\u06ED\u0670\u0640]/g;
+
 function normalize(text) {
-  return text.replace(/[\u064B-\u065F\u06D6-\u06ED\u0670\u0640]/g, "");
+  return String(text || "").replace(DIACRITICS_RE_GLOBAL, "");
 }
 
-function highlightWord(text, word) {
-  const regex = new RegExp(`(${normalize(word)})`, 'gi');
-  return text.replace(regex, '<span class="highlight">$1</span>');
+function stripWithMap(text) {
+  const src = String(text || "");
+  const chars = [];
+  const map = [];
+  for (let i = 0; i < src.length; i++) {
+    const ch = src[i];
+    if (DIACRITICS_RE.test(ch)) {
+      continue;
+    }
+    chars.push(ch);
+    map.push(i);
+  }
+  return { norm: chars.join(""), map };
+}
+
+function buildHighlightFragment(text, queryText) {
+  const rawText = String(text || "");
+  const rawQuery = String(queryText || "");
+  const frag = document.createDocumentFragment();
+
+  if (!rawText) {
+    return frag;
+  }
+
+  if (!rawQuery) {
+    frag.appendChild(document.createTextNode(rawText));
+    return frag;
+  }
+
+  const { norm, map } = stripWithMap(rawText);
+  const normQuery = normalize(rawQuery);
+  if (!normQuery) {
+    frag.appendChild(document.createTextNode(rawText));
+    return frag;
+  }
+
+  const haystack = norm.toLowerCase();
+  const needle = normQuery.toLowerCase();
+  const ranges = [];
+  let idx = 0;
+  while ((idx = haystack.indexOf(needle, idx)) !== -1) {
+    const start = map[idx];
+    const end = map[idx + needle.length - 1];
+    if (start !== undefined && end !== undefined) {
+      ranges.push({ start, end });
+    }
+    idx += needle.length;
+  }
+
+  if (!ranges.length) {
+    frag.appendChild(document.createTextNode(rawText));
+    return frag;
+  }
+
+  let last = 0;
+  for (const range of ranges) {
+    if (range.start > last) {
+      frag.appendChild(document.createTextNode(rawText.slice(last, range.start)));
+    }
+    const span = document.createElement("span");
+    span.className = "highlight";
+    span.textContent = rawText.slice(range.start, range.end + 1);
+    frag.appendChild(span);
+    last = range.end + 1;
+  }
+
+  if (last < rawText.length) {
+    frag.appendChild(document.createTextNode(rawText.slice(last)));
+  }
+
+  return frag;
 }
 
 async function fetchPage(page = 1) {
@@ -78,20 +149,39 @@ async function fetchPage(page = 1) {
   document.getElementById("total-pages").textContent = totalPages;
 
   const container = document.getElementById("results");
-  container.innerHTML = "";
+  container.textContent = "";
 
   for (const item of results) {
     const verseKey = item.verse_key;
-    const [surah, ayah] = verseKey.split(":");
+    if (!verseKey) continue;
+    const [surahRaw, ayahRaw] = verseKey.split(":");
+    const surah = Number.parseInt(surahRaw, 10);
+    const ayah = Number.parseInt(ayahRaw, 10);
+    if (!Number.isFinite(surah) || !Number.isFinite(ayah)) continue;
     const fullText = item.text;
-    const highlightedText = highlightWord(normalize(fullText), normalize(query));
+    const result = document.createElement("div");
+    result.className = "result";
 
-    container.innerHTML += `
-      <div class="result">
-        <div class="ayah-text">${highlightedText}</div>
-        <b>Verse:</b> <a class="verse-link" href="ayah_${surah}_${ayah}.html" target="_blank">${verseKey}</a>
-      </div>
-    `;
+    const ayahText = document.createElement("div");
+    ayahText.className = "ayah-text";
+    ayahText.appendChild(buildHighlightFragment(fullText, query));
+    result.appendChild(ayahText);
+
+    const verseRow = document.createElement("div");
+    const verseLabel = document.createElement("b");
+    verseLabel.textContent = "Verse:";
+    const verseLink = document.createElement("a");
+    verseLink.className = "verse-link";
+    verseLink.href = `surah_${surah}/ayah_${surah}_${ayah}.html`;
+    verseLink.target = "_blank";
+    verseLink.rel = "noopener noreferrer";
+    verseLink.textContent = verseKey;
+    verseRow.appendChild(verseLabel);
+    verseRow.appendChild(document.createTextNode(" "));
+    verseRow.appendChild(verseLink);
+    result.appendChild(verseRow);
+
+    container.appendChild(result);
   }
 
   renderPagination();
@@ -99,7 +189,7 @@ async function fetchPage(page = 1) {
 
 function renderPagination() {
   const container = document.getElementById("pagination");
-  container.innerHTML = "";
+  container.textContent = "";
 
   for (let i = 1; i <= totalPages; i++) {
     const btn = document.createElement("button");

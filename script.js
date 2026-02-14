@@ -110,14 +110,16 @@ console.log('[IFRAME] script.js executed', location.pathname);
    BOOT APPLY SETTINGS (EARLY)
 ============================ */
 (() => {
+  const html = document.documentElement;
+  // Default state: roots hidden unless user explicitly turns them on.
+  html.classList.add('hide-root');
   try {
     const raw = localStorage.getItem('qq_settings');
     if (!raw) return;
     const settings = JSON.parse(raw);
     if (!settings || typeof settings !== 'object') return;
 
-    const html = document.documentElement;
-    html.classList.toggle('hide-root', settings.showRoot === false);
+    html.classList.toggle('hide-root', settings.showRoot !== true);
     html.classList.toggle('hide-grammar', settings.showGrammar === false);
     html.classList.toggle('hide-word-translation', settings.showWordTranslation === false);
     if (typeof settings.showPanelTranslation === 'boolean') {
@@ -325,9 +327,31 @@ const LOG = {
       let isSwiping = false;
       let swipeCommitted = false;
       let swipeLocked = false;
+      let swipeBlockedByHint = false;
       let swipeDir = 0; // -1 = right, 1 = left
       let hasPointerCapture = false;
       let swipeScrollLocked = false;
+
+      function setSwipeBlockedByHint(blocked) {
+        swipeBlockedByHint = !!blocked;
+      }
+
+      function blockSwipeForHint() {
+        setSwipeBlockedByHint(true);
+        swipeLocked = true;
+        isSwiping = false;
+        swipeCommitted = false;
+        swipeDir = 0;
+        swipeDX = 0;
+        lastSentFrame = 0;
+        unlockSwipeScroll();
+        window.parent?.postMessage({ type: 'SWIPE_CANCEL' }, PARENT_ORIGIN);
+      }
+
+      function unblockSwipeForHint() {
+        swipeLocked = false;
+        setSwipeBlockedByHint(false);
+      }
 
       function lockSwipeScroll() {
         if (!swipeScrollLocked) {
@@ -386,6 +410,10 @@ const LOG = {
 
       function onSwipePointerDown(e) {
         debugSwipeState('pointerdown:before', e);
+        if (swipeBlockedByHint) {
+          debugSwipeState('pointerdown:blocked-hint', e);
+          return;
+        }
         if (shouldIgnoreSwipeTarget(e.target)) {
           debugSwipeState('pointerdown:ignored-target', e);
           return;
@@ -443,6 +471,7 @@ const LOG = {
       }
 
       function onSwipePointerMove(e) {
+        if (swipeBlockedByHint) return;
         debugSwipeState('pointermove', e);
         if (!isSwiping || swipeLocked) return;
 
@@ -550,6 +579,7 @@ const LOG = {
       }
 
       function onSwipePointerUp(e) {
+    if (swipeBlockedByHint) return;
     debugSwipeState('pointerup:before', e);
     unlockSwipeScroll();
     if (hasPointerCapture && e.pointerId && el.releasePointerCapture) {
@@ -865,7 +895,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         const html = document.documentElement;
 
         // Visibility toggles
-        html.classList.toggle('hide-root', settings.showRoot === false);
+        html.classList.toggle('hide-root', settings.showRoot !== true);
         html.classList.toggle('hide-grammar', settings.showGrammar === false);
         html.classList.toggle('hide-word-translation', settings.showWordTranslation === false);
         if (typeof settings.showPanelTranslation === 'boolean') {
@@ -1958,11 +1988,16 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
             return;
           }
 
-          const url = `/search_results.html?q=${encodeURIComponent(normalizedWord)}`;
+          const params = new URLSearchParams({
+            q: normalizedWord,
+            fromSurah: String(currentSurah),
+            fromAyah: String(currentAyah)
+          });
+          const url = `/search_results.html?${params.toString()}`;
           console.log('[SEARCH] Opening search tab:', url);
 
-          const w = window.open(url, '_blank', 'noopener');
-          if (w) w.opener = null;
+          const target = window.parent && window.parent !== window ? window.parent : window;
+          target.location.assign(url);
         }
       window.openSearchTab = openSearchTab;
 
@@ -2571,87 +2606,28 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
           console.warn('[NAV] Missing required elements', { nav, playBtn, ayahAudio });
           return;
         }
-        
-        
         function scheduleHide() {
           clearTimeout(hideTimer);
-          if (holdNavVisible) return;
+          if (holdNavVisible || (ayahAudio && !ayahAudio.paused)) return;
+
           hideTimer = setTimeout(() => {
+            if (holdNavVisible || (ayahAudio && !ayahAudio.paused)) return;
             nav.classList.remove('visible');
           }, SHOW_DURATION);
         }
 
-        function showNav() {
-          if (nav.classList.contains('visible')) {
-            // already visible → just extend timer
-            scheduleHide();
-            return;
-          }
-
-          console.log('[NAV] showNav called');
+        function showNav({ keepVisible = false } = {}) {
           nav.classList.add('visible');
-          scheduleHide();
+          clearTimeout(hideTimer);
+          if (!keepVisible) {
+            scheduleHide();
+          }
         }
 
-
-        const placeholder = document.createElement('div');
-        placeholder.className = 'nav-item play-btn-placeholder';
-
-        const cs = getComputedStyle(playBtn);
-        placeholder.style.cssText = `
-          width:       ${cs.width};
-          height:      ${cs.height};
-          margin-top:  ${cs.marginTop};
-          margin-left: ${cs.marginLeft};
-          margin-right:${cs.marginRight};
-          visibility:  hidden;
-          flex-shrink: 0;
-        `;
-
-        // ---------------------------------------------
-        // Float play button when audio plays
-        // ---------------------------------------------
-        function floatPlayBtn() {
-          if (playBtn.parentNode !== nav) return;
-
-          nav.insertBefore(placeholder, playBtn);
-          nav.removeChild(playBtn);
-
-          document.body.appendChild(playBtn);
-          Object.assign(playBtn.style, {
-            position:  'fixed',
-            bottom:    '38px',
-            left:      '50%',
-            transform: 'translateX(-50%)',
-            zIndex:    '9999'
-          });
-
-          scheduleHide();
-        }
-
-        // ---------------------------------------------
-        // Reattach play button back into nav
-        // ---------------------------------------------
-        function reattachPlayBtn() {
-          if (playBtn.parentNode !== document.body) return;
-
-          console.log('[NAV] Reattaching play button');
-
-          document.body.removeChild(playBtn);
-
-          ['position','bottom','left','transform','zIndex']
-            .forEach(p => playBtn.style[p] = '');
-
-          nav.replaceChild(playBtn, placeholder);
-          showNav();
-        }
-
-        // ---------------------------------------------
-        // Audio-driven behavior
-        // ---------------------------------------------
-        on(ayahAudio, 'play',  floatPlayBtn);
-        on(ayahAudio, 'pause', reattachPlayBtn);
-        on(ayahAudio, 'ended', reattachPlayBtn);
+        // Keep play FAB visible while audio is playing; auto-hide when paused/stopped.
+        on(ayahAudio, 'play', () => showNav({ keepVisible: true }));
+        on(ayahAudio, 'pause', () => showNav());
+        on(ayahAudio, 'ended', () => showNav());
 
 
         // Initial load
@@ -2676,8 +2652,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         // Keep nav visible while settings are open
         on(document.body, 'click', e => {
           if (e.target.closest('#navSettings')) {
-            nav.classList.add('visible');
-            clearTimeout(hideTimer);
+            showNav({ keepVisible: true });
           }
         });
 
@@ -2740,6 +2715,35 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
           },
           PARENT_ORIGIN
         );
+      }
+
+      function ensureInlineSaveProgressButton() {
+        const playPracticeBtn = document.getElementById('stripNavGames');
+        if (!playPracticeBtn) return;
+
+        const host = playPracticeBtn.parentElement;
+        if (!host) return;
+
+        host.classList.add('strip-action-row');
+        playPracticeBtn.classList.add('strip-btn-inline');
+
+        let saveBtn = document.getElementById('stripSaveProgress');
+        if (!saveBtn) {
+          saveBtn = document.createElement('button');
+          saveBtn.id = 'stripSaveProgress';
+          saveBtn.type = 'button';
+          saveBtn.className = 'strip-btn strip-btn-inline';
+          saveBtn.innerHTML = '<span class="btn-text">Save Progress</span>';
+          host.appendChild(saveBtn);
+        }
+        saveBtn.classList.add('strip-btn-inline');
+        saveBtn.type = 'button';
+
+        saveBtn.onclick = e => {
+          if (e?.preventDefault) e.preventDefault();
+          requestSaveProgress();
+          saveBtn.blur();
+        };
       }
 
 /*************************************************
@@ -2889,6 +2893,17 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
 
           case 'CLOSE_ACTIVE_POPUP': {
             closeActivePopup({ suppressNotify: true });
+            return;
+          }
+
+          case 'OPEN_SETTINGS': {
+            const isAlreadyOpen = !!document.getElementById('settingsMenu');
+            if (!isAlreadyOpen) {
+              toggleSettingsNav({
+                preventDefault() {},
+                stopPropagation() {}
+              });
+            }
             return;
           }
 
@@ -3372,6 +3387,8 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
 
         saveHintOverlay.classList.remove('hidden');
         saveHintOverlay.style.pointerEvents = 'none';
+        localStorage.setItem(SAVE_KEY, '1');
+        blockSwipeForHint();
         window.parent?.postMessage({ type: 'SAVE_HINT_SHOWN' }, PARENT_ORIGIN);
 
         const SCALE = 2.8;
@@ -3415,7 +3432,8 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
           ro.disconnect();
           if (anim) anim.destroy();
           saveHintOverlay.classList.add('hidden');
-          localStorage.setItem(SAVE_KEY, '1');
+          saveHintOverlay.style.pointerEvents = 'none';
+          unblockSwipeForHint();
           holdNavVisible = false;
           window.parent?.postMessage({ type: 'SAVE_HINT_DONE' }, PARENT_ORIGIN);
           if (nav?.classList.contains('visible')) {
@@ -3442,6 +3460,8 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
 
         wordHintOverlay.classList.remove('hidden');
         wordHintOverlay.style.pointerEvents = 'none';
+        localStorage.setItem(STORAGE_KEY, '1');
+        blockSwipeForHint();
         window.parent?.postMessage({ type: 'WORD_HINT_SHOWN' }, PARENT_ORIGIN);
 
         // ------------------------------
@@ -3502,7 +3522,8 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
           if (anim) anim.destroy();
 
           wordHintOverlay.classList.add('hidden');
-          localStorage.setItem(STORAGE_KEY, '1');
+          wordHintOverlay.style.pointerEvents = 'none';
+          unblockSwipeForHint();
           window.parent?.postMessage({ type: 'WORD_HINT_DONE' }, PARENT_ORIGIN);
 
           document.querySelectorAll('.word-block')
@@ -3570,7 +3591,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         speedSelect 	= document.getElementById('speedSelect');
         repeatInput 	= document.getElementById('repeatCount');
         navIcon   		= document.getElementById('navPlayIcon');
-        saveNav  			= document.getElementById('navSaveProgress');
+        saveNav  			= document.getElementById('stripSaveProgress') || document.getElementById('navSaveProgress');
 
         clearBtn 			 = document.getElementById('clearAll');
         hideTranslationsBtn = document.getElementById('hideTranslations');
@@ -3622,6 +3643,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         console.log('[INIT] initIframeApp running for DOM version', iframeDomVersion);
 
         console.log('[INIT] initIframeApp'              );
+        ensureInlineSaveProgressButton();
         cacheDOM();
         bindInlineReplacements();
         if (scrollEl) {
@@ -3666,9 +3688,11 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         }
       }
 
-      window.addEventListener('DOMContentLoaded', () => {
+      if (document.readyState === 'loading') {
+        window.addEventListener('DOMContentLoaded', initIframeApp, { once: true });
+      } else {
         initIframeApp();
-      });
+      }
 
 
 

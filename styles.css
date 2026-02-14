@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Material+Icons+Outlined');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
+
 /*───────────────────────────────────────────────────────────────────────────
   Tokens & color variables
 ───────────────────────────────────────────────────────────────────────────*/
@@ -121,7 +124,7 @@ html, body {
 }
 
 
-*:not(.material-icons):not(.material-icons-outlined):not([class^="material-icons"]):not(.grammar-info):not(.grammar-info *) {
+*:not(.material-icons):not(.material-icons-outlined):not([class^="material-icons"]):not(.material-symbols-outlined):not([class^="material-symbols"]):not(.grammar-info):not(.grammar-info *) {
   font-family: 'Roboto', 'CustomArabic', sans-serif !important;
 }
 
@@ -986,31 +989,34 @@ body.modal-open #ayahScroll {
 ───────────────────────────────────────────────────────────────────────────*/
 .bottom-nav {
   position: fixed;
-  bottom: 16px;
+  bottom: calc(18px + env(safe-area-inset-bottom, 0px));
   left: 50%;
-  transform: translate(-50%, 100%); /* start off-screen */
+  transform: translate(-50%, 140%);
   opacity: 0;
   touch-action: pan-y;
-  
-  width: calc(100% - 32px);
-  max-width: 480px;
-  height: 64px;
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(40px);
-  border-radius: 32px;
+  width: auto;
+  max-width: none;
+  height: auto;
+  background: transparent;
+  backdrop-filter: none;
+  border-radius: 0;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  box-shadow: none;
   z-index: 10;
-  flex-wrap: wrap;
-  transition: transform 0.4s ease, opacity 0.4s ease;
+  flex-wrap: nowrap;
+  transition: transform 0.28s ease, opacity 0.28s ease;
 }
 
-/* When .visible is toggled on, slide it up & fade in */
+/* Keep class for compatibility with existing JS nav logic. */
 .bottom-nav.visible {
   transform: translate(-50%, 0);
   opacity: 1;
+}
+
+.bottom-nav .nav-item:not(#playToggleBtn) {
+  display: none !important;
 }
 
 /*───────────────────────────────────────────────────────────────────────────
@@ -1067,6 +1073,26 @@ body.modal-open #ayahScroll {
   height: 24px;
 }
 
+/* Recite mode switch is exposed on Learn home now. */
+#navMode {
+  display: none !important;
+}
+
+/* Practice lives in Memorization flow now; hide it from the floating nav. */
+#navPractice {
+  display: none !important;
+}
+
+/* Settings now opens from the top-right navbar in Learn mode. */
+#navSettings {
+  display: none !important;
+}
+
+/* Save action moved to inline button row near Play and Practise. */
+#navSaveProgress {
+  display: none !important;
+}
+
 #navPractice .material-icons-outlined {
   width: 24px;
   height: 24px;
@@ -1095,14 +1121,19 @@ body.modal-open #ayahScroll {
 .nav-item#playToggleBtn {
   background: #0a4d68;
   color: white;
-  border-radius: 50%;
-  width: 56px; height: 56px;
-  margin-top: -28px; /* lift it up */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  border-radius: 999px;
+  width: 58px;
+  height: 58px;
+  margin-top: 0;
+  box-shadow: 0 8px 22px rgba(4, 20, 28, 0.34);
   z-index: 11;
 }
 .nav-item#playToggleBtn.active {
   background: #09435b;
+}
+
+.nav-item#playToggleBtn:hover {
+  transform: translateY(-2px);
 }
 
 /* labels under icons */
@@ -1754,6 +1785,336 @@ select, .settings-popup input[type=number] {
   flex-wrap: wrap;
 }
 
+/* Game-y Verb Match (actual container) */
+#verbGameContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+  width: 100%;
+  height: 100%;
+  padding: 16px 16px 96px;
+  direction: ltr;
+  --verb-grid-width: 620px;
+  --verb-grid-pad: 6px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+#verbGameContainer .match-grid {
+  position: relative !important;
+  top: 0 !important;
+  width: min(var(--verb-grid-width), 100%) !important;
+  display: grid !important;
+  grid-template-columns: minmax(220px, 2fr) minmax(120px, 1fr) !important;
+  gap: 12px 16px !important;
+  align-items: stretch !important;
+  justify-content: center !important;
+  justify-items: stretch !important;
+  direction: ltr !important;
+  padding: var(--verb-grid-pad) !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  margin: 8px auto 0 !important;
+  order: 2;
+  overflow: visible !important;
+}
+
+#verbGameContainer .match-column-ar,
+#verbGameContainer .match-column-en {
+  gap: 12px !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
+  overflow: visible !important;
+}
+
+#verbGameContainer .match-card {
+  margin: 0 !important;
+  width: 100%;
+  max-width: 100%;
+  height: 46px;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: 2px solid rgba(10, 77, 104, 0.25);
+  background: linear-gradient(180deg, #ffffff 0%, #f1f7fa 100%);
+  box-shadow:
+    0 8px 16px rgba(10, 77, 104, 0.14),
+    inset 0 -2px 0 rgba(10, 77, 104, 0.1);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+#verbGameContainer .match-card:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow:
+    0 14px 22px rgba(10, 77, 104, 0.2),
+    inset 0 -2px 0 rgba(10, 77, 104, 0.12);
+}
+
+#verbGameContainer .match-card.selected {
+  background: linear-gradient(180deg, #f7fbff 0%, #e4f2ff 100%);
+  border-color: rgba(51, 153, 255, 0.7);
+  box-shadow:
+    inset 0 0 0 2px rgba(51, 153, 255, 0.7),
+    0 10px 18px rgba(10, 77, 104, 0.18);
+  animation: none;
+}
+
+#verbGameContainer .match-card.matched {
+  background: #e9f7ef;
+  border-color: #2b8a5a;
+  box-shadow:
+    0 0 0 2px rgba(46, 160, 104, 0.25),
+    0 10px 18px rgba(46, 160, 104, 0.16);
+}
+
+#verbGameContainer .match-card.wrong {
+  animation: shake 0.3s;
+}
+
+#verbGameContainer .match-column-ar .match-card {
+  direction: rtl;
+  text-align: right;
+  font-family: 'CustomArabic', serif;
+  font-size: 20px;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+
+#verbGameContainer .match-column-en .match-card {
+  text-align: left;
+  font-size: 16px;
+  color: #22323a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#verbGameContainer #verbControls {
+  position: static !important;
+  left: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  width: min(var(--verb-grid-width), 100%);
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  margin: 8px auto 8px !important;
+  align-self: center;
+  padding: 0 var(--verb-grid-pad);
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  direction: ltr !important;
+  order: 1;
+  box-sizing: border-box;
+}
+
+#verbGameContainer #verbControls .game-play-btn-verbs {
+  width: 100%;
+  border-radius: 14px !important;
+  background: linear-gradient(135deg, #f7d88c 0%, #f3b85b 100%) !important;
+  color: #2b2b2b !important;
+  box-shadow:
+    0 6px 0 #d8a24a,
+    0 10px 18px rgba(110, 78, 24, 0.22) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+#verbGameContainer #verbControls .game-play-btn-verbs.secondary {
+  background: linear-gradient(135deg, #f7d88c 0%, #f3b85b 100%) !important;
+  color: #2b2b2b !important;
+  box-shadow:
+    0 6px 0 #d8a24a,
+    0 10px 18px rgba(110, 78, 24, 0.22) !important;
+}
+
+#verbGameContainer #verbControls .disabled-control {
+  background: linear-gradient(135deg, #f7d88c 0%, #f3b85b 100%) !important;
+  color: #8a7d5a !important;
+  box-shadow:
+    0 6px 0 #d8a24a,
+    0 10px 18px rgba(110, 78, 24, 0.22) !important;
+  opacity: 0.9 !important;
+}
+
+#verbGameContainer #verbControls .game-play-btn-verbs.disabled-control {
+  color: #8a7d5a !important;
+}
+
+#verbGameContainer #verbControls .game-play-btn-verbs.active-control {
+  color: #2b2b2b !important;
+}
+
+@media (max-width: 620px) {
+  #verbGameContainer {
+    padding: 16px 12px 28px;
+  }
+  #verbGameContainer .match-grid {
+    grid-template-columns: minmax(160px, 1.8fr) minmax(110px, 1fr);
+    gap: 10px 12px;
+    padding: 12px;
+  }
+  #verbGameContainer .match-column-ar .match-card {
+    font-size: 18px;
+  }
+  #verbGameContainer .match-column-en .match-card {
+    font-size: 15px;
+  }
+}
+
+/* Verb match: keep verb + meaning on the same line */
+#verbMatchGame {
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 18px 16px 24px;
+  box-sizing: border-box;
+  direction: ltr;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(255, 214, 117, 0.25), transparent 50%),
+    radial-gradient(circle at 80% 10%, rgba(112, 220, 255, 0.28), transparent 45%),
+    linear-gradient(180deg, #f6fbff 0%, #eaf4f9 100%);
+  border: 2px solid rgba(10, 77, 104, 0.18);
+  border-radius: 18px;
+  box-shadow: 0 10px 24px rgba(10, 77, 104, 0.08);
+}
+
+#verbMatchGame .prompt {
+  text-align: center;
+  direction: ltr;
+  font-size: 16px;
+  font-weight: 600;
+  color: #0a4d68;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, #ffffff 0%, #f1fbff 100%);
+  border: 2px solid rgba(10, 77, 104, 0.2);
+  border-radius: 999px;
+  padding: 8px 16px;
+  box-shadow:
+    0 6px 14px rgba(10, 77, 104, 0.12),
+    0 0 0 3px rgba(84, 168, 255, 0.12);
+}
+
+.verb-match-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) minmax(200px, 2fr);
+  gap: 12px 16px;
+  align-items: stretch;
+  padding: 14px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(245, 252, 255, 0.85)),
+    repeating-linear-gradient(
+      45deg,
+      rgba(10, 77, 104, 0.06) 0,
+      rgba(10, 77, 104, 0.06) 6px,
+      transparent 6px,
+      transparent 12px
+    );
+  border: 2px solid rgba(10, 77, 104, 0.16);
+  border-radius: 14px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 6px 16px rgba(10, 77, 104, 0.08);
+}
+
+#verbMatchGame .match-card {
+  margin: 0 !important;
+  width: 100%;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  word-break: break-word;
+  border-radius: 12px;
+  border: 2px solid rgba(10, 77, 104, 0.25);
+  background: linear-gradient(180deg, #ffffff 0%, #f1f7fa 100%);
+  box-shadow:
+    0 6px 14px rgba(10, 77, 104, 0.12),
+    inset 0 -2px 0 rgba(10, 77, 104, 0.08);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+#verbMatchGame .match-card:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow:
+    0 12px 20px rgba(10, 77, 104, 0.2),
+    inset 0 -2px 0 rgba(10, 77, 104, 0.1);
+}
+
+#verbMatchGame .match-card.selected {
+  background: linear-gradient(180deg, #f7fbff 0%, #e4f2ff 100%);
+  border-color: rgba(51, 153, 255, 0.7);
+  box-shadow:
+    0 0 0 3px rgba(51, 153, 255, 0.25),
+    0 12px 20px rgba(10, 77, 104, 0.18);
+  animation: verbPulse 1.2s ease-in-out infinite;
+}
+
+#verbMatchGame .match-card.matched {
+  background: #e9f7ef;
+  border-color: #2b8a5a;
+  box-shadow:
+    0 0 0 2px rgba(46, 160, 104, 0.25),
+    0 10px 18px rgba(46, 160, 104, 0.16);
+}
+
+#verbMatchGame .match-card.wrong {
+  animation: shake 0.3s;
+}
+
+#verbMatchGame .match-card[data-role="verb"] {
+  direction: rtl;
+  text-align: right;
+  font-family: 'CustomArabic', serif;
+  font-size: 20px;
+  letter-spacing: 0.2px;
+}
+
+#verbMatchGame .match-card[data-role="meaning"] {
+  text-align: left;
+  font-size: 16px;
+  color: #22323a;
+}
+
+@keyframes verbPulse {
+  0%, 100% { transform: translateY(-1px) scale(1.01); }
+  50% { transform: translateY(-1px) scale(1.03); }
+}
+
+@media (max-width: 620px) {
+  #verbMatchGame {
+    padding: 14px 12px 20px;
+  }
+  .verb-match-grid {
+    grid-template-columns: minmax(100px, 1fr) minmax(150px, 1.6fr);
+    gap: 10px 12px;
+    padding: 12px;
+  }
+  #verbMatchGame .match-card[data-role="verb"] {
+    font-size: 18px;
+  }
+  #verbMatchGame .match-card[data-role="meaning"] {
+    font-size: 15px;
+  }
+}
+
 
 
 
@@ -1821,6 +2182,51 @@ select, .settings-popup input[type=number] {
 :root {
   --theme-start: #538295;
   --theme-end:   #8aa8b8;
+}
+
+#gameSelector.game-selector {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 16px;
+  display: grid;
+  gap: 16px;
+  direction: ltr;
+}
+
+#gameSelector.game-selector .game-card {
+  margin: 0;
+  max-width: 100%;
+}
+
+.game-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.game-card h3 {
+  margin: 0 0 8px;
+  color: #0a4d68;
+}
+
+.game-card p {
+  margin: 0;
+  color: #333;
+}
+
+.game-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+@media (max-width: 600px) {
+  .game-card-actions {
+    justify-content: center;
+  }
+  .game-card-actions button {
+    width: 100%;
+  }
 }
 
 /* ─── Outer Card ───────────────────────────────────────── */
@@ -2043,6 +2449,20 @@ select, .settings-popup input[type=number] {
 
 
 /* keep the “greyed” look when disabled */
+.strip-action-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+
+.strip-action-row .strip-btn-inline {
+  width: auto;
+  flex: 1 1 0;
+  max-width: 150px;
+}
+
 .game-play-btn:disabled {
   opacity: 0.5 !important;
   cursor: not-allowed !important;
@@ -2135,12 +2555,28 @@ select, .settings-popup input[type=number] {
   width:    100vw !important;
   height:   100vh !important;
 
-  /* use your theme with reduced opacity */
-  background: rgba(var(--game-overlay-color), var(--game-overlay-opacity)) !important;
+  /* full-screen game background */
+  background:
+    radial-gradient(circle at 15% 0%, rgba(255, 214, 117, 0.22), transparent 45%),
+    radial-gradient(circle at 85% 12%, rgba(112, 220, 255, 0.22), transparent 40%),
+    linear-gradient(180deg, #f6fbff 0%, #eaf4f9 100%) !important;
 
   padding:       30px 10px !important;
   box-sizing:    border-box !important;
   overflow:      hidden !important;
+}
+
+body.game-active {
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
+}
+
+#game-mode-content,
+#game-mode-content.fullscreen-game,
+#game-mode-content.fullscreen-game .game-section,
+#verbGameContainer,
+#verbGameContainer .match-grid {
+  overflow-x: hidden;
 }
 
 
@@ -2318,3 +2754,4 @@ body.game-mode #returnToAyah {
   border-radius: 8px;
   font-size: 12px;
 }
+

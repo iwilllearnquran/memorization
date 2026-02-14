@@ -2,9 +2,142 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+    rel="stylesheet"
+  />
   <title>🔍 Quran Search Debug</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; background: #fdfdfd; }
+    :root {
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: 0px;
+    }
+
+    @supports (-webkit-touch-callout: none) {
+      :root {
+        --safe-bottom: env(safe-area-inset-bottom, 0px);
+      }
+    }
+
+    body {
+      --navbar-h: calc(var(--safe-top) + 64px);
+      --bottom-nav-h: 57px;
+      font-family: sans-serif;
+      padding: calc(var(--navbar-h) + 16px) 20px
+        calc(var(--bottom-nav-h) + var(--safe-bottom) + 16px);
+      background: #fdfdfd;
+      margin: 0;
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--navbar-h);
+      padding: calc(var(--safe-top) + 8px) 20px 8px;
+      background-color: #0a4d68;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 1200;
+      box-sizing: border-box;
+    }
+
+    .navbar-center {
+      font-weight: 600;
+      font-size: 16px;
+      text-align: center;
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .navbar-left,
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 110px;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: calc(var(--bottom-nav-h) + var(--safe-bottom));
+      background: linear-gradient(180deg, #0b5872 0%, #0a4d68 100%);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 6px 18px rgba(4, 18, 26, 0.24);
+      padding-bottom: var(--safe-bottom);
+      box-sizing: border-box;
+      z-index: 1200;
+    }
+
+    .bottom-nav-inner {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      height: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .bottom-nav-btn {
+      border: none;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      cursor: pointer;
+      transition: color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+      border-radius: 12px;
+    }
+
+    .bottom-nav-btn .material-symbols-outlined {
+      font-size: 22px;
+      transition: transform 0.2s ease;
+    }
+
+    .bottom-nav-btn .bottom-nav-icon {
+      width: 24px;
+      height: 24px;
+      display: block;
+      fill: currentColor;
+      transition: transform 0.2s ease;
+    }
+
+    .bottom-nav-btn:hover {
+      color: #ffffff;
+    }
+
+    .bottom-nav-btn.active {
+      color: #ffffff;
+    }
+
+    .bottom-nav-btn.active::after {
+      content: "";
+      width: 26px;
+      height: 3px;
+      border-radius: 999px;
+      background: #ffffff;
+      box-shadow: 0 0 12px rgba(205, 203, 199, 0.85);
+    }
+
+    .bottom-nav-btn.active .material-symbols-outlined,
+    .bottom-nav-btn.active .bottom-nav-icon {
+      transform: scale(1.1);
+    }
+
     .result {
       border: 1px solid #ccc;
       border-radius: 8px;
@@ -21,6 +154,10 @@
     .pagination {
       margin-top: 20px;
       text-align: center;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
     }
     .page-btn {
       margin: 4px;
@@ -35,13 +172,12 @@
       color: white;
     }
     .back-btn {
-      padding: 10px 18px;
-      background: #0a4d68;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.16);
       color: white;
       border: none;
-      font-size: 16px;
-      border-radius: 6px;
-      margin-bottom: 20px;
+      font-size: 14px;
+      border-radius: 999px;
       cursor: pointer;
     }
     .debug-block {
@@ -53,19 +189,138 @@
       margin-top: 8px;
       white-space: pre-wrap;
     }
+
+    @media (max-width: 640px) {
+      body {
+        padding: calc(var(--navbar-h) + 12px) 14px
+          calc(var(--bottom-nav-h) + var(--safe-bottom) + 12px);
+      }
+
+      .navbar {
+        padding: calc(var(--safe-top) + 8px) 12px 8px;
+      }
+
+      .navbar-left,
+      .navbar-right {
+        min-width: 80px;
+        gap: 6px;
+      }
+
+      .navbar-center {
+        font-size: 14px;
+      }
+
+      h2 {
+        font-size: 18px;
+        margin: 10px 0 14px;
+      }
+
+      .result {
+        padding: 12px;
+      }
+
+      .debug-block {
+        font-size: 11px;
+      }
+
+      .page-btn {
+        padding: 6px 10px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      body {
+        padding: calc(var(--navbar-h) + var(--safe-top) + 10px) 10px
+          calc(var(--bottom-nav-h) + var(--safe-bottom) + 10px);
+      }
+
+      .result {
+        padding: 10px;
+      }
+
+      .navbar-center {
+        font-size: 13px;
+      }
+    }
+  </style>
   </style>
 </head>
 <body>
 
-<button class="back-btn" onclick="history.back()">⬅️ Back to Ayah</button>
+<div class="navbar" id="mainNavbar">
+  <div class="navbar-left">
+    <button class="back-btn" id="backBtn" type="button">Back to Ayah</button>
+  </div>
+  <div class="navbar-center">Search Results</div>
+  <div class="navbar-right"></div>
+</div>
 
 <h2>🔍 Search Results for <span id="query-word">—</span></h2>
 <div id="results"></div>
 <div class="pagination" id="pagination"></div>
 
+<nav class="bottom-nav" id="bottomNav">
+  <div class="bottom-nav-inner">
+    <button class="bottom-nav-btn active" id="navLearnQuran" type="button">
+      <svg class="bottom-nav-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+        <path d="M456,168h-8v-44.977c0-15.027-13.623-26.219-28.109-23.648l-163.892,28.504L92.172,98.992C77.56,96.372,64,107.656,64,122.625V168h-8c-8.836,0-16,7.163-16,16v184c0,8.836,7.164,16,16,16h130.745c13.602,0,19.88,6.625,27.882,14.627c6.001,6.001,14.141,9.373,22.627,9.373c13.566,0,23.924,0,37.49,0c8.487,0,16.626-3.372,22.627-9.373c8-8,14.268-14.627,27.882-14.627H456c8.836,0,16-7.164,16-16V184C472,175.163,464.836,168,456,168z M422.633,115.141c4.748-0.848,9.367,2.787,9.367,7.883v199.109c0,3.891-2.781,7.203-6.609,7.883L264,358.469V142.727L422.633,115.141z M80,122.625c0-4.952,4.446-8.733,9.391-7.883L248,142.711v215.758L86.609,330.016c-3.828-0.68-6.609-3.992-6.609-7.883V122.625z M288.125,267.727c-0.773-4.352,2.133-8.5,6.484-9.266l104-18.336c4.336-0.82,8.5,2.133,9.266,6.484c0.773,4.352-2.133,8.5-6.484,9.266l-104,18.336c-0.469,0.086-0.938,0.125-1.398,0.125C292.18,274.336,288.805,271.609,288.125,267.727z M288.125,227.727c-0.773-4.352,2.133-8.5,6.484-9.266l104-18.336c4.336-0.805,8.5,2.133,9.266,6.484c0.773,4.352-2.133,8.5-6.484,9.266l-104,18.336c-0.469,0.086-0.938,0.125-1.398,0.125C292.18,234.336,288.805,231.609,288.125,227.727z M288.125,187.727c-0.773-4.352,2.133-8.5,6.484-9.266l104-18.336c4.336-0.82,8.5,2.133,9.266,6.484c0.773,4.352-2.133,8.5-6.484,9.266l-104,18.336c-0.469,0.086-0.938,0.125-1.398,0.125C292.18,194.336,288.805,191.609,288.125,187.727z M288.125,307.727c-0.773-4.352,2.133-8.5,6.484-9.266l104-18.336c4.336-0.805,8.5,2.133,9.266,6.484c0.773,4.352-2.133,8.5-6.484,9.266l-104,18.336c-0.469,0.086-0.938,0.125-1.398,0.125C292.18,314.336,288.805,311.609,288.125,307.727z M118.239,218.242c-11.85-14.068-13.889-33.678-3.614-45.243c12.414-13.972,35.529-10.978,49.375,5.462c13.847-11.557,36.961-6.399,49.375,11.951c10.275,15.188,8.235,34.079-3.614,43.968l-32.5,27.125c-7.318,6.108-19.204,4.012-26.522-4.677L118.239,218.242z"/>
+      </svg>
+      <span>Learn Quran</span>
+    </button>
+    <button class="bottom-nav-btn" id="navRamzanDuas" type="button">
+      <span class="material-symbols-outlined" aria-hidden="true">prayer_times</span>
+      <span>Ramzan Duas</span>
+    </button>
+  </div>
+</nav>
+
 <script>
-const query = new URLSearchParams(window.location.search).get("q");
+const params = new URLSearchParams(window.location.search);
+const query = params.get("q") || "";
+const fromSurah = Number.parseInt(params.get("fromSurah"), 10);
+const fromAyah = Number.parseInt(params.get("fromAyah"), 10);
 document.getElementById("query-word").textContent = query || "—";
+
+function buildAppUrl(surah, ayah) {
+  const url = new URL("/", window.location.origin);
+  url.searchParams.set("tab", "learn");
+  if (Number.isFinite(surah) && Number.isFinite(ayah)) {
+    url.searchParams.set("surah", String(surah));
+    url.searchParams.set("ayah", String(ayah));
+  }
+  return url.pathname + url.search;
+}
+
+const backBtn = document.getElementById("backBtn");
+if (backBtn) {
+  backBtn.addEventListener("click", () => {
+    if (Number.isFinite(fromSurah) && Number.isFinite(fromAyah)) {
+      window.location.replace(buildAppUrl(fromSurah, fromAyah));
+      return;
+    }
+    if (window.history.length > 1) {
+      window.history.back();
+      return;
+    }
+    window.location.replace(buildAppUrl());
+  });
+}
+
+const navLearn = document.getElementById("navLearnQuran");
+if (navLearn) {
+  navLearn.addEventListener("click", () => {
+    window.location.replace(buildAppUrl(fromSurah, fromAyah));
+  });
+}
+
+const navDuas = document.getElementById("navRamzanDuas");
+if (navDuas) {
+  navDuas.addEventListener("click", () => {
+    const url = new URL("/", window.location.origin);
+    url.searchParams.set("tab", "duas");
+    window.location.replace(url.pathname + url.search);
+  });
+}
 
 const apiBase = "https://api.quran.com/api/v4/search";
 const waqfMarks = new Set([
@@ -110,7 +365,11 @@ async function fetchPage(page = 1) {
 
   for (const item of results) {
     const verseKey = item.verse_key;
-    const [surah, ayah] = verseKey.split(":");
+    if (!verseKey) continue;
+    const [surahRaw, ayahRaw] = verseKey.split(":");
+    const surah = Number.parseInt(surahRaw, 10);
+    const ayah = Number.parseInt(ayahRaw, 10);
+    if (!Number.isFinite(surah) || !Number.isFinite(ayah)) continue;
     const highlighted = item.words.find(w => w.highlight);
     const rawWord = highlighted ? highlighted.text : query;
     const fullText = item.text;
@@ -170,9 +429,7 @@ async function fetchPage(page = 1) {
     verseLabel.textContent = "Verse Key:";
     const verseLink = document.createElement("a");
     verseLink.className = "verse-link";
-    verseLink.href = `ayah_${surah}_${ayah}.html`;
-    verseLink.target = "_blank";
-    verseLink.rel = "noopener noreferrer";
+    verseLink.href = buildAppUrl(surah, ayah);
     verseLink.textContent = verseKey;
     verseRow.appendChild(verseLabel);
     verseRow.appendChild(document.createTextNode(" "));

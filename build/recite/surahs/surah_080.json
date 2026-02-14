@@ -1,0 +1,517 @@
+{
+  "generatedAt": "2026-02-14T12:15:18.148531+00:00",
+  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "surah": {
+    "surah": 80,
+    "arabicName": "سُورَةُ عَبَسَ",
+    "englishName": "Abasa",
+    "englishNameTranslation": "He frowned",
+    "ayahCount": 42,
+    "ayahs": [
+      {
+        "ayah": 1,
+        "globalAyah": 5759,
+        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ عَبَسَ وَتَوَلَّىٰٓ",
+        "translation_en": "HE FROWNED and turned away",
+        "translation_ur": "(محمد مصطفٰےﷺ) ترش رُو ہوئے اور منہ پھیر بیٹھے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080001.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5759.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5759.mp3"
+        }
+      },
+      {
+        "ayah": 2,
+        "globalAyah": 5760,
+        "arabic": "أَن جَآءَهُ ٱلْأَعْمَىٰ",
+        "translation_en": "because the blind man approached him!",
+        "translation_ur": "کہ ان کے پاس ایک نابینا آیا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080002.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5760.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5760.mp3"
+        }
+      },
+      {
+        "ayah": 3,
+        "globalAyah": 5761,
+        "arabic": "وَمَا يُدْرِيكَ لَعَلَّهُۥ يَزَّكَّىٰٓ",
+        "translation_en": "Yet for all thou didst know, [O Muhammad,] he might perhaps have grown in purity,",
+        "translation_ur": "اور تم کو کیا خبر شاید وہ پاکیزگی حاصل کرتا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080003.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5761.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5761.mp3"
+        }
+      },
+      {
+        "ayah": 4,
+        "globalAyah": 5762,
+        "arabic": "أَوْ يَذَّكَّرُ فَتَنفَعَهُ ٱلذِّكْرَىٰٓ",
+        "translation_en": "or have been reminded [of the truth], and helped by this reminder.",
+        "translation_ur": "یا سوچتا تو سمجھانا اسے فائدہ دیتا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080004.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5762.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5762.mp3"
+        }
+      },
+      {
+        "ayah": 5,
+        "globalAyah": 5763,
+        "arabic": "أَمَّا مَنِ ٱسْتَغْنَىٰ",
+        "translation_en": "Now as for him who believes himself to be self-sufficient",
+        "translation_ur": "جو پروا نہیں کرتا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080005.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5763.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5763.mp3"
+        }
+      },
+      {
+        "ayah": 6,
+        "globalAyah": 5764,
+        "arabic": "فَأَنتَ لَهُۥ تَصَدَّىٰ",
+        "translation_en": "to him didst thou give thy whole attention,",
+        "translation_ur": "اس کی طرف تو تم توجہ کرتے ہو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080006.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5764.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5764.mp3"
+        }
+      },
+      {
+        "ayah": 7,
+        "globalAyah": 5765,
+        "arabic": "وَمَا عَلَيْكَ أَلَّا يَزَّكَّىٰ",
+        "translation_en": "although thou art not accountable for his failure to attain to purity;",
+        "translation_ur": "حالانکہ اگر وہ نہ سنورے تو تم پر کچھ (الزام) نہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080007.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5765.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5765.mp3"
+        }
+      },
+      {
+        "ayah": 8,
+        "globalAyah": 5766,
+        "arabic": "وَأَمَّا مَن جَآءَكَ يَسْعَىٰ",
+        "translation_en": "but as for him who came unto thee full of eagerness",
+        "translation_ur": "اور جو تمہارے پاس دوڑتا ہوا آیا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080008.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5766.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5766.mp3"
+        }
+      },
+      {
+        "ayah": 9,
+        "globalAyah": 5767,
+        "arabic": "وَهُوَ يَخْشَىٰ",
+        "translation_en": "and in awe [of God]",
+        "translation_ur": "اور (خدا سے) ڈرتا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080009.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5767.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5767.mp3"
+        }
+      },
+      {
+        "ayah": 10,
+        "globalAyah": 5768,
+        "arabic": "فَأَنتَ عَنْهُ تَلَهَّىٰ",
+        "translation_en": "him didst thou disregard!",
+        "translation_ur": "اس سے تم بےرخی کرتے ہو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080010.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5768.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5768.mp3"
+        }
+      },
+      {
+        "ayah": 11,
+        "globalAyah": 5769,
+        "arabic": "كَلَّآ إِنَّهَا تَذْكِرَةٌۭ",
+        "translation_en": "NAY, VERILY, these [messages] are but a reminder:",
+        "translation_ur": "دیکھو یہ (قرآن) نصیحت ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080011.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5769.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5769.mp3"
+        }
+      },
+      {
+        "ayah": 12,
+        "globalAyah": 5770,
+        "arabic": "فَمَن شَآءَ ذَكَرَهُۥ",
+        "translation_en": "and so, whoever is willing may remember Him",
+        "translation_ur": "پس جو چاہے اسے یاد رکھے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080012.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5770.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5770.mp3"
+        }
+      },
+      {
+        "ayah": 13,
+        "globalAyah": 5771,
+        "arabic": "فِى صُحُفٍۢ مُّكَرَّمَةٍۢ",
+        "translation_en": "in [the light of His] revelations blest with dignity,",
+        "translation_ur": "قابل ادب ورقوں میں (لکھا ہوا)",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080013.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5771.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5771.mp3"
+        }
+      },
+      {
+        "ayah": 14,
+        "globalAyah": 5772,
+        "arabic": "مَّرْفُوعَةٍۢ مُّطَهَّرَةٍۭ",
+        "translation_en": "lofty and pure,",
+        "translation_ur": "جو بلند مقام پر رکھے ہوئے (اور) پاک ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080014.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5772.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5772.mp3"
+        }
+      },
+      {
+        "ayah": 15,
+        "globalAyah": 5773,
+        "arabic": "بِأَيْدِى سَفَرَةٍۢ",
+        "translation_en": "[borne] by the hands of messengers",
+        "translation_ur": "لکھنے والوں کے ہاتھوں میں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080015.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5773.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5773.mp3"
+        }
+      },
+      {
+        "ayah": 16,
+        "globalAyah": 5774,
+        "arabic": "كِرَامٍۭ بَرَرَةٍۢ",
+        "translation_en": "noble and most virtuous.",
+        "translation_ur": "جو سردار اور نیکو کار ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080016.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5774.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5774.mp3"
+        }
+      },
+      {
+        "ayah": 17,
+        "globalAyah": 5775,
+        "arabic": "قُتِلَ ٱلْإِنسَٰنُ مَآ أَكْفَرَهُۥ",
+        "translation_en": "[But only too often] man destroys himself: how stubbornly does he deny the truth!",
+        "translation_ur": "انسان ہلاک ہو جائے کیسا ناشکرا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080017.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5775.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5775.mp3"
+        }
+      },
+      {
+        "ayah": 18,
+        "globalAyah": 5776,
+        "arabic": "مِنْ أَىِّ شَىْءٍ خَلَقَهُۥ",
+        "translation_en": "[Does man ever consider] out of what substance [God] creates him?",
+        "translation_ur": "اُسے (خدا نے) کس چیز سے بنایا؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080018.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5776.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5776.mp3"
+        }
+      },
+      {
+        "ayah": 19,
+        "globalAyah": 5777,
+        "arabic": "مِن نُّطْفَةٍ خَلَقَهُۥ فَقَدَّرَهُۥ",
+        "translation_en": "Out of a drop of sperm He creates him, and thereupon determines his nature,",
+        "translation_ur": "نطفے سے بنایا پھر اس کا اندازہ مقرر کیا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080019.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5777.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5777.mp3"
+        }
+      },
+      {
+        "ayah": 20,
+        "globalAyah": 5778,
+        "arabic": "ثُمَّ ٱلسَّبِيلَ يَسَّرَهُۥ",
+        "translation_en": "and then makes it easy for him to go through life;",
+        "translation_ur": "پھر اس کے لیے رستہ آسان کر دیا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080020.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5778.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5778.mp3"
+        }
+      },
+      {
+        "ayah": 21,
+        "globalAyah": 5779,
+        "arabic": "ثُمَّ أَمَاتَهُۥ فَأَقْبَرَهُۥ",
+        "translation_en": "and in the end He causes him to die and brings him to the grave;",
+        "translation_ur": "پھر اس کو موت دی پھر قبر میں دفن کرایا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080021.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5779.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5779.mp3"
+        }
+      },
+      {
+        "ayah": 22,
+        "globalAyah": 5780,
+        "arabic": "ثُمَّ إِذَا شَآءَ أَنشَرَهُۥ",
+        "translation_en": "and then, if it be His will, He shall raise him again to life,",
+        "translation_ur": "پھر جب چاہے گا اسے اٹھا کھڑا کرے گا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080022.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5780.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5780.mp3"
+        }
+      },
+      {
+        "ayah": 23,
+        "globalAyah": 5781,
+        "arabic": "كَلَّا لَمَّا يَقْضِ مَآ أَمَرَهُۥ",
+        "translation_en": "Nay, but [man] has never yet fulfilled what He has enjoined upon him!",
+        "translation_ur": "کچھ شک نہیں کہ خدا نے اسے جو حکم دیا اس نے اس پر عمل نہ کیا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080023.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5781.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5781.mp3"
+        }
+      },
+      {
+        "ayah": 24,
+        "globalAyah": 5782,
+        "arabic": "فَلْيَنظُرِ ٱلْإِنسَٰنُ إِلَىٰ طَعَامِهِۦٓ",
+        "translation_en": "Let man, then, consider [the sources of] his food:",
+        "translation_ur": "تو انسان کو چاہیئے کہ اپنے کھانے کی طرف نظر کرے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080024.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5782.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5782.mp3"
+        }
+      },
+      {
+        "ayah": 25,
+        "globalAyah": 5783,
+        "arabic": "أَنَّا صَبَبْنَا ٱلْمَآءَ صَبًّۭا",
+        "translation_en": "[how it is] that We pour down water, pouring it down abundantly;",
+        "translation_ur": "بے شک ہم ہی نے پانی برسایا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080025.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5783.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5783.mp3"
+        }
+      },
+      {
+        "ayah": 26,
+        "globalAyah": 5784,
+        "arabic": "ثُمَّ شَقَقْنَا ٱلْأَرْضَ شَقًّۭا",
+        "translation_en": "and then We cleave the earth [with new growth], cleaving it asunder,",
+        "translation_ur": "پھر ہم ہی نے زمین کو چیرا پھاڑا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080026.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5784.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5784.mp3"
+        }
+      },
+      {
+        "ayah": 27,
+        "globalAyah": 5785,
+        "arabic": "فَأَنۢبَتْنَا فِيهَا حَبًّۭا",
+        "translation_en": "and thereupon We cause grain to grow out of it,",
+        "translation_ur": "پھر ہم ہی نے اس میں اناج اگایا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080027.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5785.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5785.mp3"
+        }
+      },
+      {
+        "ayah": 28,
+        "globalAyah": 5786,
+        "arabic": "وَعِنَبًۭا وَقَضْبًۭا",
+        "translation_en": "and vines and edible plants,",
+        "translation_ur": "اور انگور اور ترکاری",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080028.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5786.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5786.mp3"
+        }
+      },
+      {
+        "ayah": 29,
+        "globalAyah": 5787,
+        "arabic": "وَزَيْتُونًۭا وَنَخْلًۭا",
+        "translation_en": "and olive trees and date-palms,",
+        "translation_ur": "اور زیتون اور کھجوریں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080029.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5787.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5787.mp3"
+        }
+      },
+      {
+        "ayah": 30,
+        "globalAyah": 5788,
+        "arabic": "وَحَدَآئِقَ غُلْبًۭا",
+        "translation_en": "and gardens dense with foliage,",
+        "translation_ur": "اور گھنے گھنے باغ",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080030.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5788.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5788.mp3"
+        }
+      },
+      {
+        "ayah": 31,
+        "globalAyah": 5789,
+        "arabic": "وَفَٰكِهَةًۭ وَأَبًّۭا",
+        "translation_en": "and fruits and herbage,",
+        "translation_ur": "اور میوے اور چارا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080031.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5789.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5789.mp3"
+        }
+      },
+      {
+        "ayah": 32,
+        "globalAyah": 5790,
+        "arabic": "مَّتَٰعًۭا لَّكُمْ وَلِأَنْعَٰمِكُمْ",
+        "translation_en": "for you and for your animals to enjoy.",
+        "translation_ur": "(یہ سب کچھ) تمہارے اور تمہارے چارپایوں کے لیے بنایا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080032.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5790.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5790.mp3"
+        }
+      },
+      {
+        "ayah": 33,
+        "globalAyah": 5791,
+        "arabic": "فَإِذَا جَآءَتِ ٱلصَّآخَّةُ",
+        "translation_en": "AND SO, when the piercing call [of resurrection] is heard",
+        "translation_ur": "تو جب (قیامت کا) غل مچے گا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080033.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5791.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5791.mp3"
+        }
+      },
+      {
+        "ayah": 34,
+        "globalAyah": 5792,
+        "arabic": "يَوْمَ يَفِرُّ ٱلْمَرْءُ مِنْ أَخِيهِ",
+        "translation_en": "on a Day when everyone will [want to] flee from his brother,",
+        "translation_ur": "اس دن آدمی اپنے بھائی سے دور بھاگے گا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080034.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5792.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5792.mp3"
+        }
+      },
+      {
+        "ayah": 35,
+        "globalAyah": 5793,
+        "arabic": "وَأُمِّهِۦ وَأَبِيهِ",
+        "translation_en": "and from his mother and father,",
+        "translation_ur": "اور اپنی ماں اور اپنے باپ سے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080035.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5793.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5793.mp3"
+        }
+      },
+      {
+        "ayah": 36,
+        "globalAyah": 5794,
+        "arabic": "وَصَٰحِبَتِهِۦ وَبَنِيهِ",
+        "translation_en": "and from his spouse and his children:",
+        "translation_ur": "اور اپنی بیوی اور اپنے بیٹے سے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080036.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5794.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5794.mp3"
+        }
+      },
+      {
+        "ayah": 37,
+        "globalAyah": 5795,
+        "arabic": "لِكُلِّ ٱمْرِئٍۢ مِّنْهُمْ يَوْمَئِذٍۢ شَأْنٌۭ يُغْنِيهِ",
+        "translation_en": "on that Day, to every one of them will his own state be of sufficient concern.",
+        "translation_ur": "ہر شخص اس روز ایک فکر میں ہو گا جو اسے (مصروفیت کے لیے) بس کرے گا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080037.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5795.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5795.mp3"
+        }
+      },
+      {
+        "ayah": 38,
+        "globalAyah": 5796,
+        "arabic": "وُجُوهٌۭ يَوْمَئِذٍۢ مُّسْفِرَةٌۭ",
+        "translation_en": "Some faces will on that Day be bright with happiness,",
+        "translation_ur": "اور کتنے منہ اس روز چمک رہے ہوں گے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080038.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5796.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5796.mp3"
+        }
+      },
+      {
+        "ayah": 39,
+        "globalAyah": 5797,
+        "arabic": "ضَاحِكَةٌۭ مُّسْتَبْشِرَةٌۭ",
+        "translation_en": "laughing, rejoicing at glad tidings.",
+        "translation_ur": "خنداں و شاداں (یہ مومنان نیکو کار ہیں)",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080039.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5797.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5797.mp3"
+        }
+      },
+      {
+        "ayah": 40,
+        "globalAyah": 5798,
+        "arabic": "وَوُجُوهٌۭ يَوْمَئِذٍ عَلَيْهَا غَبَرَةٌۭ",
+        "translation_en": "And some faces will on that Day with dust be covered,",
+        "translation_ur": "اور کتنے منہ ہوں گے جن پر گرد پڑ رہی ہو گی",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080040.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5798.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5798.mp3"
+        }
+      },
+      {
+        "ayah": 41,
+        "globalAyah": 5799,
+        "arabic": "تَرْهَقُهَا قَتَرَةٌ",
+        "translation_en": "with darkness overspread:",
+        "translation_ur": "(اور) سیاہی چڑھ رہی ہو گی",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080041.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5799.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5799.mp3"
+        }
+      },
+      {
+        "ayah": 42,
+        "globalAyah": 5800,
+        "arabic": "أُو۟لَٰٓئِكَ هُمُ ٱلْكَفَرَةُ ٱلْفَجَرَةُ",
+        "translation_en": "these, these will be the ones who denied the truth and were immersed in iniquity!",
+        "translation_ur": "یہ کفار بدکردار ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/080042.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5800.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5800.mp3"
+        }
+      }
+    ]
+  }
+}

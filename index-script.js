@@ -15,14 +15,18 @@
 import {
   auth,
   onAuthChange,
+  signInWithGoogle,
+  logout,
   persistProfile,
   getUserDoc,
-  saveStatsToFirestore,
+  mergeGuestData,
   onForegroundMessage,
   getLastReadFromDb,
   recordStreak,
   updateLastRead,
-  addPointsToFirestore} from '/services//_private/firestoreService.js';
+  addPointsToFirestore,
+  updateCompletedSurahsProgress
+} from '/services//_private/firestoreService.js';
 
 import {
   addGuestPoints,
@@ -39,7 +43,9 @@ const DEFAULT_SURAH = 1;
 const DEFAULT_AYAH  = 1;
 const STORAGE_KEY = 'swipe_hint_shown_v1';
 const LISTEN_STORAGE_KEY = 'qq_last_listened_auto_swipe_v1';
-const CONTACT_FORM_URL = 'https://docs.google.com/forms/d/e/REPLACE_ME/viewform?embedded=true';
+const MEMO_PROGRESS_KEY = 'memo_last_progress_v1';
+const GUEST_MIGRATION_KEY = 'guest_migration_done_v1';
+const CONTACT_FORM_URL = 'https://forms.gle/Bm7jN8CoadBHw7oB8';
 const iframe = document.getElementById('ayahViewer');
 const aboutBtn = document.getElementById('aboutBtn')
 const ring = {cards: [],};
@@ -76,6 +82,10 @@ if (DISABLE_CONSOLE_LOGS && typeof console !== 'undefined') {
 const popupHistoryStack = [];
 let ignoreNextPopState = false;
 let setDuasMode = null;
+let setMemorizationMode = null;
+let setReciteMode = null;
+let launchReciteSurah = null;
+let refreshReciteModeView = null;
 let pendingDuaReturn = false;
 
 function pushPopupHistory(closeFn) {
@@ -138,6 +148,25 @@ function isKnownIframeSource(source) {
   return frames.some(frame => frame.contentWindow === source);
 }
 
+function resolveAppUrl(path) {
+  try {
+    return new URL(path, window.location.href).toString();
+  } catch {
+    return path;
+  }
+}
+
+function sendNativeTabSwitch(tab) {
+  if (tab !== 'learn' && tab !== 'memo' && tab !== 'duas') return;
+  try {
+    if (window.ReactNativeWebView?.postMessage) {
+      window.ReactNativeWebView.postMessage(
+        JSON.stringify({ type: 'NATIVE_TAB_SWITCH', tab })
+      );
+    }
+  } catch (_) {}
+}
+
 function isTrustedMessage(e) {
   if (!e || !e.origin) return false;
   if (RAW_ORIGIN === 'null') {
@@ -147,6 +176,29 @@ function isTrustedMessage(e) {
   }
   if (e.source === window) return true;
   return isKnownIframeSource(e.source);
+}
+
+
+const TAB_SYSTEM_BAR_COLORS = Object.freeze({
+  learn: '#e8edef',
+  memo: '#0f6650',
+  duas: '#7f4960'
+});
+
+
+function isValidHexColor(value) {
+  return typeof value === 'string' && /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(value);
+}
+
+function sendSystemBarColor(color) {
+  if (!isValidHexColor(color)) return;
+  try {
+    if (window.ReactNativeWebView?.postMessage) {
+      window.ReactNativeWebView.postMessage(
+        JSON.stringify({ type: 'SYSTEM_BAR_COLOR', color })
+      );
+    }
+  } catch (_) {}
 }
 
 
@@ -160,6 +212,11 @@ let isCurrentAyahDirty = false;
 let pendingSwipeDone = false;
 let isDuasMode = false;
 let duasModeState = null;
+let isMemoMode = false;
+let memoModeState = null;
+let isReciteMode = false;
+let reciteModeState = null;
+let reciteRenderVersion = 0;
 let swipeStartX = 0;
 let swipeDir = 0; // -1 = prev, 1 = next
 let swipeStartY = 0;
@@ -187,13 +244,17 @@ let swipeCommitted = false;
 const prewarmedIndices = new Set();
 const iframeReadySet = new WeakSet();
 const ayahHTMLCache = new Map(); // key = "surah:ayah", value = html string
-const menuAnimation = lottie.loadAnimation({
-        container: document.getElementById('menuLottie'),
+const menuLottieContainer = document.getElementById('menuLottie');
+const menuAnimation =
+  menuLottieContainer && typeof lottie?.loadAnimation === 'function'
+    ? lottie.loadAnimation({
+        container: menuLottieContainer,
         renderer: 'svg',
         loop: false,
         autoplay: true,
         path: '/utils/assets/hamburger_menu.json'
-      });
+      })
+    : null;
 const SWIPE_DEBUG = true;
 const log = (...args) => SWIPE_DEBUG && console.log(...args);
 const t0 = performance.now();
@@ -249,7 +310,7 @@ let minuteMotivationShown = false;
 
 const DEFAULT_SETTINGS = {
   showWordTranslation: true,
-  showRoot: true,
+  showRoot: false,
   showGrammar: true,
   showPanelTranslation: true,
   panelLang: 'en',
@@ -263,16 +324,37 @@ let settingsVersion = 0;
 const iframeSettingsVersion = new WeakMap();
 
       function getSettings() {
+        let stored = {};
+        try {
+          stored = JSON.parse(localStorage.getItem('qq_settings')) || {};
+        } catch (err) {
+          stored = {};
+        }
+        const migrated = { ...stored };
+
+        // One-time migration: if the user has never explicitly chosen root visibility,
+        // default it to hidden on app load.
+        if (!Object.prototype.hasOwnProperty.call(migrated, 'rootPreferenceSet')) {
+          migrated.showRoot = false;
+          migrated.rootPreferenceSet = false;
+          localStorage.setItem('qq_settings', JSON.stringify(migrated));
+        }
+
         return {
           ...DEFAULT_SETTINGS,
-          ...(JSON.parse(localStorage.getItem('qq_settings')) || {})
+          ...migrated
         };
       }
 
       function saveSettings(patch) {
+        const normalizedPatch = { ...patch };
+        if (Object.prototype.hasOwnProperty.call(normalizedPatch, 'showRoot')) {
+          normalizedPatch.rootPreferenceSet = true;
+        }
+
         const next = {
           ...getSettings(),
-          ...patch
+          ...normalizedPatch
         };
 
         localStorage.setItem('qq_settings', JSON.stringify(next));
@@ -293,6 +375,9 @@ const iframeSettingsVersion = new WeakMap();
           iframeSettingsVersion.set(iframe, settingsVersion);
           postToIframe(iframe, { type: 'APPLY_SETTINGS', settings, version: settingsVersion });
         });
+        if (isReciteMode && typeof refreshReciteModeView === 'function') {
+          refreshReciteModeView(settings);
+        }
       }
 
 /* ==========================================================
@@ -373,6 +458,53 @@ const iframeSettingsVersion = new WeakMap();
         btn.title = `Resume listening from ${last.surah}:${last.ayah}`;
       }
 
+      function getMemorizationProgress() {
+        try {
+          const raw = localStorage.getItem(MEMO_PROGRESS_KEY);
+          if (!raw) return null;
+          const parsed = JSON.parse(raw);
+          const surah = Number(parsed?.surah);
+          const ayah = Number(parsed?.ayah);
+          const percent = Number(parsed?.percent);
+          const revealed = Number(parsed?.revealed);
+          const total = Number(parsed?.total);
+          if (!Number.isFinite(surah) || !Number.isFinite(ayah)) return null;
+          return {
+            surah,
+            ayah,
+            percent: Number.isFinite(percent) ? percent : 0,
+            revealed: Number.isFinite(revealed) ? revealed : 0,
+            total: Number.isFinite(total) ? total : 0
+          };
+        } catch (err) {
+          console.warn('[MEMO] Failed to parse memorization progress', err);
+          return null;
+        }
+      }
+
+      function updateMemorizationHeroButton() {
+        const btn = D.memorizationHeroBtn || document.getElementById('memorizationHeroBtn');
+        if (!btn) return;
+        const labelEl = document.getElementById('memorizationHeroLabel');
+        const fillEl = document.getElementById('memorizationHeroFill');
+        const data = getMemorizationProgress();
+
+        if (!data) {
+          if (labelEl) labelEl.textContent = 'Last memorized: --';
+          if (fillEl) fillEl.style.width = '0%';
+          btn.removeAttribute('data-surah');
+          btn.removeAttribute('data-ayah');
+          return;
+        }
+
+        const pct = Math.max(0, Math.min(100, Math.round(data.percent)));
+        const wordsText = data.total ? `${data.revealed}/${data.total} words` : 'In progress';
+        if (labelEl) labelEl.textContent = `Last memorized: ${data.surah}:${data.ayah} - ${wordsText}`;
+        if (fillEl) fillEl.style.width = `${pct}%`;
+        btn.dataset.surah = String(data.surah);
+        btn.dataset.ayah = String(data.ayah);
+      }
+
       function requestAutoPlayActiveIframe(reason = 'resumeListening') {
         const iframe = getActiveIframe();
         if (!iframe) return;
@@ -396,11 +528,49 @@ const iframeSettingsVersion = new WeakMap();
         return entry ? entry.englishName : `Surah ${num}`;
       }
 
+      function openLearnAyah(surah, ayah, options = {}) {
+        const { mode = null, autoPlay = false } = options;
+        if (isReciteMode && typeof setReciteMode === 'function') {
+          setReciteMode(false, { showHome: false });
+        }
+        if (mode === 'learning' || mode === 'reciting') {
+          saveSettings({ mode });
+        }
+
+        D.surahContainer.style.display = 'none';
+        D.hero.style.display = 'none';
+        D.viewer.style.display = 'block';
+        D.dropdowns.style.display = 'flex';
+
+        loadAyah(surah, ayah);
+
+        if (autoPlay) {
+          setTimeout(() => requestAutoPlayActiveIframe('cardPlay'), 80);
+        }
+      }
+
+      function triggerReciteStart(surah, ayah, options = {}) {
+        const targetSurah = Number(surah) || DEFAULT_SURAH;
+        const targetAyah = Number(ayah) || DEFAULT_AYAH;
+        const autoPlay = options.autoPlay === true;
+
+        if (typeof launchReciteSurah === 'function') {
+          launchReciteSurah(targetSurah, targetAyah, { autoPlay });
+          return;
+        }
+        if (typeof setReciteMode === 'function') {
+          setReciteMode(true, { surah: targetSurah, ayah: targetAyah, autoPlay });
+          return;
+        }
+        openLearnAyah(targetSurah, targetAyah, { mode: 'reciting', autoPlay });
+      }
+
 /* ==========================================================
    Initialize Start / Resume Button
    ========================================================== */
       async function initStartButton() {
         const btn = D.startBtn;
+        const reciteBtn = D.startReciteBtn;
         let lastRead = null;
 
         /* ------------------------------------------
@@ -430,36 +600,37 @@ const iframeSettingsVersion = new WeakMap();
             `📍 Resuming from Surah ${lastRead.surah} Ayah ${lastRead.ayah} (${surahName})`
           );
 
-          btn.textContent = `Resume Learning (${surahName} : ${lastRead.ayah})`;
+          btn.textContent = `Resume Learning (${surahName}:${lastRead.ayah})`;
 
           btn.onclick = () => {
-            console.log(
-              `📍 [Button Click] loadAyah(${lastRead.surah}, ${lastRead.ayah})`
-            );
-
-            // Show reader UI
-            D.surahContainer.style.display = 'none';
-            D.hero.style.display           = 'none';
-            D.viewer.style.display         = 'block';
-            D.dropdowns.style.display      = 'flex';
-
-
-            loadAyah(lastRead.surah, lastRead.ayah);
+            openLearnAyah(lastRead.surah, lastRead.ayah, { mode: 'learning' });
           };
+
+          if (reciteBtn) {
+            reciteBtn.textContent = `Resume Reciting (${surahName}:${lastRead.ayah})`;
+            reciteBtn.onclick = () => {
+              triggerReciteStart(lastRead.surah, lastRead.ayah, {
+                autoPlay: false
+              });
+            };
+          }
 
         } else {
           /* -------- Start Learning Case -------- */
           btn.textContent = 'Start Learning';
 
           btn.onclick = () => {
-            // Show reader UI
-            D.surahContainer.style.display = 'none';
-            D.hero.style.display           = 'none';
-            D.viewer.style.display         = 'block';
-            D.dropdowns.style.display      = 'flex';
-
-            loadAyah(DEFAULT_SURAH, DEFAULT_AYAH);
+            openLearnAyah(DEFAULT_SURAH, DEFAULT_AYAH, { mode: 'learning' });
           };
+
+          if (reciteBtn) {
+            reciteBtn.textContent = 'Start Reciting';
+            reciteBtn.onclick = () => {
+              triggerReciteStart(DEFAULT_SURAH, DEFAULT_AYAH, {
+                autoPlay: false
+              });
+            };
+          }
         }
       }
 
@@ -549,12 +720,18 @@ const iframeSettingsVersion = new WeakMap();
 
           title.append(englishEl, arabicEl);
 
-          const resumeBtn = document.createElement('button');
-          resumeBtn.className = 'resume-btn';
-          resumeBtn.dataset.surah = String(surah.number);
-          resumeBtn.textContent = '▶';
+          const statusEl = document.createElement('div');
+          statusEl.className = 'surah-status';
 
-          card.append(header, title, resumeBtn);
+          const playBtn = document.createElement('button');
+          playBtn.className = 'surah-play-btn';
+          playBtn.dataset.surah = String(surah.number);
+          playBtn.type = 'button';
+          playBtn.setAttribute('aria-label', `Play Surah ${surah.number}`);
+          playBtn.innerHTML =
+            '<span class="material-symbols-outlined" aria-hidden="true">play_arrow</span>';
+
+          card.append(header, title, statusEl, playBtn);
 
           D.surahContainer.append(card);
 
@@ -580,43 +757,25 @@ const iframeSettingsVersion = new WeakMap();
             Determine resume label & next ayah
             ------------------------------------------ */
           const totalAyahs = surah.ayahCount;
-          let labelHTML = '';
+          let statusText = '';
           let nextAyah = 1;
 
           if (maxAyahRead === 0) {
             // Not started
-            labelHTML = `
-              <span class="material-symbols-outlined"
-                    style="vertical-align:middle;font-size:18px;">
-                book_5
-              </span>&nbsp;
-              <span>Start Surah ${surah.number}</span>
-            `;
+            statusText = 'Start from Ayah 1';
             nextAyah = 1;
 
           } else if (maxAyahRead >= totalAyahs) {
             // Completed
-            labelHTML = `
-              <span class="material-icons-outlined"
-                    style="vertical-align:middle;font-size:18px;">
-                restart_alt
-              </span>&nbsp;
-              <span>Repeat Surah</span>
-            `;
+            statusText = 'Completed - Tap to revise';
             nextAyah = 1;
 
             console.log(`🎉 Surah ${surah.number} fully completed.`);
 
           } else {
             // Partially completed
-            labelHTML = `
-              <span class="material-symbols-outlined"
-                    style="vertical-align:middle;font-size:20px;">
-                play_arrow
-              </span>&nbsp;
-              <span>Resume from Ayah ${maxAyahRead}</span>
-            `;
             nextAyah = maxAyahRead + 1;
+            statusText = `Resume from Ayah ${nextAyah}`;
 
             console.log(
               `⏯️ Surah ${surah.number} partially done. Resuming from Ayah ${nextAyah}`
@@ -627,18 +786,12 @@ const iframeSettingsVersion = new WeakMap();
           /* ------------------------------------------
             Resume button behavior
             ------------------------------------------ */
-          resumeBtn.innerHTML = labelHTML;
-          resumeBtn.dataset.nextAyah = nextAyah;
+          statusEl.textContent = statusText;
+          playBtn.dataset.nextAyah = nextAyah;
 
-          resumeBtn.addEventListener('click', e => {
+          playBtn.addEventListener('click', e => {
             e.stopPropagation();
-
-            D.surahContainer.style.display = 'none';
-            D.hero.style.display           = 'none';
-            D.viewer.style.display         = 'block';
-            D.dropdowns.style.display      = 'flex';
-
-            loadAyah(surah.number, nextAyah);
+            openLearnAyah(surah.number, nextAyah, { autoPlay: true });
           });
 
 
@@ -646,12 +799,7 @@ const iframeSettingsVersion = new WeakMap();
             Card click → start from Ayah 1
             ------------------------------------------ */
           card.addEventListener('click', () => {
-            D.surahContainer.style.display = 'none';
-            D.hero.style.display           = 'none';
-            D.viewer.style.display         = 'block';
-            D.dropdowns.style.display      = 'flex';
-
-            loadAyah(surah.number, 1);
+            openLearnAyah(surah.number, nextAyah, { mode: 'learning' });
           });
         }
 
@@ -667,15 +815,17 @@ const iframeSettingsVersion = new WeakMap();
 /* ------------------------------------------
    Freeze animation at midpoint after play
    ------------------------------------------ */
-      menuAnimation.addEventListener('DOMLoaded', () => {
-        const freezeFrame = Math.floor(
-          menuAnimation.totalFrames / 2
-        );
+      if (menuAnimation) {
+        menuAnimation.addEventListener('DOMLoaded', () => {
+          const freezeFrame = Math.floor(
+            menuAnimation.totalFrames / 2
+          );
 
-        menuAnimation.addEventListener('complete', () => {
-          menuAnimation.goToAndStop(freezeFrame, true);
+          menuAnimation.addEventListener('complete', () => {
+            menuAnimation.goToAndStop(freezeFrame, true);
+          });
         });
-      });
+      }
 
 /* ==========================================================
    Show Swipe User Guide
@@ -904,6 +1054,8 @@ switch (data.type) {
 }
 
     case 'AUTO_SWIPE_NEXT': {
+      if (isReciteMode) break;
+      if (isGameMode) break;
       if (isAnimatingSwipe || dragState.active) break;
       if (!canMove(1)) {
         pendingAutoPlay = false;
@@ -916,7 +1068,12 @@ switch (data.type) {
 
     case 'SETTINGS_OPENED':
     case 'WORD_DETAILS_OPENED': {
+      const sourceWindow = e.source;
       pushPopupHistory(() => {
+        if (sourceWindow?.postMessage) {
+          sourceWindow.postMessage({ type: 'CLOSE_ACTIVE_POPUP' }, LOCAL_ORIGIN);
+          return;
+        }
         const activeFrame = getActiveIframe();
         postToIframe(activeFrame, { type: 'CLOSE_ACTIVE_POPUP' });
       });
@@ -954,6 +1111,13 @@ switch (data.type) {
       break;
     }
 
+    case 'EXIT_MEMO': {
+      if (typeof setMemorizationMode === 'function') {
+        setMemorizationMode(false);
+      }
+      break;
+    }
+
 
 
 
@@ -973,7 +1137,10 @@ switch (data.type) {
        Auth / UI requests
        ------------------------------------------ */
     case 'loginRequest':
-      console.log('[loginRequest] Guest-only mode — ignoring login request');
+      if (D.openDrawer) {
+        D.openDrawer();
+      }
+      showInAppToast('Sign in to save your progress.');
       break;
 
 
@@ -994,6 +1161,16 @@ switch (data.type) {
     }
 
 case 'SWIPE_START': {
+  if (isReciteMode) {
+    break;
+  }
+  if (isGameMode) {
+    postToWindow(window, { type: 'SWIPE_CANCEL' });
+    break;
+  }
+  if (hintBusy) {
+    break;
+  }
   // Clear any leftover settle/transition so drag can begin immediately.
   isAnimatingSwipe = false;
   swipeLockedUntilFrame = 0;
@@ -1012,6 +1189,17 @@ case 'SWIPE_START': {
 
 
 case 'SWIPE_COMMIT': {
+  if (isReciteMode) {
+    break;
+  }
+  if (isGameMode) {
+    postToWindow(window, { type: 'SWIPE_CANCEL' });
+    break;
+  }
+  if (hintBusy) {
+    postToWindow(window, { type: 'SWIPE_CANCEL' });
+    break;
+  }
   const { dir } = data;
   const autoPlayRequested = !!(pendingAutoPlay || data.autoPlay);
 
@@ -1088,6 +1276,15 @@ case 'SWIPE_COMMIT': {
 
 
 case 'SWIPE_PROGRESS': {
+  if (isReciteMode) {
+    return;
+  }
+  if (isGameMode) {
+    return;
+  }
+  if (hintBusy) {
+    return;
+  }
   // ⛔ iframe still settling → ignore drag
   if (performance.now() < swipeLockedUntilFrame) {
     return;
@@ -1115,6 +1312,12 @@ case 'SWIPE_PROGRESS': {
 
 
 case 'SWIPE_CANCEL': {
+  if (isReciteMode) {
+    break;
+  }
+  if (isGameMode) {
+    break;
+  }
   // 🧹 STOP live drag immediately
   dragState.active = false;
   dragState.dx = 0;
@@ -1245,6 +1448,7 @@ case 'SAVE_HINT_DONE': {
         if (auth.currentUser) {
           /* -------- Logged-in user -------- */
           await updateLastRead(surah, ayah);
+          await updateCompletedSurahsProgress(surah, ayah);
 
           // 🔥 Record streak ONLY if asked
           if (recordStreak) {
@@ -1484,6 +1688,36 @@ case 'SAVE_HINT_DONE': {
         }, DISPLAY_TIME);
       }
 
+      function showInAppToast(message, detailOrColor) {
+        if (!message) return;
+        const toast = document.createElement('div');
+        toast.className = 'motivation-toast';
+        const isColor = typeof detailOrColor === 'string' && detailOrColor.startsWith('#');
+        if (isColor) {
+          toast.style.background = detailOrColor;
+          toast.textContent = message;
+        } else if (detailOrColor) {
+          toast.textContent = `${message} — ${detailOrColor}`;
+        } else {
+          toast.textContent = message;
+        }
+        document.body.appendChild(toast);
+
+        requestAnimationFrame(() => {
+          toast.classList.add('show');
+        });
+
+        const DISPLAY_TIME = 2600;
+        const FADE_TIME = 300;
+
+        setTimeout(() => {
+          toast.classList.remove('show');
+          setTimeout(() => {
+            toast.remove();
+          }, FADE_TIME);
+        }, DISPLAY_TIME);
+      }
+
       function maybeShowMotivation(options = {}) {
         if (shouldSuppressMilestones()) return;
         const { force = false } = options;
@@ -1663,6 +1897,8 @@ case 'SAVE_HINT_DONE': {
         if (!active && D.progressTip) {
           D.progressTip.classList.remove('is-visible');
         }
+
+        updateTopSettingsButtonState();
       }
 
       function isHomeVisible() {
@@ -1677,6 +1913,19 @@ case 'SAVE_HINT_DONE': {
       function isViewerVisible() {
         if (!D.viewer) return false;
         return window.getComputedStyle(D.viewer).display !== 'none';
+      }
+
+      function updateTopSettingsButtonState() {
+        const showTopSettings =
+          !isDuasMode &&
+          !isMemoMode &&
+          (isReciteMode || isViewerVisible());
+
+        document.body.classList.toggle('learn-settings-visible', showTopSettings && !isReciteMode);
+
+        if (D.learnSettingsBtn) {
+          D.learnSettingsBtn.setAttribute('aria-hidden', showTopSettings ? 'false' : 'true');
+        }
       }
 
       function ensureHomeScroll() {
@@ -1897,6 +2146,10 @@ case 'SAVE_HINT_DONE': {
         D.nextArrow      = document.querySelector('.next');
         D.returnBtn      = document.getElementById('returnToAyah');
         D.startBtn       = document.getElementById('startLearningBtn');
+        D.startReciteBtn = document.getElementById('startRecitingBtn');
+        D.learnSettingsBtn = document.getElementById('learnSettingsBtn');
+        D.reciteHomeBtn  = document.getElementById('reciteHomeBtn');
+        D.reciteScrollView = document.getElementById('reciteScrollView');
         D.ptsEl          = document.getElementById('ajrPoints');
         D.streakEl       = document.getElementById('streakDisplay');
         D.closeBtn       = document.getElementById('drawerCloseBtn');
@@ -1910,16 +2163,25 @@ case 'SAVE_HINT_DONE': {
          D.surahSelect = document.getElementById('surahSelect');
         D.duasView       = document.getElementById('duasView');
         D.duasFrame      = document.getElementById('duasFrame');
+        D.memoView       = document.getElementById('memorizationView');
+        D.memoFrame      = document.getElementById('memorizationFrame');
         D.navLearnQuran  = document.getElementById('navLearnQuran');
         D.navRamzanDuas  = document.getElementById('navRamzanDuas');
+        D.navMemorization = document.getElementById('navMemorization');
         D.bottomNav      = document.getElementById('bottomNav');
         D.randomDuaCard  = document.getElementById('randomDuaCard');
         D.resumeListeningBtn = document.getElementById('resumeListeningHeroBtn');
+        D.memorizationHeroBtn = document.getElementById('memorizationHeroBtn');
         D.contactBtn     = document.getElementById('contactUsBtn');
+        D.drawerGreeting = document.getElementById('drawerGreeting');
+        D.drawerSubtext = document.getElementById('drawerSubtext');
+        D.drawerLoginBtn = document.getElementById('drawerLoginBtn');
+        D.drawerLogoutBtn = document.getElementById('drawerLogoutBtn');
 
 
         const menuBtn = document.getElementById('menuBtn');
         let drawerOverlay = null;
+        let prefiredNativeTab = null;
 
         const syncNavHeights = () => {
           const nav = document.getElementById('mainNavbar');
@@ -1928,9 +2190,45 @@ case 'SAVE_HINT_DONE': {
           }
         };
 
-        const setActiveNav = (isDuas) => {
-          if (D.navLearnQuran) D.navLearnQuran.classList.toggle('active', !isDuas);
+        const setActiveNav = mode => {
+          if (prefiredNativeTab === mode) {
+            prefiredNativeTab = null;
+          } else {
+            sendNativeTabSwitch(mode);
+          }
+          const isLearn = mode === 'learn';
+          const isDuas = mode === 'duas';
+          const isMemo = mode === 'memo';
+          if (D.navLearnQuran) D.navLearnQuran.classList.toggle('active', isLearn);
           if (D.navRamzanDuas) D.navRamzanDuas.classList.toggle('active', isDuas);
+          if (D.navMemorization) D.navMemorization.classList.toggle('active', isMemo);
+          sendSystemBarColor(TAB_SYSTEM_BAR_COLORS[mode]);
+          updateTopSettingsButtonState();
+        };
+
+        const goLearnHome = () => {
+          if (isDuasMode && typeof setDuasMode === 'function') {
+            setDuasMode(false);
+          }
+          if (isMemoMode && typeof setMemorizationMode === 'function') {
+            setMemorizationMode(false);
+          }
+          if (isReciteMode && typeof setReciteMode === 'function') {
+            setReciteMode(false, { showHome: true });
+          }
+
+          if (D.hero) D.hero.style.display = '';
+          if (D.surahContainer) D.surahContainer.style.display = '';
+          if (D.viewer) D.viewer.style.display = 'none';
+          if (D.dropdowns) D.dropdowns.style.display = 'none';
+          setReaderMode(false);
+          ensureHomeScroll();
+          setActiveNav('learn');
+
+          const homePath = resolveAppUrl('index.html');
+          if (window.location.href !== homePath) {
+            window.history.replaceState({}, '', homePath);
+          }
         };
 
         const pauseQuranAudio = () => {
@@ -1944,12 +2242,607 @@ case 'SAVE_HINT_DONE': {
           }
         };
 
+        const getSurahMeta = surahNum =>
+          surahData.find(item => Number(item.number) === Number(surahNum)) || null;
+        const reciteDataCache = new Map();
+        let reciteCombinedPayload = null;
+        let reciteCurrentSurahData = null;
+        const reciteAyahIndex = new Map();
+        let reciteAudio = null;
+        let reciteActivePlayBtn = null;
+        let recitePlaybackToken = 0;
+        let closeReciteSettingsPopup = null;
+
+        const recitePad3 = value => String(Number(value) || 0).padStart(3, '0');
+
+        const getReciteSurahPath = surahNum =>
+          resolveAppUrl(`build/recite/surahs/surah_${recitePad3(surahNum)}.json`);
+
+        const fetchJsonStrict = async url => {
+          const res = await fetch(url, { cache: 'no-store' });
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status}`);
+          }
+          return res.json();
+        };
+
+        const extractSurahRecord = (payload, surahNum) => {
+          if (payload?.surah?.surah === surahNum) {
+            return payload.surah;
+          }
+          if (Array.isArray(payload?.surahs)) {
+            return payload.surahs.find(item => Number(item?.surah) === surahNum) || null;
+          }
+          return null;
+        };
+
+        const fetchReciteCombinedData = async () => {
+          if (reciteCombinedPayload) return reciteCombinedPayload;
+          const combinedPath = resolveAppUrl('build/recite/recite_surahs.json');
+          reciteCombinedPayload = await fetchJsonStrict(combinedPath);
+          return reciteCombinedPayload;
+        };
+
+        const fetchReciteSurahData = async surahNum => {
+          const normalizedSurah = Number(surahNum);
+          if (!Number.isFinite(normalizedSurah) || normalizedSurah < 1) {
+            throw new Error('Invalid surah');
+          }
+          if (reciteDataCache.has(normalizedSurah)) {
+            return reciteDataCache.get(normalizedSurah);
+          }
+
+          const perSurahPath = getReciteSurahPath(normalizedSurah);
+          let record = null;
+
+          try {
+            const payload = await fetchJsonStrict(perSurahPath);
+            record = extractSurahRecord(payload, normalizedSurah);
+          } catch {
+            // Fallback to combined dataset when per-surah file is unavailable.
+          }
+
+          if (!record) {
+            const combined = await fetchReciteCombinedData();
+            record = extractSurahRecord(combined, normalizedSurah);
+          }
+
+          if (!record || !Array.isArray(record.ayahs)) {
+            throw new Error(`Could not resolve recite data for surah ${normalizedSurah}`);
+          }
+
+          const normalized = {
+            ...record,
+            surah: normalizedSurah,
+            ayahs: record.ayahs.map(item => ({
+              ayah: Number(item?.ayah),
+              globalAyah: Number(item?.globalAyah),
+              arabic: String(item?.arabic || '').replace(/^\uFEFF/, ''),
+              translation_en: String(item?.translation_en || ''),
+              translation_ur: String(item?.translation_ur || ''),
+              audio: {
+                ar: item?.audio?.ar || '',
+                en: item?.audio?.en || '',
+                ur: item?.audio?.ur || ''
+              }
+            }))
+          };
+
+          reciteDataCache.set(normalizedSurah, normalized);
+          return normalized;
+        };
+
+        const getReciteAudioUrl = (ayahData, settings = getSettings()) => {
+          const preferredLang = settings.audioLang || 'ar';
+          const audio = ayahData?.audio || {};
+          return audio[preferredLang] || audio.ar || audio.en || audio.ur || '';
+        };
+
+        const setRecitePlayButtonState = (btn, playing) => {
+          if (!btn) return;
+          btn.classList.toggle('is-playing', !!playing);
+          const icon = btn.querySelector('.material-symbols-outlined');
+          if (icon) {
+            icon.textContent = playing ? 'pause' : 'play_arrow';
+          }
+        };
+
+        const stopReciteAudio = () => {
+          recitePlaybackToken += 1;
+          if (reciteAudio) {
+            reciteAudio.pause();
+            reciteAudio.src = '';
+            reciteAudio = null;
+          }
+          if (reciteActivePlayBtn) {
+            setRecitePlayButtonState(reciteActivePlayBtn, false);
+            reciteActivePlayBtn = null;
+          }
+        };
+
+        const playReciteAyah = (ayahData, playBtn, options = {}) => {
+          const { autoStart = false } = options;
+          if (!ayahData) return;
+          const settings = getSettings();
+          const src = getReciteAudioUrl(ayahData, settings);
+          if (!src) {
+            if (!autoStart) {
+              showInAppToast('Audio not available for this ayah.');
+            }
+            return;
+          }
+
+          if (reciteActivePlayBtn === playBtn && reciteAudio && !reciteAudio.paused) {
+            stopReciteAudio();
+            return;
+          }
+
+          stopReciteAudio();
+          pauseQuranAudio();
+          pauseDuasAudio();
+
+          const audio = new Audio(src);
+          const desiredSpeed = Number.parseFloat(settings.speed);
+          if (Number.isFinite(desiredSpeed) && desiredSpeed > 0) {
+            audio.playbackRate = desiredSpeed;
+          }
+
+          const repeat = Math.max(1, Math.min(20, Number.parseInt(settings.repeat, 10) || 1));
+          let played = 0;
+          const token = ++recitePlaybackToken;
+
+          reciteAudio = audio;
+          reciteActivePlayBtn = playBtn || null;
+          setRecitePlayButtonState(reciteActivePlayBtn, true);
+
+          const cleanup = () => {
+            if (token !== recitePlaybackToken) return;
+            stopReciteAudio();
+          };
+
+          audio.addEventListener('ended', () => {
+            if (token !== recitePlaybackToken) return;
+            played += 1;
+            if (played >= repeat) {
+              cleanup();
+              return;
+            }
+            audio.currentTime = 0;
+            audio.play().catch(() => cleanup());
+          });
+
+          audio.addEventListener('error', () => {
+            if (token !== recitePlaybackToken) return;
+            cleanup();
+            showInAppToast('Could not play audio.');
+          });
+
+          audio.play().catch(() => {
+            cleanup();
+            if (autoStart) {
+              showInAppToast('Tap play on an ayah to start audio.');
+            } else {
+              showInAppToast('Audio playback was blocked.');
+            }
+          });
+        };
+
+        const applyReciteSettingsToDom = (settings = getSettings()) => {
+          if (!D.reciteScrollView || !reciteCurrentSurahData) return;
+          const showTranslation = settings.showPanelTranslation !== false;
+          const useUr = settings.panelLang === 'ur';
+
+          const cards = D.reciteScrollView.querySelectorAll('.recite-ayah-card');
+          cards.forEach(card => {
+            const ayahNum = Number(card.dataset.ayah);
+            const ayahData = reciteAyahIndex.get(ayahNum);
+            const transEl = card.querySelector('.recite-ayah-translation');
+            if (!ayahData || !transEl) return;
+            const translationText = useUr
+              ? (ayahData.translation_ur || ayahData.translation_en || '')
+              : (ayahData.translation_en || ayahData.translation_ur || '');
+            transEl.textContent = translationText;
+            transEl.style.display = showTranslation && translationText ? 'block' : 'none';
+          });
+
+          if (reciteAudio) {
+            const desiredSpeed = Number.parseFloat(settings.speed);
+            if (Number.isFinite(desiredSpeed) && desiredSpeed > 0) {
+              reciteAudio.playbackRate = desiredSpeed;
+            }
+          }
+        };
+
+        refreshReciteModeView = settings => {
+          if (!isReciteMode) return;
+          applyReciteSettingsToDom(settings || getSettings());
+        };
+
+        const clearReciteModeCards = () => {
+          reciteRenderVersion += 1;
+          reciteCurrentSurahData = null;
+          reciteAyahIndex.clear();
+          if (D.reciteScrollView) {
+            D.reciteScrollView.innerHTML = '';
+          }
+          stopReciteAudio();
+        };
+
+        const renderReciteSurah = async (surahNum, startAyah = 1, options = {}) => {
+          if (!D.reciteScrollView) return;
+          const { autoPlay = false } = options;
+          const normalizedSurah = Number(surahNum);
+          const surahMeta = getSurahMeta(normalizedSurah);
+          const totalAyahs = Number(surahMeta?.ayahCount || 0);
+          if (!totalAyahs) return;
+
+          stopReciteAudio();
+          const renderToken = ++reciteRenderVersion;
+          D.reciteScrollView.innerHTML = '<div class="recite-loading">Loading surah...</div>';
+
+          let record = null;
+          try {
+            record = await fetchReciteSurahData(normalizedSurah);
+          } catch (err) {
+            if (renderToken !== reciteRenderVersion || !isReciteMode) return;
+            D.reciteScrollView.innerHTML = '<div class="recite-error">Could not load recite dataset.</div>';
+            showInAppToast('Recite data missing. Opening classic recite.');
+            setTimeout(() => {
+              openLearnAyah(normalizedSurah, Math.max(1, Number(startAyah) || 1), {
+                mode: 'reciting',
+                autoPlay
+              });
+            }, 180);
+            return;
+          }
+
+          if (renderToken !== reciteRenderVersion || !isReciteMode) return;
+
+          const ayahs = Array.isArray(record.ayahs) ? record.ayahs : [];
+          const firstAyah = Math.min(totalAyahs, Math.max(1, Number(startAyah) || 1));
+          currentSurah = normalizedSurah;
+          currentAyah = firstAyah;
+          setGuestLastRead(currentSurah, currentAyah);
+          syncDropdowns(currentSurah, currentAyah);
+
+          reciteCurrentSurahData = record;
+          reciteAyahIndex.clear();
+          D.reciteScrollView.innerHTML = '';
+
+          const surahHeader = document.createElement('section');
+          surahHeader.className = 'recite-surah-header';
+          surahHeader.innerHTML = `
+            <div class="recite-surah-kicker">Surah ${normalizedSurah}</div>
+            <h2 class="recite-surah-title">${surahMeta?.englishName || record?.englishName || `Surah ${normalizedSurah}`}</h2>
+            <div class="recite-surah-subtitle">${surahMeta?.englishNameTranslation || record?.englishNameTranslation || ''}</div>
+            <div class="recite-surah-meta">${totalAyahs} Ayahs</div>
+          `;
+          D.reciteScrollView.appendChild(surahHeader);
+
+          ayahs.forEach(ayahData => {
+            const ayahNum = Number(ayahData.ayah);
+            if (!Number.isFinite(ayahNum)) return;
+            reciteAyahIndex.set(ayahNum, ayahData);
+
+            const card = document.createElement('article');
+            card.className = 'recite-ayah-card';
+            if (ayahNum % 2 === 0) {
+              card.classList.add('is-alt');
+            }
+            card.dataset.surah = String(normalizedSurah);
+            card.dataset.ayah = String(ayahNum);
+
+            const badge = document.createElement('div');
+            badge.className = 'recite-ayah-index';
+            badge.textContent = String(ayahNum);
+
+            const body = document.createElement('div');
+            body.className = 'recite-ayah-body';
+
+            const arabic = document.createElement('p');
+            arabic.className = 'recite-ayah-arabic';
+            arabic.textContent = ayahData.arabic || '';
+
+            const translation = document.createElement('p');
+            translation.className = 'recite-ayah-translation';
+
+            body.append(arabic, translation);
+
+            const playBtn = document.createElement('button');
+            playBtn.className = 'recite-ayah-play';
+            playBtn.type = 'button';
+            playBtn.setAttribute('aria-label', `Play Surah ${normalizedSurah} Ayah ${ayahNum}`);
+            playBtn.innerHTML = '<span class="material-symbols-outlined" aria-hidden="true">play_arrow</span>';
+            playBtn.addEventListener('click', () => playReciteAyah(ayahData, playBtn));
+
+            card.append(badge, body, playBtn);
+            D.reciteScrollView.appendChild(card);
+          });
+
+          applyReciteSettingsToDom(getSettings());
+
+          requestAnimationFrame(() => {
+            const startCard = D.reciteScrollView.querySelector(
+              `.recite-ayah-card[data-surah="${normalizedSurah}"][data-ayah="${firstAyah}"]`
+            );
+            if (startCard) {
+              D.reciteScrollView.scrollTop = Math.max(0, startCard.offsetTop - 8);
+              if (autoPlay) {
+                const btn = startCard.querySelector('.recite-ayah-play');
+                const ayahData = reciteAyahIndex.get(firstAyah);
+                if (btn && ayahData) {
+                  playReciteAyah(ayahData, btn, { autoStart: true });
+                }
+              }
+            } else {
+              D.reciteScrollView.scrollTop = 0;
+            }
+          });
+        };
+
+        const openReciteSettingsPopup = () => {
+          if (!isReciteMode) return;
+          if (closeReciteSettingsPopup) return;
+
+          const settings = getSettings();
+          const overlay = document.createElement('div');
+          overlay.id = 'reciteSettingsOverlay';
+          overlay.className = 'qq-overlay recite-settings-overlay';
+
+          overlay.innerHTML = `
+            <div class="qq-modal recite-settings-modal">
+              <div class="recite-settings-header">
+                <h3 class="recite-settings-title">Recite Settings</h3>
+                <button type="button" id="reciteSettingsCloseBtn" class="recite-settings-close" aria-label="Close recite settings">
+                  <span aria-hidden="true">x</span>
+                </button>
+              </div>
+              <label class="recite-settings-row">
+                <span>Show translation</span>
+                <input id="reciteSetPanelTrans" type="checkbox" ${settings.showPanelTranslation ? 'checked' : ''}>
+              </label>
+              <label class="recite-settings-row">
+                <span>Translation language</span>
+                <select id="reciteSetPanelLang">
+                  <option value="en" ${settings.panelLang === 'en' ? 'selected' : ''}>English</option>
+                  <option value="ur" ${settings.panelLang === 'ur' ? 'selected' : ''}>Urdu</option>
+                </select>
+              </label>
+              <label class="recite-settings-row">
+                <span>Audio language</span>
+                <select id="reciteSetAudioLang">
+                  <option value="ar" ${settings.audioLang === 'ar' ? 'selected' : ''}>Arabic</option>
+                  <option value="en" ${settings.audioLang === 'en' ? 'selected' : ''}>English</option>
+                  <option value="ur" ${settings.audioLang === 'ur' ? 'selected' : ''}>Urdu</option>
+                </select>
+              </label>
+              <label class="recite-settings-row">
+                <span>Playback speed</span>
+                <select id="reciteSetSpeed">
+                  <option value="0.5" ${settings.speed === '0.5' ? 'selected' : ''}>0.5x</option>
+                  <option value="0.75" ${settings.speed === '0.75' ? 'selected' : ''}>0.75x</option>
+                  <option value="1" ${settings.speed === '1' ? 'selected' : ''}>1x</option>
+                  <option value="1.25" ${settings.speed === '1.25' ? 'selected' : ''}>1.25x</option>
+                </select>
+              </label>
+              <label class="recite-settings-row recite-settings-row-last">
+                <span>Repeat count</span>
+                <input id="reciteSetRepeat" type="number" min="1" max="20" value="${settings.repeat || '1'}">
+              </label>
+              <div class="recite-settings-actions">
+                <button type="button" id="reciteSettingsCancelBtn" class="recite-settings-btn recite-settings-btn-cancel">Cancel</button>
+                <button type="button" id="reciteSettingsApplyBtn" class="recite-settings-btn recite-settings-btn-apply">Apply</button>
+              </div>
+            </div>
+          `;
+
+          const close = (fromHistory = false) => {
+            overlay.remove();
+            closeReciteSettingsPopup = null;
+            if (!fromHistory) {
+              popPopupHistoryFromChild();
+            }
+          };
+
+          closeReciteSettingsPopup = close;
+
+          overlay.addEventListener('click', e => {
+            if (e.target === overlay) close();
+          });
+
+          overlay.querySelector('#reciteSettingsCloseBtn')?.addEventListener('click', () => close());
+          overlay.querySelector('#reciteSettingsCancelBtn')?.addEventListener('click', () => close());
+          overlay.querySelector('#reciteSettingsApplyBtn')?.addEventListener('click', () => {
+            const patch = {
+              showPanelTranslation: !!overlay.querySelector('#reciteSetPanelTrans')?.checked,
+              panelLang: overlay.querySelector('#reciteSetPanelLang')?.value || 'en',
+              audioLang: overlay.querySelector('#reciteSetAudioLang')?.value || 'ar',
+              speed: overlay.querySelector('#reciteSetSpeed')?.value || '1',
+              repeat: overlay.querySelector('#reciteSetRepeat')?.value || '1',
+              mode: 'reciting'
+            };
+            saveSettings(patch);
+            close();
+          });
+
+          document.body.appendChild(overlay);
+          pushPopupHistory(() => close(true));
+        };
+
+        setReciteMode = (enabled, options = {}) => {
+          if (enabled === isReciteMode) {
+            if (enabled && Number(options.surah) && Number(options.ayah)) {
+              renderReciteSurah(Number(options.surah), Number(options.ayah), {
+                autoPlay: !!options.autoPlay
+              });
+            }
+            return;
+          }
+
+          const {
+            surah = currentSurah || DEFAULT_SURAH,
+            ayah = currentAyah || DEFAULT_AYAH,
+            autoPlay = false,
+            showHome = true
+          } = options;
+
+          isReciteMode = enabled;
+
+          if (enabled) {
+            if (isDuasMode) {
+              setDuasMode(false);
+            }
+            if (isMemoMode) {
+              setMemorizationMode(false);
+            }
+
+            reciteModeState = {
+              hero: D.hero?.style.display ?? '',
+              surah: D.surahContainer?.style.display ?? '',
+              viewer: D.viewer?.style.display ?? '',
+              dropdowns: D.dropdowns?.style.display ?? '',
+              readerMode: document.body.classList.contains('reader-mode')
+            };
+
+            requestWakeLock();
+            closeDrawer();
+            pauseQuranAudio();
+            pauseDuasAudio();
+            stopReciteAudio();
+
+            saveSettings({ mode: 'reciting' });
+
+            document.body.classList.add('recite-mode');
+            setReaderMode(false);
+
+            if (D.reciteScrollView) {
+              D.reciteScrollView.setAttribute('aria-hidden', 'false');
+            }
+            if (D.hero) D.hero.style.display = 'none';
+            if (D.surahContainer) D.surahContainer.style.display = 'none';
+            if (D.viewer) D.viewer.style.display = 'none';
+            if (D.dropdowns) D.dropdowns.style.display = 'flex';
+
+            renderReciteSurah(Number(surah), Number(ayah), { autoPlay });
+            setActiveNav('learn');
+            return;
+          }
+
+          document.body.classList.remove('recite-mode');
+          if (D.reciteScrollView) {
+            D.reciteScrollView.setAttribute('aria-hidden', 'true');
+          }
+          if (closeReciteSettingsPopup) {
+            closeReciteSettingsPopup();
+          }
+          clearReciteModeCards();
+
+          if (showHome) {
+            if (D.hero) D.hero.style.display = '';
+            if (D.surahContainer) D.surahContainer.style.display = '';
+            if (D.viewer) D.viewer.style.display = 'none';
+            if (D.dropdowns) D.dropdowns.style.display = 'none';
+            setReaderMode(false);
+            ensureHomeScroll();
+          } else if (reciteModeState) {
+            if (D.hero) D.hero.style.display = reciteModeState.hero;
+            if (D.surahContainer) D.surahContainer.style.display = reciteModeState.surah;
+            if (D.viewer) D.viewer.style.display = reciteModeState.viewer;
+            if (D.dropdowns) D.dropdowns.style.display = reciteModeState.dropdowns;
+            setReaderMode(!!reciteModeState.readerMode);
+          } else {
+            if (D.hero) D.hero.style.display = '';
+            if (D.surahContainer) D.surahContainer.style.display = '';
+            if (D.viewer) D.viewer.style.display = '';
+            if (D.dropdowns) D.dropdowns.style.display = '';
+            setReaderMode(false);
+          }
+
+          reciteModeState = null;
+          setActiveNav('learn');
+        };
+
+        launchReciteSurah = (surah, ayah, options = {}) => {
+          const targetSurah = Number(surah) || DEFAULT_SURAH;
+          const targetAyah = Number(ayah) || DEFAULT_AYAH;
+          setReciteMode(true, {
+            surah: targetSurah,
+            ayah: targetAyah,
+            autoPlay: options.autoPlay !== false
+          });
+        };
+
+        setMemorizationMode = enabled => {
+          if (enabled === isMemoMode) return;
+          isMemoMode = enabled;
+          syncNavHeights();
+
+          if (enabled) {
+            if (isReciteMode && typeof setReciteMode === 'function') {
+              setReciteMode(false, { showHome: false });
+            }
+            if (isDuasMode) {
+              setDuasMode(false);
+            }
+            requestWakeLock();
+            closeDrawer();
+
+            memoModeState = {
+              hero: D.hero?.style.display ?? '',
+              surah: D.surahContainer?.style.display ?? '',
+              viewer: D.viewer?.style.display ?? '',
+              dropdowns: D.dropdowns?.style.display ?? ''
+            };
+
+            document.body.classList.add('memorization-mode');
+            if (D.memoView) D.memoView.setAttribute('aria-hidden', 'false');
+            if (D.memoFrame) {
+              const target = resolveAppUrl('memorization.html?embedded=1');
+              const current = typeof D.memoFrame.src === 'string' ? D.memoFrame.src : '';
+              if (!current || current === 'about:blank' || !current.includes('memorization.html')) {
+                D.memoFrame.src = target;
+              }
+            }
+
+            if (D.hero) D.hero.style.display = 'none';
+            if (D.surahContainer) D.surahContainer.style.display = 'none';
+            if (D.viewer) D.viewer.style.display = 'none';
+            if (D.dropdowns) D.dropdowns.style.display = 'none';
+            setActiveNav('memo');
+          } else {
+            requestWakeLock();
+            document.body.classList.remove('memorization-mode');
+            if (D.memoView) D.memoView.setAttribute('aria-hidden', 'true');
+
+            if (memoModeState) {
+              if (D.hero) D.hero.style.display = memoModeState.hero;
+              if (D.surahContainer) D.surahContainer.style.display = memoModeState.surah;
+              if (D.viewer) D.viewer.style.display = memoModeState.viewer;
+              if (D.dropdowns) D.dropdowns.style.display = memoModeState.dropdowns;
+              memoModeState = null;
+            } else {
+              if (D.hero) D.hero.style.display = '';
+              if (D.surahContainer) D.surahContainer.style.display = '';
+              if (D.viewer) D.viewer.style.display = '';
+              if (D.dropdowns) D.dropdowns.style.display = '';
+            }
+
+            setActiveNav('learn');
+          }
+        };
+
         setDuasMode = (enabled) => {
           if (enabled === isDuasMode) return;
           isDuasMode = enabled;
           syncNavHeights();
 
           if (enabled) {
+            if (isReciteMode && typeof setReciteMode === 'function') {
+              setReciteMode(false, { showHome: false });
+            }
+            if (isMemoMode) {
+              setMemorizationMode(false);
+            }
             requestWakeLock();
             pendingDuaReturn = false;
             pauseQuranAudio();
@@ -1973,7 +2866,7 @@ case 'SAVE_HINT_DONE': {
             if (D.surahContainer) D.surahContainer.style.display = 'none';
             if (D.viewer) D.viewer.style.display = 'none';
             if (D.dropdowns) D.dropdowns.style.display = 'none';
-            setActiveNav(true);
+            setActiveNav('duas');
           } else {
             requestWakeLock();
             pauseDuasAudio();
@@ -1995,7 +2888,7 @@ case 'SAVE_HINT_DONE': {
               if (D.dropdowns) D.dropdowns.style.display = '';
             }
 
-            setActiveNav(false);
+            setActiveNav('learn');
           }
         };
 
@@ -2019,6 +2912,7 @@ case 'SAVE_HINT_DONE': {
         };
 
         const closeDrawer = () => {
+          if (!D.drawer) return;
           D.drawer.classList.remove('open');
           document.body.classList.remove('drawer-open');
           if (drawerOverlay) {
@@ -2028,6 +2922,7 @@ case 'SAVE_HINT_DONE': {
         };
 
         const openDrawer = () => {
+          if (!D.drawer) return;
           D.drawer.classList.add('open');
           document.body.classList.add('drawer-open');
 
@@ -2049,6 +2944,14 @@ case 'SAVE_HINT_DONE': {
           }
         };
 
+        D.openDrawer = openDrawer;
+
+        if (D.startReciteBtn) {
+          D.startReciteBtn.onclick = () => {
+            triggerReciteStart(DEFAULT_SURAH, DEFAULT_AYAH, { autoPlay: false });
+          };
+        }
+
         if (D.contactBtn) {
           D.contactBtn.addEventListener('click', () => {
             closeDrawer();
@@ -2056,13 +2959,97 @@ case 'SAVE_HINT_DONE': {
           });
         }
 
+        if (D.drawerLoginBtn) {
+          D.drawerLoginBtn.addEventListener('click', async () => {
+            try {
+              await signInWithGoogle();
+            } catch (err) {
+              console.warn('[Auth] Google sign-in failed', err);
+              showInAppToast('Login failed. Please try again.', '#dc3545');
+            }
+          });
+        }
+
+        if (D.drawerLogoutBtn) {
+          D.drawerLogoutBtn.addEventListener('click', async () => {
+            try {
+              await logout();
+              localStorage.removeItem(GUEST_MIGRATION_KEY);
+            } catch (err) {
+              console.warn('[Auth] Sign out failed', err);
+              showInAppToast('Could not sign out.', '#dc3545');
+            }
+          });
+        }
+
         if (D.navLearnQuran) {
-          D.navLearnQuran.addEventListener('click', () => setDuasMode(false));
+          D.navLearnQuran.addEventListener('click', () => {
+            sendNativeTabSwitch('learn');
+            prefiredNativeTab = 'learn';
+            if (isDuasMode) setDuasMode(false);
+            if (isMemoMode) setMemorizationMode(false);
+            if (isReciteMode && typeof setReciteMode === 'function') {
+              setReciteMode(false, { showHome: true });
+            }
+            setActiveNav('learn');
+          });
         }
 
         if (D.navRamzanDuas) {
-          D.navRamzanDuas.addEventListener('click', () => setDuasMode(true));
+          D.navRamzanDuas.addEventListener('click', () => {
+            sendNativeTabSwitch('duas');
+            prefiredNativeTab = 'duas';
+            setDuasMode(true);
+          });
         }
+
+        if (D.navMemorization) {
+          D.navMemorization.addEventListener('click', () => {
+            sendNativeTabSwitch('memo');
+            prefiredNativeTab = 'memo';
+            setMemorizationMode(true);
+          });
+        }
+
+        if (D.memorizationHeroBtn) {
+          D.memorizationHeroBtn.addEventListener('click', () => {
+            const progress = getMemorizationProgress();
+            setMemorizationMode(true);
+            if (D.memoFrame) {
+              const target = progress?.surah && progress?.ayah
+                ? `memorization.html?embedded=1&surah=${progress.surah}&ayah=${progress.ayah}`
+                : 'memorization.html?embedded=1';
+              const resolved = resolveAppUrl(target);
+              const current = typeof D.memoFrame.src === 'string' ? D.memoFrame.src : '';
+              if (!current || current === 'about:blank' || !current.includes(target)) {
+                D.memoFrame.src = resolved;
+              }
+            }
+          });
+          updateMemorizationHeroButton();
+        }
+
+        if (D.learnSettingsBtn) {
+          D.learnSettingsBtn.addEventListener('click', () => {
+            if (isReciteMode) {
+              openReciteSettingsPopup();
+              return;
+            }
+            if (isDuasMode || isMemoMode) return;
+            if (!isViewerVisible()) return;
+            const activeFrame = getActiveIframe();
+            postToIframe(activeFrame, { type: 'OPEN_SETTINGS' });
+          });
+        }
+
+        if (D.reciteHomeBtn) {
+          D.reciteHomeBtn.addEventListener('click', () => {
+            if (!isReciteMode || typeof setReciteMode !== 'function') return;
+            setReciteMode(false, { showHome: true });
+          });
+        }
+
+        updateDrawerUser(auth.currentUser);
 
         if (D.randomDuaCard) {
           D.randomDuaCard.addEventListener('click', openDuaFromHero);
@@ -2080,6 +3067,8 @@ case 'SAVE_HINT_DONE': {
         const params = new URLSearchParams(window.location.search);
         if (params.get('tab') === 'duas' || window.location.hash === '#duas') {
           setDuasMode(true);
+        } else {
+          setActiveNav('learn');
         }
 
 
@@ -2087,11 +3076,21 @@ case 'SAVE_HINT_DONE': {
           Surah / Ayah dropdown navigation
           ------------------------------------------ */
         D.surahSelect.addEventListener('change', () => {
-          loadAyah(+D.surahSelect.value, 1);
+          const surah = +D.surahSelect.value;
+          if (isReciteMode) {
+            renderReciteSurah(surah, 1, { autoPlay: false });
+            return;
+          }
+          loadAyah(surah, 1);
         });
 
         D.ayahSelect.addEventListener('change', () => {
-          loadAyah(currentSurah, +D.ayahSelect.value);
+          const ayah = +D.ayahSelect.value;
+          if (isReciteMode) {
+            renderReciteSurah(currentSurah, ayah, { autoPlay: false });
+            return;
+          }
+          loadAyah(currentSurah, ayah);
         });
 
 
@@ -2102,8 +3101,8 @@ case 'SAVE_HINT_DONE': {
       /* ==========================================================
         About Popup
         ========================================================== */
-      aboutBtn
-        .addEventListener('click', () => {
+      if (aboutBtn) {
+        aboutBtn.addEventListener('click', () => {
           closeDrawer();
 
           const overlay = document.createElement('div');
@@ -2166,40 +3165,54 @@ case 'SAVE_HINT_DONE': {
             if (e.target === overlay) overlay.remove();
           };
         });
+      }
         /* ------------------------------------------
           Profile drawer open / close
           ------------------------------------------ */
-        menuBtn.addEventListener('click', () => {
-          openDrawer();
-        });
+        if (menuBtn) {
+          menuBtn.addEventListener('click', () => {
+            const onLearnReader = isViewerVisible() && !isReciteMode && !isDuasMode && !isMemoMode;
+            if (onLearnReader) {
+              goLearnHome();
+              return;
+            }
+            openDrawer();
+          });
+        }
 
-        D.closeBtn.addEventListener('click', () => {
-          closeDrawer();
-        });
+        if (D.closeBtn) {
+          D.closeBtn.addEventListener('click', () => {
+            closeDrawer();
+          });
+        }
 
         // Swipe-to-close drawer (mobile)
         let touchStartX = 0;
 
-        D.drawer.addEventListener('touchstart', e => {
-          touchStartX = e.changedTouches[0].pageX;
-        });
+        if (D.drawer) {
+          D.drawer.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].pageX;
+          });
 
-        D.drawer.addEventListener('touchend', e => {
-          if (e.changedTouches[0].pageX - touchStartX < 50) {
-            closeDrawer();
-          }
-        });
+          D.drawer.addEventListener('touchend', e => {
+            if (e.changedTouches[0].pageX - touchStartX < 50) {
+              closeDrawer();
+            }
+          });
+        }
 
 
         /* ------------------------------------------
           Return from game mode
           ------------------------------------------ */
-        D.returnBtn.addEventListener('click', () => {
-          const iframe = ring.cards?.[1]?.querySelector('iframe');
-          postToIframe(iframe, { type: 'RETURN_TO_AYAH' });
-          disableGameMode();
-          loadAyah(currentSurah, currentAyah);
-        });
+        if (D.returnBtn) {
+          D.returnBtn.addEventListener('click', () => {
+            const iframe = ring.cards?.[1]?.querySelector('iframe');
+            postToIframe(iframe, { type: 'RETURN_TO_AYAH' });
+            disableGameMode();
+            loadAyah(currentSurah, currentAyah);
+          });
+        }
 
         if (D.progressInfo && D.progressTip) {
           const showTip = () => {
@@ -2220,9 +3233,9 @@ case 'SAVE_HINT_DONE': {
         /* ==========================================================
           Learning Journey (Analytics Popup)
           ========================================================== */
-        document
-          .getElementById('learningJourneyBtn')
-          .addEventListener('click', () => {
+        const learningJourneyBtn = document.getElementById('learningJourneyBtn');
+        if (learningJourneyBtn) {
+          learningJourneyBtn.addEventListener('click', () => {
             closeDrawer();
 
             const raw = JSON.parse(
@@ -2330,6 +3343,7 @@ case 'SAVE_HINT_DONE': {
               if (e.target === overlay) overlay.remove();
             };
           });
+        }
 
         const journeyHeroBtn = document.getElementById('learningJourneyHeroBtn');
         if (journeyHeroBtn) {
@@ -2363,6 +3377,16 @@ case 'SAVE_HINT_DONE': {
         document
           .getElementById('goHomeBtn')
           .addEventListener('click', () => {
+            if (isMemoMode) {
+              closeDrawer();
+              if (D.memoFrame) {
+                const memoHomeUrl = resolveAppUrl(`memorization.html?embedded=1&home=1&t=${Date.now()}`);
+                D.memoFrame.src = memoHomeUrl;
+              }
+              setMemorizationMode(true);
+              return;
+            }
+
             // Already on home
             if (D.hero.style.display === 'block') return;
 
@@ -2403,6 +3427,90 @@ case 'SAVE_HINT_DONE': {
 /* ==========================================================
    Auth State Change Handler
    ========================================================== */
+      function updateDrawerUser(user) {
+        if (!D.drawerGreeting || !D.drawerSubtext) return;
+
+        if (!user || user.isAnonymous) {
+          D.drawerGreeting.textContent = 'Assalamualaikum, Guest';
+          D.drawerSubtext.textContent =
+            'Guest mode: your progress stays on this device only. Clearing data or uninstalling will erase it.';
+          if (D.drawerLoginBtn) D.drawerLoginBtn.style.display = 'inline-flex';
+          if (D.drawerLogoutBtn) D.drawerLogoutBtn.style.display = 'none';
+          localStorage.removeItem(GUEST_MIGRATION_KEY);
+          return;
+        }
+
+        const fullName = user.displayName || 'User';
+        const firstName = fullName.split(' ')[0] || fullName;
+        D.drawerGreeting.textContent = `Assalamualaikum, ${firstName}`;
+        D.drawerSubtext.textContent = user.email || 'Signed in';
+        if (D.drawerLoginBtn) D.drawerLoginBtn.style.display = 'none';
+        if (D.drawerLogoutBtn) D.drawerLogoutBtn.style.display = 'inline-flex';
+      }
+
+      function readLocalJSON(key, fallback) {
+        try {
+          const raw = localStorage.getItem(key);
+          if (!raw) return fallback;
+          return JSON.parse(raw);
+        } catch {
+          return fallback;
+        }
+      }
+
+      function collectGuestData() {
+        const points = Number(localStorage.getItem('guestPoints')) || 0;
+        const streakHistory = readLocalJSON('guestStreakHistory', []);
+        const streakFreezes = Number(localStorage.getItem('guestStreakFreezes')) || 0;
+        const completedSurahs = readLocalJSON('completedSurahs_new', {});
+        const lastRead = readLocalJSON('lastReadAyah', null);
+        const memoProgress = readLocalJSON('memo_progress_v1', null);
+        const memoListens = readLocalJSON('memo_listens_v1', null);
+        const memoLastProgress = readLocalJSON('memo_last_progress_v1', null);
+
+        const hasMemorization =
+          memoProgress || (memoListens && Object.keys(memoListens).length);
+
+        const hasData =
+          points ||
+          (Array.isArray(streakHistory) && streakHistory.length) ||
+          (completedSurahs && Object.keys(completedSurahs).length) ||
+          (lastRead && lastRead.surah && lastRead.ayah) ||
+          hasMemorization;
+
+        return {
+          hasData,
+          points,
+          streakHistory,
+          streakFreezes,
+          completedSurahs,
+          lastRead,
+          memorization: hasMemorization
+            ? {
+                unlocked: memoProgress,
+                listens: memoListens,
+                lastProgress: memoLastProgress
+              }
+            : null
+        };
+      }
+
+      async function migrateGuestDataIfNeeded(user) {
+        if (!user || user.isAnonymous) return;
+        if (localStorage.getItem(GUEST_MIGRATION_KEY) === '1') return;
+        const payload = collectGuestData();
+        if (!payload.hasData) return;
+        try {
+          await mergeGuestData(payload);
+          localStorage.setItem(GUEST_MIGRATION_KEY, '1');
+          localStorage.removeItem('guestPoints');
+          localStorage.removeItem('guestStreakHistory');
+          localStorage.removeItem('guestStreakFreezes');
+        } catch (err) {
+          console.warn('[Auth] Guest migration failed', err);
+        }
+      }
+
       async function handleAuthChange(user) {
         if (!D.ptsEl || !D.streakEl) {
           console.warn('[Auth] UI not ready yet, skipping update');
@@ -2410,6 +3518,7 @@ case 'SAVE_HINT_DONE': {
         }
 
         refreshAllProgress();
+        updateDrawerUser(user);
         console.log(
           '[Auth] Auth state changed:',
           user ? user.displayName : 'Guest'
@@ -2443,32 +3552,8 @@ case 'SAVE_HINT_DONE': {
           postToIframe(activeIframe, { type: 'userLoggedIn', firstName });
         }
 
-        // Transfer guest stats if first login
-        const snap = await getUserDoc();
-        const guestPoints =
-          +localStorage.getItem('guestPoints') || 0;
-
-        const guestStreak =
-          JSON.parse(
-            localStorage.getItem('guestStreakHistory') || '[]'
-          );
-
-        if (
-          !snap.exists() &&
-          (guestPoints || guestStreak.length)
-        ) {
-          await saveStatsToFirestore({
-            score: guestPoints,
-            streakHistory: guestStreak
-          });
-
-          await persistProfile(user.displayName, user.email);
-
-          localStorage.removeItem('guestPoints');
-          localStorage.removeItem('guestStreakHistory');
-        } else {
-          await persistProfile(user.displayName, user.email);
-        }
+        await migrateGuestDataIfNeeded(user);
+        await persistProfile(user.displayName, user.email);
 
         // Load Firestore stats
         const data = (await getUserDoc()).data() || {};
@@ -2894,6 +3979,7 @@ async function sendAyahToIframe(iframe, surah, ayah) {
         currentIndex = idx;
         currentSurah = surahNum;
         currentAyah  = ayahNum;
+        setGuestLastRead(surahNum, ayahNum);
 
         setReaderMode(true);
         if (lastMilestoneSurah !== surahNum) {
@@ -3312,11 +4398,30 @@ function canMove(dir) {
    ========================================================== */
 async function init() {
   bindUIActions();
+  const urlParams = new URLSearchParams(window.location.search);
+  const hasSurahParam = urlParams.has('surah');
+  const hasAyahParam = urlParams.has('ayah');
+  const urlSurah = hasSurahParam ? Number(urlParams.get('surah')) : NaN;
+  const urlAyah = hasAyahParam ? Number(urlParams.get('ayah')) : NaN;
+  const shouldAutoOpen =
+    hasSurahParam && hasAyahParam &&
+    Number.isFinite(urlSurah) && urlSurah > 0 &&
+    Number.isFinite(urlAyah) && urlAyah > 0;
+  if (shouldAutoOpen) {
+    document.documentElement.classList.add('pending-ayah');
+    document.body.classList.add('pending-ayah');
+  }
   setReaderMode(false);
   ensureHomeScroll();
-  window.addEventListener('pageshow', ensureHomeScroll);
+  window.addEventListener('pageshow', () => {
+    ensureHomeScroll();
+    updateMemorizationHeroButton();
+  });
   window.addEventListener('visibilitychange', () => {
-    if (!document.hidden) ensureHomeScroll();
+    if (!document.hidden) {
+      ensureHomeScroll();
+      updateMemorizationHeroButton();
+    }
   });
   normalizeLearningJourney();
   initSwipeHintObserver();
@@ -3326,6 +4431,18 @@ async function init() {
 
   await renderSurahOverview();
   await initStartButton();
+  if (shouldAutoOpen) {
+    if (typeof setDuasMode === 'function') {
+      setDuasMode(false);
+    }
+    if (D.surahContainer) D.surahContainer.style.display = 'none';
+    if (D.hero) D.hero.style.display = 'none';
+    if (D.viewer) D.viewer.style.display = 'block';
+    if (D.dropdowns) D.dropdowns.style.display = 'flex';
+    loadAyah(urlSurah, urlAyah);
+    document.documentElement.classList.remove('pending-ayah');
+    document.body.classList.remove('pending-ayah');
+  }
 
   StreakUI.init({
     navSelector: '#streakDisplay',
@@ -3336,7 +4453,39 @@ async function init() {
   requestWakeLock();
 }
 
+function bindStartReciteFailsafe() {
+  const btn = document.getElementById('startRecitingBtn');
+  if (!btn || btn.dataset.qqFailsafeBound === '1') return;
+  btn.dataset.qqFailsafeBound = '1';
+
+  btn.addEventListener('click', () => {
+    setTimeout(async () => {
+      // If the normal handler already switched view, do nothing.
+      if (document.body.classList.contains('recite-mode')) return;
+      const hero = document.getElementById('hero');
+      const heroVisible = !!hero && window.getComputedStyle(hero).display !== 'none';
+      if (!heroVisible) return;
+
+      let lastRead = null;
+      try {
+        lastRead = auth.currentUser ? await getLastReadFromDb() : getGuestLastRead();
+      } catch {
+        lastRead = null;
+      }
+
+      const surah = Number(lastRead?.surah) || DEFAULT_SURAH;
+      const ayah = Number(lastRead?.ayah) || DEFAULT_AYAH;
+      triggerReciteStart(surah, ayah, { autoPlay: false });
+    }, 0);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', bindStartReciteFailsafe);
 document.addEventListener('DOMContentLoaded', init);
+
+
+
+
 
 
 
