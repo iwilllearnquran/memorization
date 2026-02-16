@@ -28,7 +28,7 @@
 
       const parseIndex = (value, min, max) => {
         const n = Number.parseInt(value, 10);
-        if (!Number.isFinite(n) || n < min || n > max) {
+        if (Number.isNaN(n) || n < min || n > max) {
           return null;
         }
         return n;

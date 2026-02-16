@@ -25,7 +25,7 @@ export function showGrammarPopup(type) {
 
   const content = grammarExplanations[type];
 
-  if (content == null) {
+  if (content === null || content === undefined) {
     // Unknown or missing type: clear any stale content and hide the popup.
     popup.innerHTML = '';
     popup.style.display = 'none';

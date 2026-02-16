@@ -598,7 +598,6 @@
   (function () {
     document.addEventListener('DOMContentLoaded', function () {
       const overlay = document.getElementById('overlay');
-      const popup = document.getElementById('popupContent');
       if (!overlay) return;
 
       overlay.addEventListener('click', function () {
@@ -607,6 +606,7 @@
           return;
         }
 
+        const popup = document.getElementById('popupContent');
         overlay.style.display = 'none';
         if (popup) {
           popup.style.display = 'none';
