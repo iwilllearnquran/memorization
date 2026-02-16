@@ -15,14 +15,44 @@
 
   <script>
     window.addEventListener('message', async e => {
+      // Enforce same-origin messages only. Adjust if multiple trusted origins are needed.
+      const allowedOrigin = window.location.origin;
+      if (e.origin !== allowedOrigin) {
+        console.warn('[IFRAME] Ignoring message from untrusted origin:', e.origin);
+        return;
+      }
+
       if (e.data?.type !== 'LOAD_AYAH') return;
 
-      const { surah, ayah } = e.data;
-      console.log('[IFRAME] load', surah, ayah);
+      const { surah, ayah } = e.data || {};
+
+      const parseIndex = (value, min, max) => {
+        const n = Number.parseInt(value, 10);
+        if (!Number.isFinite(n) || n < min || n > max) {
+          return null;
+        }
+        return n;
+      };
+
+      // Adjust bounds if your content uses different ranges.
+      const surahIndex = parseIndex(surah, 1, 114);
+      const ayahIndex = parseIndex(ayah, 1, 300);
+
+      if (surahIndex === null || ayahIndex === null) {
+        console.warn('[IFRAME] Ignoring message with invalid surah/ayah:', surah, ayah);
+        return;
+      }
+
+      console.log('[IFRAME] load', surahIndex, ayahIndex);
 
       const res = await fetch(
-        `/ayahs/surah_${surah}/ayah_${surah}_${ayah}.html`
+        `/ayahs/surah_${surahIndex}/ayah_${surahIndex}_${ayahIndex}.html`
       );
+
+      if (!res.ok) {
+        console.warn('[IFRAME] Failed to load ayah content:', res.status, res.statusText);
+        return;
+      }
 
       const html = await res.text();
       document.getElementById('content').innerHTML = html;

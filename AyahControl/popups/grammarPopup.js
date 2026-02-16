@@ -1,10 +1,43 @@
 import { grammarExplanations } from './grammarContent.js';
 
+export function closeGrammarPopup() {
+  const popup = document.getElementById('popupContent');
+  const overlay = document.getElementById('overlay');
+
+  if (!popup || !overlay) {
+    return;
+  }
+
+  popup.innerHTML = '';
+  popup.style.display = 'none';
+  overlay.style.display = 'none';
+}
+
 export function showGrammarPopup(type) {
   const popup = document.getElementById('popupContent');
   const overlay = document.getElementById('overlay');
 
-  popup.innerHTML = grammarExplanations[type];
+  if (!popup || !overlay) {
+    return;
+  }
+
+  const content = grammarExplanations[type];
+
+  if (content == null) {
+    // Unknown or missing type: clear any stale content and hide the popup.
+    popup.innerHTML = '';
+    popup.style.display = 'none';
+    overlay.style.display = 'none';
+    return;
+  }
+
+  popup.innerHTML = content;
   popup.style.display = 'block';
   overlay.style.display = 'block';
+
+  // Attach overlay click handler once, to allow closing the popup.
+  if (!overlay.dataset.grammarPopupBound) {
+    overlay.addEventListener('click', closeGrammarPopup);
+    overlay.dataset.grammarPopupBound = 'true';
+  }
 }

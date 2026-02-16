@@ -594,6 +594,28 @@
 
 <script src="/script.js" defer></script> 
 
+<script>
+  (function () {
+    document.addEventListener('DOMContentLoaded', function () {
+      var overlay = document.getElementById('overlay');
+      var popup = document.getElementById('popupContent');
+      if (!overlay) return;
+
+      overlay.addEventListener('click', function () {
+        if (typeof window.hidePopup === 'function') {
+          window.hidePopup();
+          return;
+        }
+
+        overlay.style.display = 'none';
+        if (popup) {
+          popup.style.display = 'none';
+        }
+      });
+    });
+  })();
+</script>
+
 <script type="module" defer>
   import { toggleGames } from '/ui/toggleGames.js';
 
