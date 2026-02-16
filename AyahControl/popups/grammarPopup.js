@@ -1,5 +1,7 @@
 import { grammarExplanations } from './grammarContent.js';
 
+const boundOverlays = new WeakSet();
+
 export function closeGrammarPopup() {
   const popup = document.getElementById('popupContent');
   const overlay = document.getElementById('overlay');
@@ -36,8 +38,8 @@ export function showGrammarPopup(type) {
   overlay.style.display = 'block';
 
   // Attach overlay click handler once, to allow closing the popup.
-  if (!overlay.dataset.grammarPopupBound) {
+  if (!boundOverlays.has(overlay)) {
     overlay.addEventListener('click', closeGrammarPopup);
-    overlay.dataset.grammarPopupBound = 'true';
+    boundOverlays.add(overlay);
   }
 }

@@ -3,15 +3,9 @@ import { log } from '../core/logger.js';
 
 const logger = log('BRIDGE');
 
-const parentOrigin = (() => {
-  try {
-    // Prefer the embedding page's origin (from referrer), fall back to our own origin.
-    const referrerOrSelf = document.referrer || window.location.href;
-    return new URL(referrerOrSelf).origin;
-  } catch (e) {
-    return window.location.origin;
-  }
-})();
+// For same-origin iframes, use the current origin.
+// If this needs to support cross-origin embedding, configure allowed origins here.
+const parentOrigin = window.location.origin;
 
 export function send(type, payload = {}) {
   logger.info('→', type, payload);
@@ -20,7 +14,9 @@ export function send(type, payload = {}) {
 
 export function initParentBridge() {
   window.addEventListener('message', e => {
+    // Only accept messages from the same origin
     if (e.origin !== parentOrigin) {
+      logger.warn('Rejected message from unauthorized origin:', e.origin);
       return;
     }
     logger.info('←', e.data);
