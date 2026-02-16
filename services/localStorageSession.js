@@ -8,11 +8,11 @@ const STREAK_KEY = 'guestStreakHistory';
 const STREAK_FREEZE_KEY = 'guestStreakFreezes';
 const DEFAULT_STREAK_FREEZES = 2;
 
-function getISTDateStr() {
-  const now = new Date();
-  const utcMs = now.getTime() + now.getTimezoneOffset() * 60000;
-  const istMs = utcMs + 330 * 60000;
-  return new Date(istMs).toISOString().split('T')[0];
+function getLocalDateStr(date = new Date()) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
 }
 
 function diffDaysUTC(aStr, bStr) {
@@ -62,7 +62,7 @@ export function addGuestPoints(pointsDelta) {
  */
 export function recordGuestStreak() {
   initGuestSession();
-  const today = getISTDateStr();
+  const today = getLocalDateStr();
   const history = JSON.parse(localStorage.getItem(STREAK_KEY)) || [];
   const oldLength = history.length;
   const freezes = parseInt(localStorage.getItem(STREAK_FREEZE_KEY), 10) || 0;

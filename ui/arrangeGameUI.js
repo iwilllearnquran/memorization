@@ -123,7 +123,7 @@ function placeWord(box, correctOrder) {
   });
 
   // 4️⃣ After animation completes, show glass effect, cleanup, and update state
-  setTimeout(() => {
+  setTimeout(async () => {
     // Glass burst effect
     const glass = document.getElementById('glassEffect');
     if (glass) {
@@ -164,16 +164,7 @@ function placeWord(box, correctOrder) {
         'You have earned ' +
         (GAME_CONFIG.fullGameBonus) + ' extra Ajr points for forming a complete ayah!',
       ); **/
-      gameSession.end(true);
-      window.parent.postMessage({
-        type: 'persistStats',
-        score: gameSession.sessionScore,  // total earned this session
-        recordStreak: false,                // ask them to record today’s streak too
-      }, '*');
-      //window.parent.postMessage({
-       // type: 'streakUpdate',
-      //  date: new Date().toISOString().split('T')[0]
-     // }, '*');
+      await gameSession.end(true);
     
     }
   }, 400);

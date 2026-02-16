@@ -5,8 +5,6 @@ import { VERB_DATA }             from '../verbs_data.js';
 import { initStats, updateStats }from '/ui/gameStatsUI.js'; 
 import { showCompletionPopup }   from '/ui/gameCompletionUI.js';
 import { showGameOverPopup }     from '/ui/gameOverPopup.js';
-import { saveStatsToFirestore, auth } from '/services//_private/firestoreService.js';
-import { addPointsToFirestore } from '../services//_private/firestoreService.js';
 
 const importantStyles = {
   display:            'flex',
@@ -263,13 +261,7 @@ function _addControls() {
          Your progress is saved locally and will sync once you log in.`
       );
     }**/
-    const earned = gameSession.sessionScore; // ✅ capture BEFORE end
     await gameSession.end(true);
-    window.parent.postMessage({
-      type: 'persistStats',
-      score: gameSession.sessionScore,  // total earned this session
-      recordStreak: false                // ask them to record today’s streak too
-    }, '*');
    // window.parent.postMessage({
    //   type: 'streakUpdate',
    //   date: new Date().toISOString().split('T')[0]

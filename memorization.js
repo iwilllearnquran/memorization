@@ -11,8 +11,16 @@ const STORAGE_PROGRESS = 'memo_progress_v1';
 const STORAGE_LISTENS = 'memo_listens_v1';
 const STORAGE_LAST_PROGRESS = 'memo_last_progress_v1';
 const STORAGE_PRACTICE_MODE = 'memo_practice_mode_v1';
+const STORAGE_VIEW_STATE = 'memo_view_state_v1';
+const STORAGE_RECITE_MATCH_MODE = 'memo_recite_match_mode_v1';
 const MAX_ALIGN_EXPECTED_SPAN = 5;
 const MAX_ALIGN_ACTUAL_SPAN = 3;
+const SPEECH_TRANSLIT_ACCEPT_SIMILARITY = 0.5;
+const PEEK_DURATION_MS = 1000;
+const RECITE_MATCH_MODE = Object.freeze({
+  WORD: 'word',
+  FULL: 'full'
+});
 const SPEECH_TOKEN_ALIASES = {
   '\u062E\u0627\u0644\u0648': '\u0642\u0627\u0644\u0648\u0627',
   '\u062E\u0627\u0644\u0648\u0627': '\u0642\u0627\u0644\u0648\u0627'
@@ -45,8 +53,6 @@ const els = {
   welcomeBrain: document.getElementById('memoWelcomeBrain'),
   main: document.getElementById('memoMain'),
   welcomeStartBtn: document.getElementById('memoWelcomeStartBtn'),
-  welcomeJourneyBtn: document.getElementById('memoWelcomeJourneyBtn'),
-  welcomeResumeBtn: document.getElementById('memoWelcomeResumeBtn'),
   homeBtn: document.getElementById('memoHomeBtn'),
   status: document.getElementById('memoStatus'),
   surahSelect: document.getElementById('memoSurahSelect'),
@@ -66,6 +72,11 @@ const els = {
   feedback: document.getElementById('memoFeedback'),
   lastWord: document.getElementById('memoLastWord'),
   expectedWord: document.getElementById('memoExpectedWord'),
+  reciteLine: document.getElementById('memoReciteLine'),
+  reciteWordModeBtn: document.getElementById('memoReciteWordModeBtn'),
+  reciteFullModeBtn: document.getElementById('memoReciteFullModeBtn'),
+  reciteSettingsBtn: document.getElementById('memoReciteSettingsBtn'),
+  reciteSettingsPanel: document.getElementById('memoReciteSettingsPanel'),
   toggleMeaning: document.getElementById('memoToggleMeaning'),
   toggleGrammar: document.getElementById('memoToggleGrammar'),
   peekBtn: document.getElementById('memoPeekBtn'),
@@ -89,6 +100,7 @@ let keepListening = false;
 let recognitionRestartTimer = 0;
 let expectedWords = [];
 let expectedNormalized = [];
+let expectedTranslit = [];
 let revealIndex = 0;
 let finalTranscript = '';
 let lastFinalCount = 0;
@@ -98,6 +110,9 @@ let memoUser = null;
 let memoSyncTimer = 0;
 let isHydratingMemo = false;
 let welcomeBrainAnimation = null;
+let reciteMatchMode = RECITE_MATCH_MODE.WORD;
+let fullReciteIndex = 0;
+let fullReciteTokens = [];
 const viewState = {
   meaning: true,
   grammar: false
@@ -160,7 +175,7 @@ function normalize(text) {
   t = t.replace(/[\u0640]/g, '');
   t = t.replace(/[\u0625\u0623\u0622\u0671]/g, '\u0627');
   t = t.replace(/\u0649/g, '\u064A');
-  // Quranic orthography variants: "صلوة" -> "صلاة", then collapse final ta marbuta/heh.
+  // Quranic orthography variants: normalize waw+ta form and collapse final ta marbuta/heh.
   t = t.replace(/\u0648\u0629\b/g, '\u0627\u0629');
   t = t.replace(/\u0629/g, '\u0647');
   t = t.replace(/[^\w\u0600-\u06FF\s]+/g, ' ');
@@ -409,6 +424,7 @@ function setStatus(text, isError = false) {
 
 function updateToggleButton(btn, isOn) {
   if (!btn) return;
+  btn.classList.toggle('is-on', isOn);
   btn.classList.toggle('is-off', !isOn);
   btn.setAttribute('aria-pressed', String(isOn));
 }
@@ -419,6 +435,9 @@ function applyViewState() {
   root.classList.toggle('hide-grammar', !viewState.grammar);
   updateToggleButton(els.toggleMeaning, viewState.meaning);
   updateToggleButton(els.toggleGrammar, viewState.grammar);
+  try {
+    localStorage.setItem(STORAGE_VIEW_STATE, JSON.stringify(viewState));
+  } catch {}
 }
 
 function showFeedback(text, isError = false) {
@@ -445,14 +464,155 @@ function updateExpectedWord() {
   els.expectedWord.textContent = `Expected: ${expectedWords[revealIndex]}`;
 }
 
+function hasCompleteSpeechTranslitReference() {
+  return (
+    expectedTranslit.length === expectedWords.length &&
+    expectedTranslit.length > 0 &&
+    expectedTranslit.every(Boolean)
+  );
+}
+
+function isFullAyahReciteMode() {
+  return reciteMatchMode === RECITE_MATCH_MODE.FULL;
+}
+
+function renderFullReciteLine() {
+  if (!els.reciteLine) return;
+  if (!fullReciteTokens.length) {
+    els.reciteLine.classList.add('is-empty');
+    els.reciteLine.textContent = 'Speak full ayah...';
+    return;
+  }
+
+  const tokens = fullReciteTokens.map((token, idx) => ({
+    key: `spoken-${idx}`,
+    text: token.text,
+    status: token.status
+  }));
+
+  const frag = document.createDocumentFragment();
+  tokens.forEach((token, idx) => {
+    const chip = document.createElement('span');
+    chip.className = `memo-recite-token is-${token.status}`;
+    chip.textContent = token.text;
+    frag.appendChild(chip);
+    if (idx < tokens.length - 1) {
+      frag.appendChild(document.createTextNode(' '));
+    }
+  });
+
+  els.reciteLine.classList.remove('is-empty');
+  els.reciteLine.innerHTML = '';
+  els.reciteLine.appendChild(frag);
+}
+
+function resetFullReciteState() {
+  fullReciteIndex = 0;
+  fullReciteTokens = [];
+  renderFullReciteLine();
+}
+
+function rebuildFullReciteFromTokens(rawTokens) {
+  const nextTokens = [];
+  let idx = 0;
+  for (let i = 0; i < rawTokens.length; i += 1) {
+    const rawToken = rawTokens[i];
+    const normalizedToken = normalize(rawToken).replace(/\s+/g, '');
+    if (!normalizedToken) continue;
+
+    const expected = expectedNormalized[idx] || '';
+    const expectedTranslitNorm = expectedTranslit[idx] || '';
+    const matches =
+      (expected && (normalizedToken === expected || isFuzzyMatch(expected, normalizedToken))) ||
+      isTranslitSpeechMatch(expectedTranslitNorm, rawToken);
+
+    if (matches) {
+      nextTokens.push({
+        text: expectedWords[idx],
+        status: 'correct'
+      });
+      idx += 1;
+      continue;
+    }
+
+    // Wrong word: mark red and proceed forward to keep sequence moving.
+    nextTokens.push({
+      text: rawToken,
+      status: 'wrong'
+    });
+    idx += 1;
+
+    if (idx >= expectedWords.length) {
+      break;
+    }
+  }
+
+  fullReciteTokens = nextTokens;
+  fullReciteIndex = idx;
+  renderFullReciteLine();
+  if (fullReciteIndex >= expectedWords.length) {
+    showFeedback('Ayah complete.', false);
+    stopListening();
+  }
+}
+
+function applyReciteMatchModeUI() {
+  const fullMode = isFullAyahReciteMode();
+  updateToggleButton(els.reciteWordModeBtn, !fullMode);
+  updateToggleButton(els.reciteFullModeBtn, fullMode);
+
+  if (els.lastWord) {
+    els.lastWord.classList.toggle('is-hidden', fullMode);
+  }
+  if (els.expectedWord) {
+    els.expectedWord.classList.toggle('is-hidden', fullMode);
+  }
+  if (els.wordsWrap) {
+    els.wordsWrap.classList.toggle('is-hidden', fullMode);
+  }
+  if (els.reciteLine) {
+    els.reciteLine.classList.toggle('is-visible', fullMode);
+  }
+  if (els.peekBtn) {
+    const locked = isLockedAyah(current.surah, current.ayah);
+    els.peekBtn.disabled = locked;
+  }
+
+  if (fullMode) {
+    renderFullReciteLine();
+  } else if (els.reciteLine) {
+    els.reciteLine.classList.add('is-empty');
+    els.reciteLine.textContent = '';
+  }
+}
+
+function setReciteMatchMode(mode, options = {}) {
+  const nextMode = mode === RECITE_MATCH_MODE.FULL
+    ? RECITE_MATCH_MODE.FULL
+    : RECITE_MATCH_MODE.WORD;
+  const persist = options.persist !== false;
+  reciteMatchMode = nextMode;
+  if (persist) {
+    try {
+      localStorage.setItem(STORAGE_RECITE_MATCH_MODE, nextMode);
+    } catch {}
+  }
+  resetFullReciteState();
+  applyReciteMatchModeUI();
+}
+
 function resetTranscript() {
   finalTranscript = '';
   lastFinalCount = 0;
-  if (els.finalText) els.finalText.textContent = '—';
-  if (els.interimText) els.interimText.textContent = '—';
+  interimPreview = '';
+  if (els.finalText) els.finalText.textContent = '--';
+  if (els.interimText) els.interimText.textContent = '--';
   showFeedback('');
   setLastMatchedWord('');
   updateExpectedWord();
+  if (isFullAyahReciteMode()) {
+    resetFullReciteState();
+  }
 }
 
 function updateListenUI() {
@@ -548,6 +708,10 @@ function setSpokenText(idx, text) {
 }
 
 function updateSpokenPreview(text) {
+  if (isFullAyahReciteMode()) {
+    renderFullReciteLine();
+    return;
+  }
   const node = els.wordsWrap.querySelector(`[data-index="${revealIndex}"]`);
   if (!node) return;
   const spoken = node.querySelector('.memo-spoken');
@@ -568,6 +732,29 @@ function flashWrong(idx) {
 function peekWords() {
   stopListening();
   clearPeekTimer();
+
+  if (isFullAyahReciteMode()) {
+    if (!els.reciteLine) return;
+    const preview = expectedWords.length ? expectedWords.join(' ') : '';
+    const wasEmpty = els.reciteLine.classList.contains('is-empty');
+    const prevHtml = els.reciteLine.innerHTML;
+    els.peekBtn?.classList.add('is-active');
+    els.peekBtn?.setAttribute('aria-pressed', 'true');
+    els.reciteLine.classList.remove('is-empty');
+    els.reciteLine.textContent = preview || '—';
+    peekTimeout = window.setTimeout(() => {
+      if (wasEmpty) {
+        els.reciteLine.classList.add('is-empty');
+      }
+      els.reciteLine.innerHTML = prevHtml;
+      els.peekBtn?.classList.remove('is-active');
+      els.peekBtn?.setAttribute('aria-pressed', 'false');
+    }, PEEK_DURATION_MS);
+    return;
+  }
+
+  els.peekBtn?.classList.add('is-active');
+  els.peekBtn?.setAttribute('aria-pressed', 'true');
   expectedWords.forEach((_, idx) => {
     const node = els.wordsWrap.querySelector(`[data-index="${idx}"]`);
     if (node) {
@@ -577,7 +764,9 @@ function peekWords() {
   });
   peekTimeout = window.setTimeout(() => {
     resetReveals();
-  }, 1000);
+    els.peekBtn?.classList.remove('is-active');
+    els.peekBtn?.setAttribute('aria-pressed', 'false');
+  }, PEEK_DURATION_MS);
 }
 
 async function fetchAyahContent(surah, ayah) {
@@ -623,7 +812,15 @@ async function fetchAyahContent(surah, ayah) {
   throw lastError || new Error('Could not load ayah');
 }
 
-function renderWords(wordBlocks) {
+function extractExpectedTranslit(practiceBlocks) {
+  if (!Array.isArray(practiceBlocks) || !practiceBlocks.length) return [];
+  return practiceBlocks.map(block => {
+    const input = block?.querySelector('.translit-input');
+    return normalizeTranslit((input?.dataset.expected || '').trim());
+  });
+}
+
+function renderWords(wordBlocks, translitWords = []) {
   els.wordsWrap.innerHTML = '';
   expectedWords = [];
 
@@ -651,6 +848,7 @@ function renderWords(wordBlocks) {
   });
 
   expectedNormalized = expectedWords.map(normalize);
+  expectedTranslit = expectedWords.map((_, idx) => normalizeTranslit(translitWords[idx] || ''));
   els.wordsWrap.appendChild(wordsContainer);
 }
 
@@ -1325,6 +1523,14 @@ function isFuzzyMatch(expected, candidate) {
   return phoneticDistance <= phoneticAllowed;
 }
 
+function isTranslitSpeechMatch(expectedNorm, rawCandidate) {
+  if (!expectedNorm || !rawCandidate) return false;
+  const candidateNorm = normalizeTranslit(rawCandidate);
+  if (!candidateNorm) return false;
+  const similarity = translitSimilarity(candidateNorm, expectedNorm);
+  return similarity >= SPEECH_TRANSLIT_ACCEPT_SIMILARITY;
+}
+
 function processTokens(tokens, rawTokens) {
   const before = revealIndex;
   let consumed = 0;
@@ -1332,11 +1538,14 @@ function processTokens(tokens, rawTokens) {
   let i = 0;
   while (i < tokens.length && revealIndex < expectedNormalized.length) {
     const expected = expectedNormalized[revealIndex].replace(/\s+/g, '');
+    const expectedNormTranslit = expectedTranslit[revealIndex] || '';
     let matched = false;
-    for (let n = 1; n <= 3 && i + n <= tokens.length; n += 1) {
+    for (let n = 1; n <= 4 && i + n <= tokens.length; n += 1) {
       const candidate = tokens.slice(i, i + n).join('');
-      if (candidate === expected || isFuzzyMatch(expected, candidate)) {
-        const rawCandidate = rawTokens ? rawTokens.slice(i, i + n).join(' ') : tokens.slice(i, i + n).join(' ');
+      const rawCandidate = rawTokens ? rawTokens.slice(i, i + n).join(' ') : tokens.slice(i, i + n).join(' ');
+      const isArabicMatch = candidate === expected || isFuzzyMatch(expected, candidate);
+      const isTranslitMatch = isTranslitSpeechMatch(expectedNormTranslit, rawCandidate);
+      if (isArabicMatch || isTranslitMatch) {
         setSpokenText(revealIndex, rawCandidate);
         revealWord(revealIndex);
         revealIndex += 1;
@@ -1369,6 +1578,50 @@ function processTokens(tokens, rawTokens) {
     setLastProgressSnapshot();
   }
   return consumed;
+}
+
+function syncRevealFromTranslitTranscript(transcript) {
+  if (!hasCompleteSpeechTranslitReference()) return false;
+  if (revealIndex >= expectedWords.length) return false;
+
+  const actualRawTokens = splitRawTokens(transcript);
+  if (!actualRawTokens.length) return false;
+  const actualTokens = actualRawTokens.map(token => normalizeTranslit(token)).filter(Boolean);
+  if (!actualTokens.length) return false;
+
+  const aligned = alignTranslitTokens(expectedTranslit, actualTokens);
+  if (!aligned || !Array.isArray(aligned.expectedFeedback)) return false;
+
+  let moved = false;
+  while (revealIndex < expectedWords.length) {
+    const feedback = aligned.expectedFeedback[revealIndex];
+    if (!feedback) break;
+    const similarity = Number(feedback.similarity) || 0;
+    const acceptable =
+      feedback.status === 'correct' ||
+      feedback.status === 'fuzzy' ||
+      (similarity >= SPEECH_TRANSLIT_ACCEPT_SIMILARITY && Boolean(feedback.typedNorm));
+    if (!acceptable) break;
+
+    const spokenValue = (feedback.typedNorm || '').trim();
+    if (spokenValue) {
+      setSpokenText(revealIndex, spokenValue);
+    }
+    revealWord(revealIndex);
+    revealIndex += 1;
+    updateExpectedWord();
+    moved = true;
+  }
+
+  if (moved) {
+    showFeedback('Correct');
+    setLastProgressSnapshot();
+    updateSpokenPreview('');
+    if (revealIndex >= expectedNormalized.length) {
+      completeAyah();
+    }
+  }
+  return moved;
 }
 
 function completeAyah() {
@@ -1441,22 +1694,38 @@ function initRecognition() {
       }
     }
     if (els.finalText) {
-      els.finalText.textContent = finalTranscript.trim() || '—';
+      els.finalText.textContent = finalTranscript.trim() || '--';
     }
     if (els.interimText) {
-      els.interimText.textContent = interim.trim() || '—';
+      els.interimText.textContent = interim.trim() || '--';
     }
     interimPreview = interim.trim();
     const previewTokens = tokenizeRaw(interimPreview);
     updateSpokenPreview(previewTokens.slice(-2).join(' '));
 
+    if (isFullAyahReciteMode()) {
+      const liveText = `${finalTranscript} ${interim}`.trim();
+      const liveTokens = tokenizeRaw(liveText);
+      rebuildFullReciteFromTokens(liveTokens);
+      return;
+    }
+
     const tokens = tokenize(finalTranscript);
     const rawTokens = tokenizeRaw(finalTranscript);
     if (tokens.length > lastFinalCount) {
-      const consumed = processTokens(tokens.slice(lastFinalCount), rawTokens.slice(lastFinalCount));
-      lastFinalCount += consumed;
-      updateSpokenPreview('');
+      const nextTokens = tokens.slice(lastFinalCount);
+      const nextRawTokens = rawTokens.slice(lastFinalCount);
+      const hasArabicChars = /[\u0600-\u06FF]/.test(nextTokens.join(''));
+
+      if (hasArabicChars || !hasCompleteSpeechTranslitReference()) {
+        const consumed = processTokens(nextTokens, nextRawTokens);
+        lastFinalCount += consumed;
+        updateSpokenPreview('');
+      } else {
+        lastFinalCount = tokens.length;
+      }
     }
+    syncRevealFromTranslitTranscript(finalTranscript);
   };
 
   return rec;
@@ -1551,7 +1820,8 @@ async function loadAyah(surah, ayah) {
 
   try {
     const { wordBlocks, practiceBlocks } = await fetchAyahContent(current.surah, current.ayah);
-    renderWords(wordBlocks);
+    const translitWords = extractExpectedTranslit(practiceBlocks);
+    renderWords(wordBlocks, translitWords);
     renderPractice(practiceBlocks);
     resetReveals();
     setStatus('Idle');
@@ -1570,6 +1840,7 @@ async function loadAyah(surah, ayah) {
     setStatus('Failed', true);
     expectedWords = [];
     expectedNormalized = [];
+    expectedTranslit = [];
     revealIndex = 0;
     els.wordsWrap.innerHTML = '';
     updateExpectedWord();
@@ -1617,6 +1888,26 @@ function initWelcomeBrainAnimation() {
 async function init() {
   unlocked = getStoredProgress();
   listenCounts = getStoredListenCounts();
+  try {
+    const rawView = localStorage.getItem(STORAGE_VIEW_STATE);
+    if (rawView) {
+      const parsed = JSON.parse(rawView);
+      if (parsed && typeof parsed === 'object') {
+        viewState.meaning = parsed.meaning !== false;
+        viewState.grammar = Boolean(parsed.grammar);
+      }
+    }
+  } catch {}
+  try {
+    const storedMode = localStorage.getItem(STORAGE_RECITE_MATCH_MODE);
+    reciteMatchMode = storedMode === RECITE_MATCH_MODE.FULL
+      ? RECITE_MATCH_MODE.FULL
+      : RECITE_MATCH_MODE.WORD;
+  } catch {
+    reciteMatchMode = RECITE_MATCH_MODE.WORD;
+  }
+  applyReciteMatchModeUI();
+  applyViewState();
   surahList = await fetchSurahList();
   if (!surahList.length) {
     setStatus('No data', true);
@@ -1656,29 +1947,6 @@ if (els.welcomeStartBtn) {
   });
 }
 
-if (els.welcomeResumeBtn) {
-  els.welcomeResumeBtn.addEventListener('click', () => {
-    openMemorizationWorkspace();
-    if (els.playBtn) {
-      els.playBtn.focus();
-    }
-  });
-}
-
-if (els.welcomeJourneyBtn) {
-  els.welcomeJourneyBtn.addEventListener('click', () => {
-    if (isEmbedded) {
-      parent.postMessage(
-        { type: 'EXIT_MEMO' },
-        window.location.origin === 'null' ? '*' : window.location.origin
-      );
-      return;
-    }
-    const target = els.learnNav?.getAttribute('href') || '/index.html';
-    window.location.href = target;
-  });
-}
-
 els.surahSelect.addEventListener('change', () => {
   const surah = Number(els.surahSelect.value);
   if (!Number.isFinite(surah)) return;
@@ -1697,6 +1965,18 @@ els.playBtn.addEventListener('click', () => {
   const times = Number(els.playCount.value || 1);
   playAudio(times);
 });
+
+if (els.reciteWordModeBtn) {
+  els.reciteWordModeBtn.addEventListener('click', () => {
+    setReciteMatchMode(RECITE_MATCH_MODE.WORD);
+  });
+}
+
+if (els.reciteFullModeBtn) {
+  els.reciteFullModeBtn.addEventListener('click', () => {
+    setReciteMatchMode(RECITE_MATCH_MODE.FULL);
+  });
+}
 
 els.startBtn.addEventListener('click', startListening);
 els.stopBtn.addEventListener('click', stopListening);
@@ -1738,6 +2018,13 @@ if (els.peekBtn) {
   });
 }
 
+if (els.reciteSettingsBtn) {
+  els.reciteSettingsBtn.addEventListener('click', () => {
+    if (!els.reciteSettingsPanel) return;
+    els.reciteSettingsPanel.classList.toggle('is-hidden');
+  });
+}
+
 if (els.practiceToggle) {
   els.practiceToggle.addEventListener('click', () => {
     const isOpen = els.practicePanel?.classList.contains('is-open');
@@ -1762,3 +2049,5 @@ onAuthChange(user => {
   }
 });
 init();
+
+
