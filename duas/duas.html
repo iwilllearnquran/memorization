@@ -7,17 +7,60 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
 
 <style>
 :root {
-  --teal-900:#0a4d68;
-  --teal-700:#13728f;
+  --teal-900:#5e2b42;
+  --teal-700:#7f4960;
   --gold-500:#d6a23a;
-  --paper:#fffdf8;
-  --ink:#102a36;
-  --muted:#5f6b76;
-  --shadow:0 14px 34px rgba(10,32,42,.12);
+  --paper:rgba(255, 255, 255, 0.95);
+  --ink:#2f1b25;
+  --muted:#68525c;
+  --shadow:0 12px 28px rgba(39,16,27,.12);
   --ring:0 0 0 3px rgba(214,162,58,.45);
+}
+
+html.dark-mode body,
+body.dark-mode {
+  background:
+    radial-gradient(980px 520px at 12% -8%, rgba(72, 95, 126, 0.2), transparent 62%),
+    radial-gradient(1100px 600px at 84% 12%, rgba(84, 49, 62, 0.25), transparent 66%),
+    linear-gradient(180deg, #101723 0%, #171f2e 52%, #111928 100%);
+}
+
+html.dark-mode .app-header,
+body.dark-mode .app-header {
+  background: linear-gradient(135deg, rgba(33, 47, 66, 0.9) 0%, rgba(25, 36, 52, 0.94) 100%);
+  border-color: rgba(173, 202, 228, 0.18);
+}
+
+html.dark-mode .app-title,
+html.dark-mode .app-subtitle,
+html.dark-mode .dua-page-quote,
+body.dark-mode .app-title,
+body.dark-mode .app-subtitle,
+body.dark-mode .dua-page-quote {
+  color: #e6f3ff;
+}
+
+html.dark-mode .dua-card,
+body.dark-mode .dua-card {
+  background: linear-gradient(180deg, rgba(20, 30, 44, 0.97) 0%, rgba(23, 34, 50, 0.94) 100%);
+  border-color: rgba(146, 175, 203, 0.22);
+  color: #dbefff;
+}
+
+html.dark-mode .dua-reference,
+html.dark-mode .dua-translation,
+body.dark-mode .dua-reference,
+body.dark-mode .dua-translation {
+  color: #b9d5eb !important;
+}
+
+html.dark-mode .dua-card *,
+body.dark-mode .dua-card * {
+  color: #eef6ff !important;
 }
 
 @font-face {
@@ -32,39 +75,127 @@ body {
   font-family:Manrope, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 background:
     radial-gradient(
-      1200px 600px at 15% -10%,
-      rgba(19, 114, 143, 0.18),
-      transparent 55%
+      980px 520px at 12% -8%,
+      rgba(255, 233, 194, 0.26),
+      transparent 62%
     ),
     radial-gradient(
-      900px 500px at 85% 0%,
-      rgba(214, 162, 58, 0.18),
-      transparent 50%
+      1100px 600px at 84% 12%,
+      rgba(170, 102, 128, 0.2),
+      transparent 66%
     ),
     linear-gradient(
       180deg,
-      #f6fbfd 0%,
-      #eaf2f6 100%
+      #8c5a6d 0%,
+      #98667a 52%,
+      #865569 100%
     );
 
   background-attachment: fixed;
   padding:0;
 }
 
+html.native-app-embedded,
+body.native-app-embedded,
+body.native-app-embedded * {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+body.native-app-embedded,
+body.native-app-embedded * {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+body.native-app-embedded input,
+body.native-app-embedded textarea,
+body.native-app-embedded [contenteditable="true"],
+body.native-app-embedded .allow-text-select {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
+}
+
+body.native-app-embedded button,
+body.native-app-embedded a,
+body.native-app-embedded [role="button"] {
+  touch-action: manipulation;
+}
+
+html {
+  background: linear-gradient(180deg, #8c5a6d 0%, #98667a 52%, #865569 100%);
+}
+
 .page {
   max-width:100%;
   margin:0;
-  padding:16px 15px 40px;
+  padding:20px 15px 40px;
 }
 
 .app-header {
   text-align:center;
-  padding:22px 20px;
-  background:linear-gradient(135deg, #0a4d68 0%, #13728f 100%);
+  padding:88px 20px 22px;
+  background:linear-gradient(135deg, rgba(143, 42, 71, 0.88) 0%, rgba(101, 23, 45, 0.92) 100%);
   border-radius:20px;
   box-shadow:var(--shadow);
-  margin-bottom:10px;
-  border:1px solid rgba(255,255,255,0.18);
+  margin-bottom:20px;
+  border:1px solid rgba(255,255,255,0.22);
+  position:relative;
+  overflow:hidden;
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+  box-shadow:
+    0 14px 30px rgba(39, 16, 27, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.app-header::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.03) 45%);
+  z-index:0;
+  pointer-events:none;
+}
+
+.app-header::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(66, 14, 33, 0.06) 0%, rgba(66, 14, 33, 0.16) 55%, rgba(66, 14, 33, 0.26) 100%);
+  z-index:0;
+  pointer-events:none;
+}
+
+.app-moon-strip {
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:92px;
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  grid-template-rows:1fr;
+  pointer-events:none;
+  z-index:0;
+  opacity:0.85;
+}
+
+.app-moon-tile {
+  overflow:hidden;
+  display:grid;
+  place-items:center;
+}
+
+.app-moon-lottie {
+  width:128px;
+  height:128px;
+  transform:translateY(-10px);
+}
+
+.app-moon-tile.is-center .app-moon-lottie {
+  transform:translateY(-10px) scaleX(-1);
 }
 
 .app-title {
@@ -72,11 +203,26 @@ background:
   font-size:32px;
   color:#fff;
   margin:0 0 6px;
+  position:relative;
+  z-index:1;
 }
 
 .app-subtitle {
   color:rgba(255,255,255,0.85);
   margin:0;
+  position:relative;
+  z-index:1;
+}
+
+.dua-page-quote {
+  margin:8px auto 0;
+  max-width:420px;
+  font-size:0.7rem;
+  font-style:italic;
+  line-height:1.45;
+  color:rgba(255,255,255,0.82);
+  position:relative;
+  z-index:1;
 }
 
 .dua-list {
@@ -85,17 +231,19 @@ background:
 }
 
 .dua-card {
-  background:var(--paper);
+  background:linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,253,254,0.95) 100%);
   border-radius:22px;
   padding:24px;
-  border:1px solid rgba(10,77,104,.14);
+  border:1px solid rgba(129, 78, 99, 0.14);
   box-shadow:var(--shadow);
   text-align:center;
   transition:box-shadow .25s ease, transform .25s ease;
+  backdrop-filter: blur(8px) saturate(106%);
+  -webkit-backdrop-filter: blur(8px) saturate(106%);
 }
 
 .dua-card.playing {
-  box-shadow:var(--shadow), var(--ring);
+  box-shadow:var(--shadow), var(--ring), inset 0 1px 0 rgba(255,255,255,0.28);
   transform:scale(1.01);
 }
 
@@ -115,12 +263,12 @@ background:
   cursor: pointer;
   text-decoration: underline;
   text-underline-offset: 3px;
-  text-decoration-color: rgba(19, 114, 143, 0.5);
+  text-decoration-color: rgba(143, 42, 71, 0.5);
 }
 
 .dua-ref-link:hover {
   color: var(--teal-900);
-  text-decoration-color: rgba(10, 77, 104, 0.8);
+  text-decoration-color: rgba(101, 23, 45, 0.8);
 }
 
 .dua-arabic {
@@ -159,15 +307,15 @@ background:
   font-size:13px;
   font-weight:600;
   border-radius:999px;
-  border:1px solid rgba(10,77,104,.25);
-  background:rgba(10,77,104,.08);
+  border:1px solid rgba(101,23,45,.25);
+  background:rgba(101,23,45,.08);
   color:var(--teal-900);
   cursor:pointer;
   transition:all .2s ease;
 }
 
 .play-btn:hover {
-  background:#0a4d6824;
+  background:rgba(101,23,45,.14);
 }
 
 .play-btn.playing {
@@ -181,8 +329,8 @@ background:
 }
 
 .dua-share-btn {
-  border: 1px solid rgba(10, 77, 104, 0.25);
-  background: rgba(10, 77, 104, 0.08);
+  border: 1px solid rgba(101, 23, 45, 0.25);
+  background: rgba(101, 23, 45, 0.08);
   color: var(--teal-900);
   padding: 8px 14px;
   font-size: 12px;
@@ -197,11 +345,25 @@ background:
 }
 
 .dua-share-btn:hover {
-  background: rgba(10, 77, 104, 0.16);
+  background: rgba(101, 23, 45, 0.16);
 }
 
 .dua-share-btn .material-icons {
   font-size: 18px;
+}
+
+.dua-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.dua-actions .play-btn,
+.dua-actions .dua-share-btn {
+  margin: 0;
 }
 </style>
 </head>
@@ -210,8 +372,13 @@ background:
 <div class="page">
 
 <header class="app-header">
+  <div id="duaMoonStrip" class="app-moon-strip" aria-hidden="true"></div>
   <div class="app-title">Qur’anic Duas</div>
   <div class="app-subtitle">Powerful Duas from the Qur’an</div>
+  <p class="dua-page-quote">
+    "Call upon Me; I will respond to you."<br>
+    &mdash; Quran (40:60)
+  </p>
 </header>
 
 <main class="dua-list" id="duaList"></main>
@@ -225,6 +392,41 @@ if (window.top === window.self) {
 
 const RAW_ORIGIN = window.location.origin;
 const PARENT_ORIGIN = RAW_ORIGIN === 'null' ? '*' : RAW_ORIGIN;
+const IS_NATIVE_CONTAINER = (() => {
+  try {
+    return Boolean(
+      window.ReactNativeWebView ||
+      window.parent?.ReactNativeWebView ||
+      window.top?.ReactNativeWebView
+    );
+  } catch {
+    return Boolean(window.ReactNativeWebView);
+  }
+})();
+
+function isEditableTarget(target) {
+  if (!(target instanceof Element)) return false;
+  return Boolean(
+    target.closest('input, textarea, [contenteditable="true"], .allow-text-select')
+  );
+}
+
+function enableNativeInteractionGuard() {
+  if (!IS_NATIVE_CONTAINER) return;
+
+  document.documentElement.classList.add('native-app-embedded');
+  document.body.classList.add('native-app-embedded');
+
+  const blockIfNotEditable = event => {
+    if (isEditableTarget(event.target)) return;
+    event.preventDefault();
+  };
+
+  document.addEventListener('contextmenu', blockIfNotEditable, { capture: true });
+  document.addEventListener('selectstart', blockIfNotEditable, { capture: true });
+}
+
+enableNativeInteractionGuard();
 
 function isTrustedParentMessage(e) {
   if (!e || !e.origin) return false;
@@ -240,6 +442,61 @@ function postToParent(message) {
   if (!window.parent || window.parent === window) return;
   window.parent.postMessage(message, PARENT_ORIGIN);
 }
+
+function applyDuaTheme(isDark) {
+  const enabled = Boolean(isDark);
+  document.documentElement.classList.toggle('dark-mode', enabled);
+  document.body.classList.toggle('dark-mode', enabled);
+}
+
+function readStoredTheme() {
+  try {
+    const settings = JSON.parse(localStorage.getItem('qq_settings') || '{}') || {};
+    applyDuaTheme(settings.darkMode === true);
+  } catch {
+    applyDuaTheme(false);
+  }
+}
+
+readStoredTheme();
+
+const SHARE_URL = "https://myquranquest.com/duas";
+const SHARE_TEXT = "Powerful Duas From Quran. See more at www.myquranquest.com/duas";
+
+function initDuaMoonAnimation() {
+  const stripEl = document.getElementById("duaMoonStrip");
+  if (!stripEl || typeof window.lottie === "undefined") return;
+  try {
+    const animationPath = new URL("../assets/dua-moon-animation.json", window.location.href).href;
+    stripEl.innerHTML = "";
+    const tileCount = 3;
+    for (let i = 0; i < tileCount; i += 1) {
+      const tile = document.createElement("div");
+      tile.className = "app-moon-tile";
+      if (i === 1) {
+        tile.classList.add("is-center");
+      }
+      const host = document.createElement("div");
+      host.className = "app-moon-lottie";
+      tile.appendChild(host);
+      stripEl.appendChild(tile);
+      const anim = window.lottie.loadAnimation({
+        container: host,
+        renderer: "svg",
+        loop: false,
+        autoplay: true,
+        path: animationPath,
+        rendererSettings: { preserveAspectRatio: "xMidYMid meet" }
+      });
+      anim.addEventListener("complete", () => {
+        anim.goToAndStop(anim.totalFrames - 1, true);
+      });
+    }
+  } catch (err) {
+    console.warn("[DUAS] Failed to load moon lottie", err);
+  }
+}
+initDuaMoonAnimation();
 
 /* ---------------- TEXT CLEANING ---------------- */
 
@@ -321,6 +578,10 @@ function scrollToDuaByRef(ref) {
 
 window.addEventListener("message", e => {
   if (!isTrustedParentMessage(e)) return;
+  if (e?.data?.type === "APPLY_THEME") {
+    applyDuaTheme(e?.data?.darkMode === true);
+    return;
+  }
   if (e?.data?.type === "PAUSE_DUAS_AUDIO") {
     pauseAllDuaAudio();
     return;
@@ -496,15 +757,44 @@ async function buildShareCanvas(card) {
   ctx.font = "italic 24px 'Manrope', sans-serif";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  ctx.fillText("Visit: myquranquest.com/duas", width / 2, height - outerPad + 4);
+  const shareLabel = SHARE_URL.replace(/^https?:\/\//, "");
+  ctx.fillText(`Visit: ${shareLabel}`, width / 2, height - outerPad + 4);
 
   return canvas;
 }
 
-async function shareDuaCard(card) {
+function getDuaSharePayload(card, duaData = null) {
+  const referenceRaw =
+    card?.querySelector(".dua-reference")?.innerText?.replace(/^Qur['’]?an\s*/i, "").trim() ||
+    String(duaData?.reference || "").trim();
+  const reference = referenceRaw || "dua";
+  const arabic = card?.querySelector(".dua-arabic")?.innerText?.trim() || "";
+  const transliteration = card?.querySelector(".dua-transliteration")?.innerText?.trim() || "";
+  const translation = card?.querySelector(".dua-translation")?.innerText?.trim() || "";
+
+  const shareTextLines = [
+    `Qur'an ${reference}`,
+    arabic,
+    transliteration,
+    translation,
+    `More duas: ${SHARE_URL}`
+  ].filter(Boolean);
+
+  return {
+    reference,
+    arabic,
+    transliteration,
+    translation,
+    shareText: shareTextLines.join("\n\n")
+  };
+}
+
+async function shareDuaCard(card, duaData = null) {
   if (!card) return;
 
   const canvas = await buildShareCanvas(card);
+  const payload = getDuaSharePayload(card, duaData);
+  const shareText = payload.shareText || SHARE_TEXT;
 
   /* ---------------- WEBVIEW BRIDGE ---------------- */
   const dataUrl = canvas.toDataURL("image/png");
@@ -513,7 +803,13 @@ async function shareDuaCard(card) {
     window.ReactNativeWebView.postMessage(
       JSON.stringify({
         type: "SHARE_IMAGE",
-        dataUrl
+        dataUrl,
+        text: shareText,
+        url: SHARE_URL,
+        reference: payload.reference,
+        arabic: payload.arabic,
+        transliteration: payload.transliteration,
+        translation: payload.translation
       })
     );
     return; // 🔴 IMPORTANT: stop here for app
@@ -526,16 +822,15 @@ async function shareDuaCard(card) {
   if (!blob) return;
 
   const ref =
-    card
-      .querySelector(".dua-reference")
-      ?.innerText?.replace(/\s+/g, "-") || "dua";
+    payload.reference.replace(/\s+/g, "-") || "dua";
 
   const file = new File([blob], `${ref}.png`, { type: "image/png" });
 
   if (navigator.share && navigator.canShare?.({ files: [file] })) {
     await navigator.share({
       title: "Qur’anic Duas",
-      text: "Powerful Duas from the Qur’an",
+      text: shareText,
+      url: SHARE_URL,
       files: [file]
     });
   } else {
@@ -650,9 +945,11 @@ fetch("quranwbw_duas.json")
       card.appendChild(divider);
       card.appendChild(translitEl);
       card.appendChild(translationEl);
-      card.appendChild(shareBtn);
-
-      card.appendChild(btn);
+      const actionRow = document.createElement("div");
+      actionRow.className = "dua-actions";
+      actionRow.appendChild(shareBtn);
+      actionRow.appendChild(btn);
+      card.appendChild(actionRow);
       list.appendChild(card);
 
       if (refBtn) {
@@ -665,7 +962,7 @@ fetch("quranwbw_duas.json")
       }
 
       if (shareBtn) {
-        shareBtn.addEventListener("click", () => shareDuaCard(card));
+        shareBtn.addEventListener("click", () => shareDuaCard(card, d));
       }
 
       cards.push({ audio, card, btn });

@@ -11,18 +11,28 @@
 // 7. Progress tracking for Surah cards
 // 8. Wake Lock API to prevent screen dimming
 
-// ————— Imports —————
+// ----- Imports -----
 import {
   auth,
   onAuthChange,
+  signInWithGoogle,
+  signInWithGoogleTokens,
+  resolveGoogleRedirectResult,
+  logout,
   persistProfile,
   getUserDoc,
-  saveStatsToFirestore,
+  mergeGuestData,
   onForegroundMessage,
   getLastReadFromDb,
-  recordStreak,
+  recordStreak as recordUserStreak,
   updateLastRead,
-  addPointsToFirestore} from '/services//_private/firestoreService.js';
+  updateLastRecite,
+  addPointsToFirestore,
+  updateCompletedSurahsProgress,
+  saveNamazGoalsWidget,
+  getNamazGoalsWidget,
+  getLastReciteFromDb
+} from '/services/_private/firestoreService.js';
 
 import {
   addGuestPoints,
@@ -34,11 +44,50 @@ import {
 import { StreakUI } from '/ui/StreakLogicAndUI.js';
 import { fetchSurahList } from '/services/quranApi.js';
 
-// ————— Constants & State —————
+// ----- Constants & State -----
 const DEFAULT_SURAH = 1;
 const DEFAULT_AYAH  = 1;
 const STORAGE_KEY = 'swipe_hint_shown_v1';
 const LISTEN_STORAGE_KEY = 'qq_last_listened_auto_swipe_v1';
+const RECITE_PROGRESS_KEY = 'qq_last_recite_progress_v1';
+const MEMO_PROGRESS_KEY = 'memo_last_progress_v1';
+const MEMO_LISTEN_TARGET = 20;
+const GUEST_MIGRATION_KEY = 'guest_migration_done_v1';
+const NAMAZ_WIDGET_STORAGE_KEY = 'qq_namaz_goals_widget_v1';
+const CONTACT_FORM_URL = 'https://forms.gle/Bm7jN8CoadBHw7oB8';
+const NAMAZ_PRAYER_KEYS = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
+const AYAH_OF_DAY_POOL = [
+  {
+    ref: '2:201',
+    text: 'Our Lord, grant us good in this world and good in the Hereafter, and protect us from the torment of the Fire.',
+    meta: 'Al-Baqarah - 2:201'
+  },
+  {
+    ref: '2:286',
+    text: 'Our Lord, do not impose blame upon us if we forget or make a mistake.',
+    meta: 'Al-Baqarah - 2:286'
+  },
+  {
+    ref: '3:8',
+    text: 'Our Lord, do not let our hearts deviate after You have guided us, and grant us mercy from Yourself.',
+    meta: 'Ali Imran - 3:8'
+  },
+  {
+    ref: '7:23',
+    text: 'Our Lord, we have wronged ourselves. If You do not forgive us and have mercy upon us, we will surely be among the losers.',
+    meta: 'Al-Araf - 7:23'
+  },
+  {
+    ref: '25:74',
+    text: 'Our Lord, grant us from among our spouses and offspring comfort to our eyes and make us an example for the righteous.',
+    meta: 'Al-Furqan - 25:74'
+  },
+  {
+    ref: '66:8',
+    text: 'Our Lord, perfect for us our light and forgive us. Indeed, You are over all things competent.',
+    meta: 'At-Tahrim - 66:8'
+  }
+];
 const iframe = document.getElementById('ayahViewer');
 const aboutBtn = document.getElementById('aboutBtn')
 const ring = {cards: [],};
@@ -47,6 +96,105 @@ const SWIPE_IFRAME = '[SWIPE:IFRAME]';
 const SWIPE_PARENT = '[SWIPE:PARENT]';
 const RAW_ORIGIN = window.location.origin;
 const LOCAL_ORIGIN = RAW_ORIGIN === 'null' ? '*' : RAW_ORIGIN;
+const IS_NATIVE_WEBVIEW = !!window.ReactNativeWebView;
+const IS_ANDROID_WEBVIEW = /Android/i.test(navigator.userAgent) && IS_NATIVE_WEBVIEW;
+
+function getGuestMigrationKey(user) {
+  const uid = user?.uid;
+  return uid ? `${GUEST_MIGRATION_KEY}:${uid}` : GUEST_MIGRATION_KEY;
+}
+
+function isAuthenticatedUser(user = auth.currentUser) {
+  return Boolean(user && !user.isAnonymous);
+}
+
+function getLocalDateKey(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function dateKeyToUTCms(dateKey) {
+  const [y, m, d] = String(dateKey).split('-').map(Number);
+  if (!Number.isFinite(y) || !Number.isFinite(m) || !Number.isFinite(d)) return NaN;
+  return Date.UTC(y, m - 1, d);
+}
+
+function addDaysToDateKey(dateKey, delta) {
+  const base = dateKeyToUTCms(dateKey);
+  if (!Number.isFinite(base)) return getLocalDateKey();
+  const next = new Date(base + Number(delta) * 86400000);
+  const y = next.getUTCFullYear();
+  const m = String(next.getUTCMonth() + 1).padStart(2, '0');
+  const d = String(next.getUTCDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+function getDateKeyHash(dateKey) {
+  let hash = 0;
+  const source = String(dateKey || '');
+  for (let i = 0; i < source.length; i += 1) {
+    hash = ((hash << 5) - hash) + source.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+}
+
+function getLearningJourneyStorageKey(user = auth.currentUser) {
+  const uid = user?.uid;
+  if (isAuthenticatedUser(user) && uid) {
+    return `learningJourney:${uid}`;
+  }
+  return 'learningJourney';
+}
+
+function readLearningJourneyFromStorage(user = auth.currentUser) {
+  const key = getLearningJourneyStorageKey(user);
+  try {
+    const raw = localStorage.getItem(key);
+    const parsed = raw ? JSON.parse(raw) : {};
+    return parsed && typeof parsed === 'object' ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function writeLearningJourneyToStorage(journey, user = auth.currentUser) {
+  const key = getLearningJourneyStorageKey(user);
+  try {
+    localStorage.setItem(key, JSON.stringify(journey || {}));
+  } catch (_) {}
+}
+
+function clearGuestLocalDataAfterMigration() {
+  [
+    'guestPoints',
+    'guestStreakHistory',
+    'guestStreakFreezes',
+    'completedSurahs_new',
+    'lastReadAyah',
+    'memo_progress_v1',
+    'memo_listens_v1',
+    'memo_last_progress_v1',
+    NAMAZ_WIDGET_STORAGE_KEY,
+    LISTEN_STORAGE_KEY,
+    RECITE_PROGRESS_KEY,
+    'learningJourney'
+  ].forEach(key => localStorage.removeItem(key));
+  reciteProgressCache = null;
+}
+
+function clearLocalDataOnExplicitLogout() {
+  clearGuestLocalDataAfterMigration();
+  [
+    LISTEN_STORAGE_KEY,
+    RECITE_PROGRESS_KEY,
+    'learningJourney'
+  ].forEach(key => localStorage.removeItem(key));
+  reciteProgressCache = null;
+}
+
 const dragState = {
   active: false,
   dx: 0,
@@ -58,6 +206,9 @@ let swipeTransitionTimer = 0;
 let pendingSwipeFrame = null;
 let pendingSwipeData = null;
 let pendingAutoPlay = false;
+let lastAuthenticatedUid = null;
+let nativeGoogleSignInInFlight = false;
+let previousAuthUid = null;
 const DISABLE_CONSOLE_LOGS = true;
 if (DISABLE_CONSOLE_LOGS && typeof console !== 'undefined') {
   const noop = () => {};
@@ -75,7 +226,21 @@ if (DISABLE_CONSOLE_LOGS && typeof console !== 'undefined') {
 const popupHistoryStack = [];
 let ignoreNextPopState = false;
 let setDuasMode = null;
+let setMemorizationMode = null;
+let setReciteMode = null;
+let launchReciteSurah = null;
+let refreshReciteModeView = null;
+let renderReciteSurahTabs = () => {};
+let syncReciteSurahTabs = () => {};
+let bindReciteSurahSwipe = () => {};
+let refreshDailyUiIfNeeded = () => {};
 let pendingDuaReturn = false;
+let namazWidgetState = null;
+let namazWidgetSaveTimer = 0;
+let namazProgressFlashTimer = 0;
+let memoNavigationRevealTimer = 0;
+let reciteProgressCache = null;
+let lastDailyRefreshDateKey = '';
 
 function pushPopupHistory(closeFn) {
   popupHistoryStack.push(closeFn);
@@ -137,6 +302,92 @@ function isKnownIframeSource(source) {
   return frames.some(frame => frame.contentWindow === source);
 }
 
+function resolveAppUrl(path) {
+  try {
+    return new URL(path, window.location.href).toString();
+  } catch {
+    return path;
+  }
+}
+
+function resetRootScrollPosition() {
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+}
+
+function sendNativeTabSwitch(tab) {
+  if (tab !== 'learn' && tab !== 'memo' && tab !== 'duas') return;
+  try {
+    if (window.ReactNativeWebView?.postMessage) {
+      window.ReactNativeWebView.postMessage(
+        JSON.stringify({ type: 'NATIVE_TAB_SWITCH', tab })
+      );
+    }
+  } catch (_) {}
+}
+
+function sendNativeSaveProgress(surah, ayah) {
+  if (!Number.isInteger(surah) || !Number.isInteger(ayah)) return;
+  try {
+    if (window.ReactNativeWebView?.postMessage) {
+      window.ReactNativeWebView.postMessage(
+        JSON.stringify({ type: 'SAVE_PROGRESS', surah, ayah })
+      );
+    }
+  } catch (_) {}
+}
+
+function sendNativeGoogleSignInRequest() {
+  try {
+    if (window.ReactNativeWebView?.postMessage) {
+      window.ReactNativeWebView.postMessage(
+        JSON.stringify({ type: 'NATIVE_GOOGLE_SIGN_IN' })
+      );
+      return true;
+    }
+  } catch (_) {}
+
+  return false;
+}
+
+function isEditableElement(target) {
+  if (!(target instanceof Element)) return false;
+  return Boolean(
+    target.closest('input, textarea, [contenteditable="true"], .allow-text-select')
+  );
+}
+
+function enableNativeTouchGuard() {
+  if (!IS_NATIVE_WEBVIEW) return;
+
+  const blockIfNotEditable = event => {
+    if (isEditableElement(event.target)) return;
+    event.preventDefault();
+  };
+
+  document.addEventListener('contextmenu', blockIfNotEditable, { capture: true });
+  document.addEventListener('selectstart', blockIfNotEditable, { capture: true });
+}
+
+function setNativeGoogleSignInState(isInFlight) {
+  nativeGoogleSignInInFlight = Boolean(isInFlight);
+  if (!D.drawerLoginBtn) return;
+
+  if (nativeGoogleSignInInFlight) {
+    D.drawerLoginBtn.textContent = 'Signing in...';
+    D.drawerLoginBtn.disabled = true;
+    D.drawerLoginBtn.style.opacity = '0.72';
+    D.drawerLoginBtn.style.pointerEvents = 'none';
+    return;
+  }
+
+  D.drawerLoginBtn.textContent = 'Continue with Google';
+  D.drawerLoginBtn.disabled = false;
+  D.drawerLoginBtn.style.opacity = '';
+  D.drawerLoginBtn.style.pointerEvents = '';
+}
+
 function isTrustedMessage(e) {
   if (!e || !e.origin) return false;
   if (RAW_ORIGIN === 'null') {
@@ -148,8 +399,63 @@ function isTrustedMessage(e) {
   return isKnownIframeSource(e.source);
 }
 
+async function handleNativeGoogleSignInResult(payload) {
+  if (!payload || typeof payload !== 'object') {
+    setNativeGoogleSignInState(false);
+    showInAppToast('Login failed. Invalid native auth response.', '#dc3545');
+    return;
+  }
 
+  if (payload.ok !== true) {
+    const errorCode = String(payload.errorCode || '');
+    const errorMessage =
+      typeof payload.message === 'string' && payload.message.trim().length > 0
+        ? payload.message.trim()
+        : 'Login failed. Please try again.';
 
+    if (errorCode === 'SIGN_IN_CANCELLED') {
+      setNativeGoogleSignInState(false);
+      return;
+    }
+
+    setNativeGoogleSignInState(false);
+    showInAppToast(errorMessage, '#dc3545');
+    return;
+  }
+
+  const idToken = typeof payload.idToken === 'string' ? payload.idToken.trim() : '';
+  const accessToken =
+    typeof payload.accessToken === 'string' ? payload.accessToken.trim() : '';
+
+  if (!idToken && !accessToken) {
+    setNativeGoogleSignInState(false);
+    showInAppToast('Login failed. Missing Google token.', '#dc3545');
+    return;
+  }
+
+  try {
+    await signInWithGoogleTokens({ idToken, accessToken });
+  } catch (err) {
+    console.warn('[Auth] Native Google token sign-in failed', err);
+    showInAppToast('Login failed. Please try again.', '#dc3545');
+  } finally {
+    setNativeGoogleSignInState(false);
+  }
+}
+
+function attachNativeGoogleSignInBridge() {
+  if (!IS_NATIVE_WEBVIEW) return;
+
+  window.__qqHandleNativeGoogleSignIn = payload => {
+    handleNativeGoogleSignInResult(payload);
+  };
+
+  const pendingPayload = window.__qqPendingNativeGoogleSignInResult;
+  if (pendingPayload) {
+    window.__qqPendingNativeGoogleSignInResult = null;
+    handleNativeGoogleSignInResult(pendingPayload);
+  }
+}
 
 let surahData    = [];
 let currentSurah = DEFAULT_SURAH;
@@ -159,6 +465,11 @@ let isCurrentAyahDirty = false;
 let pendingSwipeDone = false;
 let isDuasMode = false;
 let duasModeState = null;
+let isMemoMode = false;
+let memoModeState = null;
+let isReciteMode = false;
+let reciteModeState = null;
+let reciteRenderVersion = 0;
 let swipeStartX = 0;
 let swipeDir = 0; // -1 = prev, 1 = next
 let swipeStartY = 0;
@@ -173,7 +484,7 @@ let logicalOffset = 0;
 let baseSurah = DEFAULT_SURAH;
 let baseAyah  = DEFAULT_AYAH;
 let ayahList = [];        // [{surah, ayah}]
-let ayahIndexMap = {};   // "1:1" → index
+let ayahIndexMap = {};   // "1:1" -> index
 let currentIndex = 0;
 let progressMapCache = {};
 let progressTipTimer = 0;
@@ -186,13 +497,17 @@ let swipeCommitted = false;
 const prewarmedIndices = new Set();
 const iframeReadySet = new WeakSet();
 const ayahHTMLCache = new Map(); // key = "surah:ayah", value = html string
-const menuAnimation = lottie.loadAnimation({
-        container: document.getElementById('menuLottie'),
+const menuLottieContainer = document.getElementById('menuLottie');
+const menuAnimation =
+  menuLottieContainer && typeof lottie?.loadAnimation === 'function'
+    ? lottie.loadAnimation({
+        container: menuLottieContainer,
         renderer: 'svg',
         loop: false,
         autoplay: true,
         path: '/utils/assets/hamburger_menu.json'
-      });
+      })
+    : null;
 const SWIPE_DEBUG = true;
 const log = (...args) => SWIPE_DEBUG && console.log(...args);
 const t0 = performance.now();
@@ -201,10 +516,10 @@ let isAnimatingSwipe = false;
 let journeyTrackTimer = null;
 const PROGRESS_MILESTONES = [10, 35, 50, 90, 100];
 const MILESTONE_MESSAGES = {
-  10: '10% milestone unlocked — the verse is starting to breathe with you.',
-  35: 'Momentum steady at 35% — your focus is deepening.',
-  50: 'Halfway through the surah — each syllable is now a companion.',
-  90: '90% — the finish line is in sight. Breathe, stay present.',
+  10: '10% milestone unlocked - the verse is starting to breathe with you.',
+  35: 'Momentum steady at 35% - your focus is deepening.',
+  50: 'Halfway through the surah - each syllable is now a companion.',
+  90: '90% - the finish line is in sight. Breathe, stay present.',
   100: 'Surah complete! Pause, reflect, and let gratitude settle in.'
 };
 const MOTIVATION_MESSAGES = [
@@ -248,7 +563,7 @@ let minuteMotivationShown = false;
 
 const DEFAULT_SETTINGS = {
   showWordTranslation: true,
-  showRoot: true,
+  showRoot: false,
   showGrammar: true,
   showPanelTranslation: true,
   panelLang: 'en',
@@ -256,22 +571,45 @@ const DEFAULT_SETTINGS = {
   mode: 'learning',
   speed: '1',
   repeat: '1',
-  autoSwipe: true
+  autoSwipe: true,
+  darkMode: false
 };
 let settingsVersion = 0;
 const iframeSettingsVersion = new WeakMap();
 
       function getSettings() {
+        let stored = {};
+        try {
+          stored = JSON.parse(localStorage.getItem('qq_settings')) || {};
+        } catch (err) {
+          stored = {};
+        }
+        const migrated = { ...stored };
+
+        // One-time migration: if the user has never explicitly chosen root visibility,
+        // default it to hidden on app load.
+        if (!Object.prototype.hasOwnProperty.call(migrated, 'rootPreferenceSet')) {
+          migrated.showRoot = false;
+          migrated.rootPreferenceSet = false;
+          localStorage.setItem('qq_settings', JSON.stringify(migrated));
+        }
+
         return {
           ...DEFAULT_SETTINGS,
-          ...(JSON.parse(localStorage.getItem('qq_settings')) || {})
+          ...migrated,
+          darkMode: false
         };
       }
 
       function saveSettings(patch) {
+        const normalizedPatch = { ...patch };
+        if (Object.prototype.hasOwnProperty.call(normalizedPatch, 'showRoot')) {
+          normalizedPatch.rootPreferenceSet = true;
+        }
+
         const next = {
           ...getSettings(),
-          ...patch
+          ...normalizedPatch
         };
 
         localStorage.setItem('qq_settings', JSON.stringify(next));
@@ -281,22 +619,67 @@ const iframeSettingsVersion = new WeakMap();
       }
 
       function broadcastSettings(settings) {
-        console.log('📡 Broadcasting settings');
+        console.log('Ã°Å¸â€œÂ¡ Broadcasting settings');
 
         iframePool.forEach((iframe) => {
           if (!iframeReadySet.has(iframe)) {
-            console.log('⏳ iframe not ready, skipping broadcast');
+            console.log('Ã¢ÂÂ³ iframe not ready, skipping broadcast');
             return;
           }
 
           iframeSettingsVersion.set(iframe, settingsVersion);
           postToIframe(iframe, { type: 'APPLY_SETTINGS', settings, version: settingsVersion });
         });
+        applyTheme(settings.darkMode === true);
+        if (isReciteMode && typeof refreshReciteModeView === 'function') {
+          refreshReciteModeView(settings);
+        }
+      }
+
+      function applyTheme(isDark) {
+        const enabled = Boolean(isDark);
+        document.documentElement.classList.toggle('dark-mode', enabled);
+        document.body.classList.toggle('dark-mode', enabled);
+        if (D.darkModeToggleBtn) {
+          D.darkModeToggleBtn.setAttribute('aria-pressed', String(enabled));
+          D.darkModeToggleBtn.classList.toggle('is-active-theme', enabled);
+        }
+        if (D.darkModeToggleLabel) {
+          D.darkModeToggleLabel.textContent = enabled ? 'Disable Dark Mode' : 'Enable Dark Mode';
+        }
+        if (D.memoFrame?.contentWindow) {
+          postToIframe(D.memoFrame, { type: 'APPLY_THEME', darkMode: enabled });
+        }
+        if (D.duasFrame?.contentWindow) {
+          postToIframe(D.duasFrame, { type: 'APPLY_THEME', darkMode: enabled });
+        }
+      }
+
+      function syncThemeToFrameOnLoad(frame) {
+        if (!frame) return;
+        const darkMode = getSettings().darkMode === true;
+        const send = () => postToIframe(frame, { type: 'APPLY_THEME', darkMode });
+        frame.addEventListener('load', send, { once: true });
       }
 
 /* ==========================================================
-   Auto-Swipe Listening Progress
+   Recite Resume + Start Listening
 ========================================================== */
+      function normalizeReciteProgress(raw) {
+        if (!raw || typeof raw !== 'object') return null;
+        const surah = Number(raw.surah);
+        const ayah = Number(raw.ayah);
+        if (!Number.isFinite(surah) || surah < 1) return null;
+        if (!Number.isFinite(ayah) || ayah < 1) return null;
+        const timestamp = Number(raw.timestamp || raw.savedAtMs || raw.savedAt);
+        return {
+          surah,
+          ayah,
+          timestamp: Number.isFinite(timestamp) ? timestamp : 0,
+          source: typeof raw.source === 'string' ? raw.source : 'recite'
+        };
+      }
+
       function getLastListenedAutoSwipe() {
         try {
           const raw = localStorage.getItem(LISTEN_STORAGE_KEY);
@@ -321,14 +704,97 @@ const iframeSettingsVersion = new WeakMap();
         localStorage.setItem(LISTEN_STORAGE_KEY, JSON.stringify(payload));
       }
 
-      async function getStartListeningTarget() {
-        const lastListened = getLastListenedAutoSwipe();
-        if (lastListened) return lastListened;
+      function getLocalReciteProgress() {
+        if (reciteProgressCache) {
+          return { ...reciteProgressCache };
+        }
+        try {
+          const raw = localStorage.getItem(RECITE_PROGRESS_KEY);
+          if (raw) {
+            const parsed = normalizeReciteProgress(JSON.parse(raw));
+            if (parsed) {
+              reciteProgressCache = parsed;
+              return { ...parsed };
+            }
+          }
+        } catch (err) {
+          console.warn('[RECITE] Failed to parse local recite progress', err);
+        }
+        const legacy = getLastListenedAutoSwipe();
+        if (legacy) {
+          const fallback = normalizeReciteProgress({
+            ...legacy,
+            timestamp: legacy.timestamp || 0,
+            source: 'legacy-listening'
+          });
+          if (fallback) {
+            reciteProgressCache = fallback;
+            return { ...fallback };
+          }
+        }
+        return null;
+      }
+
+      function setLocalReciteProgress(surah, ayah, options = {}) {
+        const normalized = normalizeReciteProgress({
+          surah,
+          ayah,
+          timestamp: options.timestamp || Date.now(),
+          source: options.source || 'recite'
+        });
+        if (!normalized) return null;
+
+        const prev = getLocalReciteProgress();
+        if (
+          prev &&
+          prev.surah === normalized.surah &&
+          prev.ayah === normalized.ayah &&
+          Math.abs((prev.timestamp || 0) - (normalized.timestamp || 0)) < 1000
+        ) {
+          return prev;
+        }
+
+        reciteProgressCache = normalized;
+        try {
+          localStorage.setItem(RECITE_PROGRESS_KEY, JSON.stringify(normalized));
+        } catch (_) {}
+        return { ...normalized };
+      }
+
+      async function getReciteResumeTarget(activeUser = auth.currentUser, options = {}) {
+        const { includeLearnFallback = true } = options;
+        const localRecite = getLocalReciteProgress();
+        let remoteRecite = null;
+        if (isAuthenticatedUser(activeUser)) {
+          try {
+            remoteRecite = normalizeReciteProgress(await getLastReciteFromDb(activeUser));
+          } catch (err) {
+            console.warn('[RECITE] Failed to load recite resume from Firestore', err);
+            remoteRecite = null;
+          }
+        }
+
+        const candidates = [localRecite, remoteRecite]
+          .filter(Boolean)
+          .sort((a, b) => (Number(b.timestamp) || 0) - (Number(a.timestamp) || 0));
+        if (candidates.length) {
+          return {
+            surah: Number(candidates[0].surah),
+            ayah: Number(candidates[0].ayah)
+          };
+        }
+
+        if (!includeLearnFallback) return null;
+
+        const legacyListen = getLastListenedAutoSwipe();
+        if (legacyListen) {
+          return { surah: Number(legacyListen.surah), ayah: Number(legacyListen.ayah) };
+        }
 
         let lastRead = null;
         try {
-          if (auth.currentUser) {
-            lastRead = await getLastReadFromDb();
+          if (isAuthenticatedUser(activeUser)) {
+            lastRead = await getLastReadFromDb(activeUser);
           } else {
             lastRead = getGuestLastRead();
           }
@@ -340,36 +806,682 @@ const iframeSettingsVersion = new WeakMap();
           return { surah: Number(lastRead.surah), ayah: Number(lastRead.ayah) };
         }
 
+        return null;
+      }
+
+      async function rememberReciteProgress(surah, ayah, options = {}) {
+        const { syncRemote = false, source = 'recite' } = options;
+        const normalized = setLocalReciteProgress(surah, ayah, { source });
+        if (!normalized) return null;
+        if (syncRemote && isAuthenticatedUser()) {
+          try {
+            await updateLastRecite(normalized.surah, normalized.ayah);
+          } catch (err) {
+            console.warn('[RECITE] Failed to save recite progress to Firestore', err);
+          }
+        }
+        return normalized;
+      }
+
+      async function getStartListeningTarget(activeUser = auth.currentUser) {
+        const reciteTarget = await getReciteResumeTarget(activeUser, {
+          includeLearnFallback: false
+        });
+        if (reciteTarget?.surah && reciteTarget?.ayah) {
+          return reciteTarget;
+        }
         return { surah: DEFAULT_SURAH, ayah: DEFAULT_AYAH };
       }
 
-      async function updateResumeListeningButton() {
-        const btn = D.resumeListeningBtn || document.getElementById('resumeListeningHeroBtn');
+      async function updateResumeListeningButton(activeUser = auth.currentUser) {
+        const chipBtn = D.resumeListeningBtn || document.getElementById('resumeListeningHeroBtn');
+        const ctaBtn = D.startReciteBtn || document.getElementById('startRecitingBtn');
+        const btn = chipBtn || ctaBtn;
         if (!btn) return;
-        const labelEl = btn.querySelector('.hero-chip-label');
-        const last = getLastListenedAutoSwipe();
+        const isChipButton = btn.classList.contains('hero-chip');
+        const labelEl = btn.querySelector(
+          isChipButton ? '.hero-chip-label' : '.cta-btn-text'
+        );
+        const setLabel = text => {
+          if (labelEl) {
+            labelEl.textContent = text;
+          } else {
+            btn.textContent = text;
+          }
+        };
+
+        const last = await getReciteResumeTarget(activeUser, {
+          includeLearnFallback: false
+        });
         if (!last) {
           btn.disabled = false;
-          if (labelEl) {
-            labelEl.textContent = 'Start Listening';
-          } else {
-            btn.textContent = 'Start Listening';
-          }
+          setLabel('Start Reading / Listening');
           btn.removeAttribute('data-surah');
           btn.removeAttribute('data-ayah');
-          btn.title = 'Start auto-swipe listening';
+          btn.title = 'Start reading and listening';
+          if (!isChipButton) {
+            btn.onclick = () => {
+              triggerReciteStart(DEFAULT_SURAH, DEFAULT_AYAH, {
+                autoPlay: true,
+                continuous: true
+              });
+            };
+          }
           return;
         }
 
         btn.disabled = false;
-        if (labelEl) {
-          labelEl.textContent = `Resume Listening (${last.surah}:${last.ayah})`;
-        } else {
-          btn.textContent = `Resume Listening (${last.surah}:${last.ayah})`;
-        }
+        setLabel(`Resume Reading / Listening (${last.surah}:${last.ayah})`);
         btn.dataset.surah = String(last.surah);
         btn.dataset.ayah = String(last.ayah);
-        btn.title = `Resume listening from ${last.surah}:${last.ayah}`;
+        btn.title = `Resume reading and listening from ${last.surah}:${last.ayah}`;
+        if (!isChipButton) {
+          btn.onclick = () => {
+            triggerReciteStart(last.surah, last.ayah, {
+              autoPlay: true,
+              continuous: true
+            });
+          };
+        }
+      }
+
+      function getMemorizationProgress() {
+        try {
+          const raw = localStorage.getItem(MEMO_PROGRESS_KEY);
+          if (!raw) return null;
+          const parsed = JSON.parse(raw);
+          const surah = Number(parsed?.surah);
+          const ayah = Number(parsed?.ayah);
+          const percent = Number(parsed?.percent);
+          const revealed = Number(parsed?.revealed);
+          const total = Number(parsed?.total);
+          if (!Number.isFinite(surah) || !Number.isFinite(ayah)) return null;
+          return {
+            surah,
+            ayah,
+            percent: Number.isFinite(percent) ? percent : 0,
+            revealed: Number.isFinite(revealed) ? revealed : 0,
+            total: Number.isFinite(total) ? total : 0
+          };
+        } catch (err) {
+          console.warn('[MEMO] Failed to parse memorization progress', err);
+          return null;
+        }
+      }
+
+      function updateMemorizationHeroButton() {
+        const btn = D.memorizationHeroBtn || document.getElementById('memorizationHeroBtn');
+        if (!btn) return;
+        const labelEl = document.getElementById('memorizationHeroLabel');
+        const fillEl = document.getElementById('memorizationHeroFill');
+        const data = getMemorizationProgress();
+
+        if (!data) {
+          if (labelEl) labelEl.textContent = 'Last memorized: --';
+          if (fillEl) fillEl.style.width = '0%';
+          btn.removeAttribute('data-surah');
+          btn.removeAttribute('data-ayah');
+          return;
+        }
+
+        const pct = Math.max(0, Math.min(100, Math.round(data.percent)));
+        const wordsText = data.total ? `${data.revealed}/${data.total} words` : 'In progress';
+        if (labelEl) labelEl.textContent = `Last memorized: ${data.surah}:${data.ayah} - ${wordsText}`;
+        if (fillEl) fillEl.style.width = `${pct}%`;
+        btn.dataset.surah = String(data.surah);
+        btn.dataset.ayah = String(data.ayah);
+      }
+
+      function getCurrentDateKey() {
+        return getLocalDateKey();
+      }
+
+      function createEmptyNamazWidget(date = getCurrentDateKey()) {
+        const prayers = {};
+        NAMAZ_PRAYER_KEYS.forEach(key => {
+          prayers[key] = null;
+        });
+        return {
+          date,
+          prayers,
+          history: { [date]: 0 },
+          updatedAt: Date.now()
+        };
+      }
+
+      function normalizeNamazHistory(rawHistory) {
+        const normalized = {};
+        if (!rawHistory || typeof rawHistory !== 'object') return normalized;
+        Object.entries(rawHistory).forEach(([dateKey, value]) => {
+          if (!/^\d{4}-\d{2}-\d{2}$/.test(String(dateKey))) return;
+          const completed = Math.max(0, Math.min(5, Number(value) || 0));
+          normalized[dateKey] = completed;
+        });
+        return normalized;
+      }
+
+      function trimNamazHistory(historyMap, limit = 120) {
+        const entries = Object.entries(normalizeNamazHistory(historyMap));
+        entries.sort((a, b) => b[0].localeCompare(a[0]));
+        return Object.fromEntries(entries.slice(0, limit));
+      }
+
+      function normalizeNamazStatus(value) {
+        if (value === true || value === 'yes') return true;
+        return null;
+      }
+
+      function normalizeNamazWidget(raw) {
+        if (!raw || typeof raw !== 'object') return null;
+        const date = typeof raw.date === 'string' ? raw.date.trim() : '';
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return null;
+
+        const prayers = {};
+        NAMAZ_PRAYER_KEYS.forEach(key => {
+          prayers[key] = normalizeNamazStatus(raw?.prayers?.[key]);
+        });
+
+        const history = normalizeNamazHistory(raw?.history);
+        const completedFromPrayers = NAMAZ_PRAYER_KEYS.reduce((count, key) => (
+          prayers[key] === true ? count + 1 : count
+        ), 0);
+        if (!Object.prototype.hasOwnProperty.call(history, date)) {
+          history[date] = completedFromPrayers;
+        }
+
+        return {
+          date,
+          prayers,
+          history: trimNamazHistory(history),
+          updatedAt: Number(raw.updatedAt) || 0
+        };
+      }
+
+      function getLocalNamazWidget() {
+        try {
+          const raw = localStorage.getItem(NAMAZ_WIDGET_STORAGE_KEY);
+          if (!raw) return null;
+          return normalizeNamazWidget(JSON.parse(raw));
+        } catch {
+          return null;
+        }
+      }
+
+      function setLocalNamazWidget(widget) {
+        try {
+          localStorage.setItem(NAMAZ_WIDGET_STORAGE_KEY, JSON.stringify(widget));
+        } catch (_) {}
+      }
+
+      function formatNamazWidgetDate(dateKey) {
+        if (!dateKey || !/^\d{4}-\d{2}-\d{2}$/.test(dateKey)) return 'Today';
+        const [year, month, day] = dateKey.split('-').map(Number);
+        const date = new Date(year, month - 1, day);
+        if (Number.isNaN(date.getTime())) return 'Today';
+        return date.toLocaleDateString('en-US', {
+          weekday: 'short',
+          month: 'short',
+          day: 'numeric'
+        });
+      }
+
+      function getNamazCompletedCount(widget) {
+        if (!widget?.prayers) return 0;
+        return NAMAZ_PRAYER_KEYS.reduce((count, key) => (
+          widget.prayers[key] === true ? count + 1 : count
+        ), 0);
+      }
+
+      function getNamazAnsweredCount(widget) {
+        if (!widget?.prayers) return 0;
+        return NAMAZ_PRAYER_KEYS.reduce((count, key) => (
+          widget.prayers[key] === true || widget.prayers[key] === false
+            ? count + 1
+            : count
+        ), 0);
+      }
+
+      function buildNamazWidgetState(raw) {
+        const today = getCurrentDateKey();
+        const normalized = normalizeNamazWidget(raw);
+        if (!normalized) return createEmptyNamazWidget(today);
+
+        const nextHistory = normalizeNamazHistory(normalized.history);
+        if (!Object.prototype.hasOwnProperty.call(nextHistory, today)) {
+          nextHistory[today] = 0;
+        }
+
+        if (normalized.date !== today) {
+          return {
+            date: today,
+            prayers: createEmptyNamazWidget(today).prayers,
+            history: trimNamazHistory(nextHistory),
+            updatedAt: normalized.updatedAt || Date.now()
+          };
+        }
+
+        return {
+          ...normalized,
+          history: trimNamazHistory(nextHistory)
+        };
+      }
+
+      function syncNamazHistoryFromState() {
+        if (!namazWidgetState) return;
+        const dateKey = namazWidgetState.date || getCurrentDateKey();
+        const nextHistory = normalizeNamazHistory(namazWidgetState.history);
+        nextHistory[dateKey] = getNamazCompletedCount(namazWidgetState);
+        namazWidgetState.history = trimNamazHistory(nextHistory);
+      }
+
+      function getNamazHistoryEntries(limit = 30) {
+        if (!namazWidgetState) return [];
+        syncNamazHistoryFromState();
+        const entries = Object.entries(normalizeNamazHistory(namazWidgetState.history));
+        entries.sort((a, b) => a[0].localeCompare(b[0]));
+        return entries.slice(-limit);
+      }
+
+      function showNamazHistoryPopup() {
+        ensureNamazWidgetForToday();
+        const existingOverlay = document.getElementById('namazHistoryOverlay');
+        if (existingOverlay) existingOverlay.remove();
+
+        const historyMap = normalizeNamazHistory(namazWidgetState?.history);
+        const entries = getNamazHistoryEntries(30);
+        const today = getCurrentDateKey();
+
+        const MAX_BAR_HEIGHT = 140;
+        let barsHTML = '';
+        let lastMonth = '';
+        let lastYear = '';
+
+        entries.forEach(([dateKey, completed]) => {
+          const [y, m, d] = String(dateKey).split('-').map(Number);
+          const dateObj = new Date(y, (m || 1) - 1, d || 1);
+          const safeCompleted = Math.max(0, Math.min(5, Number(completed) || 0));
+          const height = safeCompleted === 0
+            ? 8
+            : Math.max(14, Math.round((safeCompleted / 5) * MAX_BAR_HEIGHT));
+          const month = dateObj.toLocaleString('en-US', { month: 'short' });
+          const dayNum = dateObj.getDate();
+          const year = dateObj.getFullYear();
+
+          let monthLabel = '';
+          let yearLabel = '';
+
+          if (month !== lastMonth) {
+            monthLabel = month;
+            lastMonth = month;
+          }
+          if (year !== lastYear) {
+            yearLabel = year;
+            lastYear = year;
+          }
+
+          barsHTML += `
+            <div class="journeyItem">
+              <div class="journeyBarArea">
+                <div class="journeyBarWrap">
+                  <div class="journeyCount">${safeCompleted}/5</div>
+                  <div class="journeyBar ${safeCompleted === 0 ? 'is-zero' : ''}" style="height:${height}px"></div>
+                </div>
+              </div>
+              <div class="journeyDate">
+                <div class="jd-day">${dayNum}</div>
+                ${monthLabel ? `<div class="jd-month">${monthLabel}</div>` : ''}
+                ${yearLabel ? `<div class="jd-year">${yearLabel}</div>` : ''}
+              </div>
+            </div>
+          `;
+        });
+
+        const editableDateKeys = [];
+        for (let i = 20; i >= 0; i -= 1) {
+          editableDateKeys.push(addDaysToDateKey(today, -i));
+        }
+        let editRowsHTML = '';
+        editableDateKeys.forEach(dateKey => {
+          const [y, m, d] = String(dateKey).split('-').map(Number);
+          const dateObj = new Date(y, (m || 1) - 1, d || 1);
+          const dateLabel = dateObj.toLocaleDateString('en-US', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric'
+          });
+          const value = Math.max(0, Math.min(5, Number(historyMap[dateKey]) || 0));
+          const options = [0, 1, 2, 3, 4, 5]
+            .map(n => `<option value="${n}" ${n === value ? 'selected' : ''}>${n}/5</option>`)
+            .join('');
+
+          editRowsHTML += `
+            <label class="namazEditRow">
+              <span class="namazEditDate">${dateLabel}</span>
+              <select class="namazEditSelect" data-date-key="${dateKey}">
+                ${options}
+              </select>
+            </label>
+          `;
+        });
+
+        const overlay = document.createElement('div');
+        overlay.id = 'namazHistoryOverlay';
+        overlay.classList.add('qq-overlay');
+        overlay.innerHTML = `
+          <div class="journeyBox namazHistoryBox">
+            <div class="journeyHeader">
+              <span>Salah History</span>
+            </div>
+            <div class="journeyChart namazHistoryChart">
+              ${barsHTML}
+            </div>
+            <div class="namazHistoryLegend">Update past days if you forgot. Today edits also update the check-in circles.</div>
+            <div class="namazEditGrid">
+              ${editRowsHTML}
+            </div>
+            <div class="namazHistoryActions">
+              <button class="journeyClose secondary" type="button">Close</button>
+              <button class="journeyClose primary" type="button">Save Changes</button>
+            </div>
+          </div>
+        `;
+
+        document.body.appendChild(overlay);
+
+        const closeBtn = overlay.querySelector('.journeyClose.secondary');
+        const saveBtn = overlay.querySelector('.journeyClose.primary');
+
+        if (closeBtn) {
+          closeBtn.onclick = () => overlay.remove();
+        }
+
+        if (saveBtn) {
+          saveBtn.onclick = async () => {
+            if (!namazWidgetState) return;
+            const selects = overlay.querySelectorAll('.namazEditSelect[data-date-key]');
+            if (!selects.length) return;
+
+            const nextHistory = normalizeNamazHistory(namazWidgetState.history);
+            let changed = false;
+            selects.forEach(select => {
+              const dateKey = String(select.getAttribute('data-date-key') || '').trim();
+              if (!/^\d{4}-\d{2}-\d{2}$/.test(dateKey)) return;
+              const value = Math.max(0, Math.min(5, Number(select.value) || 0));
+              const prev = Math.max(0, Math.min(5, Number(nextHistory[dateKey]) || 0));
+              if (prev !== value) {
+                nextHistory[dateKey] = value;
+                changed = true;
+              }
+            });
+
+            if (!changed) {
+              showInAppToast('No Salah history changes.');
+              return;
+            }
+
+            namazWidgetState.history = trimNamazHistory(nextHistory);
+            if (namazWidgetState.date === today) {
+              const todayCount = Math.max(0, Math.min(5, Number(nextHistory[today]) || 0));
+              const nextPrayers = {};
+              NAMAZ_PRAYER_KEYS.forEach((key, idx) => {
+                nextPrayers[key] = idx < todayCount ? true : null;
+              });
+              namazWidgetState.prayers = nextPrayers;
+            }
+            namazWidgetState.updatedAt = Date.now();
+
+            renderNamazGoalsWidget();
+            await persistNamazGoalsWidget();
+            showInAppToast('Salah history updated.');
+            overlay.remove();
+          };
+        }
+
+        overlay.onclick = e => {
+          if (e.target === overlay) overlay.remove();
+        };
+      }
+
+      function showMemorizedAyahsPopup() {
+        let listens = {};
+        try {
+          const raw = JSON.parse(localStorage.getItem('memo_listens_v1') || '{}');
+          if (raw && typeof raw === 'object') listens = raw;
+        } catch (_) {}
+
+        const bySurah = {};
+        Object.entries(listens).forEach(([ayahKey, countValue]) => {
+          const [surahRaw, ayahRaw] = String(ayahKey).split(':');
+          const surah = Number(surahRaw);
+          const ayah = Number(ayahRaw);
+          const count = Number(countValue) || 0;
+          if (!Number.isInteger(surah) || !Number.isInteger(ayah)) return;
+          if (count < MEMO_LISTEN_TARGET) return;
+          bySurah[surah] = (bySurah[surah] || 0) + 1;
+        });
+
+        const entries = Object.entries(bySurah)
+          .map(([surah, count]) => [Number(surah), Number(count) || 0])
+          .filter(([surah, count]) => Number.isInteger(surah) && count > 0)
+          .sort((a, b) => a[0] - b[0]);
+
+        if (!entries.length) {
+          alert(`No memorized ayahs yet. Each ayah counts after ${MEMO_LISTEN_TARGET}+ listens.`);
+          return;
+        }
+
+        const maxCount = entries.reduce((max, [, count]) => Math.max(max, count), 1);
+        const MAX_BAR_HEIGHT = 150;
+        let barsHTML = '';
+
+        entries.forEach(([surah, count]) => {
+          const height = Math.max(14, Math.round((count / maxCount) * MAX_BAR_HEIGHT));
+          barsHTML += `
+            <div class="journeyItem memoJourneyItem">
+              <div class="journeyBarArea">
+                <div class="journeyBarWrap">
+                  <div class="journeyCount">${count}</div>
+                  <div class="journeyBar memoJourneyBar" style="height:${height}px"></div>
+                </div>
+              </div>
+              <div class="journeyDate memoJourneyDate">
+                <div class="jd-day">S${surah}</div>
+              </div>
+            </div>
+          `;
+        });
+
+        const overlay = document.createElement('div');
+        overlay.id = 'memorizedHistoryOverlay';
+        overlay.classList.add('qq-overlay');
+        overlay.innerHTML = `
+          <div class="journeyBox memoHistoryBox">
+            <div class="journeyHeader">
+              <span>My Memorized Ayahs</span>
+            </div>
+            <div class="journeyChart memoHistoryChart">
+              ${barsHTML}
+            </div>
+            <div class="memoHistoryLegend">Each bar shows ayahs with ${MEMO_LISTEN_TARGET}+ listens in that Surah.</div>
+            <button class="journeyClose">Close</button>
+          </div>
+        `;
+
+        document.body.appendChild(overlay);
+        overlay.querySelector('.journeyClose').onclick = () => overlay.remove();
+        overlay.onclick = e => {
+          if (e.target === overlay) overlay.remove();
+        };
+      }
+
+      function popNamazYesConfetti(prayerKey) {
+        if (typeof confetti !== 'function' || !D.namazGoalsRows) return;
+        const dot = D.namazGoalsRows.querySelector(
+          `.hero-namaz-item[data-prayer-row="${prayerKey}"] .hero-namaz-dot`
+        );
+        if (!dot) return;
+        const rect = dot.getBoundingClientRect();
+        const origin = {
+          x: (rect.left + rect.width / 2) / Math.max(window.innerWidth, 1),
+          y: (rect.top + rect.height / 2) / Math.max(window.innerHeight, 1)
+        };
+
+        confetti({
+          particleCount: 12,
+          startVelocity: 13,
+          spread: 44,
+          scalar: 0.46,
+          ticks: 42,
+          gravity: 1.08,
+          origin,
+          colors: ['#5e9479', '#b16a75', '#7d9eb7', '#e6edf3']
+        });
+      }
+
+      function renderNamazGoalsWidget() {
+        if (!D.namazGoalsRows) return;
+
+        if (!namazWidgetState) {
+          namazWidgetState = createEmptyNamazWidget();
+        }
+
+        if (D.namazGoalsDate) {
+          D.namazGoalsDate.textContent = formatNamazWidgetDate(namazWidgetState.date);
+        }
+
+        const completed = getNamazCompletedCount(namazWidgetState);
+        if (D.namazGoalsProgress) {
+          D.namazGoalsProgress.textContent = `${completed}/5 done`;
+        }
+
+        NAMAZ_PRAYER_KEYS.forEach(key => {
+          const row = D.namazGoalsRows.querySelector(`.hero-namaz-item[data-prayer-row="${key}"]`);
+          if (!row) return;
+          const value = namazWidgetState.prayers?.[key];
+          const status = value === true ? 'yes' : 'unanswered';
+          const label = row.dataset.label || key;
+          const statusText = status === 'yes' ? 'completed' : 'not marked';
+
+          row.classList.toggle('is-yes', status === 'yes');
+          row.classList.toggle('is-unanswered', status === 'unanswered');
+          row.setAttribute('aria-label', `${label}: ${statusText}. Tap to toggle.`);
+        });
+      }
+
+      function flashNamazProgressMessage(message) {
+        if (!D.namazGoalsProgress || !message) return;
+        const previousText = D.namazGoalsProgress.dataset.baseText || D.namazGoalsProgress.textContent || '';
+        D.namazGoalsProgress.dataset.baseText = previousText;
+        D.namazGoalsProgress.textContent = message;
+        D.namazGoalsProgress.classList.add('is-flash');
+        clearTimeout(namazProgressFlashTimer);
+        namazProgressFlashTimer = window.setTimeout(() => {
+          D.namazGoalsProgress.classList.remove('is-flash');
+          const completed = getNamazCompletedCount(namazWidgetState || {});
+          D.namazGoalsProgress.textContent = `${completed}/5 done`;
+        }, 2200);
+      }
+
+      async function persistNamazGoalsWidget() {
+        if (!namazWidgetState) return;
+        syncNamazHistoryFromState();
+
+        const payload = {
+          ...namazWidgetState,
+          updatedAt: Date.now()
+        };
+
+        namazWidgetState = payload;
+        setLocalNamazWidget(payload);
+
+        if (auth.currentUser && !auth.currentUser.isAnonymous) {
+          try {
+            await saveNamazGoalsWidget(payload);
+          } catch (err) {
+            console.warn('[NAMAZ] Failed to sync widget to Firestore', err);
+          }
+        }
+      }
+
+      function queueNamazGoalsWidgetSave() {
+        clearTimeout(namazWidgetSaveTimer);
+        namazWidgetSaveTimer = setTimeout(() => {
+          persistNamazGoalsWidget();
+        }, 180);
+      }
+
+      function ensureNamazWidgetForToday() {
+        const today = getCurrentDateKey();
+        const normalized = normalizeNamazWidget(namazWidgetState);
+        if (!normalized || normalized.date !== today) {
+          namazWidgetState = createEmptyNamazWidget(today);
+          renderNamazGoalsWidget();
+          queueNamazGoalsWidgetSave();
+          return true;
+        }
+        namazWidgetState = normalized;
+        return false;
+      }
+
+      async function loadNamazGoalsWidget(sourceData) {
+        let source = typeof sourceData === 'undefined' ? null : sourceData;
+
+        if (typeof sourceData === 'undefined') {
+          if (auth.currentUser && !auth.currentUser.isAnonymous) {
+            try {
+              source = await getNamazGoalsWidget();
+            } catch (err) {
+              console.warn('[NAMAZ] Failed to fetch widget from Firestore', err);
+              source = null;
+            }
+          } else {
+            source = getLocalNamazWidget();
+          }
+        }
+
+        const local = getLocalNamazWidget();
+        if (!source && local) {
+          source = local;
+        }
+
+        const normalizedSource = normalizeNamazWidget(source);
+        namazWidgetState = buildNamazWidgetState(normalizedSource);
+        renderNamazGoalsWidget();
+        setLocalNamazWidget(namazWidgetState);
+
+        if (!normalizedSource || normalizedSource.date !== namazWidgetState.date) {
+          queueNamazGoalsWidgetSave();
+        }
+      }
+
+      function updateNamazPrayerChoice(prayerKey, rawValue) {
+        if (!NAMAZ_PRAYER_KEYS.includes(prayerKey)) return;
+
+        ensureNamazWidgetForToday();
+        const current = namazWidgetState.prayers[prayerKey];
+
+        let value = null;
+        if (rawValue === 'yes') {
+          value = true;
+        } else if (rawValue === 'clear' || rawValue === 'none' || rawValue === null) {
+          value = null;
+        } else {
+          // Toggle only between unmarked and completed.
+          value = current === true ? null : true;
+        }
+
+        namazWidgetState.prayers[prayerKey] = value;
+        namazWidgetState.updatedAt = Date.now();
+        syncNamazHistoryFromState();
+        renderNamazGoalsWidget();
+        queueNamazGoalsWidgetSave();
+        if (value === true && current !== true) {
+          popNamazYesConfetti(prayerKey);
+          const completed = getNamazCompletedCount(namazWidgetState);
+          if (completed === NAMAZ_PRAYER_KEYS.length) {
+            flashNamazProgressMessage('Alhamdulillah! All 5 marked today.');
+          }
+        }
       }
 
       function requestAutoPlayActiveIframe(reason = 'resumeListening') {
@@ -395,81 +1507,193 @@ const iframeSettingsVersion = new WeakMap();
         return entry ? entry.englishName : `Surah ${num}`;
       }
 
+      function openLearnAyah(surah, ayah, options = {}) {
+        const { mode = null, autoPlay = false } = options;
+        if (isReciteMode && typeof setReciteMode === 'function') {
+          setReciteMode(false, { showHome: false });
+        }
+        if (mode === 'learning' || mode === 'reciting') {
+          saveSettings({ mode });
+        }
+
+        D.surahContainer.style.display = 'none';
+        D.hero.style.display = 'none';
+        D.viewer.style.display = 'block';
+        D.dropdowns.style.display = 'flex';
+
+        loadAyah(surah, ayah);
+
+        if (autoPlay) {
+          setTimeout(() => requestAutoPlayActiveIframe('cardPlay'), 80);
+        }
+      }
+
+      function openMemorizationAyah(surah, ayah) {
+        const targetSurah = Number(surah) || 1;
+        const targetAyah = Number(ayah) || 1;
+
+        const hideMemoUntilReady = () => {
+          if (!D.memoView) return;
+          D.memoView.style.opacity = '0';
+          D.memoView.style.transition = 'opacity 120ms ease';
+        };
+
+        const scheduleMemoRevealFallback = (delay = 1200) => {
+          if (memoNavigationRevealTimer) {
+            clearTimeout(memoNavigationRevealTimer);
+            memoNavigationRevealTimer = 0;
+          }
+          memoNavigationRevealTimer = window.setTimeout(() => {
+            memoNavigationRevealTimer = 0;
+            if (!D.memoView) return;
+            D.memoView.style.opacity = '1';
+            window.setTimeout(() => {
+              if (!D.memoView) return;
+              D.memoView.style.opacity = '';
+              D.memoView.style.transition = '';
+            }, 160);
+          }, delay);
+        };
+
+        if (D.memoFrame) {
+          const current = typeof D.memoFrame.src === 'string' ? D.memoFrame.src : '';
+          const canNavigateInPlace =
+            iframeReadySet.has(D.memoFrame) &&
+            current.includes('memorization.html');
+
+          if (canNavigateInPlace) {
+            hideMemoUntilReady();
+            postToIframe(D.memoFrame, {
+              type: 'NAVIGATE_MEMO_AYAH',
+              surah: targetSurah,
+              ayah: targetAyah
+            });
+            if (typeof setMemorizationMode === 'function') {
+              setMemorizationMode(true);
+            }
+            scheduleMemoRevealFallback(900);
+            return;
+          }
+
+          const target = resolveAppUrl(
+            `memorization.html?embedded=1&surah=${targetSurah}&ayah=${targetAyah}&from=learn`
+          );
+          hideMemoUntilReady();
+          syncThemeToFrameOnLoad(D.memoFrame);
+          D.memoFrame.src = target;
+          if (typeof setMemorizationMode === 'function') {
+            setMemorizationMode(true);
+          }
+          scheduleMemoRevealFallback(1400);
+        }
+      }
+
+      function triggerReciteStart(surah, ayah, options = {}) {
+        const targetSurah = Number(surah) || DEFAULT_SURAH;
+        const targetAyah = Number(ayah) || DEFAULT_AYAH;
+        const autoPlay = options.autoPlay === true;
+        const continuous = options.continuous === true;
+
+        if (typeof launchReciteSurah === 'function') {
+          launchReciteSurah(targetSurah, targetAyah, { autoPlay, continuous });
+          return;
+        }
+        if (typeof setReciteMode === 'function') {
+          setReciteMode(true, {
+            surah: targetSurah,
+            ayah: targetAyah,
+            autoPlay,
+            continuous
+          });
+          return;
+        }
+        openLearnAyah(targetSurah, targetAyah, { mode: 'reciting', autoPlay });
+      }
+
+      function setHeroActionButtonLabel(btn, iconName, text) {
+        if (!btn) return;
+        btn.textContent = '';
+        const icon = document.createElement('span');
+        icon.className = 'material-symbols-outlined cta-btn-icon';
+        icon.setAttribute('aria-hidden', 'true');
+        icon.textContent = iconName;
+        const label = document.createElement('span');
+        label.className = 'cta-btn-text';
+        label.textContent = text;
+        btn.append(icon, label);
+      }
+
 /* ==========================================================
    Initialize Start / Resume Button
    ========================================================== */
-      async function initStartButton() {
+      async function initStartButton(activeUser = auth.currentUser) {
         const btn = D.startBtn;
-        let lastRead = null;
+        const reciteBtn = D.startReciteBtn;
+        if (!btn) return;
 
-        /* ------------------------------------------
-          1️⃣ Fetch last-read location
-          ------------------------------------------ */
+        let lastRead = null;
+        let reciteResume = null;
+
         try {
-          if (auth.currentUser) {
-            lastRead = await getLastReadFromDb();
+          if (isAuthenticatedUser(activeUser)) {
+            lastRead = await getLastReadFromDb(activeUser);
           } else {
             lastRead = getGuestLastRead();
           }
         } catch (err) {
-          console.error('❌ initStartButton → error fetching last-read:', err);
+          console.error('[INIT] Failed to resolve last learning location', err);
         }
 
-        console.log('📍 initStartButton: last-read loc =', lastRead);
+        try {
+          reciteResume = await getReciteResumeTarget(activeUser, {
+            includeLearnFallback: false
+          });
+        } catch {
+          reciteResume = null;
+        }
 
-
-        /* ------------------------------------------
-          2️⃣ Configure button behavior
-          ------------------------------------------ */
         if (lastRead?.surah && lastRead?.ayah) {
-          /* -------- Resume Case -------- */
           const surahName = await resolveSurahName(lastRead.surah);
-
-          console.log(
-            `📍 Resuming from Surah ${lastRead.surah} Ayah ${lastRead.ayah} (${surahName})`
+          setHeroActionButtonLabel(
+            btn,
+            'auto_stories',
+            `Resume In-Depth Study (${surahName}:${lastRead.ayah})`
           );
-
-          btn.textContent = `Resume Learning (${surahName} : ${lastRead.ayah})`;
-
           btn.onclick = () => {
-            console.log(
-              `📍 [Button Click] loadAyah(${lastRead.surah}, ${lastRead.ayah})`
-            );
-
-            // Show reader UI
-            D.surahContainer.style.display = 'none';
-            D.hero.style.display           = 'none';
-            D.viewer.style.display         = 'block';
-            D.dropdowns.style.display      = 'flex';
-
-
-            loadAyah(lastRead.surah, lastRead.ayah);
+            openLearnAyah(lastRead.surah, lastRead.ayah, { mode: 'learning' });
           };
-
         } else {
-          /* -------- Start Learning Case -------- */
-          btn.textContent = 'Start Learning';
-
+          setHeroActionButtonLabel(btn, 'auto_stories', 'Start In-Depth Study');
           btn.onclick = () => {
-            // Show reader UI
-            D.surahContainer.style.display = 'none';
-            D.hero.style.display           = 'none';
-            D.viewer.style.display         = 'block';
-            D.dropdowns.style.display      = 'flex';
+            openLearnAyah(DEFAULT_SURAH, DEFAULT_AYAH, { mode: 'learning' });
+          };
+        }
 
-            loadAyah(DEFAULT_SURAH, DEFAULT_AYAH);
+        if (!reciteBtn) return;
+        if (reciteResume?.surah && reciteResume?.ayah) {
+          const reciteSurahName = await resolveSurahName(reciteResume.surah);
+          setHeroActionButtonLabel(
+            reciteBtn,
+            'headset',
+            `Resume Reading / Listening (${reciteSurahName}:${reciteResume.ayah})`
+          );
+          reciteBtn.onclick = () => {
+            triggerReciteStart(reciteResume.surah, reciteResume.ayah, {
+              autoPlay: true,
+              continuous: true
+            });
+          };
+        } else {
+          setHeroActionButtonLabel(reciteBtn, 'headset', 'Start Reading / Listening');
+          reciteBtn.onclick = () => {
+            triggerReciteStart(DEFAULT_SURAH, DEFAULT_AYAH, {
+              autoPlay: true,
+              continuous: true
+            });
           };
         }
       }
 
-/* ==========================================================
-   Helpers
-   ========================================================== */
-
-      /**
-       * Update Surah progress for guest users
-       * (only moves progress forward)
-       */
       function updateSurahProgressGuest(surah, ayah) {
         const STORAGE_KEY = 'completedSurahs_new';
         const progressMap = JSON.parse(
@@ -485,7 +1709,7 @@ const iframeSettingsVersion = new WeakMap();
           );
 
           console.log(
-            `📊 Progress updated → Surah ${surah}: Ayah ${ayah}`
+            `Ã°Å¸â€œÅ  Progress updated Ã¢â€ â€™ Surah ${surah}: Ayah ${ayah}`
           );
 
           progressMapCache[surah] = progressMap[surah];
@@ -493,6 +1717,22 @@ const iframeSettingsVersion = new WeakMap();
             allowMilestones: false
           });
         }
+      }
+
+      function getSurahResumeState(maxAyahRead, totalAyahs) {
+        const reached = Number(maxAyahRead) || 0;
+        const total = Number(totalAyahs) || 0;
+
+        if (reached <= 0) {
+          return { statusText: 'Start from Ayah 1', nextAyah: 1 };
+        }
+
+        if (total > 0 && reached >= total) {
+          return { statusText: 'Completed - Tap to revise', nextAyah: 1 };
+        }
+
+        const nextAyah = Math.max(1, reached + 1);
+        return { statusText: `Resume from Ayah ${nextAyah}`, nextAyah };
       }
 
 
@@ -548,22 +1788,47 @@ const iframeSettingsVersion = new WeakMap();
 
           title.append(englishEl, arabicEl);
 
-          const resumeBtn = document.createElement('button');
-          resumeBtn.className = 'resume-btn';
-          resumeBtn.dataset.surah = String(surah.number);
-          resumeBtn.textContent = '▶';
+          const statusEl = document.createElement('div');
+          statusEl.className = 'surah-status';
+          const statusSubEl = document.createElement('div');
+          statusSubEl.className = 'surah-status-sub';
 
-          card.append(header, title, resumeBtn);
+          const actionWrap = document.createElement('div');
+          actionWrap.className = 'surah-actions';
+
+          const playBtn = document.createElement('button');
+          playBtn.className = 'surah-play-btn surah-action-btn';
+          playBtn.dataset.surah = String(surah.number);
+          playBtn.type = 'button';
+          playBtn.setAttribute('aria-label', `Resume Surah ${surah.number}`);
+          playBtn.innerHTML = `
+            <span class="material-symbols-outlined" aria-hidden="true">history</span>
+            <span class="surah-action-label">Long Read</span>
+          `;
+
+          const rereadBtn = document.createElement('button');
+          rereadBtn.className = 'surah-reread-btn surah-action-btn';
+          rereadBtn.dataset.surah = String(surah.number);
+          rereadBtn.type = 'button';
+          rereadBtn.setAttribute('aria-label', `Re-read Surah ${surah.number} from Ayah 1`);
+          rereadBtn.innerHTML = `
+            <span class="material-symbols-outlined" aria-hidden="true">refresh</span>
+            <span class="surah-action-label">Re-read</span>
+          `;
+
+          actionWrap.append(playBtn, rereadBtn);
+
+          card.append(header, title, statusEl, statusSubEl, actionWrap);
 
           D.surahContainer.append(card);
 
 
           /* ------------------------------------------
-            🔍 Fetch progress (user / guest)
+            Ã°Å¸â€Â Fetch progress (user / guest)
             ------------------------------------------ */
           let maxAyahRead = 0;
 
-          if (auth.currentUser) {
+          if (auth.currentUser && !auth.currentUser.isAnonymous) {
             const snap = await getUserDoc();
             const progressMap = snap.data()?.completedSurahs_new || {};
             maxAyahRead = Number(progressMap[surah.number] || 0);
@@ -579,81 +1844,45 @@ const iframeSettingsVersion = new WeakMap();
             Determine resume label & next ayah
             ------------------------------------------ */
           const totalAyahs = surah.ayahCount;
-          let labelHTML = '';
-          let nextAyah = 1;
-
-          if (maxAyahRead === 0) {
-            // Not started
-            labelHTML = `
-              <span class="material-symbols-outlined"
-                    style="vertical-align:middle;font-size:18px;">
-                book_5
-              </span>&nbsp;
-              <span>Start Surah ${surah.number}</span>
-            `;
-            nextAyah = 1;
-
-          } else if (maxAyahRead >= totalAyahs) {
-            // Completed
-            labelHTML = `
-              <span class="material-icons-outlined"
-                    style="vertical-align:middle;font-size:18px;">
-                restart_alt
-              </span>&nbsp;
-              <span>Repeat Surah</span>
-            `;
-            nextAyah = 1;
-
-            console.log(`🎉 Surah ${surah.number} fully completed.`);
-
-          } else {
-            // Partially completed
-            labelHTML = `
-              <span class="material-symbols-outlined"
-                    style="vertical-align:middle;font-size:20px;">
-                play_arrow
-              </span>&nbsp;
-              <span>Resume from Ayah ${maxAyahRead}</span>
-            `;
-            nextAyah = maxAyahRead + 1;
-
-            console.log(
-              `⏯️ Surah ${surah.number} partially done. Resuming from Ayah ${nextAyah}`
-            );
-          }
+          const { statusText, nextAyah } = getSurahResumeState(maxAyahRead, totalAyahs);
 
 
           /* ------------------------------------------
             Resume button behavior
             ------------------------------------------ */
-          resumeBtn.innerHTML = labelHTML;
-          resumeBtn.dataset.nextAyah = nextAyah;
+          statusEl.textContent = statusText;
+          statusSubEl.textContent = maxAyahRead > 0
+            ? `Last read Ayah ${maxAyahRead}`
+            : 'No read history yet';
+          playBtn.dataset.nextAyah = String(nextAyah);
+          playBtn.dataset.resumeLabel = maxAyahRead > 0 ? 'Resume' : 'Long Read';
+          const labelEl = playBtn.querySelector('.surah-action-label');
+          if (labelEl) {
+            labelEl.textContent = playBtn.dataset.resumeLabel;
+          }
 
-          resumeBtn.addEventListener('click', e => {
+          playBtn.addEventListener('click', e => {
             e.stopPropagation();
+            const targetAyah = Number(playBtn.dataset.nextAyah) || 1;
+            openLearnAyah(surah.number, targetAyah, { mode: 'learning' });
+          });
 
-            D.surahContainer.style.display = 'none';
-            D.hero.style.display           = 'none';
-            D.viewer.style.display         = 'block';
-            D.dropdowns.style.display      = 'flex';
-
-            loadAyah(surah.number, nextAyah);
+          rereadBtn.addEventListener('click', e => {
+            e.stopPropagation();
+            openLearnAyah(surah.number, 1, { mode: 'learning' });
           });
 
 
           /* ------------------------------------------
-            Card click → start from Ayah 1
+            Card click Ã¢â€ â€™ start from Ayah 1
             ------------------------------------------ */
           card.addEventListener('click', () => {
-            D.surahContainer.style.display = 'none';
-            D.hero.style.display           = 'none';
-            D.viewer.style.display         = 'block';
-            D.dropdowns.style.display      = 'flex';
-
-            loadAyah(surah.number, 1);
+            const targetAyah = Number(playBtn.dataset.nextAyah) || 1;
+            openLearnAyah(surah.number, targetAyah, { mode: 'learning' });
           });
         }
 
+        renderReciteSurahTabs();
         refreshAllProgress();
 
         /* ===============================
@@ -666,15 +1895,17 @@ const iframeSettingsVersion = new WeakMap();
 /* ------------------------------------------
    Freeze animation at midpoint after play
    ------------------------------------------ */
-      menuAnimation.addEventListener('DOMLoaded', () => {
-        const freezeFrame = Math.floor(
-          menuAnimation.totalFrames / 2
-        );
+      if (menuAnimation) {
+        menuAnimation.addEventListener('DOMLoaded', () => {
+          const freezeFrame = Math.floor(
+            menuAnimation.totalFrames / 2
+          );
 
-        menuAnimation.addEventListener('complete', () => {
-          menuAnimation.goToAndStop(freezeFrame, true);
+          menuAnimation.addEventListener('complete', () => {
+            menuAnimation.goToAndStop(freezeFrame, true);
+          });
         });
-      });
+      }
 
 /* ==========================================================
    Show Swipe User Guide
@@ -754,7 +1985,7 @@ const iframeSettingsVersion = new WeakMap();
           setNudgeCooldown();
           flushPendingMilestone();
 
-          // 🔔 Notify same-page listeners
+          // Ã°Å¸â€â€ Notify same-page listeners
           window.dispatchEvent(
             new CustomEvent('swipeHintFinished')
           );
@@ -857,7 +2088,7 @@ const iframeSettingsVersion = new WeakMap();
         const center = ring.cards[1];
         const side   = dir === 1 ? ring.cards[2] : ring.cards[0];
 
-        // 🔒 snap to device pixels (kills micro jitter)
+        // Ã°Å¸â€â€™ snap to device pixels (kills micro jitter)
 
         dragState.lastDx = dx;
 
@@ -886,7 +2117,7 @@ switch (data.type) {
     case 'UPDATE_SETTING': {
   const { patch } = data;
 
-  console.log('⚙️ UPDATE_SETTING from iframe', patch);
+  console.log('Ã¢Å¡â„¢Ã¯Â¸Â UPDATE_SETTING from iframe', patch);
 
   saveSettings(patch);       // saves + broadcasts
   break;
@@ -903,6 +2134,8 @@ switch (data.type) {
 }
 
     case 'AUTO_SWIPE_NEXT': {
+      if (isReciteMode) break;
+      if (isGameMode) break;
       if (isAnimatingSwipe || dragState.active) break;
       if (!canMove(1)) {
         pendingAutoPlay = false;
@@ -915,7 +2148,12 @@ switch (data.type) {
 
     case 'SETTINGS_OPENED':
     case 'WORD_DETAILS_OPENED': {
+      const sourceWindow = e.source;
       pushPopupHistory(() => {
+        if (sourceWindow?.postMessage) {
+          sourceWindow.postMessage({ type: 'CLOSE_ACTIVE_POPUP' }, LOCAL_ORIGIN);
+          return;
+        }
         const activeFrame = getActiveIframe();
         postToIframe(activeFrame, { type: 'CLOSE_ACTIVE_POPUP' });
       });
@@ -953,6 +2191,13 @@ switch (data.type) {
       break;
     }
 
+    case 'EXIT_MEMO': {
+      if (typeof setMemorizationMode === 'function') {
+        setMemorizationMode(false);
+      }
+      break;
+    }
+
 
 
 
@@ -972,7 +2217,10 @@ switch (data.type) {
        Auth / UI requests
        ------------------------------------------ */
     case 'loginRequest':
-      console.log('[loginRequest] Guest-only mode — ignoring login request');
+      if (D.openDrawer) {
+        D.openDrawer();
+      }
+      showInAppToast('Sign in to save your progress.');
       break;
 
 
@@ -980,19 +2228,35 @@ switch (data.type) {
        Persist game stats (points)
        ------------------------------------------ */
     case 'persistStats': {
-      const { score } = data;
-
-      if (!auth.currentUser) {
-        addGuestPoints(score);
-      } else {
-        await addPointsToFirestore(score);
+      const scoreDelta = Number(data?.score);
+      if (!Number.isFinite(scoreDelta) || scoreDelta <= 0) {
+        break;
       }
-      
+
+      try {
+        if (!auth.currentUser || auth.currentUser.isAnonymous) {
+          addGuestPoints(scoreDelta);
+        } else {
+          await addPointsToFirestore(scoreDelta);
+        }
+      } catch (err) {
+        console.warn('[Stats] Failed to persist points', err);
+      }
 
       break;
     }
 
 case 'SWIPE_START': {
+  if (isReciteMode) {
+    break;
+  }
+  if (isGameMode) {
+    postToWindow(window, { type: 'SWIPE_CANCEL' });
+    break;
+  }
+  if (hintBusy) {
+    break;
+  }
   // Clear any leftover settle/transition so drag can begin immediately.
   isAnimatingSwipe = false;
   swipeLockedUntilFrame = 0;
@@ -1011,10 +2275,21 @@ case 'SWIPE_START': {
 
 
 case 'SWIPE_COMMIT': {
+  if (isReciteMode) {
+    break;
+  }
+  if (isGameMode) {
+    postToWindow(window, { type: 'SWIPE_CANCEL' });
+    break;
+  }
+  if (hintBusy) {
+    postToWindow(window, { type: 'SWIPE_CANCEL' });
+    break;
+  }
   const { dir } = data;
   const autoPlayRequested = !!(pendingAutoPlay || data.autoPlay);
 
-  // 🧹 STOP live drag immediately
+  // Ã°Å¸Â§Â¹ STOP live drag immediately
   dragState.active = false;
   dragState.dx = 0;
   dragState.dir = 0;
@@ -1027,7 +2302,7 @@ case 'SWIPE_COMMIT': {
 
   const w = swipeWidth || D.viewer.clientWidth;
 
-  // ❌ Cannot move → bounce back
+  // Ã¢ÂÅ’ Cannot move Ã¢â€ â€™ bounce back
   if (!canMove(dir)) {
     if (autoPlayRequested) pendingAutoPlay = false;
     postToWindow(window, { type: 'SWIPE_CANCEL' });
@@ -1087,7 +2362,16 @@ case 'SWIPE_COMMIT': {
 
 
 case 'SWIPE_PROGRESS': {
-  // ⛔ iframe still settling → ignore drag
+  if (isReciteMode) {
+    return;
+  }
+  if (isGameMode) {
+    return;
+  }
+  if (hintBusy) {
+    return;
+  }
+  // Ã¢â€ºâ€ iframe still settling Ã¢â€ â€™ ignore drag
   if (performance.now() < swipeLockedUntilFrame) {
     return;
   }
@@ -1114,7 +2398,13 @@ case 'SWIPE_PROGRESS': {
 
 
 case 'SWIPE_CANCEL': {
-  // 🧹 STOP live drag immediately
+  if (isReciteMode) {
+    break;
+  }
+  if (isGameMode) {
+    break;
+  }
+  // Ã°Å¸Â§Â¹ STOP live drag immediately
   dragState.active = false;
   dragState.dx = 0;
   dragState.dir = 0;
@@ -1223,6 +2513,29 @@ case 'SAVE_HINT_DONE': {
       break;
     }
 
+    case 'OPEN_MEMORIZATION_AYAH': {
+      const targetSurah = Number(data.surah) || currentSurah || 1;
+      const targetAyah = Number(data.ayah) || currentAyah || 1;
+      openMemorizationAyah(targetSurah, targetAyah);
+      break;
+    }
+
+    case 'MEMO_NAVIGATION_READY': {
+      if (memoNavigationRevealTimer) {
+        clearTimeout(memoNavigationRevealTimer);
+        memoNavigationRevealTimer = 0;
+      }
+      if (D.memoView) {
+        D.memoView.style.opacity = '1';
+        window.setTimeout(() => {
+          if (!D.memoView) return;
+          D.memoView.style.opacity = '';
+          D.memoView.style.transition = '';
+        }, 120);
+      }
+      break;
+    }
+
     /* ------------------------------------------
        Save progress request from iframe
        ------------------------------------------ */
@@ -1232,31 +2545,37 @@ case 'SAVE_HINT_DONE': {
         surah,
         ayah,
         timestamp,
-        recordStreak
+        recordStreak: shouldRecordStreak
       } = data;
 
       console.log(
-        '📥 Parent received SAVE_PROGRESS',
-        { surah, ayah, recordStreak }
+        'Ã°Å¸â€œÂ¥ Parent received SAVE_PROGRESS',
+        { surah, ayah, recordStreak: shouldRecordStreak }
       );
 
       try {
-        if (auth.currentUser) {
+        if (auth.currentUser && !auth.currentUser.isAnonymous) {
           /* -------- Logged-in user -------- */
           await updateLastRead(surah, ayah);
+          await updateCompletedSurahsProgress(surah, ayah);
 
-          // 🔥 Record streak ONLY if asked
-          if (recordStreak) {
-            const {
-              updated,
-              oldLength,
-              newLength
-            } = await recordStreak();
+          // Ã°Å¸â€Â¥ Record streak ONLY if asked
+          if (shouldRecordStreak) {
+            try {
+              const {
+                updated,
+                oldLength,
+                newLength
+              } = await recordUserStreak();
 
             console.log(
-              '🔥 recordStreak result',
+              'Ã°Å¸â€Â¥ recordStreak result',
               { updated, oldLength, newLength }
             );
+
+            } catch (streakErr) {
+              console.warn('[SAVE_PROGRESS] recordStreak failed', streakErr);
+            }
 
             // Popup handled via Firestore snapshot
           }
@@ -1268,57 +2587,91 @@ case 'SAVE_HINT_DONE': {
 
           isCurrentAyahDirty = false;
 
-          if (recordStreak) {
-            const result = recordGuestStreak();
-            if (result.updated) {
-              postToWindow(window,
-                {
-                  type: 'streakUpdate',
-                  date: result.today,
-                  freezes: result.freezes
-                }
-              );
+          if (shouldRecordStreak) {
+            try {
+              const result = recordGuestStreak();
+              if (result.updated) {
+                postToWindow(window,
+                  {
+                    type: 'streakUpdate',
+                    date: result.today,
+                    freezes: result.freezes
+                  }
+                );
+              }
+            } catch (streakErr) {
+              console.warn('[SAVE_PROGRESS] guest streak update failed', streakErr);
             }
           } else {
             console.log(
-              '⏭️ [SAVE_PROGRESS] recordStreak=false → skipping guest streak'
+              'Ã¢ÂÂ­Ã¯Â¸Â [SAVE_PROGRESS] recordStreak=false Ã¢â€ â€™ skipping guest streak'
             );
           }
         }
 
-        // 📘 Track learning journey locally (both guest + user)
-        trackLearningJourney(surah, ayah);
+        // Ã°Å¸â€œËœ Track learning journey locally (both guest + user)
+        try {
+          trackLearningJourney(surah, ayah);
+        } catch (journeyErr) {
+          console.warn('[SAVE_PROGRESS] Failed to track learning journey', journeyErr);
+        }
+        sendNativeSaveProgress(Number(surah), Number(ayah));
 
         /* -------- Notify parent (self) -------- */
-        postToWindow(window,
-          {
-            type: 'SAVE_PROGRESS_SUCCESS',
-            surah,
-            ayah,
-            savedAt: new Date(
-              timestamp || Date.now()
-            ).toISOString()
-          }
-        );
+        try {
+          postToWindow(window,
+            {
+              type: 'SAVE_PROGRESS_SUCCESS',
+              surah,
+              ayah,
+              savedAt: new Date(
+                timestamp || Date.now()
+              ).toISOString()
+            }
+          );
+        } catch (notifyErr) {
+          console.warn('[SAVE_PROGRESS] Parent success notify failed', notifyErr);
+        }
 
         /* -------- Notify iframe (toast UI) -------- */
-        postToWindow(e.source,
-          {
-            type: 'SAVE_PROGRESS_SUCCESS',
-            surah,
-            ayah
+        try {
+          const activeIframe = getActiveIframe();
+          if (activeIframe?.contentWindow) {
+            postToIframe(activeIframe, {
+              type: 'SAVE_PROGRESS_SUCCESS',
+              surah,
+              ayah
+            });
+          } else {
+            postToWindow(e.source,
+              {
+                type: 'SAVE_PROGRESS_SUCCESS',
+                surah,
+                ayah
+              }
+            );
           }
-        );
+        } catch (notifyErr) {
+          console.warn('[SAVE_PROGRESS] Iframe success notify failed', notifyErr);
+        }
 
       } catch (err) {
-        console.error('❌ Save progress failed', err);
+        console.error('Ã¢ÂÅ’ Save progress failed', err);
 
-        postToWindow(e.source,
-          {
+        const activeIframe = getActiveIframe();
+        if (activeIframe?.contentWindow) {
+          postToIframe(activeIframe, {
             type: 'SAVE_PROGRESS_FAILED',
-            error: err.message
-          }
-        );
+            error: err?.message || 'Save failed'
+          });
+        } else {
+          postToWindow(e.source,
+            {
+              type: 'SAVE_PROGRESS_FAILED',
+              error: err?.message || 'Save failed'
+            }
+          );
+        }
       }
 
       break;
@@ -1331,7 +2684,13 @@ case 'SAVE_HINT_DONE': {
     case 'SAVE_PROGRESS_SUCCESS': {
       isCurrentAyahDirty = false;
 
-      // 🚀 Deferred navigation after save
+      if (typeof initStartButton === 'function') {
+        initStartButton().catch(err => {
+          console.warn('[INIT] Failed to refresh start button after save', err);
+        });
+      }
+
+      // Ã°Å¸Å¡â‚¬ Deferred navigation after save
       if (typeof window.__pendingGoHome === 'function') {
         const goHome = window.__pendingGoHome;
         window.__pendingGoHome = null;
@@ -1365,6 +2724,7 @@ case 'SAVE_HINT_DONE': {
         }
 
         D.ayahSelect.value = ayahNum;
+        syncReciteSurahTabs(surahNum, false);
       }
 
       function resetMilestoneTracking() {
@@ -1392,7 +2752,7 @@ case 'SAVE_HINT_DONE': {
       }
 
       function shouldSuppressMilestones() {
-        return hintBusy || milestoneActive || Date.now() < suppressNudgesUntil;
+        return isMemoMode || hintBusy || milestoneActive || Date.now() < suppressNudgesUntil;
       }
 
       function clearPendingMilestone() {
@@ -1477,6 +2837,36 @@ case 'SAVE_HINT_DONE': {
         }, DISPLAY_TIME);
       }
 
+      function showInAppToast(message, detailOrColor) {
+        if (!message) return;
+        const toast = document.createElement('div');
+        toast.className = 'motivation-toast';
+        const isColor = typeof detailOrColor === 'string' && detailOrColor.startsWith('#');
+        if (isColor) {
+          toast.style.background = detailOrColor;
+          toast.textContent = message;
+        } else if (detailOrColor) {
+          toast.textContent = `${message} - ${detailOrColor}`;
+        } else {
+          toast.textContent = message;
+        }
+        document.body.appendChild(toast);
+
+        requestAnimationFrame(() => {
+          toast.classList.add('show');
+        });
+
+        const DISPLAY_TIME = 2600;
+        const FADE_TIME = 300;
+
+        setTimeout(() => {
+          toast.classList.remove('show');
+          setTimeout(() => {
+            toast.remove();
+          }, FADE_TIME);
+        }, DISPLAY_TIME);
+      }
+
       function maybeShowMotivation(options = {}) {
         if (shouldSuppressMilestones()) return;
         const { force = false } = options;
@@ -1519,8 +2909,8 @@ case 'SAVE_HINT_DONE': {
         if (pct < milestone) return;
 
         const template =
-          MILESTONE_MESSAGES[milestone] || `You reached ${milestone}% — keep going`;
-        const message = `${milestone}% • ${template} (Surah ${surah}, Ayah ${ayah})`;
+          MILESTONE_MESSAGES[milestone] || `You reached ${milestone}% - keep going`;
+        const message = `${milestone}% - ${template} (Surah ${surah}, Ayah ${ayah})`;
         milestoneActive = true;
         clearTimeout(milestoneTimer);
         showMilestoneTip(message);
@@ -1580,11 +2970,11 @@ case 'SAVE_HINT_DONE': {
 
         if (D.progressTip) {
           let note = 'Keep reading, you are building something beautiful.';
-          if (pct < 20) note = 'This is your progress so far — keep going.';
-          else if (pct < 50) note = 'Steady progress — keep going.';
+          if (pct < 20) note = 'This is your progress so far - keep going.';
+          else if (pct < 50) note = 'Steady progress - keep going.';
           else if (pct < 80) note = 'You are more than halfway there.';
           else if (pct < 95) note = 'You are very close to finishing this surah.';
-          else note = 'Almost complete — just a little more.';
+          else note = 'Almost complete - just a little more.';
 
           const defaultMessage = `Ayah ${effective} of ${totalAyahs}. ${note}`;
           D.progressTip.dataset.defaultMessage = defaultMessage;
@@ -1656,6 +3046,8 @@ case 'SAVE_HINT_DONE': {
         if (!active && D.progressTip) {
           D.progressTip.classList.remove('is-visible');
         }
+
+        updateTopSettingsButtonState();
       }
 
       function isHomeVisible() {
@@ -1670,6 +3062,19 @@ case 'SAVE_HINT_DONE': {
       function isViewerVisible() {
         if (!D.viewer) return false;
         return window.getComputedStyle(D.viewer).display !== 'none';
+      }
+
+      function updateTopSettingsButtonState() {
+        const showTopSettings =
+          !isDuasMode &&
+          !isMemoMode &&
+          (isReciteMode || isViewerVisible());
+
+        document.body.classList.toggle('learn-settings-visible', showTopSettings && !isReciteMode);
+
+        if (D.learnSettingsBtn) {
+          D.learnSettingsBtn.setAttribute('aria-hidden', showTopSettings ? 'false' : 'true');
+        }
       }
 
       function ensureHomeScroll() {
@@ -1692,6 +3097,97 @@ case 'SAVE_HINT_DONE': {
       function getActiveIframe() {
         return ring.cards?.[1]?.querySelector('iframe') ||
           document.getElementById('ayahViewer');
+      }
+
+/* ==========================================================
+   Contact Us Popup
+   ========================================================== */
+      function openContactPopup() {
+        const existing = document.getElementById('contactOverlay');
+        if (existing) {
+          existing.remove();
+        }
+
+        const overlay = document.createElement('div');
+        overlay.id = 'contactOverlay';
+        overlay.classList.add('qq-overlay');
+        overlay.style.cssText = `
+          position: fixed;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 10000;
+        `;
+
+        overlay.innerHTML = `
+          <div class="qq-modal contact-modal">
+            <div class="contact-header">
+              <span>Contact Us</span>
+              <button type="button" class="contact-close" aria-label="Close contact form">X</button>
+            </div>
+            <iframe
+              id="contactFormFrame"
+              class="contact-frame"
+              src="${CONTACT_FORM_URL}"
+              title="Contact form"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+            ></iframe>
+            <div id="contactFallback" class="contact-fallback">
+              <span class="contact-fallback-text">Having trouble loading the form?</span>
+              <a
+                class="contact-open-btn"
+                href="${CONTACT_FORM_URL}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Open in new tab
+              </a>
+            </div>
+          </div>
+        `;
+
+        document.body.appendChild(overlay);
+
+        const frame = overlay.querySelector('#contactFormFrame');
+        const fallback = overlay.querySelector('#contactFallback');
+        let frameLoaded = false;
+        let fallbackTimer = 0;
+        const showFallback = () => {
+          if (!fallback) return;
+          fallback.classList.add('is-visible');
+        };
+        if (frame) {
+          fallbackTimer = window.setTimeout(() => {
+            if (!frameLoaded) showFallback();
+          }, 3200);
+          frame.addEventListener('load', () => {
+            frameLoaded = true;
+            if (fallbackTimer) {
+              window.clearTimeout(fallbackTimer);
+              fallbackTimer = 0;
+            }
+          });
+          frame.addEventListener('error', () => {
+            showFallback();
+          });
+        }
+
+        const closeBtn = overlay.querySelector('.contact-close');
+        if (closeBtn) {
+          closeBtn.addEventListener('click', () => {
+            if (fallbackTimer) window.clearTimeout(fallbackTimer);
+            overlay.remove();
+          });
+        }
+
+        overlay.addEventListener('click', e => {
+          if (e.target === overlay) {
+            if (fallbackTimer) window.clearTimeout(fallbackTimer);
+            overlay.remove();
+          }
+        });
       }
 
 /* ==========================================================
@@ -1720,7 +3216,7 @@ case 'SAVE_HINT_DONE': {
             width: 85%;
             text-align: center;
           ">
-            <!-- ❌ Close -->
+            <!-- Close -->
             <button id="popupClose" style="
               position: absolute;
               top: 8px;
@@ -1730,7 +3226,7 @@ case 'SAVE_HINT_DONE': {
               font-size: 18px;
               cursor: pointer;
               color: #888;
-            ">✕</button>
+            ">&times;</button>
 
             <h3>${title}</h3>
 
@@ -1774,7 +3270,7 @@ case 'SAVE_HINT_DONE': {
 
 
         /* ------------------------------------------
-          Close (X) → stay on ayah
+          Close (X) Ã¢â€ â€™ stay on ayah
           ------------------------------------------ */
         overlay.querySelector('#popupClose').onclick = () => {
           overlay.remove();
@@ -1782,19 +3278,19 @@ case 'SAVE_HINT_DONE': {
 
 
         /* ------------------------------------------
-          💾 Save & Go Home
+          Ã°Å¸â€™Â¾ Save & Go Home
           ------------------------------------------ */
         overlay.querySelector('#popupSaveGo').onclick = () => {
           // Ask iframe to save progress
           const iframe = getActiveIframe();
           postToIframe(iframe, { type: 'REQUEST_SAVE_PROGRESS' });
 
-          console.log('🟡 Save & Go Home clicked');
+          console.log('Ã°Å¸Å¸Â¡ Save & Go Home clicked');
 
           // Defer navigation until SAVE_PROGRESS_SUCCESS
           window.__pendingGoHome = onGoHome;
           console.log(
-            '🟡 pendingGoHome set:',
+            'Ã°Å¸Å¸Â¡ pendingGoHome set:',
             window.__pendingGoHome
           );
 
@@ -1803,7 +3299,7 @@ case 'SAVE_HINT_DONE': {
 
 
         /* ------------------------------------------
-          🏠 Go Home without saving
+          Ã°Å¸ÂÂ  Go Home without saving
           ------------------------------------------ */
         overlay.querySelector('#popupGoHome').onclick = () => {
           overlay.remove();
@@ -1815,7 +3311,7 @@ case 'SAVE_HINT_DONE': {
 
 
         /* ------------------------------------------
-          Click outside → stay
+          Click outside Ã¢â€ â€™ stay
           ------------------------------------------ */
         overlay.onclick = e => {
           if (e.target === overlay) {
@@ -1837,10 +3333,16 @@ case 'SAVE_HINT_DONE': {
         D.dropdowns      = document.querySelector('.dropdowns');
         D.surahSelect    = document.getElementById('surahSelect');
         D.ayahSelect     = document.getElementById('ayahSelect');
+        D.reciteSurahTabsWrap = document.getElementById('reciteSurahTabsWrap');
+        D.reciteSurahTabs = document.getElementById('reciteSurahTabs');
         D.prevArrow      = document.querySelector('.prev');
         D.nextArrow      = document.querySelector('.next');
         D.returnBtn      = document.getElementById('returnToAyah');
         D.startBtn       = document.getElementById('startLearningBtn');
+        D.startReciteBtn = document.getElementById('startRecitingBtn');
+        D.learnSettingsBtn = document.getElementById('learnSettingsBtn');
+        D.reciteHomeBtn  = document.getElementById('reciteHomeBtn');
+        D.reciteScrollView = document.getElementById('reciteScrollView');
         D.ptsEl          = document.getElementById('ajrPoints');
         D.streakEl       = document.getElementById('streakDisplay');
         D.closeBtn       = document.getElementById('drawerCloseBtn');
@@ -1854,15 +3356,66 @@ case 'SAVE_HINT_DONE': {
          D.surahSelect = document.getElementById('surahSelect');
         D.duasView       = document.getElementById('duasView');
         D.duasFrame      = document.getElementById('duasFrame');
+        D.memoView       = document.getElementById('memorizationView');
+        D.memoFrame      = document.getElementById('memorizationFrame');
         D.navLearnQuran  = document.getElementById('navLearnQuran');
         D.navRamzanDuas  = document.getElementById('navRamzanDuas');
+        D.navMemorization = document.getElementById('navMemorization');
         D.bottomNav      = document.getElementById('bottomNav');
         D.randomDuaCard  = document.getElementById('randomDuaCard');
         D.resumeListeningBtn = document.getElementById('resumeListeningHeroBtn');
+        D.memorizationHeroBtn = document.getElementById('memorizationHeroBtn');
+        D.namazGoalsWidget = document.getElementById('namazGoalsWidget');
+        D.namazGoalsSummary = document.getElementById('namazGoalsSummary');
+        D.namazGoalsRows = document.getElementById('namazGoalsRows');
+        D.namazGoalsDate = document.getElementById('namazGoalsDate');
+        D.namazGoalsProgress = document.getElementById('namazGoalsProgress');
+        D.contactBtn     = document.getElementById('contactUsBtn');
+        D.drawerGreeting = document.getElementById('drawerGreeting');
+        D.drawerSubtext = document.getElementById('drawerSubtext');
+        D.drawerLoginBtn = document.getElementById('drawerLoginBtn');
+        D.drawerLogoutBtn = document.getElementById('drawerLogoutBtn');
+        D.namazHistoryBtn = document.getElementById('namazHistoryBtn');
+        D.memorizedAyahsBtn = document.getElementById('memorizedAyahsBtn');
+        D.drawerPlaceholderBtn = document.getElementById('drawerPlaceholderBtn');
 
 
         const menuBtn = document.getElementById('menuBtn');
         let drawerOverlay = null;
+        let drawerLockScrollY = 0;
+        let drawerBodyLockActive = false;
+        let nativeTabSyncLockDepth = 0;
+        let queuedNativeTab = null;
+
+        const lockBodyScrollForDrawer = () => {
+          if (drawerBodyLockActive) return;
+          drawerLockScrollY =
+            window.scrollY ||
+            document.documentElement.scrollTop ||
+            document.body.scrollTop ||
+            0;
+          document.body.style.position = 'fixed';
+          document.body.style.top = `-${drawerLockScrollY}px`;
+          document.body.style.left = '0';
+          document.body.style.right = '0';
+          document.body.style.width = '100%';
+          document.body.style.overflow = 'hidden';
+          document.documentElement.style.overflow = 'hidden';
+          drawerBodyLockActive = true;
+        };
+
+        const unlockBodyScrollForDrawer = () => {
+          if (!drawerBodyLockActive) return;
+          document.body.style.position = '';
+          document.body.style.top = '';
+          document.body.style.left = '';
+          document.body.style.right = '';
+          document.body.style.width = '';
+          document.body.style.overflow = '';
+          document.documentElement.style.overflow = '';
+          window.scrollTo(0, drawerLockScrollY);
+          drawerBodyLockActive = false;
+        };
 
         const syncNavHeights = () => {
           const nav = document.getElementById('mainNavbar');
@@ -1871,9 +3424,95 @@ case 'SAVE_HINT_DONE': {
           }
         };
 
-        const setActiveNav = (isDuas) => {
-          if (D.navLearnQuran) D.navLearnQuran.classList.toggle('active', !isDuas);
+        const setActiveNav = mode => {
+          const isLearn = mode === 'learn';
+          const isDuas = mode === 'duas';
+          const isMemo = mode === 'memo';
+          if (D.navLearnQuran) D.navLearnQuran.classList.toggle('active', isLearn);
           if (D.navRamzanDuas) D.navRamzanDuas.classList.toggle('active', isDuas);
+          if (D.navMemorization) D.navMemorization.classList.toggle('active', isMemo);
+          updateTopSettingsButtonState();
+          if (nativeTabSyncLockDepth > 0) {
+            queuedNativeTab = mode;
+            return;
+          }
+          sendNativeTabSwitch(mode);
+        };
+
+        const runTabTransition = (targetTab, transitionFn) => {
+          nativeTabSyncLockDepth += 1;
+          try {
+            transitionFn();
+            if (targetTab === 'learn' || targetTab === 'memo' || targetTab === 'duas') {
+              queuedNativeTab = targetTab;
+            }
+          } finally {
+            nativeTabSyncLockDepth = Math.max(0, nativeTabSyncLockDepth - 1);
+            if (nativeTabSyncLockDepth === 0) {
+              const finalTab = queuedNativeTab;
+              queuedNativeTab = null;
+              if (finalTab) {
+                sendNativeTabSwitch(finalTab);
+              }
+            }
+          }
+        };
+
+        const prewarmSecondaryTabs = () => {
+          const warm = () => {
+            if (D.duasFrame) {
+              try {
+                D.duasFrame.loading = 'eager';
+              } catch (_) {}
+              if (!D.duasFrame.src) {
+                syncThemeToFrameOnLoad(D.duasFrame);
+                D.duasFrame.src = resolveAppUrl('duas/duas.html');
+              }
+            }
+
+            if (D.memoFrame) {
+              try {
+                D.memoFrame.loading = 'eager';
+              } catch (_) {}
+              const target = resolveAppUrl('memorization.html?embedded=1');
+              const current = typeof D.memoFrame.src === 'string' ? D.memoFrame.src : '';
+              if (!current || current === 'about:blank' || !current.includes('memorization.html')) {
+                syncThemeToFrameOnLoad(D.memoFrame);
+                D.memoFrame.src = target;
+              }
+            }
+          };
+
+          if (typeof window.requestIdleCallback === 'function') {
+            window.requestIdleCallback(warm, { timeout: 1800 });
+          } else {
+            window.setTimeout(warm, 900);
+          }
+        };
+
+        const goLearnHome = () => {
+          if (isDuasMode && typeof setDuasMode === 'function') {
+            setDuasMode(false);
+          }
+          if (isMemoMode && typeof setMemorizationMode === 'function') {
+            setMemorizationMode(false);
+          }
+          if (isReciteMode && typeof setReciteMode === 'function') {
+            setReciteMode(false, { showHome: true });
+          }
+
+          if (D.hero) D.hero.style.display = '';
+          if (D.surahContainer) D.surahContainer.style.display = '';
+          if (D.viewer) D.viewer.style.display = 'none';
+          if (D.dropdowns) D.dropdowns.style.display = 'none';
+          setReaderMode(false);
+          ensureHomeScroll();
+          setActiveNav('learn');
+
+          const homePath = resolveAppUrl('index.html');
+          if (window.location.href !== homePath) {
+            window.history.replaceState({}, '', homePath);
+          }
         };
 
         const pauseQuranAudio = () => {
@@ -1887,12 +3526,1052 @@ case 'SAVE_HINT_DONE': {
           }
         };
 
+        const getSurahMeta = surahNum =>
+          surahData.find(item => Number(item.number) === Number(surahNum)) || null;
+        const reciteDataCache = new Map();
+        let reciteCombinedPayload = null;
+        let reciteCurrentSurahData = null;
+        const reciteAyahIndex = new Map();
+        let reciteAudio = null;
+        let recitePreloadAudio = null;
+        let recitePlaybackContext = null;
+        let reciteActivePlayBtn = null;
+        let reciteActiveCard = null;
+        let reciteExpandedCard = null;
+        let recitePlaybackToken = 0;
+        let reciteContinuousPlayback = false;
+        let reciteVisibleAyah = null;
+        let reciteScrollRaf = 0;
+        let closeReciteSettingsPopup = null;
+        let reciteSwipeStartX = 0;
+        let reciteSwipeStartY = 0;
+        let reciteSwipeTracking = false;
+        let reciteSurahSwipeLockUntil = 0;
+
+        const recitePad3 = value => String(Number(value) || 0).padStart(3, '0');
+        const sanitizeReciteArabicText = value =>
+          String(value || '')
+            // Remove Quranic annotation marks (small pause/ornament symbols).
+            .replace(/[\u06D6-\u06ED]/g, '')
+            .trim();
+
+        const getReciteSurahPath = surahNum =>
+          resolveAppUrl(`build/recite/surahs/surah_${recitePad3(surahNum)}.json`);
+
+        const fetchJsonStrict = async url => {
+          const res = await fetch(url, { cache: 'no-store' });
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status}`);
+          }
+          return res.json();
+        };
+
+        const extractSurahRecord = (payload, surahNum) => {
+          if (payload?.surah?.surah === surahNum) {
+            return payload.surah;
+          }
+          if (Array.isArray(payload?.surahs)) {
+            return payload.surahs.find(item => Number(item?.surah) === surahNum) || null;
+          }
+          return null;
+        };
+
+        const fetchReciteCombinedData = async () => {
+          if (reciteCombinedPayload) return reciteCombinedPayload;
+          const combinedPath = resolveAppUrl('build/recite/recite_surahs.json');
+          reciteCombinedPayload = await fetchJsonStrict(combinedPath);
+          return reciteCombinedPayload;
+        };
+
+        const fetchReciteSurahData = async surahNum => {
+          const normalizedSurah = Number(surahNum);
+          if (!Number.isFinite(normalizedSurah) || normalizedSurah < 1) {
+            throw new Error('Invalid surah');
+          }
+          if (reciteDataCache.has(normalizedSurah)) {
+            return reciteDataCache.get(normalizedSurah);
+          }
+
+          const perSurahPath = getReciteSurahPath(normalizedSurah);
+          let record = null;
+
+          try {
+            const payload = await fetchJsonStrict(perSurahPath);
+            record = extractSurahRecord(payload, normalizedSurah);
+          } catch {
+            // Fallback to combined dataset when per-surah file is unavailable.
+          }
+
+          if (!record) {
+            const combined = await fetchReciteCombinedData();
+            record = extractSurahRecord(combined, normalizedSurah);
+          }
+
+          if (!record || !Array.isArray(record.ayahs)) {
+            throw new Error(`Could not resolve recite data for surah ${normalizedSurah}`);
+          }
+
+          const normalized = {
+            ...record,
+            surah: normalizedSurah,
+            ayahs: record.ayahs.map(item => ({
+              ayah: Number(item?.ayah),
+              globalAyah: Number(item?.globalAyah),
+              arabic: String(item?.arabic || '').replace(/^\uFEFF/, ''),
+              translation_en: String(item?.translation_en || ''),
+              translation_ur: String(item?.translation_ur || ''),
+              audio: {
+                ar: item?.audio?.ar || '',
+                en: item?.audio?.en || '',
+                ur: item?.audio?.ur || ''
+              }
+            }))
+          };
+
+          reciteDataCache.set(normalizedSurah, normalized);
+          return normalized;
+        };
+
+        const scrollActiveReciteTabIntoView = (surahNum, smooth = true) => {
+          const tabsRoot = D.reciteSurahTabs;
+          if (!tabsRoot) return;
+          const target = tabsRoot.querySelector(`.recite-surah-tab[data-surah="${Number(surahNum)}"]`);
+          if (!target) return;
+          target.scrollIntoView({
+            inline: 'center',
+            block: 'nearest',
+            behavior: smooth ? 'smooth' : 'auto'
+          });
+        };
+
+        syncReciteSurahTabs = (surahNum, smooth = true) => {
+          const tabsRoot = D.reciteSurahTabs;
+          if (!tabsRoot) return;
+          const activeSurah = Number(surahNum);
+          tabsRoot.querySelectorAll('.recite-surah-tab').forEach(btn => {
+            const isActive = Number(btn.dataset.surah) === activeSurah;
+            btn.classList.toggle('is-active', isActive);
+            btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            btn.tabIndex = isActive ? 0 : -1;
+          });
+          scrollActiveReciteTabIntoView(activeSurah, smooth);
+        };
+
+        renderReciteSurahTabs = () => {
+          const tabsRoot = D.reciteSurahTabs;
+          if (!tabsRoot) return;
+          tabsRoot.innerHTML = '';
+
+          if (!Array.isArray(surahData) || !surahData.length) return;
+
+          const frag = document.createDocumentFragment();
+          surahData.forEach(surah => {
+            const surahNum = Number(surah?.number);
+            if (!Number.isFinite(surahNum)) return;
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'recite-surah-tab';
+            btn.dataset.surah = String(surahNum);
+            btn.setAttribute('role', 'tab');
+            btn.setAttribute('aria-selected', 'false');
+            btn.tabIndex = -1;
+            btn.innerHTML = `
+              <span class="recite-surah-tab-num">${surahNum}.</span>
+              <span class="recite-surah-tab-name">${surah.englishName || `Surah ${surahNum}`}</span>
+            `;
+            btn.addEventListener('click', () => {
+              if (!isReciteMode) return;
+              renderReciteSurah(surahNum, 1, { autoPlay: false });
+            });
+            frag.appendChild(btn);
+          });
+          tabsRoot.appendChild(frag);
+          syncReciteSurahTabs(currentSurah || DEFAULT_SURAH, false);
+        };
+
+        const shiftReciteSurahBy = delta => {
+          const total = Array.isArray(surahData) ? surahData.length : 0;
+          if (!isReciteMode || !total) return;
+          const current = Number(currentSurah) || DEFAULT_SURAH;
+          const target = Math.max(1, Math.min(total, current + Number(delta)));
+          if (target === current) return;
+          renderReciteSurah(target, 1, { autoPlay: false });
+        };
+
+        bindReciteSurahSwipe = () => {
+          if (!D.reciteScrollView || D.reciteScrollView.dataset.reciteSwipeBound === '1') return;
+          D.reciteScrollView.dataset.reciteSwipeBound = '1';
+
+          D.reciteScrollView.addEventListener('touchstart', evt => {
+            if (!isReciteMode || evt.touches.length !== 1) return;
+            const touch = evt.touches[0];
+            reciteSwipeStartX = touch.clientX;
+            reciteSwipeStartY = touch.clientY;
+            reciteSwipeTracking = true;
+          }, { passive: true });
+
+          D.reciteScrollView.addEventListener('touchmove', evt => {
+            if (!reciteSwipeTracking || evt.touches.length !== 1) return;
+          }, { passive: true });
+
+          D.reciteScrollView.addEventListener('touchend', evt => {
+            if (!reciteSwipeTracking || !isReciteMode) return;
+            reciteSwipeTracking = false;
+
+            const touch = evt.changedTouches?.[0];
+            if (!touch) return;
+            const dx = touch.clientX - reciteSwipeStartX;
+            const dy = touch.clientY - reciteSwipeStartY;
+            const absDx = Math.abs(dx);
+            const absDy = Math.abs(dy);
+
+            if (absDx < 56 || absDx <= absDy * 1.2) return;
+            if (Date.now() < reciteSurahSwipeLockUntil) return;
+
+            reciteSurahSwipeLockUntil = Date.now() + 320;
+            // Natural direction: swipe left -> next surah, swipe right -> previous surah.
+            shiftReciteSurahBy(dx < 0 ? 1 : -1);
+          }, { passive: true });
+
+          D.reciteScrollView.addEventListener('touchcancel', () => {
+            reciteSwipeTracking = false;
+          }, { passive: true });
+        };
+
+        const getReciteAudioUrl = (ayahData, settings = getSettings()) => {
+          const preferredLang = settings.audioLang || 'ar';
+          const audio = ayahData?.audio || {};
+          return audio[preferredLang] || audio.ar || audio.en || audio.ur || '';
+        };
+
+        const getReciteCardByAyah = ayahNum => {
+          if (!D.reciteScrollView) return null;
+          return D.reciteScrollView.querySelector(
+            `.recite-ayah-card[data-surah="${Number(currentSurah)}"][data-ayah="${Number(ayahNum)}"]`
+          );
+        };
+
+        const scrollReciteCardIntoView = (card, behavior = 'smooth') => {
+          if (!card || !D.reciteScrollView) return;
+          const container = D.reciteScrollView;
+          const targetTop = card.offsetTop - Math.max(8, (container.clientHeight * 0.22));
+          container.scrollTo({
+            top: Math.max(0, targetTop),
+            behavior
+          });
+        };
+
+        const setRecitePlayingCard = card => {
+          if (reciteActiveCard && reciteActiveCard !== card) {
+            reciteActiveCard.classList.remove('is-playing');
+          }
+          reciteActiveCard = card || null;
+          if (reciteActiveCard) {
+            reciteActiveCard.classList.add('is-playing');
+          }
+        };
+
+        const setReciteCardExpanded = (card, expanded, options = {}) => {
+          if (!card) return;
+          const panel = card.querySelector('.recite-ayah-panel');
+          const toggle = card.querySelector('.recite-ayah-expand-toggle');
+          if (!panel || !toggle) return;
+
+          const shouldExpand = !!expanded;
+          if (shouldExpand && options.exclusive !== false && reciteExpandedCard && reciteExpandedCard !== card) {
+            setReciteCardExpanded(reciteExpandedCard, false, { exclusive: false });
+          }
+
+          card.classList.toggle('is-expanded', shouldExpand);
+          panel.hidden = !shouldExpand;
+          toggle.setAttribute('aria-expanded', shouldExpand ? 'true' : 'false');
+          toggle.classList.toggle('is-expanded', shouldExpand);
+          reciteExpandedCard = shouldExpand ? card : (reciteExpandedCard === card ? null : reciteExpandedCard);
+        };
+
+        const markRecitePosition = (surah, ayah, options = {}) => {
+          const targetSurah = Number(surah) || 0;
+          const targetAyah = Number(ayah) || 0;
+          if (!targetSurah || !targetAyah) return;
+          currentSurah = targetSurah;
+          currentAyah = targetAyah;
+          reciteVisibleAyah = targetAyah;
+          rememberReciteProgress(targetSurah, targetAyah, {
+            syncRemote: options.syncRemote === true,
+            source: options.source || 'recite'
+          });
+        };
+
+        const probeVisibleReciteAyah = () => {
+          if (!isReciteMode || !D.reciteScrollView) return;
+          const cards = D.reciteScrollView.querySelectorAll('.recite-ayah-card');
+          if (!cards.length) return;
+          const containerRect = D.reciteScrollView.getBoundingClientRect();
+          const anchorY = containerRect.top + Math.min(containerRect.height * 0.28, 130);
+          let best = null;
+          let bestDist = Number.POSITIVE_INFINITY;
+          cards.forEach(card => {
+            const rect = card.getBoundingClientRect();
+            const centerY = rect.top + (rect.height / 2);
+            const dist = Math.abs(centerY - anchorY);
+            if (dist < bestDist) {
+              best = card;
+              bestDist = dist;
+            }
+          });
+          if (!best) return;
+          const ayahNum = Number(best.dataset.ayah);
+          if (!Number.isFinite(ayahNum) || ayahNum < 1) return;
+          reciteVisibleAyah = ayahNum;
+          if (!reciteContinuousPlayback && ayahNum !== currentAyah) {
+            markRecitePosition(currentSurah, ayahNum, { source: 'recite-scroll' });
+          }
+        };
+
+        const bindReciteScrollTracking = () => {
+          if (!D.reciteScrollView || D.reciteScrollView.dataset.reciteScrollBound === '1') return;
+          D.reciteScrollView.dataset.reciteScrollBound = '1';
+          D.reciteScrollView.addEventListener('scroll', () => {
+            if (reciteScrollRaf) return;
+            reciteScrollRaf = requestAnimationFrame(() => {
+              reciteScrollRaf = 0;
+              probeVisibleReciteAyah();
+            });
+          }, { passive: true });
+        };
+
+        const saveReciteProgressTarget = async (target, options = {}) => {
+          if (!target || !Number.isFinite(Number(target.surah)) || !Number.isFinite(Number(target.ayah))) {
+            return;
+          }
+          const source = options.source || 'manual-recite-save';
+          await rememberReciteProgress(Number(target.surah), Number(target.ayah), {
+            syncRemote: true,
+            source
+          });
+          showInAppToast(`Recite saved at ${Number(target.surah)}:${Number(target.ayah)}.`);
+          await initStartButton(auth.currentUser);
+          await updateResumeListeningButton(auth.currentUser);
+        };
+
+        const setRecitePlayButtonState = (btn, playing) => {
+          if (!btn) return;
+          btn.classList.toggle('is-playing', !!playing);
+          const icon = btn.querySelector('.material-symbols-outlined');
+          if (icon) {
+            icon.textContent = playing ? 'pause' : 'play_arrow';
+          }
+          const text = btn.querySelector('[data-recite-play-label]');
+          if (text) {
+            text.textContent = playing ? 'Pause' : 'Play';
+          }
+        };
+
+        const getOrCreateReciteAudio = () => {
+          if (!reciteAudio) {
+            reciteAudio = new Audio();
+            reciteAudio.preload = 'auto';
+          }
+          return reciteAudio;
+        };
+
+        const preloadNextReciteAyah = (ayahData, settings = getSettings(), continueSequence = false) => {
+          if (!continueSequence) return;
+          const nextAyah = (Number(ayahData?.ayah) || 0) + 1;
+          if (nextAyah < 1) return;
+          const nextAyahData = reciteAyahIndex.get(nextAyah);
+          if (!nextAyahData) return;
+          const nextSrc = getReciteAudioUrl(nextAyahData, settings);
+          if (!nextSrc) return;
+
+          if (!recitePreloadAudio) {
+            recitePreloadAudio = new Audio();
+            recitePreloadAudio.preload = 'auto';
+          }
+
+          if (recitePreloadAudio.src !== nextSrc) {
+            recitePreloadAudio.src = nextSrc;
+            try {
+              recitePreloadAudio.load();
+            } catch (_) {}
+          }
+        };
+
+        const stopReciteAudio = (options = {}) => {
+          const { preserveSequence = false } = options;
+          recitePlaybackToken += 1;
+          recitePlaybackContext = null;
+          if (reciteAudio) {
+            reciteAudio.pause();
+            reciteAudio.onended = null;
+            reciteAudio.onerror = null;
+            reciteAudio.currentTime = 0;
+          }
+          if (reciteActivePlayBtn) {
+            setRecitePlayButtonState(reciteActivePlayBtn, false);
+            reciteActivePlayBtn = null;
+          }
+          if (reciteActiveCard) {
+            reciteActiveCard.classList.remove('is-playing');
+            reciteActiveCard = null;
+          }
+          if (!preserveSequence) {
+            reciteContinuousPlayback = false;
+          }
+        };
+
+        const playReciteAyah = (ayahData, playBtn, options = {}) => {
+          const {
+            autoStart = false,
+            continueSequence = false,
+            scrollIntoView = true
+          } = options;
+          if (!ayahData) return;
+          const settings = getSettings();
+          const src = getReciteAudioUrl(ayahData, settings);
+          if (!src) {
+            if (!autoStart) {
+              showInAppToast('Audio not available for this ayah.');
+            }
+            return;
+          }
+
+          if (reciteActivePlayBtn === playBtn && reciteAudio && !reciteAudio.paused) {
+            stopReciteAudio();
+            return;
+          }
+
+          reciteContinuousPlayback = continueSequence;
+          stopReciteAudio({ preserveSequence: continueSequence });
+          pauseQuranAudio();
+          pauseDuasAudio();
+
+          const audio = getOrCreateReciteAudio();
+          audio.src = src;
+          const desiredSpeed = Number.parseFloat(settings.speed);
+          if (Number.isFinite(desiredSpeed) && desiredSpeed > 0) {
+            audio.playbackRate = desiredSpeed;
+          }
+
+          const repeat = Math.max(1, Math.min(20, Number.parseInt(settings.repeat, 10) || 1));
+          const token = ++recitePlaybackToken;
+          recitePlaybackContext = {
+            token,
+            ayahData,
+            continueSequence,
+            repeat,
+            played: 0
+          };
+
+          reciteActivePlayBtn = playBtn || null;
+          setRecitePlayButtonState(reciteActivePlayBtn, true);
+          const currentCard = playBtn?.closest('.recite-ayah-card') || null;
+          if (currentCard) {
+            setReciteCardExpanded(currentCard, true);
+          }
+          setRecitePlayingCard(currentCard);
+          if (currentCard && scrollIntoView) {
+            scrollReciteCardIntoView(currentCard, autoStart ? 'smooth' : 'auto');
+          }
+          markRecitePosition(
+            Number(currentCard?.dataset?.surah) || currentSurah || DEFAULT_SURAH,
+            Number(ayahData.ayah) || currentAyah || DEFAULT_AYAH,
+            {
+              source: continueSequence ? 'recite-listening' : 'recite-play'
+            }
+          );
+
+          const cleanup = () => {
+            if (token !== recitePlaybackToken) return;
+            stopReciteAudio();
+          };
+
+          audio.onended = () => {
+            const ctx = recitePlaybackContext;
+            if (!ctx || ctx.token !== token) return;
+            ctx.played += 1;
+            if (ctx.played < ctx.repeat) {
+              audio.currentTime = 0;
+              audio.play().catch(() => cleanup());
+              return;
+            }
+
+            if (ctx.continueSequence) {
+              const nextAyah = (Number(ctx.ayahData?.ayah) || 0) + 1;
+              const nextAyahData = reciteAyahIndex.get(nextAyah);
+              const nextCard = getReciteCardByAyah(nextAyah);
+              const nextBtn = nextCard?.querySelector('.recite-ayah-panel-play');
+              if (nextAyahData && nextBtn) {
+                playReciteAyah(nextAyahData, nextBtn, {
+                  autoStart: true,
+                  continueSequence: true,
+                  scrollIntoView: true
+                });
+                return;
+              }
+            }
+            cleanup();
+          };
+
+          audio.onerror = () => {
+            if (token !== recitePlaybackToken) return;
+            cleanup();
+            showInAppToast('Could not play audio.');
+          };
+
+          preloadNextReciteAyah(ayahData, settings, continueSequence);
+
+          audio.play().catch(() => {
+            cleanup();
+            if (autoStart) {
+              showInAppToast('Tap play on an ayah to start audio.');
+            } else {
+              showInAppToast('Audio playback was blocked.');
+            }
+          });
+        };
+
+        const applyReciteSettingsToDom = (settings = getSettings()) => {
+          if (!D.reciteScrollView || !reciteCurrentSurahData) return;
+          const showTranslation = settings.showPanelTranslation !== false;
+          const useUr = settings.panelLang === 'ur';
+          const autoNextEnabled = settings.autoSwipe !== false;
+          const repeatValue = Math.max(1, Math.min(20, Number.parseInt(settings.repeat, 10) || 1));
+
+          const cards = D.reciteScrollView.querySelectorAll('.recite-ayah-card');
+          cards.forEach(card => {
+            const ayahNum = Number(card.dataset.ayah);
+            const ayahData = reciteAyahIndex.get(ayahNum);
+            const transEl = card.querySelector('.recite-ayah-translation');
+            if (!ayahData || !transEl) return;
+            const translationText = useUr
+              ? (ayahData.translation_ur || ayahData.translation_en || '')
+              : (ayahData.translation_en || ayahData.translation_ur || '');
+            transEl.textContent = translationText;
+            transEl.style.display = showTranslation && translationText ? 'block' : 'none';
+
+            const repeatInput = card.querySelector('.recite-ayah-repeat-input');
+            if (repeatInput && repeatInput.value !== String(repeatValue)) {
+              repeatInput.value = String(repeatValue);
+            }
+            const autoNextInput = card.querySelector('.recite-ayah-autonext-input');
+            if (autoNextInput) {
+              autoNextInput.checked = autoNextEnabled;
+            }
+          });
+
+          if (reciteAudio) {
+            const desiredSpeed = Number.parseFloat(settings.speed);
+            if (Number.isFinite(desiredSpeed) && desiredSpeed > 0) {
+              reciteAudio.playbackRate = desiredSpeed;
+            }
+          }
+        };
+
+        refreshReciteModeView = settings => {
+          if (!isReciteMode) return;
+          applyReciteSettingsToDom(settings || getSettings());
+        };
+
+        const clearReciteModeCards = () => {
+          reciteRenderVersion += 1;
+          reciteCurrentSurahData = null;
+          reciteAyahIndex.clear();
+          reciteVisibleAyah = null;
+          reciteExpandedCard = null;
+          if (D.reciteScrollView) {
+            D.reciteScrollView.innerHTML = '';
+          }
+          stopReciteAudio();
+        };
+
+        const renderReciteSurah = async (surahNum, startAyah = 1, options = {}) => {
+          if (!D.reciteScrollView) return;
+          const {
+            autoPlay = false,
+            continuous = false
+          } = options;
+          const normalizedSurah = Number(surahNum);
+          const surahMeta = getSurahMeta(normalizedSurah);
+          const totalAyahs = Number(surahMeta?.ayahCount || 0);
+          if (!totalAyahs) return;
+          syncReciteSurahTabs(normalizedSurah, true);
+
+          stopReciteAudio();
+          const renderToken = ++reciteRenderVersion;
+          D.reciteScrollView.innerHTML = '<div class="recite-loading">Loading surah...</div>';
+
+          let record = null;
+          try {
+            record = await fetchReciteSurahData(normalizedSurah);
+          } catch (err) {
+            if (renderToken !== reciteRenderVersion || !isReciteMode) return;
+            D.reciteScrollView.innerHTML = '<div class="recite-error">Could not load recite dataset.</div>';
+            showInAppToast('Recite data missing. Opening classic recite.');
+            setTimeout(() => {
+              openLearnAyah(normalizedSurah, Math.max(1, Number(startAyah) || 1), {
+                mode: 'reciting',
+                autoPlay
+              });
+            }, 180);
+            return;
+          }
+
+          if (renderToken !== reciteRenderVersion || !isReciteMode) return;
+
+          const ayahs = Array.isArray(record.ayahs) ? record.ayahs : [];
+          const firstAyah = Math.min(totalAyahs, Math.max(1, Number(startAyah) || 1));
+          markRecitePosition(normalizedSurah, firstAyah, {
+            source: 'recite-open'
+          });
+          syncDropdowns(currentSurah, currentAyah);
+
+          reciteCurrentSurahData = record;
+          reciteAyahIndex.clear();
+          D.reciteScrollView.innerHTML = '';
+          const initialReciteSettings = getSettings();
+
+          const revelationTypeRaw = String(surahMeta?.revelationType || record?.revelationType || '');
+          const revelationLabel = revelationTypeRaw
+            ? `${revelationTypeRaw.charAt(0).toUpperCase()}${revelationTypeRaw.slice(1).toLowerCase()}`
+            : 'Surah';
+          const surahTitle = surahMeta?.englishName || record?.englishName || `Surah ${normalizedSurah}`;
+          const surahSubtitle = surahMeta?.englishNameTranslation || record?.englishNameTranslation || '';
+          const surahArabicName = surahMeta?.arabicName || record?.arabicName || '';
+
+          const surahHeader = document.createElement('section');
+          surahHeader.className = 'recite-surah-header';
+          surahHeader.innerHTML = `
+            <div class="recite-surah-banner">
+              <div class="recite-surah-chip">${revelationLabel}</div>
+              <div class="recite-surah-headline">
+                <div class="recite-surah-kicker">Surah ${normalizedSurah}</div>
+                <h2 class="recite-surah-title">${surahTitle}</h2>
+                <div class="recite-surah-subtitle">${surahSubtitle}</div>
+              </div>
+              <div class="recite-surah-chip">${totalAyahs} Ayahs</div>
+            </div>
+            <div class="recite-surah-meta">${surahArabicName}</div>
+          `;
+          D.reciteScrollView.appendChild(surahHeader);
+
+          ayahs.forEach(ayahData => {
+            const ayahNum = Number(ayahData.ayah);
+            if (!Number.isFinite(ayahNum)) return;
+            reciteAyahIndex.set(ayahNum, ayahData);
+
+            const card = document.createElement('article');
+            card.className = 'recite-ayah-card';
+            if (ayahNum % 2 === 0) {
+              card.classList.add('is-alt');
+            }
+            card.dataset.surah = String(normalizedSurah);
+            card.dataset.ayah = String(ayahNum);
+
+            const badge = document.createElement('div');
+            badge.className = 'recite-ayah-index';
+            badge.textContent = String(ayahNum);
+
+            const body = document.createElement('div');
+            body.className = 'recite-ayah-body';
+
+            const arabic = document.createElement('p');
+            arabic.className = 'recite-ayah-arabic';
+            arabic.textContent = sanitizeReciteArabicText(ayahData.arabic);
+
+            const translation = document.createElement('p');
+            translation.className = 'recite-ayah-translation';
+
+            body.append(arabic, translation);
+
+            const expandBtn = document.createElement('button');
+            expandBtn.className = 'recite-ayah-expand-toggle';
+            expandBtn.type = 'button';
+            expandBtn.setAttribute('aria-label', `Open controls for Surah ${normalizedSurah} Ayah ${ayahNum}`);
+            expandBtn.setAttribute('aria-expanded', 'false');
+            expandBtn.innerHTML = '<span class="recite-ayah-expand-glyph" aria-hidden="true"></span>';
+            expandBtn.addEventListener('click', e => {
+              e.stopPropagation();
+              setReciteCardExpanded(card, !card.classList.contains('is-expanded'));
+            });
+
+            const panel = document.createElement('div');
+            panel.className = 'recite-ayah-panel';
+            panel.hidden = true;
+
+            const panelPlayBtn = document.createElement('button');
+            panelPlayBtn.className = 'recite-ayah-panel-btn recite-ayah-panel-play';
+            panelPlayBtn.type = 'button';
+            panelPlayBtn.setAttribute('aria-label', `Play Surah ${normalizedSurah} Ayah ${ayahNum}`);
+            panelPlayBtn.innerHTML = '<span class="material-symbols-outlined" aria-hidden="true">play_arrow</span>';
+            panelPlayBtn.addEventListener('click', e => {
+              e.stopPropagation();
+              const autoNextInput = panel.querySelector('.recite-ayah-autonext-input');
+              const continueSequence = !!autoNextInput?.checked;
+              playReciteAyah(ayahData, panelPlayBtn, { continueSequence });
+            });
+
+            const panelSaveBtn = document.createElement('button');
+            panelSaveBtn.className = 'recite-ayah-panel-btn recite-ayah-panel-save';
+            panelSaveBtn.type = 'button';
+            panelSaveBtn.setAttribute('aria-label', `Save Surah ${normalizedSurah} Ayah ${ayahNum}`);
+            panelSaveBtn.innerHTML = '<span class="material-symbols-outlined" aria-hidden="true">bookmark_add</span>';
+            panelSaveBtn.addEventListener('click', async e => {
+              e.stopPropagation();
+              await saveReciteProgressTarget(
+                { surah: normalizedSurah, ayah: ayahNum },
+                { source: 'manual-recite-card-save' }
+              );
+            });
+
+            const repeatWrap = document.createElement('label');
+            repeatWrap.className = 'recite-ayah-panel-field';
+            repeatWrap.innerHTML = '<span>Repeat</span>';
+            const repeatInput = document.createElement('input');
+            repeatInput.className = 'recite-ayah-repeat-input';
+            repeatInput.type = 'number';
+            repeatInput.min = '1';
+            repeatInput.max = '20';
+            repeatInput.value = String(Math.max(1, Math.min(20, Number.parseInt(initialReciteSettings.repeat, 10) || 1)));
+            repeatInput.addEventListener('change', () => {
+              const clamped = String(Math.max(1, Math.min(20, Number.parseInt(repeatInput.value, 10) || 1)));
+              repeatInput.value = clamped;
+              saveSettings({ repeat: clamped });
+            });
+            repeatWrap.appendChild(repeatInput);
+
+            const autoNextWrap = document.createElement('label');
+            autoNextWrap.className = 'recite-ayah-panel-field recite-ayah-panel-toggle';
+            const autoNextInput = document.createElement('input');
+            autoNextInput.className = 'recite-ayah-autonext-input';
+            autoNextInput.type = 'checkbox';
+            autoNextInput.checked = initialReciteSettings.autoSwipe !== false;
+            autoNextInput.addEventListener('change', () => {
+              saveSettings({ autoSwipe: !!autoNextInput.checked });
+            });
+            const autoNextText = document.createElement('span');
+            autoNextText.textContent = 'Auto next ayah';
+            autoNextWrap.append(autoNextInput, autoNextText);
+
+            panel.append(panelPlayBtn, panelSaveBtn, repeatWrap, autoNextWrap);
+
+            card.append(badge, body, expandBtn, panel);
+            card.addEventListener('click', e => {
+              const target = e.target;
+              if (!(target instanceof HTMLElement)) return;
+              if (target.closest('.recite-ayah-panel')) return;
+              if (target.closest('.recite-ayah-expand-toggle')) return;
+              setReciteCardExpanded(card, !card.classList.contains('is-expanded'));
+            });
+            D.reciteScrollView.appendChild(card);
+          });
+
+          applyReciteSettingsToDom(getSettings());
+
+          requestAnimationFrame(() => {
+            const startCard = D.reciteScrollView.querySelector(
+              `.recite-ayah-card[data-surah="${normalizedSurah}"][data-ayah="${firstAyah}"]`
+            );
+            if (startCard) {
+              D.reciteScrollView.scrollTop = Math.max(0, startCard.offsetTop - 8);
+              if (autoPlay) {
+                const btn = startCard.querySelector('.recite-ayah-panel-play');
+                const ayahData = reciteAyahIndex.get(firstAyah);
+                if (btn && ayahData) {
+                  playReciteAyah(ayahData, btn, {
+                    autoStart: true,
+                    continueSequence: continuous,
+                    scrollIntoView: true
+                  });
+                }
+              }
+            } else {
+              D.reciteScrollView.scrollTop = 0;
+            }
+            probeVisibleReciteAyah();
+          });
+        };
+
+        const openReciteSettingsPopup = () => {
+          if (!isReciteMode) return;
+          if (closeReciteSettingsPopup) return;
+
+          const settings = getSettings();
+          const overlay = document.createElement('div');
+          overlay.id = 'reciteSettingsOverlay';
+          overlay.className = 'qq-overlay recite-settings-overlay';
+
+          overlay.innerHTML = `
+            <div class="qq-modal recite-settings-modal">
+              <div class="recite-settings-header">
+                <h3 class="recite-settings-title">Recite Settings</h3>
+                <button type="button" id="reciteSettingsCloseBtn" class="recite-settings-close" aria-label="Close recite settings">
+                  <span aria-hidden="true">x</span>
+                </button>
+              </div>
+              <label class="recite-settings-row">
+                <span>Show translation</span>
+                <input id="reciteSetPanelTrans" type="checkbox" ${settings.showPanelTranslation ? 'checked' : ''}>
+              </label>
+              <label class="recite-settings-row">
+                <span>Translation language</span>
+                <select id="reciteSetPanelLang">
+                  <option value="en" ${settings.panelLang === 'en' ? 'selected' : ''}>English</option>
+                  <option value="ur" ${settings.panelLang === 'ur' ? 'selected' : ''}>Urdu</option>
+                </select>
+              </label>
+              <label class="recite-settings-row">
+                <span>Audio language</span>
+                <select id="reciteSetAudioLang">
+                  <option value="ar" ${settings.audioLang === 'ar' ? 'selected' : ''}>Arabic</option>
+                  <option value="en" ${settings.audioLang === 'en' ? 'selected' : ''}>English</option>
+                  <option value="ur" ${settings.audioLang === 'ur' ? 'selected' : ''}>Urdu</option>
+                </select>
+              </label>
+              <label class="recite-settings-row">
+                <span>Playback speed</span>
+                <select id="reciteSetSpeed">
+                  <option value="0.5" ${settings.speed === '0.5' ? 'selected' : ''}>0.5x</option>
+                  <option value="0.75" ${settings.speed === '0.75' ? 'selected' : ''}>0.75x</option>
+                  <option value="1" ${settings.speed === '1' ? 'selected' : ''}>1x</option>
+                  <option value="1.25" ${settings.speed === '1.25' ? 'selected' : ''}>1.25x</option>
+                </select>
+              </label>
+              <label class="recite-settings-row recite-settings-row-last">
+                <span>Repeat count</span>
+                <input id="reciteSetRepeat" type="number" min="1" max="20" value="${settings.repeat || '1'}">
+              </label>
+              <div class="recite-settings-actions">
+                <button type="button" id="reciteSettingsCancelBtn" class="recite-settings-btn recite-settings-btn-cancel">Cancel</button>
+                <button type="button" id="reciteSettingsApplyBtn" class="recite-settings-btn recite-settings-btn-apply">Apply</button>
+              </div>
+            </div>
+          `;
+
+          const close = (fromHistory = false) => {
+            overlay.remove();
+            closeReciteSettingsPopup = null;
+            if (!fromHistory) {
+              popPopupHistoryFromChild();
+            }
+          };
+
+          closeReciteSettingsPopup = close;
+
+          overlay.addEventListener('click', e => {
+            if (e.target === overlay) close();
+          });
+
+          overlay.querySelector('#reciteSettingsCloseBtn')?.addEventListener('click', () => close());
+          overlay.querySelector('#reciteSettingsCancelBtn')?.addEventListener('click', () => close());
+          overlay.querySelector('#reciteSettingsApplyBtn')?.addEventListener('click', () => {
+            const patch = {
+              showPanelTranslation: !!overlay.querySelector('#reciteSetPanelTrans')?.checked,
+              panelLang: overlay.querySelector('#reciteSetPanelLang')?.value || 'en',
+              audioLang: overlay.querySelector('#reciteSetAudioLang')?.value || 'ar',
+              speed: overlay.querySelector('#reciteSetSpeed')?.value || '1',
+              repeat: overlay.querySelector('#reciteSetRepeat')?.value || '1',
+              mode: 'reciting'
+            };
+            saveSettings(patch);
+            close();
+          });
+
+          document.body.appendChild(overlay);
+          pushPopupHistory(() => close(true));
+        };
+
+        setReciteMode = (enabled, options = {}) => {
+          if (enabled === isReciteMode) {
+            if (enabled && Number(options.surah) && Number(options.ayah)) {
+              renderReciteSurah(Number(options.surah), Number(options.ayah), {
+                autoPlay: !!options.autoPlay,
+                continuous: !!options.continuous
+              });
+            }
+            return;
+          }
+
+          const {
+            surah = currentSurah || DEFAULT_SURAH,
+            ayah = currentAyah || DEFAULT_AYAH,
+            autoPlay = false,
+            continuous = false,
+            showHome = true
+          } = options;
+
+          isReciteMode = enabled;
+
+          if (enabled) {
+            if (isDuasMode) {
+              setDuasMode(false);
+            }
+            if (isMemoMode) {
+              setMemorizationMode(false);
+            }
+
+            reciteModeState = {
+              hero: D.hero?.style.display ?? '',
+              surah: D.surahContainer?.style.display ?? '',
+              viewer: D.viewer?.style.display ?? '',
+              dropdowns: D.dropdowns?.style.display ?? '',
+              readerMode: document.body.classList.contains('reader-mode')
+            };
+
+            requestWakeLock();
+            closeDrawer();
+            pauseQuranAudio();
+            pauseDuasAudio();
+            stopReciteAudio();
+
+            saveSettings({ mode: 'reciting' });
+
+            document.body.classList.add('recite-mode');
+            setReaderMode(false);
+            resetRootScrollPosition();
+
+            if (D.reciteScrollView) {
+              D.reciteScrollView.setAttribute('aria-hidden', 'false');
+            }
+            if (D.hero) D.hero.style.display = 'none';
+            if (D.surahContainer) D.surahContainer.style.display = 'none';
+            if (D.viewer) D.viewer.style.display = 'none';
+            if (D.dropdowns) D.dropdowns.style.display = 'flex';
+            if (D.reciteSurahTabsWrap) D.reciteSurahTabsWrap.setAttribute('aria-hidden', 'false');
+
+            renderReciteSurah(Number(surah), Number(ayah), {
+              autoPlay,
+              continuous
+            });
+            setActiveNav('learn');
+            return;
+          }
+
+          document.body.classList.remove('recite-mode');
+          if (D.reciteScrollView) {
+            D.reciteScrollView.setAttribute('aria-hidden', 'true');
+          }
+          if (closeReciteSettingsPopup) {
+            closeReciteSettingsPopup();
+          }
+          clearReciteModeCards();
+          if (D.reciteSurahTabsWrap) D.reciteSurahTabsWrap.setAttribute('aria-hidden', 'true');
+
+          if (showHome) {
+            if (D.hero) D.hero.style.display = '';
+            if (D.surahContainer) D.surahContainer.style.display = '';
+            if (D.viewer) D.viewer.style.display = 'none';
+            if (D.dropdowns) D.dropdowns.style.display = 'none';
+            setReaderMode(false);
+            ensureHomeScroll();
+          } else if (reciteModeState) {
+            if (D.hero) D.hero.style.display = reciteModeState.hero;
+            if (D.surahContainer) D.surahContainer.style.display = reciteModeState.surah;
+            if (D.viewer) D.viewer.style.display = reciteModeState.viewer;
+            if (D.dropdowns) D.dropdowns.style.display = reciteModeState.dropdowns;
+            setReaderMode(!!reciteModeState.readerMode);
+          } else {
+            if (D.hero) D.hero.style.display = '';
+            if (D.surahContainer) D.surahContainer.style.display = '';
+            if (D.viewer) D.viewer.style.display = '';
+            if (D.dropdowns) D.dropdowns.style.display = '';
+            setReaderMode(false);
+          }
+
+          reciteModeState = null;
+          setActiveNav('learn');
+        };
+
+        launchReciteSurah = (surah, ayah, options = {}) => {
+          const targetSurah = Number(surah) || DEFAULT_SURAH;
+          const targetAyah = Number(ayah) || DEFAULT_AYAH;
+          setReciteMode(true, {
+            surah: targetSurah,
+            ayah: targetAyah,
+            autoPlay: options.autoPlay !== false,
+            continuous: options.continuous === true
+          });
+        };
+
+        setMemorizationMode = enabled => {
+          if (enabled === isMemoMode) return;
+          isMemoMode = enabled;
+          syncNavHeights();
+
+          if (enabled) {
+            if (isReciteMode && typeof setReciteMode === 'function') {
+              setReciteMode(false, { showHome: false });
+            }
+            if (isDuasMode) {
+              setDuasMode(false);
+            }
+            requestWakeLock();
+            closeDrawer();
+
+            memoModeState = {
+              hero: D.hero?.style.display ?? '',
+              surah: D.surahContainer?.style.display ?? '',
+              viewer: D.viewer?.style.display ?? '',
+              dropdowns: D.dropdowns?.style.display ?? ''
+            };
+
+            document.body.classList.add('memorization-mode');
+            document.documentElement.classList.add('memorization-mode');
+            if (D.progressTip) {
+              D.progressTip.classList.remove('is-visible');
+            }
+            milestoneActive = false;
+            resetRootScrollPosition();
+            if (D.memoView) D.memoView.setAttribute('aria-hidden', 'false');
+            if (D.memoFrame) {
+              const target = resolveAppUrl('memorization.html?embedded=1');
+              const current = typeof D.memoFrame.src === 'string' ? D.memoFrame.src : '';
+              if (!current || current === 'about:blank' || !current.includes('memorization.html')) {
+                syncThemeToFrameOnLoad(D.memoFrame);
+                D.memoFrame.src = target;
+              }
+            }
+
+            if (D.hero) D.hero.style.display = 'none';
+            if (D.surahContainer) D.surahContainer.style.display = 'none';
+            if (D.viewer) D.viewer.style.display = 'none';
+            if (D.dropdowns) D.dropdowns.style.display = 'none';
+            setActiveNav('memo');
+          } else {
+            requestWakeLock();
+            document.body.classList.remove('memorization-mode');
+            document.documentElement.classList.remove('memorization-mode');
+            if (D.memoView) D.memoView.setAttribute('aria-hidden', 'true');
+
+            if (memoModeState) {
+              if (D.hero) D.hero.style.display = memoModeState.hero;
+              if (D.surahContainer) D.surahContainer.style.display = memoModeState.surah;
+              if (D.viewer) D.viewer.style.display = memoModeState.viewer;
+              if (D.dropdowns) D.dropdowns.style.display = memoModeState.dropdowns;
+              memoModeState = null;
+            } else {
+              if (D.hero) D.hero.style.display = '';
+              if (D.surahContainer) D.surahContainer.style.display = '';
+              if (D.viewer) D.viewer.style.display = '';
+              if (D.dropdowns) D.dropdowns.style.display = '';
+            }
+
+            setActiveNav('learn');
+          }
+        };
+
         setDuasMode = (enabled) => {
           if (enabled === isDuasMode) return;
           isDuasMode = enabled;
           syncNavHeights();
 
           if (enabled) {
+            if (isReciteMode && typeof setReciteMode === 'function') {
+              setReciteMode(false, { showHome: false });
+            }
+            if (isMemoMode) {
+              setMemorizationMode(false);
+            }
             requestWakeLock();
             pendingDuaReturn = false;
             pauseQuranAudio();
@@ -1904,11 +4583,14 @@ case 'SAVE_HINT_DONE': {
             };
 
             document.body.classList.add('duas-mode');
+            document.documentElement.classList.add('duas-mode');
+            resetRootScrollPosition();
             closeDrawer();
             if (D.drawer) D.drawer.style.display = 'none';
             if (menuBtn) menuBtn.style.display = 'none';
             if (D.duasView) D.duasView.setAttribute('aria-hidden', 'false');
             if (D.duasFrame && !D.duasFrame.src) {
+              syncThemeToFrameOnLoad(D.duasFrame);
               D.duasFrame.src = 'duas/duas.html';
             }
 
@@ -1916,11 +4598,12 @@ case 'SAVE_HINT_DONE': {
             if (D.surahContainer) D.surahContainer.style.display = 'none';
             if (D.viewer) D.viewer.style.display = 'none';
             if (D.dropdowns) D.dropdowns.style.display = 'none';
-            setActiveNav(true);
+            setActiveNav('duas');
           } else {
             requestWakeLock();
             pauseDuasAudio();
             document.body.classList.remove('duas-mode');
+            document.documentElement.classList.remove('duas-mode');
             if (D.drawer) D.drawer.style.display = '';
             if (menuBtn) menuBtn.style.display = '';
             if (D.duasView) D.duasView.setAttribute('aria-hidden', 'true');
@@ -1938,8 +4621,37 @@ case 'SAVE_HINT_DONE': {
               if (D.dropdowns) D.dropdowns.style.display = '';
             }
 
-            setActiveNav(false);
+            setActiveNav('learn');
           }
+        };
+
+        const getAyahOfDayEntry = (dateKey = getLocalDateKey()) => {
+          if (!AYAH_OF_DAY_POOL.length) return null;
+          const idx = getDateKeyHash(dateKey) % AYAH_OF_DAY_POOL.length;
+          return AYAH_OF_DAY_POOL[idx] || AYAH_OF_DAY_POOL[0];
+        };
+
+        const applyAyahOfDayCard = (dateKey = getLocalDateKey()) => {
+          if (!D.randomDuaCard) return;
+          const entry = getAyahOfDayEntry(dateKey);
+          if (!entry) return;
+
+          const titleEl = D.randomDuaCard.querySelector('.hero-dua-title');
+          const textEl = D.randomDuaCard.querySelector('.hero-dua-text');
+          const metaEl = D.randomDuaCard.querySelector('.hero-dua-meta');
+
+          D.randomDuaCard.setAttribute('data-ref', entry.ref);
+          if (titleEl) titleEl.textContent = 'Ayah of the Day';
+          if (textEl) textEl.textContent = entry.text;
+          if (metaEl) metaEl.textContent = entry.meta;
+        };
+
+        refreshDailyUiIfNeeded = () => {
+          const todayKey = getLocalDateKey();
+          if (todayKey === lastDailyRefreshDateKey) return;
+          lastDailyRefreshDateKey = todayKey;
+          applyAyahOfDayCard(todayKey);
+          ensureNamazWidgetForToday();
         };
 
         const openDuaFromHero = () => {
@@ -1962,8 +4674,10 @@ case 'SAVE_HINT_DONE': {
         };
 
         const closeDrawer = () => {
-          D.drawer.classList.remove('open');
+          if (nativeGoogleSignInInFlight) return;
+          if (D.drawer) D.drawer.classList.remove('open');
           document.body.classList.remove('drawer-open');
+          unlockBodyScrollForDrawer();
           if (drawerOverlay) {
             drawerOverlay.remove();
             drawerOverlay = null;
@@ -1971,8 +4685,11 @@ case 'SAVE_HINT_DONE': {
         };
 
         const openDrawer = () => {
+          if (!D.drawer) return;
+          if (D.drawer.classList.contains('open')) return;
           D.drawer.classList.add('open');
           document.body.classList.add('drawer-open');
+          lockBodyScrollForDrawer();
 
           if (!drawerOverlay) {
             drawerOverlay = document.createElement('div');
@@ -1992,13 +4709,164 @@ case 'SAVE_HINT_DONE': {
           }
         };
 
+        D.openDrawer = openDrawer;
+
+        if (D.startReciteBtn) {
+          D.startReciteBtn.onclick = async () => {
+            const resume = await getReciteResumeTarget(auth.currentUser, {
+              includeLearnFallback: false
+            });
+            const surah = Number(resume?.surah) || DEFAULT_SURAH;
+            const ayah = Number(resume?.ayah) || DEFAULT_AYAH;
+            triggerReciteStart(surah, ayah, {
+              autoPlay: true,
+              continuous: true
+            });
+          };
+        }
+
+        if (D.contactBtn) {
+          D.contactBtn.addEventListener('click', () => {
+            closeDrawer();
+            openContactPopup();
+          });
+        }
+
+        if (D.drawerLoginBtn) {
+          D.drawerLoginBtn.addEventListener('click', async () => {
+            if (IS_NATIVE_WEBVIEW) {
+              if (nativeGoogleSignInInFlight) return;
+              setNativeGoogleSignInState(true);
+              const requested = sendNativeGoogleSignInRequest();
+              if (!requested) {
+                setNativeGoogleSignInState(false);
+                showInAppToast('Google sign-in is unavailable right now.', '#dc3545');
+                return;
+              }
+              showInAppToast('Choose a Google account to continue.', '#0a4d68');
+              return;
+            }
+
+            try {
+              await signInWithGoogle();
+            } catch (err) {
+              console.warn('[Auth] Google sign-in failed', err);
+              showInAppToast('Login failed. Please try again.', '#dc3545');
+            }
+          });
+        }
+
+        if (D.drawerLogoutBtn) {
+          D.drawerLogoutBtn.addEventListener('click', async () => {
+            try {
+              const migrationKey = getGuestMigrationKey(auth.currentUser);
+              const userJourneyKey = getLearningJourneyStorageKey(auth.currentUser);
+              await logout();
+              clearLocalDataOnExplicitLogout();
+              localStorage.removeItem(userJourneyKey);
+              localStorage.removeItem(migrationKey);
+              localStorage.removeItem(GUEST_MIGRATION_KEY);
+            } catch (err) {
+              console.warn('[Auth] Sign out failed', err);
+              showInAppToast('Could not sign out.', '#dc3545');
+            }
+          });
+        }
+
+        const bindImmediateTabAction = (el, action) => {
+          if (!el || typeof action !== 'function') return;
+          let lastPressAt = 0;
+          const handler = evt => {
+            const type = evt?.type || '';
+            const now = Date.now();
+            if (type === 'pointerdown' || type === 'touchstart') {
+              if ((now - lastPressAt) < 80) return;
+              lastPressAt = now;
+              action();
+              return;
+            }
+            if (type === 'click' && (now - lastPressAt) < 500) {
+              return;
+            }
+            action();
+          };
+          el.addEventListener('pointerdown', handler, { passive: true });
+          el.addEventListener('touchstart', handler, { passive: true });
+          el.addEventListener('click', handler);
+        };
+
         if (D.navLearnQuran) {
-          D.navLearnQuran.addEventListener('click', () => setDuasMode(false));
+          const openLearnTab = () => {
+            runTabTransition('learn', () => {
+              if (isDuasMode) setDuasMode(false);
+              if (isMemoMode) setMemorizationMode(false);
+              if (isReciteMode && typeof setReciteMode === 'function') {
+                setReciteMode(false, { showHome: true });
+              }
+              setActiveNav('learn');
+            });
+          };
+          bindImmediateTabAction(D.navLearnQuran, openLearnTab);
         }
 
         if (D.navRamzanDuas) {
-          D.navRamzanDuas.addEventListener('click', () => setDuasMode(true));
+          const openDuasTab = () => {
+            runTabTransition('duas', () => {
+              setDuasMode(true);
+            });
+          };
+          bindImmediateTabAction(D.navRamzanDuas, openDuasTab);
         }
+
+        if (D.navMemorization) {
+          const openMemoTab = () => {
+            runTabTransition('memo', () => {
+              setMemorizationMode(true);
+            });
+          };
+          bindImmediateTabAction(D.navMemorization, openMemoTab);
+        }
+
+        if (D.memorizationHeroBtn) {
+          D.memorizationHeroBtn.addEventListener('click', () => {
+            const progress = getMemorizationProgress();
+            setMemorizationMode(true);
+            if (D.memoFrame) {
+              const target = progress?.surah && progress?.ayah
+                ? `memorization.html?embedded=1&surah=${progress.surah}&ayah=${progress.ayah}`
+                : 'memorization.html?embedded=1';
+              const resolved = resolveAppUrl(target);
+              const current = typeof D.memoFrame.src === 'string' ? D.memoFrame.src : '';
+              if (!current || current === 'about:blank' || !current.includes(target)) {
+                syncThemeToFrameOnLoad(D.memoFrame);
+                D.memoFrame.src = resolved;
+              }
+            }
+          });
+          updateMemorizationHeroButton();
+        }
+
+        if (D.learnSettingsBtn) {
+          D.learnSettingsBtn.addEventListener('click', () => {
+            if (isReciteMode) {
+              openReciteSettingsPopup();
+              return;
+            }
+            if (isDuasMode || isMemoMode) return;
+            if (!isViewerVisible()) return;
+            const activeFrame = getActiveIframe();
+            postToIframe(activeFrame, { type: 'OPEN_SETTINGS' });
+          });
+        }
+
+        if (D.reciteHomeBtn) {
+          D.reciteHomeBtn.addEventListener('click', () => {
+            if (!isReciteMode || typeof setReciteMode !== 'function') return;
+            setReciteMode(false, { showHome: true });
+          });
+        }
+
+        updateDrawerUser(auth.currentUser);
 
         if (D.randomDuaCard) {
           D.randomDuaCard.addEventListener('click', openDuaFromHero);
@@ -2009,25 +4877,53 @@ case 'SAVE_HINT_DONE': {
             }
           });
         }
+        refreshDailyUiIfNeeded();
 
-        syncNavHeights();
-        window.addEventListener('resize', syncNavHeights);
+        const syncViewportLayout = () => {
+          syncNavHeights();
+          if (IS_ANDROID_WEBVIEW) {
+            resetRootScrollPosition();
+          }
+        };
+
+        syncViewportLayout();
+        window.addEventListener('resize', syncViewportLayout);
+        if (window.visualViewport?.addEventListener) {
+          window.visualViewport.addEventListener('resize', syncViewportLayout);
+        }
+        bindReciteSurahSwipe();
+        if (typeof bindReciteScrollTracking === 'function') {
+          bindReciteScrollTracking();
+        }
 
         const params = new URLSearchParams(window.location.search);
         if (params.get('tab') === 'duas' || window.location.hash === '#duas') {
           setDuasMode(true);
+        } else {
+          setActiveNav('learn');
         }
+        prewarmSecondaryTabs();
 
 
         /* ------------------------------------------
           Surah / Ayah dropdown navigation
           ------------------------------------------ */
         D.surahSelect.addEventListener('change', () => {
-          loadAyah(+D.surahSelect.value, 1);
+          const surah = +D.surahSelect.value;
+          if (isReciteMode) {
+            renderReciteSurah(surah, 1, { autoPlay: false });
+            return;
+          }
+          loadAyah(surah, 1);
         });
 
         D.ayahSelect.addEventListener('change', () => {
-          loadAyah(currentSurah, +D.ayahSelect.value);
+          const ayah = +D.ayahSelect.value;
+          if (isReciteMode) {
+            renderReciteSurah(currentSurah, ayah, { autoPlay: false });
+            return;
+          }
+          loadAyah(currentSurah, ayah);
         });
 
 
@@ -2038,8 +4934,8 @@ case 'SAVE_HINT_DONE': {
       /* ==========================================================
         About Popup
         ========================================================== */
-      aboutBtn
-        .addEventListener('click', () => {
+      if (aboutBtn) {
+        aboutBtn.addEventListener('click', () => {
           closeDrawer();
 
           const overlay = document.createElement('div');
@@ -2102,40 +4998,54 @@ case 'SAVE_HINT_DONE': {
             if (e.target === overlay) overlay.remove();
           };
         });
+      }
         /* ------------------------------------------
           Profile drawer open / close
           ------------------------------------------ */
-        menuBtn.addEventListener('click', () => {
-          openDrawer();
-        });
+        if (menuBtn) {
+          menuBtn.addEventListener('click', () => {
+            const onLearnReader = isViewerVisible() && !isReciteMode && !isDuasMode && !isMemoMode;
+            if (onLearnReader) {
+              goLearnHome();
+              return;
+            }
+            openDrawer();
+          });
+        }
 
-        D.closeBtn.addEventListener('click', () => {
-          closeDrawer();
-        });
+        if (D.closeBtn) {
+          D.closeBtn.addEventListener('click', () => {
+            closeDrawer();
+          });
+        }
 
         // Swipe-to-close drawer (mobile)
         let touchStartX = 0;
 
-        D.drawer.addEventListener('touchstart', e => {
-          touchStartX = e.changedTouches[0].pageX;
-        });
+        if (D.drawer) {
+          D.drawer.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].pageX;
+          });
 
-        D.drawer.addEventListener('touchend', e => {
-          if (e.changedTouches[0].pageX - touchStartX < 50) {
-            closeDrawer();
-          }
-        });
+          D.drawer.addEventListener('touchend', e => {
+            if (e.changedTouches[0].pageX - touchStartX < 50) {
+              closeDrawer();
+            }
+          });
+        }
 
 
         /* ------------------------------------------
           Return from game mode
           ------------------------------------------ */
-        D.returnBtn.addEventListener('click', () => {
-          const iframe = ring.cards?.[1]?.querySelector('iframe');
-          postToIframe(iframe, { type: 'RETURN_TO_AYAH' });
-          disableGameMode();
-          loadAyah(currentSurah, currentAyah);
-        });
+        if (D.returnBtn) {
+          D.returnBtn.addEventListener('click', () => {
+            const iframe = ring.cards?.[1]?.querySelector('iframe');
+            postToIframe(iframe, { type: 'RETURN_TO_AYAH' });
+            disableGameMode();
+            loadAyah(currentSurah, currentAyah);
+          });
+        }
 
         if (D.progressInfo && D.progressTip) {
           const showTip = () => {
@@ -2156,20 +5066,18 @@ case 'SAVE_HINT_DONE': {
         /* ==========================================================
           Learning Journey (Analytics Popup)
           ========================================================== */
-        document
-          .getElementById('learningJourneyBtn')
-          .addEventListener('click', () => {
+        const learningJourneyBtn = document.getElementById('learningJourneyBtn');
+        if (learningJourneyBtn) {
+          learningJourneyBtn.addEventListener('click', () => {
             closeDrawer();
 
-            const raw = JSON.parse(
-              localStorage.getItem('learningJourney') || '{}'
-            );
+            const raw = readLearningJourneyFromStorage();
 
             const counts = buildDailyCountsWithZeros(raw);
             const days = Object.keys(counts);
 
             if (!days.length) {
-              alert('You haven’t read any ayahs yet 🌱');
+              alert("You haven't read any ayahs yet.");
               return;
             }
 
@@ -2266,11 +5174,51 @@ case 'SAVE_HINT_DONE': {
               if (e.target === overlay) overlay.remove();
             };
           });
+        }
 
-        const journeyHeroBtn = document.getElementById('learningJourneyHeroBtn');
-        if (journeyHeroBtn) {
-          journeyHeroBtn.addEventListener('click', () => {
-            document.getElementById('learningJourneyBtn')?.click();
+        if (D.memorizedAyahsBtn) {
+          D.memorizedAyahsBtn.addEventListener('click', () => {
+            closeDrawer();
+            showMemorizedAyahsPopup();
+          });
+        }
+
+        if (D.namazHistoryBtn) {
+          let lastNamazHistoryOpenAt = 0;
+          const openNamazHistoryFromDrawer = () => {
+            const now = Date.now();
+            if (now - lastNamazHistoryOpenAt < 300) return;
+            lastNamazHistoryOpenAt = now;
+            closeDrawer();
+            try {
+              showNamazHistoryPopup();
+            } catch (err) {
+              console.error('[NAMAZ] Failed to open history popup', err);
+              showInAppToast('Unable to open Namaz history right now.');
+            }
+          };
+
+          D.namazHistoryBtn.addEventListener('click', e => {
+            e.preventDefault();
+            e.stopPropagation();
+            openNamazHistoryFromDrawer();
+          });
+
+          D.namazHistoryBtn.addEventListener(
+            'touchend',
+            e => {
+              e.preventDefault();
+              e.stopPropagation();
+              openNamazHistoryFromDrawer();
+            },
+            { passive: false }
+          );
+        }
+
+        if (D.drawerPlaceholderBtn) {
+          D.drawerPlaceholderBtn.addEventListener('click', () => {
+            closeDrawer();
+            showInAppToast('Placeholder feature coming soon, In shaa Allah.', '#0f5a7d');
           });
         }
 
@@ -2278,27 +5226,48 @@ case 'SAVE_HINT_DONE': {
           D.resumeListeningBtn.addEventListener('click', async () => {
             const target = await getStartListeningTarget();
             if (!target) return;
-
-            saveSettings({ autoSwipe: true });
-
-            D.surahContainer.style.display = 'none';
-            D.hero.style.display           = 'none';
-            D.viewer.style.display         = 'block';
-            D.dropdowns.style.display      = 'flex';
-
-            loadAyah(target.surah, target.ayah);
-            requestAutoPlayActiveIframe('resumeListening');
+            triggerReciteStart(target.surah, target.ayah, {
+              autoPlay: true,
+              continuous: true
+            });
           });
           updateResumeListeningButton();
+        }
+
+        if (D.namazGoalsRows) {
+          D.namazGoalsRows.addEventListener('click', e => {
+            const item = e.target.closest('.hero-namaz-item');
+            if (!item || !D.namazGoalsRows.contains(item)) return;
+            const prayer = String(item.dataset.prayer || '').toLowerCase();
+            updateNamazPrayerChoice(prayer, 'cycle');
+          });
+          renderNamazGoalsWidget();
+        }
+
+        if (D.namazGoalsSummary) {
+          D.namazGoalsSummary.addEventListener('click', () => {
+            showNamazHistoryPopup();
+          });
         }
 
 
         /* ==========================================================
           Go Home Button
           ========================================================== */
-        document
-          .getElementById('goHomeBtn')
-          .addEventListener('click', () => {
+        const goHomeBtn = document.getElementById('goHomeBtn');
+        if (goHomeBtn) {
+          goHomeBtn.addEventListener('click', () => {
+            if (isMemoMode) {
+              closeDrawer();
+              if (D.memoFrame) {
+                const memoHomeUrl = resolveAppUrl(`memorization.html?embedded=1&home=1&t=${Date.now()}`);
+                syncThemeToFrameOnLoad(D.memoFrame);
+                D.memoFrame.src = memoHomeUrl;
+              }
+              setMemorizationMode(true);
+              return;
+            }
+
             // Already on home
             if (D.hero.style.display === 'block') return;
 
@@ -2307,20 +5276,21 @@ case 'SAVE_HINT_DONE': {
               window.location.reload();
             };
 
-            // ✅ Ayah already saved
+            // Current ayah already saved
             if (!isCurrentAyahDirty) {
               goHome();
               return;
             }
 
-            // ❌ Unsaved → confirm
+            // Unsaved progress -> confirm
             showConfirmPopup({
               title: 'Unsaved Progress',
               message:
-                'You haven’t saved this ayah yet. What would you like to do?',
+                'You haven\'t saved this ayah yet. What would you like to do?',
               onGoHome: goHome
             });
           });
+        }
       }
 
 /* ==========================================================
@@ -2329,7 +5299,7 @@ case 'SAVE_HINT_DONE': {
       function setupForegroundMessaging() {
         onForegroundMessage(payload => {
           const { title, body } = payload.notification || {};
-          console.log('🔔 FCM:', title, body);
+          console.log('Ã°Å¸â€â€ FCM:', title, body);
 
           // TODO: Replace with in-app toast/snackbar
           showInAppToast(title, body);
@@ -2339,30 +5309,217 @@ case 'SAVE_HINT_DONE': {
 /* ==========================================================
    Auth State Change Handler
    ========================================================== */
-      async function handleAuthChange(user) {
-        if (!D.ptsEl || !D.streakEl) {
-          console.warn('[Auth] UI not ready yet, skipping update');
+      function updateDrawerUser(user) {
+        if (!D.drawerGreeting || !D.drawerSubtext) return;
+
+        if (!user || user.isAnonymous) {
+          D.drawerGreeting.textContent = 'Assalamualaikum,';
+          D.drawerSubtext.textContent = 'Guest';
+          if (D.drawerLoginBtn) {
+            D.drawerLoginBtn.style.display = 'inline-flex';
+          }
+          setNativeGoogleSignInState(nativeGoogleSignInInFlight);
+          if (D.drawerLogoutBtn) D.drawerLogoutBtn.style.display = 'none';
           return;
         }
 
-        refreshAllProgress();
+        const fullName = String(user.displayName || '').trim();
+        const emailName = String(user.email || '').split('@')[0].trim();
+        const username = fullName || emailName || 'User';
+        const shortName = username.split(' ')[0] || username;
+        D.drawerGreeting.textContent = 'Assalamualaikum,';
+        D.drawerSubtext.textContent = shortName;
+        if (D.drawerLoginBtn) D.drawerLoginBtn.style.display = 'none';
+        if (D.drawerLogoutBtn) D.drawerLogoutBtn.style.display = 'inline-flex';
+      }
+
+      function readLocalJSON(key, fallback) {
+        try {
+          const raw = localStorage.getItem(key);
+          if (!raw) return fallback;
+          return JSON.parse(raw);
+        } catch {
+          return fallback;
+        }
+      }
+
+      function hasPersistedUserDataInDb(data) {
+        if (!data || typeof data !== 'object') return false;
+
+        if ((Number(data.ajrPoints) || 0) > 0) return true;
+        if (Array.isArray(data.streakHistory) && data.streakHistory.length > 0) return true;
+        if ((Number(data.lastSurah) || 0) > 0 && (Number(data.lastAyah) || 0) > 0) return true;
+        if ((Number(data.lastReciteSurah) || 0) > 0 && (Number(data.lastReciteAyah) || 0) > 0) return true;
+
+        if (data.completedSurahs_new && typeof data.completedSurahs_new === 'object') {
+          if (Object.keys(data.completedSurahs_new).length > 0) return true;
+        }
+
+        const memorization = data.memorization;
+        if (memorization && typeof memorization === 'object') {
+          const unlockedSurah = Number(memorization?.unlocked?.surah) || 0;
+          const unlockedAyah = Number(memorization?.unlocked?.ayah) || 0;
+          if (unlockedSurah > 1 || (unlockedSurah === 1 && unlockedAyah > 1)) return true;
+
+          const listens = memorization?.listens;
+          if (listens && typeof listens === 'object') {
+            const hasListens = Object.values(listens).some(v => (Number(v) || 0) > 0);
+            if (hasListens) return true;
+          }
+
+          const lastProgress = memorization?.lastProgress;
+          if ((Number(lastProgress?.surah) || 0) > 0 && (Number(lastProgress?.ayah) || 0) > 0) {
+            return true;
+          }
+        }
+
+        if (data.namazGoalsWidget && typeof data.namazGoalsWidget === 'object') {
+          return true;
+        }
+
+        return false;
+      }
+
+      function collectGuestData() {
+        const points = Number(localStorage.getItem('guestPoints')) || 0;
+        const streakHistory = readLocalJSON('guestStreakHistory', []);
+        const streakFreezes = Number(localStorage.getItem('guestStreakFreezes')) || 0;
+        const completedSurahs = readLocalJSON('completedSurahs_new', {});
+        const lastRead = readLocalJSON('lastReadAyah', null);
+        const memoProgress = readLocalJSON('memo_progress_v1', null);
+        const memoListens = readLocalJSON('memo_listens_v1', null);
+        const memoLastProgress = readLocalJSON('memo_last_progress_v1', null);
+        const reciteProgress = normalizeReciteProgress(
+          readLocalJSON(RECITE_PROGRESS_KEY, null)
+        );
+        const namazGoalsWidget = normalizeNamazWidget(
+          readLocalJSON(NAMAZ_WIDGET_STORAGE_KEY, null)
+        );
+
+        const hasMemorization =
+          memoProgress || (memoListens && Object.keys(memoListens).length);
+        const hasNamazGoals = !!namazGoalsWidget;
+
+        const hasData =
+          points ||
+          (Array.isArray(streakHistory) && streakHistory.length) ||
+          (completedSurahs && Object.keys(completedSurahs).length) ||
+          (lastRead && lastRead.surah && lastRead.ayah) ||
+          (reciteProgress && reciteProgress.surah && reciteProgress.ayah) ||
+          hasMemorization ||
+          hasNamazGoals;
+
+        return {
+          hasData,
+          points,
+          streakHistory,
+          streakFreezes,
+          completedSurahs,
+          lastRead,
+          reciteProgress,
+          memorization: hasMemorization
+            ? {
+                unlocked: memoProgress,
+                listens: memoListens,
+                lastProgress: memoLastProgress
+              }
+            : null,
+          namazGoalsWidget: hasNamazGoals ? namazGoalsWidget : null
+        };
+      }
+
+      async function migrateGuestDataIfNeeded(user, existingDbData = null) {
+        if (!user || user.isAnonymous) return;
+
+        const migrationKey = getGuestMigrationKey(user);
+        let dbData = existingDbData;
+        if (dbData === null) {
+          try {
+            dbData = (await getUserDoc(user)).data() || {};
+          } catch (err) {
+            console.warn('[Auth] Could not resolve DB state for migration decision', err);
+            return;
+          }
+        }
+        if (!dbData || typeof dbData !== 'object') {
+          dbData = {};
+        }
+        const hasPersistedDbData = hasPersistedUserDataInDb(dbData);
+
+        // Returning user with persisted DB state:
+        // keep DB as source-of-truth and reset guest-local data.
+        if (hasPersistedDbData) {
+          localStorage.setItem(migrationKey, '1');
+          localStorage.removeItem(GUEST_MIGRATION_KEY);
+          clearGuestLocalDataAfterMigration();
+          return;
+        }
+
+        // New DB user:
+        // migrate guest local once, then clear guest-local data.
+        const payload = collectGuestData();
+        if (!payload.hasData) {
+          localStorage.setItem(migrationKey, '1');
+          localStorage.removeItem(GUEST_MIGRATION_KEY);
+          return;
+        }
+
+        try {
+          await mergeGuestData(payload);
+          localStorage.setItem(migrationKey, '1');
+          localStorage.removeItem(GUEST_MIGRATION_KEY);
+          clearGuestLocalDataAfterMigration();
+        } catch (err) {
+          console.warn('[Auth] Guest migration failed', err);
+        }
+      }
+
+      async function handleAuthChange(user) {
+        if (!D.streakEl) {
+          console.warn('[Auth] UI not ready yet, skipping update');
+          return;
+        }
+        if (nativeGoogleSignInInFlight) {
+          setNativeGoogleSignInState(false);
+        }
+        const activeUser = user && !user.isAnonymous ? user : null;
+        const priorUid = previousAuthUid;
+        const justSignedIn = Boolean(activeUser && activeUser.uid && activeUser.uid !== priorUid);
+
+        if (!activeUser) {
+          if (lastAuthenticatedUid) {
+            localStorage.removeItem(`${GUEST_MIGRATION_KEY}:${lastAuthenticatedUid}`);
+            lastAuthenticatedUid = null;
+          }
+        } else {
+          lastAuthenticatedUid = activeUser.uid || null;
+        }
+
+        updateDrawerUser(activeUser);
         console.log(
           '[Auth] Auth state changed:',
-          user ? user.displayName : 'Guest'
+          activeUser ? activeUser.displayName : 'Guest'
         );
 
         /* ------------------------------------------
           Guest user
           ------------------------------------------ */
-        if (!user) {
-          D.ptsEl.textContent =
-            localStorage.getItem('guestPoints') || '0';
+        if (!activeUser) {
+          if (D.ptsEl) {
+            D.ptsEl.textContent =
+              localStorage.getItem('guestPoints') || '0';
+          }
 
           const flame = String.fromCodePoint(0x1F525);
           const guestHistory = JSON.parse(
             localStorage.getItem('guestStreakHistory') || '[]'
           );
           D.streakEl.textContent = `${flame}${guestHistory.length}`;
+          await loadNamazGoalsWidget();
+          await refreshAllProgress(null);
+          await initStartButton(null);
+          await updateResumeListeningButton();
+          previousAuthUid = null;
 
           return;
         }
@@ -2370,7 +5527,7 @@ case 'SAVE_HINT_DONE': {
         /* ------------------------------------------
           Logged-in user
           ------------------------------------------ */
-        const fullName  = user.displayName || '';
+        const fullName  = activeUser.displayName || '';
         const firstName = fullName.split(' ')[0];
 
         // Notify iframe of login
@@ -2379,49 +5536,51 @@ case 'SAVE_HINT_DONE': {
           postToIframe(activeIframe, { type: 'userLoggedIn', firstName });
         }
 
-        // Transfer guest stats if first login
-        const snap = await getUserDoc();
-        const guestPoints =
-          +localStorage.getItem('guestPoints') || 0;
+        let preAuthData = null;
+        try {
+          preAuthData = (await getUserDoc(activeUser)).data() || {};
+        } catch (err) {
+          console.warn('[Auth] Failed to read user doc before migration', err);
+          preAuthData = null;
+        }
 
-        const guestStreak =
-          JSON.parse(
-            localStorage.getItem('guestStreakHistory') || '[]'
-          );
+        await migrateGuestDataIfNeeded(activeUser, preAuthData);
+        await persistProfile(activeUser.displayName, activeUser.email);
 
-        if (
-          !snap.exists() &&
-          (guestPoints || guestStreak.length)
-        ) {
-          await saveStatsToFirestore({
-            score: guestPoints,
-            streakHistory: guestStreak
-          });
-
-          await persistProfile(user.displayName, user.email);
-
-          localStorage.removeItem('guestPoints');
-          localStorage.removeItem('guestStreakHistory');
-        } else {
-          await persistProfile(user.displayName, user.email);
+        if (justSignedIn) {
+          const displayName = String(activeUser.displayName || '').trim();
+          const emailPrefix = String(activeUser.email || '').split('@')[0] || '';
+          const firstName = (displayName || emailPrefix || 'Friend').split(' ')[0];
+          const isReturningUser = hasPersistedUserDataInDb(preAuthData || {});
+          const message = isReturningUser
+            ? `Welcome back, ${firstName}.`
+            : `Assalamualaikum, ${firstName}.`;
+          showInAppToast(message, '#0a4d68');
         }
 
         // Load Firestore stats
-        const data = (await getUserDoc()).data() || {};
-        D.ptsEl.textContent    = data.ajrPoints || 0;
+        const data = (await getUserDoc(activeUser)).data() || {};
+        if (D.ptsEl) {
+          D.ptsEl.textContent = data.ajrPoints || 0;
+        }
         const flame = String.fromCodePoint(0x1F525);
         D.streakEl.textContent =
           `${flame}${(data.streakHistory || []).length}`;
+        await loadNamazGoalsWidget(data.namazGoalsWidget);
+        await refreshAllProgress(activeUser);
+        await initStartButton(activeUser);
+        await updateResumeListeningButton();
+        previousAuthUid = activeUser.uid || null;
       }
 
 /* ==========================================================
    Refresh Surah Progress Bars
    ========================================================== */
-      async function refreshAllProgress() {
+      async function refreshAllProgress(activeUser = auth.currentUser) {
         let progressMap = {};
 
-        if (auth.currentUser) {
-          const snap = await getUserDoc();
+        if (isAuthenticatedUser(activeUser)) {
+          const snap = await getUserDoc(activeUser);
           progressMap = snap.data()?.completedSurahs_new || {};
         } else {
           progressMap = JSON.parse(
@@ -2437,6 +5596,9 @@ case 'SAVE_HINT_DONE': {
           const surahNum = +card
             .querySelector('.surah-number')
             .textContent.replace('Surah ', '');
+          const statusEl = card.querySelector('.surah-status');
+          const statusSubEl = card.querySelector('.surah-status-sub');
+          const playBtn = card.querySelector('.surah-play-btn');
 
           const total =
             surahData.find(s => s.number === surahNum)?.ayahCount || 0;
@@ -2449,6 +5611,28 @@ case 'SAVE_HINT_DONE': {
 
           card.setAttribute('data-progress', pct);
           card.style.setProperty('--progress', `${pct}%`);
+
+          const { statusText, nextAyah } = getSurahResumeState(reached, total);
+          if (statusEl) {
+            statusEl.textContent = statusText;
+          }
+          if (statusSubEl) {
+            statusSubEl.textContent = reached > 0
+              ? `Last read Ayah ${reached}`
+              : 'No read history yet';
+          }
+          if (playBtn) {
+            playBtn.dataset.nextAyah = String(nextAyah);
+            playBtn.dataset.resumeLabel = reached > 0 ? 'Resume' : 'Long Read';
+            const labelEl = playBtn.querySelector('.surah-action-label');
+            if (labelEl) {
+              labelEl.textContent = playBtn.dataset.resumeLabel;
+            }
+            playBtn.setAttribute(
+              'aria-label',
+              `${playBtn.dataset.resumeLabel} Surah ${surahNum} from Ayah ${nextAyah}`
+            );
+          }
         });
       }
 
@@ -2470,7 +5654,7 @@ case 'SAVE_HINT_DONE': {
         }
       }
 
-    // 🔁 Re-acquire wake lock when tab becomes visible again
+    // Ã°Å¸â€Â Re-acquire wake lock when tab becomes visible again
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible' && !wakeLock) {
         requestWakeLock();
@@ -2481,11 +5665,9 @@ case 'SAVE_HINT_DONE': {
    Learning Journey Normalization
    ========================================================== */
       function normalizeLearningJourney() {
-        const raw = JSON.parse(
-          localStorage.getItem('learningJourney') || '{}'
-        );
+        const raw = readLearningJourneyFromStorage();
 
-        const today = new Date().toISOString().split('T')[0];
+        const today = getLocalDateKey();
         const cleaned = {};
 
         for (const date in raw) {
@@ -2497,13 +5679,13 @@ case 'SAVE_HINT_DONE': {
             continue;
           }
 
-          // Today → keep items
+          // Today Ã¢â€ â€™ keep items
           if (date === today && entry?.items) {
             cleaned[date] = entry;
             continue;
           }
 
-          // Old formats → aggregate
+          // Old formats Ã¢â€ â€™ aggregate
           if (Array.isArray(entry)) {
             cleaned[date] = { count: entry.length };
           } else if (entry?.items) {
@@ -2511,10 +5693,7 @@ case 'SAVE_HINT_DONE': {
           }
         }
 
-        localStorage.setItem(
-          'learningJourney',
-          JSON.stringify(cleaned)
-        );
+        writeLearningJourneyToStorage(cleaned);
       }
 
       function maybeShowSwipeHint() {
@@ -2575,12 +5754,9 @@ case 'SAVE_HINT_DONE': {
       }
 
       function trackLearningJourney(surah, ayah) {
-        const journeyKey = 'learningJourney';
-        const journey = JSON.parse(
-          localStorage.getItem(journeyKey) || '{}'
-        );
+        const journey = readLearningJourneyFromStorage();
 
-        const today = new Date().toISOString().split('T')[0];
+        const today = getLocalDateKey();
         const entry = journey[today];
 
         if (!entry || !entry.items) {
@@ -2594,10 +5770,7 @@ case 'SAVE_HINT_DONE': {
 
         if (!alreadyRead) {
           items.push({ surah, ayah });
-          localStorage.setItem(
-            journeyKey,
-            JSON.stringify(journey)
-          );
+          writeLearningJourneyToStorage(journey);
         }
       }
 
@@ -2610,16 +5783,13 @@ case 'SAVE_HINT_DONE': {
 
         if (!dates.length) return counts;
 
-        const today = new Date().toISOString().split('T')[0];
-        const start = new Date(dates.sort()[0]);
-
-        for (
-          let d = new Date(start);
-          d <= new Date(today);
-          d.setDate(d.getDate() + 1)
-        ) {
-          const key = d.toISOString().split('T')[0];
-
+        const sorted = dates
+          .filter(dateKey => /^\d{4}-\d{2}-\d{2}$/.test(dateKey))
+          .sort();
+        if (!sorted.length) return counts;
+        const today = getLocalDateKey();
+        let key = sorted[0];
+        while (key <= today) {
           if (raw[key]?.count) {
             counts[key] = raw[key].count;
           } else if (raw[key]?.items) {
@@ -2627,6 +5797,7 @@ case 'SAVE_HINT_DONE': {
           } else {
             counts[key] = 0;
           }
+          key = addDaysToDateKey(key, 1);
         }
 
         return counts;
@@ -2659,7 +5830,7 @@ case 'SAVE_HINT_DONE': {
           }
         });
 
-        log('📘 Ayah index built:', ayahList.length, 'ayahs');
+        log('Ã°Å¸â€œËœ Ayah index built:', ayahList.length, 'ayahs');
       }
 
 
@@ -2667,7 +5838,7 @@ case 'SAVE_HINT_DONE': {
         const key = `${surah}:${ayah}`;
 
         if (ayahHTMLCache.has(key)) {
-          log('📦 HTML cache hit', key);
+          log('Ã°Å¸â€œÂ¦ HTML cache hit', key);
           return ayahHTMLCache.get(key);
         }
 
@@ -2678,7 +5849,7 @@ case 'SAVE_HINT_DONE': {
         const html = await res.text();
         const end = performance.now();
 
-        log('🌐 HTML fetched', {
+        log('Ã°Å¸Å’Â HTML fetched', {
           key,
           bytes: html.length,
           tookMs: Math.round(end - start)
@@ -2691,12 +5862,12 @@ case 'SAVE_HINT_DONE': {
 
 async function sendAyahToIframe(iframe, surah, ayah) {
   console.groupCollapsed(
-    '%c📤 sendAyahToIframe',
+    '%cÃ°Å¸â€œÂ¤ sendAyahToIframe',
     'color:#673AB7;font-weight:bold'
   );
 
   if (!iframe) {
-    console.warn('❌ iframe is null/undefined');
+    console.warn('Ã¢ÂÅ’ iframe is null/undefined');
     console.groupEnd();
     return;
   }
@@ -2706,9 +5877,9 @@ async function sendAyahToIframe(iframe, surah, ayah) {
     .find(([, f]) => f === iframe)?.[0];
 
   /* ------------------------------------------
-     🔍 GLOBAL SWIPE STATE
+     Ã°Å¸â€Â GLOBAL SWIPE STATE
   ------------------------------------------ */
-  console.log('🧭 Swipe state', {
+  console.log('Ã°Å¸Â§Â­ Swipe state', {
     currentIndex,
     currentSurah,
     currentAyah,
@@ -2719,9 +5890,9 @@ async function sendAyahToIframe(iframe, surah, ayah) {
   });
 
   /* ------------------------------------------
-     🧲 Drag state
+     Ã°Å¸Â§Â² Drag state
   ------------------------------------------ */
-  console.log('🖐️ Drag state', {
+  console.log('Ã°Å¸â€“ÂÃ¯Â¸Â Drag state', {
     active: dragState.active,
     dx: dragState.dx,
     dir: dragState.dir,
@@ -2729,9 +5900,9 @@ async function sendAyahToIframe(iframe, surah, ayah) {
   });
 
   /* ------------------------------------------
-     🧩 iframe info
+     Ã°Å¸Â§Â© iframe info
   ------------------------------------------ */
-  console.log('🧩 iframe info', {
+  console.log('Ã°Å¸Â§Â© iframe info', {
     key,
     iframeIndex: idx,
     ready: iframeReadySet.has(iframe),
@@ -2740,56 +5911,56 @@ async function sendAyahToIframe(iframe, surah, ayah) {
   });
 
   /* ------------------------------------------
-     🧱 Ring transform state
+     Ã°Å¸Â§Â± Ring transform state
   ------------------------------------------ */
   ring.cards.forEach((card, i) => {
     const style = getComputedStyle(card);
-    console.log(`🪟 Card ${i}`, {
+    console.log(`Ã°Å¸ÂªÅ¸ Card ${i}`, {
       transform: style.transform,
       transition: style.transition
     });
   });
 
   /* ------------------------------------------
-     📦 Cache state
+     Ã°Å¸â€œÂ¦ Cache state
   ------------------------------------------ */
   const cacheHit = ayahHTMLCache.has(key);
 
-  console.log('📦 Cache state', {
+  console.log('Ã°Å¸â€œÂ¦ Cache state', {
     cacheHit,
     cacheSize: ayahHTMLCache.size
   });
 
   /* ------------------------------------------
-     🛑 iframe not ready
+     Ã°Å¸â€ºâ€˜ iframe not ready
   ------------------------------------------ */
   if (!iframeReadySet.has(iframe)) {
-    console.warn('⏳ iframe not ready → skip inject');
+    console.warn('Ã¢ÂÂ³ iframe not ready Ã¢â€ â€™ skip inject');
     console.groupEnd();
     return;
   }
 
   /* ------------------------------------------
-     🌐 Fetch HTML
+     Ã°Å¸Å’Â Fetch HTML
   ------------------------------------------ */
   const t0 = performance.now();
   const html = await getAyahHTML(surah, ayah);
   const t1 = performance.now();
 
-  console.log('📨 HTML ready', {
+  console.log('Ã°Å¸â€œÂ¨ HTML ready', {
     key,
     bytes: html.length,
     timeMs: Math.round(t1 - t0)
   });
 
   if (!iframe.contentWindow) {
-    console.warn('❌ iframe.contentWindow missing');
+    console.warn('Ã¢ÂÅ’ iframe.contentWindow missing');
     console.groupEnd();
     return;
   }
 
   /* ------------------------------------------
-     📤 Inject
+     Ã°Å¸â€œÂ¤ Inject
   ------------------------------------------ */
   postToIframe(iframe, {
     type: 'LOAD_AYAH_HTML',
@@ -2798,14 +5969,14 @@ async function sendAyahToIframe(iframe, surah, ayah) {
     html,
   });
 
-  console.log('✅ LOAD_AYAH_HTML posted');
+  console.log('Ã¢Å“â€¦ LOAD_AYAH_HTML posted');
 
   /* ------------------------------------------
-     🔒 Swipe lock update
+     Ã°Å¸â€â€™ Swipe lock update
   ------------------------------------------ */
   swipeLockedUntilFrame = performance.now() + 32;
 
-  console.log('🔒 swipeLockedUntilFrame set', swipeLockedUntilFrame);
+  console.log('Ã°Å¸â€â€™ swipeLockedUntilFrame set', swipeLockedUntilFrame);
 
   console.groupEnd();
 }
@@ -2821,15 +5992,18 @@ async function sendAyahToIframe(iframe, surah, ayah) {
         const ayahNum = Number(ayah);
         const idx = ayahIndexMap[`${surahNum}:${ayahNum}`];
         if (idx == null) {
-          log('❌ loadAyah: invalid', surah, ayah);
+          log('Ã¢ÂÅ’ loadAyah: invalid', surah, ayah);
           return;
         }
 
-        log('📍 loadAyah → index', idx, `(S${surahNum}:A${ayahNum})`);
+        log('Ã°Å¸â€œÂ loadAyah Ã¢â€ â€™ index', idx, `(S${surahNum}:A${ayahNum})`);
 
         currentIndex = idx;
         currentSurah = surahNum;
         currentAyah  = ayahNum;
+        if (!isAuthenticatedUser()) {
+          setGuestLastRead(surahNum, ayahNum);
+        }
 
         setReaderMode(true);
         if (lastMilestoneSurah !== surahNum) {
@@ -2888,14 +6062,14 @@ async function sendAyahToIframe(iframe, surah, ayah) {
         if (idx < 0 || idx >= ayahList.length) return null;
 
         if (iframePool.has(idx)) {
-          log('♻️ Reusing iframe for index', idx);
+          log('Ã¢â„¢Â»Ã¯Â¸Â Reusing iframe for index', idx);
           return iframePool.get(idx);
         }
 
   const data = ayahList[idx];
   const iframe = document.createElement('iframe');
 
-  // ⏱️ START TIMER HERE (per iframe)
+  // Ã¢ÂÂ±Ã¯Â¸Â START TIMER HERE (per iframe)
   const loadStart = performance.now();
   iframe.src =
     `ayahs/surah_${data.surah}/ayah_${data.surah}_${data.ayah}.html`;
@@ -2913,7 +6087,7 @@ async function sendAyahToIframe(iframe, surah, ayah) {
 
     iframeReadySet.add(iframe);
 
-    log('🧩 iframe ready', {
+    log('Ã°Å¸Â§Â© iframe ready', {
       idx,
       surah: data.surah,
       ayah: data.ayah,
@@ -2944,7 +6118,7 @@ async function sendAyahToIframe(iframe, surah, ayah) {
   };
 
         iframePool.set(idx, iframe);
-        log('🆕 Created (hidden) iframe for index', idx);
+        log('Ã°Å¸â€ â€¢ Created (hidden) iframe for index', idx);
 
         return iframe;
       }
@@ -2956,7 +6130,7 @@ async function sendAyahToIframe(iframe, surah, ayah) {
 ========================================================== */
       function initRing() {
         if (ring.cards.length) {
-          log('🔁 Ring already initialized');
+          log('Ã°Å¸â€Â Ring already initialized');
           return;
         }
 
@@ -2969,14 +6143,14 @@ async function sendAyahToIframe(iframe, surah, ayah) {
           ring.cards.push(card);
         }
 
-        log('🧩 Ring initialized with 3 cards');
+        log('Ã°Å¸Â§Â© Ring initialized with 3 cards');
       }
 
 /* ==========================================================
    UPDATE RING (ATTACH IFRAMES)
 ========================================================== */
       function updateRing() {
-        log('🔄 updateRing → currentIndex', currentIndex);
+        log('Ã°Å¸â€â€ž updateRing Ã¢â€ â€™ currentIndex', currentIndex);
 
         const indices = [
           currentIndex - 1,
@@ -2994,7 +6168,7 @@ async function sendAyahToIframe(iframe, surah, ayah) {
             card.appendChild(iframe);
           }
 
-          // 🔑 VISIBILITY + POINTER CONTROL
+          // Ã°Å¸â€â€˜ VISIBILITY + POINTER CONTROL
           iframe.style.visibility = 'visible';
           iframe.style.pointerEvents = (i === 1) ? 'auto' : 'none';
 
@@ -3018,7 +6192,7 @@ async function sendAyahToIframe(iframe, surah, ayah) {
 ========================================================== */
       function positionRing() {
         const w = D.viewer.clientWidth;
-        log('📐 positionRing width', w);
+        log('Ã°Å¸â€œÂ positionRing width', w);
 
         ring.cards.forEach((card, i) => {
           card.style.transition = 'none';
@@ -3043,7 +6217,7 @@ async function sendAyahToIframe(iframe, surah, ayah) {
 
         for (const [idx, iframe] of iframePool.entries()) {
           if (!keep.has(idx) && !prewarmedIndices.has(idx)) {
-            log('🗑️ Pruning iframe index', idx);
+            log('Ã°Å¸â€”â€˜Ã¯Â¸Â Pruning iframe index', idx);
             iframe.remove();
             iframePool.delete(idx);
           }
@@ -3072,13 +6246,13 @@ function resetCardPositions() {
   ring.cards[1].style.transform = 'translate3d(0,0,0)';
   ring.cards[2].style.transform = `translate3d(${w}px,0,0)`;
 
-  // 🔑 force layout so next swipe starts clean
+  // Ã°Å¸â€â€˜ force layout so next swipe starts clean
   ring.cards[1].getBoundingClientRect();
 }
 
 
 function finalizeSwipe(dir) {
-        // 1️⃣ Rotate cards + index (VISUAL ONLY)
+        // 1Ã¯Â¸ÂÃ¢Æ’Â£ Rotate cards + index (VISUAL ONLY)
         if (dir === 1) {
           ring.cards.push(ring.cards.shift());
           currentIndex++;
@@ -3093,7 +6267,7 @@ function finalizeSwipe(dir) {
 
         prewarmNeighbors(3);
 
-        // 2️⃣ Snap positions immediately
+        // 2Ã¯Â¸ÂÃ¢Æ’Â£ Snap positions immediately
         updateRing();
         positionRing();
         isSwiping = false;
@@ -3108,11 +6282,11 @@ function finalizeSwipe(dir) {
         const shouldAutoPlay = pendingAutoPlay;
         if (pendingAutoPlay) pendingAutoPlay = false;
 
-        // 3️⃣ 🔑 Inject HTML AFTER animation frame settles
+        // 3Ã¯Â¸ÂÃ¢Æ’Â£ Ã°Å¸â€â€˜ Inject HTML AFTER animation frame settles
         requestAnimationFrame(() => {
         const iframe = ring.cards[1].querySelector('iframe');
 
-        //warmupCardLayers();   // ✅ ADD THIS LINE
+        //warmupCardLayers();   // Ã¢Å“â€¦ ADD THIS LINE
 
           if (!iframe) return;
 
@@ -3137,7 +6311,7 @@ function finalizeSwipe(dir) {
         });
 
 
-        // 4️⃣ Everything else is idle / background
+        // 4Ã¯Â¸ÂÃ¢Æ’Â£ Everything else is idle / background
         requestIdleCallback(() => {
           syncDropdowns(currentSurah, currentAyah);
 
@@ -3179,7 +6353,7 @@ function finalizeSwipe(dir) {
     const iframe = card?.querySelector('iframe');
 
     if (!iframe || !iframe.contentWindow) {
-      log('⚠️ No active iframe to forward click');
+      log('Ã¢Å¡Â Ã¯Â¸Â No active iframe to forward click');
       return;
     }
 
@@ -3188,7 +6362,7 @@ function finalizeSwipe(dir) {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    log('🖱️ Forwarding click to iframe', { x, y });
+    log('Ã°Å¸â€“Â±Ã¯Â¸Â Forwarding click to iframe', { x, y });
 
     postToIframe(iframe, {
       type: 'CLICK',
@@ -3213,7 +6387,7 @@ function prewarmIframe(idx) {
 
   const { surah, ayah } = ayahList[idx];
 
-  log('🔥 Prewarming iframe for index', idx);
+  log('Ã°Å¸â€Â¥ Prewarming iframe for index', idx);
   prewarmedIndices.add(idx);
   getAyahHTML(surah, ayah);
   getIframeForIndex(idx);
@@ -3234,7 +6408,7 @@ function prewarmNeighbors(distance = 3) {
 function canMove(dir) {
   const next = currentIndex + dir;
   const ok = next >= 0 && next < ayahList.length;
-  log('🔍 canMove', dir, ok);
+  log('Ã°Å¸â€Â canMove', dir, ok);
   return ok;
 }
 
@@ -3247,21 +6421,78 @@ function canMove(dir) {
    Main Initialization
    ========================================================== */
 async function init() {
+  try {
+    const raw = localStorage.getItem('qq_settings');
+    const parsed = raw ? JSON.parse(raw) : {};
+    const next = { ...(parsed || {}), darkMode: false };
+    localStorage.setItem('qq_settings', JSON.stringify(next));
+  } catch (_) {}
   bindUIActions();
+  applyTheme(false);
+  attachNativeGoogleSignInBridge();
+  enableNativeTouchGuard();
+  if (window.ReactNativeWebView) {
+    const nativeParams = new URLSearchParams(window.location.search);
+    const immersiveFlag = String(nativeParams.get('immersive') || '').toLowerCase();
+    const isAndroidImmersive =
+      IS_ANDROID_WEBVIEW && (immersiveFlag === '1' || immersiveFlag === 'true' || immersiveFlag === 'yes');
+    document.documentElement.classList.add('native-app');
+    document.body.classList.add('native-app');
+    document.documentElement.classList.toggle('android-immersive', isAndroidImmersive);
+    document.body.classList.toggle('android-immersive', isAndroidImmersive);
+    resetRootScrollPosition();
+  }
+  const urlParams = new URLSearchParams(window.location.search);
+  const hasSurahParam = urlParams.has('surah');
+  const hasAyahParam = urlParams.has('ayah');
+  const urlSurah = hasSurahParam ? Number(urlParams.get('surah')) : NaN;
+  const urlAyah = hasAyahParam ? Number(urlParams.get('ayah')) : NaN;
+  const shouldAutoOpen =
+    hasSurahParam && hasAyahParam &&
+    Number.isFinite(urlSurah) && urlSurah > 0 &&
+    Number.isFinite(urlAyah) && urlAyah > 0;
+  if (shouldAutoOpen) {
+    document.documentElement.classList.add('pending-ayah');
+    document.body.classList.add('pending-ayah');
+  }
   setReaderMode(false);
   ensureHomeScroll();
-  window.addEventListener('pageshow', ensureHomeScroll);
+  window.addEventListener('pageshow', () => {
+    ensureHomeScroll();
+    updateMemorizationHeroButton();
+    refreshDailyUiIfNeeded();
+    ensureNamazWidgetForToday();
+  });
   window.addEventListener('visibilitychange', () => {
-    if (!document.hidden) ensureHomeScroll();
+    if (!document.hidden) {
+      ensureHomeScroll();
+      updateMemorizationHeroButton();
+      refreshDailyUiIfNeeded();
+      ensureNamazWidgetForToday();
+    }
   });
   normalizeLearningJourney();
   initSwipeHintObserver();
   setupForegroundMessaging();
+  await resolveGoogleRedirectResult();
+  await loadNamazGoalsWidget();
 
   onAuthChange(handleAuthChange);
 
   await renderSurahOverview();
   await initStartButton();
+  if (shouldAutoOpen) {
+    if (typeof setDuasMode === 'function') {
+      setDuasMode(false);
+    }
+    if (D.surahContainer) D.surahContainer.style.display = 'none';
+    if (D.hero) D.hero.style.display = 'none';
+    if (D.viewer) D.viewer.style.display = 'block';
+    if (D.dropdowns) D.dropdowns.style.display = 'flex';
+    loadAyah(urlSurah, urlAyah);
+    document.documentElement.classList.remove('pending-ayah');
+    document.body.classList.remove('pending-ayah');
+  }
 
   StreakUI.init({
     navSelector: '#streakDisplay',
@@ -3272,7 +6503,43 @@ async function init() {
   requestWakeLock();
 }
 
+function bindStartReciteFailsafe() {
+  const btn = document.getElementById('startRecitingBtn');
+  if (!btn || btn.dataset.qqFailsafeBound === '1') return;
+  btn.dataset.qqFailsafeBound = '1';
+
+      btn.addEventListener('click', () => {
+    setTimeout(async () => {
+      // If the normal handler already switched view, do nothing.
+      if (document.body.classList.contains('recite-mode')) return;
+      const hero = document.getElementById('hero');
+      const heroVisible = !!hero && window.getComputedStyle(hero).display !== 'none';
+      if (!heroVisible) return;
+
+      let resumeTarget = null;
+      try {
+        resumeTarget = await getReciteResumeTarget(auth.currentUser, {
+          includeLearnFallback: false
+        });
+      } catch {
+        resumeTarget = null;
+      }
+
+      const surah = Number(resumeTarget?.surah) || DEFAULT_SURAH;
+      const ayah = Number(resumeTarget?.ayah) || DEFAULT_AYAH;
+      triggerReciteStart(surah, ayah, { autoPlay: true, continuous: true });
+    }, 0);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', bindStartReciteFailsafe);
 document.addEventListener('DOMContentLoaded', init);
+
+
+
+
+
+
 
 
 

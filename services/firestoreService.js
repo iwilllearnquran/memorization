@@ -6,9 +6,14 @@ import {
   getAuth,
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithRedirect,
+  signInWithCredential,
+  getRedirectResult,
   signOut,
   onAuthStateChanged,
-  signInAnonymously        
+  signInAnonymously,
+  setPersistence,
+  browserLocalPersistence
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import {
   getFirestore,
@@ -40,6 +45,24 @@ const firebaseConfig = {
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
+const authPersistenceReady = setPersistence(auth, browserLocalPersistence).catch(err => {
+  console.warn('[Auth] Failed to enable local persistence', err);
+});
+const POPUP_TO_REDIRECT_CODES = new Set([
+  'auth/popup-blocked',
+  'auth/popup-closed-by-user',
+  'auth/cancelled-popup-request',
+  'auth/operation-not-supported-in-this-environment'
+]);
+let googleRedirectResolved = false;
+
+function isNativeWebViewEnvironment() {
+  try {
+    return typeof window !== 'undefined' && Boolean(window.ReactNativeWebView);
+  } catch {
+    return false;
+  }
+}
 
 const DEFAULT_STREAK_FREEZES = 2;
 
@@ -56,6 +79,24 @@ function diffDaysUTC(aStr, bStr) {
   const a = Date.UTC(ay, am - 1, ad);
   const b = Date.UTC(by, bm - 1, bd);
   return Math.round((a - b) / 86400000);
+}
+
+function compareAyahRef(a, b) {
+  if (!a || !b) return 0;
+  if (a.surah !== b.surah) return a.surah - b.surah;
+  return a.ayah - b.ayah;
+}
+
+function mergeProgressMap(current = {}, incoming = {}) {
+  const merged = { ...current };
+  Object.entries(incoming).forEach(([key, value]) => {
+    const next = Number(value) || 0;
+    const prev = Number(merged[key]) || 0;
+    if (next > prev) {
+      merged[key] = next;
+    }
+  });
+  return merged;
 }
 
 // ————— Ensure Anonymous Guest User —————
@@ -107,9 +148,58 @@ export async function transferGuestStats(pendingPoints) {
 /**
  * Sign in via Google popup
  */
-export function signInWithGoogle() {
+export async function signInWithGoogle() {
+  await authPersistenceReady;
+  if (isNativeWebViewEnvironment()) {
+    const nativeWebViewError = new Error(
+      'Google OAuth is blocked inside embedded WebView. Open secure browser login instead.'
+    );
+    nativeWebViewError.code = 'auth/webview-google-signin-disallowed';
+    throw nativeWebViewError;
+  }
+
   const provider = new GoogleAuthProvider();
-  return signInWithPopup(auth, provider);
+  provider.setCustomParameters({ prompt: 'select_account' });
+
+  try {
+    return await signInWithPopup(auth, provider);
+  } catch (err) {
+    const code = String(err?.code || '');
+    if (POPUP_TO_REDIRECT_CODES.has(code)) {
+      await signInWithRedirect(auth, provider);
+      return null;
+    }
+    throw err;
+  }
+}
+
+export async function signInWithGoogleTokens({ idToken, accessToken } = {}) {
+  await authPersistenceReady;
+  const normalizedIdToken = typeof idToken === 'string' ? idToken.trim() : '';
+  const normalizedAccessToken =
+    typeof accessToken === 'string' ? accessToken.trim() : '';
+
+  if (!normalizedIdToken && !normalizedAccessToken) {
+    throw new Error('Missing Google auth tokens');
+  }
+
+  const credential = GoogleAuthProvider.credential(
+    normalizedIdToken || null,
+    normalizedAccessToken || null
+  );
+  return signInWithCredential(auth, credential);
+}
+
+export async function resolveGoogleRedirectResult() {
+  await authPersistenceReady;
+  if (googleRedirectResolved) return null;
+  googleRedirectResolved = true;
+  try {
+    return await getRedirectResult(auth);
+  } catch (err) {
+    console.warn('[Auth] Redirect result handling failed', err);
+    return null;
+  }
 }
 
 /**
@@ -127,7 +217,16 @@ export async function logout() {
  * Subscribe to auth state changes
  */
 export function onAuthChange(callback) {
-  return onAuthStateChanged(auth, callback);
+  let unsub = () => {};
+  let active = true;
+  authPersistenceReady.finally(() => {
+    if (!active) return;
+    unsub = onAuthStateChanged(auth, callback);
+  });
+  return () => {
+    active = false;
+    unsub();
+  };
 }
 
 // ————— Profile Persistence —————
@@ -140,8 +239,11 @@ export function persistProfile(name, email) {
   }, { merge: true });
 }
 
-export function getUserDoc() {
-  const ref = doc(db, 'users', auth.currentUser.uid);
+export function getUserDoc(user = auth.currentUser) {
+  if (!user?.uid) {
+    throw new Error('No authenticated user');
+  }
+  const ref = doc(db, 'users', user.uid);
   return getDoc(ref);
 }
 
@@ -175,14 +277,137 @@ export async function saveStatsToFirestore(stats) {
   await setDoc(ref, payload, { merge: true });
 }
 
+export async function updateCompletedSurahsProgress(surah, ayah) {
+  if (!auth.currentUser) return;
+  const userRef = doc(db, 'users', auth.currentUser.uid);
+  await runTransaction(db, async tx => {
+    const snap = await tx.get(userRef);
+    const data = snap.exists() ? snap.data() : {};
+    const progressMap = data.completedSurahs_new || {};
+    const current = Number(progressMap[surah]) || 0;
+    if (ayah > current) {
+      progressMap[surah] = ayah;
+      tx.set(userRef, { completedSurahs_new: progressMap }, { merge: true });
+    }
+  });
+}
+
+export async function saveMemorizationData(memoData) {
+  if (!auth.currentUser) return;
+  const userRef = doc(db, 'users', auth.currentUser.uid);
+  await setDoc(userRef, { memorization: memoData }, { merge: true });
+}
+
+export async function getMemorizationData() {
+  if (!auth.currentUser) return null;
+  const snap = await getUserDoc();
+  if (!snap.exists()) return null;
+  return snap.data()?.memorization || null;
+}
+
+export async function mergeGuestData(payload) {
+  if (!auth.currentUser || auth.currentUser.isAnonymous) return;
+  const userRef = doc(db, 'users', auth.currentUser.uid);
+
+  await runTransaction(db, async tx => {
+    const snap = await tx.get(userRef);
+    const data = snap.exists() ? snap.data() : {};
+    const updates = {};
+
+    const guestPoints = Number(payload?.points) || 0;
+    if (guestPoints) {
+      updates.ajrPoints = (Number(data.ajrPoints) || 0) + guestPoints;
+    }
+
+    const guestStreak = Array.isArray(payload?.streakHistory)
+      ? payload.streakHistory
+      : [];
+    if (guestStreak.length) {
+      const mergedStreak = Array.from(new Set([...(data.streakHistory || []), ...guestStreak]));
+      mergedStreak.sort();
+      updates.streakHistory = mergedStreak;
+      const existingFreezes = Number.isFinite(data.streakFreezes)
+        ? data.streakFreezes
+        : DEFAULT_STREAK_FREEZES;
+      const guestFreezes = Number.isFinite(payload?.streakFreezes)
+        ? payload.streakFreezes
+        : existingFreezes;
+      updates.streakFreezes = Math.min(existingFreezes, guestFreezes);
+    }
+
+    if (payload?.completedSurahs) {
+      updates.completedSurahs_new = mergeProgressMap(
+        data.completedSurahs_new || {},
+        payload.completedSurahs
+      );
+    }
+
+    if (payload?.lastRead?.surah && payload?.lastRead?.ayah) {
+      const incoming = {
+        surah: Number(payload.lastRead.surah) || 0,
+        ayah: Number(payload.lastRead.ayah) || 0
+      };
+      const current = {
+        surah: Number(data.lastSurah) || 0,
+        ayah: Number(data.lastAyah) || 0
+      };
+      const incomingSavedAt = Date.parse(payload?.lastRead?.savedAt || '');
+      const currentSavedAt = typeof data.lastReadAt?.toMillis === 'function'
+        ? data.lastReadAt.toMillis()
+        : 0;
+
+      const shouldReplace =
+        !current.surah ||
+        !current.ayah ||
+        (Number.isFinite(incomingSavedAt) && incomingSavedAt > currentSavedAt) ||
+        compareAyahRef(incoming, current) > 0;
+
+      if (shouldReplace) {
+        updates.lastSurah = incoming.surah;
+        updates.lastAyah = incoming.ayah;
+        updates.lastReadAt = serverTimestamp();
+      }
+    }
+
+    if (payload?.memorization) {
+      const memo = data.memorization || {};
+      const mergedMemo = { ...memo };
+      if (payload.memorization.unlocked) {
+        const incoming = payload.memorization.unlocked;
+        const current = memo.unlocked || { surah: 1, ayah: 1 };
+        mergedMemo.unlocked =
+          compareAyahRef(incoming, current) > 0 ? incoming : current;
+      }
+
+      if (payload.memorization.listens) {
+        const currentListens = memo.listens || {};
+        mergedMemo.listens = mergeProgressMap(currentListens, payload.memorization.listens);
+      }
+
+      if (payload.memorization.lastProgress) {
+        const incoming = payload.memorization.lastProgress;
+        const current = memo.lastProgress;
+        if (!current || (incoming?.timestamp || 0) > (current?.timestamp || 0)) {
+          mergedMemo.lastProgress = incoming;
+        }
+      }
+
+      updates.memorization = mergedMemo;
+    }
+
+    updates.lastLogin = serverTimestamp();
+    tx.set(userRef, updates, { merge: true });
+  });
+}
+
 export async function addPointsToFirestore(pointsDelta) {
   const user = auth.currentUser;
   if (!user) throw new Error("No authenticated user");
   const userRef = doc(db, 'users', user.uid);
-  await updateDoc(userRef, {
+  await setDoc(userRef, {
     ajrPoints: increment(pointsDelta),
     lastLogin: serverTimestamp()
-  });
+  }, { merge: true });
 }
 
 export async function recordStreak() {
@@ -292,20 +517,23 @@ const messaging = getMessaging(app);
  */
 export async function registerForNotifications() {
   try {
+    if (!auth.currentUser) {
+      throw new Error('No authenticated user');
+    }
     const permission = await Notification.requestPermission();
     if (permission !== 'granted') {
       throw new Error('Notification permission not granted');
     }
     const swReg = await navigator.serviceWorker.register('/_private/firebase-messaging-sw.js');
     const token = await getToken(messaging, {
-      vapidKey: 'fffff-PnwLy3uQ9g8JBik'
+      vapidKey: 'BE9W8HfVFsVQaBaU_WV2CWkgSJJJNKmve8NhXx1f0araDhnbEAxk9MlxYsCB2mjMpCdqeB2-PnwLy3uQ9g8JBik'
     , swRegistration: swReg});
 
     // Persist to Firestore under users/{uid}.fcmTokens
     const userRef = doc(db, 'users', auth.currentUser.uid);
-    await updateDoc(userRef, {
+    await setDoc(userRef, {
       fcmTokens: arrayUnion(token)
-    });
+    }, { merge: true });
 
     return token;
   } catch (err) {
@@ -339,11 +567,11 @@ export async function updateLastRead(surah, ayah) {
   }
   try {
     const userRef = doc(db, 'users', auth.currentUser.uid);
-    await updateDoc(userRef, {
+    await setDoc(userRef, {
       lastSurah: surah,
       lastAyah: ayah,
       lastReadAt: serverTimestamp()
-    });
+    }, { merge: true });
   } catch (err) {
     console.error('Failed to update lastRead:', err);
   }
@@ -354,9 +582,9 @@ export async function updateLastRead(surah, ayah) {
  * Fetch last-read Surah/Ayah from Firestore (for logged-in users)
  * @returns {Promise<{surah:number, ayah:number}|null>}
  */
-export async function getLastReadFromDb() {
-  if (!auth.currentUser) return null;
-  const snap = await getUserDoc();
+export async function getLastReadFromDb(user = auth.currentUser) {
+  if (!user || user.isAnonymous) return null;
+  const snap = await getUserDoc(user);
   if (!snap.exists()) return null;
   const { lastSurah, lastAyah } = snap.data();
   return (lastSurah && lastAyah)

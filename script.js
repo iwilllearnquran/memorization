@@ -17,6 +17,17 @@ const audioCache = {};
 const cleanupFns = [];
 const RAW_ORIGIN = window.location.origin;
 const PARENT_ORIGIN = RAW_ORIGIN === 'null' ? '*' : RAW_ORIGIN;
+const IS_NATIVE_CONTAINER = (() => {
+  try {
+    return Boolean(
+      window.ReactNativeWebView ||
+      window.parent?.ReactNativeWebView ||
+      window.top?.ReactNativeWebView
+    );
+  } catch {
+    return Boolean(window.ReactNativeWebView);
+  }
+})();
 let ticking = false;
 const SHOW_DURATION = 3000;
 let hideTimer = null;
@@ -47,6 +58,36 @@ let saveHintText;
 let saveHintLottie;
 let closeSettingsMenuFn = null;
 let settingsOutsideClickHandler = null;
+
+function isEditableTarget(target) {
+  if (!(target instanceof Element)) return false;
+  return Boolean(
+    target.closest('input, textarea, [contenteditable="true"], .allow-text-select')
+  );
+}
+
+function enableNativeInteractionGuard() {
+  if (!IS_NATIVE_CONTAINER) return;
+
+  document.documentElement.classList.add('native-app-embedded');
+  if (document.body) {
+    document.body.classList.add('native-app-embedded');
+  } else {
+    document.addEventListener('DOMContentLoaded', () => {
+      document.body?.classList.add('native-app-embedded');
+    }, { once: true });
+  }
+
+  const blockIfNotEditable = event => {
+    if (isEditableTarget(event.target)) return;
+    event.preventDefault();
+  };
+
+  document.addEventListener('contextmenu', blockIfNotEditable, { capture: true });
+  document.addEventListener('selectstart', blockIfNotEditable, { capture: true });
+}
+
+enableNativeInteractionGuard();
 
 const debugLog = (typeof console !== 'undefined' && console.log)
   ? console.log.bind(console)
@@ -110,16 +151,20 @@ console.log('[IFRAME] script.js executed', location.pathname);
    BOOT APPLY SETTINGS (EARLY)
 ============================ */
 (() => {
+  const html = document.documentElement;
+  // Default state: roots hidden unless user explicitly turns them on.
+  html.classList.add('hide-root');
   try {
     const raw = localStorage.getItem('qq_settings');
     if (!raw) return;
     const settings = JSON.parse(raw);
     if (!settings || typeof settings !== 'object') return;
 
-    const html = document.documentElement;
-    html.classList.toggle('hide-root', settings.showRoot === false);
+    html.classList.toggle('hide-root', settings.showRoot !== true);
     html.classList.toggle('hide-grammar', settings.showGrammar === false);
     html.classList.toggle('hide-word-translation', settings.showWordTranslation === false);
+    html.classList.toggle('dark-mode', settings.darkMode === true);
+    if (document.body) document.body.classList.toggle('dark-mode', settings.darkMode === true);
     if (typeof settings.showPanelTranslation === 'boolean') {
       html.classList.toggle('hide-panel-translation', !settings.showPanelTranslation);
     }
@@ -325,9 +370,31 @@ const LOG = {
       let isSwiping = false;
       let swipeCommitted = false;
       let swipeLocked = false;
+      let swipeBlockedByHint = false;
       let swipeDir = 0; // -1 = right, 1 = left
       let hasPointerCapture = false;
       let swipeScrollLocked = false;
+
+      function setSwipeBlockedByHint(blocked) {
+        swipeBlockedByHint = !!blocked;
+      }
+
+      function blockSwipeForHint() {
+        setSwipeBlockedByHint(true);
+        swipeLocked = true;
+        isSwiping = false;
+        swipeCommitted = false;
+        swipeDir = 0;
+        swipeDX = 0;
+        lastSentFrame = 0;
+        unlockSwipeScroll();
+        window.parent?.postMessage({ type: 'SWIPE_CANCEL' }, PARENT_ORIGIN);
+      }
+
+      function unblockSwipeForHint() {
+        swipeLocked = false;
+        setSwipeBlockedByHint(false);
+      }
 
       function lockSwipeScroll() {
         if (!swipeScrollLocked) {
@@ -386,6 +453,10 @@ const LOG = {
 
       function onSwipePointerDown(e) {
         debugSwipeState('pointerdown:before', e);
+        if (swipeBlockedByHint) {
+          debugSwipeState('pointerdown:blocked-hint', e);
+          return;
+        }
         if (shouldIgnoreSwipeTarget(e.target)) {
           debugSwipeState('pointerdown:ignored-target', e);
           return;
@@ -443,6 +514,7 @@ const LOG = {
       }
 
       function onSwipePointerMove(e) {
+        if (swipeBlockedByHint) return;
         debugSwipeState('pointermove', e);
         if (!isSwiping || swipeLocked) return;
 
@@ -550,6 +622,7 @@ const LOG = {
       }
 
       function onSwipePointerUp(e) {
+    if (swipeBlockedByHint) return;
     debugSwipeState('pointerup:before', e);
     unlockSwipeScroll();
     if (hasPointerCapture && e.pointerId && el.releasePointerCapture) {
@@ -865,9 +938,11 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         const html = document.documentElement;
 
         // Visibility toggles
-        html.classList.toggle('hide-root', settings.showRoot === false);
+        html.classList.toggle('hide-root', settings.showRoot !== true);
         html.classList.toggle('hide-grammar', settings.showGrammar === false);
         html.classList.toggle('hide-word-translation', settings.showWordTranslation === false);
+        html.classList.toggle('dark-mode', settings.darkMode === true);
+        if (document.body) document.body.classList.toggle('dark-mode', settings.darkMode === true);
         if (typeof settings.showPanelTranslation === 'boolean') {
           setPanelTranslationVisible(settings.showPanelTranslation);
         }
@@ -1958,11 +2033,16 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
             return;
           }
 
-          const url = `/search_results.html?q=${encodeURIComponent(normalizedWord)}`;
+          const params = new URLSearchParams({
+            q: normalizedWord,
+            fromSurah: String(currentSurah),
+            fromAyah: String(currentAyah)
+          });
+          const url = `/search_results.html?${params.toString()}`;
           console.log('[SEARCH] Opening search tab:', url);
 
-          const w = window.open(url, '_blank', 'noopener');
-          if (w) w.opener = null;
+          const target = window.parent && window.parent !== window ? window.parent : window;
+          target.location.assign(url);
         }
       window.openSearchTab = openSearchTab;
 
@@ -2571,87 +2651,28 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
           console.warn('[NAV] Missing required elements', { nav, playBtn, ayahAudio });
           return;
         }
-        
-        
         function scheduleHide() {
           clearTimeout(hideTimer);
-          if (holdNavVisible) return;
+          if (holdNavVisible || (ayahAudio && !ayahAudio.paused)) return;
+
           hideTimer = setTimeout(() => {
+            if (holdNavVisible || (ayahAudio && !ayahAudio.paused)) return;
             nav.classList.remove('visible');
           }, SHOW_DURATION);
         }
 
-        function showNav() {
-          if (nav.classList.contains('visible')) {
-            // already visible → just extend timer
-            scheduleHide();
-            return;
-          }
-
-          console.log('[NAV] showNav called');
+        function showNav({ keepVisible = false } = {}) {
           nav.classList.add('visible');
-          scheduleHide();
+          clearTimeout(hideTimer);
+          if (!keepVisible) {
+            scheduleHide();
+          }
         }
 
-
-        const placeholder = document.createElement('div');
-        placeholder.className = 'nav-item play-btn-placeholder';
-
-        const cs = getComputedStyle(playBtn);
-        placeholder.style.cssText = `
-          width:       ${cs.width};
-          height:      ${cs.height};
-          margin-top:  ${cs.marginTop};
-          margin-left: ${cs.marginLeft};
-          margin-right:${cs.marginRight};
-          visibility:  hidden;
-          flex-shrink: 0;
-        `;
-
-        // ---------------------------------------------
-        // Float play button when audio plays
-        // ---------------------------------------------
-        function floatPlayBtn() {
-          if (playBtn.parentNode !== nav) return;
-
-          nav.insertBefore(placeholder, playBtn);
-          nav.removeChild(playBtn);
-
-          document.body.appendChild(playBtn);
-          Object.assign(playBtn.style, {
-            position:  'fixed',
-            bottom:    '38px',
-            left:      '50%',
-            transform: 'translateX(-50%)',
-            zIndex:    '9999'
-          });
-
-          scheduleHide();
-        }
-
-        // ---------------------------------------------
-        // Reattach play button back into nav
-        // ---------------------------------------------
-        function reattachPlayBtn() {
-          if (playBtn.parentNode !== document.body) return;
-
-          console.log('[NAV] Reattaching play button');
-
-          document.body.removeChild(playBtn);
-
-          ['position','bottom','left','transform','zIndex']
-            .forEach(p => playBtn.style[p] = '');
-
-          nav.replaceChild(playBtn, placeholder);
-          showNav();
-        }
-
-        // ---------------------------------------------
-        // Audio-driven behavior
-        // ---------------------------------------------
-        on(ayahAudio, 'play',  floatPlayBtn);
-        on(ayahAudio, 'pause', reattachPlayBtn);
-        on(ayahAudio, 'ended', reattachPlayBtn);
+        // Keep play FAB visible while audio is playing; auto-hide when paused/stopped.
+        on(ayahAudio, 'play', () => showNav({ keepVisible: true }));
+        on(ayahAudio, 'pause', () => showNav());
+        on(ayahAudio, 'ended', () => showNav());
 
 
         // Initial load
@@ -2676,8 +2697,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         // Keep nav visible while settings are open
         on(document.body, 'click', e => {
           if (e.target.closest('#navSettings')) {
-            nav.classList.add('visible');
-            clearTimeout(hideTimer);
+            showNav({ keepVisible: true });
           }
         });
 
@@ -2742,6 +2762,71 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         );
       }
 
+      function ensureInlineSaveProgressButton() {
+        const playPracticeBtn = document.getElementById('stripNavGames');
+        if (!playPracticeBtn) return;
+
+        const host = playPracticeBtn.parentElement;
+        if (!host) return;
+
+        host.classList.add('strip-action-row');
+        playPracticeBtn.classList.add('strip-btn-inline');
+        const playLabel =
+          playPracticeBtn.querySelector('.btn-text') ||
+          playPracticeBtn.querySelector('.nav-label');
+        if (playLabel) {
+          playLabel.textContent = 'Play & Practice';
+        } else {
+          playPracticeBtn.textContent = 'Play & Practice';
+        }
+
+        let saveBtn = document.getElementById('stripSaveProgress');
+        if (!saveBtn) {
+          saveBtn = document.createElement('button');
+          saveBtn.id = 'stripSaveProgress';
+          saveBtn.type = 'button';
+          saveBtn.className = 'strip-btn strip-btn-inline';
+          saveBtn.innerHTML = '<span class="btn-text">Save Progress</span>';
+          host.appendChild(saveBtn);
+        }
+        saveBtn.classList.add('strip-btn-inline');
+        saveBtn.type = 'button';
+        saveBtn.innerHTML = `
+          <span class="material-symbols-outlined" aria-hidden="true">bookmark</span>
+          <span class="btn-text">Save</span>
+        `;
+
+        saveBtn.onclick = e => {
+          if (e?.preventDefault) e.preventDefault();
+          requestSaveProgress();
+          saveBtn.blur();
+        };
+
+        let memoBtn = document.getElementById('stripMemorizeAyah');
+        if (!memoBtn) {
+          memoBtn = document.createElement('button');
+          memoBtn.id = 'stripMemorizeAyah';
+          memoBtn.type = 'button';
+          memoBtn.className = 'strip-btn strip-btn-inline';
+          memoBtn.innerHTML = '<span class="btn-text">Memorize</span>';
+          host.appendChild(memoBtn);
+        }
+        memoBtn.innerHTML = '<span class="btn-text">Memorize</span>';
+
+        memoBtn.onclick = e => {
+          if (e?.preventDefault) e.preventDefault();
+          window.parent.postMessage(
+            {
+              type: 'OPEN_MEMORIZATION_AYAH',
+              surah: currentSurah,
+              ayah: currentAyah
+            },
+            PARENT_ORIGIN
+          );
+          memoBtn.blur();
+        };
+      }
+
 /*************************************************
  * IFRAME ↔ PARENT MESSAGE ROUTER
  *************************************************/
@@ -2753,6 +2838,83 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
           console.log('[INIT] initMessaging');
 
           on(window, 'message', onParentMessage);
+      }
+
+      function bindInlineReplacements() {
+        if (bindInlineReplacements.done) return;
+        bindInlineReplacements.done = true;
+
+        const overlayEl = document.getElementById('overlay');
+        if (overlayEl) {
+          overlayEl.addEventListener('click', () => hidePopup());
+        }
+
+        const navPracticeBtn = document.getElementById('navPractice');
+        if (navPracticeBtn) {
+          navPracticeBtn.addEventListener('click', e => {
+            e.preventDefault();
+            togglePracticeNav();
+            navPracticeBtn.blur();
+          });
+        }
+
+        const navModeBtn = document.getElementById('navMode');
+        if (navModeBtn) {
+          navModeBtn.addEventListener('click', e => {
+            e.preventDefault();
+            toggleModeNav();
+            navModeBtn.blur();
+          });
+        }
+
+        const playBtnEl = document.getElementById('playToggleBtn');
+        if (playBtnEl) {
+          playBtnEl.addEventListener('click', e => {
+            e.preventDefault();
+            togglePlay(e);
+          });
+        }
+
+        const navSettingsBtn = document.getElementById('navSettings');
+        if (navSettingsBtn) {
+          navSettingsBtn.addEventListener('click', e => {
+            e.preventDefault();
+            toggleSettingsNav(e);
+            navSettingsBtn.blur();
+          });
+        }
+
+        const saveBtn = document.getElementById('navSaveProgress');
+        if (saveBtn) {
+          saveBtn.addEventListener('click', e => {
+            e.preventDefault();
+            requestSaveProgress();
+            saveBtn.blur();
+          });
+        }
+
+        document.querySelectorAll('.grammar-item[data-grammar]')
+          .forEach(item => {
+            item.addEventListener('click', () => {
+              const type = item.getAttribute('data-grammar');
+              if (type) {
+                showGrammarPopup(type);
+              }
+            });
+          });
+
+        document.body.addEventListener('click', e => {
+          const word = e.target.closest('.word-block[data-popup]');
+          if (!word) return;
+          const raw = word.getAttribute('data-popup');
+          if (!raw) return;
+          try {
+            const data = JSON.parse(raw);
+            showPopup(data);
+          } catch (err) {
+            console.warn('[POPUP] Failed to parse word popup data', err);
+          }
+        });
       }
 
       function isTrustedParentMessage(e) {
@@ -2779,6 +2941,13 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
               appliedSettingsVersion = nextVersion;
             }
             applySettings(data.settings || {});
+            return;
+          }
+
+          case 'APPLY_THEME': {
+            const enabled = data.darkMode === true;
+            document.documentElement.classList.toggle('dark-mode', enabled);
+            if (document.body) document.body.classList.toggle('dark-mode', enabled);
             return;
           }
 
@@ -2812,6 +2981,17 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
 
           case 'CLOSE_ACTIVE_POPUP': {
             closeActivePopup({ suppressNotify: true });
+            return;
+          }
+
+          case 'OPEN_SETTINGS': {
+            const isAlreadyOpen = !!document.getElementById('settingsMenu');
+            if (!isAlreadyOpen) {
+              toggleSettingsNav({
+                preventDefault() {},
+                stopPropagation() {}
+              });
+            }
             return;
           }
 
@@ -3295,6 +3475,8 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
 
         saveHintOverlay.classList.remove('hidden');
         saveHintOverlay.style.pointerEvents = 'none';
+        localStorage.setItem(SAVE_KEY, '1');
+        blockSwipeForHint();
         window.parent?.postMessage({ type: 'SAVE_HINT_SHOWN' }, PARENT_ORIGIN);
 
         const SCALE = 2.8;
@@ -3338,7 +3520,8 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
           ro.disconnect();
           if (anim) anim.destroy();
           saveHintOverlay.classList.add('hidden');
-          localStorage.setItem(SAVE_KEY, '1');
+          saveHintOverlay.style.pointerEvents = 'none';
+          unblockSwipeForHint();
           holdNavVisible = false;
           window.parent?.postMessage({ type: 'SAVE_HINT_DONE' }, PARENT_ORIGIN);
           if (nav?.classList.contains('visible')) {
@@ -3365,6 +3548,8 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
 
         wordHintOverlay.classList.remove('hidden');
         wordHintOverlay.style.pointerEvents = 'none';
+        localStorage.setItem(STORAGE_KEY, '1');
+        blockSwipeForHint();
         window.parent?.postMessage({ type: 'WORD_HINT_SHOWN' }, PARENT_ORIGIN);
 
         // ------------------------------
@@ -3425,7 +3610,8 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
           if (anim) anim.destroy();
 
           wordHintOverlay.classList.add('hidden');
-          localStorage.setItem(STORAGE_KEY, '1');
+          wordHintOverlay.style.pointerEvents = 'none';
+          unblockSwipeForHint();
           window.parent?.postMessage({ type: 'WORD_HINT_DONE' }, PARENT_ORIGIN);
 
           document.querySelectorAll('.word-block')
@@ -3493,7 +3679,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         speedSelect 	= document.getElementById('speedSelect');
         repeatInput 	= document.getElementById('repeatCount');
         navIcon   		= document.getElementById('navPlayIcon');
-        saveNav  			= document.getElementById('navSaveProgress');
+        saveNav  			= document.getElementById('stripSaveProgress') || document.getElementById('navSaveProgress');
 
         clearBtn 			 = document.getElementById('clearAll');
         hideTranslationsBtn = document.getElementById('hideTranslations');
@@ -3545,7 +3731,9 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         console.log('[INIT] initIframeApp running for DOM version', iframeDomVersion);
 
         console.log('[INIT] initIframeApp'              );
+        ensureInlineSaveProgressButton();
         cacheDOM();
+        bindInlineReplacements();
         if (scrollEl) {
           document.body.classList.add('has-ayah-scroll');
         } else {
@@ -3588,9 +3776,11 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         }
       }
 
-      window.addEventListener('DOMContentLoaded', () => {
+      if (document.readyState === 'loading') {
+        window.addEventListener('DOMContentLoaded', initIframeApp, { once: true });
+      } else {
         initIframeApp();
-      });
+      }
 
 
 
