@@ -269,20 +269,18 @@ function closePopup() {
       const pct = (lastWeekCount / 7) * 100;
     }
 
-    function getISTNowParts() {
+    function getLocalNowParts() {
       const now = new Date();
-      const utcMs = now.getTime() + now.getTimezoneOffset() * 60000;
-      const ist = new Date(utcMs + 330 * 60000);
       return {
-        y: ist.getUTCFullYear(),
-        m: ist.getUTCMonth(),
-        d: ist.getUTCDate(),
-        dow: ist.getUTCDay()
+        y: now.getFullYear(),
+        m: now.getMonth(),
+        d: now.getDate(),
+        dow: now.getDay()
       };
     }
 
-    function getISTDateStr() {
-      const p = getISTNowParts();
+    function getLocalDateStr() {
+      const p = getLocalNowParts();
       const mm = String(p.m + 1).padStart(2, '0');
       const dd = String(p.d).padStart(2, '0');
       return `${p.y}-${mm}-${dd}`;
@@ -307,8 +305,8 @@ function closePopup() {
       return short.slice(0, 2);
     }
 
-    function getWeekDatesIST() {
-      const p = getISTNowParts();
+    function getWeekDatesLocal() {
+      const p = getLocalNowParts();
       const weekStartMs = Date.UTC(p.y, p.m, p.d - p.dow);
       const days = [];
       for (let i = 0; i < 7; i++) {
@@ -318,8 +316,8 @@ function closePopup() {
     }
 
     function buildWeekData() {
-      const weekDates = getWeekDatesIST();
-      const todayStr = getISTDateStr();
+      const weekDates = getWeekDatesLocal();
+      const todayStr = getLocalDateStr();
       const historySet = new Set(history);
       let freezesToMark = Math.max(0, MAX_FREEZES - remainingFreezes);
       let streakAlive = true;
@@ -359,7 +357,7 @@ function closePopup() {
 
       const data = buildWeekData();
       const segWidth = 100 / data.length;
-      const todayStr = getISTDateStr();
+      const todayStr = getLocalDateStr();
 
       const labels = data.map(item => {
         const isToday = item.dateStr === todayStr;

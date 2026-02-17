@@ -1,0 +1,229 @@
+{
+  "generatedAt": "2026-02-14T12:15:09.087706+00:00",
+  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "surah": {
+    "surah": 64,
+    "arabicName": "سُورَةُ التَّغَابُنِ",
+    "englishName": "At-Taghaabun",
+    "englishNameTranslation": "Mutual Disillusion",
+    "ayahCount": 18,
+    "ayahs": [
+      {
+        "ayah": 1,
+        "globalAyah": 5200,
+        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ يُسَبِّحُ لِلَّهِ مَا فِى ٱلسَّمَٰوَٰتِ وَمَا فِى ٱلْأَرْضِ ۖ لَهُ ٱلْمُلْكُ وَلَهُ ٱلْحَمْدُ ۖ وَهُوَ عَلَىٰ كُلِّ شَىْءٍۢ قَدِيرٌ",
+        "translation_en": "ALL THAT IS in the heavens and all that is on earth extols God's limitless glory: His is all dominion, and to Him all praise is due; and He has the power to will anything.",
+        "translation_ur": "جو چیز آسمانوں میں ہے اور جو چیز زمین میں ہے (سب) خدا کی تسبیح کرتی ہے۔ اسی کی سچی بادشاہی ہے اور اسی کی تعریف (لامتناہی) ہے اور وہ ہر چیز پر قادر ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/064001.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5200.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5200.mp3"
+        }
+      },
+      {
+        "ayah": 2,
+        "globalAyah": 5201,
+        "arabic": "هُوَ ٱلَّذِى خَلَقَكُمْ فَمِنكُمْ كَافِرٌۭ وَمِنكُم مُّؤْمِنٌۭ ۚ وَٱللَّهُ بِمَا تَعْمَلُونَ بَصِيرٌ",
+        "translation_en": "He it is who has created you: and among you are such as deny this truth, and among you are such as believe [in it]. And God sees all that you do.",
+        "translation_ur": "وہی تو ہے جس نے تم کو پیدا کیا پھر کوئی تم میں کافر ہے اور کوئی مومن۔ اور جو کچھ تم کرتے ہو خدا اس کو دیکھتا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/064002.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5201.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5201.mp3"
+        }
+      },
+      {
+        "ayah": 3,
+        "globalAyah": 5202,
+        "arabic": "خَلَقَ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضَ بِٱلْحَقِّ وَصَوَّرَكُمْ فَأَحْسَنَ صُوَرَكُمْ ۖ وَإِلَيْهِ ٱلْمَصِيرُ",
+        "translation_en": "He has created the heavens and the earth in accordance with [an inner] truth, and has formed you - and formed you so well; and with Him is your journey's end.",
+        "translation_ur": "اسی نے آسمانوں اور زمین کو مبنی برحکمت پیدا کیا اور اسی نے تمہاری صورتیں بنائیں اور صورتیں بھی پاکیزہ بنائیں۔ اور اسی کی طرف (تمہیں) لوٹ کر جانا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/064003.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5202.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5202.mp3"
+        }
+      },
+      {
+        "ayah": 4,
+        "globalAyah": 5203,
+        "arabic": "يَعْلَمُ مَا فِى ٱلسَّمَٰوَٰتِ وَٱلْأَرْضِ وَيَعْلَمُ مَا تُسِرُّونَ وَمَا تُعْلِنُونَ ۚ وَٱللَّهُ عَلِيمٌۢ بِذَاتِ ٱلصُّدُورِ",
+        "translation_en": "He knows all that is in the heavens and on earth; and He knows all that you keep secret as well as all that you bring into the open: for God has full knowledge of what is in the hearts [of men].",
+        "translation_ur": "جو کچھ آسمانوں اور زمین میں ہے وہ سب جانتا ہے اور جو کچھ تم چھپا کر کرتے ہو اور جو کھلم کھلا کرتے ہو اس سے بھی آگاہ ہے۔ اور خدا دل کے بھیدوں سے واقف ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/064004.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5203.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5203.mp3"
+        }
+      },
+      {
+        "ayah": 5,
+        "globalAyah": 5204,
+        "arabic": "أَلَمْ يَأْتِكُمْ نَبَؤُا۟ ٱلَّذِينَ كَفَرُوا۟ مِن قَبْلُ فَذَاقُوا۟ وَبَالَ أَمْرِهِمْ وَلَهُمْ عَذَابٌ أَلِيمٌۭ",
+        "translation_en": "HAVE THE STORIES of those who, in earlier times, refused to acknowledge the truth never yet come within your ken? [They denied it -] and so they had to taste the evil outcome of their own doings, with [more] grievous suffering awaiting them [in the life to come]:",
+        "translation_ur": "کیا تم کو ان لوگوں کے حال کی خبر نہیں پہنچی جو پہلے کافر ہوئے تھے تو انہوں نے اپنے کاموں کی سزا کا مزہ چکھ لیا اور (ابھی) دکھ دینے والا عذاب (اور) ہونا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/064005.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5204.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5204.mp3"
+        }
+      },
+      {
+        "ayah": 6,
+        "globalAyah": 5205,
+        "arabic": "ذَٰلِكَ بِأَنَّهُۥ كَانَت تَّأْتِيهِمْ رُسُلُهُم بِٱلْبَيِّنَٰتِ فَقَالُوٓا۟ أَبَشَرٌۭ يَهْدُونَنَا فَكَفَرُوا۟ وَتَوَلَّوا۟ ۚ وَّٱسْتَغْنَى ٱللَّهُ ۚ وَٱللَّهُ غَنِىٌّ حَمِيدٌۭ",
+        "translation_en": "this, because time and again there came unto them their apostles with all evidence of the truth, but they [always] replied, \"Shall mere mortal men be our guides?\" And so they. denied the truth and turned away. But God was not in need [of them]: for God is self-sufficient, ever to be praised.",
+        "translation_ur": "یہ اس لئے کہ ان کے پاس پیغمبر کھلی نشانیاں لے کر آئے تو یہ کہتے کہ کیا آدمی ہمارے ہادی بنتے ہیں؟ تو انہوں نے (ان کو) نہ مانا اور منہ پھیر لیا اور خدا نے بھی بےپروائی کی۔ اور خدا بےپروا (اور) سزاوار حمد (وثنا) ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/064006.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5205.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5205.mp3"
+        }
+      },
+      {
+        "ayah": 7,
+        "globalAyah": 5206,
+        "arabic": "زَعَمَ ٱلَّذِينَ كَفَرُوٓا۟ أَن لَّن يُبْعَثُوا۟ ۚ قُلْ بَلَىٰ وَرَبِّى لَتُبْعَثُنَّ ثُمَّ لَتُنَبَّؤُنَّ بِمَا عَمِلْتُمْ ۚ وَذَٰلِكَ عَلَى ٱللَّهِ يَسِيرٌۭ",
+        "translation_en": "They who are bent on denying the truth claim that they will never be raised from the dead! Say: \"Yea, by my Sustainer! Most surely will you be raised from the dead, and then, most surely, will you be made to understand what you did [in life]! For, easy is this for God!\"",
+        "translation_ur": "جو لوگ کافر ہیں ان کا اعتقاد ہے کہ وہ (دوبارہ) ہرگز نہیں اٹھائے جائیں گے۔ کہہ دو کہ ہاں ہاں میرے پروردگار کی قسم تم ضرور اٹھائے جاؤ گے پھر جو کام تم کرتے رہے ہو وہ تمہیں بتائے جائیں گے اور یہ (بات) خدا کو آسان ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/064007.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5206.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5206.mp3"
+        }
+      },
+      {
+        "ayah": 8,
+        "globalAyah": 5207,
+        "arabic": "فَـَٔامِنُوا۟ بِٱللَّهِ وَرَسُولِهِۦ وَٱلنُّورِ ٱلَّذِىٓ أَنزَلْنَا ۚ وَٱللَّهُ بِمَا تَعْمَلُونَ خَبِيرٌۭ",
+        "translation_en": "Believe then, [O men,] in God and His Apostle, and in the light [of revelation] which We have bestowed [on you] from on high! And God is fully aware of all that you do.",
+        "translation_ur": "تو خدا پر اور اس کے رسول پر اور نور (قرآن) پر جو ہم نے نازل فرمایا ہے ایمان لاؤ۔ اور خدا تمہارے سب اعمال سے خبردار ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/064008.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5207.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5207.mp3"
+        }
+      },
+      {
+        "ayah": 9,
+        "globalAyah": 5208,
+        "arabic": "يَوْمَ يَجْمَعُكُمْ لِيَوْمِ ٱلْجَمْعِ ۖ ذَٰلِكَ يَوْمُ ٱلتَّغَابُنِ ۗ وَمَن يُؤْمِنۢ بِٱللَّهِ وَيَعْمَلْ صَٰلِحًۭا يُكَفِّرْ عَنْهُ سَيِّـَٔاتِهِۦ وَيُدْخِلْهُ جَنَّٰتٍۢ تَجْرِى مِن تَحْتِهَا ٱلْأَنْهَٰرُ خَٰلِدِينَ فِيهَآ أَبَدًۭا ۚ ذَٰلِكَ ٱلْفَوْزُ ٱلْعَظِيمُ",
+        "translation_en": "[Think of] the time when He shall gather you all together unto the Day of the [Last] Gathering - that Day of Loss and Gain! For, as for him who shall have believed in God and done what is just and right, He will [on that Day] efface his bad deeds, and will admit him into gardens through which running waters flow, therein to abide beyond the count of time: that will be a triumph supreme!",
+        "translation_ur": "جس دن وہ تم کو اکھٹا ہونے (یعنی قیامت) کے دن اکھٹا کرے گا وہ نقصان اٹھانے کا دن ہے۔ اور جو شخص خدا پر ایمان لائے اور نیک عمل کرے وہ اس سے اس کی برائیاں دور کردے گا اور باغہائے بہشت میں جن کے نیچے نہریں بہہ رہی ہیں داخل کرے گا۔ ہمیشہ ان میں رہیں گے۔ یہ بڑی کامیابی ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/064009.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5208.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5208.mp3"
+        }
+      },
+      {
+        "ayah": 10,
+        "globalAyah": 5209,
+        "arabic": "وَٱلَّذِينَ كَفَرُوا۟ وَكَذَّبُوا۟ بِـَٔايَٰتِنَآ أُو۟لَٰٓئِكَ أَصْحَٰبُ ٱلنَّارِ خَٰلِدِينَ فِيهَا ۖ وَبِئْسَ ٱلْمَصِيرُ",
+        "translation_en": "But as for those who are bent on denying the truth and on giving the lie to Our messages - they are destined for the fire, therein to abide: and how vile a journey’s end!",
+        "translation_ur": "اور جنہوں نے کفر کیا اور ہماری آیتوں کو جھٹلایا وہی اہل ذوزخ ہیں۔ ہمیشہ اس میں رہیں گے۔ اور وہ بری جگہ ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/064010.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5209.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5209.mp3"
+        }
+      },
+      {
+        "ayah": 11,
+        "globalAyah": 5210,
+        "arabic": "مَآ أَصَابَ مِن مُّصِيبَةٍ إِلَّا بِإِذْنِ ٱللَّهِ ۗ وَمَن يُؤْمِنۢ بِٱللَّهِ يَهْدِ قَلْبَهُۥ ۚ وَٱللَّهُ بِكُلِّ شَىْءٍ عَلِيمٌۭ",
+        "translation_en": "NO CALAMITY can ever befall [man] unless it be by God's leave: hence, whoever believes in God guides his [own] heart [towards this truth]; and God has full knowledge of everything.",
+        "translation_ur": "کوئی مصیبت نازل نہیں ہوتی مگر خدا کے حکم سے۔ اور جو شخص خدا پر ایمان لاتا ہے وہ اس کے دل کو ہدایت دیتا ہے۔ اور خدا ہر چیز سے باخبر ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/064011.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5210.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5210.mp3"
+        }
+      },
+      {
+        "ayah": 12,
+        "globalAyah": 5211,
+        "arabic": "وَأَطِيعُوا۟ ٱللَّهَ وَأَطِيعُوا۟ ٱلرَّسُولَ ۚ فَإِن تَوَلَّيْتُمْ فَإِنَّمَا عَلَىٰ رَسُولِنَا ٱلْبَلَٰغُ ٱلْمُبِينُ",
+        "translation_en": "Pay heed, then, unto God, and pay heed unto the Apostle; and if you turn away, [know that] Our Apostle's only duty is a clear delivery of this message:",
+        "translation_ur": "اور خدا کی اطاعت کرو اور اس کے رسول کی اطاعت کرو۔ اگر تم منہ پھیر لو گے تو ہمارے پیغمبر کے ذمے تو صرف پیغام کا کھول کھول کر پہنچا دینا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/064012.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5211.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5211.mp3"
+        }
+      },
+      {
+        "ayah": 13,
+        "globalAyah": 5212,
+        "arabic": "ٱللَّهُ لَآ إِلَٰهَ إِلَّا هُوَ ۚ وَعَلَى ٱللَّهِ فَلْيَتَوَكَّلِ ٱلْمُؤْمِنُونَ",
+        "translation_en": "God - there is no deity save Him! In God then let the believers place their trust.",
+        "translation_ur": "خدا (جو معبود برحق ہے اس) کے سوا کوئی عبادت کے لائق نہیں تو مومنوں کو چاہیئے کہ خدا ہی پر بھروسا رکھیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/064013.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5212.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5212.mp3"
+        }
+      },
+      {
+        "ayah": 14,
+        "globalAyah": 5213,
+        "arabic": "يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوٓا۟ إِنَّ مِنْ أَزْوَٰجِكُمْ وَأَوْلَٰدِكُمْ عَدُوًّۭا لَّكُمْ فَٱحْذَرُوهُمْ ۚ وَإِن تَعْفُوا۟ وَتَصْفَحُوا۟ وَتَغْفِرُوا۟ فَإِنَّ ٱللَّهَ غَفُورٌۭ رَّحِيمٌ",
+        "translation_en": "O YOU who have attained to faith! Behold, some of your spouses and your children are enemies unto you: so beware of them! But if you pardon [their faults] and forbear, and forgive-then, behold, God will be much-forgiving, a dispenser of grace.",
+        "translation_ur": "مومنو! تمہاری عورتیں اور اولاد میں سے بعض تمہارے دشمن (بھی) ہیں سو ان سے بچتے رہو۔ اور اگر معاف کردو اور درگزر کرو اور بخش دو تو خدا بھی بخشنے والا مہربان ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/064014.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5213.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5213.mp3"
+        }
+      },
+      {
+        "ayah": 15,
+        "globalAyah": 5214,
+        "arabic": "إِنَّمَآ أَمْوَٰلُكُمْ وَأَوْلَٰدُكُمْ فِتْنَةٌۭ ۚ وَٱللَّهُ عِندَهُۥٓ أَجْرٌ عَظِيمٌۭ",
+        "translation_en": "Your worldly goods and your children are but a trial and a temptation, whereas with God there is a tremendous reward.",
+        "translation_ur": "تمہارا مال اور تمہاری اولاد تو آزمائش ہے۔ اور خدا کے ہاں بڑا اجر ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/064015.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5214.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5214.mp3"
+        }
+      },
+      {
+        "ayah": 16,
+        "globalAyah": 5215,
+        "arabic": "فَٱتَّقُوا۟ ٱللَّهَ مَا ٱسْتَطَعْتُمْ وَٱسْمَعُوا۟ وَأَطِيعُوا۟ وَأَنفِقُوا۟ خَيْرًۭا لِّأَنفُسِكُمْ ۗ وَمَن يُوقَ شُحَّ نَفْسِهِۦ فَأُو۟لَٰٓئِكَ هُمُ ٱلْمُفْلِحُونَ",
+        "translation_en": "Remain, then, conscious of God as best you can, and listen [to Him], and pay heed. And spend in charity for the good of your own selves: for, such as from their own covetousness are saved – it is they, they that shall attain to a happy state!",
+        "translation_ur": "سو جہاں تک ہوسکے خدا سے ڈرو اور (اس کے احکام کو) سنو اور (اس کے) فرمانبردار رہو اور (اس کی راہ میں) خرچ کرو (یہ) تمہارے حق میں بہتر ہے۔ اور جو شخص طبعیت کے بخل سے بچایا گیا تو ایسے ہی لوگ راہ پانے والے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/064016.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5215.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5215.mp3"
+        }
+      },
+      {
+        "ayah": 17,
+        "globalAyah": 5216,
+        "arabic": "إِن تُقْرِضُوا۟ ٱللَّهَ قَرْضًا حَسَنًۭا يُضَٰعِفْهُ لَكُمْ وَيَغْفِرْ لَكُمْ ۚ وَٱللَّهُ شَكُورٌ حَلِيمٌ",
+        "translation_en": "If you offer up to God a goodly loan, He will amply repay you for it, and will forgive you your sins: for God is ever responsive to gratitude, forbearing,",
+        "translation_ur": "اگر تم خدا کو (اخلاص اور نیت) نیک (سے) قرض دو گے تو وہ تم کو اس کا دوچند دے گا اور تمہارے گناہ بھی معاف کردے گا۔ اور خدا قدر شناس اور بردبار ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/064017.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5216.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5216.mp3"
+        }
+      },
+      {
+        "ayah": 18,
+        "globalAyah": 5217,
+        "arabic": "عَٰلِمُ ٱلْغَيْبِ وَٱلشَّهَٰدَةِ ٱلْعَزِيزُ ٱلْحَكِيمُ",
+        "translation_en": "knowing all that is beyond the reach of a created being's perception as well as all that can be witnessed by a creature's senses or mind - the Almighty, the Wise!",
+        "translation_ur": "پوشیدہ اور ظاہر کا جاننے والا غالب اور حکمت والا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/064018.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5217.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5217.mp3"
+        }
+      }
+    ]
+  }
+}

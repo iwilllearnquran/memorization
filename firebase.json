@@ -18,5 +18,8 @@
       "**/node_modules/**",
       "**/.git/**"
     ]
+  },
+  "firestore": {
+    "rules": "firestore.rules"
   }
 }

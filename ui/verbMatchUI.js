@@ -5,16 +5,16 @@ import { VERB_DATA }             from '../verbs_data.js';
 import { initStats, updateStats }from '/ui/gameStatsUI.js'; 
 import { showCompletionPopup }   from '/ui/gameCompletionUI.js';
 import { showGameOverPopup }     from '/ui/gameOverPopup.js';
-import { saveStatsToFirestore, auth } from '/services//_private/firestoreService.js';
-import { addPointsToFirestore } from '../services//_private/firestoreService.js';
 
 const importantStyles = {
-  display:         'flex',
-  'flex-wrap':     'wrap',
-  gap:             '12px',
-  'justify-content':'center',
-  'align-items':   'center',
-  'margin-top':    '8px',
+  display:            'flex',
+  'flex-direction':   'column',
+  'flex-wrap':        'nowrap',
+  gap:                '12px',
+  'justify-content':  'flex-start',
+  'align-items':      'stretch',
+  'margin-top':       '0',
+  width:              '100%',
 };
 
 function applyImportant(el, styles) {
@@ -72,9 +72,9 @@ function renderVerbSet() {
   // 3️⃣ Shuffle helper
   const shuffle = arr => arr.sort(() => 0.5 - Math.random());
 
-  // 4️⃣ Pick 8 pairs and give each a unique ID
+  // 4️⃣ Pick 12 pairs and give each a unique ID
   const selectedPairs = shuffle(allPairs)
-    .slice(0, 8)
+    .slice(0, 10)
     .map(([verb, data], idx) => ({
       id:      idx.toString(),   // unique even if data.meaning duplicates
       verb,
@@ -190,8 +190,8 @@ function _addControls() {
   });
 
   ctr.innerHTML = `
-    <button id="verbNextBtn" class="game-play-btn-verbs disabled-control">More</button>
-    <button id="verbEndBtn"  class="game-play-btn-verbs disabled-control">End</button>
+    <button id="verbNextBtn" class="game-play-btn-verbs disabled-control">Next Round</button>
+    <button id="verbEndBtn"  class="game-play-btn-verbs disabled-control secondary">Finish</button>
   `;
 
     // after
@@ -261,13 +261,7 @@ function _addControls() {
          Your progress is saved locally and will sync once you log in.`
       );
     }**/
-    const earned = gameSession.sessionScore; // ✅ capture BEFORE end
     await gameSession.end(true);
-    window.parent.postMessage({
-      type: 'persistStats',
-      score: gameSession.sessionScore,  // total earned this session
-      recordStreak: false                // ask them to record today’s streak too
-    }, '*');
    // window.parent.postMessage({
    //   type: 'streakUpdate',
    //   date: new Date().toISOString().split('T')[0]

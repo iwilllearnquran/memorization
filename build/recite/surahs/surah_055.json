@@ -1,0 +1,949 @@
+{
+  "generatedAt": "2026-02-14T12:15:04.085000+00:00",
+  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "surah": {
+    "surah": 55,
+    "arabicName": "سُورَةُ الرَّحۡمَٰن",
+    "englishName": "Ar-Rahmaan",
+    "englishNameTranslation": "The Beneficent",
+    "ayahCount": 78,
+    "ayahs": [
+      {
+        "ayah": 1,
+        "globalAyah": 4902,
+        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ٱلرَّحْمَٰنُ",
+        "translation_en": "THE MOST GRACIOUS",
+        "translation_ur": "(خدا جو) نہایت مہربان",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055001.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4902.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4902.mp3"
+        }
+      },
+      {
+        "ayah": 2,
+        "globalAyah": 4903,
+        "arabic": "عَلَّمَ ٱلْقُرْءَانَ",
+        "translation_en": "has imparted this Qur’an [unto man].",
+        "translation_ur": "اسی نے قرآن کی تعلیم فرمائی",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055002.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4903.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4903.mp3"
+        }
+      },
+      {
+        "ayah": 3,
+        "globalAyah": 4904,
+        "arabic": "خَلَقَ ٱلْإِنسَٰنَ",
+        "translation_en": "He has created man:",
+        "translation_ur": "اسی نے انسان کو پیدا کیا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055003.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4904.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4904.mp3"
+        }
+      },
+      {
+        "ayah": 4,
+        "globalAyah": 4905,
+        "arabic": "عَلَّمَهُ ٱلْبَيَانَ",
+        "translation_en": "He has imparted unto him articulate thought and speech.",
+        "translation_ur": "اسی نے اس کو بولنا سکھایا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055004.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4905.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4905.mp3"
+        }
+      },
+      {
+        "ayah": 5,
+        "globalAyah": 4906,
+        "arabic": "ٱلشَّمْسُ وَٱلْقَمَرُ بِحُسْبَانٍۢ",
+        "translation_en": "[At His behest] the sun and the moon run their appointed courses;",
+        "translation_ur": "سورج اور چاند ایک حساب مقرر سے چل رہے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055005.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4906.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4906.mp3"
+        }
+      },
+      {
+        "ayah": 6,
+        "globalAyah": 4907,
+        "arabic": "وَٱلنَّجْمُ وَٱلشَّجَرُ يَسْجُدَانِ",
+        "translation_en": "[before Him] prostrate them­selves the stars and the trees.",
+        "translation_ur": "اور بوٹیاں اور درخت سجدہ کر رہے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055006.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4907.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4907.mp3"
+        }
+      },
+      {
+        "ayah": 7,
+        "globalAyah": 4908,
+        "arabic": "وَٱلسَّمَآءَ رَفَعَهَا وَوَضَعَ ٱلْمِيزَانَ",
+        "translation_en": "And the skies has He raised high, and has devised [for all things] a measure,",
+        "translation_ur": "اور اسی نے آسمان کو بلند کیا اور ترازو قائم کی",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055007.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4908.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4908.mp3"
+        }
+      },
+      {
+        "ayah": 8,
+        "globalAyah": 4909,
+        "arabic": "أَلَّا تَطْغَوْا۟ فِى ٱلْمِيزَانِ",
+        "translation_en": "so that you [too, O men,] might never transgress the measure [of what is right]:",
+        "translation_ur": "کہ ترازو (سے تولنے) میں حد سے تجاوز نہ کرو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055008.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4909.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4909.mp3"
+        }
+      },
+      {
+        "ayah": 9,
+        "globalAyah": 4910,
+        "arabic": "وَأَقِيمُوا۟ ٱلْوَزْنَ بِٱلْقِسْطِ وَلَا تُخْسِرُوا۟ ٱلْمِيزَانَ",
+        "translation_en": "weigh, therefore, [your deeds] with equity, and cut not the measure short!",
+        "translation_ur": "اور انصاف کے ساتھ ٹھیک تولو۔ اور تول کم مت کرو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055009.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4910.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4910.mp3"
+        }
+      },
+      {
+        "ayah": 10,
+        "globalAyah": 4911,
+        "arabic": "وَٱلْأَرْضَ وَضَعَهَا لِلْأَنَامِ",
+        "translation_en": "And the earth has He spread out for all living beings,",
+        "translation_ur": "اور اسی نے خلقت کے لئے زمین بچھائی",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055010.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4911.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4911.mp3"
+        }
+      },
+      {
+        "ayah": 11,
+        "globalAyah": 4912,
+        "arabic": "فِيهَا فَٰكِهَةٌۭ وَٱلنَّخْلُ ذَاتُ ٱلْأَكْمَامِ",
+        "translation_en": "with fruit thereon, and palm trees with sheathed clusters [of dates],",
+        "translation_ur": "اس میں میوے اور کھجور کے درخت ہیں جن کے خوشوں پر غلاف ہوتے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055011.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4912.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4912.mp3"
+        }
+      },
+      {
+        "ayah": 12,
+        "globalAyah": 4913,
+        "arabic": "وَٱلْحَبُّ ذُو ٱلْعَصْفِ وَٱلرَّيْحَانُ",
+        "translation_en": "and grain growing tall on its stalks, and sweet-smelling plants.",
+        "translation_ur": "اور اناج جس کے ساتھ بھس ہوتا ہے اور خوشبودار پھول",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055012.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4913.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4913.mp3"
+        }
+      },
+      {
+        "ayah": 13,
+        "globalAyah": 4914,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sustainer’s powers can you disavow?",
+        "translation_ur": "تو (اے گروہ جن وانس) تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055013.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4914.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4914.mp3"
+        }
+      },
+      {
+        "ayah": 14,
+        "globalAyah": 4915,
+        "arabic": "خَلَقَ ٱلْإِنسَٰنَ مِن صَلْصَٰلٍۢ كَٱلْفَخَّارِ",
+        "translation_en": "He has created man out of sounding clay, like pottery,",
+        "translation_ur": "اسی نے انسان کو ٹھیکرے کی طرح کھنکھناتی مٹی سے بنایا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055014.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4915.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4915.mp3"
+        }
+      },
+      {
+        "ayah": 15,
+        "globalAyah": 4916,
+        "arabic": "وَخَلَقَ ٱلْجَآنَّ مِن مَّارِجٍۢ مِّن نَّارٍۢ",
+        "translation_en": "whereas the invisible beings He has created out of a confusing flame of fire.",
+        "translation_ur": "اور جنات کو آگ کے شعلے سے پیدا کیا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055015.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4916.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4916.mp3"
+        }
+      },
+      {
+        "ayah": 16,
+        "globalAyah": 4917,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sustainer’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055016.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4917.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4917.mp3"
+        }
+      },
+      {
+        "ayah": 17,
+        "globalAyah": 4918,
+        "arabic": "رَبُّ ٱلْمَشْرِقَيْنِ وَرَبُّ ٱلْمَغْرِبَيْنِ",
+        "translation_en": "[He is] the Sustainer of the two farthest points of sunrise, and the Sustainer of the two farthest points of sunset.",
+        "translation_ur": "وہی دونوں مشرقوں اور دونوں مغربوں کا مالک (ہے)",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055017.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4918.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4918.mp3"
+        }
+      },
+      {
+        "ayah": 18,
+        "globalAyah": 4919,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sustain­er’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055018.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4919.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4919.mp3"
+        }
+      },
+      {
+        "ayah": 19,
+        "globalAyah": 4920,
+        "arabic": "مَرَجَ ٱلْبَحْرَيْنِ يَلْتَقِيَانِ",
+        "translation_en": "He has given freedom to the two great bodies of water, so that they might meet:",
+        "translation_ur": "اسی نے دو دریا رواں کئے جو آپس میں ملتے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055019.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4920.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4920.mp3"
+        }
+      },
+      {
+        "ayah": 20,
+        "globalAyah": 4921,
+        "arabic": "بَيْنَهُمَا بَرْزَخٌۭ لَّا يَبْغِيَانِ",
+        "translation_en": "[yet] between them is a barrier which they may not transgress.",
+        "translation_ur": "دونوں میں ایک آڑ ہے کہ (اس سے) تجاوز نہیں کرسکتے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055020.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4921.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4921.mp3"
+        }
+      },
+      {
+        "ayah": 21,
+        "globalAyah": 4922,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sustainer’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055021.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4922.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4922.mp3"
+        }
+      },
+      {
+        "ayah": 22,
+        "globalAyah": 4923,
+        "arabic": "يَخْرُجُ مِنْهُمَا ٱللُّؤْلُؤُ وَٱلْمَرْجَانُ",
+        "translation_en": "Out of these two [bodies of water] come forth pearls, both great and small.",
+        "translation_ur": "دونوں دریاؤں سے موتی اور مونگے نکلتے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055022.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4923.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4923.mp3"
+        }
+      },
+      {
+        "ayah": 23,
+        "globalAyah": 4924,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sustainer’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055023.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4924.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4924.mp3"
+        }
+      },
+      {
+        "ayah": 24,
+        "globalAyah": 4925,
+        "arabic": "وَلَهُ ٱلْجَوَارِ ٱلْمُنشَـَٔاتُ فِى ٱلْبَحْرِ كَٱلْأَعْلَٰمِ",
+        "translation_en": "And His are the lofty ships that sail like [floating] mountains through the seas.",
+        "translation_ur": "اور جہاز بھی اسی کے ہیں جو دریا میں پہاڑوں کی طرح اونچے کھڑے ہوتے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055024.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4925.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4925.mp3"
+        }
+      },
+      {
+        "ayah": 25,
+        "globalAyah": 4926,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sustainer’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055025.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4926.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4926.mp3"
+        }
+      },
+      {
+        "ayah": 26,
+        "globalAyah": 4927,
+        "arabic": "كُلُّ مَنْ عَلَيْهَا فَانٍۢ",
+        "translation_en": "All that lives on earth or in the heavens is bound to pass away:",
+        "translation_ur": "جو (مخلوق) زمین پر ہے سب کو فنا ہونا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055026.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4927.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4927.mp3"
+        }
+      },
+      {
+        "ayah": 27,
+        "globalAyah": 4928,
+        "arabic": "وَيَبْقَىٰ وَجْهُ رَبِّكَ ذُو ٱلْجَلَٰلِ وَٱلْإِكْرَامِ",
+        "translation_en": "but forever will abide thy Sustainer’s Self, full of majesty and glory.",
+        "translation_ur": "اور تمہارے پروردگار ہی کی ذات (بابرکات) جو صاحب جلال وعظمت ہے باقی رہے گی",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055027.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4928.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4928.mp3"
+        }
+      },
+      {
+        "ayah": 28,
+        "globalAyah": 4929,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sustainer’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055028.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4929.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4929.mp3"
+        }
+      },
+      {
+        "ayah": 29,
+        "globalAyah": 4930,
+        "arabic": "يَسْـَٔلُهُۥ مَن فِى ٱلسَّمَٰوَٰتِ وَٱلْأَرْضِ ۚ كُلَّ يَوْمٍ هُوَ فِى شَأْنٍۢ",
+        "translation_en": "On Him depends all creatures in the heavens and on earth; [and] every day He manifests Himself in yet another [wondrous] way.",
+        "translation_ur": "آسمان اور زمین میں جتنے لوگ ہیں سب اسی سے مانگتے ہیں۔ وہ ہر روز کام میں مصروف رہتا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055029.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4930.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4930.mp3"
+        }
+      },
+      {
+        "ayah": 30,
+        "globalAyah": 4931,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sustainer’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055030.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4931.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4931.mp3"
+        }
+      },
+      {
+        "ayah": 31,
+        "globalAyah": 4932,
+        "arabic": "سَنَفْرُغُ لَكُمْ أَيُّهَ ٱلثَّقَلَانِ",
+        "translation_en": "[ONE DAY] We shall take you to task, O you sin-laden two!",
+        "translation_ur": "اے دونوں جماعتو! ہم عنقریب تمہاری طرف متوجہ ہوتے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055031.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4932.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4932.mp3"
+        }
+      },
+      {
+        "ayah": 32,
+        "globalAyah": 4933,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sustainer’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055032.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4933.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4933.mp3"
+        }
+      },
+      {
+        "ayah": 33,
+        "globalAyah": 4934,
+        "arabic": "يَٰمَعْشَرَ ٱلْجِنِّ وَٱلْإِنسِ إِنِ ٱسْتَطَعْتُمْ أَن تَنفُذُوا۟ مِنْ أَقْطَارِ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضِ فَٱنفُذُوا۟ ۚ لَا تَنفُذُونَ إِلَّا بِسُلْطَٰنٍۢ",
+        "translation_en": "O you who live in close communion with [evil] invisible beings and humans! If you [think that you] can pass beyond the regions of the heavens and the earth, pass beyond them! [But] you cannot pass beyond them, save by a sanction [from God]!",
+        "translation_ur": "اے گروہِ جن وانس اگر تمہیں قدرت ہو کہ آسمان اور زمین کے کناروں سے نکل جاؤ تو نکل جاؤ۔ اور زور کے سوا تم نکل سکنے ہی کے نہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055033.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4934.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4934.mp3"
+        }
+      },
+      {
+        "ayah": 34,
+        "globalAyah": 4935,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sustainer’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055034.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4935.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4935.mp3"
+        }
+      },
+      {
+        "ayah": 35,
+        "globalAyah": 4936,
+        "arabic": "يُرْسَلُ عَلَيْكُمَا شُوَاظٌۭ مِّن نَّارٍۢ وَنُحَاسٌۭ فَلَا تَنتَصِرَانِ",
+        "translation_en": "A flash of fire will be let loose upon you, and smoke, and you will be left without succour!",
+        "translation_ur": "تم پر آگ کے شعلے اور دھواں چھوڑ دیا جائے گا تو پھر تم مقابلہ نہ کرسکو گے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055035.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4936.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4936.mp3"
+        }
+      },
+      {
+        "ayah": 36,
+        "globalAyah": 4937,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sustainer’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055036.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4937.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4937.mp3"
+        }
+      },
+      {
+        "ayah": 37,
+        "globalAyah": 4938,
+        "arabic": "فَإِذَا ٱنشَقَّتِ ٱلسَّمَآءُ فَكَانَتْ وَرْدَةًۭ كَٱلدِّهَانِ",
+        "translation_en": "And when the sky is rent asunder and becomes red like [burning] oil",
+        "translation_ur": "پھر جب آسمان پھٹ کر تیل کی تلچھٹ کی طرح گلابی ہوجائے گا (تو) وہ کیسا ہولناک دن ہوگا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055037.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4938.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4938.mp3"
+        }
+      },
+      {
+        "ayah": 38,
+        "globalAyah": 4939,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "which, then, of your Sustainer’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055038.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4939.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4939.mp3"
+        }
+      },
+      {
+        "ayah": 39,
+        "globalAyah": 4940,
+        "arabic": "فَيَوْمَئِذٍۢ لَّا يُسْـَٔلُ عَن ذَنۢبِهِۦٓ إِنسٌۭ وَلَا جَآنٌّۭ",
+        "translation_en": "For on that Day neither man nor invisible being will be asked about his sins.",
+        "translation_ur": "اس روز نہ تو کسی انسان سے اس کے گناہوں کے بارے میں پرسش کی جائے گی اور نہ کسی جن سے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055039.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4940.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4940.mp3"
+        }
+      },
+      {
+        "ayah": 40,
+        "globalAyah": 4941,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sustainer’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055040.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4941.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4941.mp3"
+        }
+      },
+      {
+        "ayah": 41,
+        "globalAyah": 4942,
+        "arabic": "يُعْرَفُ ٱلْمُجْرِمُونَ بِسِيمَٰهُمْ فَيُؤْخَذُ بِٱلنَّوَٰصِى وَٱلْأَقْدَامِ",
+        "translation_en": "All who were lost in sin shall by their marks be known, and shall by their forelocks and their feet be seized!",
+        "translation_ur": "گنہگار اپنے چہرے ہی سے پہچان لئے جائیں گے تو پیشانی کے بالوں اور پاؤں سے پکڑ لئے جائیں گے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055041.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4942.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4942.mp3"
+        }
+      },
+      {
+        "ayah": 42,
+        "globalAyah": 4943,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sustainer’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055042.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4943.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4943.mp3"
+        }
+      },
+      {
+        "ayah": 43,
+        "globalAyah": 4944,
+        "arabic": "هَٰذِهِۦ جَهَنَّمُ ٱلَّتِى يُكَذِّبُ بِهَا ٱلْمُجْرِمُونَ",
+        "translation_en": "This will be the hell which those who are lost in sin [now] call a lie:",
+        "translation_ur": "یہی وہ جہنم ہے جسے گنہگار لوگ جھٹلاتے تھے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055043.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4944.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4944.mp3"
+        }
+      },
+      {
+        "ayah": 44,
+        "globalAyah": 4945,
+        "arabic": "يَطُوفُونَ بَيْنَهَا وَبَيْنَ حَمِيمٍ ءَانٍۢ",
+        "translation_en": "between it and [their own] burning-hot despair will they wander to and fro!",
+        "translation_ur": "وہ دوزخ اور کھولتے ہوئے گرم پانی کے درمیان گھومتے پھریں گے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055044.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4945.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4945.mp3"
+        }
+      },
+      {
+        "ayah": 45,
+        "globalAyah": 4946,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sustainer’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055045.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4946.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4946.mp3"
+        }
+      },
+      {
+        "ayah": 46,
+        "globalAyah": 4947,
+        "arabic": "وَلِمَنْ خَافَ مَقَامَ رَبِّهِۦ جَنَّتَانِ",
+        "translation_en": "BUT FOR THOSE who of their Sustainer’s Presence stand in fear, two gardens [of paradise are readied] -",
+        "translation_ur": "اور جو شخص اپنے پروردگار کے سامنے کھڑے ہونے سے ڈرا اس کے لئے دو باغ ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055046.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4947.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4947.mp3"
+        }
+      },
+      {
+        "ayah": 47,
+        "globalAyah": 4948,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "which, then, of your Sustainer’s powers can you disavow? –",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055047.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4948.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4948.mp3"
+        }
+      },
+      {
+        "ayah": 48,
+        "globalAyah": 4949,
+        "arabic": "ذَوَاتَآ أَفْنَانٍۢ",
+        "translation_en": "[two gardens] of many wondrous hues.",
+        "translation_ur": "ان دونوں میں بہت سی شاخیں (یعنی قسم قسم کے میووں کے درخت ہیں)",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055048.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4949.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4949.mp3"
+        }
+      },
+      {
+        "ayah": 49,
+        "globalAyah": 4950,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sustainer’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055049.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4950.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4950.mp3"
+        }
+      },
+      {
+        "ayah": 50,
+        "globalAyah": 4951,
+        "arabic": "فِيهِمَا عَيْنَانِ تَجْرِيَانِ",
+        "translation_en": "In [each of] these two [gardens] two springs will flow.",
+        "translation_ur": "ان میں دو چشمے بہہ رہے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055050.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4951.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4951.mp3"
+        }
+      },
+      {
+        "ayah": 51,
+        "globalAyah": 4952,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sustainer’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055051.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4952.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4952.mp3"
+        }
+      },
+      {
+        "ayah": 52,
+        "globalAyah": 4953,
+        "arabic": "فِيهِمَا مِن كُلِّ فَٰكِهَةٍۢ زَوْجَانِ",
+        "translation_en": "In [each of] these two will two kinds of every fruit be [found].",
+        "translation_ur": "ان میں سب میوے دو دو قسم کے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055052.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4953.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4953.mp3"
+        }
+      },
+      {
+        "ayah": 53,
+        "globalAyah": 4954,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sustainer s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055053.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4954.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4954.mp3"
+        }
+      },
+      {
+        "ayah": 54,
+        "globalAyah": 4955,
+        "arabic": "مُتَّكِـِٔينَ عَلَىٰ فُرُشٍۭ بَطَآئِنُهَا مِنْ إِسْتَبْرَقٍۢ ۚ وَجَنَى ٱلْجَنَّتَيْنِ دَانٍۢ",
+        "translation_en": "[In such a paradise the blest will dwell,] reclin­ing upon carpets lined with rich brocade; and the fruit of both these gardens will be within easy reach.",
+        "translation_ur": "(اہل جنت) ایسے بچھونوں پر جن کے استرا طلس کے ہیں تکیہ لگائے ہوئے ہوں گے۔ اور دونوں باغوں کے میوے قریب (جھک رہے) ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055054.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4955.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4955.mp3"
+        }
+      },
+      {
+        "ayah": 55,
+        "globalAyah": 4956,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sustainer’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055055.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4956.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4956.mp3"
+        }
+      },
+      {
+        "ayah": 56,
+        "globalAyah": 4957,
+        "arabic": "فِيهِنَّ قَٰصِرَٰتُ ٱلطَّرْفِ لَمْ يَطْمِثْهُنَّ إِنسٌۭ قَبْلَهُمْ وَلَا جَآنٌّۭ",
+        "translation_en": "In these [gardens] will be mates of modest gaze, whom neither man nor invisible being will have touched ere then.",
+        "translation_ur": "ان میں نیچی نگاہ والی عورتیں ہیں جن کو اہل جنت سے پہلے نہ کسی انسان نے ہاتھ لگایا اور نہ کسی جن نے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055056.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4957.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4957.mp3"
+        }
+      },
+      {
+        "ayah": 57,
+        "globalAyah": 4958,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sus­tainer’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055057.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4958.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4958.mp3"
+        }
+      },
+      {
+        "ayah": 58,
+        "globalAyah": 4959,
+        "arabic": "كَأَنَّهُنَّ ٱلْيَاقُوتُ وَٱلْمَرْجَانُ",
+        "translation_en": "[When you are promised splendours] as though [of] rubies and [of] pearls –",
+        "translation_ur": "گویا وہ یاقوت اور مرجان ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055058.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4959.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4959.mp3"
+        }
+      },
+      {
+        "ayah": 59,
+        "globalAyah": 4960,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "which, then, of your Sustainer’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055059.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4960.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4960.mp3"
+        }
+      },
+      {
+        "ayah": 60,
+        "globalAyah": 4961,
+        "arabic": "هَلْ جَزَآءُ ٱلْإِحْسَٰنِ إِلَّا ٱلْإِحْسَٰنُ",
+        "translation_en": "Could the reward of good be aught but good?",
+        "translation_ur": "نیکی کا بدلہ نیکی کے سوا کچھ نہیں ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055060.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4961.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4961.mp3"
+        }
+      },
+      {
+        "ayah": 61,
+        "globalAyah": 4962,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sustainer’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055061.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4962.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4962.mp3"
+        }
+      },
+      {
+        "ayah": 62,
+        "globalAyah": 4963,
+        "arabic": "وَمِن دُونِهِمَا جَنَّتَانِ",
+        "translation_en": "And besides those two will be yet two [other] gardens -",
+        "translation_ur": "اور ان باغوں کے علاوہ دو باغ اور ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055062.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4963.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4963.mp3"
+        }
+      },
+      {
+        "ayah": 63,
+        "globalAyah": 4964,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "which, then, of your Sustainer’s powers can you disavow? –",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055063.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4964.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4964.mp3"
+        }
+      },
+      {
+        "ayah": 64,
+        "globalAyah": 4965,
+        "arabic": "مُدْهَآمَّتَانِ",
+        "translation_en": "two [gardens] of the deepest green.",
+        "translation_ur": "دونوں خوب گہرے سبز",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055064.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4965.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4965.mp3"
+        }
+      },
+      {
+        "ayah": 65,
+        "globalAyah": 4966,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sustainer’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055065.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4966.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4966.mp3"
+        }
+      },
+      {
+        "ayah": 66,
+        "globalAyah": 4967,
+        "arabic": "فِيهِمَا عَيْنَانِ نَضَّاخَتَانِ",
+        "translation_en": "In [each of] these two [gardens] will two springs gush forth.",
+        "translation_ur": "ان میں دو چشمے ابل رہے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055066.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4967.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4967.mp3"
+        }
+      },
+      {
+        "ayah": 67,
+        "globalAyah": 4968,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sus­tainer’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055067.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4968.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4968.mp3"
+        }
+      },
+      {
+        "ayah": 68,
+        "globalAyah": 4969,
+        "arabic": "فِيهِمَا فَٰكِهَةٌۭ وَنَخْلٌۭ وَرُمَّانٌۭ",
+        "translation_en": "In both of them will be [all kinds of] fruit, and date-palms and pomegranates.",
+        "translation_ur": "ان میں میوے اور کھجوریں اور انار ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055068.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4969.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4969.mp3"
+        }
+      },
+      {
+        "ayah": 69,
+        "globalAyah": 4970,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sustainer’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055069.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4970.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4970.mp3"
+        }
+      },
+      {
+        "ayah": 70,
+        "globalAyah": 4971,
+        "arabic": "فِيهِنَّ خَيْرَٰتٌ حِسَانٌۭ",
+        "translation_en": "In these [gardens] will be [all] things most excellent and beautiful.",
+        "translation_ur": "ان میں نیک سیرت (اور) خوبصورت عورتیں ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055070.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4971.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4971.mp3"
+        }
+      },
+      {
+        "ayah": 71,
+        "globalAyah": 4972,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sustainer’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055071.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4972.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4972.mp3"
+        }
+      },
+      {
+        "ayah": 72,
+        "globalAyah": 4973,
+        "arabic": "حُورٌۭ مَّقْصُورَٰتٌۭ فِى ٱلْخِيَامِ",
+        "translation_en": "[There the blest will live with their] companions pure and modest, in pavilions [splendid] -",
+        "translation_ur": "(وہ) حوریں (ہیں جو) خیموں میں مستور (ہیں)",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055072.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4973.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4973.mp3"
+        }
+      },
+      {
+        "ayah": 73,
+        "globalAyah": 4974,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "which, then, of your Sustainer’s powers can you disavow? –",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055073.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4974.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4974.mp3"
+        }
+      },
+      {
+        "ayah": 74,
+        "globalAyah": 4975,
+        "arabic": "لَمْ يَطْمِثْهُنَّ إِنسٌۭ قَبْلَهُمْ وَلَا جَآنٌّۭ",
+        "translation_en": "[companions] whom neither man nor invisible being will have touched ere then.",
+        "translation_ur": "ان کو اہل جنت سے پہلے نہ کسی انسان نے ہاتھ لگایا اور نہ کسی جن نے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055074.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4975.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4975.mp3"
+        }
+      },
+      {
+        "ayah": 75,
+        "globalAyah": 4976,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sustainer’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055075.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4976.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4976.mp3"
+        }
+      },
+      {
+        "ayah": 76,
+        "globalAyah": 4977,
+        "arabic": "مُتَّكِـِٔينَ عَلَىٰ رَفْرَفٍ خُضْرٍۢ وَعَبْقَرِىٍّ حِسَانٍۢ",
+        "translation_en": "[In such a paradise will they dwell,] reclining upon meadows green and carpets rich in beauty.",
+        "translation_ur": "سبز قالینوں اور نفیس مسندوں پر تکیہ لگائے بیٹھے ہوں گے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055076.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4977.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4977.mp3"
+        }
+      },
+      {
+        "ayah": 77,
+        "globalAyah": 4978,
+        "arabic": "فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
+        "translation_en": "Which, then, of your Sustainer’s powers can you disavow?",
+        "translation_ur": "تو تم اپنے پروردگار کی کون کون سی نعمت کو جھٹلاؤ گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055077.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4978.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4978.mp3"
+        }
+      },
+      {
+        "ayah": 78,
+        "globalAyah": 4979,
+        "arabic": "تَبَٰرَكَ ٱسْمُ رَبِّكَ ذِى ٱلْجَلَٰلِ وَٱلْإِكْرَامِ",
+        "translation_en": "HALLOWED be thy Sustainer’s name, full of majesty and glory!",
+        "translation_ur": "(اے محمدﷺ) تمہارا پروردگار جو صاحب جلال وعظمت ہے اس کا نام بڑا بابرکت ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/055078.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4979.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4979.mp3"
+        }
+      }
+    ]
+  }
+}

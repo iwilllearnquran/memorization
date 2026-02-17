@@ -1,0 +1,277 @@
+{
+  "generatedAt": "2026-02-14T12:15:20.757339+00:00",
+  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "surah": {
+    "surah": 85,
+    "arabicName": "سُورَةُ البُرُوجِ",
+    "englishName": "Al-Burooj",
+    "englishNameTranslation": "The Constellations",
+    "ayahCount": 22,
+    "ayahs": [
+      {
+        "ayah": 1,
+        "globalAyah": 5910,
+        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ وَٱلسَّمَآءِ ذَاتِ ٱلْبُرُوجِ",
+        "translation_en": "CONSIDER the sky full of great constellations,",
+        "translation_ur": "آسمان کی قسم جس میں برج ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/085001.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5910.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5910.mp3"
+        }
+      },
+      {
+        "ayah": 2,
+        "globalAyah": 5911,
+        "arabic": "وَٱلْيَوْمِ ٱلْمَوْعُودِ",
+        "translation_en": "and [then bethink thyself of] the promised Day,",
+        "translation_ur": "اور اس دن کی جس کا وعدہ ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/085002.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5911.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5911.mp3"
+        }
+      },
+      {
+        "ayah": 3,
+        "globalAyah": 5912,
+        "arabic": "وَشَاهِدٍۢ وَمَشْهُودٍۢ",
+        "translation_en": "and [of] Him who witnesses [all], and [of] that unto which witness is borne [by Him]!",
+        "translation_ur": "اور حاضر ہونے والے کی اور جو اس کے پاس حاضر کیا جائے اسکی",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/085003.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5912.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5912.mp3"
+        }
+      },
+      {
+        "ayah": 4,
+        "globalAyah": 5913,
+        "arabic": "قُتِلَ أَصْحَٰبُ ٱلْأُخْدُودِ",
+        "translation_en": "THEY DESTROY [but] themselves, they who would ready a pit",
+        "translation_ur": "کہ خندقوں (کے کھودنے) والے ہلاک کر دیئے گئے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/085004.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5913.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5913.mp3"
+        }
+      },
+      {
+        "ayah": 5,
+        "globalAyah": 5914,
+        "arabic": "ٱلنَّارِ ذَاتِ ٱلْوَقُودِ",
+        "translation_en": "of fire fiercely burning [for all who have attained to faith]!",
+        "translation_ur": "(یعنی) آگ (کی خندقیں) جس میں ایندھن (جھونک رکھا) تھا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/085005.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5914.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5914.mp3"
+        }
+      },
+      {
+        "ayah": 6,
+        "globalAyah": 5915,
+        "arabic": "إِذْ هُمْ عَلَيْهَا قُعُودٌۭ",
+        "translation_en": "Lo! [With glee do] they contemplate that [fire],",
+        "translation_ur": "جب کہ وہ ان (کے کناروں) پر بیٹھے ہوئے تھے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/085006.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5915.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5915.mp3"
+        }
+      },
+      {
+        "ayah": 7,
+        "globalAyah": 5916,
+        "arabic": "وَهُمْ عَلَىٰ مَا يَفْعَلُونَ بِٱلْمُؤْمِنِينَ شُهُودٌۭ",
+        "translation_en": "fully conscious of what they are doing to the believers,",
+        "translation_ur": "اور جو (سختیاں) اہل ایمان پر کر رہے تھے ان کو سامنے دیکھ رہے تھے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/085007.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5916.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5916.mp3"
+        }
+      },
+      {
+        "ayah": 8,
+        "globalAyah": 5917,
+        "arabic": "وَمَا نَقَمُوا۟ مِنْهُمْ إِلَّآ أَن يُؤْمِنُوا۟ بِٱللَّهِ ٱلْعَزِيزِ ٱلْحَمِيدِ",
+        "translation_en": "whom they hate for no other reason than that they believe in God, the Almighty, the One to whom all praise is due,",
+        "translation_ur": "ان کو مومنوں کی یہی بات بری لگتی تھی کہ وہ خدا پر ایمان لائے ہوئے تھے جو غالب (اور) قابل ستائش ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/085008.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5917.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5917.mp3"
+        }
+      },
+      {
+        "ayah": 9,
+        "globalAyah": 5918,
+        "arabic": "ٱلَّذِى لَهُۥ مُلْكُ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضِ ۚ وَٱللَّهُ عَلَىٰ كُلِّ شَىْءٍۢ شَهِيدٌ",
+        "translation_en": "[and] to whom the dominion of the heavens and the earth belongs. But God is witness unto everything!",
+        "translation_ur": "وہی جس کی آسمانوں اور زمین میں بادشاہت ہے۔ اور خدا ہر چیز سے واقف ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/085009.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5918.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5918.mp3"
+        }
+      },
+      {
+        "ayah": 10,
+        "globalAyah": 5919,
+        "arabic": "إِنَّ ٱلَّذِينَ فَتَنُوا۟ ٱلْمُؤْمِنِينَ وَٱلْمُؤْمِنَٰتِ ثُمَّ لَمْ يَتُوبُوا۟ فَلَهُمْ عَذَابُ جَهَنَّمَ وَلَهُمْ عَذَابُ ٱلْحَرِيقِ",
+        "translation_en": "Verily, as for those who persecute believing men and believing women, and thereafter do not repent, hell's suffering awaits them: yea, suffering through fire awaits them!",
+        "translation_ur": "جن لوگوں نے مومن مردوں اور مومن عورتوں کو تکلیفیں دیں اور توبہ نہ کی ان کو دوزخ کا (اور) عذاب بھی ہوگا اور جلنے کا عذاب بھی ہوگا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/085010.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5919.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5919.mp3"
+        }
+      },
+      {
+        "ayah": 11,
+        "globalAyah": 5920,
+        "arabic": "إِنَّ ٱلَّذِينَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّٰلِحَٰتِ لَهُمْ جَنَّٰتٌۭ تَجْرِى مِن تَحْتِهَا ٱلْأَنْهَٰرُ ۚ ذَٰلِكَ ٱلْفَوْزُ ٱلْكَبِيرُ",
+        "translation_en": "[But,] verily, they who attain to faith and do righteous deeds shall [in the life to come] have gardens through which running waters flow - that triumph most great!",
+        "translation_ur": "(اور) جو لوگ ایمان لائے اور نیک کام کرتے رہے ان کے لیے باغات ہیں جن کے نیچے نہریں بہہ رہی ہیں۔ یہ ہی بڑی کامیابی ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/085011.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5920.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5920.mp3"
+        }
+      },
+      {
+        "ayah": 12,
+        "globalAyah": 5921,
+        "arabic": "إِنَّ بَطْشَ رَبِّكَ لَشَدِيدٌ",
+        "translation_en": "VERILY, thy Sustainer's grip is exceedingly strong!",
+        "translation_ur": "بےشک تمہارے پروردگار کی پکڑ بڑی سخت ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/085012.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5921.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5921.mp3"
+        }
+      },
+      {
+        "ayah": 13,
+        "globalAyah": 5922,
+        "arabic": "إِنَّهُۥ هُوَ يُبْدِئُ وَيُعِيدُ",
+        "translation_en": "Behold, it is He who creates [man] in the first instance, and He [it is who] will bring him forth anew.",
+        "translation_ur": "وہی پہلی دفعہ پیدا کرتا ہے اور وہی دوبارہ (زندہ) کرے گا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/085013.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5922.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5922.mp3"
+        }
+      },
+      {
+        "ayah": 14,
+        "globalAyah": 5923,
+        "arabic": "وَهُوَ ٱلْغَفُورُ ٱلْوَدُودُ",
+        "translation_en": "And He alone is truly-forgiving, all-embracing in His love,",
+        "translation_ur": "اور وہ بخشنے والا اور محبت کرنے والا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/085014.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5923.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5923.mp3"
+        }
+      },
+      {
+        "ayah": 15,
+        "globalAyah": 5924,
+        "arabic": "ذُو ٱلْعَرْشِ ٱلْمَجِيدُ",
+        "translation_en": "in sublime almightiness enthroned,",
+        "translation_ur": "عرش کا مالک بڑی شان والا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/085015.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5924.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5924.mp3"
+        }
+      },
+      {
+        "ayah": 16,
+        "globalAyah": 5925,
+        "arabic": "فَعَّالٌۭ لِّمَا يُرِيدُ",
+        "translation_en": "a sovereign doer of whatever He wills.",
+        "translation_ur": "جو چاہتا ہے کر دیتا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/085016.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5925.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5925.mp3"
+        }
+      },
+      {
+        "ayah": 17,
+        "globalAyah": 5926,
+        "arabic": "هَلْ أَتَىٰكَ حَدِيثُ ٱلْجُنُودِ",
+        "translation_en": "HAS IT ever come within thy ken, the story of the [sinful] hosts",
+        "translation_ur": "بھلا تم کو لشکروں کا حال معلوم ہوا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/085017.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5926.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5926.mp3"
+        }
+      },
+      {
+        "ayah": 18,
+        "globalAyah": 5927,
+        "arabic": "فِرْعَوْنَ وَثَمُودَ",
+        "translation_en": "of Pharaoh, and of [the tribe of] Thamud?",
+        "translation_ur": "(یعنی) فرعون اور ثمود کا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/085018.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5927.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5927.mp3"
+        }
+      },
+      {
+        "ayah": 19,
+        "globalAyah": 5928,
+        "arabic": "بَلِ ٱلَّذِينَ كَفَرُوا۟ فِى تَكْذِيبٍۢ",
+        "translation_en": "And yet, they who are bent on denying the truth persist in giving it the lie:",
+        "translation_ur": "لیکن کافر (جان بوجھ کر) تکذیب میں (گرفتار) ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/085019.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5928.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5928.mp3"
+        }
+      },
+      {
+        "ayah": 20,
+        "globalAyah": 5929,
+        "arabic": "وَٱللَّهُ مِن وَرَآئِهِم مُّحِيطٌۢ",
+        "translation_en": "but all the while God encompasses them [with His knowledge and might] without their being aware of it.",
+        "translation_ur": "اور خدا (بھی) ان کو گردا گرد سے گھیرے ہوئے ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/085020.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5929.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5929.mp3"
+        }
+      },
+      {
+        "ayah": 21,
+        "globalAyah": 5930,
+        "arabic": "بَلْ هُوَ قُرْءَانٌۭ مَّجِيدٌۭ",
+        "translation_en": "Nay, but this [divine writ which they reject] is a discourse sublime,",
+        "translation_ur": "(یہ کتاب ہزل و بطلان نہیں) بلکہ یہ قرآن عظیم الشان ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/085021.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5930.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5930.mp3"
+        }
+      },
+      {
+        "ayah": 22,
+        "globalAyah": 5931,
+        "arabic": "فِى لَوْحٍۢ مَّحْفُوظٍۭ",
+        "translation_en": "upon an imperishable tablet [inscribed].",
+        "translation_ur": "لوح محفوظ میں (لکھا ہوا)",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/085022.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5931.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5931.mp3"
+        }
+      }
+    ]
+  }
+}

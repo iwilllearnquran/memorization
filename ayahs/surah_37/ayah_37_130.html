@@ -1,4 +1,4 @@
-﻿
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +22,7 @@
     }
 
 
-    /* ðŸŒ™ Dark Mode Styling */
+    /* 🌙 Dark Mode Styling */
     body.dark-mode {
       background-color: #121212;
       color: #f1f1f1;
@@ -217,7 +217,7 @@ p {
 }
 
     .confetti::after {
-  content: "ðŸŽ‰";
+  content: "🎉";
   position: absolute;
   top: -10px;
   right: -10px;
@@ -502,27 +502,27 @@ p {
 <div class="section dropdown-wrapper">
   <div class="dropdown-container" id="ayahDropdownToggle">
     <button class="dropdown-button">
-      ðŸ“– Surah: As-Saffat (Ø§Ù„ØµØ§ÙØ§Øª) : Ayah 130
-      <span class="caret-icon">â–¼</span>
+      📖 Surah: As-Saffat (الصافات) : Ayah 130
+      <span class="caret-icon">▼</span>
     </button>
 
     <div class="dropdown-menu-custom">
       <div class="toggle-option">
-        <span>ðŸ”  Show Translation</span>
+        <span>🔠 Show Translation</span>
         <label class="switch">
           <input type="checkbox" checked onchange="toggleElements('translation', this.checked)">
           <span class="slider"></span>
         </label>
       </div>
       <div class="toggle-option">
-        <span>ðŸ”¤ Show Grammar</span>
+        <span>🔤 Show Grammar</span>
         <label class="switch">
           <input type="checkbox" onchange="toggleElements('pos-tag', this.checked)">
           <span class="slider"></span>
         </label>
       </div>
       <div class="toggle-option">
-        <span>ðŸŒ± Show Root Words</span>
+        <span>🌱 Show Root Words</span>
         <label class="switch">
           <input type="checkbox" onchange="toggleElements('root-tag', this.checked)">
           <span class="slider"></span>
@@ -542,15 +542,15 @@ p {
 
     <div style="text-align: center; direction: rtl;">
 
-    <span class="word-block nominative " onclick="showPopup({&quot;Word&quot;: &quot;Ø³ÙŽÙ„ÙŽÙ°Ù…ÙŒ&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;https://verses.quran.com/wbw/037_130_001.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Noun&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;})">
+    <span class="word-block nominative " data-popup="{&quot;Word&quot;: &quot;سَلَٰمٌ&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;https://verses.quran.com/wbw/037_130_001.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Noun&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;}">
     
     <!-- Arabic word only -->
-    <span class="word-text">Ø³ÙŽÙ„ÙŽÙ°Ù…ÙŒ</span>
+    <span class="word-text">سَلَٰمٌ</span>
 
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">Peace be</span>
-        <span class="translation toggle-root root-tag hidden-toggle">Ø³ÙŽÙ„ÙŽÙ°Ù…</span>
+        <span class="translation toggle-root root-tag hidden-toggle">سَلَٰم</span>
         <span class="translation toggle-pos pos-tag hidden-toggle">noun</span>
     </span>
 
@@ -558,15 +558,15 @@ p {
     
 
 
-    <span class="word-block  " onclick="showPopup({&quot;Word&quot;: &quot;Ø¹ÙŽÙ„ÙŽÙ‰Ù°Ù“&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;https://verses.quran.com/wbw/037_130_002.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Preposition&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;})">
+    <span class="word-block  " data-popup="{&quot;Word&quot;: &quot;عَلَىٰٓ&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;https://verses.quran.com/wbw/037_130_002.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Preposition&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;}">
     
     <!-- Arabic word only -->
-    <span class="word-text">Ø¹ÙŽÙ„ÙŽÙ‰Ù°Ù“</span>
+    <span class="word-text">عَلَىٰٓ</span>
 
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">upon</span>
-        <span class="translation toggle-root root-tag hidden-toggle">Ø¹ÙŽÙ„ÙŽÙ‰Ù°</span>
+        <span class="translation toggle-root root-tag hidden-toggle">عَلَىٰ</span>
         <span class="translation toggle-pos pos-tag hidden-toggle">prep</span>
     </span>
 
@@ -574,20 +574,21 @@ p {
     
 
 
-    <span class="word-block genitive " onclick="showPopup({&quot;Word&quot;: &quot;Ø¥ÙÙ„Ù’&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;https://verses.quran.com/wbw/037_130_003.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Proper Noun&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;})">
+    <span class="word-block genitive " data-popup="{&quot;Word&quot;: &quot;إِلْ&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;https://verses.quran.com/wbw/037_130_003.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Proper Noun&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;}">
     
     <!-- Arabic word only -->
-    <span class="word-text">Ø¥ÙÙ„Ù’</span>
+    <span class="word-text">إِلْ</span>
 
     <!-- Metadata: translation, root, POS -->
     <span class="metadata">
         <span class="translation toggle-translation">Elijah</span>
-        <span class="translation toggle-root root-tag hidden-toggle">Ø¥ÙÙ„Ù’ÙŠÙŽØ§Ø³</span>
+        <span class="translation toggle-root root-tag hidden-toggle">إِلْيَاس</span>
         <span class="translation toggle-pos pos-tag hidden-toggle">pn</span>
     </span>
 
 </span>
     
+
 
 
 

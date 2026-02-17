@@ -421,51 +421,68 @@ import guestSession from './guestGameSession.js';
 import userSession from './userGameSession.js';
 import { auth } from '/services/_private/firestoreService.js';
 
+function resolveSessionByAuth() {
+  return auth.currentUser && !auth.currentUser.isAnonymous
+    ? userSession
+    : guestSession;
+}
+
+let currentSession = null;
+
+function getCurrentSession() {
+  if (!currentSession) {
+    currentSession = resolveSessionByAuth();
+  }
+  return currentSession;
+}
+
 const gameSession = {
-  // ─── active session selector ───
+  // Lock active session per game init so auth changes do not swap handlers mid-game.
   get active() {
-    return auth.currentUser ? userSession : guestSession;
+    return getCurrentSession();
   },
 
-  // ─── lifecycle ───
+  // Lifecycle
   init(type) {
-    return this.active.init(type);
+    currentSession = resolveSessionByAuth();
+    return currentSession.init(type);
   },
 
   end(success) {
-    return this.active.end(success);
+    return getCurrentSession().end(success);
   },
 
-  // ─── gameplay actions ───
+  // Gameplay actions
   addPoints(points) {
-    return this.active.addPoints(points);
+    return getCurrentSession().addPoints(points);
   },
 
   loseLife() {
-    return this.active.loseLife();
+    return getCurrentSession().loseLife();
   },
 
-  // ─── resets / aborts ───
+  // Resets / aborts
   resetToBeforeGame() {
-    return this.active.resetToBeforeGame?.();
+    return getCurrentSession().resetToBeforeGame?.();
   },
 
   restartGameOnly() {
-    return this.active.restartGameOnly?.();
+    return getCurrentSession().restartGameOnly?.();
   },
 
-  // ─── state getters (used by UI) ───
+  // State getters (used by UI)
   get lives() {
-    return this.active.lives;
+    return getCurrentSession().lives;
   },
 
   get sessionScore() {
-    return this.active.sessionScore;
+    return getCurrentSession().sessionScore;
   },
 
   get score() {
-    return this.active.score;
+    return getCurrentSession().score;
   }
 };
 
 export default gameSession;
+

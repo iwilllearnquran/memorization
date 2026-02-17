@@ -21,48 +21,6 @@
   --ring:0 0 0 3px rgba(214,162,58,.45);
 }
 
-html.dark-mode body,
-body.dark-mode {
-  background:
-    radial-gradient(980px 520px at 12% -8%, rgba(72, 95, 126, 0.2), transparent 62%),
-    radial-gradient(1100px 600px at 84% 12%, rgba(84, 49, 62, 0.25), transparent 66%),
-    linear-gradient(180deg, #101723 0%, #171f2e 52%, #111928 100%);
-}
-
-html.dark-mode .app-header,
-body.dark-mode .app-header {
-  background: linear-gradient(135deg, rgba(33, 47, 66, 0.9) 0%, rgba(25, 36, 52, 0.94) 100%);
-  border-color: rgba(173, 202, 228, 0.18);
-}
-
-html.dark-mode .app-title,
-html.dark-mode .app-subtitle,
-html.dark-mode .dua-page-quote,
-body.dark-mode .app-title,
-body.dark-mode .app-subtitle,
-body.dark-mode .dua-page-quote {
-  color: #e6f3ff;
-}
-
-html.dark-mode .dua-card,
-body.dark-mode .dua-card {
-  background: linear-gradient(180deg, rgba(20, 30, 44, 0.97) 0%, rgba(23, 34, 50, 0.94) 100%);
-  border-color: rgba(146, 175, 203, 0.22);
-  color: #dbefff;
-}
-
-html.dark-mode .dua-reference,
-html.dark-mode .dua-translation,
-body.dark-mode .dua-reference,
-body.dark-mode .dua-translation {
-  color: #b9d5eb !important;
-}
-
-html.dark-mode .dua-card *,
-body.dark-mode .dua-card * {
-  color: #eef6ff !important;
-}
-
 @font-face {
   font-family: 'CustomArabic';
   src: url('/fonts/PDMS_SALEEM_QURANFONTQESHIP_0.woff2') format('woff2');
@@ -93,34 +51,6 @@ background:
 
   background-attachment: fixed;
   padding:0;
-}
-
-html.native-app-embedded,
-body.native-app-embedded,
-body.native-app-embedded * {
-  -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
-}
-
-body.native-app-embedded,
-body.native-app-embedded * {
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-body.native-app-embedded input,
-body.native-app-embedded textarea,
-body.native-app-embedded [contenteditable="true"],
-body.native-app-embedded .allow-text-select {
-  -webkit-user-select: text;
-  user-select: text;
-  -webkit-touch-callout: default;
-}
-
-body.native-app-embedded button,
-body.native-app-embedded a,
-body.native-app-embedded [role="button"] {
-  touch-action: manipulation;
 }
 
 html {
@@ -392,41 +322,6 @@ if (window.top === window.self) {
 
 const RAW_ORIGIN = window.location.origin;
 const PARENT_ORIGIN = RAW_ORIGIN === 'null' ? '*' : RAW_ORIGIN;
-const IS_NATIVE_CONTAINER = (() => {
-  try {
-    return Boolean(
-      window.ReactNativeWebView ||
-      window.parent?.ReactNativeWebView ||
-      window.top?.ReactNativeWebView
-    );
-  } catch {
-    return Boolean(window.ReactNativeWebView);
-  }
-})();
-
-function isEditableTarget(target) {
-  if (!(target instanceof Element)) return false;
-  return Boolean(
-    target.closest('input, textarea, [contenteditable="true"], .allow-text-select')
-  );
-}
-
-function enableNativeInteractionGuard() {
-  if (!IS_NATIVE_CONTAINER) return;
-
-  document.documentElement.classList.add('native-app-embedded');
-  document.body.classList.add('native-app-embedded');
-
-  const blockIfNotEditable = event => {
-    if (isEditableTarget(event.target)) return;
-    event.preventDefault();
-  };
-
-  document.addEventListener('contextmenu', blockIfNotEditable, { capture: true });
-  document.addEventListener('selectstart', blockIfNotEditable, { capture: true });
-}
-
-enableNativeInteractionGuard();
 
 function isTrustedParentMessage(e) {
   if (!e || !e.origin) return false;
@@ -443,25 +338,7 @@ function postToParent(message) {
   window.parent.postMessage(message, PARENT_ORIGIN);
 }
 
-function applyDuaTheme(isDark) {
-  const enabled = Boolean(isDark);
-  document.documentElement.classList.toggle('dark-mode', enabled);
-  document.body.classList.toggle('dark-mode', enabled);
-}
-
-function readStoredTheme() {
-  try {
-    const settings = JSON.parse(localStorage.getItem('qq_settings') || '{}') || {};
-    applyDuaTheme(settings.darkMode === true);
-  } catch {
-    applyDuaTheme(false);
-  }
-}
-
-readStoredTheme();
-
 const SHARE_URL = "https://myquranquest.com/duas";
-const SHARE_TEXT = "Powerful Duas From Quran. See more at www.myquranquest.com/duas";
 
 function initDuaMoonAnimation() {
   const stripEl = document.getElementById("duaMoonStrip");
@@ -578,10 +455,6 @@ function scrollToDuaByRef(ref) {
 
 window.addEventListener("message", e => {
   if (!isTrustedParentMessage(e)) return;
-  if (e?.data?.type === "APPLY_THEME") {
-    applyDuaTheme(e?.data?.darkMode === true);
-    return;
-  }
   if (e?.data?.type === "PAUSE_DUAS_AUDIO") {
     pauseAllDuaAudio();
     return;
@@ -763,38 +636,11 @@ async function buildShareCanvas(card) {
   return canvas;
 }
 
-function getDuaSharePayload(card, duaData = null) {
-  const referenceRaw =
-    card?.querySelector(".dua-reference")?.innerText?.replace(/^Qur['’]?an\s*/i, "").trim() ||
-    String(duaData?.reference || "").trim();
-  const reference = referenceRaw || "dua";
-  const arabic = card?.querySelector(".dua-arabic")?.innerText?.trim() || "";
-  const transliteration = card?.querySelector(".dua-transliteration")?.innerText?.trim() || "";
-  const translation = card?.querySelector(".dua-translation")?.innerText?.trim() || "";
-
-  const shareTextLines = [
-    `Qur'an ${reference}`,
-    arabic,
-    transliteration,
-    translation,
-    `More duas: ${SHARE_URL}`
-  ].filter(Boolean);
-
-  return {
-    reference,
-    arabic,
-    transliteration,
-    translation,
-    shareText: shareTextLines.join("\n\n")
-  };
-}
-
-async function shareDuaCard(card, duaData = null) {
+async function shareDuaCard(card) {
   if (!card) return;
 
   const canvas = await buildShareCanvas(card);
-  const payload = getDuaSharePayload(card, duaData);
-  const shareText = payload.shareText || SHARE_TEXT;
+  const shareText = `Powerful Duas from the Qur’an\n${SHARE_URL}`;
 
   /* ---------------- WEBVIEW BRIDGE ---------------- */
   const dataUrl = canvas.toDataURL("image/png");
@@ -805,11 +651,7 @@ async function shareDuaCard(card, duaData = null) {
         type: "SHARE_IMAGE",
         dataUrl,
         text: shareText,
-        url: SHARE_URL,
-        reference: payload.reference,
-        arabic: payload.arabic,
-        transliteration: payload.transliteration,
-        translation: payload.translation
+        url: SHARE_URL
       })
     );
     return; // 🔴 IMPORTANT: stop here for app
@@ -822,7 +664,9 @@ async function shareDuaCard(card, duaData = null) {
   if (!blob) return;
 
   const ref =
-    payload.reference.replace(/\s+/g, "-") || "dua";
+    card
+      .querySelector(".dua-reference")
+      ?.innerText?.replace(/\s+/g, "-") || "dua";
 
   const file = new File([blob], `${ref}.png`, { type: "image/png" });
 
@@ -962,7 +806,7 @@ fetch("quranwbw_duas.json")
       }
 
       if (shareBtn) {
-        shareBtn.addEventListener("click", () => shareDuaCard(card, d));
+        shareBtn.addEventListener("click", () => shareDuaCard(card));
       }
 
       cards.push({ audio, card, btn });

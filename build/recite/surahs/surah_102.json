@@ -1,0 +1,109 @@
+{
+  "generatedAt": "2026-02-14T12:15:28.776178+00:00",
+  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "surah": {
+    "surah": 102,
+    "arabicName": "سُورَةُ التَّكَاثُرِ",
+    "englishName": "At-Takaathur",
+    "englishNameTranslation": "Competition",
+    "ayahCount": 8,
+    "ayahs": [
+      {
+        "ayah": 1,
+        "globalAyah": 6169,
+        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ أَلْهَىٰكُمُ ٱلتَّكَاثُرُ",
+        "translation_en": "YOU ARE OBSESSED by greed for more and more",
+        "translation_ur": "(لوگو) تم کو (مال کی) بہت سی طلب نے غافل کر دیا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/102001.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6169.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6169.mp3"
+        }
+      },
+      {
+        "ayah": 2,
+        "globalAyah": 6170,
+        "arabic": "حَتَّىٰ زُرْتُمُ ٱلْمَقَابِرَ",
+        "translation_en": "until you go down to your graves.",
+        "translation_ur": "یہاں تک کہ تم نے قبریں جا دیکھیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/102002.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6170.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6170.mp3"
+        }
+      },
+      {
+        "ayah": 3,
+        "globalAyah": 6171,
+        "arabic": "كَلَّا سَوْفَ تَعْلَمُونَ",
+        "translation_en": "Nay, in time you will come to understand!",
+        "translation_ur": "دیکھو تمہیں عنقریب معلوم ہو جائے گا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/102003.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6171.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6171.mp3"
+        }
+      },
+      {
+        "ayah": 4,
+        "globalAyah": 6172,
+        "arabic": "ثُمَّ كَلَّا سَوْفَ تَعْلَمُونَ",
+        "translation_en": "And once again: Nay, in time you will come to understand!",
+        "translation_ur": "پھر دیکھو تمہیں عنقریب معلوم ہو جائے گا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/102004.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6172.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6172.mp3"
+        }
+      },
+      {
+        "ayah": 5,
+        "globalAyah": 6173,
+        "arabic": "كَلَّا لَوْ تَعْلَمُونَ عِلْمَ ٱلْيَقِينِ",
+        "translation_en": "Nay, if you could but understand [it] with an understanding [born] of certainty,",
+        "translation_ur": "دیکھو اگر تم جانتے (یعنی) علم الیقین (رکھتے تو غفلت نہ کرتے)",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/102005.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6173.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6173.mp3"
+        }
+      },
+      {
+        "ayah": 6,
+        "globalAyah": 6174,
+        "arabic": "لَتَرَوُنَّ ٱلْجَحِيمَ",
+        "translation_en": "you would indeed, most surely, behold the blazing fire [of hell]!",
+        "translation_ur": "تم ضرور دوزخ کو دیکھو گے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/102006.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6174.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6174.mp3"
+        }
+      },
+      {
+        "ayah": 7,
+        "globalAyah": 6175,
+        "arabic": "ثُمَّ لَتَرَوُنَّهَا عَيْنَ ٱلْيَقِينِ",
+        "translation_en": "In the end you will indeed, most surely, behold it with the eye of certainty:",
+        "translation_ur": "پھر اس کو (ایسا) دیکھو گے (کہ) عین الیقین (آ جائے گا)",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/102007.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6175.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6175.mp3"
+        }
+      },
+      {
+        "ayah": 8,
+        "globalAyah": 6176,
+        "arabic": "ثُمَّ لَتُسْـَٔلُنَّ يَوْمَئِذٍ عَنِ ٱلنَّعِيمِ",
+        "translation_en": "and on that Day you will most surely be called to account for [what you did with] the boon of life!",
+        "translation_ur": "پھر اس روز تم سے (شکر) نعمت کے بارے میں پرسش ہو گی",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/102008.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6176.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6176.mp3"
+        }
+      }
+    ]
+  }
+}

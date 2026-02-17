@@ -1,0 +1,85 @@
+{
+  "generatedAt": "2026-02-14T12:15:34.484125+00:00",
+  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "surah": {
+    "surah": 114,
+    "arabicName": "سُورَةُ النَّاسِ",
+    "englishName": "An-Naas",
+    "englishNameTranslation": "Mankind",
+    "ayahCount": 6,
+    "ayahs": [
+      {
+        "ayah": 1,
+        "globalAyah": 6231,
+        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ قُلْ أَعُوذُ بِرَبِّ ٱلنَّاسِ",
+        "translation_en": "SAY: \"I seek refuge with the Sustainer of men,",
+        "translation_ur": "کہو کہ میں لوگوں کے پروردگار کی پناہ مانگتا ہوں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/114001.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6231.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6231.mp3"
+        }
+      },
+      {
+        "ayah": 2,
+        "globalAyah": 6232,
+        "arabic": "مَلِكِ ٱلنَّاسِ",
+        "translation_en": "\"the Sovereign of men,",
+        "translation_ur": "(یعنی) لوگوں کے حقیقی بادشاہ کی",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/114002.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6232.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6232.mp3"
+        }
+      },
+      {
+        "ayah": 3,
+        "globalAyah": 6233,
+        "arabic": "إِلَٰهِ ٱلنَّاسِ",
+        "translation_en": "\"the God of men,",
+        "translation_ur": "لوگوں کے معبود برحق کی",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/114003.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6233.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6233.mp3"
+        }
+      },
+      {
+        "ayah": 4,
+        "globalAyah": 6234,
+        "arabic": "مِن شَرِّ ٱلْوَسْوَاسِ ٱلْخَنَّاسِ",
+        "translation_en": "\"from the evil of the whispering, elusive tempter",
+        "translation_ur": "(شیطان) وسوسہ انداز کی برائی سے جو (خدا کا نام سن کر) پیچھے ہٹ جاتا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/114004.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6234.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6234.mp3"
+        }
+      },
+      {
+        "ayah": 5,
+        "globalAyah": 6235,
+        "arabic": "ٱلَّذِى يُوَسْوِسُ فِى صُدُورِ ٱلنَّاسِ",
+        "translation_en": "\"who whispers in the hearts of men",
+        "translation_ur": "جو لوگوں کے دلوں میں وسوسے ڈالتا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/114005.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6235.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6235.mp3"
+        }
+      },
+      {
+        "ayah": 6,
+        "globalAyah": 6236,
+        "arabic": "مِنَ ٱلْجِنَّةِ وَٱلنَّاسِ",
+        "translation_en": "\"from all [temptation to evil by] invisible forces as well as men,\"",
+        "translation_ur": "وہ جنّات میں سے (ہو) یا انسانوں میں سے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/114006.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6236.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6236.mp3"
+        }
+      }
+    ]
+  }
+}

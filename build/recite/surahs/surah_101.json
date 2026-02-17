@@ -1,0 +1,145 @@
+{
+  "generatedAt": "2026-02-14T12:15:28.305133+00:00",
+  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "surah": {
+    "surah": 101,
+    "arabicName": "سُورَةُ القَارِعَةِ",
+    "englishName": "Al-Qaari'a",
+    "englishNameTranslation": "The Calamity",
+    "ayahCount": 11,
+    "ayahs": [
+      {
+        "ayah": 1,
+        "globalAyah": 6158,
+        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ٱلْقَارِعَةُ",
+        "translation_en": "OH, the sudden calamity!",
+        "translation_ur": "کھڑ کھڑانے والی",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/101001.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6158.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6158.mp3"
+        }
+      },
+      {
+        "ayah": 2,
+        "globalAyah": 6159,
+        "arabic": "مَا ٱلْقَارِعَةُ",
+        "translation_en": "How awesome the sudden calamity!",
+        "translation_ur": "کھڑ کھڑانے والی کیا ہے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/101002.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6159.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6159.mp3"
+        }
+      },
+      {
+        "ayah": 3,
+        "globalAyah": 6160,
+        "arabic": "وَمَآ أَدْرَىٰكَ مَا ٱلْقَارِعَةُ",
+        "translation_en": "And what could make thee conceive what that sudden calamity will be?",
+        "translation_ur": "اور تم کیا جانوں کھڑ کھڑانے والی کیا ہے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/101003.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6160.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6160.mp3"
+        }
+      },
+      {
+        "ayah": 4,
+        "globalAyah": 6161,
+        "arabic": "يَوْمَ يَكُونُ ٱلنَّاسُ كَٱلْفَرَاشِ ٱلْمَبْثُوثِ",
+        "translation_en": "[It will occur] on the Day when men will be like moths swarming in confusion,",
+        "translation_ur": "(وہ قیامت ہے) جس دن لوگ ایسے ہوں گے جیسے بکھرے ہوئے پتنگے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/101004.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6161.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6161.mp3"
+        }
+      },
+      {
+        "ayah": 5,
+        "globalAyah": 6162,
+        "arabic": "وَتَكُونُ ٱلْجِبَالُ كَٱلْعِهْنِ ٱلْمَنفُوشِ",
+        "translation_en": "and the mountains will be like fluffy tufts of wool....",
+        "translation_ur": "اور پہاڑ ایسے ہو جائیں گے جیسے دھنکی ہوئی رنگ برنگ کی اون",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/101005.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6162.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6162.mp3"
+        }
+      },
+      {
+        "ayah": 6,
+        "globalAyah": 6163,
+        "arabic": "فَأَمَّا مَن ثَقُلَتْ مَوَٰزِينُهُۥ",
+        "translation_en": "And then, he whose weight [of good deeds] is heavy in the balance",
+        "translation_ur": "تو جس کے (اعمال کے) وزن بھاری نکلیں گے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/101006.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6163.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6163.mp3"
+        }
+      },
+      {
+        "ayah": 7,
+        "globalAyah": 6164,
+        "arabic": "فَهُوَ فِى عِيشَةٍۢ رَّاضِيَةٍۢ",
+        "translation_en": "shall find himself in a happy' state of life;",
+        "translation_ur": "وہ دل پسند عیش میں ہو گا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/101007.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6164.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6164.mp3"
+        }
+      },
+      {
+        "ayah": 8,
+        "globalAyah": 6165,
+        "arabic": "وَأَمَّا مَنْ خَفَّتْ مَوَٰزِينُهُۥ",
+        "translation_en": "whereas he whose weight is light in the balance",
+        "translation_ur": "اور جس کے وزن ہلکے نکلیں گے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/101008.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6165.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6165.mp3"
+        }
+      },
+      {
+        "ayah": 9,
+        "globalAyah": 6166,
+        "arabic": "فَأُمُّهُۥ هَاوِيَةٌۭ",
+        "translation_en": "shall be engulfed by an abyss.",
+        "translation_ur": "اس کا مرجع ہاویہ ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/101009.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6166.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6166.mp3"
+        }
+      },
+      {
+        "ayah": 10,
+        "globalAyah": 6167,
+        "arabic": "وَمَآ أَدْرَىٰكَ مَا هِيَهْ",
+        "translation_en": "And what could make thee conceive what that [abyss] will be?",
+        "translation_ur": "اور تم کیا سمجھے کہ ہاویہ کیا چیز ہے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/101010.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6167.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6167.mp3"
+        }
+      },
+      {
+        "ayah": 11,
+        "globalAyah": 6168,
+        "arabic": "نَارٌ حَامِيَةٌۢ",
+        "translation_en": "A fire hotly burning!",
+        "translation_ur": "دہکتی ہوئی آگ ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/101011.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6168.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6168.mp3"
+        }
+      }
+    ]
+  }
+}

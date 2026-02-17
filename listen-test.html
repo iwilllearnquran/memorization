@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recitation Listening Test</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --accent: #0a4d68;
+      --muted: #6b7a86;
+      --ok: #2b8a5a;
+      --bad: #b33a3a;
+      --chip: #e9eef3;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Manrope", "Segoe UI", Arial, sans-serif;
+      background: var(--bg);
+      color: #1a1f24;
+    }
+    .page {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+      display: grid;
+      gap: 16px;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 20px;
+      color: var(--accent);
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid rgba(10, 77, 104, 0.15);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 8px 18px rgba(10, 77, 104, 0.08);
+    }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 12px;
+      align-items: center;
+    }
+    .row label {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .row select,
+    .row input,
+    textarea {
+      border: 1px solid #d5dde5;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 14px;
+      background: #fff;
+      min-width: 160px;
+    }
+    textarea {
+      width: 100%;
+      min-height: 90px;
+      resize: vertical;
+      font-family: "Noto Naskh Arabic", "Amiri", serif;
+      font-size: 16px;
+      direction: rtl;
+    }
+    button {
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    button:disabled {
+      background: #c7d1da;
+      color: #66727b;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    button:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 14px rgba(10, 77, 104, 0.18);
+    }
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--chip);
+      color: #2c3e50;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .badge.listening {
+      background: #dff3ff;
+      color: #0a4d68;
+    }
+    .badge.error {
+      background: #fdeaea;
+      color: var(--bad);
+    }
+    .feed {
+      display: grid;
+      gap: 6px;
+      font-size: 13px;
+      color: #2d3942;
+      min-width: 220px;
+    }
+    .words {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .word {
+      padding: 6px 10px;
+      border-radius: 10px;
+      background: #eef3f7;
+      border: 1px dashed #c7d1da;
+      color: transparent;
+      min-width: 48px;
+      text-align: center;
+      font-size: 16px;
+      transition: all 0.2s ease;
+    }
+    .word.revealed {
+      color: #1c2b33;
+      border-style: solid;
+      background: #ffffff;
+      border-color: #9ab8c7;
+      box-shadow: 0 4px 10px rgba(10, 77, 104, 0.12);
+    }
+    .feedback {
+      font-size: 13px;
+      color: var(--bad);
+      min-height: 18px;
+    }
+    .note {
+      font-size: 12px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>Recitation Listening Test</h1>
+      <div class="badge" id="statusBadge">Idle</div>
+    </header>
+
+    <section class="panel">
+      <div class="row">
+        <button id="startBtn">Start Listening</button>
+        <button id="stopBtn" disabled>Stop</button>
+        <button id="resetBtn">Reset</button>
+      </div>
+      <div class="row" style="margin-top:12px;">
+        <label>Language
+          <select id="langSelect">
+            <option value="ar-SA" selected>Arabic (ar-SA)</option>
+            <option value="ar">Arabic (ar)</option>
+            <option value="en-US">English (en-US)</option>
+          </select>
+        </label>
+        <label>Mode
+          <select id="modeSelect">
+            <option value="sequential" selected>Sequential</option>
+            <option value="loose">Loose (any order)</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section class="panel">
+      <label for="wordsInput">Ayah text (space-separated words)</label>
+      <textarea id="wordsInput">بسم الله الرحمن الرحيم</textarea>
+      <div class="row" style="margin-top:10px;">
+        <button id="applyWords">Load Words</button>
+        <button id="clearWords">Clear</button>
+      </div>
+    </section>
+
+    <section class="panel status">
+      <div class="feed">
+        <div><strong>Final:</strong> <span id="finalText">—</span></div>
+        <div><strong>Interim:</strong> <span id="interimText">—</span></div>
+        <div class="feedback" id="feedback"></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="words" id="wordsWrap"></div>
+    </section>
+
+    <section class="panel">
+      <label for="simulateInput">Simulate transcript (debug)</label>
+      <div class="row" style="margin-top:8px;">
+        <input id="simulateInput" type="text" placeholder="Type recognized words here">
+        <button id="simulateBtn">Apply</button>
+      </div>
+    </section>
+
+    <p class="note">
+      Note: Web Speech API works best on HTTPS or localhost and is most reliable in Chrome.
+    </p>
+  </div>
+
+  <script src="listen-test.js"></script>
+</body>
+</html>

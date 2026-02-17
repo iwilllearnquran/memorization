@@ -1,0 +1,613 @@
+{
+  "generatedAt": "2026-02-14T12:15:16.472575+00:00",
+  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "surah": {
+    "surah": 77,
+    "arabicName": "سُورَةُ المُرۡسَلَاتِ",
+    "englishName": "Al-Mursalaat",
+    "englishNameTranslation": "The Emissaries",
+    "ayahCount": 50,
+    "ayahs": [
+      {
+        "ayah": 1,
+        "globalAyah": 5623,
+        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ وَٱلْمُرْسَلَٰتِ عُرْفًۭا",
+        "translation_en": "CONSIDER these [messages,] sent forth in waves",
+        "translation_ur": "ہواؤں کی قسم جو نرم نرم چلتی ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077001.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5623.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5623.mp3"
+        }
+      },
+      {
+        "ayah": 2,
+        "globalAyah": 5624,
+        "arabic": "فَٱلْعَٰصِفَٰتِ عَصْفًۭا",
+        "translation_en": "and then storming on with a tempest's force!",
+        "translation_ur": "پھر زور پکڑ کر جھکڑ ہو جاتی ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077002.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5624.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5624.mp3"
+        }
+      },
+      {
+        "ayah": 3,
+        "globalAyah": 5625,
+        "arabic": "وَٱلنَّٰشِرَٰتِ نَشْرًۭا",
+        "translation_en": "Consider these [messages] that spread [the truth] far and wide,",
+        "translation_ur": "اور (بادلوں کو) پھاڑ کر پھیلا دیتی ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077003.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5625.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5625.mp3"
+        }
+      },
+      {
+        "ayah": 4,
+        "globalAyah": 5626,
+        "arabic": "فَٱلْفَٰرِقَٰتِ فَرْقًۭا",
+        "translation_en": "thus separating [right and wrong] with all clarity,",
+        "translation_ur": "پھر ان کو پھاڑ کر جدا جدا کر دیتی ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077004.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5626.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5626.mp3"
+        }
+      },
+      {
+        "ayah": 5,
+        "globalAyah": 5627,
+        "arabic": "فَٱلْمُلْقِيَٰتِ ذِكْرًا",
+        "translation_en": "and then giving forth a reminder,",
+        "translation_ur": "پھر فرشتوں کی قسم جو وحی لاتے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077005.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5627.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5627.mp3"
+        }
+      },
+      {
+        "ayah": 6,
+        "globalAyah": 5628,
+        "arabic": "عُذْرًا أَوْ نُذْرًا",
+        "translation_en": "[promising] freedom from blame or [offering] a warning!",
+        "translation_ur": "تاکہ عذر (رفع) کردیا جائے یا ڈر سنا دیا جائے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077006.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5628.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5628.mp3"
+        }
+      },
+      {
+        "ayah": 7,
+        "globalAyah": 5629,
+        "arabic": "إِنَّمَا تُوعَدُونَ لَوَٰقِعٌۭ",
+        "translation_en": "BEHOLD, all that you are told to expect will surely come to pass.",
+        "translation_ur": "کہ جس بات کا تم سے وعدہ کیا جاتا ہے وہ ہو کر رہے گی",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077007.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5629.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5629.mp3"
+        }
+      },
+      {
+        "ayah": 8,
+        "globalAyah": 5630,
+        "arabic": "فَإِذَا ٱلنُّجُومُ طُمِسَتْ",
+        "translation_en": "Thus, [it will come to pass] when the stars are effaced,",
+        "translation_ur": "جب تاروں کی چمک جاتی رہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077008.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5630.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5630.mp3"
+        }
+      },
+      {
+        "ayah": 9,
+        "globalAyah": 5631,
+        "arabic": "وَإِذَا ٱلسَّمَآءُ فُرِجَتْ",
+        "translation_en": "and when the sky is rent asunder,",
+        "translation_ur": "اور جب آسمان پھٹ جائے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077009.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5631.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5631.mp3"
+        }
+      },
+      {
+        "ayah": 10,
+        "globalAyah": 5632,
+        "arabic": "وَإِذَا ٱلْجِبَالُ نُسِفَتْ",
+        "translation_en": "and when the mountains are scattered like dust,",
+        "translation_ur": "اور جب پہاڑ اُڑے اُڑے پھریں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077010.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5632.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5632.mp3"
+        }
+      },
+      {
+        "ayah": 11,
+        "globalAyah": 5633,
+        "arabic": "وَإِذَا ٱلرُّسُلُ أُقِّتَتْ",
+        "translation_en": "and when all the apostles are called together at a time appointed...",
+        "translation_ur": "اور جب پیغمبر فراہم کئے جائیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077011.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5633.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5633.mp3"
+        }
+      },
+      {
+        "ayah": 12,
+        "globalAyah": 5634,
+        "arabic": "لِأَىِّ يَوْمٍ أُجِّلَتْ",
+        "translation_en": "For what day has the term [of all this] been set?",
+        "translation_ur": "بھلا (ان امور میں) تاخیر کس دن کے لئے کی گئی؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077012.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5634.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5634.mp3"
+        }
+      },
+      {
+        "ayah": 13,
+        "globalAyah": 5635,
+        "arabic": "لِيَوْمِ ٱلْفَصْلِ",
+        "translation_en": "For the Day of Distinction [between the true and the false]!",
+        "translation_ur": "فیصلے کے دن کے لئے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077013.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5635.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5635.mp3"
+        }
+      },
+      {
+        "ayah": 14,
+        "globalAyah": 5636,
+        "arabic": "وَمَآ أَدْرَىٰكَ مَا يَوْمُ ٱلْفَصْلِ",
+        "translation_en": "And what could make thee conceive what that Day of Distinction will be?",
+        "translation_ur": "اور تمہیں کیا خبر کہ فیصلے کا دن کیا ہے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077014.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5636.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5636.mp3"
+        }
+      },
+      {
+        "ayah": 15,
+        "globalAyah": 5637,
+        "arabic": "وَيْلٌۭ يَوْمَئِذٍۢ لِّلْمُكَذِّبِينَ",
+        "translation_en": "Woe on that Day unto those who give the lie to the truth!",
+        "translation_ur": "اس دن جھٹلانے والوں کے لئے خرابی ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077015.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5637.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5637.mp3"
+        }
+      },
+      {
+        "ayah": 16,
+        "globalAyah": 5638,
+        "arabic": "أَلَمْ نُهْلِكِ ٱلْأَوَّلِينَ",
+        "translation_en": "Did We not destroy [so many of] those [sinners] of olden days?",
+        "translation_ur": "کیا ہم نے پہلے لوگوں کو ہلاک نہیں کر ڈالا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077016.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5638.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5638.mp3"
+        }
+      },
+      {
+        "ayah": 17,
+        "globalAyah": 5639,
+        "arabic": "ثُمَّ نُتْبِعُهُمُ ٱلْءَاخِرِينَ",
+        "translation_en": "And We shall let them be followed by those of later times:",
+        "translation_ur": "پھر ان پچھلوں کو بھی ان کے پیچھے بھیج دیتے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077017.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5639.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5639.mp3"
+        }
+      },
+      {
+        "ayah": 18,
+        "globalAyah": 5640,
+        "arabic": "كَذَٰلِكَ نَفْعَلُ بِٱلْمُجْرِمِينَ",
+        "translation_en": "[for] thus do We deal with such as are lost in sin.",
+        "translation_ur": "ہم گنہگاروں کے ساتھ ایسا ہی کیا کرتے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077018.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5640.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5640.mp3"
+        }
+      },
+      {
+        "ayah": 19,
+        "globalAyah": 5641,
+        "arabic": "وَيْلٌۭ يَوْمَئِذٍۢ لِّلْمُكَذِّبِينَ",
+        "translation_en": "Woe on that Day unto those who give the lie to the truth!",
+        "translation_ur": "اس دن جھٹلانے والوں کی خرابی ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077019.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5641.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5641.mp3"
+        }
+      },
+      {
+        "ayah": 20,
+        "globalAyah": 5642,
+        "arabic": "أَلَمْ نَخْلُقكُّم مِّن مَّآءٍۢ مَّهِينٍۢ",
+        "translation_en": "Did We not create you out of a humble fluid",
+        "translation_ur": "کیا ہم نے تم کو حقیر پانی سے نہیں پیدا کیا؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077020.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5642.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5642.mp3"
+        }
+      },
+      {
+        "ayah": 21,
+        "globalAyah": 5643,
+        "arabic": "فَجَعَلْنَٰهُ فِى قَرَارٍۢ مَّكِينٍ",
+        "translation_en": "which We then let remain in [the womb's] firm keeping",
+        "translation_ur": "اس کو ایک محفوظ جگہ میں رکھا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077021.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5643.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5643.mp3"
+        }
+      },
+      {
+        "ayah": 22,
+        "globalAyah": 5644,
+        "arabic": "إِلَىٰ قَدَرٍۢ مَّعْلُومٍۢ",
+        "translation_en": "for a term pre-ordained?",
+        "translation_ur": "ایک وقت معین تک",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077022.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5644.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5644.mp3"
+        }
+      },
+      {
+        "ayah": 23,
+        "globalAyah": 5645,
+        "arabic": "فَقَدَرْنَا فَنِعْمَ ٱلْقَٰدِرُونَ",
+        "translation_en": "Thus have We determined [the nature of man's creation]: and excellent indeed is Our power to determine [what is to be]!",
+        "translation_ur": "پھر اندازہ مقرر کیا اور ہم کیا ہی خوب اندازہ مقرر کرنے والے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077023.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5645.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5645.mp3"
+        }
+      },
+      {
+        "ayah": 24,
+        "globalAyah": 5646,
+        "arabic": "وَيْلٌۭ يَوْمَئِذٍۢ لِّلْمُكَذِّبِينَ",
+        "translation_en": "Woe, on that Day unto those who give the lie to the truth!",
+        "translation_ur": "اس دن جھٹلانے والوں کی خرابی ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077024.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5646.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5646.mp3"
+        }
+      },
+      {
+        "ayah": 25,
+        "globalAyah": 5647,
+        "arabic": "أَلَمْ نَجْعَلِ ٱلْأَرْضَ كِفَاتًا",
+        "translation_en": "Have We not caused the earth to hold within itself",
+        "translation_ur": "کیا ہم نے زمین کو سمیٹنے والی نہیں بنایا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077025.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5647.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5647.mp3"
+        }
+      },
+      {
+        "ayah": 26,
+        "globalAyah": 5648,
+        "arabic": "أَحْيَآءًۭ وَأَمْوَٰتًۭا",
+        "translation_en": "the living and the dead?",
+        "translation_ur": "یعنی) زندوں اور مردوں کو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077026.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5648.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5648.mp3"
+        }
+      },
+      {
+        "ayah": 27,
+        "globalAyah": 5649,
+        "arabic": "وَجَعَلْنَا فِيهَا رَوَٰسِىَ شَٰمِخَٰتٍۢ وَأَسْقَيْنَٰكُم مَّآءًۭ فُرَاتًۭا",
+        "translation_en": "and have We not set on it proud, firm mountains, and given you sweet water to drink?",
+        "translation_ur": "(بنایا) اور اس پر اونچے اونچے پہاڑ رکھ دیئے اور تم لوگوں کو میٹھا پانی پلایا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077027.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5649.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5649.mp3"
+        }
+      },
+      {
+        "ayah": 28,
+        "globalAyah": 5650,
+        "arabic": "وَيْلٌۭ يَوْمَئِذٍۢ لِّلْمُكَذِّبِينَ",
+        "translation_en": "Woe on that Day unto those who give the lie to the truth!",
+        "translation_ur": "اس دن جھٹلانے والوں کی خرابی ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077028.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5650.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5650.mp3"
+        }
+      },
+      {
+        "ayah": 29,
+        "globalAyah": 5651,
+        "arabic": "ٱنطَلِقُوٓا۟ إِلَىٰ مَا كُنتُم بِهِۦ تُكَذِّبُونَ",
+        "translation_en": "GO ON towards that [resurrection] which you were wont to call a lie!",
+        "translation_ur": "جس چیز کو تم جھٹلایا کرتے تھے۔ (اب) اس کی طرف چلو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077029.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5651.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5651.mp3"
+        }
+      },
+      {
+        "ayah": 30,
+        "globalAyah": 5652,
+        "arabic": "ٱنطَلِقُوٓا۟ إِلَىٰ ظِلٍّۢ ذِى ثَلَٰثِ شُعَبٍۢ",
+        "translation_en": "Go on towards the threefold shadow",
+        "translation_ur": "(یعنی) اس سائے کی طرف چلو جس کی تین شاخیں ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077030.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5652.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5652.mp3"
+        }
+      },
+      {
+        "ayah": 31,
+        "globalAyah": 5653,
+        "arabic": "لَّا ظَلِيلٍۢ وَلَا يُغْنِى مِنَ ٱللَّهَبِ",
+        "translation_en": "that will offer no [cooling] shade and will be of no avail against the flame",
+        "translation_ur": "نہ ٹھنڈی چھاؤں اور نہ لپٹ سے بچاؤ",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077031.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5653.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5653.mp3"
+        }
+      },
+      {
+        "ayah": 32,
+        "globalAyah": 5654,
+        "arabic": "إِنَّهَا تَرْمِى بِشَرَرٍۢ كَٱلْقَصْرِ",
+        "translation_en": "which – behold!- will throw up sparks like [burning] logs,",
+        "translation_ur": "اس سے (آگ کی اتنی اتنی بڑی) چنگاریاں اُڑتی ہیں جیسے محل",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077032.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5654.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5654.mp3"
+        }
+      },
+      {
+        "ayah": 33,
+        "globalAyah": 5655,
+        "arabic": "كَأَنَّهُۥ جِمَٰلَتٌۭ صُفْرٌۭ",
+        "translation_en": "like giant fiery ropes!",
+        "translation_ur": "گویا زرد رنگ کے اونٹ ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077033.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5655.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5655.mp3"
+        }
+      },
+      {
+        "ayah": 34,
+        "globalAyah": 5656,
+        "arabic": "وَيْلٌۭ يَوْمَئِذٍۢ لِّلْمُكَذِّبِينَ",
+        "translation_en": "Woe on that Day unto those who give the lie to the truth –",
+        "translation_ur": "اس دن جھٹلانے والوں کی خرابی ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077034.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5656.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5656.mp3"
+        }
+      },
+      {
+        "ayah": 35,
+        "globalAyah": 5657,
+        "arabic": "هَٰذَا يَوْمُ لَا يَنطِقُونَ",
+        "translation_en": "that Day on which they will not [be able to] utter a word,",
+        "translation_ur": "یہ وہ دن ہے کہ (لوگ) لب تک نہ ہلا سکیں گے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077035.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5657.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5657.mp3"
+        }
+      },
+      {
+        "ayah": 36,
+        "globalAyah": 5658,
+        "arabic": "وَلَا يُؤْذَنُ لَهُمْ فَيَعْتَذِرُونَ",
+        "translation_en": "nor be allowed to proffer excuses!",
+        "translation_ur": "اور نہ ان کو اجازت دی جائے گی کہ عذر کرسکیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077036.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5658.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5658.mp3"
+        }
+      },
+      {
+        "ayah": 37,
+        "globalAyah": 5659,
+        "arabic": "وَيْلٌۭ يَوْمَئِذٍۢ لِّلْمُكَذِّبِينَ",
+        "translation_en": "Woe on that Day unto those who give the lie to the truth –",
+        "translation_ur": "اس دن جھٹلانے والوں کی خرابی ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077037.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5659.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5659.mp3"
+        }
+      },
+      {
+        "ayah": 38,
+        "globalAyah": 5660,
+        "arabic": "هَٰذَا يَوْمُ ٱلْفَصْلِ ۖ جَمَعْنَٰكُمْ وَٱلْأَوَّلِينَ",
+        "translation_en": "that Day of Distinction [between the true and the false, when they will be told]: \"We have brought you together with those [sinners] of olden times;",
+        "translation_ur": "یہی فیصلے کا دن ہے (جس میں) ہم نے تم کو اور پہلے لوگوں کو جمع کیا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077038.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5660.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5660.mp3"
+        }
+      },
+      {
+        "ayah": 39,
+        "globalAyah": 5661,
+        "arabic": "فَإِن كَانَ لَكُمْ كَيْدٌۭ فَكِيدُونِ",
+        "translation_en": "and if you [think that you] have a subterfuge left, try to outwit Me!\"",
+        "translation_ur": "اگر تم کو کوئی داؤں آتا ہو تو مجھ سے کر لو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077039.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5661.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5661.mp3"
+        }
+      },
+      {
+        "ayah": 40,
+        "globalAyah": 5662,
+        "arabic": "وَيْلٌۭ يَوْمَئِذٍۢ لِّلْمُكَذِّبِينَ",
+        "translation_en": "Woe on that Day unto those who give the lie to the truth!",
+        "translation_ur": "اس دن جھٹلانے والوں کی خرابی ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077040.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5662.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5662.mp3"
+        }
+      },
+      {
+        "ayah": 41,
+        "globalAyah": 5663,
+        "arabic": "إِنَّ ٱلْمُتَّقِينَ فِى ظِلَٰلٍۢ وَعُيُونٍۢ",
+        "translation_en": "[AS AGAINST this,] behold, the God-conscious shall dwell amidst [cooling] shades and springs,",
+        "translation_ur": "بےشک پرہیزگار سایوں اور چشموں میں ہوں گے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077041.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5663.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5663.mp3"
+        }
+      },
+      {
+        "ayah": 42,
+        "globalAyah": 5664,
+        "arabic": "وَفَوَٰكِهَ مِمَّا يَشْتَهُونَ",
+        "translation_en": "and [partake of] whatever fruit they may desire;",
+        "translation_ur": "اور میؤوں میں جو ان کو مرغوب ہوں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077042.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5664.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5664.mp3"
+        }
+      },
+      {
+        "ayah": 43,
+        "globalAyah": 5665,
+        "arabic": "كُلُوا۟ وَٱشْرَبُوا۟ هَنِيٓـًٔۢا بِمَا كُنتُمْ تَعْمَلُونَ",
+        "translation_en": "[and they will be told:] \"Eat and drink in good cheer in return for what you did [in life]!\"",
+        "translation_ur": "اور جو عمل تم کرتے رہے تھے ان کے بدلے میں مزے سے کھاؤ اور پیو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077043.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5665.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5665.mp3"
+        }
+      },
+      {
+        "ayah": 44,
+        "globalAyah": 5666,
+        "arabic": "إِنَّا كَذَٰلِكَ نَجْزِى ٱلْمُحْسِنِينَ",
+        "translation_en": "Thus, behold, do We reward the doers of good;",
+        "translation_ur": "ہم نیکو کاروں کو ایسا ہی بدلہ دیا کرتے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077044.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5666.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5666.mp3"
+        }
+      },
+      {
+        "ayah": 45,
+        "globalAyah": 5667,
+        "arabic": "وَيْلٌۭ يَوْمَئِذٍۢ لِّلْمُكَذِّبِينَ",
+        "translation_en": "[but] woe on that Day unto those who give the lie to the truth!",
+        "translation_ur": "اس دن جھٹلانے والوں کی خرابی ہوگی",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077045.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5667.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5667.mp3"
+        }
+      },
+      {
+        "ayah": 46,
+        "globalAyah": 5668,
+        "arabic": "كُلُوا۟ وَتَمَتَّعُوا۟ قَلِيلًا إِنَّكُم مُّجْرِمُونَ",
+        "translation_en": "EAT [your fill] and enjoy your life for a little while, O you who are lost in sin!",
+        "translation_ur": "(اے جھٹلانے والو!) تم کسی قدر کھا لو اور فائدے اُٹھا لو تم بےشک گنہگار ہو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077046.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5668.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5668.mp3"
+        }
+      },
+      {
+        "ayah": 47,
+        "globalAyah": 5669,
+        "arabic": "وَيْلٌۭ يَوْمَئِذٍۢ لِّلْمُكَذِّبِينَ",
+        "translation_en": "[But] woe on that Day unto those who give the lie to the truth,",
+        "translation_ur": "اس دن جھٹلانے والوں کی خرابی ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077047.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5669.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5669.mp3"
+        }
+      },
+      {
+        "ayah": 48,
+        "globalAyah": 5670,
+        "arabic": "وَإِذَا قِيلَ لَهُمُ ٱرْكَعُوا۟ لَا يَرْكَعُونَ",
+        "translation_en": "and when they are told, \"Bow down [before God]\", do not bow down:",
+        "translation_ur": "اور جب ان سے کہا جاتا ہے کہ (خدا کے آگے) جھکو تو جھکتے نہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077048.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5670.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5670.mp3"
+        }
+      },
+      {
+        "ayah": 49,
+        "globalAyah": 5671,
+        "arabic": "وَيْلٌۭ يَوْمَئِذٍۢ لِّلْمُكَذِّبِينَ",
+        "translation_en": "woe on that Day unto those who give the to the truth!",
+        "translation_ur": "اس دن جھٹلانے والوں کی خرابی ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077049.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5671.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5671.mp3"
+        }
+      },
+      {
+        "ayah": 50,
+        "globalAyah": 5672,
+        "arabic": "فَبِأَىِّ حَدِيثٍۭ بَعْدَهُۥ يُؤْمِنُونَ",
+        "translation_en": "In what other tiding, then, will they, after this, believe?",
+        "translation_ur": "اب اس کے بعد یہ کون سی بات پر ایمان لائیں گے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/077050.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5672.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5672.mp3"
+        }
+      }
+    ]
+  }
+}
