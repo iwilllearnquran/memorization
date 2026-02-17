@@ -145,6 +145,17 @@ const TAB_SYSTEM_BAR_COLORS = Object.freeze({
   duas: '#8b5e00'
 });
 
+function renderWelcomeBrainFallback() {
+  if (!els.welcomeBrain) return;
+  if (els.welcomeBrain.querySelector('.memo-welcome-brain-fallback')) return;
+  els.welcomeBrain.innerHTML = '';
+  const icon = document.createElement('span');
+  icon.className = 'material-icons-outlined memo-welcome-brain-fallback';
+  icon.setAttribute('aria-hidden', 'true');
+  icon.textContent = 'psychology';
+  els.welcomeBrain.appendChild(icon);
+}
+
 function clamp(num, min, max) {
   return Math.max(min, Math.min(max, num));
 }
@@ -1998,21 +2009,64 @@ function setFromURL() {
 }
 
 function initWelcomeBrainAnimation() {
-  if (!els.welcomeBrain || typeof window.lottie === 'undefined' || welcomeBrainAnimation) return;
+  if (!els.welcomeBrain || welcomeBrainAnimation) return;
+  if (typeof window.lottie === 'undefined') {
+    renderWelcomeBrainFallback();
+    return;
+  }
+
+  const candidates = [
+    new URL('./assets/brain-animation.json', window.location.href).href,
+    '/assets/brain-animation.json',
+    '/utils/assets/brain-animation.json',
+    '/brain-animation.json'
+  ];
+
+  const tryLoad = index => {
+    if (index >= candidates.length) {
+      renderWelcomeBrainFallback();
+      return;
+    }
+    const path = candidates[index];
+    let localAnimation = null;
+    try {
+      localAnimation = window.lottie.loadAnimation({
+        container: els.welcomeBrain,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path,
+        rendererSettings: {
+          preserveAspectRatio: 'xMidYMid meet'
+        }
+      });
+    } catch (err) {
+      console.warn('[MEMO] Failed to start brain lottie load', err);
+      tryLoad(index + 1);
+      return;
+    }
+
+    const onReady = () => {
+      welcomeBrainAnimation = localAnimation;
+      localAnimation.removeEventListener?.('data_ready', onReady);
+      localAnimation.removeEventListener?.('data_failed', onFail);
+    };
+    const onFail = () => {
+      localAnimation.removeEventListener?.('data_ready', onReady);
+      localAnimation.removeEventListener?.('data_failed', onFail);
+      localAnimation.destroy?.();
+      tryLoad(index + 1);
+    };
+
+    localAnimation.addEventListener?.('data_ready', onReady);
+    localAnimation.addEventListener?.('data_failed', onFail);
+  };
+
   try {
-    const animationPath = new URL('./assets/brain-animation.json', window.location.href).href;
-    welcomeBrainAnimation = window.lottie.loadAnimation({
-      container: els.welcomeBrain,
-      renderer: 'svg',
-      loop: true,
-      autoplay: true,
-      path: animationPath,
-      rendererSettings: {
-        preserveAspectRatio: 'xMidYMid meet'
-      }
-    });
+    tryLoad(0);
   } catch (err) {
     console.warn('[MEMO] Failed to load brain lottie', err);
+    renderWelcomeBrainFallback();
   }
 }
 

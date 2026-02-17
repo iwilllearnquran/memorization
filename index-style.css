@@ -2113,27 +2113,39 @@ html {
 #startLearningBtn {
   position: relative;
   isolation: isolate;
+  border: 2px solid transparent;
+  background: linear-gradient(135deg, #f7d77f 0%, #d6a23a 100%);
 }
 
 #startLearningBtn::after {
-  content: '';
+  content: "";
   position: absolute;
-  inset: -7px;
-  border-radius: 999px;
-  border: 2px solid rgba(247, 215, 127, 0.9);
-  box-shadow: 0 0 18px rgba(247, 215, 127, 0.45);
-  animation: learn-ring-pulse 2s ease-in-out infinite;
+  inset: -2px;
+  border-radius: inherit;
+  padding: 2px;
   pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    rgba(10, 77, 104, 0.06) 0%,
+    rgba(10, 77, 104, 0.14) 36%,
+    rgba(250, 228, 165, 0.98) 48%,
+    rgba(214, 162, 58, 1) 56%,
+    rgba(10, 77, 104, 0.14) 70%,
+    rgba(10, 77, 104, 0.06) 100%
+  );
+  background-size: 220% 100%;
+  background-position: 100% 50%;
+  animation: startLearningBorderShimmer 2.6s linear infinite;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
 }
 
-@keyframes learn-ring-pulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.55;
-  }
-  50% {
-    transform: scale(1.06);
-    opacity: 0.95;
+@keyframes startLearningBorderShimmer {
+  to {
+    background-position: -120% 50%;
   }
 }
 
