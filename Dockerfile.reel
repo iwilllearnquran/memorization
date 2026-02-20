@@ -1,0 +1,30 @@
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1
+
+WORKDIR /app
+
+# System deps for video generation + Wand/ImageMagick rendering
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ffmpeg \
+    imagemagick \
+    libmagickwand-dev \
+    fonts-dejavu-core \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY scripts/requirements-reel-service.txt /app/scripts/requirements-reel-service.txt
+RUN pip install -r /app/scripts/requirements-reel-service.txt
+
+# App files required by reel service
+COPY scripts /app/scripts
+COPY build/recite/surahs /app/build/recite/surahs
+COPY fonts /app/fonts
+COPY background /app/background
+COPY PDMS_SALEEM_QURANFONTQESHIP_0.ttf /app/PDMS_SALEEM_QURANFONTQESHIP_0.ttf
+COPY generated/reels/.gitkeep /app/generated/reels/.gitkeep
+
+EXPOSE 8080
+
+CMD ["gunicorn", "-b", "0.0.0.0:8080", "-w", "2", "scripts.reel_service:app"]

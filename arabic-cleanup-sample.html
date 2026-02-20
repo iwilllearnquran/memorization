@@ -1,0 +1,386 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arabic Cleanup + Font Comparison</title>
+  <link rel="preload" href="/fonts/PDMS_SALEEM_QURANFONTQESHIP_0.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    @font-face {
+      font-family: 'CustomArabic';
+      src: url('/fonts/PDMS_SALEEM_QURANFONTQESHIP_0.woff2') format('woff2');
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'IndoPakQWBW';
+      src: url('/fonts/Naskh-Nastaleeq-IndoPak-QWBW.ttf') format('truetype');
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'PDMSAlt';
+      src: url('/fonts/PDMS_SALEEM_QURANFONTQESHIP_0_alt.ttf') format('truetype');
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'MuhammadiBold';
+      src: url('/fonts/MUHAMMADIBold.ttf') format('truetype');
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'AlQuranIndoPakQWBW';
+      src: url('/fonts/AlQuran-IndoPak-QuranWBW.ttf') format('truetype');
+      font-display: swap;
+    }
+
+    :root {
+      --cmp-font-size: 44px;
+      --cmp-font-weight: 400;
+      --cmp-font-style: normal;
+    }
+
+    body {
+      margin: 20px;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #1a2a33;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 20px;
+    }
+
+    h2 {
+      margin: 24px 0 8px;
+      font-size: 18px;
+    }
+
+    p.note {
+      margin: 0 0 16px;
+      color: #334;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border: 1px solid #d7deea;
+      margin-bottom: 16px;
+    }
+
+    th, td {
+      border: 1px solid #d7deea;
+      padding: 10px;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      background: #eef3fb;
+      font-size: 13px;
+    }
+
+    .ar {
+      direction: rtl;
+      text-align: right;
+      font-size: 36px;
+      line-height: 1.9;
+      background: #fefcf7;
+      border-radius: 8px;
+      padding: 8px 10px;
+      min-height: 64px;
+    }
+
+    .ar-prev {
+      font-family: 'CustomArabic', 'Scheherazade New', serif;
+    }
+
+    .ar-new {
+      font-family: 'IndoPakQWBW', 'CustomArabic', 'Scheherazade New', serif;
+      font-weight: 400;
+      color: #2f3f4e;
+      letter-spacing: -0.015em;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .ar-pdms-alt {
+      font-family: 'PDMSAlt', 'CustomArabic', 'Scheherazade New', serif;
+      font-weight: 400;
+    }
+
+    .ar-muhammadi {
+      font-family: 'MuhammadiBold', 'CustomArabic', 'Scheherazade New', serif;
+      font-weight: 400;
+    }
+
+    .ar-alquran-indopak {
+      font-family: 'AlQuranIndoPakQWBW', 'CustomArabic', 'Scheherazade New', serif;
+      font-weight: 400;
+    }
+
+    .ar-word {
+      font-size: var(--cmp-font-size);
+      line-height: 1.4;
+      min-height: auto;
+      display: inline-block;
+      background: transparent;
+      padding: 0;
+      font-weight: var(--cmp-font-weight);
+      font-style: var(--cmp-font-style);
+    }
+
+    code {
+      font-family: Consolas, monospace;
+      font-size: 12px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #123;
+    }
+
+    #loadMsg {
+      font-size: 13px;
+      color: #334;
+      margin: 6px 0 10px;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      align-items: end;
+      padding: 12px;
+      border: 1px solid #d7deea;
+      border-radius: 10px;
+      background: #fff;
+      margin-bottom: 12px;
+    }
+
+    .controls label {
+      font-size: 12px;
+      color: #334;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .controls input[type="number"],
+    .controls input[type="range"] {
+      width: 120px;
+    }
+
+    .controls button {
+      height: 34px;
+      padding: 0 12px;
+      border: 1px solid #0a4d68;
+      background: #0a4d68;
+      color: #fff;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .controls .hint {
+      font-size: 12px;
+      color: #445;
+      margin-left: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Arabic Raw vs Cleanup</h1>
+  <p class="note">
+    This page compares: Raw text, your recite cleanup (<code>/[\u06D6-\u06ED]/g</code>), and the stricter cleanup used in memorization (<code>/[\u064B-\u065F\u0670\u06D6-\u06ED]/g</code>).
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Label</th>
+        <th>Raw</th>
+        <th>After Recite Cleanup</th>
+        <th>After Strict Cleanup</th>
+        <th>Raw Codepoints</th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+  <h2>Ayah Font Comparison, Word by Word</h2>
+  <p class="note">Per-word rendering across CustomArabic, IndoPakQWBW, PDMS alt TTF, MUHAMMADIBold, and AlQuran IndoPak QuranWBW.</p>
+
+  <div class="controls">
+    <label>
+      Surah
+      <input id="ctrlSurah" type="number" min="1" max="114" value="2">
+    </label>
+    <label>
+      Ayah
+      <input id="ctrlAyah" type="number" min="1" value="282">
+    </label>
+    <button id="ctrlLoadAyah" type="button">Load Ayah</button>
+
+    <label>
+      Weight
+      <input id="ctrlWeight" type="range" min="100" max="900" step="100" value="400">
+    </label>
+    <label>
+      Size (px)
+      <input id="ctrlSize" type="range" min="22" max="72" step="1" value="44">
+    </label>
+    <span class="hint" id="ctrlSizeReadout">44px</span>
+    <label>
+      <input id="ctrlItalic" type="checkbox">
+      Italic
+    </label>
+    <span class="hint" id="ctrlStyleReadout">weight 400, size 44px, italic off</span>
+  </div>
+
+  <div id="loadMsg">Loading 2:282 from <code>build/recite/surahs/surah_002.json</code>...</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Word</th>
+        <th>Previous Font (CustomArabic)</th>
+        <th>New Font (IndoPakQWBW)</th>
+        <th>PDMS Alt TTF</th>
+        <th>MUHAMMADIBold</th>
+        <th>AlQuran IndoPak QuranWBW</th>
+      </tr>
+    </thead>
+    <tbody id="longestRows"></tbody>
+  </table>
+
+  <script>
+    const AR = {
+      mawlana: '\u0645\u064e\u0648\u0652\u0644\u064e\u0649\u0670\u0646\u064e\u0627',
+      antaWithSukun: '\u0623\u064e\u0646\u0652\u062a\u064e',
+      antaWithoutSukun: '\u0623\u064e\u0646\u062a\u064e',
+      versePhrase: '\u0623\u064e\u0646\u062a\u064e \u0645\u064e\u0648\u0652\u0644\u064e\u0649\u0670\u0646\u064e\u0627',
+      from2286: '\u0648\u064e\u0671\u0631\u0652\u062d\u064e\u0645\u0652\u0646\u064e\u0627\u0653 \u06da \u0623\u064e\u0646\u062a\u064e \u0645\u064e\u0648\u0652\u0644\u064e\u0649\u0670\u0646\u064e\u0627 \u0641\u064e\u0671\u0646\u0635\u064f\u0631\u0652\u0646\u064e\u0627'
+    };
+
+    const samples = [
+      { label: 'Mawlana (with dagger alif)', text: AR.mawlana },
+      { label: 'Anta (with sukun on noon)', text: AR.antaWithSukun },
+      { label: 'Anta (without sukun)', text: AR.antaWithoutSukun },
+      { label: 'Verse phrase', text: AR.versePhrase },
+      { label: 'From 2:286 chunk', text: AR.from2286 }
+    ];
+
+    const reciteCleanup = s => String(s || '').replace(/[\u06D6-\u06ED]/g, '').trim();
+    const strictCleanup = s => String(s || '').replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g, '').trim();
+
+    function codepoints(str) {
+      return Array.from(str)
+        .map(ch => `${ch} U+${ch.codePointAt(0).toString(16).toUpperCase().padStart(4, '0')}`)
+        .join(' | ');
+    }
+
+    const tbody = document.getElementById('rows');
+    samples.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${item.label}</td>
+        <td><div class="ar ar-new">${item.text}</div></td>
+        <td><div class="ar ar-new">${reciteCleanup(item.text)}</div></td>
+        <td><div class="ar ar-new">${strictCleanup(item.text)}</div></td>
+        <td><code>${codepoints(item.text)}</code></td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    const ctrlSurah = document.getElementById('ctrlSurah');
+    const ctrlAyah = document.getElementById('ctrlAyah');
+    const ctrlLoadAyah = document.getElementById('ctrlLoadAyah');
+    const ctrlWeight = document.getElementById('ctrlWeight');
+    const ctrlSize = document.getElementById('ctrlSize');
+    const ctrlSizeReadout = document.getElementById('ctrlSizeReadout');
+    const ctrlItalic = document.getElementById('ctrlItalic');
+    const ctrlStyleReadout = document.getElementById('ctrlStyleReadout');
+
+    function pad3(value) {
+      return String(Number(value) || 0).padStart(3, '0');
+    }
+
+    function applyStyleControls() {
+      const weight = Math.max(100, Math.min(900, Number(ctrlWeight.value) || 400));
+      const size = Math.max(22, Math.min(72, Number(ctrlSize.value) || 44));
+      const italic = !!ctrlItalic.checked;
+      document.documentElement.style.setProperty('--cmp-font-weight', String(weight));
+      document.documentElement.style.setProperty('--cmp-font-size', `${size}px`);
+      document.documentElement.style.setProperty('--cmp-font-style', italic ? 'italic' : 'normal');
+      ctrlSizeReadout.textContent = `${size}px`;
+      ctrlStyleReadout.textContent = `weight ${weight}, size ${size}px, italic ${italic ? 'on' : 'off'}`;
+    }
+
+    async function renderLongestAyahWordByWord(surahInput = 2, ayahInput = 282) {
+      const loadMsg = document.getElementById('loadMsg');
+      const longestRows = document.getElementById('longestRows');
+      const surah = Number(surahInput);
+      const ayahNum = Number(ayahInput);
+      longestRows.innerHTML = '';
+
+      try {
+        if (!Number.isFinite(surah) || surah < 1 || surah > 114) {
+          throw new Error('Surah must be between 1 and 114.');
+        }
+        if (!Number.isFinite(ayahNum) || ayahNum < 1) {
+          throw new Error('Ayah must be 1 or greater.');
+        }
+
+        const path = `build/recite/surahs/surah_${pad3(surah)}.json`;
+        const res = await fetch(path, { cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const payload = await res.json();
+        const ayah = payload?.surah?.ayahs?.find(a => Number(a?.ayah) === ayahNum);
+        if (!ayah?.arabic) throw new Error(`Ayah ${surah}:${ayahNum} not found in dataset.`);
+
+        const words = String(ayah.arabic).trim().split(/\s+/).filter(Boolean);
+        loadMsg.textContent = `Loaded ${surah}:${ayahNum} with ${words.length} words.`;
+
+        words.forEach((word, idx) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${idx + 1}</td>
+            <td><code>${word}</code></td>
+            <td><div class="ar ar-word ar-prev">${word}</div></td>
+            <td><div class="ar ar-word ar-new">${word}</div></td>
+            <td><div class="ar ar-word ar-pdms-alt">${word}</div></td>
+            <td><div class="ar ar-word ar-muhammadi">${word}</div></td>
+            <td><div class="ar ar-word ar-alquran-indopak">${word}</div></td>
+          `;
+          longestRows.appendChild(tr);
+        });
+      } catch (err) {
+        loadMsg.textContent = `Could not load selected ayah: ${err.message}. If you're opening this as file://, run via local server.`;
+      }
+    }
+
+    ctrlLoadAyah.addEventListener('click', () => {
+      renderLongestAyahWordByWord(ctrlSurah.value, ctrlAyah.value);
+    });
+
+    ctrlSurah.addEventListener('keydown', e => {
+      if (e.key === 'Enter') renderLongestAyahWordByWord(ctrlSurah.value, ctrlAyah.value);
+    });
+
+    ctrlAyah.addEventListener('keydown', e => {
+      if (e.key === 'Enter') renderLongestAyahWordByWord(ctrlSurah.value, ctrlAyah.value);
+    });
+
+    ctrlWeight.addEventListener('input', applyStyleControls);
+    ctrlSize.addEventListener('input', applyStyleControls);
+    ctrlItalic.addEventListener('change', applyStyleControls);
+
+    applyStyleControls();
+    renderLongestAyahWordByWord(ctrlSurah.value, ctrlAyah.value);
+  </script>
+</body>
+</html>

@@ -1,0 +1,313 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QuranQuest Reel Admin</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f1720;
+      color: #ecf2f9;
+    }
+    .wrap {
+      max-width: 680px;
+      margin: 40px auto;
+      padding: 20px;
+      border: 1px solid #234;
+      border-radius: 12px;
+      background: #15212d;
+    }
+    h1 {
+      margin: 0 0 10px;
+      font-size: 22px;
+    }
+    .sub {
+      margin: 0 0 20px;
+      color: #a7bfd4;
+      font-size: 14px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      color: #a7bfd4;
+      margin-bottom: 4px;
+    }
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #385067;
+      background: #0d1620;
+      color: #ecf2f9;
+      padding: 9px 10px;
+      border-radius: 8px;
+    }
+    .full {
+      grid-column: 1 / -1;
+    }
+    button {
+      margin-top: 12px;
+      border: 1px solid #0a7b53;
+      background: #0a7b53;
+      color: white;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    #status, #ghStatus {
+      margin-top: 16px;
+      white-space: pre-wrap;
+      font-size: 14px;
+    }
+    a {
+      color: #6fd8ff;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Private Reel Generator</h1>
+    <p class="sub">Generates a 1080x1920 Quran reel for one ayah and returns a download link.</p>
+
+    <div class="grid">
+      <div>
+        <label for="serviceUrl">Service URL</label>
+        <input id="serviceUrl" value="http://127.0.0.1:8787" />
+      </div>
+      <div>
+        <label for="token">Admin Token</label>
+        <input id="token" type="password" placeholder="REEL_ADMIN_TOKEN" />
+      </div>
+      <div>
+        <label for="surah">Surah</label>
+        <input id="surah" type="number" min="1" max="114" value="2" />
+      </div>
+      <div>
+        <label for="ayah">Ayah</label>
+        <input id="ayah" type="number" min="1" value="255" />
+      </div>
+      <div class="full">
+        <label for="title">Video Title (inside video)</label>
+        <input id="title" placeholder="Powerful Duas from Quran" />
+      </div>
+      <div class="full">
+        <button id="generateBtn" type="button">Generate Reel (Local Service)</button>
+      </div>
+    </div>
+
+    <div id="status"></div>
+
+    <hr style="margin:20px 0;border-color:#294055;">
+    <h1 style="font-size:18px;">GitHub Actions Backend</h1>
+    <p class="sub">Use this UI, but run ffmpeg/rendering in GitHub Actions.</p>
+    <div class="grid">
+      <div>
+        <label for="ghOwner">GitHub Owner</label>
+        <input id="ghOwner" placeholder="your-username-or-org" />
+      </div>
+      <div>
+        <label for="ghRepo">GitHub Repo</label>
+        <input id="ghRepo" placeholder="memorization" />
+      </div>
+      <div>
+        <label for="ghBranch">Branch</label>
+        <input id="ghBranch" value="main" />
+      </div>
+      <div>
+        <label for="ghWorkflow">Workflow File</label>
+        <input id="ghWorkflow" value="reel-generate.yml" />
+      </div>
+      <div class="full">
+        <label for="ghToken">GitHub Token (workflow scope)</label>
+        <input id="ghToken" type="password" placeholder="ghp_..." />
+      </div>
+      <div class="full">
+        <button id="ghGenerateBtn" type="button">Generate via GitHub Actions</button>
+      </div>
+    </div>
+    <div id="ghStatus"></div>
+  </div>
+
+  <script>
+    const key = "qq_reel_admin_v1";
+    const $ = id => document.getElementById(id);
+    const status = $("status");
+    const ghStatus = $("ghStatus");
+
+    function saveState() {
+      const payload = {
+        serviceUrl: $("serviceUrl").value.trim(),
+        token: $("token").value,
+        surah: $("surah").value,
+        ayah: $("ayah").value,
+        title: $("title").value,
+        ghOwner: $("ghOwner").value,
+        ghRepo: $("ghRepo").value,
+        ghBranch: $("ghBranch").value,
+        ghWorkflow: $("ghWorkflow").value,
+        ghToken: $("ghToken").value
+      };
+      localStorage.setItem(key, JSON.stringify(payload));
+    }
+
+    function loadState() {
+      try {
+        const payload = JSON.parse(localStorage.getItem(key) || "{}");
+        if (payload.serviceUrl) $("serviceUrl").value = payload.serviceUrl;
+        if (payload.token) $("token").value = payload.token;
+        if (payload.surah) $("surah").value = payload.surah;
+        if (payload.ayah) $("ayah").value = payload.ayah;
+        if (payload.title) $("title").value = payload.title;
+        if (payload.ghOwner) $("ghOwner").value = payload.ghOwner;
+        if (payload.ghRepo) $("ghRepo").value = payload.ghRepo;
+        if (payload.ghBranch) $("ghBranch").value = payload.ghBranch;
+        if (payload.ghWorkflow) $("ghWorkflow").value = payload.ghWorkflow;
+        if (payload.ghToken) $("ghToken").value = payload.ghToken;
+      } catch (_) {}
+    }
+
+    async function generateLocal() {
+      saveState();
+      const serviceUrl = $("serviceUrl").value.trim().replace(/\/+$/, "");
+      const token = $("token").value.trim();
+      const surah = Number($("surah").value);
+      const ayah = Number($("ayah").value);
+      const title = $("title").value.trim();
+
+      if (!serviceUrl || !token || !surah || !ayah) {
+        status.textContent = "Missing required inputs.";
+        return;
+      }
+
+      status.textContent = "Generating reel...";
+      try {
+        const res = await fetch(`${serviceUrl}/api/reel/generate`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Reel-Token": token
+          },
+          body: JSON.stringify({ surah, ayah, title })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          status.textContent = `Failed: ${data.error || res.status}`;
+          return;
+        }
+
+        status.innerHTML = [
+          `Done: Surah ${data.surah}, Ayah ${data.ayah}`,
+          data.title ? `Title: ${data.title}` : "",
+          `File: ${data.filename}`,
+          `Renderer: ${data.renderer || "unknown"}`,
+          data.renderer_error ? `Renderer fallback reason: ${data.renderer_error}` : "",
+          `Download: <a href="${data.download_url}" target="_blank" rel="noopener">download video</a>`,
+          "Branding included: quranquest.com"
+        ].filter(Boolean).join("<br>");
+      } catch (err) {
+        status.textContent = `Error: ${err.message}`;
+      }
+    }
+
+    async function triggerGithubWorkflow() {
+      saveState();
+      const owner = $("ghOwner").value.trim();
+      const repo = $("ghRepo").value.trim();
+      const branch = $("ghBranch").value.trim() || "main";
+      const workflow = $("ghWorkflow").value.trim() || "reel-generate.yml";
+      const ghToken = $("ghToken").value.trim();
+      const surah = Number($("surah").value);
+      const ayah = Number($("ayah").value);
+      const title = $("title").value.trim();
+
+      if (!owner || !repo || !ghToken || !surah || !ayah) {
+        ghStatus.textContent = "Missing GitHub Owner/Repo/Token or Surah/Ayah.";
+        return;
+      }
+
+      ghStatus.textContent = "Dispatching GitHub Actions workflow...";
+      const url = `https://api.github.com/repos/${owner}/${repo}/actions/workflows/${encodeURIComponent(workflow)}/dispatches`;
+
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${ghToken}`,
+            "Accept": "application/vnd.github+json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            ref: branch,
+            inputs: {
+              surah: String(surah),
+              ayah: String(ayah),
+              title
+            }
+          })
+        });
+
+        if (res.status !== 204) {
+          let msg = `${res.status}`;
+          try {
+            const j = await res.json();
+            msg = j.message || msg;
+          } catch (_) {}
+          ghStatus.textContent = `Failed to trigger workflow: ${msg}`;
+          return;
+        }
+
+        const runsUrl = `https://github.com/${owner}/${repo}/actions/workflows/${workflow}`;
+        ghStatus.innerHTML = [
+          "Workflow dispatched successfully.",
+          `Open runs: <a href="${runsUrl}" target="_blank" rel="noopener">${runsUrl}</a>`,
+          "After it finishes, download artifact from that run."
+        ].join("<br>");
+      } catch (err) {
+        ghStatus.textContent = `Error: ${err.message}`;
+      }
+    }
+
+    async function checkHealth() {
+      const serviceUrl = $("serviceUrl").value.trim().replace(/\/+$/, "");
+      if (!serviceUrl) return;
+      try {
+        const res = await fetch(`${serviceUrl}/api/reel/health`);
+        const data = await res.json();
+        if (res.ok && data.ok) {
+          status.textContent = "Service reachable. Ready to generate.";
+        } else {
+          status.textContent = "Service responded, but not healthy.";
+        }
+      } catch (err) {
+        status.textContent = `Service not reachable: ${err.message}`;
+      }
+    }
+
+    window.addEventListener("submit", e => e.preventDefault());
+    $("generateBtn").addEventListener("click", e => {
+      e.preventDefault();
+      e.stopPropagation();
+      generateLocal();
+    });
+    $("ghGenerateBtn").addEventListener("click", e => {
+      e.preventDefault();
+      e.stopPropagation();
+      triggerGithubWorkflow();
+    });
+
+    ["serviceUrl", "token", "surah", "ayah", "title", "ghOwner", "ghRepo", "ghBranch", "ghWorkflow", "ghToken"].forEach(id => {
+      $(id).addEventListener("change", saveState);
+    });
+
+    loadState();
+    checkHealth();
+  </script>
+</body>
+</html>
