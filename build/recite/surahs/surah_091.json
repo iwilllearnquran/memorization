@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-02-14T12:15:23.690888+00:00",
-  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "generatedAt": "2026-02-21T01:14:35.402729+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
   "surah": {
     "surah": 91,
     "arabicName": "سُورَةُ الشَّمۡسِ",
@@ -11,7 +11,7 @@
       {
         "ayah": 1,
         "globalAyah": 6044,
-        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ وَٱلشَّمْسِ وَضُحَىٰهَا",
+        "arabic": "وَالشَّمۡسِ وَضُحٰٮهَا  ۙ‏",
         "translation_en": "CONSIDER the sun and its radiant brightness,",
         "translation_ur": "سورج کی قسم اور اس کی روشنی کی",
         "audio": {
@@ -23,7 +23,7 @@
       {
         "ayah": 2,
         "globalAyah": 6045,
-        "arabic": "وَٱلْقَمَرِ إِذَا تَلَىٰهَا",
+        "arabic": "وَالۡقَمَرِ اِذَا تَلٰٮهَا  ۙ‏",
         "translation_en": "and the moon as it reflects the sun!",
         "translation_ur": "اور چاند کی جب اس کے پیچھے نکلے",
         "audio": {
@@ -35,7 +35,7 @@
       {
         "ayah": 3,
         "globalAyah": 6046,
-        "arabic": "وَٱلنَّهَارِ إِذَا جَلَّىٰهَا",
+        "arabic": "وَالنَّهَارِ اِذَا جَلّٰٮهَا ۙ‏",
         "translation_en": "Consider the day as it reveals the world,",
         "translation_ur": "اور دن کی جب اُسے چمکا دے",
         "audio": {
@@ -47,7 +47,7 @@
       {
         "ayah": 4,
         "globalAyah": 6047,
-        "arabic": "وَٱلَّيْلِ إِذَا يَغْشَىٰهَا",
+        "arabic": "وَالَّيۡلِ اِذَا يَغۡشٰٮهَا ۙ‏",
         "translation_en": "and the night as it veils it darkly!",
         "translation_ur": "اور رات کی جب اُسے چھپا لے",
         "audio": {
@@ -59,7 +59,7 @@
       {
         "ayah": 5,
         "globalAyah": 6048,
-        "arabic": "وَٱلسَّمَآءِ وَمَا بَنَىٰهَا",
+        "arabic": "وَالسَّمَآءِ وَمَا بَنٰٮهَا ۙ‏",
         "translation_en": "Consider the sky and its wondrous make,",
         "translation_ur": "اور آسمان کی اور اس ذات کی جس نے اسے بنایا",
         "audio": {
@@ -71,7 +71,7 @@
       {
         "ayah": 6,
         "globalAyah": 6049,
-        "arabic": "وَٱلْأَرْضِ وَمَا طَحَىٰهَا",
+        "arabic": "وَالۡاَرۡضِ وَمَا طَحٰٮهَا ۙ‏",
         "translation_en": "and the earth and all its expanse!",
         "translation_ur": "اور زمین کی اور اس کی جس نے اسے پھیلایا",
         "audio": {
@@ -83,7 +83,7 @@
       {
         "ayah": 7,
         "globalAyah": 6050,
-        "arabic": "وَنَفْسٍۢ وَمَا سَوَّىٰهَا",
+        "arabic": "وَنَفۡسٍ وَّمَا سَوّٰٮهَا ۙ‏",
         "translation_en": "Consider the human self, and how it is formed in accordance with what it is meant to be,",
         "translation_ur": "اور انسان کی اور اس کی جس نے اس (کے اعضا) کو برابر کیا",
         "audio": {
@@ -95,7 +95,7 @@
       {
         "ayah": 8,
         "globalAyah": 6051,
-        "arabic": "فَأَلْهَمَهَا فُجُورَهَا وَتَقْوَىٰهَا",
+        "arabic": "فَاَلۡهَمَهَا فُجُوۡرَهَا وَتَقۡوٰٮهَا ۙ‏",
         "translation_en": "and how it is imbued with moral failings as well as with consciousness of God!",
         "translation_ur": "پھر اس کو بدکاری (سے بچنے) اور پرہیزگاری کرنے کی سمجھ دی",
         "audio": {
@@ -107,7 +107,7 @@
       {
         "ayah": 9,
         "globalAyah": 6052,
-        "arabic": "قَدْ أَفْلَحَ مَن زَكَّىٰهَا",
+        "arabic": "قَدۡ اَفۡلَحَ مَنۡ زَكّٰٮهَا ۙ‏",
         "translation_en": "To a happy state shall indeed attain he who causes this [self] to grow in purity,",
         "translation_ur": "کہ جس نے (اپنے) نفس (یعنی روح) کو پاک رکھا وہ مراد کو پہنچا",
         "audio": {
@@ -119,7 +119,7 @@
       {
         "ayah": 10,
         "globalAyah": 6053,
-        "arabic": "وَقَدْ خَابَ مَن دَسَّىٰهَا",
+        "arabic": "وَقَدۡ خَابَ مَنۡ دَسّٰٮهَا ؕ‏",
         "translation_en": "and truly lost is he who buries it [in darkness].",
         "translation_ur": "اور جس نے اسے خاک میں ملایا وہ خسارے میں رہا",
         "audio": {
@@ -131,7 +131,7 @@
       {
         "ayah": 11,
         "globalAyah": 6054,
-        "arabic": "كَذَّبَتْ ثَمُودُ بِطَغْوَىٰهَآ",
+        "arabic": "كَذَّبَتۡ ثَمُوۡدُ بِطَغۡوٰٮهَآ  ۙ‏",
         "translation_en": "TO [THIS] TRUTH gave the lie, in their overweening arrogance, [the tribe of] Thamud,",
         "translation_ur": "(قوم) ثمود نے اپنی سرکشی کے سبب (پیغمبر کو) جھٹلایا",
         "audio": {
@@ -143,7 +143,7 @@
       {
         "ayah": 12,
         "globalAyah": 6055,
-        "arabic": "إِذِ ٱنۢبَعَثَ أَشْقَىٰهَا",
+        "arabic": "اِذِ انۡۢبَعَثَ اَشۡقٰٮهَا  ۙ‏",
         "translation_en": "when that most hapless wretch from among them rushed forward [to commit his evil deed],",
         "translation_ur": "جب ان میں سے ایک نہایت بدبخت اٹھا",
         "audio": {
@@ -155,7 +155,7 @@
       {
         "ayah": 13,
         "globalAyah": 6056,
-        "arabic": "فَقَالَ لَهُمْ رَسُولُ ٱللَّهِ نَاقَةَ ٱللَّهِ وَسُقْيَٰهَا",
+        "arabic": "فَقَالَ لَهُمۡ رَسُوۡلُ اللّٰهِ نَاقَةَ اللّٰهِ وَسُقۡيٰهَا ؕ‏",
         "translation_en": "although God's apostle had told them, \"It is a she-camel belonging to God, so let her drink [and do her no harm]!\"",
         "translation_ur": "تو خدا کے پیغمبر (صالح) نے ان سے کہا کہ خدا کی اونٹنی اور اس کے پانی پینے کی باری سے عذر کرو",
         "audio": {
@@ -167,7 +167,7 @@
       {
         "ayah": 14,
         "globalAyah": 6057,
-        "arabic": "فَكَذَّبُوهُ فَعَقَرُوهَا فَدَمْدَمَ عَلَيْهِمْ رَبُّهُم بِذَنۢبِهِمْ فَسَوَّىٰهَا",
+        "arabic": "فَكَذَّبُوۡهُ فَعَقَرُوۡهَا   ۙفَدَمۡدَمَ عَلَيۡهِمۡ رَبُّهُمۡ بِذَنۡۢبِهِمۡ فَسَوّٰٮهَا  ۙ‏",
         "translation_en": "But they gave him the lie, and cruelly slaughtered her - whereupon their Sustainer visited them with utter destruction for this their sin, destroying them all alike:",
         "translation_ur": "مگر انہوں نے پیغمبر کو جھٹلایا اور اونٹنی کی کونچیں کاٹ دیں تو خدا نے ان کےگناہ کے سبب ان پر عذاب نازل کیا اور سب کو (ہلاک کر کے) برابر کر دیا",
         "audio": {
@@ -179,7 +179,7 @@
       {
         "ayah": 15,
         "globalAyah": 6058,
-        "arabic": "وَلَا يَخَافُ عُقْبَٰهَا",
+        "arabic": "وَلَا يَخَافُ عُقۡبٰهَا‏",
         "translation_en": "for none [of them] had any fear of what might befall them.",
         "translation_ur": "اور اس کو ان کے بدلہ لینے کا کچھ بھی ڈر نہیں",
         "audio": {

@@ -12,11 +12,12 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Generate one Quran reel.")
     parser.add_argument("--surah", type=int, required=True)
     parser.add_argument("--ayah", type=int, required=True)
+    parser.add_argument("--source", type=str, choices=["ayah", "dua"], default="ayah")
     parser.add_argument("--title", type=str, default="")
     parser.add_argument("--out-json", type=str, default="generated/reels/result.json")
     args = parser.parse_args()
 
-    result = generate_for_ayah(args.surah, args.ayah, args.title)
+    result = generate_for_ayah(args.surah, args.ayah, args.title, source=args.source)
     out_path = Path(args.out_json)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")

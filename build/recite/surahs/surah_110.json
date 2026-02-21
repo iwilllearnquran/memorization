@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-02-14T12:15:32.622063+00:00",
-  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "generatedAt": "2026-02-21T01:14:48.975526+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
   "surah": {
     "surah": 110,
     "arabicName": "سُورَةُ النَّصۡرِ",
@@ -11,7 +11,7 @@
       {
         "ayah": 1,
         "globalAyah": 6214,
-        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ إِذَا جَآءَ نَصْرُ ٱللَّهِ وَٱلْفَتْحُ",
+        "arabic": "اِذَا جَآءَ نَصۡرُ اللّٰهِ وَالۡفَتۡحُۙ‏",
         "translation_en": "WHEN GOD'S SUCCOUR comes, and victory,",
         "translation_ur": "جب خدا کی مدد آ پہنچی اور فتح (حاصل ہو گئی)",
         "audio": {
@@ -23,7 +23,7 @@
       {
         "ayah": 2,
         "globalAyah": 6215,
-        "arabic": "وَرَأَيْتَ ٱلنَّاسَ يَدْخُلُونَ فِى دِينِ ٱللَّهِ أَفْوَاجًۭا",
+        "arabic": "وَرَاَيۡتَ النَّاسَ يَدۡخُلُوۡنَ فِىۡ دِيۡنِ اللّٰهِ اَفۡوَاجًا ۙ‏",
         "translation_en": "and thou seest people enter God's religion in hosts,",
         "translation_ur": "اور تم نے دیکھ لیا کہ لوگ غول کے غول خدا کے دین میں داخل ہو رہے ہیں",
         "audio": {
@@ -35,7 +35,7 @@
       {
         "ayah": 3,
         "globalAyah": 6216,
-        "arabic": "فَسَبِّحْ بِحَمْدِ رَبِّكَ وَٱسْتَغْفِرْهُ ۚ إِنَّهُۥ كَانَ تَوَّابًۢا",
+        "arabic": "فَسَبِّحۡ بِحَمۡدِ رَبِّكَ وَاسۡتَغۡفِرۡهُ​ ؕ اِنَّهٗ كَانَ تَوَّابًا‏",
         "translation_en": "extol thy Sustainer's limitless glory, and praise Him, and seek His forgiveness: for, behold, He is ever an acceptor of repentance.",
         "translation_ur": "تو اپنے پروردگار کی تعریف کے ساتھ تسبیح کرو اور اس سے مغفرت مانگو، بے شک وہ معاف کرنے والا ہے",
         "audio": {

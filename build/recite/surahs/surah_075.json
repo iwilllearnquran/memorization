@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-02-14T12:15:15.362291+00:00",
-  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "generatedAt": "2026-02-21T01:14:11.321044+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
   "surah": {
     "surah": 75,
     "arabicName": "سُورَةُ القِيَامَةِ",
@@ -11,7 +11,7 @@
       {
         "ayah": 1,
         "globalAyah": 5552,
-        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ لَآ أُقْسِمُ بِيَوْمِ ٱلْقِيَٰمَةِ",
+        "arabic": "لَاۤ اُقۡسِمُ بِيَوۡمِ الۡقِيٰمَةِۙ‏",
         "translation_en": "NAY! I call to witness the Day of Resurrection!",
         "translation_ur": "ہم کو روز قیامت کی قسم",
         "audio": {
@@ -23,7 +23,7 @@
       {
         "ayah": 2,
         "globalAyah": 5553,
-        "arabic": "وَلَآ أُقْسِمُ بِٱلنَّفْسِ ٱللَّوَّامَةِ",
+        "arabic": "وَلَاۤ اُقۡسِمُ بِالنَّفۡسِ اللَّوَّامَةِؕ‏",
         "translation_en": "But nay! I call to witness the accusing voice of man's own conscience!",
         "translation_ur": "اور نفس لوامہ کی (کہ سب لوگ اٹھا کر) کھڑے کئے جائیں گے",
         "audio": {
@@ -35,7 +35,7 @@
       {
         "ayah": 3,
         "globalAyah": 5554,
-        "arabic": "أَيَحْسَبُ ٱلْإِنسَٰنُ أَلَّن نَّجْمَعَ عِظَامَهُۥ",
+        "arabic": "اَيَحۡسَبُ الۡاِنۡسَانُ اَلَّنۡ نَّجۡمَعَ عِظَامَهٗؕ‏",
         "translation_en": "Does man think that We cannot [resurrect him and] bring his bones together again?",
         "translation_ur": "کیا انسان یہ خیال کرتا ہے کہ ہم اس کی (بکھری ہوئی) ہڈیاں اکٹھی نہیں کریں گے؟",
         "audio": {
@@ -47,7 +47,7 @@
       {
         "ayah": 4,
         "globalAyah": 5555,
-        "arabic": "بَلَىٰ قَٰدِرِينَ عَلَىٰٓ أَن نُّسَوِّىَ بَنَانَهُۥ",
+        "arabic": "بَلٰى قٰدِرِيۡنَ عَلٰٓى اَنۡ نُّسَوِّىَ بَنَانَهٗ‏",
         "translation_en": "Yea indeed, We are able to make whole his very finger-tips!",
         "translation_ur": "ضرور کریں گے (اور) ہم اس بات پر قادر ہیں کہ اس کی پور پور درست کردیں",
         "audio": {
@@ -59,7 +59,7 @@
       {
         "ayah": 5,
         "globalAyah": 5556,
-        "arabic": "بَلْ يُرِيدُ ٱلْإِنسَٰنُ لِيَفْجُرَ أَمَامَهُۥ",
+        "arabic": "بَلۡ يُرِيۡدُ الۡاِنۡسَانُ لِيَفۡجُرَ اَمَامَهٗ​ۚ‏",
         "translation_en": "None the less man chooses to deny what lies ahead of him,",
         "translation_ur": "مگر انسان چاہتا ہے کہ آگے کو خود سری کرتا جائے",
         "audio": {
@@ -71,7 +71,7 @@
       {
         "ayah": 6,
         "globalAyah": 5557,
-        "arabic": "يَسْـَٔلُ أَيَّانَ يَوْمُ ٱلْقِيَٰمَةِ",
+        "arabic": "يَسۡـَٔـلُ اَيَّانَ يَوۡمُ الۡقِيٰمَةِؕ‏",
         "translation_en": "asking [derisively], \"When is that Resurrection Day to be?\"",
         "translation_ur": "پوچھتا ہے کہ قیامت کا دن کب ہوگا؟",
         "audio": {
@@ -83,7 +83,7 @@
       {
         "ayah": 7,
         "globalAyah": 5558,
-        "arabic": "فَإِذَا بَرِقَ ٱلْبَصَرُ",
+        "arabic": "فَاِذَا بَرِقَ الۡبَصَرُۙ‏",
         "translation_en": "But [on that Day,] when the eyesight is by fear confounded,",
         "translation_ur": "جب آنکھیں چندھیا جائیں",
         "audio": {
@@ -95,7 +95,7 @@
       {
         "ayah": 8,
         "globalAyah": 5559,
-        "arabic": "وَخَسَفَ ٱلْقَمَرُ",
+        "arabic": "وَخَسَفَ الۡقَمَرُۙ‏",
         "translation_en": "and the moon is darkened,",
         "translation_ur": "اور چاند گہنا جائے",
         "audio": {
@@ -107,7 +107,7 @@
       {
         "ayah": 9,
         "globalAyah": 5560,
-        "arabic": "وَجُمِعَ ٱلشَّمْسُ وَٱلْقَمَرُ",
+        "arabic": "وَجُمِعَ الشَّمۡسُ وَالۡقَمَرُۙ‏",
         "translation_en": "and the sun and the moon are brought together",
         "translation_ur": "اور سورج اور چاند جمع کردیئے جائیں",
         "audio": {
@@ -119,7 +119,7 @@
       {
         "ayah": 10,
         "globalAyah": 5561,
-        "arabic": "يَقُولُ ٱلْإِنسَٰنُ يَوْمَئِذٍ أَيْنَ ٱلْمَفَرُّ",
+        "arabic": "يَقُوۡلُ الۡاِنۡسَانُ يَوۡمَٮِٕذٍ اَيۡنَ الۡمَفَرُّ​ ۚ‏",
         "translation_en": "on that Day will man exclaim \"Whither to flee?\"",
         "translation_ur": "اس دن انسان کہے گا کہ (اب) کہاں بھاگ جاؤں؟",
         "audio": {
@@ -131,7 +131,7 @@
       {
         "ayah": 11,
         "globalAyah": 5562,
-        "arabic": "كَلَّا لَا وَزَرَ",
+        "arabic": "كَلَّا لَا وَزَرَؕ‏",
         "translation_en": "But nay: no refuge [for thee, O man]!",
         "translation_ur": "بےشک کہیں پناہ نہیں",
         "audio": {
@@ -143,7 +143,7 @@
       {
         "ayah": 12,
         "globalAyah": 5563,
-        "arabic": "إِلَىٰ رَبِّكَ يَوْمَئِذٍ ٱلْمُسْتَقَرُّ",
+        "arabic": "اِلٰى رَبِّكَ يَوۡمَٮِٕذِ اۨلۡمُسۡتَقَرُّ ؕ‏",
         "translation_en": "With thy Sustainer, on that Day, the journey's end will be!",
         "translation_ur": "اس روز پروردگار ہی کے پاس ٹھکانا ہے",
         "audio": {
@@ -155,7 +155,7 @@
       {
         "ayah": 13,
         "globalAyah": 5564,
-        "arabic": "يُنَبَّؤُا۟ ٱلْإِنسَٰنُ يَوْمَئِذٍۭ بِمَا قَدَّمَ وَأَخَّرَ",
+        "arabic": "يُنَبَّؤُا الۡاِنۡسَانُ يَوۡمَٮِٕذٍۢ بِمَا قَدَّمَ وَاَخَّرَؕ‏",
         "translation_en": "Man will be apprised, on that Day, of what he has done and what he has left undone:",
         "translation_ur": "اس دن انسان کو جو (عمل) اس نے آگے بھیجے اور پیچھے چھوڑے ہوں گے سب بتا دیئے جائیں گے",
         "audio": {
@@ -167,7 +167,7 @@
       {
         "ayah": 14,
         "globalAyah": 5565,
-        "arabic": "بَلِ ٱلْإِنسَٰنُ عَلَىٰ نَفْسِهِۦ بَصِيرَةٌۭ",
+        "arabic": "بَلِ الۡاِنۡسَانُ عَلٰى نَفۡسِهٖ بَصِيۡرَةٌ ۙ‏",
         "translation_en": "nay, but man shall against himself be an eye-witness,",
         "translation_ur": "بلکہ انسان آپ اپنا گواہ ہے",
         "audio": {
@@ -179,7 +179,7 @@
       {
         "ayah": 15,
         "globalAyah": 5566,
-        "arabic": "وَلَوْ أَلْقَىٰ مَعَاذِيرَهُۥ",
+        "arabic": "وَّلَوۡ اَلۡقٰى مَعَاذِيۡرَهٗؕ‏",
         "translation_en": "even though he may veil himself in excuses.",
         "translation_ur": "اگرچہ عذر ومعذرت کرتا رہے",
         "audio": {
@@ -191,7 +191,7 @@
       {
         "ayah": 16,
         "globalAyah": 5567,
-        "arabic": "لَا تُحَرِّكْ بِهِۦ لِسَانَكَ لِتَعْجَلَ بِهِۦٓ",
+        "arabic": "لَا تُحَرِّكۡ بِهٖ لِسَانَكَ لِتَعۡجَلَ بِهٖؕ‏",
         "translation_en": "MOVE NOT thy tongue in haste, [repeating the words of the revelation:]",
         "translation_ur": "اور (اے محمدﷺ) وحی کے پڑھنے کے لئے اپنی زبان نہ چلایا کرو کہ اس کو جلد یاد کرلو",
         "audio": {
@@ -203,7 +203,7 @@
       {
         "ayah": 17,
         "globalAyah": 5568,
-        "arabic": "إِنَّ عَلَيْنَا جَمْعَهُۥ وَقُرْءَانَهُۥ",
+        "arabic": "اِنَّ عَلَيۡنَا جَمۡعَهٗ وَقُرۡاٰنَهٗۚ  ۖ‏",
         "translation_en": "for, behold, it is for Us to gather it [in thy heart,] and to cause it to be read [as it ought to be read].",
         "translation_ur": "اس کا جمع کرنا اور پڑھانا ہمارے ذمے ہے",
         "audio": {
@@ -215,7 +215,7 @@
       {
         "ayah": 18,
         "globalAyah": 5569,
-        "arabic": "فَإِذَا قَرَأْنَٰهُ فَٱتَّبِعْ قُرْءَانَهُۥ",
+        "arabic": "فَاِذَا قَرَاۡنٰهُ فَاتَّبِعۡ قُرۡاٰنَهٗ​ۚ‏",
         "translation_en": "Thus, when We recite it, follow thou its wording [with all thy mind]:",
         "translation_ur": "جب ہم وحی پڑھا کریں تو تم (اس کو سنا کرو اور) پھر اسی طرح پڑھا کرو",
         "audio": {
@@ -227,7 +227,7 @@
       {
         "ayah": 19,
         "globalAyah": 5570,
-        "arabic": "ثُمَّ إِنَّ عَلَيْنَا بَيَانَهُۥ",
+        "arabic": "ثُمَّ اِنَّ عَلَيۡنَا بَيَانَهٗؕ‏",
         "translation_en": "and then, behold, it will be for Us to make its meaning clear.",
         "translation_ur": "پھر اس (کے معانی) کا بیان بھی ہمارے ذمے ہے",
         "audio": {
@@ -239,7 +239,7 @@
       {
         "ayah": 20,
         "globalAyah": 5571,
-        "arabic": "كَلَّا بَلْ تُحِبُّونَ ٱلْعَاجِلَةَ",
+        "arabic": "كَلَّا بَلۡ تُحِبُّوۡنَ الۡعَاجِلَةَ ۙ‏",
         "translation_en": "NAY, but [most of] you love this fleeting life,",
         "translation_ur": "مگر (لوگو) تم دنیا کو دوست رکھتے ہو",
         "audio": {
@@ -251,7 +251,7 @@
       {
         "ayah": 21,
         "globalAyah": 5572,
-        "arabic": "وَتَذَرُونَ ٱلْءَاخِرَةَ",
+        "arabic": "وَتَذَرُوۡنَ الۡاٰخِرَةَ ؕ‏",
         "translation_en": "and give no thought to the life to come [and to Judgment Day]!",
         "translation_ur": "اور آخرت کو ترک کئے دیتے ہو",
         "audio": {
@@ -263,7 +263,7 @@
       {
         "ayah": 22,
         "globalAyah": 5573,
-        "arabic": "وُجُوهٌۭ يَوْمَئِذٍۢ نَّاضِرَةٌ",
+        "arabic": "وُجُوۡهٌ يَّوۡمَٮِٕذٍ نَّاضِرَةٌ ۙ‏",
         "translation_en": "Some faces will on that Day be bright with happiness,",
         "translation_ur": "اس روز بہت سے منہ رونق دار ہوں گے",
         "audio": {
@@ -275,7 +275,7 @@
       {
         "ayah": 23,
         "globalAyah": 5574,
-        "arabic": "إِلَىٰ رَبِّهَا نَاظِرَةٌۭ",
+        "arabic": "اِلٰى رَبِّهَا نَاظِرَةٌ​ ۚ‏",
         "translation_en": "looking up to their Sustainer;",
         "translation_ur": "اور) اپنے پروردگار کے محو دیدار ہوں گے",
         "audio": {
@@ -287,7 +287,7 @@
       {
         "ayah": 24,
         "globalAyah": 5575,
-        "arabic": "وَوُجُوهٌۭ يَوْمَئِذٍۭ بَاسِرَةٌۭ",
+        "arabic": "وَوُجُوۡهٌ يَّوۡمَٮِٕذٍۢ بَاسِرَةٌ ۙ‏",
         "translation_en": "and some faces will on that Day be overcast with despair,",
         "translation_ur": "اور بہت سے منہ اس دن اداس ہوں گے",
         "audio": {
@@ -299,7 +299,7 @@
       {
         "ayah": 25,
         "globalAyah": 5576,
-        "arabic": "تَظُنُّ أَن يُفْعَلَ بِهَا فَاقِرَةٌۭ",
+        "arabic": "تَظُنُّ اَنۡ يُّفۡعَلَ بِهَا فَاقِرَةٌ ؕ‏",
         "translation_en": "knowing that a crushing calamity is about to befall them.",
         "translation_ur": "خیال کریں گے کہ ان پر مصیبت واقع ہونے کو ہے",
         "audio": {
@@ -311,7 +311,7 @@
       {
         "ayah": 26,
         "globalAyah": 5577,
-        "arabic": "كَلَّآ إِذَا بَلَغَتِ ٱلتَّرَاقِىَ",
+        "arabic": "كَلَّاۤ اِذَا بَلَغَتِ التَّرَاقِىَۙ‏",
         "translation_en": "NAY, but when [the last breath] comes up to the throat [of a dying man],",
         "translation_ur": "دیکھو جب جان گلے تک پہنچ جائے",
         "audio": {
@@ -323,7 +323,7 @@
       {
         "ayah": 27,
         "globalAyah": 5578,
-        "arabic": "وَقِيلَ مَنْ ۜ رَاقٍۢ",
+        "arabic": "وَقِيۡلَ مَنۡ رَاقٍۙ‏",
         "translation_en": "and people ask, \"Is there any wizard [that could save him]?\"",
         "translation_ur": "اور لوگ کہنے لگیں (اس وقت) کون جھاڑ پھونک کرنے والا ہے",
         "audio": {
@@ -335,7 +335,7 @@
       {
         "ayah": 28,
         "globalAyah": 5579,
-        "arabic": "وَظَنَّ أَنَّهُ ٱلْفِرَاقُ",
+        "arabic": "وَّظَنَّ اَنَّهُ الۡفِرَاقُۙ‏",
         "translation_en": "the while he [himself] knows that this is the parting,",
         "translation_ur": "اور اس (جان بلب) نے سمجھا کہ اب سب سے جدائی ہے",
         "audio": {
@@ -347,7 +347,7 @@
       {
         "ayah": 29,
         "globalAyah": 5580,
-        "arabic": "وَٱلْتَفَّتِ ٱلسَّاقُ بِٱلسَّاقِ",
+        "arabic": "وَالۡتَفَّتِ السَّاقُ بِالسَّاقِۙ‏",
         "translation_en": "and is enwrapped in the pangs of death",
         "translation_ur": "اور پنڈلی سے پنڈلی لپٹ جائے",
         "audio": {
@@ -359,7 +359,7 @@
       {
         "ayah": 30,
         "globalAyah": 5581,
-        "arabic": "إِلَىٰ رَبِّكَ يَوْمَئِذٍ ٱلْمَسَاقُ",
+        "arabic": "اِلٰى رَبِّكَ يَوۡمَٮِٕذِ اۨلۡمَسَاقُؕ‏",
         "translation_en": "at that time towards thy Sustainer does he feel impelled to turn!",
         "translation_ur": "اس دن تجھ کو اپنے پروردگار کی طرف چلنا ہے",
         "audio": {
@@ -371,7 +371,7 @@
       {
         "ayah": 31,
         "globalAyah": 5582,
-        "arabic": "فَلَا صَدَّقَ وَلَا صَلَّىٰ",
+        "arabic": "فَلَا صَدَّقَ وَلَا صَلّٰىۙ‏",
         "translation_en": "[Useless, though, will be his repentance: for [as long as he was alive] he did not accept the truth, nor did he pray [for enlightenment],",
         "translation_ur": "تو اس (ناعاقبت) اندیش نے نہ تو (کلام خدا) کی تصدیق کی نہ نماز پڑھی",
         "audio": {
@@ -383,7 +383,7 @@
       {
         "ayah": 32,
         "globalAyah": 5583,
-        "arabic": "وَلَٰكِن كَذَّبَ وَتَوَلَّىٰ",
+        "arabic": "وَلٰڪِنۡ كَذَّبَ وَتَوَلّٰىۙ‏",
         "translation_en": "but, on the contrary, he gave the lie to the truth and turned away [from it],",
         "translation_ur": "بلکہ جھٹلایا اور منہ پھیر لیا",
         "audio": {
@@ -395,7 +395,7 @@
       {
         "ayah": 33,
         "globalAyah": 5584,
-        "arabic": "ثُمَّ ذَهَبَ إِلَىٰٓ أَهْلِهِۦ يَتَمَطَّىٰٓ",
+        "arabic": "ثُمَّ ذَهَبَ اِلٰٓى اَهۡلِهٖ يَتَمَطّٰىؕ‏",
         "translation_en": "and then went arrogantly back to what he had come from.",
         "translation_ur": "پھر اپنے گھر والوں کے پاس اکڑتا ہوا چل دیا",
         "audio": {
@@ -407,7 +407,7 @@
       {
         "ayah": 34,
         "globalAyah": 5585,
-        "arabic": "أَوْلَىٰ لَكَ فَأَوْلَىٰ",
+        "arabic": "اَوۡلٰى لَكَ فَاَوۡلٰىۙ‏",
         "translation_en": "[And yet, O man, thine end comes hourly] nearer unto thee, and nearer –",
         "translation_ur": "افسوس ہے تجھ پر پھر افسوس ہے",
         "audio": {
@@ -419,7 +419,7 @@
       {
         "ayah": 35,
         "globalAyah": 5586,
-        "arabic": "ثُمَّ أَوْلَىٰ لَكَ فَأَوْلَىٰٓ",
+        "arabic": "ثُمَّ اَوۡلٰى لَكَ فَاَوۡلٰىؕ‏",
         "translation_en": "and ever nearer unto thee, and nearer!",
         "translation_ur": "پھر افسوس ہے تجھ پر پھر افسوس ہے",
         "audio": {
@@ -431,7 +431,7 @@
       {
         "ayah": 36,
         "globalAyah": 5587,
-        "arabic": "أَيَحْسَبُ ٱلْإِنسَٰنُ أَن يُتْرَكَ سُدًى",
+        "arabic": "اَيَحۡسَبُ الۡاِنۡسَانُ اَنۡ يُّتۡرَكَ سُدًىؕ‏",
         "translation_en": "DOES MAN, then, think that he is to be left to himself to go about at will?",
         "translation_ur": "کیا انسان خیال کرتا ہے کہ یوں ہی چھوڑ دیا جائے گا؟",
         "audio": {
@@ -443,7 +443,7 @@
       {
         "ayah": 37,
         "globalAyah": 5588,
-        "arabic": "أَلَمْ يَكُ نُطْفَةًۭ مِّن مَّنِىٍّۢ يُمْنَىٰ",
+        "arabic": "اَلَمۡ يَكُ نُطۡفَةً مِّنۡ مَّنِىٍّ يُّمۡنٰىۙ‏",
         "translation_en": "Was he not once a [mere] drop of sperm that had been spilt,",
         "translation_ur": "کیا وہ منی کا جو رحم میں ڈالی جاتی ہے ایک قطرہ نہ تھا؟",
         "audio": {
@@ -455,7 +455,7 @@
       {
         "ayah": 38,
         "globalAyah": 5589,
-        "arabic": "ثُمَّ كَانَ عَلَقَةًۭ فَخَلَقَ فَسَوَّىٰ",
+        "arabic": "ثُمَّ كَانَ عَلَقَةً فَخَلَقَ فَسَوّٰىۙ‏",
         "translation_en": "and thereafter became a germ-cell - whereupon He created and formed [it] in accordance with what [it] was meant to be,",
         "translation_ur": "پھر لوتھڑا ہوا پھر (خدا نے) اس کو بنایا پھر (اس کے اعضا کو) درست کیا",
         "audio": {
@@ -467,7 +467,7 @@
       {
         "ayah": 39,
         "globalAyah": 5590,
-        "arabic": "فَجَعَلَ مِنْهُ ٱلزَّوْجَيْنِ ٱلذَّكَرَ وَٱلْأُنثَىٰٓ",
+        "arabic": "فَجَعَلَ مِنۡهُ الزَّوۡجَيۡنِ الذَّكَرَ وَالۡاُنۡثٰىؕ‏",
         "translation_en": "and fashioned out of it the two sexes, the male and the female?",
         "translation_ur": "پھر اس کی دو قسمیں بنائیں (ایک) مرد اور (ایک) عورت",
         "audio": {
@@ -479,7 +479,7 @@
       {
         "ayah": 40,
         "globalAyah": 5591,
-        "arabic": "أَلَيْسَ ذَٰلِكَ بِقَٰدِرٍ عَلَىٰٓ أَن يُحْۦِىَ ٱلْمَوْتَىٰ",
+        "arabic": "اَلَيۡسَ ذٰلِكَ بِقٰدِرٍ عَلٰٓى اَنۡ يُّحۡـىِۦَ الۡمَوۡتٰى‏",
         "translation_en": "Is not He, then; able to bring the dead back to life?",
         "translation_ur": "کیا اس خالق کو اس بات پر قدرت نہیں کہ مردوں کو جلا اُٹھائے؟",
         "audio": {

@@ -19,12 +19,23 @@
   --muted:#68525c;
   --shadow:0 12px 28px rgba(39,16,27,.12);
   --ring:0 0 0 3px rgba(214,162,58,.45);
+  --qq-arabic-font-family: 'CustomArabic';
+  --qq-arabic-size: 30px;
+  --qq-arabic-weight: 100;
+  --qq-arabic-style: normal;
+  --qq-english-scale: 1;
 }
 
 @font-face {
   font-family: 'CustomArabic';
-  src: url('/fonts/PDMS_SALEEM_QURANFONTQESHIP_0.woff2') format('woff2');
+  src: url('/fonts/Naskh-Nastaleeq-IndoPak-QWBW.ttf') format('truetype');
   font-display: swap;       /* 🔥 critical */
+}
+
+@font-face {
+  font-family: 'UthmanicHafs';
+  src: url('/fonts/UthmanicHafs1Ver18.woff2') format('woff2');
+  font-display: swap;
 }
 
 
@@ -202,8 +213,13 @@ html {
 }
 
 .dua-arabic {
-  font-family:"CustomArabic", serif;
-  font-size:clamp(26px,4vw,34px);
+  font-family:var(--qq-arabic-font-family), serif;
+  font-size:var(--qq-arabic-size);
+  font-weight:var(--qq-arabic-weight);
+  font-style:var(--qq-arabic-style);
+  line-height:1.35;
+  word-spacing:-0.12em;
+  letter-spacing:-0.01em;
   direction:rtl;
   margin-bottom:14px;
   color:var(--ink);
@@ -219,10 +235,12 @@ html {
 .dua-transliteration {
   font-style:italic;
   color:var(--muted);
+  font-size: calc(16px * var(--qq-english-scale));
   margin-bottom:10px;
 }
 
 .dua-translation {
+  font-size: calc(16px * var(--qq-english-scale));
   line-height:1.7;
   color:#1a2d3a;
 }
@@ -338,6 +356,37 @@ function postToParent(message) {
   window.parent.postMessage(message, PARENT_ORIGIN);
 }
 
+function sanitizeTypographySettings(raw = {}) {
+  const arabicFont = raw.arabicFont === "UthmanicHafs" ? "UthmanicHafs" : "CustomArabic";
+  const parsedSize = Number.parseFloat(raw.arabicSize);
+  const arabicSize = Number.isFinite(parsedSize) ? Math.min(56, Math.max(16, parsedSize)) : 30;
+  const parsedWeight = Number.parseInt(raw.arabicWeight, 10);
+  const weightBucket = Number.isFinite(parsedWeight) ? Math.round(parsedWeight / 100) * 100 : 100;
+  const arabicWeight = Math.min(900, Math.max(100, weightBucket));
+  const englishRaw = Number.parseFloat(raw.englishScale);
+  const englishScale = Number.isFinite(englishRaw) ? Math.min(160, Math.max(70, englishRaw)) : 100;
+  return {
+    arabicFont,
+    arabicSize,
+    arabicWeight,
+    arabicItalic: raw.arabicItalic === true,
+    englishScale
+  };
+}
+
+let currentTypography = sanitizeTypographySettings({});
+
+function applyDuaTypography(rawSettings = {}) {
+  currentTypography = sanitizeTypographySettings(rawSettings);
+  const html = document.documentElement;
+  html.setAttribute("data-arabic-font", currentTypography.arabicFont);
+  html.style.setProperty("--qq-arabic-font-family", `'${currentTypography.arabicFont}'`);
+  html.style.setProperty("--qq-arabic-size", `${currentTypography.arabicSize}px`);
+  html.style.setProperty("--qq-arabic-weight", String(currentTypography.arabicWeight));
+  html.style.setProperty("--qq-arabic-style", currentTypography.arabicItalic ? "italic" : "normal");
+  html.style.setProperty("--qq-english-scale", String(currentTypography.englishScale / 100));
+}
+
 const SHARE_URL = "https://myquranquest.com/duas";
 
 function initDuaMoonAnimation() {
@@ -375,6 +424,13 @@ function initDuaMoonAnimation() {
 }
 initDuaMoonAnimation();
 
+try {
+  const stored = JSON.parse(localStorage.getItem("qq_settings") || "{}");
+  applyDuaTypography(stored || {});
+} catch (_) {
+  applyDuaTypography({});
+}
+
 /* ---------------- TEXT CLEANING ---------------- */
 
 function cleanHtml(text) {
@@ -392,8 +448,11 @@ function cleanHtml(text) {
 
 function removeQuranicSymbols(text) {
   const pattern =
-    /[ۖۗۘۙۚۛۜ۝۞ۣ۟۠ۡۢۤۥۦۧۨ۩۪ۭ۫۬ۮۯـ\u0660-\u0669\u06F0-\u06F9]/g;
+    /[ۖۗۘۙۛۜ۝۞ۣ۟۠ۢۤۥۦۧۨ۩۪ۭ۫۬ۮۯـ\u0660-\u0669\u06F0-\u06F9]/g;
   return String(text || "")
+    .replace(/\u0657(?=\u0627)/g, "\u064B")
+    .replace(/\u0657/g, "\u064C")
+    .replace(/\u06E1/g, "\u0652")
     .replace(pattern, "")
     .replace(/\s+/g, " ")
     .trim();
@@ -455,6 +514,10 @@ function scrollToDuaByRef(ref) {
 
 window.addEventListener("message", e => {
   if (!isTrustedParentMessage(e)) return;
+  if (e?.data?.type === "APPLY_SETTINGS") {
+    applyDuaTypography(e?.data?.settings || {});
+    return;
+  }
   if (e?.data?.type === "PAUSE_DUAS_AUDIO") {
     pauseAllDuaAudio();
     return;
@@ -507,7 +570,8 @@ async function buildShareCanvas(card) {
 
   ctx.font = "600 38px 'Manrope', sans-serif";
   const refLines = wrapLines(ctx, reference, innerWidth);
-  ctx.font = "54px 'CustomArabic', serif";
+  const shareArabicFont = `${currentTypography.arabicItalic ? "italic" : "normal"} ${currentTypography.arabicWeight} ${currentTypography.arabicSize}px '${currentTypography.arabicFont}', serif`;
+  ctx.font = shareArabicFont;
   const arabicLines = wrapLines(ctx, arabic, innerWidth);
   ctx.font = "italic 32px 'Manrope', sans-serif";
   const translitLines = wrapLines(ctx, transliteration, innerWidth);
@@ -516,7 +580,7 @@ async function buildShareCanvas(card) {
 
   const lineHeights = {
     ref: 44,
-    arabic: 64,
+    arabic: Math.round(currentTypography.arabicSize * 2.1),
     translit: 44,
     translation: 46
   };
@@ -601,7 +665,7 @@ async function buildShareCanvas(card) {
   });
 
   cursorY += 8;
-  ctx.font = "54px 'CustomArabic', serif";
+  ctx.font = shareArabicFont;
   ctx.fillStyle = "#102a36";
   if (ctx.direction !== undefined) ctx.direction = "rtl";
   arabicLines.forEach(line => {
@@ -640,7 +704,7 @@ async function shareDuaCard(card) {
   if (!card) return;
 
   const canvas = await buildShareCanvas(card);
-  const shareText = `Powerful Duas from the Qur’an\n${SHARE_URL}`;
+  const shareText = "Powerful Duas from the Qur’an";
 
   /* ---------------- WEBVIEW BRIDGE ---------------- */
   const dataUrl = canvas.toDataURL("image/png");

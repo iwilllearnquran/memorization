@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-02-14T12:15:30.330642+00:00",
-  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "generatedAt": "2026-02-21T01:14:45.966619+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
   "surah": {
     "surah": 105,
     "arabicName": "سُورَةُ الفِيلِ",
@@ -11,7 +11,7 @@
       {
         "ayah": 1,
         "globalAyah": 6189,
-        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِأَصْحَٰبِ ٱلْفِيلِ",
+        "arabic": "اَلَمۡ تَرَ كَيۡفَ فَعَلَ رَبُّكَ بِاَصۡحٰبِ الۡفِيۡلِؕ‏",
         "translation_en": "ART THOU NOT aware of how thy Sustainer dealt with the Army of the Elephant?",
         "translation_ur": "کیا تم نے نہیں دیکھا کہ تمہارے پروردگار نے ہاتھی والوں کے ساتھ کیا کیا",
         "audio": {
@@ -23,7 +23,7 @@
       {
         "ayah": 2,
         "globalAyah": 6190,
-        "arabic": "أَلَمْ يَجْعَلْ كَيْدَهُمْ فِى تَضْلِيلٍۢ",
+        "arabic": "اَلَمۡ يَجۡعَلۡ كَيۡدَهُمۡ فِىۡ تَضۡلِيۡلٍۙ‏",
         "translation_en": "Did He not utterly confound their artful planning?",
         "translation_ur": "کیا ان کا داؤں غلط نہیں کیا؟ (گیا)",
         "audio": {
@@ -35,7 +35,7 @@
       {
         "ayah": 3,
         "globalAyah": 6191,
-        "arabic": "وَأَرْسَلَ عَلَيْهِمْ طَيْرًا أَبَابِيلَ",
+        "arabic": "وَّاَرۡسَلَ عَلَيۡهِمۡ طَيۡرًا اَبَابِيۡلَۙ‏",
         "translation_en": "Thus, He let loose upon them great swarms of flying creatures",
         "translation_ur": "اور ان پر جھلڑ کے جھلڑ جانور بھیجے",
         "audio": {
@@ -47,7 +47,7 @@
       {
         "ayah": 4,
         "globalAyah": 6192,
-        "arabic": "تَرْمِيهِم بِحِجَارَةٍۢ مِّن سِجِّيلٍۢ",
+        "arabic": "تَرۡمِيۡهِمۡ بِحِجَارَةٍ مِّنۡ سِجِّيۡلٍۙ‏",
         "translation_en": "which smote them with stone-hard blows of chastisement pre-ordained,",
         "translation_ur": "جو ان پر کھنگر کی پتھریاں پھینکتے تھے",
         "audio": {
@@ -59,7 +59,7 @@
       {
         "ayah": 5,
         "globalAyah": 6193,
-        "arabic": "فَجَعَلَهُمْ كَعَصْفٍۢ مَّأْكُولٍۭ",
+        "arabic": "فَجَعَلَهُمۡ كَعَصۡفٍ مَّاۡكُوۡلٍ‏",
         "translation_en": "and caused them to become like a field of grain that has been eaten down to stubble",
         "translation_ur": "تو ان کو ایسا کر دیا جیسے کھایا ہوا بھس",
         "audio": {

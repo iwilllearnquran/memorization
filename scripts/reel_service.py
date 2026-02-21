@@ -16,6 +16,7 @@ import os
 import random
 import re
 import subprocess
+import urllib.parse
 from pathlib import Path
 from typing import Dict, List, Tuple
 
@@ -35,6 +36,7 @@ except Exception as e:
 
 ROOT = Path(__file__).resolve().parents[1]
 RECITE_DIR = ROOT / "build" / "recite" / "surahs"
+DUAS_JSON_PATH = ROOT / "duas" / "quranwbw_duas.json"
 OUTPUT_DIR = ROOT / "generated" / "reels"
 TMP_DIR = OUTPUT_DIR / "_tmp"
 BACKGROUND_DIR = ROOT / "background"
@@ -43,10 +45,19 @@ ADMIN_TOKEN = os.getenv("REEL_ADMIN_TOKEN", "").strip()
 PORT = int(os.getenv("PORT", os.getenv("REEL_SERVICE_PORT", "8787")))
 HOST = os.getenv("REEL_SERVICE_HOST", "0.0.0.0")
 FFMPEG_BIN = os.getenv("FFMPEG_BIN", "ffmpeg")
+FFMPEG_PRESET = os.getenv("REEL_FFMPEG_PRESET", "veryfast").strip() or "veryfast"
+FFMPEG_CRF = os.getenv("REEL_FFMPEG_CRF", "25").strip() or "25"
 
 W, H = 1080, 1920
 QURAN_API_BASE = "https://api.quran.com/api/v4"
 USE_REMOTE_INDOPAK = os.getenv("REEL_USE_REMOTE_INDOPAK", "1").strip() != "0"
+REEL_RENDERER = os.getenv("REEL_RENDERER", "pillow").strip().lower()
+METADATA_ROOT = "http://metadata.google.internal/computeMetadata/v1"
+FREE_TIER_REQUESTS = int(os.getenv("REEL_FREE_TIER_REQUESTS", "2000000"))
+FREE_TIER_VCPU_SECONDS = float(os.getenv("REEL_FREE_TIER_VCPU_SECONDS", "180000"))
+FREE_TIER_GIB_SECONDS = float(os.getenv("REEL_FREE_TIER_GIB_SECONDS", "360000"))
+ALLOCATED_VCPU = float(os.getenv("REEL_ALLOCATED_VCPU", "1"))
+ALLOCATED_MEMORY_GIB = float(os.getenv("REEL_ALLOCATED_MEMORY_GIB", "0.5"))
 
 
 def require_token(incoming: str) -> bool:
@@ -63,6 +74,53 @@ def fetch_json(url: str, timeout: int = 20) -> Dict:
     r = requests.get(url, timeout=timeout)
     r.raise_for_status()
     return r.json()
+
+
+def fetch_metadata(path: str, timeout: int = 2) -> str:
+    url = f"{METADATA_ROOT}/{path.lstrip('/')}"
+    r = requests.get(url, headers={"Metadata-Flavor": "Google"}, timeout=timeout)
+    r.raise_for_status()
+    return r.text.strip()
+
+
+def get_access_token() -> str:
+    payload = fetch_json(f"{METADATA_ROOT}/instance/service-accounts/default/token", timeout=3)
+    return str(payload.get("access_token", "")).strip()
+
+
+def query_monitoring_sum(
+    project_id: str, metric_type: str, service_name: str, start_iso: str, end_iso: str
+) -> float:
+    raw_filter = (
+        f'metric.type="{metric_type}" '
+        f'AND resource.type="cloud_run_revision" '
+        f'AND resource.labels.service_name="{service_name}"'
+    )
+    params = {
+        "filter": raw_filter,
+        "interval.startTime": start_iso,
+        "interval.endTime": end_iso,
+        "view": "FULL",
+        "aggregation.alignmentPeriod": "86400s",
+        "aggregation.perSeriesAligner": "ALIGN_SUM",
+        "aggregation.crossSeriesReducer": "REDUCE_SUM",
+    }
+    query = urllib.parse.urlencode(params)
+    token = get_access_token()
+    url = f"https://monitoring.googleapis.com/v3/projects/{project_id}/timeSeries?{query}"
+    r = requests.get(url, headers={"Authorization": f"Bearer {token}"}, timeout=15)
+    r.raise_for_status()
+    payload = r.json()
+
+    total = 0.0
+    for series in payload.get("timeSeries", []) or []:
+        for point in series.get("points", []) or []:
+            value = point.get("value", {})
+            if "doubleValue" in value:
+                total += float(value["doubleValue"])
+            elif "int64Value" in value:
+                total += float(value["int64Value"])
+    return total
 
 
 def load_ayah_payload_remote(surah: int, ayah: int, custom_title: str = "") -> Dict:
@@ -135,6 +193,32 @@ def load_ayah_payload(surah: int, ayah: int, custom_title: str = "") -> Dict:
             # Fallback to local dataset if remote fetch fails.
             return load_ayah_payload_local(surah, ayah, custom_title)
     return load_ayah_payload_local(surah, ayah, custom_title)
+
+
+def load_dua_payload(surah: int, ayah: int, custom_title: str = "") -> Dict:
+    if not DUAS_JSON_PATH.exists():
+        raise FileNotFoundError(f"Missing dua file: {DUAS_JSON_PATH}")
+
+    with DUAS_JSON_PATH.open("r", encoding="utf-8") as f:
+        rows = json.load(f)
+
+    ref = f"{surah}:{ayah}"
+    row = next((d for d in rows if clean_text(d.get("reference", "")) == ref), None)
+    if not row:
+        raise ValueError(f"Dua reference {ref} not found in {DUAS_JSON_PATH.name}")
+
+    payload = load_ayah_payload_local(surah, ayah, custom_title)
+    payload["arabic"] = clean_text(row.get("arabic", "")) or payload["arabic"]
+    payload["translation_en"] = clean_text(row.get("translation", "")) or payload["translation_en"]
+    payload["custom_title"] = clean_text(custom_title)
+    return payload
+
+
+def load_reel_payload(source: str, surah: int, ayah: int, custom_title: str = "") -> Dict:
+    source = clean_text(source).lower() or "ayah"
+    if source == "dua":
+        return load_dua_payload(surah, ayah, custom_title)
+    return load_ayah_payload(surah, ayah, custom_title)
 
 
 def get_required_assets() -> Dict[str, List[str]]:
@@ -370,15 +454,15 @@ def render_poster_wand(meta: Dict, out_path: Path) -> None:
         y += en_body_size + english_line_spacing
 
     # Footer
-    draw.font = str(title_en_font)
-    draw.font_size = 30
+    draw.font = str(footer_font)
+    draw.font_size = 28
     m = draw.get_font_metrics(img, "see more at:", True)
     draw.text(int((W - m.text_width) // 2), 1790, "see more at:")
 
-    draw.font = str(footer_font)
-    draw.font_size = 30
-    m = draw.get_font_metrics(img, "quranquest.com", True)
-    draw.text(int((W - m.text_width) // 2), 1820, "quranquest.com")
+    draw.font = str(title_en_font)
+    draw.font_size = 32
+    m = draw.get_font_metrics(img, "myquranquest.com", True)
+    draw.text(int((W - m.text_width) // 2), 1820, "myquranquest.com")
 
     draw(img)
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -504,8 +588,8 @@ def render_poster(meta: Dict, out_path: Path) -> None:
         y += en_body_size + english_line_spacing
 
     # Footer aligned with your request and original style intent.
-    draw.text((W // 2, 1790), "see more at:", fill="#ffffff", font=body_en_font, anchor="mm")
-    draw.text((W // 2, 1820), "quranquest.com", fill="#ffffff", font=footer_en_font, anchor="mm")
+    draw.text((W // 2, 1790), "see more at:", fill="#ffffff", font=footer_en_font, anchor="mm")
+    draw.text((W // 2, 1820), "myquranquest.com", fill="#ffffff", font=body_en_font, anchor="mm")
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     img.save(out_path, format="PNG", quality=100)
@@ -536,6 +620,10 @@ def create_reel_video(image_path: Path, audio_path: Path, output_path: Path) -> 
         str(audio_path),
         "-c:v",
         "libx264",
+        "-preset",
+        FFMPEG_PRESET,
+        "-crf",
+        FFMPEG_CRF,
         "-tune",
         "stillimage",
         "-r",
@@ -547,7 +635,7 @@ def create_reel_video(image_path: Path, audio_path: Path, output_path: Path) -> 
         "-c:a",
         "aac",
         "-b:a",
-        "192k",
+        "128k",
         "-shortest",
         "-movflags",
         "+faststart",
@@ -556,22 +644,25 @@ def create_reel_video(image_path: Path, audio_path: Path, output_path: Path) -> 
     subprocess.run(cmd, check=True, capture_output=True, text=True)
 
 
-def generate_for_ayah(surah: int, ayah: int, title: str = "") -> Dict:
+def generate_for_ayah(surah: int, ayah: int, title: str = "", source: str = "ayah") -> Dict:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     TMP_DIR.mkdir(parents=True, exist_ok=True)
 
     stamp = dt.datetime.utcnow().strftime("%Y%m%d_%H%M%S")
-    slug = f"s{surah:03d}_a{ayah:03d}_{stamp}"
+    source = clean_text(source).lower() or "ayah"
+    slug_prefix = "d" if source == "dua" else "s"
+    slug = f"{slug_prefix}{surah:03d}_a{ayah:03d}_{stamp}"
 
     poster = TMP_DIR / f"{slug}.png"
     audio = TMP_DIR / f"{slug}.mp3"
     video = OUTPUT_DIR / f"{slug}.mp4"
 
-    meta = load_ayah_payload(surah, ayah, title)
+    meta = load_reel_payload(source, surah, ayah, title)
     renderer = "pillow"
     renderer_error = ""
     try:
-        if WAND_AVAILABLE:
+        use_wand = REEL_RENDERER == "wand"
+        if use_wand and WAND_AVAILABLE:
             render_poster_wand(meta, poster)
             renderer = "wand"
         else:
@@ -587,6 +678,7 @@ def generate_for_ayah(surah: int, ayah: int, title: str = "") -> Dict:
 
     return {
         "ok": True,
+        "source": source,
         "surah": surah,
         "ayah": ayah,
         "title": meta.get("custom_title", ""),
@@ -620,6 +712,7 @@ def health():
             "wandAvailable": WAND_AVAILABLE,
             "wandImportError": WAND_IMPORT_ERROR,
             "useRemoteIndopak": USE_REMOTE_INDOPAK,
+            "rendererMode": REEL_RENDERER,
         }
     )
 
@@ -644,17 +737,91 @@ def generate():
     except Exception:
         return jsonify({"ok": False, "error": "surah and ayah must be integers"}), 400
     title = clean_text(str(body.get("title", "")))
+    source = clean_text(str(body.get("source", "ayah"))).lower() or "ayah"
 
+    if source not in {"ayah", "dua"}:
+        return jsonify({"ok": False, "error": "source must be 'ayah' or 'dua'"}), 400
     if surah < 1 or surah > 114 or ayah < 1:
         return jsonify({"ok": False, "error": "invalid surah/ayah range"}), 400
 
     try:
-        result = generate_for_ayah(surah, ayah, title)
+        result = generate_for_ayah(surah, ayah, title, source=source)
         download_url = f"{request.host_url.rstrip('/')}/api/reel/download/{result['filename']}?token={token}"
         result["download_url"] = download_url
         return jsonify(result)
     except subprocess.CalledProcessError as e:
         return jsonify({"ok": False, "error": "ffmpeg failed", "details": e.stderr[-4000:]}), 500
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+@app.get("/api/reel/usage")
+def usage():
+    token = str(request.headers.get("X-Reel-Token", "")).strip()
+    if not require_token(token):
+        return jsonify({"ok": False, "error": "unauthorized"}), 403
+
+    try:
+        project_id = (
+            os.getenv("GOOGLE_CLOUD_PROJECT", "").strip()
+            or fetch_metadata("project/project-id")
+        )
+        service_name = os.getenv("K_SERVICE", "").strip() or "quran-reel-service"
+        start = dt.datetime.utcnow().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        end = dt.datetime.utcnow()
+        start_iso = start.strftime("%Y-%m-%dT%H:%M:%SZ")
+        end_iso = end.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+        request_count = query_monitoring_sum(
+            project_id=project_id,
+            metric_type="run.googleapis.com/request_count",
+            service_name=service_name,
+            start_iso=start_iso,
+            end_iso=end_iso,
+        )
+        billable_seconds = query_monitoring_sum(
+            project_id=project_id,
+            metric_type="run.googleapis.com/container/billable_instance_time",
+            service_name=service_name,
+            start_iso=start_iso,
+            end_iso=end_iso,
+        )
+
+        vcpu_used = billable_seconds * ALLOCATED_VCPU
+        gib_seconds_used = billable_seconds * ALLOCATED_MEMORY_GIB
+        requests_remaining = max(0.0, float(FREE_TIER_REQUESTS) - request_count)
+        vcpu_remaining = max(0.0, FREE_TIER_VCPU_SECONDS - vcpu_used)
+        gib_seconds_remaining = max(0.0, FREE_TIER_GIB_SECONDS - gib_seconds_used)
+
+        return jsonify(
+            {
+                "ok": True,
+                "periodStartUtc": start_iso,
+                "periodEndUtc": end_iso,
+                "projectId": project_id,
+                "serviceName": service_name,
+                "allocation": {
+                    "vcpuPerInstance": ALLOCATED_VCPU,
+                    "memoryGiBPerInstance": ALLOCATED_MEMORY_GIB,
+                },
+                "usage": {
+                    "requestCount": int(round(request_count)),
+                    "billableInstanceSeconds": billable_seconds,
+                    "vcpuSeconds": vcpu_used,
+                    "gibSeconds": gib_seconds_used,
+                },
+                "freeTier": {
+                    "requestCount": FREE_TIER_REQUESTS,
+                    "vcpuSeconds": FREE_TIER_VCPU_SECONDS,
+                    "gibSeconds": FREE_TIER_GIB_SECONDS,
+                },
+                "remaining": {
+                    "requestCount": int(round(requests_remaining)),
+                    "vcpuSeconds": vcpu_remaining,
+                    "gibSeconds": gib_seconds_remaining,
+                },
+            }
+        )
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
 

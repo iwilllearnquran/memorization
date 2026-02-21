@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-02-14T12:15:06.982535+00:00",
-  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "generatedAt": "2026-02-21T01:13:51.280198+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
   "surah": {
     "surah": 60,
     "arabicName": "سُورَةُ المُمۡتَحنَةِ",
@@ -11,7 +11,7 @@
       {
         "ayah": 1,
         "globalAyah": 5151,
-        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ لَا تَتَّخِذُوا۟ عَدُوِّى وَعَدُوَّكُمْ أَوْلِيَآءَ تُلْقُونَ إِلَيْهِم بِٱلْمَوَدَّةِ وَقَدْ كَفَرُوا۟ بِمَا جَآءَكُم مِّنَ ٱلْحَقِّ يُخْرِجُونَ ٱلرَّسُولَ وَإِيَّاكُمْ ۙ أَن تُؤْمِنُوا۟ بِٱللَّهِ رَبِّكُمْ إِن كُنتُمْ خَرَجْتُمْ جِهَٰدًۭا فِى سَبِيلِى وَٱبْتِغَآءَ مَرْضَاتِى ۚ تُسِرُّونَ إِلَيْهِم بِٱلْمَوَدَّةِ وَأَنَا۠ أَعْلَمُ بِمَآ أَخْفَيْتُمْ وَمَآ أَعْلَنتُمْ ۚ وَمَن يَفْعَلْهُ مِنكُمْ فَقَدْ ضَلَّ سَوَآءَ ٱلسَّبِيلِ",
+        "arabic": "يٰۤاَيُّهَا الَّذِيۡنَ اٰمَنُوۡا لَا تَتَّخِذُوۡا عَدُوِّىۡ وَعَدُوَّكُمۡ اَوۡلِيَآءَ تُلۡقُوۡنَ اِلَيۡهِمۡ بِالۡمَوَدَّةِ وَقَدۡ كَفَرُوۡا بِمَا جَآءَكُمۡ مِّنَ الۡحَـقِّ​ ۚ يُخۡرِجُوۡنَ الرَّسُوۡلَ وَاِيَّاكُمۡ​ اَنۡ تُؤۡمِنُوۡا بِاللّٰهِ رَبِّكُمۡ ؕ اِنۡ كُنۡـتُمۡ خَرَجۡتُمۡ جِهَادًا فِىۡ سَبِيۡلِىۡ وَ ابۡتِغَآءَ مَرۡضَاتِىۡ ​ۖ  تُسِرُّوۡنَ اِلَيۡهِمۡ بِالۡمَوَدَّةِ ​ۖ  وَاَنَا اَعۡلَمُ بِمَاۤ اَخۡفَيۡتُمۡ وَمَاۤ اَعۡلَنۡتُمۡ​ؕ وَمَنۡ يَّفۡعَلۡهُ مِنۡكُمۡ فَقَدۡ ضَلَّ سَوَآءَ السَّبِيۡلِ‏ ﻿﻿",
         "translation_en": "O YOU who have attained to faith! Do not take My enemies - who are your enemies as well - for your friends, showing them affection even though they are bent on denying whatever truth has come unto you, [and even though] they have driven the Apostle and yourselves away, [only] because you believe in God, your Sustainer! If [it be true that] you have gone forth [from your homes] to strive in My cause, and out of a longing for My goodly acceptance, [do not take them for your friends,] inclining towards them in secret affection: for I am fully aware of all that you may conceal as well as of all that you do openly. And any of you who does this has already strayed from the right path.",
         "translation_ur": "مومنو! اگر تم میری راہ میں لڑنے اور میری خوشنودی طلب کرنے کے لئے (مکے سے) نکلے ہو تو میرے اور اپنے دشمنوں کو دوست نہ بناؤ۔ تم تو ان کو دوستی کے پیغام بھیجتے ہو اور وہ (دین) حق سے جو تمہارے پاس آیا ہے منکر ہیں۔ اور اس باعث سے کہ تم اپنے پروردگار خدا تعالیٰ پر ایمان لائے ہو پیغمبر کو اور تم کو جلاوطن کرتے ہیں۔ تم ان کی طرف پوشیدہ پوشیدہ دوستی کے پیغام بھیجتے ہو۔ اور جو کچھ تم مخفی طور پر اور جو علیٰ الاعلان کرتے ہو وہ مجھے معلوم ہے۔ اور جو کوئی تم میں سے ایسا کرے گا وہ سیدھے راستے سے بھٹک گیا",
         "audio": {
@@ -23,7 +23,7 @@
       {
         "ayah": 2,
         "globalAyah": 5152,
-        "arabic": "إِن يَثْقَفُوكُمْ يَكُونُوا۟ لَكُمْ أَعْدَآءًۭ وَيَبْسُطُوٓا۟ إِلَيْكُمْ أَيْدِيَهُمْ وَأَلْسِنَتَهُم بِٱلسُّوٓءِ وَوَدُّوا۟ لَوْ تَكْفُرُونَ",
+        "arabic": "اِنۡ يَّثۡقَفُوۡكُمۡ يَكُوۡنُوۡا لَـكُمۡ اَعۡدَآءً وَّيَبۡسُطُوۡۤا اِلَيۡكُمۡ اَيۡدِيَهُمۡ وَاَلۡسِنَتَهُمۡ بِالسُّوۡٓءِ وَوَدُّوۡا لَوۡ تَكۡفُرُوۡنَؕ‏",
         "translation_en": "If they could but overcome you, they would [still] remain your foes, and would stretch forth their hands and tongues against you with evil intent: for they desire that you [too] should deny the truth.",
         "translation_ur": "اگر یہ کافر تم پر قدرت پالیں تو تمہارے دشمن ہوجائیں اور ایذا کے لئے تم پر ہاتھ (بھی) چلائیں اور زبانیں (بھی) اور چاہتے ہیں کہ تم کسی طرح کافر ہوجاؤ",
         "audio": {
@@ -35,7 +35,7 @@
       {
         "ayah": 3,
         "globalAyah": 5153,
-        "arabic": "لَن تَنفَعَكُمْ أَرْحَامُكُمْ وَلَآ أَوْلَٰدُكُمْ ۚ يَوْمَ ٱلْقِيَٰمَةِ يَفْصِلُ بَيْنَكُمْ ۚ وَٱللَّهُ بِمَا تَعْمَلُونَ بَصِيرٌۭ",
+        "arabic": "لَنۡ تَـنۡفَعَكُمۡ اَرۡحَامُكُمۡ وَلَاۤ اَوۡلَادُكُمۡ ۛۚ يَوۡمَ الۡقِيٰمَةِ ۛۚ يَفۡصِلُ بَيۡنَكُمۡ​ؕ وَاللّٰهُ بِمَا تَعۡمَلُوۡنَ بَصِيۡرٌ‏",
         "translation_en": "But [bear in mind that] neither your kinsfolk nor [even] your own children will be of any benefit to you on Resurrection Day, [for then] He will decide between you [on your merit alone]: and God sees all that you do.",
         "translation_ur": "قیامت کے دن نہ تمہارے رشتے ناتے کام آئیں گے اور نہ اولاد۔ اس روز وہی تم میں فیصلہ کرے گا۔ اور جو کچھ تم کرتے ہو خدا اس کو دیکھتا ہے",
         "audio": {
@@ -47,7 +47,7 @@
       {
         "ayah": 4,
         "globalAyah": 5154,
-        "arabic": "قَدْ كَانَتْ لَكُمْ أُسْوَةٌ حَسَنَةٌۭ فِىٓ إِبْرَٰهِيمَ وَٱلَّذِينَ مَعَهُۥٓ إِذْ قَالُوا۟ لِقَوْمِهِمْ إِنَّا بُرَءَٰٓؤُا۟ مِنكُمْ وَمِمَّا تَعْبُدُونَ مِن دُونِ ٱللَّهِ كَفَرْنَا بِكُمْ وَبَدَا بَيْنَنَا وَبَيْنَكُمُ ٱلْعَدَٰوَةُ وَٱلْبَغْضَآءُ أَبَدًا حَتَّىٰ تُؤْمِنُوا۟ بِٱللَّهِ وَحْدَهُۥٓ إِلَّا قَوْلَ إِبْرَٰهِيمَ لِأَبِيهِ لَأَسْتَغْفِرَنَّ لَكَ وَمَآ أَمْلِكُ لَكَ مِنَ ٱللَّهِ مِن شَىْءٍۢ ۖ رَّبَّنَا عَلَيْكَ تَوَكَّلْنَا وَإِلَيْكَ أَنَبْنَا وَإِلَيْكَ ٱلْمَصِيرُ",
+        "arabic": "قَدۡ كَانَتۡ لَـكُمۡ اُسۡوَةٌ حَسَنَةٌ فِىۡۤ اِبۡرٰهِيۡمَ وَالَّذِيۡنَ مَعَهٗ​ۚ اِذۡ قَالُوۡا لِقَوۡمِهِمۡ اِنَّا بُرَءٰٓؤُا مِنۡكُمۡ وَمِمَّا تَعۡبُدُوۡنَ مِنۡ دُوۡنِ اللّٰهِ كَفَرۡنَا بِكُمۡ وَبَدَا بَيۡنَنَا وَبَيۡنَكُمُ الۡعَدَاوَةُ وَالۡبَغۡضَآءُ اَبَدًا حَتّٰى تُؤۡمِنُوۡا بِاللّٰهِ وَحۡدَهٗۤ اِلَّا قَوۡلَ اِبۡرٰهِيۡمَ لِاَبِيۡهِ لَاَسۡتَغۡفِرَنَّ لَـكَ وَمَاۤ اَمۡلِكُ لَـكَ مِنَ اللّٰهِ مِنۡ شَىۡءٍ ​ؕ رَبَّنَا عَلَيۡكَ تَوَكَّلۡنَا وَاِلَيۡكَ اَنَـبۡنَا وَاِلَيۡكَ الۡمَصِيۡرُ‏",
         "translation_en": "Indeed, you have had a good example in Abraham and those who followed him, when they said unto their [idolatrous] people: \"Verily, we are quit of you and of all that you worship instead of God: we deny the truth of whatever you believe; and between us and you there has arisen enmity and hatred, to last until such a time as you come to believe in the One God!\" The only exception was Abraham's saying to his father \"I shall indeed pray for [God's] forgiveness for thee, although I have it not in my power to obtain anything from God in thy behalf.\" [And Abraham and his followers prayed:] \"O our Sustainer! In Thee have we placed our trust, and unto Thee do we turn: for unto Thee is all journeys' end.",
         "translation_ur": "تمہیں ابراہیم اور ان کے رفقاء کی نیک چال چلنی (ضرور) ہے۔ جب انہوں نے اپنی قوم کے لوگوں سے کہا کہ ہم تم سے اور ان (بتوں) سے جن کو تم خدا کے سوا پوجتے ہو بےتعلق ہیں (اور) تمہارے (معبودوں کے کبھی) قائل نہیں (ہوسکتے) اور جب تک تم خدائے واحد اور ایمان نہ لاؤ ہم میں تم میں ہمیشہ کھلم کھلا عداوت اور دشمنی رہے گی۔ ہاں ابراہیمؑ نے اپنے باپ سے یہ (ضرور) کہا کہ میں آپ کے لئے مغفرت مانگوں گا اور خدا کے سامنے آپ کے بارے میں کسی چیز کا کچھ اختیار نہیں رکھتا۔ اے ہمارے پروردگار تجھ ہی پر ہمارا بھروسہ ہے اور تیری ہی طرف ہم رجوع کرتے ہیں اور تیرے ہی حضور میں (ہمیں) لوٹ کر آنا ہے",
         "audio": {
@@ -59,7 +59,7 @@
       {
         "ayah": 5,
         "globalAyah": 5155,
-        "arabic": "رَبَّنَا لَا تَجْعَلْنَا فِتْنَةًۭ لِّلَّذِينَ كَفَرُوا۟ وَٱغْفِرْ لَنَا رَبَّنَآ ۖ إِنَّكَ أَنتَ ٱلْعَزِيزُ ٱلْحَكِيمُ",
+        "arabic": "رَبَّنَا لَا تَجۡعَلۡنَا فِتۡنَةً لِّلَّذِيۡنَ كَفَرُوۡا وَاغۡفِرۡ لَـنَا رَبَّنَا​ ۚ اِنَّكَ اَنۡتَ الۡعَزِيۡزُ الۡحَكِيۡمُ‏",
         "translation_en": "O our Sustainer! Make us not a plaything for those who are bent on denying the truth! And forgive us our sins, O our sustainer: for Thou alone art, almighty, truly wise!\"",
         "translation_ur": "اے ہمارے پروردگار ہم کو کافروں کے ہاتھ سے عذاب نہ دلانا اور اے پروردگار ہمارے ہمیں معاف فرما۔ بےشک تو غالب حکمت والا ہے",
         "audio": {
@@ -71,7 +71,7 @@
       {
         "ayah": 6,
         "globalAyah": 5156,
-        "arabic": "لَقَدْ كَانَ لَكُمْ فِيهِمْ أُسْوَةٌ حَسَنَةٌۭ لِّمَن كَانَ يَرْجُوا۟ ٱللَّهَ وَٱلْيَوْمَ ٱلْءَاخِرَ ۚ وَمَن يَتَوَلَّ فَإِنَّ ٱللَّهَ هُوَ ٱلْغَنِىُّ ٱلْحَمِيدُ",
+        "arabic": "لَقَدۡ كَانَ لَـكُمۡ فِيۡهِمۡ اُسۡوَةٌ حَسَنَةٌ لِّمَنۡ كَانَ يَرۡجُوا اللّٰهَ وَالۡيَوۡمَ الۡاٰخِرَ​ ؕ وَمَنۡ يَّتَوَلَّ فَاِنَّ اللّٰهَ هُوَ الۡغَنِىُّ الۡحَمِيۡدُ‏ ﻿﻿",
         "translation_en": "In them, indeed, you have a good example for everyone who looks forward [with hope and awe] to God and the Last Day. And if any turns away, [let him know that] God is truly self-sufficient, the One to whom all praise is due.\"",
         "translation_ur": "تم (مسلمانوں) کو یعنی جو کوئی خدا (کے سامنے جانے) اور روز آخرت (کے آنے) کی امید رکھتا ہو اسے ان لوگوں کی نیک چال چلنی (ضرور) ہے۔ اور روگردانی کرے تو خدا بھی بےپرواہ اور سزاوار حمد (وثنا) ہے",
         "audio": {
@@ -83,7 +83,7 @@
       {
         "ayah": 7,
         "globalAyah": 5157,
-        "arabic": "۞ عَسَى ٱللَّهُ أَن يَجْعَلَ بَيْنَكُمْ وَبَيْنَ ٱلَّذِينَ عَادَيْتُم مِّنْهُم مَّوَدَّةًۭ ۚ وَٱللَّهُ قَدِيرٌۭ ۚ وَٱللَّهُ غَفُورٌۭ رَّحِيمٌۭ",
+        "arabic": "عَسَى اللّٰهُ اَنۡ يَّجۡعَلَ بَيۡنَكُمۡ وَبَيۡنَ الَّذِيۡنَ عَادَيۡتُمۡ مِّنۡهُمۡ مَّوَدَّةً ؕ وَاللّٰهُ قَدِيۡرٌ​ؕ وَاللّٰهُ غَفُوۡرٌ رَّحِيۡمٌ‏",
         "translation_en": "[But] it may well be that God will bring about [mutual] affection between you [O believers] and some of those whom you [now] face as enemies: for, God is all-powerful - and God is much-forgiving, a dispenser of grace.",
         "translation_ur": "عجب نہیں کہ خدا تم میں اور ان لوگوں میں جن سے تم دشمنی رکھتے ہو دوستی پیدا کردے۔ اور خدا قادر ہے اور خدا بخشنے والا مہربان ہے",
         "audio": {
@@ -95,7 +95,7 @@
       {
         "ayah": 8,
         "globalAyah": 5158,
-        "arabic": "لَّا يَنْهَىٰكُمُ ٱللَّهُ عَنِ ٱلَّذِينَ لَمْ يُقَٰتِلُوكُمْ فِى ٱلدِّينِ وَلَمْ يُخْرِجُوكُم مِّن دِيَٰرِكُمْ أَن تَبَرُّوهُمْ وَتُقْسِطُوٓا۟ إِلَيْهِمْ ۚ إِنَّ ٱللَّهَ يُحِبُّ ٱلْمُقْسِطِينَ",
+        "arabic": "لَا يَنۡهٰٮكُمُ اللّٰهُ عَنِ الَّذِيۡنَ لَمۡ يُقَاتِلُوۡكُمۡ فِى الدِّيۡنِ وَلَمۡ يُخۡرِجُوۡكُمۡ مِّنۡ دِيَارِكُمۡ اَنۡ تَبَرُّوۡهُمۡ وَ تُقۡسِطُوۡۤا اِلَيۡهِمۡ​ؕ اِنَّ اللّٰهَ يُحِبُّ الۡمُقۡسِطِيۡنَ‏",
         "translation_en": "As for such [of the unbelievers] as do not fight against you on account of [your] faith, and neither drive you forth from your homelands, God does not forbid you to show them kindness and to behave towards them with full equity: for, verily, God loves those who act equitably.",
         "translation_ur": "جن لوگوں نے تم سے دین کے بارے میں جنگ نہیں کی اور نہ تم کو تمہارے گھروں سے نکالا ان کے ساتھ بھلائی اور انصاف کا سلوک کرنے سے خدا تم کو منع نہیں کرتا۔ خدا تو انصاف کرنے والوں کو دوست رکھتا ہے",
         "audio": {
@@ -107,7 +107,7 @@
       {
         "ayah": 9,
         "globalAyah": 5159,
-        "arabic": "إِنَّمَا يَنْهَىٰكُمُ ٱللَّهُ عَنِ ٱلَّذِينَ قَٰتَلُوكُمْ فِى ٱلدِّينِ وَأَخْرَجُوكُم مِّن دِيَٰرِكُمْ وَظَٰهَرُوا۟ عَلَىٰٓ إِخْرَاجِكُمْ أَن تَوَلَّوْهُمْ ۚ وَمَن يَتَوَلَّهُمْ فَأُو۟لَٰٓئِكَ هُمُ ٱلظَّٰلِمُونَ",
+        "arabic": "اِنَّمَا يَنۡهٰٮكُمُ اللّٰهُ عَنِ الَّذِيۡنَ قَاتَلُوۡكُمۡ فِى الدِّيۡنِ وَاَخۡرَجُوۡكُمۡ مِّنۡ دِيَارِكُمۡ وَظَاهَرُوۡا عَلٰٓى اِخۡرَاجِكُمۡ اَنۡ تَوَلَّوۡهُمۡ​ۚ وَمَنۡ يَّتَوَلَّهُمۡ فَاُولٰٓٮِٕكَ هُمُ الظّٰلِمُوۡنَ‏",
         "translation_en": "God only forbids you to turn in friendship towards such as fight against you because of [your] faith, and drive you forth from your homelands, or aid [others] in driving you forth: and as for those [from among you] who turn towards them in friendship; it is they, they who are truly wrongdoers!",
         "translation_ur": "خدا ان ہی لوگوں کے ساتھ تم کو دوستی کرنے سے منع کرتا ہے جنہوں نے تم سے دین کے بارے میں لڑائی کی اور تم کو تمہارے گھروں سے نکالا اور تمہارے نکالنے میں اوروں کی مدد کی۔ تو جو لوگ ایسوں سے دوستی کریں گے وہی ظالم ہیں",
         "audio": {
@@ -119,7 +119,7 @@
       {
         "ayah": 10,
         "globalAyah": 5160,
-        "arabic": "يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوٓا۟ إِذَا جَآءَكُمُ ٱلْمُؤْمِنَٰتُ مُهَٰجِرَٰتٍۢ فَٱمْتَحِنُوهُنَّ ۖ ٱللَّهُ أَعْلَمُ بِإِيمَٰنِهِنَّ ۖ فَإِنْ عَلِمْتُمُوهُنَّ مُؤْمِنَٰتٍۢ فَلَا تَرْجِعُوهُنَّ إِلَى ٱلْكُفَّارِ ۖ لَا هُنَّ حِلٌّۭ لَّهُمْ وَلَا هُمْ يَحِلُّونَ لَهُنَّ ۖ وَءَاتُوهُم مَّآ أَنفَقُوا۟ ۚ وَلَا جُنَاحَ عَلَيْكُمْ أَن تَنكِحُوهُنَّ إِذَآ ءَاتَيْتُمُوهُنَّ أُجُورَهُنَّ ۚ وَلَا تُمْسِكُوا۟ بِعِصَمِ ٱلْكَوَافِرِ وَسْـَٔلُوا۟ مَآ أَنفَقْتُمْ وَلْيَسْـَٔلُوا۟ مَآ أَنفَقُوا۟ ۚ ذَٰلِكُمْ حُكْمُ ٱللَّهِ ۖ يَحْكُمُ بَيْنَكُمْ ۚ وَٱللَّهُ عَلِيمٌ حَكِيمٌۭ",
+        "arabic": "يٰۤاَيُّهَا الَّذِيۡنَ اٰمَنُوۡۤا اِذَا جَآءَكُمُ الۡمُؤۡمِنٰتُ مُهٰجِرٰتٍ فَامۡتَحِنُوۡهُنَّ​ ؕ اَللّٰهُ اَعۡلَمُ بِاِيۡمَانِهِنَّ​ ۚ فَاِنۡ عَلِمۡتُمُوۡهُنَّ مُؤۡمِنٰتٍ فَلَا تَرۡجِعُوۡهُنَّ اِلَى الۡكُفَّارِ​ ؕ لَا هُنَّ حِلٌّ لَّهُمۡ وَلَا هُمۡ يَحِلُّوۡنَ لَهُنَّ​ ۚ وَاٰ تُوۡهُمۡ مَّاۤ اَنۡفَقُوۡا​ ؕ وَلَا جُنَاحَ عَلَيۡكُمۡ اَنۡ تَنۡكِحُوۡهُنَّ اِذَاۤ اٰ تَيۡتُمُوۡهُنَّ اُجُوۡرَهُنَّ​ ؕ وَلَا تُمۡسِكُوۡا بِعِصَمِ الۡكَوَافِرِ وَسۡــَٔـلُوۡا مَاۤ اَنۡفَقۡتُمۡ وَلۡيَسۡــَٔـلُوۡا مَاۤ اَنۡفَقُوۡا​ ؕ ذٰ لِكُمۡ حُكۡمُ اللّٰهِ​ ؕ يَحۡكُمُ بَيۡنَكُمۡ​ ؕ وَاللّٰهُ عَلِيۡمٌ حَكِيۡمٌ‏ ﻿﻿",
         "translation_en": "O YOU who have attained to faith! Whenever believing women come unto you, forsaking the domain of evil, examine them, [although only] God is fully aware of their faith; and if you have thus ascertained that they are believers, do not send them back to the deniers of the truth, [since] they are [no longer] lawful to their erstwhile husbands, and these are [no longer] lawful to them. None the less, you shall return to them whatever they have spent [on their wives by way of dower]; and [then, O believers,] you will be committing no sin if you marry them after giving them their dowers. On the other hand, hold not to the marriage-tie with women who [continue to] deny the truth, and ask but for [the return of] whatever you have spent [by way of dower] -just as they [whose wives have gone over to you] have the right to demand [the return of] whatever they have spent. Such is God's judgment: He judges between you [in equity] - for God is all-knowing, wise.",
         "translation_ur": "مومنو! جب تمہارے پاس مومن عورتیں وطن چھوڑ کر آئیں تو ان کی آزمائش کرلو۔ (اور) خدا تو ان کے ایمان کو خوب جانتا ہے۔ سو اگر تم کو معلوم ہو کہ مومن ہیں تو ان کو کفار کے پاس واپس نہ بھیجو۔ کہ نہ یہ ان کو حلال ہیں اور نہ وہ ان کو جائز۔ اور جو کچھ انہوں نے (ان پر) خرچ کیا ہو وہ ان کو دے دو۔ اور تم پر کچھ گناہ نہیں کہ ان عورتوں کو مہر دے کر ان سے نکاح کرلو اور کافر عورتوں کی ناموس کو قبضے میں نہ رکھو (یعنی کفار کو واپس دے دو) اور جو کچھ تم نے ان پر خرچ کیا ہو تم ان سے طلب کرلو اور جو کچھ انہوں نے (اپنی عورتوں پر) خرچ کیا ہو وہ تم سے طلب کرلیں۔ یہ خدا کا حکم ہے جو تم میں فیصلہ کئے دیتا ہے اور خدا جاننے والا حکمت والا ہے",
         "audio": {
@@ -131,7 +131,7 @@
       {
         "ayah": 11,
         "globalAyah": 5161,
-        "arabic": "وَإِن فَاتَكُمْ شَىْءٌۭ مِّنْ أَزْوَٰجِكُمْ إِلَى ٱلْكُفَّارِ فَعَاقَبْتُمْ فَـَٔاتُوا۟ ٱلَّذِينَ ذَهَبَتْ أَزْوَٰجُهُم مِّثْلَ مَآ أَنفَقُوا۟ ۚ وَٱتَّقُوا۟ ٱللَّهَ ٱلَّذِىٓ أَنتُم بِهِۦ مُؤْمِنُونَ",
+        "arabic": "وَاِنۡ فَاتَكُمۡ شَىۡءٌ مِّنۡ اَزۡوَاجِكُمۡ اِلَى الۡكُفَّارِ فَعَاقَبۡتُمۡ فَاٰ تُوا الَّذِيۡنَ ذَهَبَتۡ اَزۡوَاجُهُمۡ مِّثۡلَ مَاۤ اَنۡفَقُوۡا​ ؕ وَاتَّقُوا اللّٰهَ الَّذِىۡۤ اَنۡـتُمۡ بِهٖ مُؤۡمِنُوۡنَ‏",
         "translation_en": "And if any of your wives should go over to the deniers of the truth, and you are thus afflicted in turn, then give unto those whose wives have gone away the equivalent of what they had spent [on their wives by way of dower], and remain conscious of God, in whom you believe!",
         "translation_ur": "اور اگر تمہاری عورتوں میں سے کوئی عورت تمہارے ہاتھ سے نکل کر کافروں کے پاس چلی جائے (اور اس کا مہر وصول نہ ہوا ہو) پھر تم ان سے جنگ کرو (اور ان سے تم کو غنیمت ہاتھ لگے) تو جن کی عورتیں چلی گئی ہیں ان کو (اس مال میں سے) اتنا دے دو جتنا انہوں نے خرچ کیا تھا اور خدا سے جس پر تم ایمان لائے ہو ڈرو",
         "audio": {
@@ -143,7 +143,7 @@
       {
         "ayah": 12,
         "globalAyah": 5162,
-        "arabic": "يَٰٓأَيُّهَا ٱلنَّبِىُّ إِذَا جَآءَكَ ٱلْمُؤْمِنَٰتُ يُبَايِعْنَكَ عَلَىٰٓ أَن لَّا يُشْرِكْنَ بِٱللَّهِ شَيْـًۭٔا وَلَا يَسْرِقْنَ وَلَا يَزْنِينَ وَلَا يَقْتُلْنَ أَوْلَٰدَهُنَّ وَلَا يَأْتِينَ بِبُهْتَٰنٍۢ يَفْتَرِينَهُۥ بَيْنَ أَيْدِيهِنَّ وَأَرْجُلِهِنَّ وَلَا يَعْصِينَكَ فِى مَعْرُوفٍۢ ۙ فَبَايِعْهُنَّ وَٱسْتَغْفِرْ لَهُنَّ ٱللَّهَ ۖ إِنَّ ٱللَّهَ غَفُورٌۭ رَّحِيمٌۭ",
+        "arabic": "يٰۤاَيُّهَا النَّبِىُّ اِذَا جَآءَكَ الۡمُؤۡمِنٰتُ يُبَايِعۡنَكَ عَلٰٓى اَنۡ لَّا يُشۡرِكۡنَ بِاللّٰهِ شَيۡــًٔا وَّلَا يَسۡرِقۡنَ وَلَا يَزۡنِيۡنَ وَلَا يَقۡتُلۡنَ اَوۡلَادَهُنَّ وَلَا يَاۡتِيۡنَ بِبُهۡتَانٍ يَّفۡتَرِيۡنَهٗ بَيۡنَ اَيۡدِيۡهِنَّ وَاَرۡجُلِهِنَّ وَلَا يَعۡصِيۡنَكَ فِىۡ مَعۡرُوۡفٍ​ فَبَايِعۡهُنَّ وَاسۡتَغۡفِرۡ لَهُنَّ اللّٰهَ​ؕ اِنَّ اللّٰهَ غَفُوۡرٌ رَّحِيۡمٌ‏",
         "translation_en": "O Prophet! Whenever believing women come unto thee to pledge their allegiance to thee, [pledging] that [henceforth] they would not ascribe divinity, in any way, to aught but God, and would not steal, and would not commit adultery, and would not kill their children, and would not indulge in slander, falsely devising it out of nothingness: and would not disobey thee in anything [that thou declarest to be] right - then accept their pledge of allegiance, and pray to God to forgive them their [past] sins: for, behold, God is much-forgiving, a dispenser of grace.",
         "translation_ur": "اے پیغمبر! جب تمہارے پاس مومن عورتیں اس بات پر بیعت کرنے کو آئیں کہ خدا کے ساتھ نہ شرک کریں گی نہ چوری کریں گی نہ بدکاری کریں گی نہ اپنی اولاد کو قتل کریں گی نہ اپنے ہاتھ پاؤں میں کوئی بہتان باندھ لائیں گی اور نہ نیک کاموں میں تمہاری نافرمانی کریں گی تو ان سے بیعت لے لو اور ان کے لئے خدا سے بخشش مانگو۔ بےشک خدا بخشنے والا مہربان ہے",
         "audio": {
@@ -155,7 +155,7 @@
       {
         "ayah": 13,
         "globalAyah": 5163,
-        "arabic": "يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ لَا تَتَوَلَّوْا۟ قَوْمًا غَضِبَ ٱللَّهُ عَلَيْهِمْ قَدْ يَئِسُوا۟ مِنَ ٱلْءَاخِرَةِ كَمَا يَئِسَ ٱلْكُفَّارُ مِنْ أَصْحَٰبِ ٱلْقُبُورِ",
+        "arabic": "يٰۤاَيُّهَا الَّذِيۡنَ اٰمَنُوۡا لَا تَتَوَلَّوۡا قَوۡمًا غَضِبَ اللّٰهُ عَلَيۡهِمۡ قَدۡ يَــٮِٕـسُوۡا مِنَ الۡاٰخِرَةِ كَمَا يَــٮِٕـسَ الۡكُفَّارُ مِنۡ اَصۡحٰبِ الۡقُبُوۡرِ‏ ﻿﻿",
         "translation_en": "O YOU who have attained to faith! Be not friends with people whom God has condemned! They [who would befriend them] are indeed bereft of all hope of a life to come - just as those deniers of the truth are bereft of all hope of [ever again seeing] those who are [now] in their graves.",
         "translation_ur": "مومنو! ان لوگوں سے جن پر خدا غصے ہوا ہے دوستی نہ کرو (کیونکہ) جس طرح کافروں کو مردوں (کے جی اُٹھنے) کی امید نہیں اسی طرح ان لوگوں کو بھی آخرت (کے آنے) کی امید نہیں",
         "audio": {

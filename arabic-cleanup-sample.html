@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Arabic Cleanup + Font Comparison</title>
   <link rel="preload" href="/fonts/PDMS_SALEEM_QURANFONTQESHIP_0.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/UthmanicHafs1Ver18.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/indopak-nastaleeq-waqf-lazim-v4.2.1.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/p106.woff2" as="font" type="font/woff2" crossorigin>
   <style>
     @font-face {
       font-family: 'CustomArabic';
@@ -33,6 +36,24 @@
     @font-face {
       font-family: 'AlQuranIndoPakQWBW';
       src: url('/fonts/AlQuran-IndoPak-QuranWBW.ttf') format('truetype');
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'UthmanicHafs';
+      src: url('/fonts/UthmanicHafs1Ver18.woff2') format('woff2');
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'IndoPakWaqfLazim';
+      src: url('/fonts/indopak-nastaleeq-waqf-lazim-v4.2.1.woff2') format('woff2');
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'P106';
+      src: url('/fonts/p106.woff2') format('woff2');
       font-display: swap;
     }
 
@@ -123,6 +144,21 @@
       font-weight: 400;
     }
 
+    .ar-uthmanic-hafs {
+      font-family: 'UthmanicHafs', 'CustomArabic', 'Scheherazade New', serif;
+      font-weight: 400;
+    }
+
+    .ar-indopak-waqf-lazim {
+      font-family: 'IndoPakWaqfLazim', 'CustomArabic', 'Scheherazade New', serif;
+      font-weight: 400;
+    }
+
+    .ar-p106 {
+      font-family: 'P106', 'CustomArabic', 'Scheherazade New', serif;
+      font-weight: 400;
+    }
+
     .ar-word {
       font-size: var(--cmp-font-size);
       line-height: 1.4;
@@ -188,6 +224,67 @@
       color: #445;
       margin-left: 4px;
     }
+
+    .cleanup-step-list {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 12px;
+      padding-top: 4px;
+    }
+
+    .cleanup-step-list label {
+      display: inline-flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #334;
+    }
+
+    .cleanup-playground {
+      border: 1px solid #d7deea;
+      border-radius: 10px;
+      background: #fff;
+      padding: 12px;
+      margin-bottom: 16px;
+    }
+
+    .cleanup-playground textarea {
+      width: 100%;
+      min-height: 110px;
+      resize: vertical;
+      box-sizing: border-box;
+      border: 1px solid #c8d3e4;
+      border-radius: 8px;
+      padding: 10px;
+      font-family: Consolas, monospace;
+      font-size: 13px;
+      color: #123;
+      background: #fcfdff;
+    }
+
+    .cleanup-actions {
+      margin-top: 8px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .cleanup-actions button {
+      height: 34px;
+      padding: 0 12px;
+      border: 1px solid #0a4d68;
+      background: #0a4d68;
+      color: #fff;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .cleanup-actions .hint {
+      font-size: 12px;
+      color: #445;
+    }
   </style>
 </head>
 <body>
@@ -209,8 +306,30 @@
     <tbody id="rows"></tbody>
   </table>
 
+  <h2>Step-by-Step Cleanup Trace</h2>
+  <p class="note">Type any raw text and inspect exactly how each cleanup line changes it.</p>
+  <div class="cleanup-playground">
+    <textarea id="cleanupInput"></textarea>
+    <div class="cleanup-actions">
+      <button id="runCleanupTrace" type="button">Run Cleanup Trace</button>
+      <span class="hint">Shows before/after for every regex in sequence.</span>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Step</th>
+        <th>Rule</th>
+        <th>Before</th>
+        <th>After</th>
+      </tr>
+    </thead>
+    <tbody id="traceRows"></tbody>
+  </table>
+
   <h2>Ayah Font Comparison, Word by Word</h2>
-  <p class="note">Per-word rendering across CustomArabic, IndoPakQWBW, PDMS alt TTF, MUHAMMADIBold, and AlQuran IndoPak QuranWBW.</p>
+  <p class="note">Per-word rendering across CustomArabic, IndoPakQWBW, PDMS alt TTF, MUHAMMADIBold, AlQuran IndoPak QuranWBW, UthmanicHafs, IndoPak Waqf Lazim, and P106.</p>
 
   <div class="controls">
     <label>
@@ -236,7 +355,21 @@
       <input id="ctrlItalic" type="checkbox">
       Italic
     </label>
+    <span class="hint" id="ctrlCleanupReadout">cleanups: none</span>
     <span class="hint" id="ctrlStyleReadout">weight 400, size 44px, italic off</span>
+    <div class="cleanup-step-list">
+      <label><input id="stepRecite" type="checkbox" checked>Recite cleanup</label>
+      <label><input id="stepStrict" type="checkbox" checked>Strict cleanup</label>
+      <label><input id="stepHtmlTags" type="checkbox" checked>Remove HTML tags</label>
+      <label><input id="stepBracketNums" type="checkbox" checked>Remove [n]</label>
+      <label><input id="stepFootNoteAttr" type="checkbox" checked>Remove foot_note=n</label>
+      <label><input id="stepCommaNum" type="checkbox" checked>Replace ", n"</label>
+      <label><input id="stepDotNum" type="checkbox" checked>Replace ". n"</label>
+      <label><input id="stepWhitespace" type="checkbox" checked>Normalize spaces</label>
+      <label><input id="stepTrailingComma" type="checkbox" checked>Trailing comma to dot</label>
+      <label><input id="stepCapitalize" type="checkbox" checked>Capitalize first letter</label>
+      <label><input id="stepQuranSymbols" type="checkbox" checked>Remove Quranic symbols</label>
+    </div>
   </div>
 
   <div id="loadMsg">Loading 2:282 from <code>build/recite/surahs/surah_002.json</code>...</div>
@@ -251,6 +384,9 @@
         <th>PDMS Alt TTF</th>
         <th>MUHAMMADIBold</th>
         <th>AlQuran IndoPak QuranWBW</th>
+        <th>UthmanicHafs</th>
+        <th>IndoPak Waqf Lazim</th>
+        <th>P106</th>
       </tr>
     </thead>
     <tbody id="longestRows"></tbody>
@@ -273,13 +409,89 @@
       { label: 'From 2:286 chunk', text: AR.from2286 }
     ];
 
-    const reciteCleanup = s => String(s || '').replace(/[\u06D6-\u06ED]/g, '').trim();
-    const strictCleanup = s => String(s || '').replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g, '').trim();
+    const reciteCleanup = s => String(s || '').replace(/[\u064B-\u065F]/g, '').trim();
+    const strictCleanup = s => String(s || '').replace(/[\u064B-\u065F]/g, '').trim();
+    const cleanupInput = document.getElementById('cleanupInput');
+    const runCleanupTrace = document.getElementById('runCleanupTrace');
+    const traceRows = document.getElementById('traceRows');
+    const traceSeed = '<p>وَٱرْحَمْنَآ <span foot_note=12345>ۚ</span> أَنتَ [2], 45. 88 ؕ</p>';
 
     function codepoints(str) {
       return Array.from(str)
         .map(ch => `${ch} U+${ch.codePointAt(0).toString(16).toUpperCase().padStart(4, '0')}`)
         .join(' | ');
+    }
+
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function traceCleanHtml(rawText) {
+      let current = String(rawText || '');
+      const steps = [];
+
+      function applyStep(label, rule, transform) {
+        const before = current;
+        const after = transform(before);
+        steps.push({ label, rule, before, after });
+        current = after;
+      }
+
+      applyStep('clean_html #1', "re.sub(r'<[^>]*>', '', raw_text)", text => text.replace(/<[^>]*>/g, ''));
+      applyStep('clean_html #2', "re.sub(r'\\[\\d+\\]', '', cleaned_text)", text => text.replace(/\[\d+\]/g, ''));
+      applyStep('clean_html #3', "re.sub(r'foot_note=\\d+', '', cleaned_text)", text => text.replace(/foot_note=\d+/g, ''));
+      applyStep('clean_html #4', "re.sub(r',\\s*\\d+', '.', cleaned_text)", text => text.replace(/,\s*\d+/g, '.'));
+      applyStep('clean_html #5', "re.sub(r'.\\s*\\d+', '.', cleaned_text)", text => text.replace(/.\s*\d+/g, '.'));
+      applyStep('clean_html #6', "re.sub(r'\\s+', ' ', cleaned_text).strip()", text => text.replace(/\s+/g, ' ').trim());
+      applyStep('clean_html #7', "re.sub(r',\\s*$', '.', cleaned_text).strip()", text => text.replace(/,\s*$/, '.').trim());
+      applyStep('clean_html #8', 'capitalize first letter if text exists', text => {
+        if (!text) return text;
+        return text[0].toUpperCase() + text.slice(1);
+      });
+
+      return { steps, cleanHtmlResult: current };
+    }
+
+    function traceRemoveQuranicSymbols(inputText) {
+      let current = String(inputText || '');
+      const steps = [];
+
+      function applyStep(label, rule, transform) {
+        const before = current;
+        const after = transform(before);
+        steps.push({ label, rule, before, after });
+        current = after;
+      }
+
+      applyStep('remove_quranic_symbols #1', 'text = text.replace("ؕ", "")', text => text.replace(/ؕ/g, ''));
+      applyStep('remove_quranic_symbols #2', "cleaned_text = re.sub(r'\\s+', ' ', text)", text => text.replace(/\s+/g, ' '));
+      applyStep('remove_quranic_symbols note', '# pattern exists but replacement line is commented out', text => text);
+
+      return { steps, finalResult: current };
+    }
+
+    function renderCleanupTrace() {
+      const raw = String(cleanupInput.value || '');
+      const htmlTrace = traceCleanHtml(raw);
+      const quranTrace = traceRemoveQuranicSymbols(htmlTrace.cleanHtmlResult);
+      const rows = [...htmlTrace.steps, ...quranTrace.steps];
+      traceRows.innerHTML = '';
+
+      rows.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><code>${escapeHtml(row.label)}</code></td>
+          <td><code>${escapeHtml(row.rule)}</code></td>
+          <td><code>${escapeHtml(row.before)}</code></td>
+          <td><code>${escapeHtml(row.after)}</code></td>
+        `;
+        traceRows.appendChild(tr);
+      });
     }
 
     const tbody = document.getElementById('rows');
@@ -302,7 +514,19 @@
     const ctrlSize = document.getElementById('ctrlSize');
     const ctrlSizeReadout = document.getElementById('ctrlSizeReadout');
     const ctrlItalic = document.getElementById('ctrlItalic');
+    const ctrlCleanupReadout = document.getElementById('ctrlCleanupReadout');
     const ctrlStyleReadout = document.getElementById('ctrlStyleReadout');
+    const stepRecite = document.getElementById('stepRecite');
+    const stepStrict = document.getElementById('stepStrict');
+    const stepHtmlTags = document.getElementById('stepHtmlTags');
+    const stepBracketNums = document.getElementById('stepBracketNums');
+    const stepFootNoteAttr = document.getElementById('stepFootNoteAttr');
+    const stepCommaNum = document.getElementById('stepCommaNum');
+    const stepDotNum = document.getElementById('stepDotNum');
+    const stepWhitespace = document.getElementById('stepWhitespace');
+    const stepTrailingComma = document.getElementById('stepTrailingComma');
+    const stepCapitalize = document.getElementById('stepCapitalize');
+    const stepQuranSymbols = document.getElementById('stepQuranSymbols');
 
     function pad3(value) {
       return String(Number(value) || 0).padStart(3, '0');
@@ -317,6 +541,75 @@
       document.documentElement.style.setProperty('--cmp-font-style', italic ? 'italic' : 'normal');
       ctrlSizeReadout.textContent = `${size}px`;
       ctrlStyleReadout.textContent = `weight ${weight}, size ${size}px, italic ${italic ? 'on' : 'off'}`;
+    }
+
+    function cleanHtmlLikeDuas(text) {
+      let t = String(text || '');
+      t = t.replace(/<[^>]*>/g, '');
+      t = t.replace(/\[\d+\]/g, '');
+      t = t.replace(/foot_note=\d+/g, '');
+      t = t.replace(/,\s*\d+/g, '.');
+      t = t.replace(/\.\s*\d+/g, '.');
+      t = t.replace(/\s+/g, ' ').trim();
+      t = t.replace(/,\s*$/, '.').trim();
+      if (t) t = t[0].toUpperCase() + t.slice(1);
+      return t;
+    }
+
+    function removeQuranicSymbolsLikeDuas(text) {
+      const pattern = /[ۖۗۘۙۚۛۜ۝۞ۣ۟۠ۡۢۤۥۦۧۨ۩۪ۭ۫۬ۮۯـ\u0660-\u0669\u06F0-\u06F9]/g;
+      return String(text || '')
+        .replace(pattern, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function selectedCleanupOptions() {
+      return {
+        recite: !!stepRecite.checked,
+        strict: !!stepStrict.checked,
+        htmlTags: !!stepHtmlTags.checked,
+        bracketNums: !!stepBracketNums.checked,
+        footNoteAttr: !!stepFootNoteAttr.checked,
+        commaNum: !!stepCommaNum.checked,
+        dotNum: !!stepDotNum.checked,
+        whitespace: !!stepWhitespace.checked,
+        trailingComma: !!stepTrailingComma.checked,
+        capitalize: !!stepCapitalize.checked,
+        quranSymbols: !!stepQuranSymbols.checked
+      };
+    }
+
+    function cleanupSummary(opts) {
+      const labels = [];
+      if (opts.recite) labels.push('recite');
+      if (opts.strict) labels.push('strict');
+      if (opts.htmlTags) labels.push('html-tags');
+      if (opts.bracketNums) labels.push('[n]');
+      if (opts.footNoteAttr) labels.push('foot_note');
+      if (opts.commaNum) labels.push(',n');
+      if (opts.dotNum) labels.push('.n');
+      if (opts.whitespace) labels.push('spaces');
+      if (opts.trailingComma) labels.push('trailing-comma');
+      if (opts.capitalize) labels.push('capitalize');
+      if (opts.quranSymbols) labels.push('quran-symbols');
+      return labels;
+    }
+
+    function applySelectedCleanups(text, opts) {
+      let t = String(text || '');
+      if (opts.recite) t = reciteCleanup(t);
+      if (opts.strict) t = strictCleanup(t);
+      if (opts.htmlTags) t = t.replace(/<[^>]*>/g, '');
+      if (opts.bracketNums) t = t.replace(/\[\d+\]/g, '');
+      if (opts.footNoteAttr) t = t.replace(/foot_note=\d+/g, '');
+      if (opts.commaNum) t = t.replace(/,\s*\d+/g, '.');
+      if (opts.dotNum) t = t.replace(/\.\s*\d+/g, '.');
+      if (opts.whitespace) t = t.replace(/\s+/g, ' ').trim();
+      if (opts.trailingComma) t = t.replace(/,\s*$/, '.').trim();
+      if (opts.capitalize && t) t = t[0].toUpperCase() + t.slice(1);
+      if (opts.quranSymbols) t = removeQuranicSymbolsLikeDuas(t);
+      return t;
     }
 
     async function renderLongestAyahWordByWord(surahInput = 2, ayahInput = 282) {
@@ -343,18 +636,25 @@
         if (!ayah?.arabic) throw new Error(`Ayah ${surah}:${ayahNum} not found in dataset.`);
 
         const words = String(ayah.arabic).trim().split(/\s+/).filter(Boolean);
-        loadMsg.textContent = `Loaded ${surah}:${ayahNum} with ${words.length} words.`;
+        const opts = selectedCleanupOptions();
+        const active = cleanupSummary(opts);
+        ctrlCleanupReadout.textContent = `cleanups: ${active.length ? active.join(', ') : 'none'}`;
+        loadMsg.textContent = `Loaded ${surah}:${ayahNum} with ${words.length} words (${active.length} cleanup step${active.length === 1 ? '' : 's'} active).`;
 
         words.forEach((word, idx) => {
+          const renderedWord = applySelectedCleanups(word, opts);
           const tr = document.createElement('tr');
           tr.innerHTML = `
             <td>${idx + 1}</td>
-            <td><code>${word}</code></td>
-            <td><div class="ar ar-word ar-prev">${word}</div></td>
-            <td><div class="ar ar-word ar-new">${word}</div></td>
-            <td><div class="ar ar-word ar-pdms-alt">${word}</div></td>
-            <td><div class="ar ar-word ar-muhammadi">${word}</div></td>
-            <td><div class="ar ar-word ar-alquran-indopak">${word}</div></td>
+            <td><code>${renderedWord}</code></td>
+            <td><div class="ar ar-word ar-prev">${renderedWord}</div></td>
+            <td><div class="ar ar-word ar-new">${renderedWord}</div></td>
+            <td><div class="ar ar-word ar-pdms-alt">${renderedWord}</div></td>
+            <td><div class="ar ar-word ar-muhammadi">${renderedWord}</div></td>
+            <td><div class="ar ar-word ar-alquran-indopak">${renderedWord}</div></td>
+            <td><div class="ar ar-word ar-uthmanic-hafs">${renderedWord}</div></td>
+            <td><div class="ar ar-word ar-indopak-waqf-lazim">${renderedWord}</div></td>
+            <td><div class="ar ar-word ar-p106">${renderedWord}</div></td>
           `;
           longestRows.appendChild(tr);
         });
@@ -378,7 +678,28 @@
     ctrlWeight.addEventListener('input', applyStyleControls);
     ctrlSize.addEventListener('input', applyStyleControls);
     ctrlItalic.addEventListener('change', applyStyleControls);
+    [
+      stepRecite,
+      stepStrict,
+      stepHtmlTags,
+      stepBracketNums,
+      stepFootNoteAttr,
+      stepCommaNum,
+      stepDotNum,
+      stepWhitespace,
+      stepTrailingComma,
+      stepCapitalize,
+      stepQuranSymbols
+    ].forEach(el => el.addEventListener('change', () => {
+      renderLongestAyahWordByWord(ctrlSurah.value, ctrlAyah.value);
+    }));
+    runCleanupTrace.addEventListener('click', renderCleanupTrace);
+    cleanupInput.addEventListener('keydown', e => {
+      if (e.ctrlKey && e.key === 'Enter') renderCleanupTrace();
+    });
 
+    cleanupInput.value = traceSeed;
+    renderCleanupTrace();
     applyStyleControls();
     renderLongestAyahWordByWord(ctrlSurah.value, ctrlAyah.value);
   </script>

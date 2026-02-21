@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-02-14T12:15:26.439205+00:00",
-  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "generatedAt": "2026-02-21T01:14:40.188729+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
   "surah": {
     "surah": 97,
     "arabicName": "سُورَةُ القَدۡرِ",
@@ -11,7 +11,7 @@
       {
         "ayah": 1,
         "globalAyah": 6126,
-        "arabic": "بِّسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ إِنَّآ أَنزَلْنَٰهُ فِى لَيْلَةِ ٱلْقَدْرِ",
+        "arabic": "اِنَّاۤ اَنۡزَلۡنٰهُ فِىۡ لَيۡلَةِ الۡقَدۡرِ ۖ ۚ‏",
         "translation_en": "BEHOLD, from on high have We bestowed this [divine writ] on Night of Destiny.",
         "translation_ur": "ہم نے اس (قرآن) کو شب قدر میں نازل (کرنا شروع) کیا",
         "audio": {
@@ -23,7 +23,7 @@
       {
         "ayah": 2,
         "globalAyah": 6127,
-        "arabic": "وَمَآ أَدْرَىٰكَ مَا لَيْلَةُ ٱلْقَدْرِ",
+        "arabic": "وَمَاۤ اَدۡرٰٮكَ مَا لَيۡلَةُ الۡقَدۡرِؕ‏",
         "translation_en": "And what could make thee conceive what it is, that Night of Destiny?",
         "translation_ur": "اور تمہیں کیا معلوم کہ شب قدر کیا ہے؟",
         "audio": {
@@ -35,7 +35,7 @@
       {
         "ayah": 3,
         "globalAyah": 6128,
-        "arabic": "لَيْلَةُ ٱلْقَدْرِ خَيْرٌۭ مِّنْ أَلْفِ شَهْرٍۢ",
+        "arabic": "لَيۡلَةُ الۡقَدۡرِ  ۙ خَيۡرٌ مِّنۡ اَلۡفِ شَهۡرٍؕ‏",
         "translation_en": "The Night of Destiny is better than a thousand months:",
         "translation_ur": "شب قدر ہزار مہینے سے بہتر ہے",
         "audio": {
@@ -47,7 +47,7 @@
       {
         "ayah": 4,
         "globalAyah": 6129,
-        "arabic": "تَنَزَّلُ ٱلْمَلَٰٓئِكَةُ وَٱلرُّوحُ فِيهَا بِإِذْنِ رَبِّهِم مِّن كُلِّ أَمْرٍۢ",
+        "arabic": "تَنَزَّلُ الۡمَلٰٓٮِٕكَةُ وَالرُّوۡحُ فِيۡهَا بِاِذۡنِ رَبِّهِمۡ​ۚ مِّنۡ كُلِّ اَمۡرٍ ۛۙ‏",
         "translation_en": "in hosts descend in it the angels, bearing divine inspiration by their Sustainer's leave; from all [evil] that may happen",
         "translation_ur": "اس میں روح (الامین) اور فرشتے ہر کام کے (انتظام کے) لیے اپنے پروردگار کے حکم سے اترتے ہیں",
         "audio": {
@@ -59,7 +59,7 @@
       {
         "ayah": 5,
         "globalAyah": 6130,
-        "arabic": "سَلَٰمٌ هِىَ حَتَّىٰ مَطْلَعِ ٱلْفَجْرِ",
+        "arabic": "سَلٰمٌ   ۛهِىَ حَتّٰى مَطۡلَعِ الۡفَجۡرِ‏",
         "translation_en": "does it make secure, until the rise of dawn.",
         "translation_ur": "یہ (رات) طلوع صبح تک (امان اور) سلامتی ہے",
         "audio": {

@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-02-14T12:15:14.145146+00:00",
-  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "generatedAt": "2026-02-21T01:14:07.559766+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
   "surah": {
     "surah": 73,
     "arabicName": "سُورَةُ المُزَّمِّلِ",
@@ -11,7 +11,7 @@
       {
         "ayah": 1,
         "globalAyah": 5476,
-        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ يَٰٓأَيُّهَا ٱلْمُزَّمِّلُ",
+        "arabic": "يٰۤاَيُّهَا الۡمُزَّمِّلُۙ‏",
         "translation_en": "O THOU enwrapped one!",
         "translation_ur": "اے (محمدﷺ) جو کپڑے میں لپٹ رہے ہو",
         "audio": {
@@ -23,7 +23,7 @@
       {
         "ayah": 2,
         "globalAyah": 5477,
-        "arabic": "قُمِ ٱلَّيْلَ إِلَّا قَلِيلًۭا",
+        "arabic": "قُمِ الَّيۡلَ اِلَّا قَلِيۡلًا ۙ‏",
         "translation_en": "Keep awake [in prayer] at night, all but a small part",
         "translation_ur": "رات کو قیام کیا کرو مگر تھوڑی سی رات",
         "audio": {
@@ -35,7 +35,7 @@
       {
         "ayah": 3,
         "globalAyah": 5478,
-        "arabic": "نِّصْفَهُۥٓ أَوِ ٱنقُصْ مِنْهُ قَلِيلًا",
+        "arabic": "نِّصۡفَهٗۤ اَوِ انْقُصۡ مِنۡهُ قَلِيۡلًا ۙ‏",
         "translation_en": "of one-half thereof - or make it a little less than that,",
         "translation_ur": "(قیام) آدھی رات (کیا کرو)",
         "audio": {
@@ -47,7 +47,7 @@
       {
         "ayah": 4,
         "globalAyah": 5479,
-        "arabic": "أَوْ زِدْ عَلَيْهِ وَرَتِّلِ ٱلْقُرْءَانَ تَرْتِيلًا",
+        "arabic": "اَوۡ زِدۡ عَلَيۡهِ وَرَتِّلِ الۡقُرۡاٰنَ تَرۡتِيۡلًا ؕ‏",
         "translation_en": "or add to it [at will]; and [during that time] recite the Qur’an calmly and distinctly, with thy mind attuned to its meaning.",
         "translation_ur": "یا اس سے کچھ کم یا کچھ زیادہ اور قرآن کو ٹھہر ٹھہر کر پڑھا کرو",
         "audio": {
@@ -59,7 +59,7 @@
       {
         "ayah": 5,
         "globalAyah": 5480,
-        "arabic": "إِنَّا سَنُلْقِى عَلَيْكَ قَوْلًۭا ثَقِيلًا",
+        "arabic": "اِنَّا سَنُلۡقِىۡ عَلَيۡكَ قَوۡلًا ثَقِيۡلًا‏",
         "translation_en": "Behold, We shall bestow upon thee a weighty message –",
         "translation_ur": "ہم عنقریب تم پر ایک بھاری فرمان نازل کریں گے",
         "audio": {
@@ -71,7 +71,7 @@
       {
         "ayah": 6,
         "globalAyah": 5481,
-        "arabic": "إِنَّ نَاشِئَةَ ٱلَّيْلِ هِىَ أَشَدُّ وَطْـًۭٔا وَأَقْوَمُ قِيلًا",
+        "arabic": "اِنَّ نَاشِئَةَ الَّيۡلِ هِىَ اَشَدُّ وَطۡـاً وَّاَقۡوَمُ قِيۡلًا ؕ‏",
         "translation_en": "[and,] verily, the hours of night the mind most strongly and speak with the clearest voice,",
         "translation_ur": "کچھ شک نہیں کہ رات کا اٹھنا (نفس بہیمی) کو سخت پامال کرتا ہے اور اس وقت ذکر بھی خوب درست ہوتا ہے",
         "audio": {
@@ -83,7 +83,7 @@
       {
         "ayah": 7,
         "globalAyah": 5482,
-        "arabic": "إِنَّ لَكَ فِى ٱلنَّهَارِ سَبْحًۭا طَوِيلًۭا",
+        "arabic": "اِنَّ لَـكَ فِى النَّهَارِ سَبۡحًا طَوِيۡلًا ؕ‏",
         "translation_en": "whereas by day a long chain of doings is thy portion.",
         "translation_ur": "دن کے وقت تو تمہیں اور بہت سے شغل ہوتے ہیں",
         "audio": {
@@ -95,7 +95,7 @@
       {
         "ayah": 8,
         "globalAyah": 5483,
-        "arabic": "وَٱذْكُرِ ٱسْمَ رَبِّكَ وَتَبَتَّلْ إِلَيْهِ تَبْتِيلًۭا",
+        "arabic": "وَاذۡكُرِ اسۡمَ رَبِّكَ وَتَبَتَّلۡ اِلَيۡهِ تَبۡتِيۡلًا ؕ‏",
         "translation_en": "But [whether by night or by day,] remember thy Sustainer's name, and devote thyself unto Him with utter devotion.",
         "translation_ur": "تو اپنے پروردگار کے نام کا ذکر کرو اور ہر طرف سے بےتعلق ہو کر اسی کی طرف متوجہ ہوجاؤ",
         "audio": {
@@ -107,7 +107,7 @@
       {
         "ayah": 9,
         "globalAyah": 5484,
-        "arabic": "رَّبُّ ٱلْمَشْرِقِ وَٱلْمَغْرِبِ لَآ إِلَٰهَ إِلَّا هُوَ فَٱتَّخِذْهُ وَكِيلًۭا",
+        "arabic": "رَبُّ الۡمَشۡرِقِ وَالۡمَغۡرِبِ لَاۤ اِلٰهَ اِلَّا هُوَ فَاتَّخِذۡهُ وَكِيۡلًا‏ ﻿﻿",
         "translation_en": "The Sustainer of the east and the west [is He]: there is no deity save Him: hence, ascribe to Him alone the power to determine thy fate,",
         "translation_ur": "مشرق اور مغرب کا مالک (ہے اور) اس کے سوا کوئی معبود نہیں تو اسی کو اپنا کارساز بناؤ",
         "audio": {
@@ -119,7 +119,7 @@
       {
         "ayah": 10,
         "globalAyah": 5485,
-        "arabic": "وَٱصْبِرْ عَلَىٰ مَا يَقُولُونَ وَٱهْجُرْهُمْ هَجْرًۭا جَمِيلًۭا",
+        "arabic": "وَاصۡبِرۡ عَلٰى مَا يَقُوۡلُوۡنَ وَاهۡجُرۡهُمۡ هَجۡرًا جَمِيۡلًا‏",
         "translation_en": "and endure with patience whatever people may say [against thee], and avoid them with a comely avoidance.",
         "translation_ur": "اور جو جو (دل آزار) باتیں یہ لوگ کہتے ہیں ان کو سہتے رہو اور اچھے طریق سے ان سے کنارہ کش رہو",
         "audio": {
@@ -131,7 +131,7 @@
       {
         "ayah": 11,
         "globalAyah": 5486,
-        "arabic": "وَذَرْنِى وَٱلْمُكَذِّبِينَ أُو۟لِى ٱلنَّعْمَةِ وَمَهِّلْهُمْ قَلِيلًا",
+        "arabic": "وَذَرۡنِىۡ وَالۡمُكَذِّبِيۡنَ اُولِى النَّعۡمَةِ وَمَهِّلۡهُمۡ قَلِيۡلًا‏ ﻿﻿",
         "translation_en": "And leave Me alone [to deal] with those who give the lie to the truth - those who enjoy the blessings of life [without any thought of God] - and bear thou with them for a little while:",
         "translation_ur": "اور مجھے ان جھٹلانے والوں سے جو دولتمند ہیں سمجھ لینے دو اور ان کو تھوڑی سی مہلت دے دو",
         "audio": {
@@ -143,7 +143,7 @@
       {
         "ayah": 12,
         "globalAyah": 5487,
-        "arabic": "إِنَّ لَدَيْنَآ أَنكَالًۭا وَجَحِيمًۭا",
+        "arabic": "اِنَّ لَدَيۡنَاۤ اَنۡـكَالًا وَّجَحِيۡمًا ۙ‏",
         "translation_en": "for, behold, heavy fetters [await them] with Us, and a blazing fire,",
         "translation_ur": "کچھ شک نہیں کہ ہمارے پاس بیڑیاں ہیں اور بھڑکتی ہوئی آگ ہے",
         "audio": {
@@ -155,7 +155,7 @@
       {
         "ayah": 13,
         "globalAyah": 5488,
-        "arabic": "وَطَعَامًۭا ذَا غُصَّةٍۢ وَعَذَابًا أَلِيمًۭا",
+        "arabic": "وَّطَعَامًا ذَا غُصَّةٍ وَّعَذَابًا اَلِيۡمًا‏",
         "translation_en": "and food that chokes, and grievous suffering",
         "translation_ur": "اور گلوگیر کھانا ہے اور درد دینے والا عذاب (بھی) ہے",
         "audio": {
@@ -167,7 +167,7 @@
       {
         "ayah": 14,
         "globalAyah": 5489,
-        "arabic": "يَوْمَ تَرْجُفُ ٱلْأَرْضُ وَٱلْجِبَالُ وَكَانَتِ ٱلْجِبَالُ كَثِيبًۭا مَّهِيلًا",
+        "arabic": "يَوۡمَ تَرۡجُفُ الۡاَرۡضُ وَالۡجِبَالُ وَكَانَتِ الۡجِبَالُ كَثِيۡبًا مَّهِيۡلًا‏ ﻿﻿",
         "translation_en": "on the Day when the earth and the mountains will be convulsed and the mountains will [crumble and] become like a sand-dune on the move!",
         "translation_ur": "جس دن زمین اور پہاڑ کانپنے لگیں اور پہاڑ ایسے بھر بھرے (گویا) ریت کے ٹیلے ہوجائیں",
         "audio": {
@@ -179,7 +179,7 @@
       {
         "ayah": 15,
         "globalAyah": 5490,
-        "arabic": "إِنَّآ أَرْسَلْنَآ إِلَيْكُمْ رَسُولًۭا شَٰهِدًا عَلَيْكُمْ كَمَآ أَرْسَلْنَآ إِلَىٰ فِرْعَوْنَ رَسُولًۭا",
+        "arabic": "اِنَّاۤ اَرۡسَلۡنَاۤ اِلَيۡكُمۡ رَسُوۡلًا ۙ شَاهِدًا عَلَيۡكُمۡ كَمَاۤ اَرۡسَلۡنَاۤ اِلٰى فِرۡعَوۡنَ رَسُوۡلًا ؕ‏",
         "translation_en": "BEHOLD, [O men,] We have sent unto you an apostle who shall bear witness to the truth before you, even as We sent an apostle unto Pharaoh:",
         "translation_ur": "(اے اہل مکہ) جس طرح ہم نے فرعون کے پاس (موسیٰ کو) پیغمبر (بنا کر) بھیجا تھا (اسی طرح) تمہارے پاس بھی (محمدﷺ) رسول بھیجے ہیں جو تمہارے مقابلے میں گواہ ہوں گے",
         "audio": {
@@ -191,7 +191,7 @@
       {
         "ayah": 16,
         "globalAyah": 5491,
-        "arabic": "فَعَصَىٰ فِرْعَوْنُ ٱلرَّسُولَ فَأَخَذْنَٰهُ أَخْذًۭا وَبِيلًۭا",
+        "arabic": "فَعَصٰى فِرۡعَوۡنُ الرَّسُوۡلَ فَاَخَذۡنٰهُ اَخۡذًا وَّبِيۡلًا‏",
         "translation_en": "and Pharaoh rebelled against the apostle, whereupon We took him to task with a crushing grip.",
         "translation_ur": "سو فرعون نے (ہمارے) پیغمبر کا کہا نہ مانا تو ہم نے اس کو بڑے وبال میں پکڑ لیا",
         "audio": {
@@ -203,7 +203,7 @@
       {
         "ayah": 17,
         "globalAyah": 5492,
-        "arabic": "فَكَيْفَ تَتَّقُونَ إِن كَفَرْتُمْ يَوْمًۭا يَجْعَلُ ٱلْوِلْدَٰنَ شِيبًا",
+        "arabic": "فَكَيۡفَ تَتَّقُوۡنَ اِنۡ كَفَرۡتُمۡ يَوۡمًا يَّجۡعَلُ الۡوِلۡدَانَ شِيۡبَا  ۖ‏",
         "translation_en": "How, then, if you refuse to acknowledge the truth, will you protect yourselves on that Day which shall turn the hair of children grey,",
         "translation_ur": "اگر تم بھی (ان پیغمبروں کو) نہ مانو گے تو اس دن سے کیونکر بچو گے جو بچّوں کو بوڑھا کر دے گا",
         "audio": {
@@ -215,7 +215,7 @@
       {
         "ayah": 18,
         "globalAyah": 5493,
-        "arabic": "ٱلسَّمَآءُ مُنفَطِرٌۢ بِهِۦ ۚ كَانَ وَعْدُهُۥ مَفْعُولًا",
+        "arabic": "اۨلسَّمَآءُ مُنۡفَطِرٌ ۢ بِهٖ​ؕ كَانَ وَعۡدُهٗ مَفۡعُوۡلًا‏",
         "translation_en": "[the Day] on which the skies shall be rent asunder, [and] His promise [of resurrection] fulfilled?",
         "translation_ur": "(اور) جس سے آسمان پھٹ جائے گا۔ یہ اس کا وعدہ (پورا) ہو کر رہے گا",
         "audio": {
@@ -227,7 +227,7 @@
       {
         "ayah": 19,
         "globalAyah": 5494,
-        "arabic": "إِنَّ هَٰذِهِۦ تَذْكِرَةٌۭ ۖ فَمَن شَآءَ ٱتَّخَذَ إِلَىٰ رَبِّهِۦ سَبِيلًا",
+        "arabic": "اِنَّ هٰذِهٖ تَذۡكِرَةٌ ​ ۚ فَمَنۡ شَآءَ اتَّخَذَ اِلٰى رَبِّهٖ سَبِيۡلًا‏ ﻿﻿",
         "translation_en": "This, verily, is a reminder: let him who wills, then set out on a way to his Sustainer!",
         "translation_ur": "یہ (قرآن) تو نصیحت ہے۔ سو جو چاہے اپنے پروردگار تک (پہنچنے کا) رستہ اختیار کرلے",
         "audio": {
@@ -239,7 +239,7 @@
       {
         "ayah": 20,
         "globalAyah": 5495,
-        "arabic": "۞ إِنَّ رَبَّكَ يَعْلَمُ أَنَّكَ تَقُومُ أَدْنَىٰ مِن ثُلُثَىِ ٱلَّيْلِ وَنِصْفَهُۥ وَثُلُثَهُۥ وَطَآئِفَةٌۭ مِّنَ ٱلَّذِينَ مَعَكَ ۚ وَٱللَّهُ يُقَدِّرُ ٱلَّيْلَ وَٱلنَّهَارَ ۚ عَلِمَ أَن لَّن تُحْصُوهُ فَتَابَ عَلَيْكُمْ ۖ فَٱقْرَءُوا۟ مَا تَيَسَّرَ مِنَ ٱلْقُرْءَانِ ۚ عَلِمَ أَن سَيَكُونُ مِنكُم مَّرْضَىٰ ۙ وَءَاخَرُونَ يَضْرِبُونَ فِى ٱلْأَرْضِ يَبْتَغُونَ مِن فَضْلِ ٱللَّهِ ۙ وَءَاخَرُونَ يُقَٰتِلُونَ فِى سَبِيلِ ٱللَّهِ ۖ فَٱقْرَءُوا۟ مَا تَيَسَّرَ مِنْهُ ۚ وَأَقِيمُوا۟ ٱلصَّلَوٰةَ وَءَاتُوا۟ ٱلزَّكَوٰةَ وَأَقْرِضُوا۟ ٱللَّهَ قَرْضًا حَسَنًۭا ۚ وَمَا تُقَدِّمُوا۟ لِأَنفُسِكُم مِّنْ خَيْرٍۢ تَجِدُوهُ عِندَ ٱللَّهِ هُوَ خَيْرًۭا وَأَعْظَمَ أَجْرًۭا ۚ وَٱسْتَغْفِرُوا۟ ٱللَّهَ ۖ إِنَّ ٱللَّهَ غَفُورٌۭ رَّحِيمٌۢ",
+        "arabic": "اِنَّ رَبَّكَ يَعۡلَمُ اَنَّكَ تَقُوۡمُ اَدۡنىٰ مِنۡ ثُلُثَىِ الَّيۡلِ وَ نِصۡفَهٗ وَثُلُثَهٗ وَطَآٮِٕفَةٌ مِّنَ الَّذِيۡنَ مَعَكَ​ؕ وَاللّٰهُ يُقَدِّرُ الَّيۡلَ وَالنَّهَارَ​ؕ عَلِمَ اَنۡ لَّنۡ تُحۡصُوۡهُ فَتَابَ عَلَيۡكُمۡ​ فَاقۡرَءُوۡا مَا تَيَسَّرَ مِنَ الۡقُرۡاٰنِ​ؕ عَلِمَ اَنۡ سَيَكُوۡنُ مِنۡكُمۡ مَّرۡضٰى​ۙ وَاٰخَرُوۡنَ يَضۡرِبُوۡنَ فِى الۡاَرۡضِ يَبۡتَغُوۡنَ مِنۡ فَضۡلِ اللّٰهِ​ۙ وَاٰخَرُوۡنَ يُقَاتِلُوۡنَ فِىۡ سَبِيۡلِ اللّٰهِ ۖ فَاقۡرَءُوۡا مَا تَيَسَّرَ مِنۡهُ​ ۙ وَاَقِيۡمُوا الصَّلٰوةَ وَاٰتُوا الزَّكٰوةَ وَاَقۡرِضُوا اللّٰهَ قَرۡضًا حَسَنًا​ ؕ وَمَا تُقَدِّمُوۡا لِاَنۡفُسِكُمۡ مِّنۡ خَيۡرٍ تَجِدُوۡهُ عِنۡدَ اللّٰهِ هُوَ خَيۡرًا وَّاَعۡظَمَ اَجۡرًا​ ؕ وَاسۡتَغۡفِرُوا اللّٰهَ ​ؕ اِنَّ اللّٰهَ غَفُوۡرٌ رَّحِيۡمٌ‏",
         "translation_en": "BEHOLD, [O Prophet,] thy Sustainer knows that thou keepest awake [in prayer] nearly two-thirds of the night, or one-half of it, or a third of it, together with some of those who follow thee. And God who determines the measure of night and day, is aware that you would never grudge it: and therefore He turns towards you in His grace. Recite, then, as much of the Qur’an as you may do with ease. He knows that in time there will be among you sick people, and others who will go about the land in search of God's bounty, and others who will fight in God’s cause. Recite, then, [only] as much of it as you may do with ease, and be constant in prayer, and spend in charity, and [thus] lend unto God a goodly loan: for whatever good deed you may offer up in your own behalf, you shall truly find it with God - yea, better, and richer in reward. And [always] seek God's forgiveness: behold, God is much-forgiving, a dispenser of grace!",
         "translation_ur": "تمہارا پروردگار خوب جانتا ہے کہ تم اور تمہارے ساتھ کے لوگ (کبھی) دو تہائی رات کے قریب اور (کبھی) آدھی رات اور (کبھی) تہائی رات قیام کیا کرتے ہو۔ اور خدا تو رات اور دن کا اندازہ رکھتا ہے۔ اس نے معلوم کیا کہ تم اس کو نباہ نہ سکو گے تو اس نے تم پر مہربانی کی۔ پس جتنا آسانی سے ہوسکے (اتنا) قرآن پڑھ لیا کرو۔ اس نے جانا کہ تم میں بعض بیمار بھی ہوتے ہیں اور بعض خدا کے فضل (یعنی معاش) کی تلاش میں ملک میں سفر کرتے ہیں اور بعض خدا کی راہ میں لڑتے ہیں۔ تو جتنا آسانی سے ہوسکے اتنا پڑھ لیا کرو۔ اور نماز پڑھتے رہو اور زکوٰة ادا کرتے رہو اور خدا کو نیک (اور خلوص نیت سے) قرض دیتے رہو۔ اور جو عمل نیک تم اپنے لئے آگے بھیجو گے اس کو خدا کے ہاں بہتر اور صلے میں بزرگ تر پاؤ گے۔ اور خدا سے بخشش مانگتے رہو۔ بےشک خدا بخشنے والا مہربان ہے",
         "audio": {

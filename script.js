@@ -59,6 +59,41 @@ let saveHintLottie;
 let closeSettingsMenuFn = null;
 let settingsOutsideClickHandler = null;
 
+function sanitizeTypographySettings(raw = {}) {
+  const arabicFont = raw.arabicFont === 'UthmanicHafs' ? 'UthmanicHafs' : 'CustomArabic';
+  const parsedSize = Number.parseFloat(raw.arabicSize);
+  const arabicSize = Number.isFinite(parsedSize)
+    ? Math.min(56, Math.max(16, parsedSize))
+    : 22;
+  const parsedWeight = Number.parseInt(raw.arabicWeight, 10);
+  const weightBucket = Number.isFinite(parsedWeight)
+    ? Math.round(parsedWeight / 100) * 100
+    : 100;
+  const arabicWeight = Math.min(900, Math.max(100, weightBucket));
+  const englishRaw = Number.parseFloat(raw.englishScale);
+  const englishScale = Number.isFinite(englishRaw)
+    ? Math.min(160, Math.max(70, englishRaw))
+    : 100;
+  return {
+    arabicFont,
+    arabicSize,
+    arabicWeight,
+    arabicItalic: raw.arabicItalic === true,
+    englishScale
+  };
+}
+
+function applyTypographySettings(rawSettings = {}) {
+  const settings = sanitizeTypographySettings(rawSettings);
+  const html = document.documentElement;
+  html.setAttribute('data-arabic-font', settings.arabicFont);
+  html.style.setProperty('--qq-arabic-font-family', `'${settings.arabicFont}'`);
+  html.style.setProperty('--qq-arabic-size', `${settings.arabicSize}px`);
+  html.style.setProperty('--qq-arabic-weight', String(settings.arabicWeight));
+  html.style.setProperty('--qq-arabic-style', settings.arabicItalic ? 'italic' : 'normal');
+  html.style.setProperty('--qq-english-scale', String(settings.englishScale / 100));
+}
+
 function isEditableTarget(target) {
   if (!(target instanceof Element)) return false;
   return Boolean(
@@ -171,6 +206,7 @@ console.log('[IFRAME] script.js executed', location.pathname);
     if (settings.panelLang === 'en' || settings.panelLang === 'ur') {
       html.setAttribute('data-panel-lang', settings.panelLang);
     }
+    applyTypographySettings(settings);
   } catch (err) {
     // Swallow parse errors to avoid blocking iframe boot.
   }
@@ -934,6 +970,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
       function applySettings(settings) {
         LOG.iframe('Applying settings', settings);
         lastSettings = settings || lastSettings;
+        applyTypographySettings(settings || {});
 
         const html = document.documentElement;
 
@@ -1157,6 +1194,64 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
 
         // ===== AUDIO SETTINGS =====
         menuHTML += `
+          <div class="sm-section-title">Text Appearance</div>
+
+          <div class="sm-row">
+            <div class="sm-label">
+              <i class="material-icons-outlined">font_download</i>
+              <span>Arabic Font</span>
+            </div>
+            <select id="arabicFontSelect">
+              <option value="CustomArabic">CustomArabic</option>
+              <option value="UthmanicHafs">UthmanicHafs</option>
+            </select>
+          </div>
+
+          <div class="sm-row">
+            <div class="sm-label">
+              <i class="material-icons-outlined">format_size</i>
+              <span>Arabic Size</span>
+            </div>
+            <input type="number" id="arabicSizeInput" min="16" max="56" step="1" value="22"/>
+          </div>
+
+          <div class="sm-row">
+            <div class="sm-label">
+              <i class="material-icons-outlined">line_weight</i>
+              <span>Arabic Weight</span>
+            </div>
+            <select id="arabicWeightSelect">
+              <option value="100">100</option>
+              <option value="200">200</option>
+              <option value="300">300</option>
+              <option value="400">400</option>
+              <option value="500">500</option>
+              <option value="600">600</option>
+              <option value="700">700</option>
+              <option value="800">800</option>
+              <option value="900">900</option>
+            </select>
+          </div>
+
+          <div class="sm-row">
+            <div class="sm-label">
+              <i class="material-icons-outlined">format_italic</i>
+              <span>Arabic Italic</span>
+            </div>
+            <label class="switch">
+              <input id="arabicItalicToggle" type="checkbox">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="sm-row">
+            <div class="sm-label">
+              <i class="material-icons-outlined">text_fields</i>
+              <span>English Size (%)</span>
+            </div>
+            <input type="number" id="englishScaleInput" min="70" max="160" step="5" value="100"/>
+          </div>
+
           <div class="sm-section-title">Audio Settings</div>
 
           <div class="sm-row">
@@ -1285,6 +1380,31 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
             toggleSection('translation-section', e.target.checked)
           );
 
+        menuEl.querySelector('#arabicFontSelect')
+          ?.addEventListener('change', e =>
+            updateSetting({ arabicFont: e.target.value })
+          );
+
+        menuEl.querySelector('#arabicSizeInput')
+          ?.addEventListener('change', e =>
+            updateSetting({ arabicSize: Number(e.target.value) || 22 })
+          );
+
+        menuEl.querySelector('#arabicWeightSelect')
+          ?.addEventListener('change', e =>
+            updateSetting({ arabicWeight: Number(e.target.value) || 100 })
+          );
+
+        menuEl.querySelector('#arabicItalicToggle')
+          ?.addEventListener('change', e =>
+            updateSetting({ arabicItalic: !!e.target.checked })
+          );
+
+        menuEl.querySelector('#englishScaleInput')
+          ?.addEventListener('change', e =>
+            updateSetting({ englishScale: Number(e.target.value) || 100 })
+          );
+
         menuEl.querySelector('#audioLangSelect')
           ?.addEventListener('change', e =>
             onAudioLangChange(e.target.value)
@@ -1401,6 +1521,18 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
               !document.documentElement.classList.contains('hide-panel-translation');
           }
         }
+
+        const typoSettings = sanitizeTypographySettings(lastSettings || {});
+        const arabicFontSelect = menuEl.querySelector('#arabicFontSelect');
+        const arabicSizeInput = menuEl.querySelector('#arabicSizeInput');
+        const arabicWeightSelect = menuEl.querySelector('#arabicWeightSelect');
+        const arabicItalicToggle = menuEl.querySelector('#arabicItalicToggle');
+        const englishScaleInput = menuEl.querySelector('#englishScaleInput');
+        if (arabicFontSelect) arabicFontSelect.value = typoSettings.arabicFont;
+        if (arabicSizeInput) arabicSizeInput.value = String(Math.round(typoSettings.arabicSize));
+        if (arabicWeightSelect) arabicWeightSelect.value = String(typoSettings.arabicWeight);
+        if (arabicItalicToggle) arabicItalicToggle.checked = typoSettings.arabicItalic;
+        if (englishScaleInput) englishScaleInput.value = String(Math.round(typoSettings.englishScale));
 
         // ---------------------------------------------
         // FORCE audio language dropdown to saved value
@@ -3717,6 +3849,27 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         });
       }
 
+      function normalizeArabicDisplayText(raw) {
+        return String(raw || '')
+          // Normalize tanween-before-alif variant to standard fathatan.
+          .replace(/\u0657(?=\u0627)/g, '\u064B')
+          // Normalize remaining Quranic tanween variant to standard dammatan.
+          .replace(/\u0657/g, '\u064C')
+          // Normalize Quranic sukun mark to standard sukun for font compatibility.
+          .replace(/\u06E1/g, '\u0652');
+      }
+
+      function normalizeArabicDisplayInView() {
+        const selectors = ['.word-text', '#reciting-mode-content', '.ayah-arabic'];
+        selectors.forEach(sel => {
+          document.querySelectorAll(sel).forEach(node => {
+            const before = node.textContent || '';
+            const after = normalizeArabicDisplayText(before);
+            if (after !== before) node.textContent = after;
+          });
+        });
+      }
+
 
       
 
@@ -3733,6 +3886,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         console.log('[INIT] initIframeApp'              );
         ensureInlineSaveProgressButton();
         cacheDOM();
+        normalizeArabicDisplayInView();
         bindInlineReplacements();
         if (scrollEl) {
           document.body.classList.add('has-ayah-scroll');

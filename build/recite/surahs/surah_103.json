@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-02-14T12:15:29.267142+00:00",
-  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "generatedAt": "2026-02-21T01:14:44.590515+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
   "surah": {
     "surah": 103,
     "arabicName": "سُورَةُ العَصۡرِ",
@@ -11,7 +11,7 @@
       {
         "ayah": 1,
         "globalAyah": 6177,
-        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ وَٱلْعَصْرِ",
+        "arabic": "وَالۡعَصۡرِۙ‏",
         "translation_en": "CONSIDER the flight of time!",
         "translation_ur": "عصر کی قسم",
         "audio": {
@@ -23,7 +23,7 @@
       {
         "ayah": 2,
         "globalAyah": 6178,
-        "arabic": "إِنَّ ٱلْإِنسَٰنَ لَفِى خُسْرٍ",
+        "arabic": "اِنَّ الۡاِنۡسَانَ لَفِىۡ خُسۡرٍۙ‏",
         "translation_en": "Verily, man is bound to lose himself",
         "translation_ur": "کہ انسان نقصان میں ہے",
         "audio": {
@@ -35,7 +35,7 @@
       {
         "ayah": 3,
         "globalAyah": 6179,
-        "arabic": "إِلَّا ٱلَّذِينَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّٰلِحَٰتِ وَتَوَاصَوْا۟ بِٱلْحَقِّ وَتَوَاصَوْا۟ بِٱلصَّبْرِ",
+        "arabic": "اِلَّا الَّذِيۡنَ اٰمَنُوۡا وَ عَمِلُوا الصّٰلِحٰتِ وَتَوَاصَوۡا بِالۡحَقِّ   ۙ وَتَوَاصَوۡا بِالصَّبۡرِ‏",
         "translation_en": "unless he be of those who attain to faith, and do good works, and enjoin upon one another the keeping to truth, and enjoin upon one another patience in adversity.",
         "translation_ur": "مگر وہ لوگ جو ایمان لائے اور نیک عمل کرتے رہے اور آپس میں حق (بات) کی تلقین اور صبر کی تاکید کرتے رہے",
         "audio": {

@@ -20,9 +20,9 @@ from typing import Any, Dict, List
 
 
 SURAH_LIST_URL = "https://api.alquran.cloud/v1/surah"
-SURAH_ARABIC_URL = "https://api.alquran.cloud/v1/surah/{surah}/quran-uthmani"
 SURAH_EN_URL = "https://api.alquran.cloud/v1/surah/{surah}/en.asad"
 SURAH_UR_URL = "https://api.alquran.cloud/v1/surah/{surah}/ur.jalandhry"
+QURAN_COM_INDOPAK_VERSE_URL = "https://api.quran.com/api/v4/quran/verses/indopak?verse_key={surah}:{ayah}"
 
 
 @dataclass
@@ -104,29 +104,54 @@ def _build_audio_urls(surah: int, ayah: int, global_ayah: int) -> Dict[str, str]
     }
 
 
+def _load_indopak_ayahs_from_quran_com(
+    surah: int, ayah_count: int, timeout: int, retries: int
+) -> Dict[int, str]:
+    out: Dict[int, str] = {}
+    for ayah in range(1, ayah_count + 1):
+        url = QURAN_COM_INDOPAK_VERSE_URL.format(surah=surah, ayah=ayah)
+        payload = _request_json(url, timeout=timeout, retries=retries)
+        verses = payload.get("verses") if isinstance(payload, dict) else None
+        if not isinstance(verses, list) or not verses:
+            raise RuntimeError(f"Unexpected Quran.com verse payload for {surah}:{ayah}: {payload}")
+        verse = verses[0] if isinstance(verses[0], dict) else {}
+        text = str(verse.get("text_indopak", "")).lstrip("\ufeff")
+        if not text:
+            raise RuntimeError(f"Missing text_indopak for {surah}:{ayah}")
+        out[ayah] = text
+    return out
+
+
 def _build_surah_record(surah: int, meta: SurahMeta, timeout: int, retries: int) -> Dict[str, Any]:
-    ar = _request_json(SURAH_ARABIC_URL.format(surah=surah), timeout=timeout, retries=retries)
     en = _request_json(SURAH_EN_URL.format(surah=surah), timeout=timeout, retries=retries)
     ur = _request_json(SURAH_UR_URL.format(surah=surah), timeout=timeout, retries=retries)
+    ar_by_num = _load_indopak_ayahs_from_quran_com(
+        surah=surah,
+        ayah_count=meta.ayah_count,
+        timeout=timeout,
+        retries=retries,
+    )
 
-    ar_ayahs = ar.get("data", {}).get("ayahs", [])
     en_ayahs = en.get("data", {}).get("ayahs", [])
     ur_ayahs = ur.get("data", {}).get("ayahs", [])
-    if not (isinstance(ar_ayahs, list) and isinstance(en_ayahs, list) and isinstance(ur_ayahs, list)):
+    if not (isinstance(en_ayahs, list) and isinstance(ur_ayahs, list)):
         raise RuntimeError(f"Unexpected ayah payload for surah {surah}")
 
     en_by_num = {int(item["numberInSurah"]): item for item in en_ayahs}
     ur_by_num = {int(item["numberInSurah"]): item for item in ur_ayahs}
 
     ayahs: List[Dict[str, Any]] = []
-    for item in ar_ayahs:
-        ayah_num = int(item["numberInSurah"])
-        global_ayah = int(item["number"])
+    for ayah_num in range(1, meta.ayah_count + 1):
+        global_ayah = int(en_by_num.get(ayah_num, {}).get("number", 0)) or int(
+            ur_by_num.get(ayah_num, {}).get("number", 0)
+        )
+        if global_ayah <= 0:
+            raise RuntimeError(f"Missing global ayah number for surah {surah}, ayah {ayah_num}")
         ayahs.append(
             {
                 "ayah": ayah_num,
                 "globalAyah": global_ayah,
-                "arabic": item.get("text", "").lstrip("\ufeff"),
+                "arabic": ar_by_num.get(ayah_num, ""),
                 "translation_en": en_by_num.get(ayah_num, {}).get("text", ""),
                 "translation_ur": ur_by_num.get(ayah_num, {}).get("text", ""),
                 "audio": _build_audio_urls(surah, ayah_num, global_ayah),
@@ -200,7 +225,7 @@ def main() -> int:
                 per_surah_path,
                 {
                     "generatedAt": datetime.now(timezone.utc).isoformat(),
-                    "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+                    "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
                     "surah": record,
                 },
             )
@@ -214,7 +239,7 @@ def main() -> int:
         "generatedAt": datetime.now(timezone.utc).isoformat(),
         "sourceApis": {
             "surahList": SURAH_LIST_URL,
-            "arabic": SURAH_ARABIC_URL,
+            "arabicIndopakByVerseKey": QURAN_COM_INDOPAK_VERSE_URL,
             "english": SURAH_EN_URL,
             "urdu": SURAH_UR_URL,
             "audioPattern": {

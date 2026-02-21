@@ -2191,6 +2191,41 @@ function applyMemoTheme(isDark) {
   document.body.classList.toggle('dark-mode', enabled);
 }
 
+function sanitizeTypographySettings(raw = {}) {
+  const arabicFont = raw.arabicFont === 'UthmanicHafs' ? 'UthmanicHafs' : 'CustomArabic';
+  const parsedSize = Number.parseFloat(raw.arabicSize);
+  const arabicSize = Number.isFinite(parsedSize)
+    ? Math.min(56, Math.max(16, parsedSize))
+    : 22;
+  const parsedWeight = Number.parseInt(raw.arabicWeight, 10);
+  const weightBucket = Number.isFinite(parsedWeight)
+    ? Math.round(parsedWeight / 100) * 100
+    : 100;
+  const arabicWeight = Math.min(900, Math.max(100, weightBucket));
+  const englishRaw = Number.parseFloat(raw.englishScale);
+  const englishScale = Number.isFinite(englishRaw)
+    ? Math.min(160, Math.max(70, englishRaw))
+    : 100;
+  return {
+    arabicFont,
+    arabicSize,
+    arabicWeight,
+    arabicItalic: raw.arabicItalic === true,
+    englishScale
+  };
+}
+
+function applyMemoTypography(rawSettings = {}) {
+  const settings = sanitizeTypographySettings(rawSettings);
+  const html = document.documentElement;
+  html.setAttribute('data-arabic-font', settings.arabicFont);
+  html.style.setProperty('--qq-arabic-font-family', `'${settings.arabicFont}'`);
+  html.style.setProperty('--qq-arabic-size', `${settings.arabicSize}px`);
+  html.style.setProperty('--qq-arabic-weight', String(settings.arabicWeight));
+  html.style.setProperty('--qq-arabic-style', settings.arabicItalic ? 'italic' : 'normal');
+  html.style.setProperty('--qq-english-scale', String(settings.englishScale / 100));
+}
+
 function isEditableTarget(target) {
   if (!(target instanceof Element)) return false;
   return Boolean(
@@ -2355,6 +2390,9 @@ if (els.practiceToggle) {
 
 applyViewState();
 updateLearnNavLink();
+const initialAppSettings = getStoredAppSettings();
+applyMemoTheme(initialAppSettings.darkMode === true);
+applyMemoTypography(initialAppSettings);
 initWelcomeBrainAnimation();
 if (els.welcome && !els.welcome.classList.contains('is-hidden')) {
   document.body.classList.add('memo-welcome-mode');
@@ -2370,6 +2408,10 @@ window.addEventListener('message', event => {
   if (!data || typeof data !== 'object') return;
   if (data.type === 'APPLY_THEME') {
     applyMemoTheme(data.darkMode === true);
+    return;
+  }
+  if (data.type === 'APPLY_SETTINGS') {
+    applyMemoTypography(data.settings || {});
     return;
   }
 

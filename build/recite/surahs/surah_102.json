@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-02-14T12:15:28.776178+00:00",
-  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "generatedAt": "2026-02-21T01:14:44.008444+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
   "surah": {
     "surah": 102,
     "arabicName": "سُورَةُ التَّكَاثُرِ",
@@ -11,7 +11,7 @@
       {
         "ayah": 1,
         "globalAyah": 6169,
-        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ أَلْهَىٰكُمُ ٱلتَّكَاثُرُ",
+        "arabic": "اَلۡهٰٮكُمُ التَّكَاثُرُۙ‏",
         "translation_en": "YOU ARE OBSESSED by greed for more and more",
         "translation_ur": "(لوگو) تم کو (مال کی) بہت سی طلب نے غافل کر دیا",
         "audio": {
@@ -23,7 +23,7 @@
       {
         "ayah": 2,
         "globalAyah": 6170,
-        "arabic": "حَتَّىٰ زُرْتُمُ ٱلْمَقَابِرَ",
+        "arabic": "حَتّٰى زُرۡتُمُ الۡمَقَابِرَؕ‏",
         "translation_en": "until you go down to your graves.",
         "translation_ur": "یہاں تک کہ تم نے قبریں جا دیکھیں",
         "audio": {
@@ -35,7 +35,7 @@
       {
         "ayah": 3,
         "globalAyah": 6171,
-        "arabic": "كَلَّا سَوْفَ تَعْلَمُونَ",
+        "arabic": "كَلَّا سَوۡفَ تَعۡلَمُوۡنَۙ‏",
         "translation_en": "Nay, in time you will come to understand!",
         "translation_ur": "دیکھو تمہیں عنقریب معلوم ہو جائے گا",
         "audio": {
@@ -47,7 +47,7 @@
       {
         "ayah": 4,
         "globalAyah": 6172,
-        "arabic": "ثُمَّ كَلَّا سَوْفَ تَعْلَمُونَ",
+        "arabic": "ثُمَّ كَلَّا سَوۡفَ تَعۡلَمُوۡنَؕ‏",
         "translation_en": "And once again: Nay, in time you will come to understand!",
         "translation_ur": "پھر دیکھو تمہیں عنقریب معلوم ہو جائے گا",
         "audio": {
@@ -59,7 +59,7 @@
       {
         "ayah": 5,
         "globalAyah": 6173,
-        "arabic": "كَلَّا لَوْ تَعْلَمُونَ عِلْمَ ٱلْيَقِينِ",
+        "arabic": "كَلَّا لَوۡ تَعۡلَمُوۡنَ عِلۡمَ الۡيَقِيۡنِؕ‏",
         "translation_en": "Nay, if you could but understand [it] with an understanding [born] of certainty,",
         "translation_ur": "دیکھو اگر تم جانتے (یعنی) علم الیقین (رکھتے تو غفلت نہ کرتے)",
         "audio": {
@@ -71,7 +71,7 @@
       {
         "ayah": 6,
         "globalAyah": 6174,
-        "arabic": "لَتَرَوُنَّ ٱلْجَحِيمَ",
+        "arabic": "لَتَرَوُنَّ الۡجَحِيۡمَۙ‏",
         "translation_en": "you would indeed, most surely, behold the blazing fire [of hell]!",
         "translation_ur": "تم ضرور دوزخ کو دیکھو گے",
         "audio": {
@@ -83,7 +83,7 @@
       {
         "ayah": 7,
         "globalAyah": 6175,
-        "arabic": "ثُمَّ لَتَرَوُنَّهَا عَيْنَ ٱلْيَقِينِ",
+        "arabic": "ثُمَّ لَتَرَوُنَّهَا عَيۡنَ الۡيَقِيۡنِۙ‏",
         "translation_en": "In the end you will indeed, most surely, behold it with the eye of certainty:",
         "translation_ur": "پھر اس کو (ایسا) دیکھو گے (کہ) عین الیقین (آ جائے گا)",
         "audio": {
@@ -95,7 +95,7 @@
       {
         "ayah": 8,
         "globalAyah": 6176,
-        "arabic": "ثُمَّ لَتُسْـَٔلُنَّ يَوْمَئِذٍ عَنِ ٱلنَّعِيمِ",
+        "arabic": "ثُمَّ لَـتُسۡـَٔـلُنَّ يَوۡمَٮِٕذٍ عَنِ النَّعِيۡمِ‏",
         "translation_en": "and on that Day you will most surely be called to account for [what you did with] the boon of life!",
         "translation_ur": "پھر اس روز تم سے (شکر) نعمت کے بارے میں پرسش ہو گی",
         "audio": {

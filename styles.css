@@ -11,6 +11,11 @@
   --icon-hover:   #000;
   --theme-glow-start: #538295;
   --theme-glow-end:   #8aa8b8;
+  --qq-arabic-font-family: 'CustomArabic';
+  --qq-arabic-size: 22px;
+  --qq-arabic-weight: 100;
+  --qq-arabic-style: normal;
+  --qq-english-scale: 1;
   }
 
 
@@ -604,10 +609,12 @@ input:checked + .slider:before {
 }
 .word-text {
   display: block;
-  font-size: 28px;
+  font-size: var(--qq-arabic-size);
   margin-top: 0px;
   direction: rtl;
-  font-family: 'CustomArabic', serif;
+  font-family: var(--qq-arabic-font-family), serif;
+  font-weight: var(--qq-arabic-weight);
+  font-style: var(--qq-arabic-style);
   line-height: 1.43;
   margin-bottom: 2px;
 }
@@ -621,7 +628,7 @@ input:checked + .slider:before {
   margin-bottom: 4px;
 }
 .translation {
-  font-size: 12px;
+  font-size: calc(12px * var(--qq-english-scale));
   color: gray;
   display: block;
   margin-top: 0px;
@@ -727,8 +734,14 @@ input:checked + .slider:before {
 
 @font-face {
   font-family: 'CustomArabic';
-  src: url('/fonts/PDMS_SALEEM_QURANFONTQESHIP_0.woff2') format('woff2');
+  src: url('/fonts/Naskh-Nastaleeq-IndoPak-QWBW.ttf') format('truetype');
   font-display: swap;       /* 🔥 critical */
+}
+
+@font-face {
+  font-family: 'UthmanicHafs';
+  src: url('/fonts/UthmanicHafs1Ver18.woff2') format('woff2');
+  font-display: swap;
 }
 
 @font-face {
@@ -792,14 +805,16 @@ body.modal-open #ayahScroll {
 }
 
 .ayah-arabic {
-  font-family: 'CustomArabic', serif;
-  font-size: 30px;
+  font-family: var(--qq-arabic-font-family), serif;
+  font-size: var(--qq-arabic-size) !important;
+  font-weight: var(--qq-arabic-weight);
+  font-style: var(--qq-arabic-style);
   text-align: right;
   direction: rtl;
 }
 
 .ayah-english {
-  font-size: 15px;
+  font-size: calc(15px * var(--qq-english-scale));
   text-align: center;
 }
 
@@ -1534,7 +1549,9 @@ select, .settings-popup input[type=number] {
   padding: 6px 0;           /* No global underline */
   gap: 0px;                        /* Small space between slots */
   font-family: 'CustomArabic', serif;
-  font-size: 28px;
+  font-size: 22px;
+  font-weight: 100;
+  font-style: normal;
   justify-content: center;
   border: 1px solid rgba(0, 0, 0, 0.15);
   background-color: rgba(255, 255, 255, 0.6); /* or use transparent if you prefer */
@@ -1558,7 +1575,9 @@ select, .settings-popup input[type=number] {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 28px;
+  font-size: 22px;
+  font-weight: 100;
+  font-style: normal;
   padding: 1px;
 
 }
@@ -1912,8 +1931,10 @@ select, .settings-popup input[type=number] {
 #verbGameContainer .match-column-ar .match-card {
   direction: rtl;
   text-align: right;
-  font-family: 'CustomArabic', serif;
-  font-size: 20px;
+  font-family: var(--qq-arabic-font-family), serif;
+  font-size: var(--qq-arabic-size);
+  font-weight: var(--qq-arabic-weight);
+  font-style: var(--qq-arabic-style);
   letter-spacing: 0.2px;
   white-space: nowrap;
 }
@@ -1994,7 +2015,9 @@ select, .settings-popup input[type=number] {
     padding: 12px;
   }
   #verbGameContainer .match-column-ar .match-card {
-    font-size: 18px;
+    font-size: 22px;
+    font-weight: 100;
+    font-style: normal;
   }
   #verbGameContainer .match-column-en .match-card {
     font-size: 15px;
@@ -2111,7 +2134,9 @@ select, .settings-popup input[type=number] {
   direction: rtl;
   text-align: right;
   font-family: 'CustomArabic', serif;
-  font-size: 20px;
+  font-size: 22px;
+  font-weight: 100;
+  font-style: normal;
   letter-spacing: 0.2px;
 }
 
@@ -2136,7 +2161,9 @@ select, .settings-popup input[type=number] {
     padding: 12px;
   }
   #verbMatchGame .match-card[data-role="verb"] {
-    font-size: 18px;
+    font-size: 22px;
+    font-weight: 100;
+    font-style: normal;
   }
   #verbMatchGame .match-card[data-role="meaning"] {
     font-size: 15px;

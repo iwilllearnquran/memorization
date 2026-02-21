@@ -889,7 +889,7 @@
 
 .memo-last-word {
   text-align: center;
-  font-size: 12px;
+  font-size: calc(12px * var(--qq-english-scale, 1));
   color: var(--memo-muted);
   margin-top: 2px;
   min-height: 16px;
@@ -897,7 +897,7 @@
 
 .memo-expected-word {
   text-align: center;
-  font-size: 12px;
+  font-size: calc(12px * var(--qq-english-scale, 1));
   color: #2d3942;
   margin-top: 1px;
   min-height: 16px;
@@ -906,7 +906,7 @@
 
 .memo-expected-hint {
   text-align: center;
-  font-size: 12px;
+  font-size: calc(12px * var(--qq-english-scale, 1));
   color: #2d3942;
   margin-top: 2px;
   min-height: 16px;
@@ -1197,6 +1197,7 @@
   margin-top: 8px;
   min-height: 28px;
   text-align: center;
+  font-size: calc(12px * var(--qq-english-scale, 1));
   line-height: 1.2;
 }
 
@@ -1421,7 +1422,10 @@
 }
 
 .memorization-page .memo-word-grid .word-text {
-  font-size: 22px;
+  font-family: var(--qq-arabic-font-family, 'CustomArabic'), serif;
+  font-size: var(--qq-arabic-size, 22px);
+  font-weight: var(--qq-arabic-weight, 100);
+  font-style: var(--qq-arabic-style, normal);
   line-height: 1.6;
 }
 

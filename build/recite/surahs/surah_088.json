@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-02-14T12:15:22.185358+00:00",
-  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "generatedAt": "2026-02-21T01:14:31.804906+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
   "surah": {
     "surah": 88,
     "arabicName": "سُورَةُ الغَاشِيَةِ",
@@ -11,7 +11,7 @@
       {
         "ayah": 1,
         "globalAyah": 5968,
-        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ هَلْ أَتَىٰكَ حَدِيثُ ٱلْغَٰشِيَةِ",
+        "arabic": "هَلۡ اَتٰٮكَ حَدِيۡثُ الۡغَاشِيَةِؕ‏",
         "translation_en": "HAS THERE COME unto thee the tiding of the Overshadowing Event?'",
         "translation_ur": "بھلا تم کو ڈھانپ لینے والی (یعنی قیامت کا) حال معلوم ہوا ہے",
         "audio": {
@@ -23,7 +23,7 @@
       {
         "ayah": 2,
         "globalAyah": 5969,
-        "arabic": "وُجُوهٌۭ يَوْمَئِذٍ خَٰشِعَةٌ",
+        "arabic": "وُجُوۡهٌ يَّوۡمَٮِٕذٍ خَاشِعَةٌ ۙ‏",
         "translation_en": "Some faces will on that Day be downcast,",
         "translation_ur": "اس روز بہت سے منہ (والے) ذلیل ہوں گے",
         "audio": {
@@ -35,7 +35,7 @@
       {
         "ayah": 3,
         "globalAyah": 5970,
-        "arabic": "عَامِلَةٌۭ نَّاصِبَةٌۭ",
+        "arabic": "عَامِلَةٌ نَّاصِبَةٌ ۙ‏",
         "translation_en": "toiling [under burdens of sin], worn out [by fear],",
         "translation_ur": "سخت محنت کرنے والے تھکے ماندے",
         "audio": {
@@ -47,7 +47,7 @@
       {
         "ayah": 4,
         "globalAyah": 5971,
-        "arabic": "تَصْلَىٰ نَارًا حَامِيَةًۭ",
+        "arabic": "تَصۡلٰى نَارًا حَامِيَةً ۙ‏",
         "translation_en": "about to enter a glowing fire,",
         "translation_ur": "دہکتی آگ میں داخل ہوں گے",
         "audio": {
@@ -59,7 +59,7 @@
       {
         "ayah": 5,
         "globalAyah": 5972,
-        "arabic": "تُسْقَىٰ مِنْ عَيْنٍ ءَانِيَةٍۢ",
+        "arabic": "تُسۡقٰى مِنۡ عَيۡنٍ اٰنِيَةٍؕ‏",
         "translation_en": "given to drink from a boiling spring.",
         "translation_ur": "ایک کھولتے ہوئے چشمے کا ان کو پانی پلایا جائے گا",
         "audio": {
@@ -71,7 +71,7 @@
       {
         "ayah": 6,
         "globalAyah": 5973,
-        "arabic": "لَّيْسَ لَهُمْ طَعَامٌ إِلَّا مِن ضَرِيعٍۢ",
+        "arabic": "لَـيۡسَ لَهُمۡ طَعَامٌ اِلَّا مِنۡ ضَرِيۡعٍۙ‏",
         "translation_en": "No food for them save the bitterness of dry thorns,",
         "translation_ur": "اور خار دار جھاڑ کے سوا ان کے لیے کوئی کھانا نہیں (ہو گا)",
         "audio": {
@@ -83,7 +83,7 @@
       {
         "ayah": 7,
         "globalAyah": 5974,
-        "arabic": "لَّا يُسْمِنُ وَلَا يُغْنِى مِن جُوعٍۢ",
+        "arabic": "لَّا يُسۡمِنُ وَلَا يُغۡنِىۡ مِنۡ جُوۡعٍؕ‏",
         "translation_en": "which gives no strength and neither stills hunger.",
         "translation_ur": "جو نہ فربہی لائے اور نہ بھوک میں کچھ کام آئے",
         "audio": {
@@ -95,7 +95,7 @@
       {
         "ayah": 8,
         "globalAyah": 5975,
-        "arabic": "وُجُوهٌۭ يَوْمَئِذٍۢ نَّاعِمَةٌۭ",
+        "arabic": "وُجُوۡهٌ يَّوۡمَٮِٕذٍ نَّاعِمَةٌ ۙ‏",
         "translation_en": "[And] some faces will on that Day shine with bliss,",
         "translation_ur": "اور بہت سے منہ (والے) اس روز شادماں ہوں گے",
         "audio": {
@@ -107,7 +107,7 @@
       {
         "ayah": 9,
         "globalAyah": 5976,
-        "arabic": "لِّسَعْيِهَا رَاضِيَةٌۭ",
+        "arabic": "لِّسَعۡيِهَا رَاضِيَةٌ ۙ‏",
         "translation_en": "well-pleased with [the fruit of] their striving,",
         "translation_ur": "اپنے اعمال (کی جزا) سے خوش دل",
         "audio": {
@@ -119,7 +119,7 @@
       {
         "ayah": 10,
         "globalAyah": 5977,
-        "arabic": "فِى جَنَّةٍ عَالِيَةٍۢ",
+        "arabic": "فِىۡ جَنَّةٍ عَالِيَةٍۙ‏",
         "translation_en": "in a garden sublime,",
         "translation_ur": "بہشت بریں میں",
         "audio": {
@@ -131,7 +131,7 @@
       {
         "ayah": 11,
         "globalAyah": 5978,
-        "arabic": "لَّا تَسْمَعُ فِيهَا لَٰغِيَةًۭ",
+        "arabic": "لَّا تَسۡمَعُ فِيۡهَا لَاغِيَةً ؕ‏",
         "translation_en": "wherein thou wilt hear no empty talk.",
         "translation_ur": "وہاں کسی طرح کی بکواس نہیں سنیں گے",
         "audio": {
@@ -143,7 +143,7 @@
       {
         "ayah": 12,
         "globalAyah": 5979,
-        "arabic": "فِيهَا عَيْنٌۭ جَارِيَةٌۭ",
+        "arabic": "فِيۡهَا عَيۡنٌ جَارِيَةٌ​ ۘ‏",
         "translation_en": "Countless springs will flow therein,",
         "translation_ur": "اس میں چشمے بہ رہے ہوں گے",
         "audio": {
@@ -155,7 +155,7 @@
       {
         "ayah": 13,
         "globalAyah": 5980,
-        "arabic": "فِيهَا سُرُرٌۭ مَّرْفُوعَةٌۭ",
+        "arabic": "فِيۡهَا سُرُرٌ مَّرۡفُوۡعَةٌ ۙ‏",
         "translation_en": "[and] there will be thrones [of happiness] raised high,",
         "translation_ur": "وہاں تخت ہوں گے اونچے بچھے ہوئے",
         "audio": {
@@ -167,7 +167,7 @@
       {
         "ayah": 14,
         "globalAyah": 5981,
-        "arabic": "وَأَكْوَابٌۭ مَّوْضُوعَةٌۭ",
+        "arabic": "وَّاَكۡوَابٌ مَّوۡضُوۡعَةٌ ۙ‏",
         "translation_en": "and goblets placed ready,",
         "translation_ur": "اور آبخورے (قرینے سے) رکھے ہوئے",
         "audio": {
@@ -179,7 +179,7 @@
       {
         "ayah": 15,
         "globalAyah": 5982,
-        "arabic": "وَنَمَارِقُ مَصْفُوفَةٌۭ",
+        "arabic": "وَّنَمَارِقُ مَصۡفُوۡفَةٌ ۙ‏",
         "translation_en": "and cushions ranged,",
         "translation_ur": "اور گاؤ تکیے قطار کی قطار لگے ہوئے",
         "audio": {
@@ -191,7 +191,7 @@
       {
         "ayah": 16,
         "globalAyah": 5983,
-        "arabic": "وَزَرَابِىُّ مَبْثُوثَةٌ",
+        "arabic": "وَّزَرَابِىُّ مَبۡثُوۡثَةٌ ؕ‏",
         "translation_en": "and carpets spread out…",
         "translation_ur": "اور نفیس مسندیں بچھی ہوئی",
         "audio": {
@@ -203,7 +203,7 @@
       {
         "ayah": 17,
         "globalAyah": 5984,
-        "arabic": "أَفَلَا يَنظُرُونَ إِلَى ٱلْإِبِلِ كَيْفَ خُلِقَتْ",
+        "arabic": "اَفَلَا يَنۡظُرُوۡنَ اِلَى الۡاِ بِلِ كَيۡفَ خُلِقَتۡ‏",
         "translation_en": "DO, THEN, they [who deny resurrection] never gaze at the clouds pregnant with water, [and observe] how they are created?",
         "translation_ur": "یہ لوگ اونٹوں کی طرف نہیں دیکھتے کہ کیسے (عجیب) پیدا کیے گئے ہیں",
         "audio": {
@@ -215,7 +215,7 @@
       {
         "ayah": 18,
         "globalAyah": 5985,
-        "arabic": "وَإِلَى ٱلسَّمَآءِ كَيْفَ رُفِعَتْ",
+        "arabic": "وَاِلَى السَّمَآءِ كَيۡفَ رُفِعَتۡ‏",
         "translation_en": "And at the sky, how it is raised aloft?",
         "translation_ur": "اور آسمان کی طرف کہ کیسا بلند کیا گیا ہے",
         "audio": {
@@ -227,7 +227,7 @@
       {
         "ayah": 19,
         "globalAyah": 5986,
-        "arabic": "وَإِلَى ٱلْجِبَالِ كَيْفَ نُصِبَتْ",
+        "arabic": "وَاِلَى الۡجِبَالِ كَيۡفَ نُصِبَتۡ‏",
         "translation_en": "And at the mountains, how firmly they are reared?",
         "translation_ur": "اور پہاڑوں کی طرف کہ کس طرح کھڑے کیے گئے ہیں",
         "audio": {
@@ -239,7 +239,7 @@
       {
         "ayah": 20,
         "globalAyah": 5987,
-        "arabic": "وَإِلَى ٱلْأَرْضِ كَيْفَ سُطِحَتْ",
+        "arabic": "وَاِلَى الۡاَرۡضِ كَيۡفَ سُطِحَتۡ‏",
         "translation_en": "And at the earth, how it is spread out?",
         "translation_ur": "اور زمین کی طرف کہ کس طرح بچھائی گئی",
         "audio": {
@@ -251,7 +251,7 @@
       {
         "ayah": 21,
         "globalAyah": 5988,
-        "arabic": "فَذَكِّرْ إِنَّمَآ أَنتَ مُذَكِّرٌۭ",
+        "arabic": "فَذَكِّرۡ ؕ اِنَّمَاۤ اَنۡتَ مُذَكِّرٌ ؕ‏",
         "translation_en": "And so, [O Prophet,] exhort them; thy task is only to exhort:",
         "translation_ur": "تو تم نصیحت کرتے رہو کہ تم نصیحت کرنے والے ہی ہو",
         "audio": {
@@ -263,7 +263,7 @@
       {
         "ayah": 22,
         "globalAyah": 5989,
-        "arabic": "لَّسْتَ عَلَيْهِم بِمُصَيْطِرٍ",
+        "arabic": "لَـسۡتَ عَلَيۡهِمۡ بِمُصَۜيۡطِرٍۙ‏",
         "translation_en": "thou canst not compel them [to believe].",
         "translation_ur": "تم ان پر داروغہ نہیں ہو",
         "audio": {
@@ -275,7 +275,7 @@
       {
         "ayah": 23,
         "globalAyah": 5990,
-        "arabic": "إِلَّا مَن تَوَلَّىٰ وَكَفَرَ",
+        "arabic": "اِلَّا مَنۡ تَوَلّٰى وَكَفَرَۙ‏",
         "translation_en": "However, as for him who turns away, being bent on denying the truth,",
         "translation_ur": "ہاں جس نے منہ پھیرا اور نہ مانا",
         "audio": {
@@ -287,7 +287,7 @@
       {
         "ayah": 24,
         "globalAyah": 5991,
-        "arabic": "فَيُعَذِّبُهُ ٱللَّهُ ٱلْعَذَابَ ٱلْأَكْبَرَ",
+        "arabic": "فَيُعَذِّبُهُ اللّٰهُ الۡعَذَابَ الۡاَكۡبَرَؕ‏",
         "translation_en": "him will God cause to suffer the greatest suffering [in the life to come]:",
         "translation_ur": "تو خدا اس کو بڑا عذاب دے گا",
         "audio": {
@@ -299,7 +299,7 @@
       {
         "ayah": 25,
         "globalAyah": 5992,
-        "arabic": "إِنَّ إِلَيْنَآ إِيَابَهُمْ",
+        "arabic": "اِنَّ اِلَيۡنَاۤ اِيَابَهُمۡۙ‏",
         "translation_en": "for behold, unto Us will be their return,",
         "translation_ur": "بےشک ان کو ہمارے پاس لوٹ کر آنا ہے",
         "audio": {
@@ -311,7 +311,7 @@
       {
         "ayah": 26,
         "globalAyah": 5993,
-        "arabic": "ثُمَّ إِنَّ عَلَيْنَا حِسَابَهُم",
+        "arabic": "ثُمَّ اِنَّ عَلَيۡنَا حِسَابَهُمْ‏",
         "translation_en": "and verily, It is for Us to call them to account.",
         "translation_ur": "پھر ہم ہی کو ان سے حساب لینا ہے",
         "audio": {

@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-02-14T12:15:12.465129+00:00",
-  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "generatedAt": "2026-02-21T01:14:03.931279+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
   "surah": {
     "surah": 70,
     "arabicName": "سُورَةُ المَعَارِجِ",
@@ -11,7 +11,7 @@
       {
         "ayah": 1,
         "globalAyah": 5376,
-        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ سَأَلَ سَآئِلٌۢ بِعَذَابٍۢ وَاقِعٍۢ",
+        "arabic": "سَاَلَ سَآٮِٕلٌ ۢ بِعَذَابٍ وَّاقِعٍۙ‏",
         "translation_en": "ONE who is minded to ask might ask about the suffering which [in the hereafter] is bound to befall",
         "translation_ur": "ایک طلب کرنے والے نے عذاب طلب کیا جو نازل ہو کر رہے گا",
         "audio": {
@@ -23,7 +23,7 @@
       {
         "ayah": 2,
         "globalAyah": 5377,
-        "arabic": "لِّلْكَٰفِرِينَ لَيْسَ لَهُۥ دَافِعٌۭ",
+        "arabic": "لِّلۡكٰفِرِيۡنَ لَيۡسَ لَهٗ دَافِعٌ ۙ‏",
         "translation_en": "those who deny the truth. [Know, then, that] nothing can ward it off,",
         "translation_ur": "(یعنی) کافروں پر (اور) کوئی اس کو ٹال نہ سکے گا",
         "audio": {
@@ -35,7 +35,7 @@
       {
         "ayah": 3,
         "globalAyah": 5378,
-        "arabic": "مِّنَ ٱللَّهِ ذِى ٱلْمَعَارِجِ",
+        "arabic": "مِّنَ اللّٰهِ ذِى الۡمَعَارِجِؕ‏",
         "translation_en": "[since it will come] from God, unto whom there are many ways of ascent:",
         "translation_ur": "(اور وہ) خدائے صاحب درجات کی طرف سے (نازل ہوگا)",
         "audio": {
@@ -47,7 +47,7 @@
       {
         "ayah": 4,
         "globalAyah": 5379,
-        "arabic": "تَعْرُجُ ٱلْمَلَٰٓئِكَةُ وَٱلرُّوحُ إِلَيْهِ فِى يَوْمٍۢ كَانَ مِقْدَارُهُۥ خَمْسِينَ أَلْفَ سَنَةٍۢ",
+        "arabic": "تَعۡرُجُ الۡمَلٰٓٮِٕكَةُ وَ الرُّوۡحُ اِلَيۡهِ فِىۡ يَوۡمٍ كَانَ مِقۡدَارُهٗ خَمۡسِيۡنَ اَلۡفَ سَنَةٍ​ۚ‏",
         "translation_en": "all the angels and all the inspiration [ever granted to man] ascend unto Him [daily,] in a day the length whereof is [like] fifty thousand years…",
         "translation_ur": "جس کی طرف روح (الامین) اور فرشتے پڑھتے ہیں (اور) اس روز (نازل ہوگا) جس کا اندازہ پچاس ہزار برس کا ہوگا",
         "audio": {
@@ -59,7 +59,7 @@
       {
         "ayah": 5,
         "globalAyah": 5380,
-        "arabic": "فَٱصْبِرْ صَبْرًۭا جَمِيلًا",
+        "arabic": "فَاصۡبِرۡ صَبۡرًا جَمِيۡلًا‏",
         "translation_en": "Therefore, [O believer,] endure all adversity with goodly patience:",
         "translation_ur": "(تو تم کافروں کی باتوں کو) قوت کے ساتھ برداشت کرتے رہو",
         "audio": {
@@ -71,7 +71,7 @@
       {
         "ayah": 6,
         "globalAyah": 5381,
-        "arabic": "إِنَّهُمْ يَرَوْنَهُۥ بَعِيدًۭا",
+        "arabic": "اِنَّهُمۡ يَرَوۡنَهٗ بَعِيۡدًا ۙ‏",
         "translation_en": "behold, men look upon that [reckoning] as something far away –",
         "translation_ur": "وہ ان لوگوں کی نگاہ میں دور ہے",
         "audio": {
@@ -83,7 +83,7 @@
       {
         "ayah": 7,
         "globalAyah": 5382,
-        "arabic": "وَنَرَىٰهُ قَرِيبًۭا",
+        "arabic": "وَّنَرٰٮهُ قَرِيۡبًا ؕ‏",
         "translation_en": "but, We see it as near!",
         "translation_ur": "اور ہماری نظر میں نزدیک",
         "audio": {
@@ -95,7 +95,7 @@
       {
         "ayah": 8,
         "globalAyah": 5383,
-        "arabic": "يَوْمَ تَكُونُ ٱلسَّمَآءُ كَٱلْمُهْلِ",
+        "arabic": "يَوۡمَ تَكُوۡنُ السَّمَآءُ كَالۡمُهۡلِۙ‏",
         "translation_en": "[It will take place] on a Day when the sky will be like molten lead,",
         "translation_ur": "جس دن آسمان ایسا ہو جائے گا جیسے پگھلا ہوا تانبا",
         "audio": {
@@ -107,7 +107,7 @@
       {
         "ayah": 9,
         "globalAyah": 5384,
-        "arabic": "وَتَكُونُ ٱلْجِبَالُ كَٱلْعِهْنِ",
+        "arabic": "وَتَكُوۡنُ الۡجِبَالُ كَالۡعِهۡنِۙ‏",
         "translation_en": "and the mountains will be like tufts of wool,",
         "translation_ur": "اور پہاڑ (ایسے) جیسے (دھنکی ہوئی) رنگین اون",
         "audio": {
@@ -119,7 +119,7 @@
       {
         "ayah": 10,
         "globalAyah": 5385,
-        "arabic": "وَلَا يَسْـَٔلُ حَمِيمٌ حَمِيمًۭا",
+        "arabic": "وَلَا يَسۡـَٔـلُ حَمِيۡمٌ حَمِيۡمًا ۖۚ‏",
         "translation_en": "and [when] no friend will ask about his friend,",
         "translation_ur": "اور کوئی دوست کسی دوست کا پرسان نہ ہوگا",
         "audio": {
@@ -131,7 +131,7 @@
       {
         "ayah": 11,
         "globalAyah": 5386,
-        "arabic": "يُبَصَّرُونَهُمْ ۚ يَوَدُّ ٱلْمُجْرِمُ لَوْ يَفْتَدِى مِنْ عَذَابِ يَوْمِئِذٍۭ بِبَنِيهِ",
+        "arabic": "يُّبَصَّرُوۡنَهُمۡ​ؕ يَوَدُّ الۡمُجۡرِمُ لَوۡ يَفۡتَدِىۡ مِنۡ عَذَابِ يَوۡمِٮِٕذٍۢ بِبَنِيۡهِۙ‏",
         "translation_en": "though they may be in one another's sight: [for,] everyone who was lost in sin will on that Day but desire to ransom himself from suffering at the price of his own children,",
         "translation_ur": "ایک دوسرے کو سامنے دیکھ رہے ہوں گے (اس روز) گنہگار خواہش کرے گا کہ کسی طرح اس دن کے عذاب کے بدلے میں (سب کچھ) دے دے یعنی اپنے بیٹے",
         "audio": {
@@ -143,7 +143,7 @@
       {
         "ayah": 12,
         "globalAyah": 5387,
-        "arabic": "وَصَٰحِبَتِهِۦ وَأَخِيهِ",
+        "arabic": "وَ صَاحِبَتِهٖ وَاَخِيۡهِۙ‏",
         "translation_en": "and of his spouse, and of his brother,",
         "translation_ur": "اور اپنی بیوی اور اپنے بھائی",
         "audio": {
@@ -155,7 +155,7 @@
       {
         "ayah": 13,
         "globalAyah": 5388,
-        "arabic": "وَفَصِيلَتِهِ ٱلَّتِى تُـْٔوِيهِ",
+        "arabic": "وَفَصِيۡلَتِهِ الَّتِىۡ تُــْٔوِيۡهِۙ‏",
         "translation_en": "and of all the kinsfolk who ever sheltered him,",
         "translation_ur": "اور اپنا خاندان جس میں وہ رہتا تھا",
         "audio": {
@@ -167,7 +167,7 @@
       {
         "ayah": 14,
         "globalAyah": 5389,
-        "arabic": "وَمَن فِى ٱلْأَرْضِ جَمِيعًۭا ثُمَّ يُنجِيهِ",
+        "arabic": "وَمَنۡ فِى الۡاَرۡضِ جَمِيۡعًا ۙ ثُمَّ يُنۡجِيۡهِۙ‏",
         "translation_en": "and of whoever [else] lives on earth, all of them - so that he could but save himself.",
         "translation_ur": "اور جتنے آدمی زمین میں ہیں (غرض) سب (کچھ دے دے) اور اپنے تئیں عذاب سے چھڑا لے",
         "audio": {
@@ -179,7 +179,7 @@
       {
         "ayah": 15,
         "globalAyah": 5390,
-        "arabic": "كَلَّآ ۖ إِنَّهَا لَظَىٰ",
+        "arabic": "كَلَّا ؕ اِنَّهَا لَظٰىۙ‏",
         "translation_en": "But nay! Verily, all [that awaits him] is a raging flame,",
         "translation_ur": "(لیکن) ایسا ہرگز نہیں ہوگا وہ بھڑکتی ہوئی آگ ہے",
         "audio": {
@@ -191,7 +191,7 @@
       {
         "ayah": 16,
         "globalAyah": 5391,
-        "arabic": "نَزَّاعَةًۭ لِّلشَّوَىٰ",
+        "arabic": "نَزَّاعَةً لِّلشَّوٰى​ ۖ​ۚ‏",
         "translation_en": "tearing away his skin!",
         "translation_ur": "کھال ادھیڑ ڈالنے والی",
         "audio": {
@@ -203,7 +203,7 @@
       {
         "ayah": 17,
         "globalAyah": 5392,
-        "arabic": "تَدْعُوا۟ مَنْ أَدْبَرَ وَتَوَلَّىٰ",
+        "arabic": "تَدۡعُوۡا مَنۡ اَدۡبَرَ وَتَوَلّٰىۙ‏",
         "translation_en": "It will claim all such as turn their backs [on what is right], and turn away [from the truth],",
         "translation_ur": "ان لوگوں کو اپنی طرف بلائے گی جنہوں نے (دین حق سے) اعراض کیا",
         "audio": {
@@ -215,7 +215,7 @@
       {
         "ayah": 18,
         "globalAyah": 5393,
-        "arabic": "وَجَمَعَ فَأَوْعَىٰٓ",
+        "arabic": "وَجَمَعَ فَاَوۡعٰى‏",
         "translation_en": "and amass [wealth] and thereupon withhold [it from their fellow-men].",
         "translation_ur": "اور (مال) جمع کیا اور بند کر رکھا",
         "audio": {
@@ -227,7 +227,7 @@
       {
         "ayah": 19,
         "globalAyah": 5394,
-        "arabic": "۞ إِنَّ ٱلْإِنسَٰنَ خُلِقَ هَلُوعًا",
+        "arabic": "اِنَّ الۡاِنۡسَانَ خُلِقَ هَلُوۡعًا ۙ‏",
         "translation_en": "VERILY, man is born with a restless disposition.",
         "translation_ur": "کچھ شک نہیں کہ انسان کم حوصلہ پیدا ہوا ہے",
         "audio": {
@@ -239,7 +239,7 @@
       {
         "ayah": 20,
         "globalAyah": 5395,
-        "arabic": "إِذَا مَسَّهُ ٱلشَّرُّ جَزُوعًۭا",
+        "arabic": "اِذَا مَسَّهُ الشَّرُّ جَزُوۡعًا ۙ‏",
         "translation_en": "[As a rule,] whenever misfortune touches him, he is filled with self-pity;",
         "translation_ur": "جب اسے تکلیف پہنچتی ہے تو گھبرا اٹھتا ہے",
         "audio": {
@@ -251,7 +251,7 @@
       {
         "ayah": 21,
         "globalAyah": 5396,
-        "arabic": "وَإِذَا مَسَّهُ ٱلْخَيْرُ مَنُوعًا",
+        "arabic": "وَاِذَا مَسَّهُ الۡخَيۡرُ مَنُوۡعًا ۙ‏",
         "translation_en": "and whenever good fortune comes to him, he selfishly withholds it [from others].",
         "translation_ur": "اور جب آسائش حاصل ہوتی ہے تو بخیل بن جاتا ہے",
         "audio": {
@@ -263,7 +263,7 @@
       {
         "ayah": 22,
         "globalAyah": 5397,
-        "arabic": "إِلَّا ٱلْمُصَلِّينَ",
+        "arabic": "اِلَّا الۡمُصَلِّيۡنَۙ‏",
         "translation_en": "Not so, however, those who consciously turn towards God in prayer.",
         "translation_ur": "مگر نماز گزار",
         "audio": {
@@ -275,7 +275,7 @@
       {
         "ayah": 23,
         "globalAyah": 5398,
-        "arabic": "ٱلَّذِينَ هُمْ عَلَىٰ صَلَاتِهِمْ دَآئِمُونَ",
+        "arabic": "الَّذِيۡنَ هُمۡ عَلٰى صَلَاتِهِمۡ دَآٮِٕمُوۡنَۙ‏",
         "translation_en": "[and] who incessantly persevere in their prayer",
         "translation_ur": "جو نماز کا التزام رکھتے (اور بلاناغہ پڑھتے) ہیں",
         "audio": {
@@ -287,7 +287,7 @@
       {
         "ayah": 24,
         "globalAyah": 5399,
-        "arabic": "وَٱلَّذِينَ فِىٓ أَمْوَٰلِهِمْ حَقٌّۭ مَّعْلُومٌۭ",
+        "arabic": "وَالَّذِيۡنَ فِىۡۤ اَمۡوَالِهِمۡ حَقٌّ مَّعۡلُوۡمٌۙ‏",
         "translation_en": "and in whose possessions there is a due share, acknowledged [by them],",
         "translation_ur": "اور جن کے مال میں حصہ مقرر ہے",
         "audio": {
@@ -299,7 +299,7 @@
       {
         "ayah": 25,
         "globalAyah": 5400,
-        "arabic": "لِّلسَّآئِلِ وَٱلْمَحْرُومِ",
+        "arabic": "لِّلسَّآٮِٕلِ وَالۡمَحۡرُوۡمِۙ‏",
         "translation_en": "for such as ask [for help] and such as are deprived [of what is good in life];",
         "translation_ur": "(یعنی) مانگنے والے کا۔ اور نہ مانگے والے والا کا",
         "audio": {
@@ -311,7 +311,7 @@
       {
         "ayah": 26,
         "globalAyah": 5401,
-        "arabic": "وَٱلَّذِينَ يُصَدِّقُونَ بِيَوْمِ ٱلدِّينِ",
+        "arabic": "وَالَّذِيۡنَ يُصَدِّقُوۡنَ بِيَوۡمِ الدِّيۡنِۙ‏",
         "translation_en": "and who accept as true the [coming of the] Day of Judgment;",
         "translation_ur": "اور جو روز جزا کو سچ سمجھتے ہیں",
         "audio": {
@@ -323,7 +323,7 @@
       {
         "ayah": 27,
         "globalAyah": 5402,
-        "arabic": "وَٱلَّذِينَ هُم مِّنْ عَذَابِ رَبِّهِم مُّشْفِقُونَ",
+        "arabic": "وَالَّذِيۡنَ هُمۡ مِّنۡ عَذَابِ رَبِّهِمۡ مُّشۡفِقُوۡنَ​ۚ‏",
         "translation_en": "and who stand in dread of their Sustainer's chastisement –",
         "translation_ur": "اور جو اپنے پروردگار کے عذاب سے خوف رکھتے ہیں",
         "audio": {
@@ -335,7 +335,7 @@
       {
         "ayah": 28,
         "globalAyah": 5403,
-        "arabic": "إِنَّ عَذَابَ رَبِّهِمْ غَيْرُ مَأْمُونٍۢ",
+        "arabic": "اِنَّ عَذَابَ رَبِّهِمۡ غَيۡرُ مَاۡمُوۡنٍ‏",
         "translation_en": "for, behold, of their Sustainer's chastisement none may ever feel [wholly] secure;",
         "translation_ur": "بےشک ان کے پروردگار کا عذاب ہے ہی ایسا کہ اس سے بےخوف نہ ہوا جائے",
         "audio": {
@@ -347,7 +347,7 @@
       {
         "ayah": 29,
         "globalAyah": 5404,
-        "arabic": "وَٱلَّذِينَ هُمْ لِفُرُوجِهِمْ حَٰفِظُونَ",
+        "arabic": "وَالَّذِيۡنَ هُمۡ لِفُرُوۡجِهِمۡ حٰفِظُوۡنَۙ‏",
         "translation_en": "and who are mindful of their chastity,",
         "translation_ur": "اور جو اپنی شرمگاہوں کی حفاظت کرتے ہیں",
         "audio": {
@@ -359,7 +359,7 @@
       {
         "ayah": 30,
         "globalAyah": 5405,
-        "arabic": "إِلَّا عَلَىٰٓ أَزْوَٰجِهِمْ أَوْ مَا مَلَكَتْ أَيْمَٰنُهُمْ فَإِنَّهُمْ غَيْرُ مَلُومِينَ",
+        "arabic": "اِلَّا عَلٰٓى اَزۡوَاجِهِمۡ اَوۡ مَا مَلَـكَتۡ اَيۡمَانُهُمۡ فَاِنَّهُمۡ غَيۡرُ مَلُوۡمِيۡنَ​ۚ‏",
         "translation_en": "[not giving way to their desires] with any but their spouses - that is, those whom they rightfully possess [through wedlock] -: for then, behold, they are free of all blame,",
         "translation_ur": "مگر اپنی بیویوں یا لونڈیوں سے کہ (ان کے پاس جانے پر) انہیں کچھ ملامت نہیں",
         "audio": {
@@ -371,7 +371,7 @@
       {
         "ayah": 31,
         "globalAyah": 5406,
-        "arabic": "فَمَنِ ٱبْتَغَىٰ وَرَآءَ ذَٰلِكَ فَأُو۟لَٰٓئِكَ هُمُ ٱلْعَادُونَ",
+        "arabic": "فَمَنِ ابۡتَغٰى وَرَآءَ ذٰلِكَ فَاُولٰٓٮِٕكَ هُمُ الۡعٰدُوۡنَ​ۚ‏",
         "translation_en": "whereas such as seek to go beyond that [limit] are truly transgressors;",
         "translation_ur": "اور جو لوگ ان کے سوا اور کے خواستگار ہوں وہ حد سے نکل جانے والے ہیں",
         "audio": {
@@ -383,7 +383,7 @@
       {
         "ayah": 32,
         "globalAyah": 5407,
-        "arabic": "وَٱلَّذِينَ هُمْ لِأَمَٰنَٰتِهِمْ وَعَهْدِهِمْ رَٰعُونَ",
+        "arabic": "وَالَّذِيۡنَ هُمۡ لِاَمٰنٰتِهِمۡ وَعَهۡدِهِمۡ رٰعُوۡنَ ۙ‏",
         "translation_en": "and who are faithful to their trusts and to their pledges:",
         "translation_ur": "اور جو اپنی امانتوں اور اقراروں کا پاس کرتے ہیں",
         "audio": {
@@ -395,7 +395,7 @@
       {
         "ayah": 33,
         "globalAyah": 5408,
-        "arabic": "وَٱلَّذِينَ هُم بِشَهَٰدَٰتِهِمْ قَآئِمُونَ",
+        "arabic": "وَالَّذِيۡنَ هُمۡ بِشَهٰدٰتِهِمۡ قَآٮِٕمُوۡنَ ۙ‏",
         "translation_en": "and who stand firm whenever they bear witness;",
         "translation_ur": "اور جو اپنی شہادتوں پر قائم رہتے ہیں",
         "audio": {
@@ -407,7 +407,7 @@
       {
         "ayah": 34,
         "globalAyah": 5409,
-        "arabic": "وَٱلَّذِينَ هُمْ عَلَىٰ صَلَاتِهِمْ يُحَافِظُونَ",
+        "arabic": "وَالَّذِيۡنَ هُمۡ عَلٰى صَلَاتِهِمۡ يُحَافِظُوۡنَؕ‏",
         "translation_en": "and who guard their prayers [from all worldly intent].",
         "translation_ur": "اور جو اپنی نماز کی خبر رکھتے ہیں",
         "audio": {
@@ -419,7 +419,7 @@
       {
         "ayah": 35,
         "globalAyah": 5410,
-        "arabic": "أُو۟لَٰٓئِكَ فِى جَنَّٰتٍۢ مُّكْرَمُونَ",
+        "arabic": "اُولٰٓٮِٕكَ فِىۡ جَنّٰتٍ مُّكۡرَمُوۡنَؕ‏",
         "translation_en": "These it is who in the gardens [of paradise] shall be honoured!",
         "translation_ur": "یہی لوگ باغہائے بہشت میں عزت واکرام سے ہوں گے",
         "audio": {
@@ -431,7 +431,7 @@
       {
         "ayah": 36,
         "globalAyah": 5411,
-        "arabic": "فَمَالِ ٱلَّذِينَ كَفَرُوا۟ قِبَلَكَ مُهْطِعِينَ",
+        "arabic": "فَمَالِ الَّذِيۡنَ كَفَرُوۡا قِبَلَكَ مُهۡطِعِيۡنَۙ‏",
         "translation_en": "WHAT, THEN, is amiss with such as are bent on denying the truth, that they run about confusedly to and fro before thee,",
         "translation_ur": "تو ان کافروں کو کیا ہوا ہے کہ تمہاری طرف دوڑے چلے آتے ہیں",
         "audio": {
@@ -443,7 +443,7 @@
       {
         "ayah": 37,
         "globalAyah": 5412,
-        "arabic": "عَنِ ٱلْيَمِينِ وَعَنِ ٱلشِّمَالِ عِزِينَ",
+        "arabic": "عَنِ الۡيَمِيۡنِ وَعَنِ الشِّمَالِ عِزِيۡنَ‏",
         "translation_en": "[coming upon thee] from the right and from the left, in crowds?",
         "translation_ur": "اور) دائیں بائیں سے گروہ گروہ ہو کر (جمع ہوتے جاتے ہیں)",
         "audio": {
@@ -455,7 +455,7 @@
       {
         "ayah": 38,
         "globalAyah": 5413,
-        "arabic": "أَيَطْمَعُ كُلُّ ٱمْرِئٍۢ مِّنْهُمْ أَن يُدْخَلَ جَنَّةَ نَعِيمٍۢ",
+        "arabic": "اَيَطۡمَعُ كُلُّ امۡرِىءٍ مِّنۡهُمۡ اَنۡ يُّدۡخَلَ جَنَّةَ نَعِيۡمٍۙ‏ ﻿﻿",
         "translation_en": "Does every one of them hope to enter [by this means] a garden of bliss?",
         "translation_ur": "کیا ان میں سے ہر شخص یہ توقع رکھتا ہے کہ نعمت کے باغ میں داخل کیا جائے گا",
         "audio": {
@@ -467,7 +467,7 @@
       {
         "ayah": 39,
         "globalAyah": 5414,
-        "arabic": "كَلَّآ ۖ إِنَّا خَلَقْنَٰهُم مِّمَّا يَعْلَمُونَ",
+        "arabic": "كَلَّا ؕ اِنَّا خَلَقۡنٰهُمۡ مِّمَّا يَعۡلَمُوۡنَ‏",
         "translation_en": "Never! For, behold, We have created them out of something that they know [only too well]!",
         "translation_ur": "ہرگز نہیں۔ ہم نے ان کو اس چیز سے پیدا کیا ہے جسے وہ جانتے ہیں",
         "audio": {
@@ -479,7 +479,7 @@
       {
         "ayah": 40,
         "globalAyah": 5415,
-        "arabic": "فَلَآ أُقْسِمُ بِرَبِّ ٱلْمَشَٰرِقِ وَٱلْمَغَٰرِبِ إِنَّا لَقَٰدِرُونَ",
+        "arabic": "فَلَاۤ اُقۡسِمُ بِرَبِّ الۡمَشٰرِقِ وَالۡمَغٰرِبِ اِنَّا لَقٰدِرُوۡنَۙ‏",
         "translation_en": "But nay! I call to witness [Our being] the Sustainer of all the points of sunrise and sunset: verily, well able are We",
         "translation_ur": "ہمیں مشرقوں اور مغربوں کے مالک کی قسم کہ ہم طاقت رکھتے ہیں",
         "audio": {
@@ -491,7 +491,7 @@
       {
         "ayah": 41,
         "globalAyah": 5416,
-        "arabic": "عَلَىٰٓ أَن نُّبَدِّلَ خَيْرًۭا مِّنْهُمْ وَمَا نَحْنُ بِمَسْبُوقِينَ",
+        "arabic": "عَلٰٓى اَنۡ نُّبَدِّلَ خَيۡرًا مِّنۡهُمۡۙ وَمَا نَحۡنُ بِمَسۡبُوۡقِيۡنَ‏",
         "translation_en": "to replace them with [people] better than they are; for there is nothing to prevent Us [from doing what We will].",
         "translation_ur": "(یعنی) اس بات پر (قادر ہیں) کہ ان سے بہتر لوگ بدل لائیں اور ہم عاجز نہیں ہیں",
         "audio": {
@@ -503,7 +503,7 @@
       {
         "ayah": 42,
         "globalAyah": 5417,
-        "arabic": "فَذَرْهُمْ يَخُوضُوا۟ وَيَلْعَبُوا۟ حَتَّىٰ يُلَٰقُوا۟ يَوْمَهُمُ ٱلَّذِى يُوعَدُونَ",
+        "arabic": "فَذَرۡهُمۡ يَخُوۡضُوۡا وَيَلۡعَبُوۡا حَتّٰى يُلٰقُوۡا يَوۡمَهُمُ الَّذِىۡ يُوۡعَدُوۡنَۙ‏",
         "translation_en": "Hence, leave them to indulge in idle talk and play [with words] until they face that [Judgment] Day of theirs which they have been promised –",
         "translation_ur": "تو (اے پیغمبر) ان کو باطل میں پڑے رہنے اور کھیل لینے دو یہاں تک کہ جس دن کا ان سے وعدہ کیا جاتا ہے وہ ان کے سامنے آ موجود ہو",
         "audio": {
@@ -515,7 +515,7 @@
       {
         "ayah": 43,
         "globalAyah": 5418,
-        "arabic": "يَوْمَ يَخْرُجُونَ مِنَ ٱلْأَجْدَاثِ سِرَاعًۭا كَأَنَّهُمْ إِلَىٰ نُصُبٍۢ يُوفِضُونَ",
+        "arabic": "يَوۡمَ يَخۡرُجُوۡنَ مِنَ الۡاَجۡدَاثِ سِرَاعًا كَاَنَّهُمۡ اِلٰى نُصُبٍ يُّوۡفِضُوۡنَۙ‏ ﻿﻿",
         "translation_en": "the Day when they shall come forth in haste from their graves, as if racing towards a goal-post,",
         "translation_ur": "اس دن یہ قبر سے نکل کر (اس طرح) دوڑیں گے جیسے (شکاری) شکار کے جال کی طرف دوڑتے ہیں",
         "audio": {
@@ -527,7 +527,7 @@
       {
         "ayah": 44,
         "globalAyah": 5419,
-        "arabic": "خَٰشِعَةً أَبْصَٰرُهُمْ تَرْهَقُهُمْ ذِلَّةٌۭ ۚ ذَٰلِكَ ٱلْيَوْمُ ٱلَّذِى كَانُوا۟ يُوعَدُونَ",
+        "arabic": "خَاشِعَةً اَبۡصَارُهُمۡ تَرۡهَقُهُمۡ ذِلَّةٌ ؕ ذٰلِكَ الۡيَوۡمُ الَّذِىۡ كَانُوۡا يُوۡعَدُوۡنَ‏",
         "translation_en": "with downcast eyes, with ignominy overwhelming them: that Day which they were promised again and…",
         "translation_ur": "ان کی آنکھیں جھک رہی ہوں گی اور ذلت ان پر چھا رہی ہوگی۔ یہی وہ دن ہے جس کا ان سے وعدہ کیا جاتا تھا",
         "audio": {

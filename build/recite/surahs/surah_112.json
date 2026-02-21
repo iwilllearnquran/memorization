@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-02-14T12:15:33.586059+00:00",
-  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "generatedAt": "2026-02-21T01:14:50.172586+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
   "surah": {
     "surah": 112,
     "arabicName": "سُورَةُ الإِخۡلَاصِ",
@@ -11,7 +11,7 @@
       {
         "ayah": 1,
         "globalAyah": 6222,
-        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ قُلْ هُوَ ٱللَّهُ أَحَدٌ",
+        "arabic": "قُلۡ هُوَ اللّٰهُ اَحَدٌ​ ۚ‏",
         "translation_en": "SAY: \"He is the One God:",
         "translation_ur": "کہو کہ وہ (ذات پاک جس کا نام) الله (ہے) ایک ہے",
         "audio": {
@@ -23,7 +23,7 @@
       {
         "ayah": 2,
         "globalAyah": 6223,
-        "arabic": "ٱللَّهُ ٱلصَّمَدُ",
+        "arabic": "اَللّٰهُ الصَّمَدُ​ ۚ‏",
         "translation_en": "\"God the Eternal, the Uncaused Cause of All Being.",
         "translation_ur": "معبود برحق جو بےنیاز ہے",
         "audio": {
@@ -35,7 +35,7 @@
       {
         "ayah": 3,
         "globalAyah": 6224,
-        "arabic": "لَمْ يَلِدْ وَلَمْ يُولَدْ",
+        "arabic": "لَمۡ يَلِدۡ   ۙ وَلَمۡ يُوۡلَدۡ ۙ‏",
         "translation_en": "\"He begets not, and neither is He begotten;",
         "translation_ur": "نہ کسی کا باپ ہے اور نہ کسی کا بیٹا",
         "audio": {
@@ -47,7 +47,7 @@
       {
         "ayah": 4,
         "globalAyah": 6225,
-        "arabic": "وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ",
+        "arabic": "وَلَمۡ يَكُنۡ لَّهٗ كُفُوًا اَحَدٌ‏",
         "translation_en": "\"and there is nothing that could be compared with Him.",
         "translation_ur": "اور کوئی اس کا ہمسر نہیں",
         "audio": {

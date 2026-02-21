@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-02-14T12:15:20.159742+00:00",
-  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "generatedAt": "2026-02-21T01:14:27.013968+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
   "surah": {
     "surah": 84,
     "arabicName": "سُورَةُ الانشِقَاقِ",
@@ -11,7 +11,7 @@
       {
         "ayah": 1,
         "globalAyah": 5885,
-        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ إِذَا ٱلسَّمَآءُ ٱنشَقَّتْ",
+        "arabic": "اِذَا السَّمَآءُ انْشَقَّتۡۙ‏",
         "translation_en": "WHEN THE SKY is split asunder,",
         "translation_ur": "جب آسمان پھٹ جائے گا",
         "audio": {
@@ -23,7 +23,7 @@
       {
         "ayah": 2,
         "globalAyah": 5886,
-        "arabic": "وَأَذِنَتْ لِرَبِّهَا وَحُقَّتْ",
+        "arabic": "وَاَذِنَتۡ لِرَبِّهَا وَحُقَّتۡۙ‏",
         "translation_en": "obeying its Sustainer, as in truth it must;",
         "translation_ur": "اور اپنے پروردگار کا فرمان بجا لائے گا اور اسے واجب بھی یہ ہی ہے",
         "audio": {
@@ -35,7 +35,7 @@
       {
         "ayah": 3,
         "globalAyah": 5887,
-        "arabic": "وَإِذَا ٱلْأَرْضُ مُدَّتْ",
+        "arabic": "وَاِذَا الۡاَرۡضُ مُدَّتۡؕ‏",
         "translation_en": "and when the earth is leveled,",
         "translation_ur": "اور جب زمین ہموار کر دی جائے گی",
         "audio": {
@@ -47,7 +47,7 @@
       {
         "ayah": 4,
         "globalAyah": 5888,
-        "arabic": "وَأَلْقَتْ مَا فِيهَا وَتَخَلَّتْ",
+        "arabic": "وَاَلۡقَتۡ مَا فِيۡهَا وَتَخَلَّتۡۙ‏",
         "translation_en": "and casts forth whatever is in it, and becomes utterly void,",
         "translation_ur": "جو کچھ اس میں ہے اسے نکال کر باہر ڈال دے گی اور (بالکل) خالی ہو جائے گی",
         "audio": {
@@ -59,7 +59,7 @@
       {
         "ayah": 5,
         "globalAyah": 5889,
-        "arabic": "وَأَذِنَتْ لِرَبِّهَا وَحُقَّتْ",
+        "arabic": "وَاَذِنَتۡ لِرَبِّهَا وَحُقَّتۡؕ‏",
         "translation_en": "obeying its Sustainer, as in truth it must -:",
         "translation_ur": "اور اپنے پروردگار کے ارشاد کی تعمیل کرے گی اور اس کو لازم بھی یہی ہے (تو قیامت قائم ہو جائے گی)",
         "audio": {
@@ -71,7 +71,7 @@
       {
         "ayah": 6,
         "globalAyah": 5890,
-        "arabic": "يَٰٓأَيُّهَا ٱلْإِنسَٰنُ إِنَّكَ كَادِحٌ إِلَىٰ رَبِّكَ كَدْحًۭا فَمُلَٰقِيهِ",
+        "arabic": "يٰۤاَيُّهَا الۡاِنۡسَانُ اِنَّكَ كَادِحٌ اِلٰى رَبِّكَ كَدۡحًا فَمُلٰقِيۡهِ​ۚ‏ ﻿﻿",
         "translation_en": "[then,] O man - thou [that] hast, verily, been toiling towards thy Sustainer in painful toil - then shalt thou meet Him!",
         "translation_ur": "اے انسان! تو اپنے پروردگار کی طرف (پہنچنے میں) خوب کوشِش کرتا ہے سو اس سے جا ملے گا",
         "audio": {
@@ -83,7 +83,7 @@
       {
         "ayah": 7,
         "globalAyah": 5891,
-        "arabic": "فَأَمَّا مَنْ أُوتِىَ كِتَٰبَهُۥ بِيَمِينِهِۦ",
+        "arabic": "فَاَمَّا مَنۡ اُوۡتِىَ كِتٰبَهٗ بِيَمِيۡنِهٖۙ‏",
         "translation_en": "And as for him whose record shall be placed in his right hand,",
         "translation_ur": "تو جس کا نامہٴ (اعمال) اس کے داہنے ہاتھ میں دیا جائے گا",
         "audio": {
@@ -95,7 +95,7 @@
       {
         "ayah": 8,
         "globalAyah": 5892,
-        "arabic": "فَسَوْفَ يُحَاسَبُ حِسَابًۭا يَسِيرًۭا",
+        "arabic": "فَسَوۡفَ يُحَاسَبُ حِسَابًا يَّسِيۡرًا ۙ‏",
         "translation_en": "he will in time be called to account with an easy accounting,",
         "translation_ur": "اس سے حساب آسان لیا جائے گا",
         "audio": {
@@ -107,7 +107,7 @@
       {
         "ayah": 9,
         "globalAyah": 5893,
-        "arabic": "وَيَنقَلِبُ إِلَىٰٓ أَهْلِهِۦ مَسْرُورًۭا",
+        "arabic": "وَّيَنۡقَلِبُ اِلٰٓى اَهۡلِهٖ مَسۡرُوۡرًا ؕ‏",
         "translation_en": "and will [be able to] turn joyfully to those of his own kind.",
         "translation_ur": "اور وہ اپنے گھر والوں میں خوش خوش آئے گا",
         "audio": {
@@ -119,7 +119,7 @@
       {
         "ayah": 10,
         "globalAyah": 5894,
-        "arabic": "وَأَمَّا مَنْ أُوتِىَ كِتَٰبَهُۥ وَرَآءَ ظَهْرِهِۦ",
+        "arabic": "وَاَمَّا مَنۡ اُوۡتِىَ كِتٰبَهٗ وَرَآءَ ظَهۡرِهٖۙ‏",
         "translation_en": "But as for him whose record shall be given to him behind his back;",
         "translation_ur": "اور جس کا نامہٴ (اعمال) اس کی پیٹھ کے پیچھے سے دیا جائے گا",
         "audio": {
@@ -131,7 +131,7 @@
       {
         "ayah": 11,
         "globalAyah": 5895,
-        "arabic": "فَسَوْفَ يَدْعُوا۟ ثُبُورًۭا",
+        "arabic": "فَسَوۡفَ يَدۡعُوۡا ثُبُوۡرًا ۙ‏",
         "translation_en": "he will in time pray for utter destruction:",
         "translation_ur": "وہ موت کو پکارے گا",
         "audio": {
@@ -143,7 +143,7 @@
       {
         "ayah": 12,
         "globalAyah": 5896,
-        "arabic": "وَيَصْلَىٰ سَعِيرًا",
+        "arabic": "وَّيَصۡلٰى سَعِيۡرًا ؕ‏",
         "translation_en": "but he will enter the blazing flame.",
         "translation_ur": "اور وہ دوزخ میں داخل ہو گا",
         "audio": {
@@ -155,7 +155,7 @@
       {
         "ayah": 13,
         "globalAyah": 5897,
-        "arabic": "إِنَّهُۥ كَانَ فِىٓ أَهْلِهِۦ مَسْرُورًا",
+        "arabic": "اِنَّهٗ كَانَ فِىۡۤ اَهۡلِهٖ مَسۡرُوۡرًا ؕ‏",
         "translation_en": "Behold, [in his earthly life] he lived joyfully among people of his own kind",
         "translation_ur": "یہ اپنے اہل (و عیال) میں مست رہتا تھا",
         "audio": {
@@ -167,7 +167,7 @@
       {
         "ayah": 14,
         "globalAyah": 5898,
-        "arabic": "إِنَّهُۥ ظَنَّ أَن لَّن يَحُورَ",
+        "arabic": "اِنَّهٗ ظَنَّ اَنۡ لَّنۡ يَّحُوۡرَ ۛۚ‏",
         "translation_en": "for, behold, he never thought that he would have to return [to God].",
         "translation_ur": "اور خیال کرتا تھا کہ (خدا کی طرف) پھر کر نہ جائے گا",
         "audio": {
@@ -179,7 +179,7 @@
       {
         "ayah": 15,
         "globalAyah": 5899,
-        "arabic": "بَلَىٰٓ إِنَّ رَبَّهُۥ كَانَ بِهِۦ بَصِيرًۭا",
+        "arabic": "بَلٰٓى ۛۚ اِنَّ رَبَّهٗ كَانَ بِهٖ بَصِيۡرًا ؕ‏",
         "translation_en": "Yea indeed! His Sustainer did see all that was in him!",
         "translation_ur": "ہاں ہاں۔ اس کا پروردگار اس کو دیکھ رہا تھا",
         "audio": {
@@ -191,7 +191,7 @@
       {
         "ayah": 16,
         "globalAyah": 5900,
-        "arabic": "فَلَآ أُقْسِمُ بِٱلشَّفَقِ",
+        "arabic": "فَلَاۤ اُقۡسِمُ بِالشَّفَقِۙ‏",
         "translation_en": "BUT NAY! I call to witness the sunset's [fleeting] afterglow,",
         "translation_ur": "ہمیں شام کی سرخی کی قسم",
         "audio": {
@@ -203,7 +203,7 @@
       {
         "ayah": 17,
         "globalAyah": 5901,
-        "arabic": "وَٱلَّيْلِ وَمَا وَسَقَ",
+        "arabic": "وَالَّيۡلِ وَمَا وَسَقَۙ‏",
         "translation_en": "and the night, and what it [step by step] unfolds,",
         "translation_ur": "اور رات کی اور جن چیزوں کو وہ اکٹھا کر لیتی ہے ان کی",
         "audio": {
@@ -215,7 +215,7 @@
       {
         "ayah": 18,
         "globalAyah": 5902,
-        "arabic": "وَٱلْقَمَرِ إِذَا ٱتَّسَقَ",
+        "arabic": "وَالۡقَمَرِ اِذَا اتَّسَقَۙ‏",
         "translation_en": "and the moon, as it grows to its fullness:",
         "translation_ur": "اور چاند کی جب کامل ہو جائے",
         "audio": {
@@ -227,7 +227,7 @@
       {
         "ayah": 19,
         "globalAyah": 5903,
-        "arabic": "لَتَرْكَبُنَّ طَبَقًا عَن طَبَقٍۢ",
+        "arabic": "لَتَرۡكَبُنَّ طَبَقًا عَنۡ طَبَقٍؕ‏",
         "translation_en": "[even thus, O men,] are you bound to move; onward from stage to stage.",
         "translation_ur": "کہ تم درجہ بدرجہ (رتبہٴ اعلیٰ پر) چڑھو گے",
         "audio": {
@@ -239,7 +239,7 @@
       {
         "ayah": 20,
         "globalAyah": 5904,
-        "arabic": "فَمَا لَهُمْ لَا يُؤْمِنُونَ",
+        "arabic": "فَمَا لَهُمۡ لَا يُؤۡمِنُوۡنَۙ‏",
         "translation_en": "What, then, is amiss with them that they will not believe [in a life to come]?",
         "translation_ur": "تو ان لوگوں کو کیا ہوا ہے کہ ایمان نہیں لاتے",
         "audio": {
@@ -251,7 +251,7 @@
       {
         "ayah": 21,
         "globalAyah": 5905,
-        "arabic": "وَإِذَا قُرِئَ عَلَيْهِمُ ٱلْقُرْءَانُ لَا يَسْجُدُونَ ۩",
+        "arabic": "وَاِذَا قُرِئَ عَلَيۡهِمُ الۡقُرۡاٰنُ لَا يَسۡجُدُوۡنَ ؕ ۩‏",
         "translation_en": "and [that], when the Qur’an is read unto them, they do not fall down in prostration?",
         "translation_ur": "اور جب ان کے سامنے قرآن پڑھا جاتا ہے تو سجدہ نہیں کرتے",
         "audio": {
@@ -263,7 +263,7 @@
       {
         "ayah": 22,
         "globalAyah": 5906,
-        "arabic": "بَلِ ٱلَّذِينَ كَفَرُوا۟ يُكَذِّبُونَ",
+        "arabic": "بَلِ الَّذِيۡنَ كَفَرُوۡا يُكَذِّبُوۡنَ ۖ‏",
         "translation_en": "Nay, but they who are bent on denying the truth give the lie [to this divine writ]!",
         "translation_ur": "بلکہ کافر جھٹلاتے ہیں",
         "audio": {
@@ -275,7 +275,7 @@
       {
         "ayah": 23,
         "globalAyah": 5907,
-        "arabic": "وَٱللَّهُ أَعْلَمُ بِمَا يُوعُونَ",
+        "arabic": "وَاللّٰهُ اَعۡلَمُ بِمَا يُوۡعُوۡنَ ۖ‏",
         "translation_en": "Yet God has full knowledge of what they conceal [in their hearts].",
         "translation_ur": "اور خدا ان باتوں کو جو یہ اپنے دلوں میں چھپاتے ہیں خوب جانتا ہے",
         "audio": {
@@ -287,7 +287,7 @@
       {
         "ayah": 24,
         "globalAyah": 5908,
-        "arabic": "فَبَشِّرْهُم بِعَذَابٍ أَلِيمٍ",
+        "arabic": "فَبَشِّرۡهُمۡ بِعَذَابٍ اَلِيۡمٍۙ‏",
         "translation_en": "Hence, give them the tiding of grievous suffering [in the life to come] –",
         "translation_ur": "تو ان کو دکھ دینے والے عذاب کی خبر سنا دو",
         "audio": {
@@ -299,7 +299,7 @@
       {
         "ayah": 25,
         "globalAyah": 5909,
-        "arabic": "إِلَّا ٱلَّذِينَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّٰلِحَٰتِ لَهُمْ أَجْرٌ غَيْرُ مَمْنُونٍۭ",
+        "arabic": "اِلَّا الَّذِيۡنَ اٰمَنُوۡا وَعَمِلُوا الصّٰلِحٰتِ لَهُمۡ اَجۡرٌ غَيۡرُ مَمۡنُوۡنٍ‏ ﻿﻿",
         "translation_en": "unless it be such [of them] as [repent, and] attain to faith, and do good works: for theirs shall be a reward unending!.",
         "translation_ur": "ہاں جو لوگ ایمان لائے اور نیک عمل کرتے رہے ان کے لیے بےانتہا اجر ہے",
         "audio": {

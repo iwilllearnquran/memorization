@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-02-14T12:15:18.666181+00:00",
-  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "generatedAt": "2026-02-21T01:14:22.841091+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
   "surah": {
     "surah": 81,
     "arabicName": "سُورَةُ التَّكۡوِيرِ",
@@ -11,7 +11,7 @@
       {
         "ayah": 1,
         "globalAyah": 5801,
-        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ إِذَا ٱلشَّمْسُ كُوِّرَتْ",
+        "arabic": "اِذَا الشَّمۡسُ كُوِّرَتۡۙ‏",
         "translation_en": "WHEN THE SUN is shrouded in darkness,",
         "translation_ur": "جب سورج لپیٹ لیا جائے گا",
         "audio": {
@@ -23,7 +23,7 @@
       {
         "ayah": 2,
         "globalAyah": 5802,
-        "arabic": "وَإِذَا ٱلنُّجُومُ ٱنكَدَرَتْ",
+        "arabic": "وَاِذَا النُّجُوۡمُ انْكَدَرَتۡۙ‏",
         "translation_en": "and when the stars lose their light,",
         "translation_ur": "جب تارے بےنور ہو جائیں گے",
         "audio": {
@@ -35,7 +35,7 @@
       {
         "ayah": 3,
         "globalAyah": 5803,
-        "arabic": "وَإِذَا ٱلْجِبَالُ سُيِّرَتْ",
+        "arabic": "وَاِذَا الۡجِبَالُ سُيِّرَتۡۙ‏",
         "translation_en": "and when the mountains are made to vanish,",
         "translation_ur": "اور جب پہاڑ چلائے جائیں گے",
         "audio": {
@@ -47,7 +47,7 @@
       {
         "ayah": 4,
         "globalAyah": 5804,
-        "arabic": "وَإِذَا ٱلْعِشَارُ عُطِّلَتْ",
+        "arabic": "وَاِذَا الۡعِشَارُ عُطِّلَتۡۙ‏",
         "translation_en": "and when she-camels big with young, about to give birth, are left untended,",
         "translation_ur": "اور جب بیانے والی اونٹنیاں بےکار ہو جائیں گی",
         "audio": {
@@ -59,7 +59,7 @@
       {
         "ayah": 5,
         "globalAyah": 5805,
-        "arabic": "وَإِذَا ٱلْوُحُوشُ حُشِرَتْ",
+        "arabic": "وَاِذَا الۡوُحُوۡشُ حُشِرَتۡۙ‏",
         "translation_en": "and when all beasts are gathered together,",
         "translation_ur": "اور جب وحشی جانور جمع اکٹھے ہو جائیں گے",
         "audio": {
@@ -71,7 +71,7 @@
       {
         "ayah": 6,
         "globalAyah": 5806,
-        "arabic": "وَإِذَا ٱلْبِحَارُ سُجِّرَتْ",
+        "arabic": "وَاِذَا الۡبِحَارُ سُجِّرَتۡۙ‏",
         "translation_en": "and when the seas boil over,",
         "translation_ur": "اور جب دریا آگ ہو جائیں گے",
         "audio": {
@@ -83,7 +83,7 @@
       {
         "ayah": 7,
         "globalAyah": 5807,
-        "arabic": "وَإِذَا ٱلنُّفُوسُ زُوِّجَتْ",
+        "arabic": "وَاِذَا النُّفُوۡسُ زُوِّجَتۡۙ‏",
         "translation_en": "and when all human beings are coupled [with their deeds],",
         "translation_ur": "اور جب روحیں (بدنوں سے) ملا دی جائیں گی",
         "audio": {
@@ -95,7 +95,7 @@
       {
         "ayah": 8,
         "globalAyah": 5808,
-        "arabic": "وَإِذَا ٱلْمَوْءُۥدَةُ سُئِلَتْ",
+        "arabic": "وَاِذَا الۡمَوۡءٗدَةُ سُٮِٕلَتۡۙ‏",
         "translation_en": "and when the girl-child that was buried alive is made to ask",
         "translation_ur": "اور جب لڑکی سے جو زندہ دفنا دی گئی ہو پوچھا جائے گا",
         "audio": {
@@ -107,7 +107,7 @@
       {
         "ayah": 9,
         "globalAyah": 5809,
-        "arabic": "بِأَىِّ ذَنۢبٍۢ قُتِلَتْ",
+        "arabic": "بِاَىِّ ذَنۡۢبٍ قُتِلَتۡ​ۚ‏",
         "translation_en": "for what crime she had been slain,",
         "translation_ur": "کہ وہ کس گناہ پرماری گئی",
         "audio": {
@@ -119,7 +119,7 @@
       {
         "ayah": 10,
         "globalAyah": 5810,
-        "arabic": "وَإِذَا ٱلصُّحُفُ نُشِرَتْ",
+        "arabic": "وَاِذَا الصُّحُفُ نُشِرَتۡۙ‏",
         "translation_en": "and when the scrolls [of men's deeds] are unfolded,",
         "translation_ur": "اور جب (عملوں کے) دفتر کھولے جائیں گے",
         "audio": {
@@ -131,7 +131,7 @@
       {
         "ayah": 11,
         "globalAyah": 5811,
-        "arabic": "وَإِذَا ٱلسَّمَآءُ كُشِطَتْ",
+        "arabic": "وَاِذَا السَّمَآءُ كُشِطَتۡۙ‏",
         "translation_en": "and when heaven is laid bare,",
         "translation_ur": "اور جب آسمانوں کی کھال کھینچ لی جائے گی",
         "audio": {
@@ -143,7 +143,7 @@
       {
         "ayah": 12,
         "globalAyah": 5812,
-        "arabic": "وَإِذَا ٱلْجَحِيمُ سُعِّرَتْ",
+        "arabic": "وَاِذَا الۡجَحِيۡمُ سُعِّرَتۡۙ‏",
         "translation_en": "and when the blazing fire [of hell] is kindled bright,",
         "translation_ur": "اور جب دوزخ (کی آگ) بھڑکائی جائے گی",
         "audio": {
@@ -155,7 +155,7 @@
       {
         "ayah": 13,
         "globalAyah": 5813,
-        "arabic": "وَإِذَا ٱلْجَنَّةُ أُزْلِفَتْ",
+        "arabic": "وَاِذَا الۡجَـنَّةُ اُزۡلِفَتۡۙ‏",
         "translation_en": "and when paradise is brought into view:",
         "translation_ur": "اور بہشت جب قریب لائی جائے گی",
         "audio": {
@@ -167,7 +167,7 @@
       {
         "ayah": 14,
         "globalAyah": 5814,
-        "arabic": "عَلِمَتْ نَفْسٌۭ مَّآ أَحْضَرَتْ",
+        "arabic": "عَلِمَتۡ نَفۡسٌ مَّاۤ اَحۡضَرَتۡؕ‏",
         "translation_en": "[on that Day] every human being will come to know what he has prepared [for himself].",
         "translation_ur": "تب ہر شخص معلوم کر لے گا کہ وہ کیا لے کر آیا ہے",
         "audio": {
@@ -179,7 +179,7 @@
       {
         "ayah": 15,
         "globalAyah": 5815,
-        "arabic": "فَلَآ أُقْسِمُ بِٱلْخُنَّسِ",
+        "arabic": "فَلَاۤ اُقۡسِمُ بِالۡخُنَّسِۙ‏",
         "translation_en": "BUT NAY! I call to witness the revolving stars,",
         "translation_ur": "ہم کو ان ستاروں کی قسم جو پیچھے ہٹ جاتے ہیں",
         "audio": {
@@ -191,7 +191,7 @@
       {
         "ayah": 16,
         "globalAyah": 5816,
-        "arabic": "ٱلْجَوَارِ ٱلْكُنَّسِ",
+        "arabic": "الۡجَوَارِ الۡكُنَّسِۙ‏",
         "translation_en": "the planets that run their course and set,",
         "translation_ur": "(اور) جو سیر کرتے اور غائب ہو جاتے ہیں",
         "audio": {
@@ -203,7 +203,7 @@
       {
         "ayah": 17,
         "globalAyah": 5817,
-        "arabic": "وَٱلَّيْلِ إِذَا عَسْعَسَ",
+        "arabic": "وَالَّيۡلِ اِذَا عَسۡعَسَۙ‏",
         "translation_en": "and the night as it darkly falls,",
         "translation_ur": "اور رات کی قسم جب ختم ہونے لگتی ہے",
         "audio": {
@@ -215,7 +215,7 @@
       {
         "ayah": 18,
         "globalAyah": 5818,
-        "arabic": "وَٱلصُّبْحِ إِذَا تَنَفَّسَ",
+        "arabic": "وَالصُّبۡحِ اِذَا تَنَفَّسَۙ‏",
         "translation_en": "and the morn as it softly breathes:",
         "translation_ur": "اور صبح کی قسم جب نمودار ہوتی ہے",
         "audio": {
@@ -227,7 +227,7 @@
       {
         "ayah": 19,
         "globalAyah": 5819,
-        "arabic": "إِنَّهُۥ لَقَوْلُ رَسُولٍۢ كَرِيمٍۢ",
+        "arabic": "اِنَّهٗ لَقَوۡلُ رَسُوۡلٍ كَرِيۡمٍۙ‏",
         "translation_en": "behold, this [divine writ] is indeed the [inspired] word of a noble apostle,",
         "translation_ur": "کہ بےشک یہ (قرآن) فرشتہٴ عالی مقام کی زبان کا پیغام ہے",
         "audio": {
@@ -239,7 +239,7 @@
       {
         "ayah": 20,
         "globalAyah": 5820,
-        "arabic": "ذِى قُوَّةٍ عِندَ ذِى ٱلْعَرْشِ مَكِينٍۢ",
+        "arabic": "ذِىۡ قُوَّةٍ عِنۡدَ ذِى الۡعَرۡشِ مَكِيۡنٍۙ‏",
         "translation_en": "with strength endowed, secure with Him who in almightiness is enthroned",
         "translation_ur": "جو صاحب قوت مالک عرش کے ہاں اونچے درجے والا ہے",
         "audio": {
@@ -251,7 +251,7 @@
       {
         "ayah": 21,
         "globalAyah": 5821,
-        "arabic": "مُّطَاعٍۢ ثَمَّ أَمِينٍۢ",
+        "arabic": "مُّطَاعٍ ثَمَّ اَمِيۡنٍؕ‏",
         "translation_en": "[the word] of one to be heeded, and worthy of trust!",
         "translation_ur": "سردار (اور) امانت دار ہے",
         "audio": {
@@ -263,7 +263,7 @@
       {
         "ayah": 22,
         "globalAyah": 5822,
-        "arabic": "وَمَا صَاحِبُكُم بِمَجْنُونٍۢ",
+        "arabic": "وَ مَا صَاحِبُكُمۡ بِمَجۡنُوۡنٍ​ۚ‏",
         "translation_en": "For, this fellow-man of yours is not a madman:",
         "translation_ur": "اور (مکے والو) تمہارے رفیق (یعنی محمدﷺ) دیوانے نہیں ہیں",
         "audio": {
@@ -275,7 +275,7 @@
       {
         "ayah": 23,
         "globalAyah": 5823,
-        "arabic": "وَلَقَدْ رَءَاهُ بِٱلْأُفُقِ ٱلْمُبِينِ",
+        "arabic": "وَلَقَدۡ رَاٰهُ بِالۡاُفُقِ الۡمُبِيۡنِ​ۚ‏",
         "translation_en": "he truly beheld [the angel - beheld] him on the clear horizon;",
         "translation_ur": "بےشک انہوں نے اس (فرشتے) کو (آسمان کے کھلے یعنی) مشرقی کنارے پر دیکھا ہے",
         "audio": {
@@ -287,7 +287,7 @@
       {
         "ayah": 24,
         "globalAyah": 5824,
-        "arabic": "وَمَا هُوَ عَلَى ٱلْغَيْبِ بِضَنِينٍۢ",
+        "arabic": "وَمَا هُوَ عَلَى الۡغَيۡبِ بِضَنِيۡنٍ​ۚ‏",
         "translation_en": "and he is not one to begrudge others the knowledge [of whatever has been revealed to him] out of that which is beyond the reach of human Perception.",
         "translation_ur": "اور وہ پوشیدہ باتوں (کے ظاہر کرنے) میں بخیل نہیں",
         "audio": {
@@ -299,7 +299,7 @@
       {
         "ayah": 25,
         "globalAyah": 5825,
-        "arabic": "وَمَا هُوَ بِقَوْلِ شَيْطَٰنٍۢ رَّجِيمٍۢ",
+        "arabic": "وَمَا هُوَ بِقَوۡلِ شَيۡطٰنٍ رَّجِيۡمٍۙ‏",
         "translation_en": "Nor is this [message] the word of any satanic force accursed.",
         "translation_ur": "اور یہ شیطان مردود کا کلام نہیں",
         "audio": {
@@ -311,7 +311,7 @@
       {
         "ayah": 26,
         "globalAyah": 5826,
-        "arabic": "فَأَيْنَ تَذْهَبُونَ",
+        "arabic": "فَاَيۡنَ تَذۡهَبُوۡنَؕ‏",
         "translation_en": "Whither, then, will you go?",
         "translation_ur": "پھر تم کدھر جا رہے ہو",
         "audio": {
@@ -323,7 +323,7 @@
       {
         "ayah": 27,
         "globalAyah": 5827,
-        "arabic": "إِنْ هُوَ إِلَّا ذِكْرٌۭ لِّلْعَٰلَمِينَ",
+        "arabic": "اِنۡ هُوَ اِلَّا ذِكۡرٌ لِّلۡعٰلَمِيۡنَۙ‏",
         "translation_en": "This [message] is no less than a reminder to all mankind –",
         "translation_ur": "یہ تو جہان کے لوگوں کے لیے نصیحت ہے",
         "audio": {
@@ -335,7 +335,7 @@
       {
         "ayah": 28,
         "globalAyah": 5828,
-        "arabic": "لِمَن شَآءَ مِنكُمْ أَن يَسْتَقِيمَ",
+        "arabic": "لِمَنۡ شَآءَ مِنۡكُمۡ اَنۡ يَّسۡتَقِيۡمَؕ‏",
         "translation_en": "to everyone of you who wills to walk a straight way.",
         "translation_ur": "(یعنی) اس کے لیے جو تم میں سے سیدھی چال چلنا چاہے",
         "audio": {
@@ -347,7 +347,7 @@
       {
         "ayah": 29,
         "globalAyah": 5829,
-        "arabic": "وَمَا تَشَآءُونَ إِلَّآ أَن يَشَآءَ ٱللَّهُ رَبُّ ٱلْعَٰلَمِينَ",
+        "arabic": "وَمَا تَشَآءُوۡنَ اِلَّاۤ اَنۡ يَّشَآءَ اللّٰهُ رَبُّ الۡعٰلَمِيۡنَ‏",
         "translation_en": "But you cannot will it unless God, the Sustainer of all the worlds, wills [to show you that way].",
         "translation_ur": "اور تم کچھ بھی نہیں چاہ سکتے مگر وہی جو خدائے رب العالمین چاہے",
         "audio": {

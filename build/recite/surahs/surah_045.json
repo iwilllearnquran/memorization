@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-02-14T12:14:58.006673+00:00",
-  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "generatedAt": "2026-02-21T01:13:22.577835+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
   "surah": {
     "surah": 45,
     "arabicName": "سُورَةُ الجَاثِيَةِ",
@@ -11,7 +11,7 @@
       {
         "ayah": 1,
         "globalAyah": 4474,
-        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ حمٓ",
+        "arabic": "حٰمٓ​​ ۚ‏",
         "translation_en": "Ha. Mim.",
         "translation_ur": "حٰم",
         "audio": {
@@ -23,7 +23,7 @@
       {
         "ayah": 2,
         "globalAyah": 4475,
-        "arabic": "تَنزِيلُ ٱلْكِتَٰبِ مِنَ ٱللَّهِ ٱلْعَزِيزِ ٱلْحَكِيمِ",
+        "arabic": "تَنۡزِيۡلُ الۡكِتٰبِ مِنَ اللّٰهِ الۡعَزِيۡزِ الۡحَكِيۡمِ‏",
         "translation_en": "THE BESTOWAL from on high of this divine writ issues from God, the Almighty, the Wise.",
         "translation_ur": "اس کتاب کا اُتارا جانا خدائے غالب (اور) دانا (کی طرف) سے ہے",
         "audio": {
@@ -35,7 +35,7 @@
       {
         "ayah": 3,
         "globalAyah": 4476,
-        "arabic": "إِنَّ فِى ٱلسَّمَٰوَٰتِ وَٱلْأَرْضِ لَءَايَٰتٍۢ لِّلْمُؤْمِنِينَ",
+        "arabic": "اِنَّ فِى السَّمٰوٰتِ وَالۡاَرۡضِ لَاٰيٰتٍ لِّلۡمُؤۡمِنِيۡنَؕ‏",
         "translation_en": "Behold, in the heavens as well as on earth there are indeed messages for all who [are willing to] believe.",
         "translation_ur": "بےشک آسمانوں اور زمین میں ایمان والوں کے لئے (خدا کی قدرت کی) نشانیاں ہیں",
         "audio": {
@@ -47,7 +47,7 @@
       {
         "ayah": 4,
         "globalAyah": 4477,
-        "arabic": "وَفِى خَلْقِكُمْ وَمَا يَبُثُّ مِن دَآبَّةٍ ءَايَٰتٌۭ لِّقَوْمٍۢ يُوقِنُونَ",
+        "arabic": "وَفِىۡ خَلۡقِكُمۡ وَمَا يَبُثُّ مِنۡ دَآبَّةٍ اٰيٰتٌ لِّقَوۡمٍ يُّوۡقِنُوۡنَۙ‏ ﻿﻿",
         "translation_en": "And in your own nature, and in [that of] all the animals which He scatters [over the earth] there are messages for people who are endowed with inner certainty.",
         "translation_ur": "اور تمہاری پیدائش میں بھی۔ اور جانوروں میں بھی جن کو وہ پھیلاتا ہے یقین کرنے والوں کے لئے نشانیاں ہیں",
         "audio": {
@@ -59,7 +59,7 @@
       {
         "ayah": 5,
         "globalAyah": 4478,
-        "arabic": "وَٱخْتِلَٰفِ ٱلَّيْلِ وَٱلنَّهَارِ وَمَآ أَنزَلَ ٱللَّهُ مِنَ ٱلسَّمَآءِ مِن رِّزْقٍۢ فَأَحْيَا بِهِ ٱلْأَرْضَ بَعْدَ مَوْتِهَا وَتَصْرِيفِ ٱلرِّيَٰحِ ءَايَٰتٌۭ لِّقَوْمٍۢ يَعْقِلُونَ",
+        "arabic": "وَاخۡتِلَافِ الَّيۡلِ وَالنَّهَارِ وَمَاۤ اَنۡزَلَ اللّٰهُ مِنَ السَّمَآءِ مِنۡ رِّزۡقٍ فَاَحۡيَا بِهِ الۡاَرۡضَ بَعۡدَ مَوۡتِهَا وَ تَصۡرِيۡفِ الرِّيٰحِ اٰيٰتٌ لِّقَوۡمٍ يَّعۡقِلُوۡنَ‏",
         "translation_en": "And in the succession of night and day, and in the means of subsistence which God sends down from the skies, giving life thereby to the earth after it had been lifeless, and in the change of the winds: [in all this] there are messages for people who use their reason.",
         "translation_ur": "اور رات اور دن کے آگے پیچھے آنے جانے میں اور وہ جو خدا نے آسمان سے (ذریعہٴ) رزق نازل فرمایا پھر اس سے زمین کو اس کے مرجانے کے بعد زندہ کیا اس میں اور ہواؤں کے بدلنے میں عقل والوں کے لئے نشانیاں ہیں",
         "audio": {
@@ -71,7 +71,7 @@
       {
         "ayah": 6,
         "globalAyah": 4479,
-        "arabic": "تِلْكَ ءَايَٰتُ ٱللَّهِ نَتْلُوهَا عَلَيْكَ بِٱلْحَقِّ ۖ فَبِأَىِّ حَدِيثٍۭ بَعْدَ ٱللَّهِ وَءَايَٰتِهِۦ يُؤْمِنُونَ",
+        "arabic": "تِلۡكَ اٰيٰتُ اللّٰهِ نَـتۡلُوۡهَا عَلَيۡكَ بِالۡحَقِّ​ ​ۚ فَبِاَىِّ حَدِيۡثٍۢ بَعۡدَ اللّٰهِ وَاٰيٰتِهٖ يُؤۡمِنُوۡنَ‏",
         "translation_en": "These messages of God do We convey unto thee, setting forth the truth. In what other tiding, if not in God’s messages, will they, then, believe?",
         "translation_ur": "یہ خدا کی آیتیں ہیں جو ہم تم کو سچائی کے ساتھ پڑھ کر سناتے ہیں۔ تو یہ خدا اور اس کی آیتوں کے بعد کس بات پر ایمان لائیں گے؟",
         "audio": {
@@ -83,7 +83,7 @@
       {
         "ayah": 7,
         "globalAyah": 4480,
-        "arabic": "وَيْلٌۭ لِّكُلِّ أَفَّاكٍ أَثِيمٍۢ",
+        "arabic": "وَيۡلٌ لِّـكُلِّ اَفَّاكٍ اَثِيۡمٍۙ‏",
         "translation_en": "Woe unto every sinful self-deceiver",
         "translation_ur": "ہر جھوٹے گنہگار پر افسوس ہے",
         "audio": {
@@ -95,7 +95,7 @@
       {
         "ayah": 8,
         "globalAyah": 4481,
-        "arabic": "يَسْمَعُ ءَايَٰتِ ٱللَّهِ تُتْلَىٰ عَلَيْهِ ثُمَّ يُصِرُّ مُسْتَكْبِرًۭا كَأَن لَّمْ يَسْمَعْهَا ۖ فَبَشِّرْهُ بِعَذَابٍ أَلِيمٍۢ",
+        "arabic": "يَّسۡمَعُ اٰيٰتِ اللّٰهِ تُتۡلٰى عَلَيۡهِ ثُمَّ يُصِرُّ مُسۡتَكۡبِرًا كَاَنۡ لَّمۡ يَسۡمَعۡهَا​ ۚ فَبَشِّرۡهُ بِعَذَابٍ اَ لِيۡمٍ‏",
         "translation_en": "who hears God’s messages when they are conveyed to him, and yet, as though he had not heard them, persists in his haughty disdain! Hence, announce unto him grievous suffering –",
         "translation_ur": "(کہ) خدا کی آیتیں اس کو پڑھ کر سنائی جاتی ہیں تو ان کو سن تو لیتا ہے (مگر) پھر غرور سے ضد کرتا ہے کہ گویا ان کو سنا ہی نہیں۔ سو ایسے شخص کو دکھ دینے والے عذاب کی خوشخبری سنا دو",
         "audio": {
@@ -107,7 +107,7 @@
       {
         "ayah": 9,
         "globalAyah": 4482,
-        "arabic": "وَإِذَا عَلِمَ مِنْ ءَايَٰتِنَا شَيْـًٔا ٱتَّخَذَهَا هُزُوًا ۚ أُو۟لَٰٓئِكَ لَهُمْ عَذَابٌۭ مُّهِينٌۭ",
+        "arabic": "وَاِذَا عَلِمَ مِنۡ اٰيٰتِنَا شَيۡــًٔـا اۨتَّخَذَهَا هُزُوًا​ ؕ اُولٰٓٮِٕكَ لَهُمۡ عَذَابٌ مُّهِيۡنٌ ؕ‏",
         "translation_en": "for when he does become aware of any of Our messages, he makes them a target of his mockery! For all such there is shameful suffering in store.",
         "translation_ur": "اور جب ہماری کچھ آیتیں اسے معلوم ہوتی ہیں تو ان کی ہنسی اُڑاتا ہے۔ ایسے لوگوں کے لئے ذلیل کرنے والا عذاب ہے",
         "audio": {
@@ -119,7 +119,7 @@
       {
         "ayah": 10,
         "globalAyah": 4483,
-        "arabic": "مِّن وَرَآئِهِمْ جَهَنَّمُ ۖ وَلَا يُغْنِى عَنْهُم مَّا كَسَبُوا۟ شَيْـًۭٔا وَلَا مَا ٱتَّخَذُوا۟ مِن دُونِ ٱللَّهِ أَوْلِيَآءَ ۖ وَلَهُمْ عَذَابٌ عَظِيمٌ",
+        "arabic": "مِنۡ وَّرَآٮِٕهِمۡ جَهَنَّمُۚ وَلَا يُغۡنِىۡ عَنۡهُمۡ مَّا كَسَبُوۡا شَيۡــًٔـا وَّلَا مَا اتَّخَذُوۡا مِنۡ دُوۡنِ اللّٰهِ اَوۡلِيَآءَ​ ۚ وَلَهُمۡ عَذَابٌ عَظِيۡمٌؕ‏ ﻿﻿",
         "translation_en": "Hell is ahead of them; and all that they may have gained [in this world] shall be of no avail whatever to them, and neither shall any of those things which, instead of God, they have come to regard as their protectors: for, awesome suffering awaits them.",
         "translation_ur": "ان کے سامنے دوزخ ہے۔ اور جو کام وہ کرتے رہے کچھ بھی ان کے کام نہ آئیں گے۔ اور نہ وہی (کام آئیں گے) جن کو انہوں نے خدا کے سوا معبود بنا رکھا تھا۔ اور ان کے لئے بڑا عذاب ہے",
         "audio": {
@@ -131,7 +131,7 @@
       {
         "ayah": 11,
         "globalAyah": 4484,
-        "arabic": "هَٰذَا هُدًۭى ۖ وَٱلَّذِينَ كَفَرُوا۟ بِـَٔايَٰتِ رَبِّهِمْ لَهُمْ عَذَابٌۭ مِّن رِّجْزٍ أَلِيمٌ",
+        "arabic": "هٰذَا هُدًى​ ​ۚ وَالَّذِيۡنَ كَفَرُوۡا بِاٰيٰتِ رَبِّهِمۡ لَهُمۡ عَذَابٌ مِّنۡ رِّجۡزٍ اَلِيۡمٌ‏",
         "translation_en": "[To pay heed to God’s signs and messages:] this is [the meaning of] guidance; on the other hand, for those who are bent on denying the truth of their Sustainer’s messages there is grievous suffering in store as an outcome of [their] vileness.",
         "translation_ur": "یہ ہدایت (کی کتاب) ہے۔ اور جو لوگ اپنے پروردگار کی آیتوں سے انکار کرتے ہیں ان کو سخت قسم کا درد دینے والا عذاب ہوگا",
         "audio": {
@@ -143,7 +143,7 @@
       {
         "ayah": 12,
         "globalAyah": 4485,
-        "arabic": "۞ ٱللَّهُ ٱلَّذِى سَخَّرَ لَكُمُ ٱلْبَحْرَ لِتَجْرِىَ ٱلْفُلْكُ فِيهِ بِأَمْرِهِۦ وَلِتَبْتَغُوا۟ مِن فَضْلِهِۦ وَلَعَلَّكُمْ تَشْكُرُونَ",
+        "arabic": "اَللّٰهُ الَّذِىۡ سَخَّرَ لَـكُمُ الۡبَحۡرَ لِتَجۡرِىَ الۡفُلۡكُ فِيۡهِ بِاَمۡرِهٖ وَلِتَبۡتَغُوۡا مِنۡ فَضۡلِهٖ وَلَعَلَّكُمۡ تَشۡكُرُوۡنَ​ۚ‏",
         "translation_en": "IT IS GOD who has made the sea subservient [to His laws, so that it be of use] to you so that ships might sail through it at His behest, and that you might seek to obtain [what you need] of His bounty, and that you might have cause to be grateful.",
         "translation_ur": "خدا ہی تو ہے جس نے دریا کو تمہارے قابو کردیا تاکہ اس کے حکم سے اس میں کشتیاں چلیں اور تاکہ تم اس کے فضل سے (معاش) تلاش کرو اور تاکہ شکر کرو",
         "audio": {
@@ -155,7 +155,7 @@
       {
         "ayah": 13,
         "globalAyah": 4486,
-        "arabic": "وَسَخَّرَ لَكُم مَّا فِى ٱلسَّمَٰوَٰتِ وَمَا فِى ٱلْأَرْضِ جَمِيعًۭا مِّنْهُ ۚ إِنَّ فِى ذَٰلِكَ لَءَايَٰتٍۢ لِّقَوْمٍۢ يَتَفَكَّرُونَ",
+        "arabic": "وَسَخَّرَ لَـكُمۡ مَّا فِى السَّمٰوٰتِ وَمَا فِى الۡاَرۡضِ جَمِيۡعًا مِّنۡهُ​ ؕ اِنَّ فِىۡ ذٰ لِكَ لَاٰيٰتٍ لِّقَوۡمٍ يَّتَفَكَّرُوۡنَ‏",
         "translation_en": "And He has made subservient to you, [as a gift] from Himself, all that is in the heavens and on earth: in this, behold, there are messages indeed for people who think!",
         "translation_ur": "اور جو کچھ آسمانوں میں ہے اور جو کچھ زمین میں ہے سب کو اپنے (حکم) سے تمہارے کام میں لگا دیا۔ جو لوگ غور کرتے ہیں ان کے لئے اس میں (قدرت خدا کی) نشانیاں ہیں",
         "audio": {
@@ -167,7 +167,7 @@
       {
         "ayah": 14,
         "globalAyah": 4487,
-        "arabic": "قُل لِّلَّذِينَ ءَامَنُوا۟ يَغْفِرُوا۟ لِلَّذِينَ لَا يَرْجُونَ أَيَّامَ ٱللَّهِ لِيَجْزِىَ قَوْمًۢا بِمَا كَانُوا۟ يَكْسِبُونَ",
+        "arabic": "قُلْ لِّلَّذِيۡنَ اٰمَنُوۡا يَغۡفِرُوۡا لِلَّذِيۡنَ لَا يَرۡجُوۡنَ اَيَّامَ اللّٰهِ لِيَجۡزِىَ قَوۡمًۢا بِمَا كَانُوۡا يَكۡسِبُوۡنَ‏",
         "translation_en": "Tell all who have attained to faith that they should forgive those who do not believe in the com­ing of the Days of God, [since it is] for Him [alone] to requite people for whatever they may have earned.",
         "translation_ur": "مومنوں سے کہہ دو کہ جو لوگ خدا کے دنوں کی (جو اعمال کے بدلے کے لئے مقرر ہیں) توقع نہیں رکھتے ان سے درگزر کریں۔ تاکہ وہ ان لوگوں کو ان کے اعمال کا بدلے دے",
         "audio": {
@@ -179,7 +179,7 @@
       {
         "ayah": 15,
         "globalAyah": 4488,
-        "arabic": "مَنْ عَمِلَ صَٰلِحًۭا فَلِنَفْسِهِۦ ۖ وَمَنْ أَسَآءَ فَعَلَيْهَا ۖ ثُمَّ إِلَىٰ رَبِّكُمْ تُرْجَعُونَ",
+        "arabic": "مَنۡ عَمِلَ صَالِحًـا فَلِنَفۡسِهٖ​ۚ وَمَنۡ اَسَآءَ فَعَلَيۡهَا​ ثُمَّ اِلٰى رَبِّكُمۡ تُرۡجَعُوۡنَ‏",
         "translation_en": "Whoever does what is just and right, does so for his own good; and whoever does evil, does so to his own hurt; and in the end unto your Sustainer you all will be brought back.",
         "translation_ur": "جو کوئی عمل نیک کرے گا تو اپنے لئے۔ اور جو برے کام کرے گا تو ان کا ضرر اسی کو ہوگا۔ پھر تم اپنے پروردگار کی طرف لوٹ کر جاؤ گے",
         "audio": {
@@ -191,7 +191,7 @@
       {
         "ayah": 16,
         "globalAyah": 4489,
-        "arabic": "وَلَقَدْ ءَاتَيْنَا بَنِىٓ إِسْرَٰٓءِيلَ ٱلْكِتَٰبَ وَٱلْحُكْمَ وَٱلنُّبُوَّةَ وَرَزَقْنَٰهُم مِّنَ ٱلطَّيِّبَٰتِ وَفَضَّلْنَٰهُمْ عَلَى ٱلْعَٰلَمِينَ",
+        "arabic": "وَلَقَدۡ اٰتَيۡنَا بَنِىۡۤ اِسۡرَآءِيۡلَ الۡكِتٰبَ وَالۡحُكۡمَ وَالنُّبُوَّةَ وَرَزَقۡنٰهُمۡ مِّنَ الطَّيِّبٰتِ وَفَضَّلۡنٰهُمۡ عَلَى الۡعٰلَمِيۡنَ​ۚ‏",
         "translation_en": "AND, INDEED, [already] unto the children of Israel did We vouchsafe revelation, and wisdom, and prophethood; and We provided for them sustenance out of the good things of life, and favoured them above all other people [of their time].",
         "translation_ur": "اور ہم نے بنی اسرائیل کو کتاب (ہدایت) اور حکومت اور نبوت بخشی اور پاکیزہ چیزیں عطا فرمائیں اور اہل عالم پر فضیلت دی",
         "audio": {
@@ -203,7 +203,7 @@
       {
         "ayah": 17,
         "globalAyah": 4490,
-        "arabic": "وَءَاتَيْنَٰهُم بَيِّنَٰتٍۢ مِّنَ ٱلْأَمْرِ ۖ فَمَا ٱخْتَلَفُوٓا۟ إِلَّا مِنۢ بَعْدِ مَا جَآءَهُمُ ٱلْعِلْمُ بَغْيًۢا بَيْنَهُمْ ۚ إِنَّ رَبَّكَ يَقْضِى بَيْنَهُمْ يَوْمَ ٱلْقِيَٰمَةِ فِيمَا كَانُوا۟ فِيهِ يَخْتَلِفُونَ",
+        "arabic": "وَاٰتَيۡنٰهُمۡ بَيِّنٰتٍ مِّنَ الۡاَمۡرِ​ ۚ فَمَا اخۡتَلَفُوۡۤا اِلَّا مِنۡۢ بَعۡدِ مَا جَآءَهُمُ الۡعِلۡمُ ۙ بَغۡيًاۢ بَيۡنَهُمۡ​ؕ اِنَّ رَبَّكَ يَقۡضِىۡ بَيۡنَهُمۡ يَوۡمَ الۡقِيٰمَةِ فِيۡمَا كَانُوۡا فِيۡهِ يَخۡتَلِفُوۡنَ‏",
         "translation_en": "And We gave them clear indications of the purpose [of faith]; and it was only after all this knowledge had been vouchsafed to them that they began, out of mutual jealousy, to hold divergent views: [but,] verily, thy Sustainer will judge be­tween them on Resurrection Day regarding all whereon they were wont to differ.",
         "translation_ur": "اور ان کو دین کے بارے میں دلیلیں عطا کیں۔ تو انہوں نے جو اختلاف کیا تو علم آچکنے کے بعد آپس کی ضد سے کیا۔ بےشک تمہارا پروردگار قیامت کے دن ان میں ان باتوں کا جن میں وہ اختلاف کرتے تھے فیصلہ کرے گا",
         "audio": {
@@ -215,7 +215,7 @@
       {
         "ayah": 18,
         "globalAyah": 4491,
-        "arabic": "ثُمَّ جَعَلْنَٰكَ عَلَىٰ شَرِيعَةٍۢ مِّنَ ٱلْأَمْرِ فَٱتَّبِعْهَا وَلَا تَتَّبِعْ أَهْوَآءَ ٱلَّذِينَ لَا يَعْلَمُونَ",
+        "arabic": "ثُمَّ جَعَلۡنٰكَ عَلٰى شَرِيۡعَةٍ مِّنَ الۡاَمۡرِ فَاتَّبِعۡهَا وَلَا تَتَّبِعۡ اَهۡوَآءَ الَّذِيۡنَ لَا يَعۡلَمُوۡنَ‏",
         "translation_en": "And, finally, [O Muhammad,] We have set thee on a way by which the purpose [of faith] may be fulfilled: so follow thou this [way], and follow not the likes and dislikes of those who do not know [the truth].",
         "translation_ur": "پھر ہم نے تم کو دین کے کھلے رستے پر (قائم) کر دیا تو اسی (رستے) پر چلے چلو اور نادانوں کی خواہشوں کے پیچھے نہ چلنا",
         "audio": {
@@ -227,7 +227,7 @@
       {
         "ayah": 19,
         "globalAyah": 4492,
-        "arabic": "إِنَّهُمْ لَن يُغْنُوا۟ عَنكَ مِنَ ٱللَّهِ شَيْـًۭٔا ۚ وَإِنَّ ٱلظَّٰلِمِينَ بَعْضُهُمْ أَوْلِيَآءُ بَعْضٍۢ ۖ وَٱللَّهُ وَلِىُّ ٱلْمُتَّقِينَ",
+        "arabic": "اِنَّهُمۡ لَنۡ يُّغۡنُوۡا عَنۡكَ مِنَ اللّٰهِ شَيۡــًٔـا​ ؕ وَ اِنَّ الظّٰلِمِيۡنَ بَعۡضُهُمۡ اَوۡلِيَآءُ بَعۡضٍ​ ۚ وَاللّٰهُ وَلِىُّ الۡمُتَّقِيۡنَ‏",
         "translation_en": "Behold, they could never be of any avail to thee if thou wert to defy the will of God for, verily, such evildoers are but friends and protectors of one another, whereas God is the Protector of all who are conscious of Him.",
         "translation_ur": "یہ خدا کے سامنے تمہارے کسی کام نہیں آئیں گے۔ اور ظالم لوگ ایک دوسرے کے دوست ہوتے ہیں۔ اور خدا پرہیزگاروں کا دوست ہے",
         "audio": {
@@ -239,7 +239,7 @@
       {
         "ayah": 20,
         "globalAyah": 4493,
-        "arabic": "هَٰذَا بَصَٰٓئِرُ لِلنَّاسِ وَهُدًۭى وَرَحْمَةٌۭ لِّقَوْمٍۢ يُوقِنُونَ",
+        "arabic": "هٰذَا بَصَاٮِٕرُ لِلنَّاسِ وَهُدًى وَّرَحۡمَةٌ لِّقَوۡمٍ يُّوۡقِنُوۡنَ‏",
         "translation_en": "This [revelation, then,] is a means of insight for mankind, and a guidance and grace unto people who are endowed with inner certainty.",
         "translation_ur": "یہ قرآن لوگوں کے لئے دانائی کی باتیں ہیں اور جو یقین رکھتے ہیں ان کے لئے ہدایت اور رحمت ہے",
         "audio": {
@@ -251,7 +251,7 @@
       {
         "ayah": 21,
         "globalAyah": 4494,
-        "arabic": "أَمْ حَسِبَ ٱلَّذِينَ ٱجْتَرَحُوا۟ ٱلسَّيِّـَٔاتِ أَن نَّجْعَلَهُمْ كَٱلَّذِينَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّٰلِحَٰتِ سَوَآءًۭ مَّحْيَاهُمْ وَمَمَاتُهُمْ ۚ سَآءَ مَا يَحْكُمُونَ",
+        "arabic": "اَمۡ حَسِبَ الَّذِيۡنَ اجۡتَـرَحُوا السَّيِّاٰتِ اَنۡ نَّجۡعَلَهُمۡ كَالَّذِيۡنَ اٰمَنُوۡا وَعَمِلُوا الصّٰلِحٰتِ ۙ سَوَآءً مَّحۡيَاهُمۡ وَمَمَاتُهُمۡ​ ؕ سَآءَ مَا يَحۡكُمُوۡنَ‏",
         "translation_en": "Now as for those who indulge in sinful doings - do they think that We place them, both in their life and their death, on an equal footing with those who have attained to faith and do righteous deeds? Bad, indeed, is their judgment:",
         "translation_ur": "جو لوگ برے کام کرتے ہیں کیا وہ یہ خیال کرتے ہیں کہ ہم ان کو ان لوگوں جیسا کردیں گے جو ایمان لائے اور عمل نیک کرتے رہے اور ان کی زندگی اور موت یکساں ہوگی۔ یہ جو دعوے کرتے ہیں برے ہیں",
         "audio": {
@@ -263,7 +263,7 @@
       {
         "ayah": 22,
         "globalAyah": 4495,
-        "arabic": "وَخَلَقَ ٱللَّهُ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضَ بِٱلْحَقِّ وَلِتُجْزَىٰ كُلُّ نَفْسٍۭ بِمَا كَسَبَتْ وَهُمْ لَا يُظْلَمُونَ",
+        "arabic": "وَ خَلَقَ اللّٰهُ السَّمٰوٰتِ وَالۡاَرۡضَ بِالۡحَقِّ وَلِتُجۡزٰى كُلُّ نَفۡسٍۢ بِمَا كَسَبَتۡ وَهُمۡ لَا يُظۡلَمُوۡنَ‏",
         "translation_en": "for, God has created the heavens and the earth in accordance with [an inner] truth, and [has therefore willed] that every human being shall be recompensed for what he has earned and none shall be wronged.",
         "translation_ur": "اور خدا نے آسمانوں اور زمین کو حکمت سے پیدا کیا ہے اور تاکہ ہر شخص اپنے اعمال کا بدلہ پائے اور ان پر ظلم نہیں کیا جائے گا",
         "audio": {
@@ -275,7 +275,7 @@
       {
         "ayah": 23,
         "globalAyah": 4496,
-        "arabic": "أَفَرَءَيْتَ مَنِ ٱتَّخَذَ إِلَٰهَهُۥ هَوَىٰهُ وَأَضَلَّهُ ٱللَّهُ عَلَىٰ عِلْمٍۢ وَخَتَمَ عَلَىٰ سَمْعِهِۦ وَقَلْبِهِۦ وَجَعَلَ عَلَىٰ بَصَرِهِۦ غِشَٰوَةًۭ فَمَن يَهْدِيهِ مِنۢ بَعْدِ ٱللَّهِ ۚ أَفَلَا تَذَكَّرُونَ",
+        "arabic": "اَفَرَءَيۡتَ مَنِ اتَّخَذَ اِلٰهَهٗ هَوٰٮهُ وَاَضَلَّهُ اللّٰهُ عَلٰى عِلۡمٍ وَّخَتَمَ عَلٰى سَمۡعِهٖ وَقَلۡبِهٖ وَجَعَلَ عَلٰى بَصَرِهٖ غِشٰوَةً  ؕ فَمَنۡ يَّهۡدِيۡهِ مِنۡۢ بَعۡدِ اللّٰهِ​ ؕ اَفَلَا تَذَكَّرُوۡنَ‏",
         "translation_en": "HAST THOU ever considered [the kind of man] who makes his own desires his deity, and whom God has [thereupon] let go astray, knowing [that his mind is closed to all guidance], and whose hearing and heart He has sealed, and upon whose sight He has placed a veil? Who, then, could guide him after God [has abandoned him]? Will you not, then, bethink your­selves?",
         "translation_ur": "بھلا تم نے اس شخص کو دیکھا جس نے اپنی خواہش کو معبود بنا رکھا ہے اور باوجود جاننے بوجھنے کے (گمراہ ہو رہا ہے تو) خدا نے (بھی) اس کو گمراہ کردیا اور اس کے کانوں اور دل پر مہر لگا دی اور اس کی آنکھوں پر پردہ ڈال دیا۔ اب خدا کے سوا اس کو کون راہ پر لاسکتا ہے۔ بھلا تم کیوں نصیحت نہیں پکڑتے؟",
         "audio": {
@@ -287,7 +287,7 @@
       {
         "ayah": 24,
         "globalAyah": 4497,
-        "arabic": "وَقَالُوا۟ مَا هِىَ إِلَّا حَيَاتُنَا ٱلدُّنْيَا نَمُوتُ وَنَحْيَا وَمَا يُهْلِكُنَآ إِلَّا ٱلدَّهْرُ ۚ وَمَا لَهُم بِذَٰلِكَ مِنْ عِلْمٍ ۖ إِنْ هُمْ إِلَّا يَظُنُّونَ",
+        "arabic": "وَقَالُوۡا مَا هِىَ اِلَّا حَيَاتُنَا الدُّنۡيَا نَمُوۡتُ وَنَحۡيَا وَمَا يُهۡلِكُنَاۤ اِلَّا الدَّهۡرُ​ؕ وَمَا لَهُمۡ بِذٰلِكَ مِنۡ عِلۡمٍ​ ۚ اِنۡ هُمۡ اِلَّا يَظُنُّوۡنَ‏",
         "translation_en": "And yet they say: “There is nothing beyond our life in this world. We die as we come to life, and nothing but time destroys us.” But of this they have no knowledge whatever: they do nothing but guess.",
         "translation_ur": "اور کہتے ہیں کہ ہماری زندگی تو صرف دنیا ہی کی ہے کہ (یہیں) مرتے اور جیتے ہیں اور ہمیں تو زمانہ مار دیتا ہے۔ اور ان کو اس کا کچھ علم نہیں۔ صرف ظن سے کام لیتے ہیں",
         "audio": {
@@ -299,7 +299,7 @@
       {
         "ayah": 25,
         "globalAyah": 4498,
-        "arabic": "وَإِذَا تُتْلَىٰ عَلَيْهِمْ ءَايَٰتُنَا بَيِّنَٰتٍۢ مَّا كَانَ حُجَّتَهُمْ إِلَّآ أَن قَالُوا۟ ٱئْتُوا۟ بِـَٔابَآئِنَآ إِن كُنتُمْ صَٰدِقِينَ",
+        "arabic": "وَاِذَا تُتۡلٰى عَلَيۡهِمۡ اٰيٰتُنَا بَيِّنٰتٍ مَّا كَانَ حُجَّتَهُمۡ اِلَّاۤ اَنۡ قَالُوا ائۡتُوۡا بِاٰبَآٮِٕنَاۤ اِنۡ كُنۡتُمۡ صٰدِقِيۡنَ‏",
         "translation_en": "And [so,] whenever Our messages are conveyed to them in all their clarity, their only argument is this: “Bring forth our fore­fathers [as witnesses], if what you claim is true!”",
         "translation_ur": "اور جب ان کے سامنے ہماری کھلی کھلی آیتیں پڑھی جاتی ہیں تو ان کی یہی حجت ہوتی ہے کہ اگر تم سچے ہو تو ہمارے باپ دادا کو (زندہ کر) لاؤ",
         "audio": {
@@ -311,7 +311,7 @@
       {
         "ayah": 26,
         "globalAyah": 4499,
-        "arabic": "قُلِ ٱللَّهُ يُحْيِيكُمْ ثُمَّ يُمِيتُكُمْ ثُمَّ يَجْمَعُكُمْ إِلَىٰ يَوْمِ ٱلْقِيَٰمَةِ لَا رَيْبَ فِيهِ وَلَٰكِنَّ أَكْثَرَ ٱلنَّاسِ لَا يَعْلَمُونَ",
+        "arabic": "قُلِ اللّٰهُ يُحۡيِيۡكُمۡ ثُمَّ يُمِيۡتُكُمۡ ثُمَّ يَجۡمَعُكُمۡ اِلٰى يَوۡمِ الۡقِيٰمَةِ لَا رَيۡبَ فِيۡهِ وَلٰكِنَّ اَكۡثَرَ النَّاسِ لَا يَعۡلَمُوۡنَ‏",
         "translation_en": "Say: “It is God who gives you life, and then causes you to die; and in the end He will gather you together on Resurrection Day, [the coming of] which is beyond all doubt - but most human beings under­stand it not.”",
         "translation_ur": "کہہ دو کہ خدا ہی تم کو جان بخشتا ہے پھر (وہی) تم کو موت دیتا ہے پھر تم کو قیامت کے روز جس (کے آنے) میں کچھ شک نہیں تم کو جمع کرے گا لیکن بہت سے لوگ نہیں جانتے",
         "audio": {
@@ -323,7 +323,7 @@
       {
         "ayah": 27,
         "globalAyah": 4500,
-        "arabic": "وَلِلَّهِ مُلْكُ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضِ ۚ وَيَوْمَ تَقُومُ ٱلسَّاعَةُ يَوْمَئِذٍۢ يَخْسَرُ ٱلْمُبْطِلُونَ",
+        "arabic": "وَلِلّٰهِ مُلۡكُ السَّمٰوٰتِ وَالۡاَرۡضِ​ؕ وَيَوۡمَ تَقُوۡمُ السَّاعَةُ يَوۡمَٮِٕذٍ يَّخۡسَرُ الۡمُبۡطِلُوۡنَ‏",
         "translation_en": "For, God’s is the dominion over the heavens and the earth; and on the Day when the Last Hour dawns - on that Day will be lost all who [in their lifetime] tried to reduce to nothing [whatever they could not understand].",
         "translation_ur": "اور آسمانوں اور زمین کی بادشاہت خدا ہی کی ہے۔ اور جس روز قیامت برپا ہوگی اس روز اہل باطل خسارے میں پڑ جائیں گے",
         "audio": {
@@ -335,7 +335,7 @@
       {
         "ayah": 28,
         "globalAyah": 4501,
-        "arabic": "وَتَرَىٰ كُلَّ أُمَّةٍۢ جَاثِيَةًۭ ۚ كُلُّ أُمَّةٍۢ تُدْعَىٰٓ إِلَىٰ كِتَٰبِهَا ٱلْيَوْمَ تُجْزَوْنَ مَا كُنتُمْ تَعْمَلُونَ",
+        "arabic": "وَتَرٰى كُلَّ اُمَّةٍ جَاثِيَةً​ كُلُّ اُمَّةٍ تُدۡعٰۤى اِلٰى كِتٰبِهَا ؕ اَلۡيَوۡمَ تُجۡزَوۡنَ مَا كُنۡتُمۡ تَعۡمَلُوۡنَ‏",
         "translation_en": "And [on that Day] thou wilt see all people kneeling down [in humility]: all people will be called upon to [face] their record: “Today you shall be requited for all that you ever did!",
         "translation_ur": "اور تم ہر ایک فرقے کو دیکھو گے کہ گھٹنوں کے بل بیٹھا ہوگا۔ اور ہر ایک جماعت اپنی کتاب (اعمال) کی طرف بلائی جائے گی۔ جو کچھ تم کرتے رہے ہو آج تم کو اس کا بدلہ دیا جائے گا",
         "audio": {
@@ -347,7 +347,7 @@
       {
         "ayah": 29,
         "globalAyah": 4502,
-        "arabic": "هَٰذَا كِتَٰبُنَا يَنطِقُ عَلَيْكُم بِٱلْحَقِّ ۚ إِنَّا كُنَّا نَسْتَنسِخُ مَا كُنتُمْ تَعْمَلُونَ",
+        "arabic": "هٰذَا كِتٰبُنَا يَنۡطِقُ عَلَيۡكُمۡ بِالۡحَقِّ​ؕ اِنَّا كُنَّا نَسۡتَنۡسِخُ مَا كُنۡتُمۡ تَعۡمَلُوۡنَ‏",
         "translation_en": "This Our record speaks of you in all truth: for, verily, We have caused to be recorded all that you ever did!”",
         "translation_ur": "یہ ہماری کتاب تمہارے بارے میں سچ سچ بیان کردے گی۔ جو کچھ تم کیا کرتے تھے ہم لکھواتے جاتے ہیں",
         "audio": {
@@ -359,7 +359,7 @@
       {
         "ayah": 30,
         "globalAyah": 4503,
-        "arabic": "فَأَمَّا ٱلَّذِينَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّٰلِحَٰتِ فَيُدْخِلُهُمْ رَبُّهُمْ فِى رَحْمَتِهِۦ ۚ ذَٰلِكَ هُوَ ٱلْفَوْزُ ٱلْمُبِينُ",
+        "arabic": "فَاَمَّا الَّذِيۡنَ اٰمَنُوۡا وَعَمِلُوا الصّٰلِحٰتِ فَيُدۡخِلُهُمۡ رَبُّهُمۡ فِىۡ رَحۡمَتِهٖ​ ؕ ذٰ لِكَ هُوَ الۡفَوۡزُ الۡمُبِيۡنُ‏",
         "translation_en": "Now as for those who have attained to faith and done righteous deeds, their Sustainer will admit them to His grace: that will be [their] manifest triumph!",
         "translation_ur": "تو جو لوگ ایمان لائے اور نیک کام کرتے رہے ان کا پروردگار انہیں رحمت (کے باغ) میں داخل کرے گا۔ یہی صریح کامیابی ہے",
         "audio": {
@@ -371,7 +371,7 @@
       {
         "ayah": 31,
         "globalAyah": 4504,
-        "arabic": "وَأَمَّا ٱلَّذِينَ كَفَرُوٓا۟ أَفَلَمْ تَكُنْ ءَايَٰتِى تُتْلَىٰ عَلَيْكُمْ فَٱسْتَكْبَرْتُمْ وَكُنتُمْ قَوْمًۭا مُّجْرِمِينَ",
+        "arabic": "وَاَمَّا الَّذِيۡنَ كَفَرُوۡۤا اَفَلَمۡ تَكُنۡ اٰيٰتِىۡ تُتۡلٰى عَلَيۡكُمۡ فَاسۡتَكۡبَرۡتُمۡ وَكُنۡتُمۡ قَوۡمًا مُّجۡرِمِيۡنَ‏",
         "translation_en": "But as for those who were bent on denying the truth, [they will be told:] “Were not My messages conveyed to you? And withal, you gloried in your arrogance, and so you became people lost in sin:",
         "translation_ur": "اور جنہوں نے کفر کیا۔ (ان سے کہا جائے گا کہ) بھلا ہماری آیتیں تم کو پڑھ کر سنائی نہیں جاتی تھیں؟ پھر تم نے تکبر کیا اور تم نافرمان لوگ تھے",
         "audio": {
@@ -383,7 +383,7 @@
       {
         "ayah": 32,
         "globalAyah": 4505,
-        "arabic": "وَإِذَا قِيلَ إِنَّ وَعْدَ ٱللَّهِ حَقٌّۭ وَٱلسَّاعَةُ لَا رَيْبَ فِيهَا قُلْتُم مَّا نَدْرِى مَا ٱلسَّاعَةُ إِن نَّظُنُّ إِلَّا ظَنًّۭا وَمَا نَحْنُ بِمُسْتَيْقِنِينَ",
+        "arabic": "وَاِذَا قِيۡلَ اِنَّ وَعۡدَ اللّٰهِ حَقٌّ وَّالسَّاعَةُ لَا رَيۡبَ فِيۡهَا قُلۡتُمۡ مَّا نَدۡرِىۡ مَا السَّاعَةُ ۙ اِنۡ نَّـظُنُّ اِلَّا ظَنًّا وَّمَا نَحۡنُ بِمُسۡتَيۡقِنِيۡنَ‏",
         "translation_en": "for when it was said, ‘Behold, God’s promise always comes true, and there can be no doubt about [the coming of] the Last Hour’ - you would answer, ‘We do not know what that Last Hour may be: we think it is no more than an empty guess, and [so] we are by no means convinced!’”",
         "translation_ur": "اور جب کہا جاتا تھا کہ خدا کا وعدہ سچا ہے اور قیامت میں کچھ شک نہیں تو تم کہتے تھے ہم نہیں جانتے کہ قیامت کیا ہے۔ ہم اس کو محض ظنی خیال کرتے ہیں اور ہمیں یقین نہیں آتا",
         "audio": {
@@ -395,7 +395,7 @@
       {
         "ayah": 33,
         "globalAyah": 4506,
-        "arabic": "وَبَدَا لَهُمْ سَيِّـَٔاتُ مَا عَمِلُوا۟ وَحَاقَ بِهِم مَّا كَانُوا۟ بِهِۦ يَسْتَهْزِءُونَ",
+        "arabic": "وَبَدَا لَهُمۡ سَيِّاٰتُ مَا عَمِلُوۡا وَحَاقَ بِهِمۡ مَّا كَانُوۡا بِهٖ يَسۡتَهۡزِءُوۡنَ‏ ﻿﻿",
         "translation_en": "And [on that Day,] the evil of their doings will become obvious to them, and they will be over­whelmed by the very thing which they were wont to deride.",
         "translation_ur": "اور ان کے اعمال کی برائیاں ان پر ظاہر ہوجائیں گی اور جس (عذاب) کی وہ ہنسی اُڑاتے تھے وہ ان کو آگھیرے گا",
         "audio": {
@@ -407,7 +407,7 @@
       {
         "ayah": 34,
         "globalAyah": 4507,
-        "arabic": "وَقِيلَ ٱلْيَوْمَ نَنسَىٰكُمْ كَمَا نَسِيتُمْ لِقَآءَ يَوْمِكُمْ هَٰذَا وَمَأْوَىٰكُمُ ٱلنَّارُ وَمَا لَكُم مِّن نَّٰصِرِينَ",
+        "arabic": "وَقِيۡلَ الۡيَوۡمَ نَنۡسٰٮكُمۡ كَمَا نَسِيۡتُمۡ لِقَآءَ يَوۡمِكُمۡ هٰذَا وَمَاۡوٰٮكُمُ النَّارُ وَمَا لَـكُمۡ مِّنۡ نّٰصِرِيۡنَ‏",
         "translation_en": "And [the word] will be spoken: “Today We shall be oblivious of you as you were oblivious of the coming of this your Day [of Judgment]; and so your goal is the fire, and you shall have none to succour you:",
         "translation_ur": "اور کہا جائے گا کہ جس طرح تم نے اس دن کے آنے کو بھلا رکھا تھا۔ اسی طرح آج ہم تمہیں بھلا دیں گے اور تمہارا ٹھکانا دوزخ ہے اور کوئی تمہارا مددگار نہیں",
         "audio": {
@@ -419,7 +419,7 @@
       {
         "ayah": 35,
         "globalAyah": 4508,
-        "arabic": "ذَٰلِكُم بِأَنَّكُمُ ٱتَّخَذْتُمْ ءَايَٰتِ ٱللَّهِ هُزُوًۭا وَغَرَّتْكُمُ ٱلْحَيَوٰةُ ٱلدُّنْيَا ۚ فَٱلْيَوْمَ لَا يُخْرَجُونَ مِنْهَا وَلَا هُمْ يُسْتَعْتَبُونَ",
+        "arabic": "ذٰلِكُمۡ بِاَنَّكُمُ اتَّخَذۡتُمۡ اٰيٰتِ اللّٰهِ هُزُوًا وَّغَرَّتۡكُمُ الۡحَيٰوةُ الدُّنۡيَا​ ۚ فَالۡيَوۡمَ لَا يُخۡرَجُوۡنَ مِنۡهَا وَلَا هُمۡ يُسۡتَعۡتَبُوۡنَ‏ ﻿﻿",
         "translation_en": "this, because you made God’s messages the target of your mockery, having allowed the life of this world to beguile you!” On that Day, therefore, they will not be brought out of the fire, nor will they be allowed to make amends.",
         "translation_ur": "یہ اس لئے کہ تم نے خدا کی آیتوں کو مخول بنا رکھا تھا اور دنیا کی زندگی نے تم کو دھوکے میں ڈال رکھا تھا۔ سو آج یہ لوگ نہ دوزخ سے نکالے جائیں گے اور نہ ان کی توبہ قبول کی جائے گی",
         "audio": {
@@ -431,7 +431,7 @@
       {
         "ayah": 36,
         "globalAyah": 4509,
-        "arabic": "فَلِلَّهِ ٱلْحَمْدُ رَبِّ ٱلسَّمَٰوَٰتِ وَرَبِّ ٱلْأَرْضِ رَبِّ ٱلْعَٰلَمِينَ",
+        "arabic": "فَلِلّٰهِ الۡحَمۡدُ رَبِّ السَّمٰوٰتِ وَرَبِّ الۡاَرۡضِ رَبِّ الۡعٰلَمِيۡنَ‏ ﻿﻿",
         "translation_en": "AND THUS, all praise is due to God, Sustainer of the heavens and Sustainer of the earth: the Sustainer of all the worlds!",
         "translation_ur": "پس خدا ہی کو ہر طرح کی تعریف (سزاوار) ہے جو آسمانوں کا مالک اور زمین کا مالک اور تمام جہان کا پروردگار ہے",
         "audio": {
@@ -443,7 +443,7 @@
       {
         "ayah": 37,
         "globalAyah": 4510,
-        "arabic": "وَلَهُ ٱلْكِبْرِيَآءُ فِى ٱلسَّمَٰوَٰتِ وَٱلْأَرْضِ ۖ وَهُوَ ٱلْعَزِيزُ ٱلْحَكِيمُ",
+        "arabic": "وَلَهُ الۡكِبۡرِيَآءُ فِى السَّمٰوٰتِ وَالۡاَرۡضِ​ وَهُوَ الۡعَزِيۡزُ الۡحَكِيۡمُ‏ ﻿﻿",
         "translation_en": "And His alone is all majesty in the heavens and on earth; and He alone is almighty, truly wise!",
         "translation_ur": "اور آسمانوں اور زمین میں اُسی کے لئے بڑائی ہے۔ اور وہ غالب اور دانا ہے",
         "audio": {

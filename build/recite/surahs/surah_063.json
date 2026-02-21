@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-02-14T12:15:08.516165+00:00",
-  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "generatedAt": "2026-02-21T01:13:53.663510+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
   "surah": {
     "surah": 63,
     "arabicName": "سُورَةُ المُنَافِقُونَ",
@@ -11,7 +11,7 @@
       {
         "ayah": 1,
         "globalAyah": 5189,
-        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ إِذَا جَآءَكَ ٱلْمُنَٰفِقُونَ قَالُوا۟ نَشْهَدُ إِنَّكَ لَرَسُولُ ٱللَّهِ ۗ وَٱللَّهُ يَعْلَمُ إِنَّكَ لَرَسُولُهُۥ وَٱللَّهُ يَشْهَدُ إِنَّ ٱلْمُنَٰفِقِينَ لَكَٰذِبُونَ",
+        "arabic": "اِذَا جَآءَكَ الۡمُنٰفِقُوۡنَ قَالُوۡا نَشۡهَدُ اِنَّكَ لَرَسُوۡلُ اللّٰهِ ​ۘ وَاللّٰهُ يَعۡلَمُ اِنَّكَ لَرَسُوۡلُهٗ ؕ وَاللّٰهُ يَشۡهَدُ اِنَّ الۡمُنٰفِقِيۡنَ لَـكٰذِبُوۡنَ​ ۚ‏",
         "translation_en": "WHEN THE HYPOCRITES come unto thee, they say, \"We bear witness that thou art indeed God's Apostle!\" But God knows that thou art truly His Apostle; and He bears witness that the hypocrites are indeed false [in their declaration of faith].",
         "translation_ur": "(اے محمدﷺ) جب منافق لوگ تمہارے پاس آتے ہیں تو (از راہ نفاق) کہتے ہیں کہ ہم اقرار کرتے ہیں کہ آپ بےشک خدا کے پیغمبر ہیں اور خدا جانتا ہے کہ درحقیقت تم اس کے پیغمبر ہو لیکن خدا ظاہر کئے دیتا ہے کہ منافق (دل سے اعتقاد نہ رکھنے کے لحاظ سے) جھوٹے ہیں",
         "audio": {
@@ -23,7 +23,7 @@
       {
         "ayah": 2,
         "globalAyah": 5190,
-        "arabic": "ٱتَّخَذُوٓا۟ أَيْمَٰنَهُمْ جُنَّةًۭ فَصَدُّوا۟ عَن سَبِيلِ ٱللَّهِ ۚ إِنَّهُمْ سَآءَ مَا كَانُوا۟ يَعْمَلُونَ",
+        "arabic": "اِتَّخَذُوۡۤا اَيۡمَانَهُمۡ جُنَّةً فَصَدُّوۡا عَنۡ سَبِيۡلِ اللّٰهِ​ؕ اِنَّهُمۡ سَآءَ مَا كَانُوۡا يَعۡمَلُوۡنَ‏",
         "translation_en": "They have made their oaths a cover [for their falseness], and thus they turn others away from the Path of God. Evil indeed is all that they are wont to do:",
         "translation_ur": "انہوں نے اپنی قسموں کو ڈھال بنا رکھا ہے اور ان کے ذریعے سے (لوگوں کو) راہ خدا سے روک رہے ہیں۔ کچھ شک نہیں کہ جو کام یہ کرتے ہیں برے ہیں",
         "audio": {
@@ -35,7 +35,7 @@
       {
         "ayah": 3,
         "globalAyah": 5191,
-        "arabic": "ذَٰلِكَ بِأَنَّهُمْ ءَامَنُوا۟ ثُمَّ كَفَرُوا۟ فَطُبِعَ عَلَىٰ قُلُوبِهِمْ فَهُمْ لَا يَفْقَهُونَ",
+        "arabic": "ذٰلِكَ بِاَنَّهُمۡ اٰمَنُوۡا ثُمَّ كَفَرُوۡا فَطُبِعَ عَلٰى قُلُوۡبِهِمۡ فَهُمۡ لَا يَفۡقَهُوۡنَ‏",
         "translation_en": "this, because [they profess that] they have attained to faith, whereas [inwardly] they deny the truth - and so, a seal has been set on their hearts so that they can no longer understand [what is true and what false].",
         "translation_ur": "یہ اس لئے کہ یہ (پہلے تو) ایمان لائے پھر کافر ہوگئے تو ان کے دلوں پر مہر لگادی گئی۔ سو اب یہ سمجھتے ہی نہیں",
         "audio": {
@@ -47,7 +47,7 @@
       {
         "ayah": 4,
         "globalAyah": 5192,
-        "arabic": "۞ وَإِذَا رَأَيْتَهُمْ تُعْجِبُكَ أَجْسَامُهُمْ ۖ وَإِن يَقُولُوا۟ تَسْمَعْ لِقَوْلِهِمْ ۖ كَأَنَّهُمْ خُشُبٌۭ مُّسَنَّدَةٌۭ ۖ يَحْسَبُونَ كُلَّ صَيْحَةٍ عَلَيْهِمْ ۚ هُمُ ٱلْعَدُوُّ فَٱحْذَرْهُمْ ۚ قَٰتَلَهُمُ ٱللَّهُ ۖ أَنَّىٰ يُؤْفَكُونَ",
+        "arabic": "وَاِذَا رَاَيۡتَهُمۡ تُعۡجِبُكَ اَجۡسَامُهُمۡ​ ؕ وَاِنۡ يَّقُوۡلُوۡا تَسۡمَعۡ لِقَوۡلِهِمۡ​ ؕ كَاَنَّهُمۡ خُشُبٌ مُّسَنَّدَةٌ   ​ؕ يَحۡسَبُوۡنَ كُلَّ صَيۡحَةٍ عَلَيۡهِمۡ​ ؕ هُمُ الۡعَدُوُّ فَاحۡذَرۡهُمۡ​ ؕ قَاتَلَهُمُ اللّٰهُ​ اَنّٰى يُـؤۡفَكُوۡنَ‏ ﻿﻿",
         "translation_en": "Now when thou seest them, their outward appearance may please thee; and when they speak, thou art inclined to lend ear to what they say. [But though they may seem as sure of themselves] as if they were timbers [firmly] propped up, they think that every shout is [directed] against them. They are the [real] enemies [of all faith], so beware of them. [They deserve the imprecation,] \"May God destroy them!\" How perverted are their minds!",
         "translation_ur": "اور جب تم ان (کے تناسب اعضا) کو دیکھتے ہو تو ان کے جسم تمہیں (کیا ہی) اچھے معلوم ہوتے ہیں۔ اور جب وہ گفتگو کرتے ہیں تو تم ان کی تقریر کو توجہ سے سنتے ہو (مگر فہم وادراک سے خالی) گویا لکڑیاں ہیں جو دیواروں سے لگائی گئی ہیں۔ (بزدل ایسے کہ) ہر زور کی آواز کو سمجھیں (کہ) ان پر بلا آئی۔ یہ (تمہارے) دشمن ہیں ان سے بےخوف نہ رہنا۔ خدا ان کو ہلاک کرے۔ یہ کہاں بہکے پھرتے ہیں",
         "audio": {
@@ -59,7 +59,7 @@
       {
         "ayah": 5,
         "globalAyah": 5193,
-        "arabic": "وَإِذَا قِيلَ لَهُمْ تَعَالَوْا۟ يَسْتَغْفِرْ لَكُمْ رَسُولُ ٱللَّهِ لَوَّوْا۟ رُءُوسَهُمْ وَرَأَيْتَهُمْ يَصُدُّونَ وَهُم مُّسْتَكْبِرُونَ",
+        "arabic": "وَاِذَا قِيۡلَ لَهُمۡ تَعَالَوۡا يَسۡتَغۡفِرۡ لَـكُمۡ رَسُوۡلُ اللّٰهِ لَـوَّوۡا رُءُوۡسَهُمۡ وَرَاَيۡتَهُمۡ يَصُدُّوۡنَ وَهُمۡ مُّسۡتَكۡبِرُوۡنَ‏",
         "translation_en": "for, when they are told, \"Come, the Apostle of God will pray [unto God] that you be forgiven\", they turn their heads away, and thou canst see how they draw back in their false pride.",
         "translation_ur": "اور جب ان سے کہا جائے کہ آؤ رسول خدا تمہارے لئے مغفرت مانگیں تو سر ہلا دیتے ہیں اور تم ان کو دیکھو کہ تکبر کرتے ہوئے منہ پھیر لیتے ہیں",
         "audio": {
@@ -71,7 +71,7 @@
       {
         "ayah": 6,
         "globalAyah": 5194,
-        "arabic": "سَوَآءٌ عَلَيْهِمْ أَسْتَغْفَرْتَ لَهُمْ أَمْ لَمْ تَسْتَغْفِرْ لَهُمْ لَن يَغْفِرَ ٱللَّهُ لَهُمْ ۚ إِنَّ ٱللَّهَ لَا يَهْدِى ٱلْقَوْمَ ٱلْفَٰسِقِينَ",
+        "arabic": "سَوَآءٌ عَلَيۡهِمۡ اَسۡتَغۡفَرۡتَ لَهُمۡ اَمۡ لَمۡ تَسۡتَغۡفِرۡ لَهُمۡؕ لَنۡ يَّغۡفِرَ اللّٰهُ لَهُمۡ​ؕ اِنَّ اللّٰهَ لَا يَهۡدِى الۡقَوۡمَ الۡفٰسِقِيۡنَ‏",
         "translation_en": "As for them it is all the same whether thou dost pray that they be forgiven or dost not pray for them: God will nor forgive them - for, behold, God does not bestow His guidance upon such iniquitous folk.",
         "translation_ur": "تم ان کے لئے مغفرت مانگو یا نہ مانگو ان کے حق میں برابر ہے۔ خدا ان کو ہرگز نہ بخشے گا۔ بےشک خدا نافرمانوں کو ہدایت نہیں دیا کرتا",
         "audio": {
@@ -83,7 +83,7 @@
       {
         "ayah": 7,
         "globalAyah": 5195,
-        "arabic": "هُمُ ٱلَّذِينَ يَقُولُونَ لَا تُنفِقُوا۟ عَلَىٰ مَنْ عِندَ رَسُولِ ٱللَّهِ حَتَّىٰ يَنفَضُّوا۟ ۗ وَلِلَّهِ خَزَآئِنُ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضِ وَلَٰكِنَّ ٱلْمُنَٰفِقِينَ لَا يَفْقَهُونَ",
+        "arabic": "هُمُ الَّذِيۡنَ يَقُوۡلُوۡنَ لَا تُنۡفِقُوۡا عَلٰى مَنۡ عِنۡدَ رَسُوۡلِ اللّٰهِ حَتّٰى يَنۡفَضُّوۡا​ؕ وَلِلّٰهِ خَزَآٮِٕنُ السَّمٰوٰتِ وَالۡاَرۡضِ وَلٰـكِنَّ الۡمُنٰفِقِيۡنَ لَا يَفۡقَهُوۡنَ‏",
         "translation_en": "It is they who say [to their compatriots], \"Do not spend anything on those who are with God's Apostle, so that they [may be forced to] leave.\" However, unto God belong the treasures of the heavens and the earth: but this truth the hypocrites cannot grasp.",
         "translation_ur": "یہی ہیں جو کہتے ہیں کہ جو لوگ رسول خدا کے پاس (رہتے) ہیں ان پر (کچھ) خرچ نہ کرو۔ یہاں تک کہ یہ (خود بخود) بھاگ جائیں۔ حالانکہ آسمانوں اور زمین کے خزانے خدا ہی کہ ہیں لیکن منافق نہیں سمجھتے",
         "audio": {
@@ -95,7 +95,7 @@
       {
         "ayah": 8,
         "globalAyah": 5196,
-        "arabic": "يَقُولُونَ لَئِن رَّجَعْنَآ إِلَى ٱلْمَدِينَةِ لَيُخْرِجَنَّ ٱلْأَعَزُّ مِنْهَا ٱلْأَذَلَّ ۚ وَلِلَّهِ ٱلْعِزَّةُ وَلِرَسُولِهِۦ وَلِلْمُؤْمِنِينَ وَلَٰكِنَّ ٱلْمُنَٰفِقِينَ لَا يَعْلَمُونَ",
+        "arabic": "يَقُوۡلُوۡنَ لَٮِٕنۡ رَّجَعۡنَاۤ اِلَى الۡمَدِيۡنَةِ لَيُخۡرِجَنَّ الۡاَعَزُّ مِنۡهَا الۡاَذَلَّ ​ؕ وَلِلّٰهِ الۡعِزَّةُ وَلِرَسُوۡلِهٖ وَلِلۡمُؤۡمِنِيۡنَ وَلٰـكِنَّ الۡمُنٰفِقِيۡنَ لَا يَعۡلَمُوۡنَ‏",
         "translation_en": "[And] they say, \"Indeed, when we return to the City [we,] the ones most worthy of honour will surely drive out therefrom those most contemptible ones!\" However, all honour belongs to God, and [thus] to His Apostle and those who believe [in God]: but of this the hypocrites are not aware.",
         "translation_ur": "کہتے ہیں کہ اگر ہم لوٹ کر مدینے پہنچے تو عزت والے ذلیل لوگوں کو وہاں سے نکال باہر کریں گے۔ حالانکہ عزت خدا کی ہے اور اس کے رسول کی اور مومنوں کی لیکن منافق نہیں جانتے",
         "audio": {
@@ -107,7 +107,7 @@
       {
         "ayah": 9,
         "globalAyah": 5197,
-        "arabic": "يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ لَا تُلْهِكُمْ أَمْوَٰلُكُمْ وَلَآ أَوْلَٰدُكُمْ عَن ذِكْرِ ٱللَّهِ ۚ وَمَن يَفْعَلْ ذَٰلِكَ فَأُو۟لَٰٓئِكَ هُمُ ٱلْخَٰسِرُونَ",
+        "arabic": "يٰۤاَيُّهَا الَّذِيۡنَ اٰمَنُوۡا لَا تُلۡهِكُمۡ اَمۡوَالُكُمۡ وَلَاۤ اَوۡلَادُكُمۡ عَنۡ ذِكۡرِ اللّٰهِ​ۚ وَمَنۡ يَّفۡعَلۡ ذٰلِكَ فَاُولٰٓٮِٕكَ هُمُ الۡخٰسِرُوۡنَ‏ ﻿﻿",
         "translation_en": "O YOU who have attained to faith! Let not your worldly goods or your children make you oblivious of the remembrance of God: for If any behave thus - it is they, they who are the losers!",
         "translation_ur": "مومنو! تمہارا مال اور اولاد تم کو خدا کی یاد سے غافل نہ کردے۔ اور جو ایسا کرے گا تو وہ لوگ خسارہ اٹھانے والے ہیں",
         "audio": {
@@ -119,7 +119,7 @@
       {
         "ayah": 10,
         "globalAyah": 5198,
-        "arabic": "وَأَنفِقُوا۟ مِن مَّا رَزَقْنَٰكُم مِّن قَبْلِ أَن يَأْتِىَ أَحَدَكُمُ ٱلْمَوْتُ فَيَقُولَ رَبِّ لَوْلَآ أَخَّرْتَنِىٓ إِلَىٰٓ أَجَلٍۢ قَرِيبٍۢ فَأَصَّدَّقَ وَأَكُن مِّنَ ٱلصَّٰلِحِينَ",
+        "arabic": "وَاَنۡفِقُوۡا مِنۡ مَّا رَزَقۡنٰكُمۡ مِّنۡ قَبۡلِ اَنۡ يَّاۡتِىَ اَحَدَكُمُ الۡمَوۡتُ فَيَقُوۡلَ رَبِّ لَوۡلَاۤ اَخَّرۡتَنِىۡۤ اِلٰٓى اَجَلٍ قَرِيۡبٍۙ فَاَصَّدَّقَ وَاَكُنۡ مِّنَ الصّٰلِحِيۡنَ‏",
         "translation_en": "And spend on others out of what We have provided for you as sustenance, ere there come a time when death approaches any of you, and he then says, \"O my Sustainer! If only Thou wouldst grant me a delay for a short while, so that I could give in charity and be among the righteous!\"",
         "translation_ur": "اور جو (مال) ہم نے تم کو دیا ہے اس میں سے اس (وقت) سے پیشتر خرچ کرلو کہ تم میں سے کسی کی موت آجائے تو (اس وقت) کہنے لگے کہ اے میرے پروردگار تو نے مجھے تھوڑی سی اور مہلت کیوں نہ دی تاکہ میں خیرات کرلیتا اور نیک لوگوں میں داخل ہوجاتا",
         "audio": {
@@ -131,7 +131,7 @@
       {
         "ayah": 11,
         "globalAyah": 5199,
-        "arabic": "وَلَن يُؤَخِّرَ ٱللَّهُ نَفْسًا إِذَا جَآءَ أَجَلُهَا ۚ وَٱللَّهُ خَبِيرٌۢ بِمَا تَعْمَلُونَ",
+        "arabic": "وَلَنۡ يُّؤَخِّرَ اللّٰهُ نَفۡسًا اِذَا جَآءَ اَجَلُهَا​ؕ وَاللّٰهُ خَبِيۡرٌۢ بِمَا تَعۡمَلُوۡنَ‏",
         "translation_en": "But never does God grant a delay to a human being when his term has come; and God is fully aware of all that you do.",
         "translation_ur": "اور جب کسی کی موت آجاتی ہے تو خدا اس کو ہرگز مہلت نہیں دیتا اور جو کچھ تم کرتے ہو خدا اس سے خبردار ہے",
         "audio": {

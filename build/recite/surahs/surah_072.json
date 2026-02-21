@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-02-14T12:15:13.568437+00:00",
-  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "generatedAt": "2026-02-21T01:14:06.536102+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
   "surah": {
     "surah": 72,
     "arabicName": "سُورَةُ الجِنِّ",
@@ -11,7 +11,7 @@
       {
         "ayah": 1,
         "globalAyah": 5448,
-        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ قُلْ أُوحِىَ إِلَىَّ أَنَّهُ ٱسْتَمَعَ نَفَرٌۭ مِّنَ ٱلْجِنِّ فَقَالُوٓا۟ إِنَّا سَمِعْنَا قُرْءَانًا عَجَبًۭا",
+        "arabic": "قُلۡ اُوۡحِىَ اِلَىَّ اَنَّهُ اسۡتَمَعَ نَفَرٌ مِّنَ الۡجِنِّ فَقَالُوۡۤا اِنَّا سَمِعۡنَا قُرۡاٰنًاعَجَبًا ۙ‏",
         "translation_en": "SAY: \"It has been revealed to me that some of the unseen beings gave ear [to this divine writ], and thereupon said [unto their fellow-beings]: \"'Verily, we have heard a wondrous discourse,",
         "translation_ur": "(اے پیغمبر لوگوں سے) کہہ دو کہ میرے پاس وحی آئی ہے کہ جنوں کی ایک جماعت نے (اس کتاب کو) سنا تو کہنے لگے کہ ہم نے ایک عجیب قرآن سنا",
         "audio": {
@@ -23,7 +23,7 @@
       {
         "ayah": 2,
         "globalAyah": 5449,
-        "arabic": "يَهْدِىٓ إِلَى ٱلرُّشْدِ فَـَٔامَنَّا بِهِۦ ۖ وَلَن نُّشْرِكَ بِرَبِّنَآ أَحَدًۭا",
+        "arabic": "يَّهۡدِىۡۤ اِلَى الرُّشۡدِ فَاٰمَنَّا بِهٖ​ ؕ وَلَنۡ نُّشۡرِكَ بِرَبِّنَاۤ اَحَدًا ۙ‏",
         "translation_en": "guiding towards consciousness of what is right; and so We have come to believe in it. And we shall never ascribe divinity to anyone beside our Sustainer,",
         "translation_ur": "جو بھلائی کا رستہ بتاتا ہے سو ہم اس پر ایمان لے آئے۔ اور ہم اپنے پروردگار کے ساتھ کسی کو شریک نہیں بنائیں گے",
         "audio": {
@@ -35,7 +35,7 @@
       {
         "ayah": 3,
         "globalAyah": 5450,
-        "arabic": "وَأَنَّهُۥ تَعَٰلَىٰ جَدُّ رَبِّنَا مَا ٱتَّخَذَ صَٰحِبَةًۭ وَلَا وَلَدًۭا",
+        "arabic": "وَّاَنَّهٗ تَعٰلٰى جَدُّ رَبِّنَا مَا اتَّخَذَ صَاحِبَةً وَّلَا وَلَدًا ۙ‏ ﻿﻿",
         "translation_en": "for [we know] that sublimely exalted is our Sustainer's majesty: no consort has He ever taken unto Himself, nor a son!",
         "translation_ur": "اور یہ کہ ہمارے پروردگار کی عظمت (شان) بہت بڑی ہے اور وہ نہ بیوی رکھتا ہے نہ اولاد",
         "audio": {
@@ -47,7 +47,7 @@
       {
         "ayah": 4,
         "globalAyah": 5451,
-        "arabic": "وَأَنَّهُۥ كَانَ يَقُولُ سَفِيهُنَا عَلَى ٱللَّهِ شَطَطًۭا",
+        "arabic": "وَّ اَنَّهٗ كَانَ يَقُوۡلُ سَفِيۡهُنَا عَلَى اللّٰهِ شَطَطًا ۙ‏",
         "translation_en": "\"'And [now we know] that the foolish among us were wont to say outrageous things about God,",
         "translation_ur": "اور یہ کہ ہم میں سے بعض بےوقوف خدا کے بارے میں جھوٹ افتراء کرتا ہے",
         "audio": {
@@ -59,7 +59,7 @@
       {
         "ayah": 5,
         "globalAyah": 5452,
-        "arabic": "وَأَنَّا ظَنَنَّآ أَن لَّن تَقُولَ ٱلْإِنسُ وَٱلْجِنُّ عَلَى ٱللَّهِ كَذِبًۭا",
+        "arabic": "وَّاَنَّا ظَنَنَّاۤ اَنۡ لَّنۡ تَقُوۡلَ الۡاِنۡسُ وَالۡجِنُّ عَلَى اللّٰهِ كَذِبًا ۙ‏",
         "translation_en": "and that [we were mistaken when] we thought that neither man nor [any of] the invisible forces would ever tell a lie about God.",
         "translation_ur": "اور ہمارا (یہ) خیال تھا کہ انسان اور جن خدا کی نسبت جھوٹ نہیں بولتے",
         "audio": {
@@ -71,7 +71,7 @@
       {
         "ayah": 6,
         "globalAyah": 5453,
-        "arabic": "وَأَنَّهُۥ كَانَ رِجَالٌۭ مِّنَ ٱلْإِنسِ يَعُوذُونَ بِرِجَالٍۢ مِّنَ ٱلْجِنِّ فَزَادُوهُمْ رَهَقًۭا",
+        "arabic": "وَّاَنَّهٗ كَانَ رِجَالٌ مِّنَ الۡاِنۡسِ يَعُوۡذُوۡنَ بِرِجَالٍ مِّنَ الۡجِنِّ فَزَادُوۡهُمۡ رَهَقًا ۙ‏",
         "translation_en": "Yet [it has always happened] that certain kinds of humans would seek refuge with certain kinds of [such] invisible forces: but these only increased their confusion –",
         "translation_ur": "اور یہ کہ بعض بنی آدم بعض جنات کی پناہ پکڑا کرتے تھے (اس سے) ان کی سرکشی اور بڑھ گئی تھی",
         "audio": {
@@ -83,7 +83,7 @@
       {
         "ayah": 7,
         "globalAyah": 5454,
-        "arabic": "وَأَنَّهُمْ ظَنُّوا۟ كَمَا ظَنَنتُمْ أَن لَّن يَبْعَثَ ٱللَّهُ أَحَدًۭا",
+        "arabic": "وَّاَنَّهُمۡ ظَنُّوۡا كَمَا ظَنَنۡتُمۡ اَنۡ لَّنۡ يَّبۡعَثَ اللّٰهُ اَحَدًا ۙ‏",
         "translation_en": "so much so that they came to think, as you [once] thought, that God would never [again] send forth anyone [as His apostle].",
         "translation_ur": "اور یہ کہ ان کا بھی یہی اعتقاد تھا جس طرح تمہارا تھا کہ خدا کسی کو نہیں جلائے گا",
         "audio": {
@@ -95,7 +95,7 @@
       {
         "ayah": 8,
         "globalAyah": 5455,
-        "arabic": "وَأَنَّا لَمَسْنَا ٱلسَّمَآءَ فَوَجَدْنَٰهَا مُلِئَتْ حَرَسًۭا شَدِيدًۭا وَشُهُبًۭا",
+        "arabic": "وَّاَنَّا لَمَسۡنَا السَّمَآءَ فَوَجَدۡنٰهَا مُلِئَتۡ حَرَسًا شَدِيۡدًا وَّشُهُبًا ۙ‏",
         "translation_en": "\"'And [so it happened] that we reached out towards heaven: but we found it filled with mighty guards and flames,",
         "translation_ur": "اور یہ کہ ہم نے آسمان کو ٹٹولا تو اس کو مضبوط چوکیداروں اور انگاروں سے سے بھرا پایا",
         "audio": {
@@ -107,7 +107,7 @@
       {
         "ayah": 9,
         "globalAyah": 5456,
-        "arabic": "وَأَنَّا كُنَّا نَقْعُدُ مِنْهَا مَقَٰعِدَ لِلسَّمْعِ ۖ فَمَن يَسْتَمِعِ ٱلْءَانَ يَجِدْ لَهُۥ شِهَابًۭا رَّصَدًۭا",
+        "arabic": "وَّاَنَّا كُنَّا نَقۡعُدُ مِنۡهَا مَقَاعِدَ لِلسَّمۡعِ​ ؕ فَمَنۡ يَّسۡتَمِعِ الۡاٰنَ يَجِدۡ لَهٗ شِهَابًا رَّصَدًا ۙ‏",
         "translation_en": "notwithstanding that we were established in positions [which we had thought well-suited] to listening to [whatever secrets might be in] it: and anyone who now [or ever] tries to listen will [likewise] find a flame lying in wait for him!",
         "translation_ur": "اور یہ کہ پہلے ہم وہاں بہت سے مقامات میں (خبریں) سننے کے لئے بیٹھا کرتے تھے۔ اب کوئی سننا چاہے تو اپنے لئے انگارا تیار پائے",
         "audio": {
@@ -119,7 +119,7 @@
       {
         "ayah": 10,
         "globalAyah": 5457,
-        "arabic": "وَأَنَّا لَا نَدْرِىٓ أَشَرٌّ أُرِيدَ بِمَن فِى ٱلْأَرْضِ أَمْ أَرَادَ بِهِمْ رَبُّهُمْ رَشَدًۭا",
+        "arabic": "وَّاَنَّا لَا نَدۡرِىۡۤ اَشَرٌّ اُرِيۡدَ بِمَنۡ فِى الۡاَرۡضِ اَمۡ اَرَادَ بِهِمۡ رَبُّهُمۡ رَشَدًا ۙ‏",
         "translation_en": "\"'And [now we have become aware] that we [created beings] may not know whether evil fortune is intended for [any of] those who live on earth, or whether it is their Sustainer’s will to endow them with consciousness of what is right:",
         "translation_ur": "اور یہ کہ ہمیں معلوم نہیں کہ اس سے اہل زمین کے حق میں برائی مقصود ہے یا ان کے پروردگار نے ان کی بھلائی کا ارادہ فرمایا ہے",
         "audio": {
@@ -131,7 +131,7 @@
       {
         "ayah": 11,
         "globalAyah": 5458,
-        "arabic": "وَأَنَّا مِنَّا ٱلصَّٰلِحُونَ وَمِنَّا دُونَ ذَٰلِكَ ۖ كُنَّا طَرَآئِقَ قِدَدًۭا",
+        "arabic": "وَّاَنَّا مِنَّا الصّٰلِحُوۡنَ وَمِنَّا دُوۡنَ ذٰلِكَ​ؕ كُنَّا طَرَآٮِٕقَ قِدَدًا ۙ‏",
         "translation_en": "Just as [we do not know how it happens] that some from among us are righteous, while some of us are [far] below that: we have always followed widely divergent paths.",
         "translation_ur": "اور یہ کہ ہم میں کوئی نیک ہیں اور کوئی اور طرح کے۔ ہمارے کئی طرح کے مذہب ہیں",
         "audio": {
@@ -143,7 +143,7 @@
       {
         "ayah": 12,
         "globalAyah": 5459,
-        "arabic": "وَأَنَّا ظَنَنَّآ أَن لَّن نُّعْجِزَ ٱللَّهَ فِى ٱلْأَرْضِ وَلَن نُّعْجِزَهُۥ هَرَبًۭا",
+        "arabic": "وَّاَنَّا ظَنَنَّاۤ اَنۡ لَّنۡ نُّعۡجِزَ اللّٰهَ فِى الۡاَرۡضِ وَلَنۡ نُّعۡجِزَهٗ هَرَبًا ۙ‏",
         "translation_en": "\"'And, withal, we have come to know that we can never elude God [while we live] on earth, and that we can never elude Him by escaping [from life].",
         "translation_ur": "اور یہ کہ ہم نے یقین کرلیا ہے کہ ہم زمین میں (خواہ کہیں ہوں) خدا کو ہرا نہیں سکتے اور نہ بھاگ کر اس کو تھکا سکتے ہیں",
         "audio": {
@@ -155,7 +155,7 @@
       {
         "ayah": 13,
         "globalAyah": 5460,
-        "arabic": "وَأَنَّا لَمَّا سَمِعْنَا ٱلْهُدَىٰٓ ءَامَنَّا بِهِۦ ۖ فَمَن يُؤْمِنۢ بِرَبِّهِۦ فَلَا يَخَافُ بَخْسًۭا وَلَا رَهَقًۭا",
+        "arabic": "وَّاَنَّا لَمَّا سَمِعۡنَا الۡهُدٰٓى اٰمَنَّا بِهٖ​ ؕ فَمَنۡ يُّؤۡمِنۡۢ بِرَبِّهٖ فَلَا يَخَافُ بَخۡسًا وَّلَا رَهَقًا ۙ‏",
         "translation_en": "Hence, as soon as we heard this [call to His] guidance, we came to believe in it: and he who believes in his Sustainer need never have fear of loss or injustice.",
         "translation_ur": "اور جب ہم نے ہدایت (کی کتاب) سنی اس پر ایمان لے آئے۔ تو جو شخص اپنے پروردگار پر ایمان لاتا ہے اس کو نہ نقصان کا خوف ہے نہ ظلم کا",
         "audio": {
@@ -167,7 +167,7 @@
       {
         "ayah": 14,
         "globalAyah": 5461,
-        "arabic": "وَأَنَّا مِنَّا ٱلْمُسْلِمُونَ وَمِنَّا ٱلْقَٰسِطُونَ ۖ فَمَنْ أَسْلَمَ فَأُو۟لَٰٓئِكَ تَحَرَّوْا۟ رَشَدًۭا",
+        "arabic": "وَّاَنَّا مِنَّا الۡمُسۡلِمُوۡنَ وَمِنَّا الۡقٰسِطُوۡنَ​ؕ فَمَنۡ اَسۡلَمَ فَاُولٰٓٮِٕكَ تَحَرَّوۡا رَشَدًا‏",
         "translation_en": "\"'Yet [it is true] that among us are such as have surrendered themselves to God - just as there are among us such as have abandoned themselves to wrongdoing. Now as for those who surrender themselves to Him - it is they that have attained to consciousness of what is right;",
         "translation_ur": "اور یہ کہ ہم میں بعض فرمانبردار ہیں اور بعض (نافرمان) گنہگار ہیں۔ تو جو فرمانبردار ہوئے وہ سیدھے رستے پر چلے",
         "audio": {
@@ -179,7 +179,7 @@
       {
         "ayah": 15,
         "globalAyah": 5462,
-        "arabic": "وَأَمَّا ٱلْقَٰسِطُونَ فَكَانُوا۟ لِجَهَنَّمَ حَطَبًۭا",
+        "arabic": "وَاَمَّا الۡقٰسِطُوۡنَ فَكَانُوۡا لِجَهَنَّمَ حَطَبًا ۙ‏",
         "translation_en": "but as for those who abandon themselves to wrongdoing - they are indeed but fuel for [the fires of] hell!’\"",
         "translation_ur": "اور جو گنہگار ہوئے وہ دوزخ کا ایندھن بنے",
         "audio": {
@@ -191,7 +191,7 @@
       {
         "ayah": 16,
         "globalAyah": 5463,
-        "arabic": "وَأَلَّوِ ٱسْتَقَٰمُوا۟ عَلَى ٱلطَّرِيقَةِ لَأَسْقَيْنَٰهُم مَّآءً غَدَقًۭا",
+        "arabic": "وَّاَنْ لَّوِ اسۡتَقَامُوۡا عَلَى الطَّرِيۡقَةِ لَاَسۡقَيۡنٰهُمۡ مَّآءً غَدَقًا ۙ‏",
         "translation_en": "[KNOW,] THEN, that if they [who have heard Our call] keep firmly to the [right] path, We shall certainly shower them with blessings abundant,",
         "translation_ur": "اور (اے پیغمبر) یہ (بھی ان سے کہہ دو) کہ اگر یہ لوگ سیدھے رستے پر رہتے تو ہم ان کے پینے کو بہت سا پانی دیتے",
         "audio": {
@@ -203,7 +203,7 @@
       {
         "ayah": 17,
         "globalAyah": 5464,
-        "arabic": "لِّنَفْتِنَهُمْ فِيهِ ۚ وَمَن يُعْرِضْ عَن ذِكْرِ رَبِّهِۦ يَسْلُكْهُ عَذَابًۭا صَعَدًۭا",
+        "arabic": "لِّنَفۡتِنَهُمۡ فِيۡهِ​ ؕ وَمَنۡ يُّعۡرِضۡ عَنۡ ذِكۡرِ رَبِّهٖ يَسۡلُكۡهُ عَذَابًا صَعَدًا ۙ‏",
         "translation_en": "so as to test them by this means: for he who shall turn away from the remembrance of his Sustainer, him will He cause to undergo suffering most grievous.",
         "translation_ur": "تاکہ اس سے ان کی آزمائش کریں۔ اور جو شخص اپنے پروردگار کی یاد سے منہ پھیرے گا وہ اس کو سخت عذاب میں داخل کرے گا",
         "audio": {
@@ -215,7 +215,7 @@
       {
         "ayah": 18,
         "globalAyah": 5465,
-        "arabic": "وَأَنَّ ٱلْمَسَٰجِدَ لِلَّهِ فَلَا تَدْعُوا۟ مَعَ ٱللَّهِ أَحَدًۭا",
+        "arabic": "وَّاَنَّ الۡمَسٰجِدَ لِلّٰهِ فَلَا تَدۡعُوۡا مَعَ اللّٰهِ اَحَدًا ۙ‏",
         "translation_en": "And [know] that all worship is due to God [alone]: hence, do not invoke anyone side by side with God!",
         "translation_ur": "اور یہ کہ مسجدیں (خاص) خدا کی ہیں تو خدا کے ساتھ کسی اور کی عبادت نہ کرو",
         "audio": {
@@ -227,7 +227,7 @@
       {
         "ayah": 19,
         "globalAyah": 5466,
-        "arabic": "وَأَنَّهُۥ لَمَّا قَامَ عَبْدُ ٱللَّهِ يَدْعُوهُ كَادُوا۟ يَكُونُونَ عَلَيْهِ لِبَدًۭا",
+        "arabic": "وَّاَنَّهٗ لَمَّا قَامَ عَبۡدُ اللّٰهِ يَدۡعُوۡهُ كَادُوۡا يَكُوۡنُوۡنَ عَلَيۡهِ لِبَدًا ؕ‏",
         "translation_en": "Yet [thus it is] that whenever a servant of God stands up in prayer to Him, they [who are bent on denying the truth] would gladly overwhelm him with their crowds.",
         "translation_ur": "اور جب خدا کے بندے (محمدﷺ) اس کی عبادت کو کھڑے ہوئے تو کافر ان کے گرد ہجوم کرلینے کو تھے",
         "audio": {
@@ -239,7 +239,7 @@
       {
         "ayah": 20,
         "globalAyah": 5467,
-        "arabic": "قُلْ إِنَّمَآ أَدْعُوا۟ رَبِّى وَلَآ أُشْرِكُ بِهِۦٓ أَحَدًۭا",
+        "arabic": "قُلۡ اِنَّمَاۤ اَدۡعُوۡا رَبِّىۡ وَلَاۤ اُشۡرِكُ بِهٖۤ اَحَدًا‏",
         "translation_en": "Say: \"I invoke my Sustainer alone, for I do not ascribe divinity to anyone beside Him.\"",
         "translation_ur": "کہہ دو کہ میں تو اپنے پروردگار ہی کی عبادت کرتا ہوں اور کسی کو اس کا شریک نہیں بناتا",
         "audio": {
@@ -251,7 +251,7 @@
       {
         "ayah": 21,
         "globalAyah": 5468,
-        "arabic": "قُلْ إِنِّى لَآ أَمْلِكُ لَكُمْ ضَرًّۭا وَلَا رَشَدًۭا",
+        "arabic": "قُلۡ اِنِّىۡ لَاۤ اَمۡلِكُ لَـكُمۡ ضَرًّا وَّلَا رَشَدًا‏",
         "translation_en": "Say: \"Verily, it is not in my power to cause you harm or to endow you with consciousness of what is right.\"",
         "translation_ur": "(یہ بھی) کہہ دو کہ میں تمہارے حق میں نقصان اور نفع کا کچھ اختیار نہیں رکھتا",
         "audio": {
@@ -263,7 +263,7 @@
       {
         "ayah": 22,
         "globalAyah": 5469,
-        "arabic": "قُلْ إِنِّى لَن يُجِيرَنِى مِنَ ٱللَّهِ أَحَدٌۭ وَلَنْ أَجِدَ مِن دُونِهِۦ مُلْتَحَدًا",
+        "arabic": "قُلۡ اِنِّىۡ لَنۡ يُّجِيۡرَنِىۡ مِنَ اللّٰهِ اَحَدٌ  ۙ وَّلَنۡ اَجِدَ مِنۡ دُوۡنِهٖ مُلۡتَحَدًا ۙ‏",
         "translation_en": "Say: \"Verily, no one could ever protect me from God, nor could I ever find a place to hide from Him",
         "translation_ur": "(یہ بھی) کہہ دو کہ خدا (کے عذاب) سے مجھے کوئی پناہ نہیں دے سکتا۔ اور میں اس کے سوا کہیں جائے پناہ نہیں دیکھتا",
         "audio": {
@@ -275,7 +275,7 @@
       {
         "ayah": 23,
         "globalAyah": 5470,
-        "arabic": "إِلَّا بَلَٰغًۭا مِّنَ ٱللَّهِ وَرِسَٰلَٰتِهِۦ ۚ وَمَن يَعْصِ ٱللَّهَ وَرَسُولَهُۥ فَإِنَّ لَهُۥ نَارَ جَهَنَّمَ خَٰلِدِينَ فِيهَآ أَبَدًا",
+        "arabic": "اِلَّا بَلٰغًا مِّنَ اللّٰهِ وَرِسٰلٰتِهٖ​ ؕ وَمَنۡ يَّعۡصِ اللّٰهَ وَرَسُوۡلَهٗ فَاِنَّ لَهٗ نَارَ جَهَنَّمَ خٰلِدِيۡنَ فِيۡهَاۤ اَبَدًا ؕ‏",
         "translation_en": "if I should fail to convey [to the world whatever illumination comes to me] from God and His messages.\" Now as for him who rebels against God and His Apostle - verily, the fire of hell awaits him, therein to abide beyond the count of time.",
         "translation_ur": "ہاں خدا کی طرف سے احکام کا اور اس کے پیغاموں کا پہنچا دینا (ہی) میرے ذمے ہے۔ اور جو شخص خدا اور اس کے پیغمبر کی نافرمانی کرے گا تو ایسوں کے لئے جہنم کی آگ ہے ہمیشہ ہمیشہ اس میں رہیں گے",
         "audio": {
@@ -287,7 +287,7 @@
       {
         "ayah": 24,
         "globalAyah": 5471,
-        "arabic": "حَتَّىٰٓ إِذَا رَأَوْا۟ مَا يُوعَدُونَ فَسَيَعْلَمُونَ مَنْ أَضْعَفُ نَاصِرًۭا وَأَقَلُّ عَدَدًۭا",
+        "arabic": "حَتّٰٓى اِذَا رَاَوۡا مَا يُوۡعَدُوۡنَ فَسَيَعۡلَمُوۡنَ مَنۡ اَضۡعَفُ نَاصِرًا وَّاَقَلُّ عَدَدًا‏",
         "translation_en": "[Let them, then, wait] until the time when they behold that [doom] of which they were forewarned: for then they will come to understand which [kind of man] is more helpless and counts for less!",
         "translation_ur": "یہاں تک کہ جب یہ لوگ وہ (دن) دیکھ لیں گے جس کا ان سے وعدہ کیا جاتا ہے تب ان کو معلوم ہو جائے گا کہ مددگار کس کے کمزور اور شمار کن کا تھوڑا ہے",
         "audio": {
@@ -299,7 +299,7 @@
       {
         "ayah": 25,
         "globalAyah": 5472,
-        "arabic": "قُلْ إِنْ أَدْرِىٓ أَقَرِيبٌۭ مَّا تُوعَدُونَ أَمْ يَجْعَلُ لَهُۥ رَبِّىٓ أَمَدًا",
+        "arabic": "قُلۡ اِنۡ اَدۡرِىۡۤ اَقَرِيۡبٌ مَّا تُوۡعَدُوۡنَ اَمۡ يَجۡعَلُ لَهٗ رَبِّىۡۤ اَمَدًا‏",
         "translation_en": "Say: \"I do not know whether that [doom] of which you were forewarned is near, or whether my Sustainer has set for it a distant term.\"",
         "translation_ur": "کہہ دو کہ جس (دن) کا تم سے وعدہ کیا جاتا ہے میں نہیں جانتا کہ وہ (عن) قریب (آنے والا ہے) یا میرے پروردگار نے اس کی مدت دراز کر دی ہے",
         "audio": {
@@ -311,7 +311,7 @@
       {
         "ayah": 26,
         "globalAyah": 5473,
-        "arabic": "عَٰلِمُ ٱلْغَيْبِ فَلَا يُظْهِرُ عَلَىٰ غَيْبِهِۦٓ أَحَدًا",
+        "arabic": "عٰلِمُ الۡغَيۡبِ فَلَا يُظۡهِرُ عَلٰى غَيۡبِهٖۤ اَحَدًا ۙ‏",
         "translation_en": "He [alone] knows that which is beyond the reach of a created being's perception, and to none does He disclose aught of the mysteries of His Own unfathomable knowledge,",
         "translation_ur": "غیب (کی بات) جاننے والا ہے اور کسی پر اپنے غیب کو ظاہر نہیں کرتا",
         "audio": {
@@ -323,7 +323,7 @@
       {
         "ayah": 27,
         "globalAyah": 5474,
-        "arabic": "إِلَّا مَنِ ٱرْتَضَىٰ مِن رَّسُولٍۢ فَإِنَّهُۥ يَسْلُكُ مِنۢ بَيْنِ يَدَيْهِ وَمِنْ خَلْفِهِۦ رَصَدًۭا",
+        "arabic": "اِلَّا مَنِ ارۡتَضٰى مِنۡ رَّسُوۡلٍ فَاِنَّهٗ يَسۡلُكُ مِنۡۢ بَيۡنِ يَدَيۡهِ وَمِنۡ خَلۡفِهٖ رَصَدًا ۙ‏",
         "translation_en": "unless it be to an apostle whom He has been pleased to elect [there for]: and then He sends forth [the forces of heaven] to watch over him in whatever lies open before him and in what is beyond his ken –",
         "translation_ur": "ہاں جس پیغمبر کو پسند فرمائے تو اس (کو غیب کی باتیں بتا دیتا اور اس) کے آگے اور پیچھے نگہبان مقرر کر دیتا ہے",
         "audio": {
@@ -335,7 +335,7 @@
       {
         "ayah": 28,
         "globalAyah": 5475,
-        "arabic": "لِّيَعْلَمَ أَن قَدْ أَبْلَغُوا۟ رِسَٰلَٰتِ رَبِّهِمْ وَأَحَاطَ بِمَا لَدَيْهِمْ وَأَحْصَىٰ كُلَّ شَىْءٍ عَدَدًۢا",
+        "arabic": "لِّيَـعۡلَمَ اَنۡ قَدۡ اَبۡلَغُوۡا رِسٰلٰتِ رَبِّهِمۡ وَاَحَاطَ بِمَا لَدَيۡهِمۡ وَاَحۡصٰى كُلَّ شَىۡءٍ عَدَدًا‏",
         "translation_en": "so as to make manifest that it is indeed [but] their Sustainer's messages that these [apostles] deliver: for it is He who encompasses [with His knowledge] all that they have [to say], just as He takes count, one by one, of everything [that exists].",
         "translation_ur": "تاکہ معلوم فرمائے کہ انہوں نے اپنے پروردگار کے پیغام پہنچا دیئے ہیں اور (یوں تو) اس نے ان کی سب چیزوں کو ہر طرف سے قابو کر رکھا ہے اور ایک ایک چیز گن رکھی ہے",
         "audio": {

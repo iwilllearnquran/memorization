@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-02-14T12:14:44.066817+00:00",
-  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "generatedAt": "2026-02-21T01:11:50.252003+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
   "surah": {
     "surah": 25,
     "arabicName": "سُورَةُ الفُرۡقَانِ",
@@ -11,7 +11,7 @@
       {
         "ayah": 1,
         "globalAyah": 2856,
-        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ تَبَارَكَ ٱلَّذِى نَزَّلَ ٱلْفُرْقَانَ عَلَىٰ عَبْدِهِۦ لِيَكُونَ لِلْعَٰلَمِينَ نَذِيرًا",
+        "arabic": "تَبٰـرَكَ الَّذِىۡ نَزَّلَ الۡـفُرۡقَانَ عَلٰى عَبۡدِهٖ لِيَكُوۡنَ لِلۡعٰلَمِيۡنَ نَذِيۡرَا ۙ‏",
         "translation_en": "Hallowed is He who from on high, step by step, has bestowed upon His servant the standard by which to discern the true from the false, so that to all the world it might be a warning:",
         "translation_ur": "وہ (خدائے غزوجل) بہت ہی بابرکت ہے جس نے اپنے بندے پر قرآن نازل فرمایا تاکہ اہل حال کو ہدایت کرے",
         "audio": {
@@ -23,7 +23,7 @@
       {
         "ayah": 2,
         "globalAyah": 2857,
-        "arabic": "ٱلَّذِى لَهُۥ مُلْكُ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضِ وَلَمْ يَتَّخِذْ وَلَدًۭا وَلَمْ يَكُن لَّهُۥ شَرِيكٌۭ فِى ٱلْمُلْكِ وَخَلَقَ كُلَّ شَىْءٍۢ فَقَدَّرَهُۥ تَقْدِيرًۭا",
+        "arabic": "اۨلَّذِىۡ لَهٗ مُلۡكُ السَّمٰوٰتِ وَالۡاَرۡضِ وَلَمۡ يَتَّخِذۡ وَلَدًا وَّلَمۡ يَكُنۡ لَّهٗ شَرِيۡكٌ فِى الۡمُلۡكِ وَخَلَقَ كُلَّ شَىۡءٍ فَقَدَّرَهٗ تَقۡدِيۡرًا‏ ﻿﻿",
         "translation_en": "He to whom the dominion over the heavens and the earth belongs, and who begets no offspring, and has no partner in His dominion: for it is He who creates every thing and determines its nature in accordance with [His own] design.",
         "translation_ur": "وہی کہ آسمان اور زمین کی بادشاہی اسی کی ہے اور جس نے (کسی کو) بیٹا نہیں بنایا اور جس کا بادشاہی میں کوئی شریک نہیں اور جس نے ہر چیز کو پیدا کیا اور پھر اس کا ایک اندازہ ٹھہرایا",
         "audio": {
@@ -35,7 +35,7 @@
       {
         "ayah": 3,
         "globalAyah": 2858,
-        "arabic": "وَٱتَّخَذُوا۟ مِن دُونِهِۦٓ ءَالِهَةًۭ لَّا يَخْلُقُونَ شَيْـًۭٔا وَهُمْ يُخْلَقُونَ وَلَا يَمْلِكُونَ لِأَنفُسِهِمْ ضَرًّۭا وَلَا نَفْعًۭا وَلَا يَمْلِكُونَ مَوْتًۭا وَلَا حَيَوٰةًۭ وَلَا نُشُورًۭا",
+        "arabic": "وَاتَّخَذُوۡا مِنۡ دُوۡنِهٖۤ اٰلِهَةً لَّا يَخۡلُقُوۡنَ شَيۡـًٔـا وَّهُمۡ يُخۡلَقُوۡنَ وَلَا يَمۡلِكُوۡنَ لِاَنۡفُسِهِمۡ ضَرًّا وَّلَا نَفۡعًا وَّلَا يَمۡلِكُوۡنَ مَوۡتًا وَّلَا حَيٰوةً وَّلَا نُشُوۡرًا‏",
         "translation_en": "And yet, some choose to worship, instead of Him, imaginary deities that cannot create anything but are themselves created, and have it not within their power to avert harm from, or bring benefit to, themselves, and have no power over death, nor over life, nor over resurrection!",
         "translation_ur": "اور (لوگوں نے) اس کے سوا اور معبود بنا لئے ہیں جو کوئی چیز بھی پیدا نہیں کرسکتے اور خود پیدا کئے گئے ہیں۔ اور نہ اپنے نقصان اور نفع کا کچھ اختیار رکھتے ہیں اور نہ مرنا ان کے اختیار میں ہے اور نہ جینا اور نہ مر کر اُٹھ کھڑے ہونا",
         "audio": {
@@ -47,7 +47,7 @@
       {
         "ayah": 4,
         "globalAyah": 2859,
-        "arabic": "وَقَالَ ٱلَّذِينَ كَفَرُوٓا۟ إِنْ هَٰذَآ إِلَّآ إِفْكٌ ٱفْتَرَىٰهُ وَأَعَانَهُۥ عَلَيْهِ قَوْمٌ ءَاخَرُونَ ۖ فَقَدْ جَآءُو ظُلْمًۭا وَزُورًۭا",
+        "arabic": "وَقَالَ الَّذِيۡنَ كَفَرُوۡۤا اِنۡ هٰذَاۤ اِلَّاۤ اِفۡكٌ اۨفۡتَـرٰٮهُ وَاَعَانَهٗ عَلَيۡهِ قَوۡمٌ اٰخَرُوۡنَ​​ ۛۚ فَقَدۡ جَآءُوۡ ظُلۡمًا وَّزُوۡرًا ۛۚ‏",
         "translation_en": "Moreover, those who are bent on denying the truth are wont to say, “This [Qur’an] is nothing but a lie, which he [himself] has devised with the help of other people, who thereupon have perverted the truth and brought a falsehood into being.”",
         "translation_ur": "اور کافر کہتے ہیں کہ یہ (قرآن) من گھڑت باتیں ہی جو اس (مدعی رسالت) نے بنالی ہیں۔ اور لوگوں نے اس میں اس کی مدد کی ہے۔ یہ لوگ (ایسا کہنے سے) ظلم اور جھوٹ پر (اُتر) آئے ہیں",
         "audio": {
@@ -59,7 +59,7 @@
       {
         "ayah": 5,
         "globalAyah": 2860,
-        "arabic": "وَقَالُوٓا۟ أَسَٰطِيرُ ٱلْأَوَّلِينَ ٱكْتَتَبَهَا فَهِىَ تُمْلَىٰ عَلَيْهِ بُكْرَةًۭ وَأَصِيلًۭا",
+        "arabic": "وَقَالُوۡۤا اَسَاطِيۡرُ الۡاَوَّلِيۡنَ اكۡتَتَبَهَا فَهِىَ تُمۡلٰى عَلَيۡهِ بُكۡرَةً وَّاَصِيۡلًا‏",
         "translation_en": "And they say, “Fables of ancient times which he has caused to be written down, so that they might be read out to him at morn and evening!”",
         "translation_ur": "اور کہتے ہیں کہ یہ پہلے لوگوں کی کہانیاں ہیں جس کو اس نے لکھ رکھا ہے اور وہ صبح وشام اس کو پڑھ پڑھ کر سنائی جاتی ہیں",
         "audio": {
@@ -71,7 +71,7 @@
       {
         "ayah": 6,
         "globalAyah": 2861,
-        "arabic": "قُلْ أَنزَلَهُ ٱلَّذِى يَعْلَمُ ٱلسِّرَّ فِى ٱلسَّمَٰوَٰتِ وَٱلْأَرْضِ ۚ إِنَّهُۥ كَانَ غَفُورًۭا رَّحِيمًۭا",
+        "arabic": "قُلۡ اَنۡزَلَهُ الَّذِىۡ يَعۡلَمُ السِّرَّ فِى السَّمٰوٰتِ وَالۡاَرۡضِ​ؕ اِنَّهٗ كَانَ غَفُوۡرًا رَّحِيۡمًا‏",
         "translation_en": "Say [O Muhammad]: “He who knows all the mysteries of the heavens and the earth has bestowed from on high this [Qur’an upon me]! Verily, He is much-forgiving, a dispenser of grace!”",
         "translation_ur": "کہہ دو کہ اُس نے اُس کو اُتارا ہے جو آسمانوں اور زمین کی پوشیدہ باتوں کو جانتا ہے۔ بےشک وہ بخشنے والا مہربان ہے",
         "audio": {
@@ -83,7 +83,7 @@
       {
         "ayah": 7,
         "globalAyah": 2862,
-        "arabic": "وَقَالُوا۟ مَالِ هَٰذَا ٱلرَّسُولِ يَأْكُلُ ٱلطَّعَامَ وَيَمْشِى فِى ٱلْأَسْوَاقِ ۙ لَوْلَآ أُنزِلَ إِلَيْهِ مَلَكٌۭ فَيَكُونَ مَعَهُۥ نَذِيرًا",
+        "arabic": "وَقَالُوۡا مَالِ هٰذَا الرَّسُوۡلِ يَاۡكُلُ الطَّعَامَ وَيَمۡشِىۡ فِى الۡاَسۡوَاقِ​ ؕ لَوۡلَاۤ اُنۡزِلَ اِلَيۡهِ مَلَكٌ فَيَكُوۡنَ مَعَهٗ نَذِيۡرًا ۙ‏",
         "translation_en": "Yet they say: What sort of apostle is this [man] who eats food [like all other mortals] and goes about in the market places? Why has not an angel [visibly] been sent down unto him, to act as a warner together with him?”",
         "translation_ur": "اور کہتے ہیں کہ یہ کیسا پیغمبر ہے کہ کھاتا ہے اور بازاروں میں چلتا پھرتا ہے۔ کیوں نازل نہیں کیا گیا اس کے پاس کوئی فرشتہ اس کے ساتھ ہدایت کرنے کو رہتا",
         "audio": {
@@ -95,7 +95,7 @@
       {
         "ayah": 8,
         "globalAyah": 2863,
-        "arabic": "أَوْ يُلْقَىٰٓ إِلَيْهِ كَنزٌ أَوْ تَكُونُ لَهُۥ جَنَّةٌۭ يَأْكُلُ مِنْهَا ۚ وَقَالَ ٱلظَّٰلِمُونَ إِن تَتَّبِعُونَ إِلَّا رَجُلًۭا مَّسْحُورًا",
+        "arabic": "اَوۡ يُلۡقٰٓى اِلَيۡهِ كَنۡزٌ اَوۡ تَكُوۡنُ لَهٗ جَنَّةٌ يَّاۡكُلُ مِنۡهَا​ ؕ وَقَالَ الظّٰلِمُوۡنَ اِنۡ تَتَّبِعُوۡنَ اِلَّا رَجُلًا مَّسۡحُوۡرًا‏",
         "translation_en": "Or: “[Why has not] a treasure been granted to him [by God]?” Or: “He should [at least] have a [bountiful] garden, so that he could eat thereof [without effort]!” And so these evildoers say [unto one another], “If you were to follow [Muhammad, you would follow] but a man bewitched!”",
         "translation_ur": "یا اس کی طرف (آسمان سے) خزانہ اتارا جاتا یا اس کا کوئی باغ ہوتا کہ اس میں کھایا کرتا۔ اور ظالم کہتے ہیں کہ تم تو ایک جادو زدہ شخص کی پیروی کرتے ہو",
         "audio": {
@@ -107,7 +107,7 @@
       {
         "ayah": 9,
         "globalAyah": 2864,
-        "arabic": "ٱنظُرْ كَيْفَ ضَرَبُوا۟ لَكَ ٱلْأَمْثَٰلَ فَضَلُّوا۟ فَلَا يَسْتَطِيعُونَ سَبِيلًۭا",
+        "arabic": "اُنْظُرۡ كَيۡفَ ضَرَبُوۡا لَـكَ الۡاَمۡثَالَ فَضَلُّوۡا فَلَا يَسۡتَطِيۡعُوۡنَ سَبِيۡلاً‏",
         "translation_en": "See to what they liken thee, [O Prophet, simply] because they have gone astray and are now unable to find a way to the truth]!",
         "translation_ur": "(اے پیغمبر) دیکھو تو یہ تمہارے بارے میں کس کس طرح کی باتیں کرتے ہیں سو گمراہ ہوگئے اور رستہ نہیں پاسکتے",
         "audio": {
@@ -119,7 +119,7 @@
       {
         "ayah": 10,
         "globalAyah": 2865,
-        "arabic": "تَبَارَكَ ٱلَّذِىٓ إِن شَآءَ جَعَلَ لَكَ خَيْرًۭا مِّن ذَٰلِكَ جَنَّٰتٍۢ تَجْرِى مِن تَحْتِهَا ٱلْأَنْهَٰرُ وَيَجْعَل لَّكَ قُصُورًۢا",
+        "arabic": "تَبٰـرَكَ الَّذِىۡۤ اِنۡ شَآءَ جَعَلَ لَكَ خَيۡرًا مِّنۡ ذٰ لِكَ جَنّٰتٍ تَجۡرِىۡ مِنۡ تَحۡتِهَا الۡاَنۡهٰرُ ۙ وَيَجۡعَلْ لَّكَ قُصُوۡرًا‏",
         "translation_en": "Hallowed is He who, if it be His will, shall give thee something better than that [whereof they speak] - gardens through which running waters flow - and shall assign to thee mansions [of bliss in the life to come].",
         "translation_ur": "وہ (خدا) بہت بابرکت ہے جو اگر چاہے تو تمہارے لئے اس سے بہتر (چیزیں) بنا دے (یعنی) باغات جن کے نیچے نہریں بہہ رہی ہوں۔ نیز تمہارے لئے محل بنادے",
         "audio": {
@@ -131,7 +131,7 @@
       {
         "ayah": 11,
         "globalAyah": 2866,
-        "arabic": "بَلْ كَذَّبُوا۟ بِٱلسَّاعَةِ ۖ وَأَعْتَدْنَا لِمَن كَذَّبَ بِٱلسَّاعَةِ سَعِيرًا",
+        "arabic": "بَلۡ كَذَّبُوۡا بِالسَّاعَةِ​ وَاَعۡتَدۡنَا لِمَنۡ كَذَّبَ بِالسَّاعَةِ سَعِيۡرًا​ ۚ‏",
         "translation_en": "But nay! It is [the very coming of] the Last Hour to which they give the lie! However, for such as give the lie to [the announce­ment of] the Last Hour We have readied a blazing flame:",
         "translation_ur": "بلکہ یہ تو قیامت ہی کو جھٹلاتے ہیں اور ہم نے قیامت کے جھٹلانے والوں کے لئے دوزخ تیار کر رکھی ہے",
         "audio": {
@@ -143,7 +143,7 @@
       {
         "ayah": 12,
         "globalAyah": 2867,
-        "arabic": "إِذَا رَأَتْهُم مِّن مَّكَانٍۭ بَعِيدٍۢ سَمِعُوا۟ لَهَا تَغَيُّظًۭا وَزَفِيرًۭا",
+        "arabic": "اِذَا رَاَتۡهُمۡ مِّنۡ مَّكَانٍۢ بَعِيۡدٍ سَمِعُوۡا لَهَا تَغَيُّظًا وَّزَفِيۡرًا‏ ﻿﻿",
         "translation_en": "when it shall face them from afar, they will hear its angry roar and its hiss;",
         "translation_ur": "جس وقت وہ ان کو دور سے دیکھے گی (تو غضبناک ہو رہی ہوگی اور یہ) اس کے جوش (غضب) اور چیخنے چلانے کو سنیں گے",
         "audio": {
@@ -155,7 +155,7 @@
       {
         "ayah": 13,
         "globalAyah": 2868,
-        "arabic": "وَإِذَآ أُلْقُوا۟ مِنْهَا مَكَانًۭا ضَيِّقًۭا مُّقَرَّنِينَ دَعَوْا۟ هُنَالِكَ ثُبُورًۭا",
+        "arabic": "وَاِذَاۤ اُلۡقُوۡا مِنۡهَا مَكَانًـا ضَيِّقًا مُّقَرَّنِيۡنَ دَعَوۡا هُنَالِكَ ثُبُوۡرًا ؕ‏",
         "translation_en": "and when they are flung, linked [all] together, into a tight space within, they will pray for extinction there and then!",
         "translation_ur": "اور جب یہ دوزخ کی کسی تنگ جگہ میں (زنجیروں میں) جکڑ کر ڈالے جائیں گے تو وہاں موت کو پکاریں گے",
         "audio": {
@@ -167,7 +167,7 @@
       {
         "ayah": 14,
         "globalAyah": 2869,
-        "arabic": "لَّا تَدْعُوا۟ ٱلْيَوْمَ ثُبُورًۭا وَٰحِدًۭا وَٱدْعُوا۟ ثُبُورًۭا كَثِيرًۭا",
+        "arabic": "لَا تَدۡعُوا الۡيَوۡمَ ثُبُوۡرًا وَّاحِدًا وَّادۡعُوۡا ثُبُوۡرًا كَثِيۡرًا‏ ﻿﻿",
         "translation_en": "[But they will be told:] “Pray not today for one single extinction, but pray for many extinctions!”",
         "translation_ur": "آج ایک ہی موت کو نہ پکارو بہت سی موتوں کو پکارو",
         "audio": {
@@ -179,7 +179,7 @@
       {
         "ayah": 15,
         "globalAyah": 2870,
-        "arabic": "قُلْ أَذَٰلِكَ خَيْرٌ أَمْ جَنَّةُ ٱلْخُلْدِ ٱلَّتِى وُعِدَ ٱلْمُتَّقُونَ ۚ كَانَتْ لَهُمْ جَزَآءًۭ وَمَصِيرًۭا",
+        "arabic": "قُلۡ اَذٰ لِكَ خَيۡرٌ اَمۡ جَنَّةُ الۡخُـلۡدِ الَّتِىۡ وُعِدَ الۡمُتَّقُوۡنَ ​ؕ كَانَتۡ لَهُمۡ جَزَآءً وَّمَصِيۡرًا‏",
         "translation_en": "Say: “Which is better - that, or the paradise of life abiding which has been promised to the God-conscious as their reward and their journey’s end –",
         "translation_ur": "پوچھو کہ یہ بہتر ہے یا بہشت جاودانی جس کا پرہیزگاروں سے وعدہ ہے۔ یہ ان (کے عملوں) کا بدلہ اور رہنے کا ٹھکانہ ہوگا",
         "audio": {
@@ -191,7 +191,7 @@
       {
         "ayah": 16,
         "globalAyah": 2871,
-        "arabic": "لَّهُمْ فِيهَا مَا يَشَآءُونَ خَٰلِدِينَ ۚ كَانَ عَلَىٰ رَبِّكَ وَعْدًۭا مَّسْـُٔولًۭا",
+        "arabic": "لَّهُمۡ فِيۡهَا مَا يَشَآءُوۡنَ خٰلِدِيۡنَ​ ؕ كَانَ عَلٰى رَبِّكَ وَعۡدًا مَّسۡـــُٔوۡلًا‏",
         "translation_en": "a promise given by thy Sustainer, [always] to be prayed for?”",
         "translation_ur": "وہاں جو چاہیں گے ان کے لئے میسر ہوگا ہمیشہ اس میں رہیں گے۔ یہ وعدہ خدا کو (پورا کرنا) لازم ہے اور اس لائق ہے کہ مانگ لیا جائے",
         "audio": {
@@ -203,7 +203,7 @@
       {
         "ayah": 17,
         "globalAyah": 2872,
-        "arabic": "وَيَوْمَ يَحْشُرُهُمْ وَمَا يَعْبُدُونَ مِن دُونِ ٱللَّهِ فَيَقُولُ ءَأَنتُمْ أَضْلَلْتُمْ عِبَادِى هَٰٓؤُلَآءِ أَمْ هُمْ ضَلُّوا۟ ٱلسَّبِيلَ",
+        "arabic": "وَيَوۡمَ يَحۡشُرُهُمۡ وَمَا يَعۡبُدُوۡنَ مِنۡ دُوۡنِ اللّٰهِ فَيَقُوۡلُ ءَاَنۡـتُمۡ اَضۡلَلۡـتُمۡ عِبَادِىۡ هٰٓؤُلَاۤءِ اَمۡ هُمۡ ضَلُّوا السَّبِيۡلَ ؕ‏",
         "translation_en": "BUT [as for people who are oblivious of thy Sus­tainer’s oneness -] one Day He will gather them together with all that they [now] worship instead of God, and will ask [those to whom divinity was falsely ascribed]: “Was it you who led these My creatures astray, or did they by themselves stray from the right path?”",
         "translation_ur": "اور جس دن (خدا) ان کو اور اُن کو جنہیں یہ خدا کے سوا پوجتے ہیں جمع کرے گا تو فرمائے گا کیا تم نے میرے ان بندوں کو گمراہ کیا تھا یا یہ خود گمراہ ہوگئے تھے",
         "audio": {
@@ -215,7 +215,7 @@
       {
         "ayah": 18,
         "globalAyah": 2873,
-        "arabic": "قَالُوا۟ سُبْحَٰنَكَ مَا كَانَ يَنۢبَغِى لَنَآ أَن نَّتَّخِذَ مِن دُونِكَ مِنْ أَوْلِيَآءَ وَلَٰكِن مَّتَّعْتَهُمْ وَءَابَآءَهُمْ حَتَّىٰ نَسُوا۟ ٱلذِّكْرَ وَكَانُوا۟ قَوْمًۢا بُورًۭا",
+        "arabic": "قَالُوۡا سُبۡحٰنَكَ مَا كَانَ يَنۢۡبَغِىۡ لَنَاۤ اَنۡ نَّـتَّخِذَ مِنۡ دُوۡنِكَ مِنۡ اَوۡلِيَآءَ وَ لٰـكِنۡ مَّتَّعۡتَهُمۡ وَاٰبَآءَهُمۡ حَتّٰى نَسُوا الذِّكۡرَ​ۚ وَكَانُوۡا قَوۡمًۢا بُوۡرًا‏",
         "translation_en": "They will answer: “Limitless art Thou in Thy glory! It was inconceivable for us to take for our masters anyone but Thyself! But [as for them -] Thou didst allow them and their forefathers to enjoy [the pleasures of] life to such an extent that they forgot all remembrance [of Thee]: for they were people devoid of all good.”",
         "translation_ur": "وہ کہیں گے تو پاک ہے ہمیں یہ بات شایان نہ تھی کہ تیرے سوا اوروں کو دوست بناتے۔ لیکن تو نے ہی ان کو اور ان کے باپ دادا کو برتنے کو نعمتیں دیں یہاں تک کہ وہ تیری یاد کو بھول گئے۔ اور یہ ہلاک ہونے والے لوگ تھے",
         "audio": {
@@ -227,7 +227,7 @@
       {
         "ayah": 19,
         "globalAyah": 2874,
-        "arabic": "فَقَدْ كَذَّبُوكُم بِمَا تَقُولُونَ فَمَا تَسْتَطِيعُونَ صَرْفًۭا وَلَا نَصْرًۭا ۚ وَمَن يَظْلِم مِّنكُمْ نُذِقْهُ عَذَابًۭا كَبِيرًۭا",
+        "arabic": "فَقَدۡ كَذَّبُوۡكُمۡ بِمَا تَقُوۡلُوۡنَۙ فَمَا تَسۡتَطِيۡعُوۡنَ صَرۡفًا وَّلَا نَـصۡرًا​ۚ وَمَنۡ يَّظۡلِمۡ مِّنۡكُمۡ نُذِقۡهُ عَذَابًا كَبِيۡرًا‏",
         "translation_en": "[Thereupon God will say:] “And now, they [whom you regarded as divine] have given the lie to all your [past] assertions, and you can neither ward off [your punishment] nor obtain any succour! For, whoever of you has committed [such] evil, him shall We cause to taste great suffering!”",
         "translation_ur": "تو (کافرو) انہوں نے تو تم کو تمہاری بات میں جھٹلا دیا۔ پس (اب) تم (عذاب کو) نہ پھیر سکتے ہو۔ نہ (کسی سے) مدد لے سکتے ہو۔ اور جو شخص تم میں سے ظلم کرے گا ہم اس کو بڑے عذاب کا مزا چکھائیں گے",
         "audio": {
@@ -239,7 +239,7 @@
       {
         "ayah": 20,
         "globalAyah": 2875,
-        "arabic": "وَمَآ أَرْسَلْنَا قَبْلَكَ مِنَ ٱلْمُرْسَلِينَ إِلَّآ إِنَّهُمْ لَيَأْكُلُونَ ٱلطَّعَامَ وَيَمْشُونَ فِى ٱلْأَسْوَاقِ ۗ وَجَعَلْنَا بَعْضَكُمْ لِبَعْضٍۢ فِتْنَةً أَتَصْبِرُونَ ۗ وَكَانَ رَبُّكَ بَصِيرًۭا",
+        "arabic": "وَمَاۤ اَرۡسَلۡنَا قَبۡلَكَ مِنَ الۡمُرۡسَلِيۡنَ اِلَّاۤ اِنَّهُمۡ لَيَاۡكُلُوۡنَ الطَّعَامَ وَيَمۡشُوۡنَ فِى الۡاَسۡوَاقِ​ ؕ وَجَعَلۡنَا بَعۡضَكُمۡ لِبَعۡضٍ فِتۡنَةً  ؕ اَتَصۡبِرُوۡنَ​ۚ وَكَانَ رَبُّكَ بَصِيۡرًا‏",
         "translation_en": "AND [even] before thee, [O Muhammad,] We never sent as Our message-bearers any but [mortal men] who indeed ate food [like other human beings] and went about in the market places: for [it is thus that] We cause you [human beings] to be a means of testing one another. Are you able to endure [this test] with patience? For [remember, O man,] thy Sustainer is truly all-seeing!",
         "translation_ur": "اور ہم نے تم سے پہلے جتنے پیغمبر بھیجے ہیں سب کھانا کھاتے تھے اور بازاروں میں چلتے پھرتے تھے۔ اور ہم نے تمہیں ایک دوسرے کے لئے آزمائش بنایا ہے۔ کیا تم صبر کرو گے۔ اور تمہارا پروردگار تو دیکھنے والا ہے",
         "audio": {
@@ -251,7 +251,7 @@
       {
         "ayah": 21,
         "globalAyah": 2876,
-        "arabic": "۞ وَقَالَ ٱلَّذِينَ لَا يَرْجُونَ لِقَآءَنَا لَوْلَآ أُنزِلَ عَلَيْنَا ٱلْمَلَٰٓئِكَةُ أَوْ نَرَىٰ رَبَّنَا ۗ لَقَدِ ٱسْتَكْبَرُوا۟ فِىٓ أَنفُسِهِمْ وَعَتَوْ عُتُوًّۭا كَبِيرًۭا",
+        "arabic": "وَقَالَ الَّذِيۡنَ لَا يَرۡجُوۡنَ لِقَآءَنَا لَوۡلَاۤ اُنۡزِلَ عَلَيۡنَا الۡمَلٰٓٮِٕكَةُ اَوۡ نَرٰى رَبَّنَا ؕ لَـقَدِ اسۡتَكۡبَرُوۡا فِىۡۤ اَنۡفُسِهِمۡ وَعَتَوۡ عُتُوًّا كَبِيۡرًا‏",
         "translation_en": "But those who do not believe that they are destined to meet Us are wont to say, “Why have no angels been sent down to us?” – or, “Why do we not see our Sustainer?” Indeed, they are far too proud of themselves, hav­ing rebelled [against God’s truth] with utter disdain!",
         "translation_ur": "اور جو لوگ ہم سے ملنے کی امید نہیں رکھتے۔ کہتے ہیں کہ ہم پر فرشتے کیوں نہ نازل کئے گئے۔ یا ہم اپنی آنکھ سے اپنے پروردگار کو دیکھ لیں۔ یہ اپنے خیال میں بڑائی رکھتے ہیں اور (اسی بنا پر) بڑے سرکش ہو رہے ہی",
         "audio": {
@@ -263,7 +263,7 @@
       {
         "ayah": 22,
         "globalAyah": 2877,
-        "arabic": "يَوْمَ يَرَوْنَ ٱلْمَلَٰٓئِكَةَ لَا بُشْرَىٰ يَوْمَئِذٍۢ لِّلْمُجْرِمِينَ وَيَقُولُونَ حِجْرًۭا مَّحْجُورًۭا",
+        "arabic": "يَوۡمَ يَرَوۡنَ الۡمَلٰٓٮِٕكَةَ لَا بُشۡرٰى يَوۡمَٮِٕذٍ لِّـلۡمُجۡرِمِيۡنَ وَ يَقُوۡلُوۡنَ حِجۡرًا مَّحۡجُوۡرًا‏",
         "translation_en": "[Yet] on that Day - the Day on which they shall see the angels there will be no glad tiding for those who were lost in sin; and they will exclaim, “By a forbidding ban [are we from God’s grace debarred]!” –",
         "translation_ur": "جس دن یہ فرشتوں کو دیکھیں گے اس دن گنہگاروں کے لئے خوشی کی بات نہیں ہوگی اور کہیں گے (خدا کرے تم) روک لئے (اور بند کردیئے) جاؤ",
         "audio": {
@@ -275,7 +275,7 @@
       {
         "ayah": 23,
         "globalAyah": 2878,
-        "arabic": "وَقَدِمْنَآ إِلَىٰ مَا عَمِلُوا۟ مِنْ عَمَلٍۢ فَجَعَلْنَٰهُ هَبَآءًۭ مَّنثُورًا",
+        "arabic": "وَقَدِمۡنَاۤ اِلٰى مَا عَمِلُوۡا مِنۡ عَمَلٍ فَجَعَلۡنٰهُ هَبَآءً مَّنۡثُوۡرًا‏ ﻿﻿",
         "translation_en": "for We shall have turned towards all the [supposedly good] deeds they ever wrought, and shall have transformed them into scattered dust –",
         "translation_ur": "اور جو انہوں نے عمل کئے ہوں گے ہم ان کی طرف متوجہ ہوں گے تو ان کو اُڑتی خاک کردیں گے",
         "audio": {
@@ -287,7 +287,7 @@
       {
         "ayah": 24,
         "globalAyah": 2879,
-        "arabic": "أَصْحَٰبُ ٱلْجَنَّةِ يَوْمَئِذٍ خَيْرٌۭ مُّسْتَقَرًّۭا وَأَحْسَنُ مَقِيلًۭا",
+        "arabic": "اَصۡحٰبُ الۡجَنَّةِ يَوۡمَٮِٕذٍ خَيۡرٌ مُّسۡتَقَرًّا وَّاَحۡسَنُ مَقِيۡلًا‏ ﻿﻿",
         "translation_en": "[whereas] on that same Day those who are destined for paradise will be graced with the best of abodes and the fairest place of repose.",
         "translation_ur": "اس دن اہل جنت کا ٹھکانا بھی بہتر ہوگا اور مقام استراحت بھی ہوگا",
         "audio": {
@@ -299,7 +299,7 @@
       {
         "ayah": 25,
         "globalAyah": 2880,
-        "arabic": "وَيَوْمَ تَشَقَّقُ ٱلسَّمَآءُ بِٱلْغَمَٰمِ وَنُزِّلَ ٱلْمَلَٰٓئِكَةُ تَنزِيلًا",
+        "arabic": "وَيَوۡمَ تَشَقَّقُ السَّمَآءُ بِالۡـغَمَامِ وَنُزِّلَ الۡمَلٰٓٮِٕكَةُ تَنۡزِيۡلًا‏ ﻿﻿",
         "translation_en": "And on the Day on which the skies, together with the clouds, shall burst asunder, and the angels are made to descend in a mighty descent –",
         "translation_ur": "اور جس دن آسمان ابر کے ساتھ پھٹ جائے گا اور فرشتے نازل کئے جائیں گے",
         "audio": {
@@ -311,7 +311,7 @@
       {
         "ayah": 26,
         "globalAyah": 2881,
-        "arabic": "ٱلْمُلْكُ يَوْمَئِذٍ ٱلْحَقُّ لِلرَّحْمَٰنِ ۚ وَكَانَ يَوْمًا عَلَى ٱلْكَٰفِرِينَ عَسِيرًۭا",
+        "arabic": "اَلۡمُلۡكُ يَوۡمَٮِٕذِ اۨلۡحَـقُّ لِلرَّحۡمٰنِ​ؕ وَكَانَ يَوۡمًا عَلَى الۡكٰفِرِيۡنَ عَسِيۡرًا‏",
         "translation_en": "on that Day [it will become obvious to all that] true sover­eignty belongs to the Most Gracious [alone]: hence, a Day of distress will it be for all who deny the truth,",
         "translation_ur": "اس دن سچی بادشاہی خدا ہی کی ہوگی۔ اور وہ دن کافروں پر (سخت) مشکل ہوگا",
         "audio": {
@@ -323,7 +323,7 @@
       {
         "ayah": 27,
         "globalAyah": 2882,
-        "arabic": "وَيَوْمَ يَعَضُّ ٱلظَّالِمُ عَلَىٰ يَدَيْهِ يَقُولُ يَٰلَيْتَنِى ٱتَّخَذْتُ مَعَ ٱلرَّسُولِ سَبِيلًۭا",
+        "arabic": "وَيَوۡمَ يَعَضُّ الظَّالِمُ عَلٰى يَدَيۡهِ يَقُوۡلُ يٰلَيۡتَنِى اتَّخَذۡتُ مَعَ الرَّسُوۡلِ سَبِيۡلًا‏",
         "translation_en": "and a Day on which the evildoer will bite his hands [in despair], exclaiming: “Oh, would that I had followed the path shown to me by the apostle!",
         "translation_ur": "اور جس دن (ناعاقبت اندیش) ظالم اپنے ہاتھ کاٹ کاٹ کر کھائے گا (اور کہے گا) کہ اے کاش میں نے پیغمبر کے ساتھ رشتہ اختیار کیا ہوتا",
         "audio": {
@@ -335,7 +335,7 @@
       {
         "ayah": 28,
         "globalAyah": 2883,
-        "arabic": "يَٰوَيْلَتَىٰ لَيْتَنِى لَمْ أَتَّخِذْ فُلَانًا خَلِيلًۭا",
+        "arabic": "يٰوَيۡلَتٰى لَيۡتَنِىۡ لَمۡ اَتَّخِذۡ فُلَانًا خَلِيۡلًا‏",
         "translation_en": "Oh, woe is me! Would that I had not taken so-and-so for a friend!",
         "translation_ur": "ہائے شامت کاش میں نے فلاں شخص کو دوست نہ بنایا ہوتا",
         "audio": {
@@ -347,7 +347,7 @@
       {
         "ayah": 29,
         "globalAyah": 2884,
-        "arabic": "لَّقَدْ أَضَلَّنِى عَنِ ٱلذِّكْرِ بَعْدَ إِذْ جَآءَنِى ۗ وَكَانَ ٱلشَّيْطَٰنُ لِلْإِنسَٰنِ خَذُولًۭا",
+        "arabic": "لَقَدۡ اَضَلَّنِىۡ عَنِ الذِّكۡرِ بَعۡدَ اِذۡ جَآءَنِىۡ​ ؕ وَكَانَ الشَّيۡطٰنُ لِلۡاِنۡسَانِ خَذُوۡلًا‏",
         "translation_en": "Indeed, he led me astray from the remembrance [of God] after it had come unto me!” For [thus it is:] Satan is ever a betrayer of man.",
         "translation_ur": "اس نے مجھ کو (کتاب) نصیحت کے میرے پاس آنے کے بعد بہکا دیا۔ اور شیطان انسان کو وقت پر دغا دینے والا ہے",
         "audio": {
@@ -359,7 +359,7 @@
       {
         "ayah": 30,
         "globalAyah": 2885,
-        "arabic": "وَقَالَ ٱلرَّسُولُ يَٰرَبِّ إِنَّ قَوْمِى ٱتَّخَذُوا۟ هَٰذَا ٱلْقُرْءَانَ مَهْجُورًۭا",
+        "arabic": "وَقَالَ الرَّسُوۡلُ يٰرَبِّ اِنَّ قَوۡمِى اتَّخَذُوۡا هٰذَا الۡقُرۡاٰنَ مَهۡجُوۡرًا‏ ﻿﻿",
         "translation_en": "AND [on that Day] the Apostle will say: “O my Sustainer! Behold, [some of] my people have come to regard this Qur’an as something [that ought to be] discarded!”",
         "translation_ur": "اور پیغمبر کہیں گے کہ اے پروردگار میری قوم نے اس قرآن کو چھوڑ رکھا تھا",
         "audio": {
@@ -371,7 +371,7 @@
       {
         "ayah": 31,
         "globalAyah": 2886,
-        "arabic": "وَكَذَٰلِكَ جَعَلْنَا لِكُلِّ نَبِىٍّ عَدُوًّۭا مِّنَ ٱلْمُجْرِمِينَ ۗ وَكَفَىٰ بِرَبِّكَ هَادِيًۭا وَنَصِيرًۭا",
+        "arabic": "وَكَذٰلِكَ جَعَلۡنَا لِكُلِّ نَبِىٍّ عَدُوًّا مِّنَ الۡمُجۡرِمِيۡنَ​ؕ وَكَفٰى بِرَبِّكَ هَادِيًا وَّنَصِيۡرًا‏",
         "translation_en": "For so it is that against every prophet We have set up enemies from among those who are lost in sin: yet none can guide and give succour as thy Sustainer does!",
         "translation_ur": "اور اسی طرح ہم نے گنہگاروں میں سے ہر پیغمبر کا دشمن بنا دیا۔ اور تمہارا پروردگار ہدایت دینے اور مدد کرنے کو کافی ہے",
         "audio": {
@@ -383,7 +383,7 @@
       {
         "ayah": 32,
         "globalAyah": 2887,
-        "arabic": "وَقَالَ ٱلَّذِينَ كَفَرُوا۟ لَوْلَا نُزِّلَ عَلَيْهِ ٱلْقُرْءَانُ جُمْلَةًۭ وَٰحِدَةًۭ ۚ كَذَٰلِكَ لِنُثَبِّتَ بِهِۦ فُؤَادَكَ ۖ وَرَتَّلْنَٰهُ تَرْتِيلًۭا",
+        "arabic": "وَقَالَ الَّذِيۡنَ كَفَرُوۡا لَوۡلَا نُزِّلَ عَلَيۡهِ الۡـقُرۡاٰنُ جُمۡلَةً وَّاحِدَةً​  ​ۛۚ كَذٰلِكَ ​ۛۚ لِنُثَبِّتَ بِهٖ فُـؤَادَكَ​ وَرَتَّلۡنٰهُ تَرۡتِيۡلًا‏ ﻿﻿",
         "translation_en": "Now they who are bent on denying the truth are wont to ask. “Why has not the Qur’an been bestowed on him from on high in one single re­velation?” [it has been revealed] in this manner so that We might strengthen thy heart thereby - for We have so arranged its component parts that they form one consistent whole -",
         "translation_ur": "اور کافر کہتے ہیں کہ اس پر قرآن ایک ہی دفعہ کیوں نہیں اُتارا گیا۔ اس طرح (آہستہ آہستہ) اس لئے اُتارا گیا کہ اس سے تمہارے دل کو قائم رکھیں۔ اور اسی واسطے ہم اس کو ٹھہر ٹھہر کر پڑھتے رہے ہیں",
         "audio": {
@@ -395,7 +395,7 @@
       {
         "ayah": 33,
         "globalAyah": 2888,
-        "arabic": "وَلَا يَأْتُونَكَ بِمَثَلٍ إِلَّا جِئْنَٰكَ بِٱلْحَقِّ وَأَحْسَنَ تَفْسِيرًا",
+        "arabic": "وَلَا يَاۡتُوۡنَكَ بِمَثَلٍ اِلَّا جِئۡنٰكَ بِالۡحَـقِّ وَاَحۡسَنَ تَفۡسِيۡرًا ؕ‏",
         "translation_en": "and [that] they [who deny the truth] might never taunt thee with any deceptive half-truth without Our conveying to thee the [full] truth and [providing thee] with the best explanation.",
         "translation_ur": "اور یہ لوگ تمہارے پاس جو (اعتراض کی) بات لاتے ہیں ہم تمہارے پاس اس کا معقول اور خوب مشرح جواب بھیج دیتے ہیں",
         "audio": {
@@ -407,7 +407,7 @@
       {
         "ayah": 34,
         "globalAyah": 2889,
-        "arabic": "ٱلَّذِينَ يُحْشَرُونَ عَلَىٰ وُجُوهِهِمْ إِلَىٰ جَهَنَّمَ أُو۟لَٰٓئِكَ شَرٌّۭ مَّكَانًۭا وَأَضَلُّ سَبِيلًۭا",
+        "arabic": "اَلَّذِيۡنَ يُحۡشَرُوۡنَ عَلٰى وُجُوۡهِهِمۡ اِلٰى جَهَـنَّمَۙ اُولٰٓٮِٕكَ شَرٌّ مَّكَانًا وَّاَضَلُّ سَبِيۡلًا‏",
         "translation_en": "[And so, tell those who are bent on denying the truth that] they who shall be gathered unto hell upon their faces – it is they who [in the life to come] will be worst in station and still farther astray from the path [of truth]!",
         "translation_ur": "جو لوگ اپنے مونہوں کے بل دوزخ کی طرف جمع کئے جائیں گے ان کا ٹھکانا بھی برا ہے اور وہ رستے سے بھی بہکے ہوئے ہیں",
         "audio": {
@@ -419,7 +419,7 @@
       {
         "ayah": 35,
         "globalAyah": 2890,
-        "arabic": "وَلَقَدْ ءَاتَيْنَا مُوسَى ٱلْكِتَٰبَ وَجَعَلْنَا مَعَهُۥٓ أَخَاهُ هَٰرُونَ وَزِيرًۭا",
+        "arabic": "وَلَقَدۡ اٰتَيۡنَا مُوۡسَى الۡكِتٰبَ وَجَعَلۡنَا مَعَهٗۤ اَخَاهُ هٰرُوۡنَ وَزِيۡرًا​ ۖ​ ۚ‏",
         "translation_en": "AND, INDEED, [long before Muhammad] We vouchsafed revelation unto Moses, and appointed his brother Aaron to help him to bear his burden;",
         "translation_ur": "اور ہم نے موسیٰ کو کتاب دی اور ان کے بھائی ہارون کو مددگار بنا کر ان کے ساتھ کیا",
         "audio": {
@@ -431,7 +431,7 @@
       {
         "ayah": 36,
         "globalAyah": 2891,
-        "arabic": "فَقُلْنَا ٱذْهَبَآ إِلَى ٱلْقَوْمِ ٱلَّذِينَ كَذَّبُوا۟ بِـَٔايَٰتِنَا فَدَمَّرْنَٰهُمْ تَدْمِيرًۭا",
+        "arabic": "فَقُلۡنَا اذۡهَبَاۤ اِلَى الۡقَوۡمِ الَّذِيۡنَ كَذَّبُوۡا بِاٰيٰتِنَاؕ فَدَمَّرۡنٰهُمۡ تَدۡمِيۡرًاؕ‏",
         "translation_en": "and We said, “Go you both unto the people who have given the lie to Our messages!” - and thereupon We broke those [sinners] to smithereens.",
         "translation_ur": "اور کہا کہ دونوں ان لوگوں کے پاس جاؤ جن لوگوں نے ہماری آیتوں کی تکذیب کی۔ (جب تکذیب پر اڑے رہے) تو ہم نے ان کو ہلاک کر ڈالا",
         "audio": {
@@ -443,7 +443,7 @@
       {
         "ayah": 37,
         "globalAyah": 2892,
-        "arabic": "وَقَوْمَ نُوحٍۢ لَّمَّا كَذَّبُوا۟ ٱلرُّسُلَ أَغْرَقْنَٰهُمْ وَجَعَلْنَٰهُمْ لِلنَّاسِ ءَايَةًۭ ۖ وَأَعْتَدْنَا لِلظَّٰلِمِينَ عَذَابًا أَلِيمًۭا",
+        "arabic": "وَقَوۡمَ نُوۡحٍ لَّمَّا كَذَّبُوا الرُّسُلَ اَغۡرَقۡنٰهُمۡ وَجَعَلۡنٰهُمۡ لِلنَّاسِ اٰيَةً ​ ؕ وَاَعۡتَدۡنَا لِلظّٰلِمِيۡنَ عَذَابًا اَ لِيۡمًا ​ۖ​ ۚ‏",
         "translation_en": "And [think of] the people of Noah: when they gave the lie to [one of] the apostles, We caused them to drown, and made them a symbol for all mankind: for, grievous suffering have We readied for all who [knowingly] do wrong!",
         "translation_ur": "اور نوح کی قوم نے بھی جب پیغمبروں کو جھٹلایا تو ہم نے انہیں غرق کر ڈالا اور لوگوں کے لئے نشانی بنا دیا۔ اور ظالموں کے لئے ہم نے دکھ دینے والا عذاب تیار کر رکھا ہے",
         "audio": {
@@ -455,7 +455,7 @@
       {
         "ayah": 38,
         "globalAyah": 2893,
-        "arabic": "وَعَادًۭا وَثَمُودَا۟ وَأَصْحَٰبَ ٱلرَّسِّ وَقُرُونًۢا بَيْنَ ذَٰلِكَ كَثِيرًۭا",
+        "arabic": "وَّعَادًا وَّثَمُوۡدَا۟ وَ اَصۡحٰبَ الرَّسِّ وَقُرُوۡنًۢا بَيۡنَ ذٰ لِكَ كَثِيۡرًا‏ ﻿﻿",
         "translation_en": "And [remember how We punished the tribes of] Ad and Thamud and the people of Ar-Rass, and many generations [of sinners] in-between:",
         "translation_ur": "اور عاد اور ثمود اور کنوئیں والوں اور ان کے درمیان اور بہت سی جماعتوں کو بھی (ہلاک کر ڈالا)",
         "audio": {
@@ -467,7 +467,7 @@
       {
         "ayah": 39,
         "globalAyah": 2894,
-        "arabic": "وَكُلًّۭا ضَرَبْنَا لَهُ ٱلْأَمْثَٰلَ ۖ وَكُلًّۭا تَبَّرْنَا تَتْبِيرًۭا",
+        "arabic": "وَكُلًّا ضَرَبۡنَا لَهُ الۡاَمۡثَالَ​ وَكُلًّا تَبَّـرۡنَا تَـتۡبِيۡرًا‏ ﻿﻿",
         "translation_en": "and unto each of them did We proffer lessons and each of them did We destroy with utter destruction.",
         "translation_ur": "اور سب کے (سمجھانے کے لئے) ہم نے مثالیں بیان کیں اور (نہ ماننے پر) سب کا تہس نہس کردیا",
         "audio": {
@@ -479,7 +479,7 @@
       {
         "ayah": 40,
         "globalAyah": 2895,
-        "arabic": "وَلَقَدْ أَتَوْا۟ عَلَى ٱلْقَرْيَةِ ٱلَّتِىٓ أُمْطِرَتْ مَطَرَ ٱلسَّوْءِ ۚ أَفَلَمْ يَكُونُوا۟ يَرَوْنَهَا ۚ بَلْ كَانُوا۟ لَا يَرْجُونَ نُشُورًۭا",
+        "arabic": "وَلَقَدۡ اَتَوۡا عَلَى الۡقَرۡيَةِ الَّتِىۡۤ اُمۡطِرَتۡ مَطَرَ السَّوۡءِ​ ؕ اَفَلَمۡ يَكُوۡنُوۡا يَرَوۡنَهَا ​ۚ بَلۡ كَانُوۡا لَا يَرۡجُوۡنَ نُشُوۡرًا‏",
         "translation_en": "And they [who now deny Our messages] must surely have come across that town which was rained upon by a rain of evil: have they, then, never beheld it [with their minds eye]? But nay, they would not believe in resurrection!",
         "translation_ur": "اور یہ کافر اس بستی پر بھی گزر چکے ہیں جس پر بری طرح کا مینہ برسایا گیا تھا۔ کیا وہ اس کو دیکھتے نہ ہوں گے۔ بلکہ ان کو (مرنے کے بعد) جی اُٹھنے کی امید ہی نہیں تھی۔",
         "audio": {
@@ -491,7 +491,7 @@
       {
         "ayah": 41,
         "globalAyah": 2896,
-        "arabic": "وَإِذَا رَأَوْكَ إِن يَتَّخِذُونَكَ إِلَّا هُزُوًا أَهَٰذَا ٱلَّذِى بَعَثَ ٱللَّهُ رَسُولًا",
+        "arabic": "وَاِذَا رَاَوۡكَ اِنۡ يَّتَّخِذُوۡنَكَ اِلَّا هُزُوًا ؕ اَهٰذَا الَّذِىۡ بَعَثَ اللّٰهُ رَسُوۡلًا‏",
         "translation_en": "Hence, whenever they consider thee, [O Muhammad,] they but make thee a target of their mockery, [saying:] “Is this the one whom God has sent as an apostle?",
         "translation_ur": "اور یہ لوگ جب تم کو دیکھتے ہیں تو تمہاری ہنسی اُڑاتے ہیں۔ کہ کیا یہی شخص ہے جس کو خدا نے پیغمبر بنا کر بھیجا ہے",
         "audio": {
@@ -503,7 +503,7 @@
       {
         "ayah": 42,
         "globalAyah": 2897,
-        "arabic": "إِن كَادَ لَيُضِلُّنَا عَنْ ءَالِهَتِنَا لَوْلَآ أَن صَبَرْنَا عَلَيْهَا ۚ وَسَوْفَ يَعْلَمُونَ حِينَ يَرَوْنَ ٱلْعَذَابَ مَنْ أَضَلُّ سَبِيلًا",
+        "arabic": "اِنۡ كَادَ لَيُضِلُّنَا عَنۡ اٰلِهَـتِنَا لَوۡ لَاۤ اَنۡ صَبَـرۡنَا عَلَيۡهَا​ ؕ وَسَوۡفَ يَعۡلَمُوۡنَ حِيۡنَ يَرَوۡنَ الۡعَذَابَ مَنۡ اَضَلُّ سَبِيۡلًا‏",
         "translation_en": "Indeed, he would well-nigh have led us astray from our deities, had we not been [so] steadfastly attached to them!” But in time, when they see the suffering [that awaits them], they will come to know who it was that went farthest astray from the path [of truth]!",
         "translation_ur": "اگر ہم نے اپنے معبودوں کے بارے میں ثابت قدم نہ رہتے تو یہ ضرور ہم کو بہکا دیتا۔ (اور ان سے پھیر دیتا) اور یہ عنقریب معلوم کرلیں گے جب عذاب دیکھیں گے کہ سیدھے رستے سے کون بھٹکا ہوا ہے",
         "audio": {
@@ -515,7 +515,7 @@
       {
         "ayah": 43,
         "globalAyah": 2898,
-        "arabic": "أَرَءَيْتَ مَنِ ٱتَّخَذَ إِلَٰهَهُۥ هَوَىٰهُ أَفَأَنتَ تَكُونُ عَلَيْهِ وَكِيلًا",
+        "arabic": "اَرَءَيۡتَ مَنِ اتَّخَذَ اِلٰهَهٗ هَوٰٮهُ ؕ اَفَاَنۡتَ تَكُوۡنُ عَلَيۡهِ وَكِيۡلًا ۙ‏",
         "translation_en": "Hast thou ever considered [the kind of man] who makes his own desires his deity? Couldst thou, then, [O Prophet,] be held responsible for him?",
         "translation_ur": "کیا تم نے اس شخص کو دیکھا جس نے خواہش نفس کو معبود بنا رکھا ہے تو کیا تم اس پر نگہبان ہوسکتے ہو",
         "audio": {
@@ -527,7 +527,7 @@
       {
         "ayah": 44,
         "globalAyah": 2899,
-        "arabic": "أَمْ تَحْسَبُ أَنَّ أَكْثَرَهُمْ يَسْمَعُونَ أَوْ يَعْقِلُونَ ۚ إِنْ هُمْ إِلَّا كَٱلْأَنْعَٰمِ ۖ بَلْ هُمْ أَضَلُّ سَبِيلًا",
+        "arabic": "اَمۡ تَحۡسَبُ اَنَّ اَكۡثَرَهُمۡ يَسۡمَعُوۡنَ اَوۡ يَعۡقِلُوۡنَ​ ؕ اِنۡ هُمۡ اِلَّا كَالۡاَنۡعَامِ​ بَلۡ هُمۡ اَضَلُّ سَبِيۡلًا‏",
         "translation_en": "Or dost thou think that most of them listen [to thy message] and use their reason? Nay, they are but like cattle - nay, they are even less conscious of the right way!",
         "translation_ur": "یا تم یہ خیال کرتے ہو کہ ان میں اکثر سنتے یا سمجھتے ہیں (نہیں) یہ تو چوپایوں کی طرح ہیں بلکہ ان سے بھی زیادہ گمراہ ہیں",
         "audio": {
@@ -539,7 +539,7 @@
       {
         "ayah": 45,
         "globalAyah": 2900,
-        "arabic": "أَلَمْ تَرَ إِلَىٰ رَبِّكَ كَيْفَ مَدَّ ٱلظِّلَّ وَلَوْ شَآءَ لَجَعَلَهُۥ سَاكِنًۭا ثُمَّ جَعَلْنَا ٱلشَّمْسَ عَلَيْهِ دَلِيلًۭا",
+        "arabic": "اَلَمۡ تَرَ اِلٰى رَبِّكَ كَيۡفَ مَدَّ الظِّلَّ​ ۚ وَلَوۡ شَآءَ لَجَـعَلَهٗ سَاكِنًا​ ۚ ثُمَّ جَعَلۡنَا الشَّمۡسَ عَلَيۡهِ دَلِيۡلًا ۙ‏",
         "translation_en": "Art thou not aware of thy Sustainer [through His works]? - how He causes the shadow to lengthen [towards the night] when, had He so willed, He could indeed have made it stand still: but then, We have made the sun its guide;",
         "translation_ur": "بلکہ تم نے اپنے پروردگار (کی قدرت) کو نہیں دیکھا کہ وہ سائے کو کس طرح دراز کر (کے پھیلا) دیتا ہے۔ اور اگر وہ چاہتا تو اس کو (بےحرکت) ٹھیرا رکھتا پھر سورج کو اس کا رہنما بنا دیتا ہے",
         "audio": {
@@ -551,7 +551,7 @@
       {
         "ayah": 46,
         "globalAyah": 2901,
-        "arabic": "ثُمَّ قَبَضْنَٰهُ إِلَيْنَا قَبْضًۭا يَسِيرًۭا",
+        "arabic": "ثُمَّ قَبَضۡنٰهُ اِلَـيۡنَا قَبۡضًا يَّسِيۡرًا‏",
         "translation_en": "and then, [after having caused it to lengthen,] We draw it in towards Our­selves with a gradual drawing-in.",
         "translation_ur": "پھر اس کو ہم آہستہ آہستہ اپنی طرف سمیٹ لیتے ہیں",
         "audio": {
@@ -563,7 +563,7 @@
       {
         "ayah": 47,
         "globalAyah": 2902,
-        "arabic": "وَهُوَ ٱلَّذِى جَعَلَ لَكُمُ ٱلَّيْلَ لِبَاسًۭا وَٱلنَّوْمَ سُبَاتًۭا وَجَعَلَ ٱلنَّهَارَ نُشُورًۭا",
+        "arabic": "وَهُوَ الَّذِىۡ جَعَلَ لَـكُمُ الَّيۡلَ لِبَاسًا وَّالنَّوۡمَ سُبَاتًا وَّجَعَلَ النَّهَارَ نُشُوۡرًا‏",
         "translation_en": "And He it is who makes the night a garment for you, and [your] sleep a rest, and causes every [new] day to be a resurrection.",
         "translation_ur": "اور وہی تو ہے جس نے رات کو تمہارے لئے پردہ اور نیند کو آرام بنایا اور دن کو اُٹھ کھڑے ہونے کا وقت ٹھہرایا",
         "audio": {
@@ -575,7 +575,7 @@
       {
         "ayah": 48,
         "globalAyah": 2903,
-        "arabic": "وَهُوَ ٱلَّذِىٓ أَرْسَلَ ٱلرِّيَٰحَ بُشْرًۢا بَيْنَ يَدَىْ رَحْمَتِهِۦ ۚ وَأَنزَلْنَا مِنَ ٱلسَّمَآءِ مَآءًۭ طَهُورًۭا",
+        "arabic": "وَهُوَ الَّذِىۡۤ اَرۡسَلَ الرِّيٰحَ بُشۡرًۢا بَيۡنَ يَدَىۡ رَحۡمَتِهٖ​ۚ وَاَنۡزَلۡنَا مِنَ السَّمَآءِ مَآءً طَهُوۡرًا ۙ‏",
         "translation_en": "And He it is who sends forth the winds as a glad tiding of His coming grace; and [thus, too,] We cause pure water to descend from the skies,",
         "translation_ur": "اور وہی تو ہے جو اپنی رحمت کے مینھہ کے آگے ہواؤں کو خوش خبری بنا کر بھیجتا ہے۔ اور ہم آسمان سے پاک (اور نتھرا ہوا) پانی برساتے ہیں",
         "audio": {
@@ -587,7 +587,7 @@
       {
         "ayah": 49,
         "globalAyah": 2904,
-        "arabic": "لِّنُحْۦِىَ بِهِۦ بَلْدَةًۭ مَّيْتًۭا وَنُسْقِيَهُۥ مِمَّا خَلَقْنَآ أَنْعَٰمًۭا وَأَنَاسِىَّ كَثِيرًۭا",
+        "arabic": "لِّـنُحْیِۦَ بِهٖ بَلۡدَةً مَّيۡتًا وَّنُسۡقِيَهٗ مِمَّا خَلَقۡنَاۤ اَنۡعَامًا وَّاَنَاسِىَّ كَثِيۡرًا‏",
         "translation_en": "so that We may bring dead land to life thereby, and give to drink thereof to many [beings] of Our creation, beasts as well as humans.",
         "translation_ur": "تاکہ اس سے شہر مردہ (یعنی زمین افتادہ) کو زندہ کردیں اور پھر اسے بہت سے چوپایوں اور آدمیوں کو جو ہم نے پیدا کئے ہیں پلاتے ہیں",
         "audio": {
@@ -599,7 +599,7 @@
       {
         "ayah": 50,
         "globalAyah": 2905,
-        "arabic": "وَلَقَدْ صَرَّفْنَٰهُ بَيْنَهُمْ لِيَذَّكَّرُوا۟ فَأَبَىٰٓ أَكْثَرُ ٱلنَّاسِ إِلَّا كُفُورًۭا",
+        "arabic": "وَلَـقَدۡ صَرَّفۡنٰهُ بَيۡنَهُمۡ لِيَذَّكَّرُوْا ​ ۖ ا فَاَبٰٓى اَكۡثَرُ النَّاسِ اِلَّا كُفُوۡرًا‏",
         "translation_en": "And, indeed, many times have We repeated [all] this unto men, so that they might take it to heart: but most men refuse to be aught but ingrate.",
         "translation_ur": "اور ہم نے اس (قرآن کی آیتوں) کو طرح طرح سے لوگوں میں بیان کیا تاکہ نصیحت پکڑیں مگر بہت سے لوگوں نے انکار کے سوا قبول نہ کیا",
         "audio": {
@@ -611,7 +611,7 @@
       {
         "ayah": 51,
         "globalAyah": 2906,
-        "arabic": "وَلَوْ شِئْنَا لَبَعَثْنَا فِى كُلِّ قَرْيَةٍۢ نَّذِيرًۭا",
+        "arabic": "وَلَوۡ شِئۡنَا لَبَـعَثۡنَا فِىۡ كُلِّ قَرۡيَةٍ نَّذِيۡرًا ​ۖ ‏",
         "translation_en": "Now had We so willed. We could have [con­tinued as before and] raised up a [separate] warner in every single community:",
         "translation_ur": "اور اگر ہم چاہتے تو ہر بستی میں ڈرانے والا بھیج دیتے",
         "audio": {
@@ -623,7 +623,7 @@
       {
         "ayah": 52,
         "globalAyah": 2907,
-        "arabic": "فَلَا تُطِعِ ٱلْكَٰفِرِينَ وَجَٰهِدْهُم بِهِۦ جِهَادًۭا كَبِيرًۭا",
+        "arabic": "فَلَا تُطِعِ الۡكٰفِرِيۡنَ وَ جَاهِدۡهُمۡ بِهٖ جِهَادًا كَبِيۡرًا‏",
         "translation_en": "hence, do not defer to [the likes and dislikes of] those who deny the truth, but strive hard against them, by means of this [divine writ], with utmost striving.",
         "translation_ur": "تو تم کافروں کا کہا نہ مانو اور ان سے اس قرآن کے حکم کے مطابق بڑے شدومد سے لڑو",
         "audio": {
@@ -635,7 +635,7 @@
       {
         "ayah": 53,
         "globalAyah": 2908,
-        "arabic": "۞ وَهُوَ ٱلَّذِى مَرَجَ ٱلْبَحْرَيْنِ هَٰذَا عَذْبٌۭ فُرَاتٌۭ وَهَٰذَا مِلْحٌ أُجَاجٌۭ وَجَعَلَ بَيْنَهُمَا بَرْزَخًۭا وَحِجْرًۭا مَّحْجُورًۭا",
+        "arabic": "وَهُوَ الَّذِىۡ مَرَجَ الۡبَحۡرَيۡنِ هٰذَا عَذۡبٌ فُرَاتٌ وَّهٰذَا مِلۡحٌ​ اُجَاجٌ ۚ وَجَعَلَ بَيۡنَهُمَا بَرۡزَخًا وَّحِجۡرًا مَّحۡجُوۡرًا‏",
         "translation_en": "AND HE it is who has given freedom of movement to the two great bodies of water – the one sweet and thirst-allaying, and the other salty and bitter - and yet has wrought between them a barrier and a forbidding ban.",
         "translation_ur": "اور وہی تو ہے جس نے دو دریاؤں کو ملا دیا ایک کا پانی شیریں ہے پیاس بجھانے والا اور دوسرے کا کھاری چھاتی جلانے والا۔ اور دونوں کے درمیان ایک آڑ اور مضبوط اوٹ بنادی",
         "audio": {
@@ -647,7 +647,7 @@
       {
         "ayah": 54,
         "globalAyah": 2909,
-        "arabic": "وَهُوَ ٱلَّذِى خَلَقَ مِنَ ٱلْمَآءِ بَشَرًۭا فَجَعَلَهُۥ نَسَبًۭا وَصِهْرًۭا ۗ وَكَانَ رَبُّكَ قَدِيرًۭا",
+        "arabic": "وَهُوَ الَّذِىۡ خَلَقَ مِنَ الۡمَآءِ بَشَرًا فَجَعَلَهٗ نَسَبًا وَّ صِهۡرًا​ ؕ وَكَانَ رَبُّكَ قَدِيۡرًا‏",
         "translation_en": "And He it is who out of this [very] water has created man, and has endowed him with [the con­sciousness of] descent and marriage-tie: for thy Sustainer is ever infinite in His power.",
         "translation_ur": "اور وہی تو ہے جس نے پانی سے آدمی پیدا کیا۔ پھر اس کو صاحب نسب اور صاحب قرابت دامادی بنایا۔ اور تمہارا پروردگار (ہر طرح کی) قدرت رکھتا ہے",
         "audio": {
@@ -659,7 +659,7 @@
       {
         "ayah": 55,
         "globalAyah": 2910,
-        "arabic": "وَيَعْبُدُونَ مِن دُونِ ٱللَّهِ مَا لَا يَنفَعُهُمْ وَلَا يَضُرُّهُمْ ۗ وَكَانَ ٱلْكَافِرُ عَلَىٰ رَبِّهِۦ ظَهِيرًۭا",
+        "arabic": "وَيَعۡبُدُوۡنَ مِنۡ دُوۡنِ اللّٰهِ مَا لَا يَنۡفَعُهُمۡ وَلَا يَضُرُّهُمۡ​ؕ وَكَانَ الۡـكَافِرُ عَلٰى رَبِّهٖ ظَهِيۡرًا‏",
         "translation_en": "And yet, some people worship, instead of God, things that can neither benefit them nor harm them: thus, he who denies the truth does indeed turn his back on his Sustainer!",
         "translation_ur": "اور یہ لوگ خدا کو چھوڑ کر ایسی چیز کی پرستش کر تے ہیں جو نہ ان کو فائدہ پہنچا سکے اور نہ ضرر۔ اور کافر اپنے پروردگار کی مخالفت میں بڑا زور مارتا ہے",
         "audio": {
@@ -671,7 +671,7 @@
       {
         "ayah": 56,
         "globalAyah": 2911,
-        "arabic": "وَمَآ أَرْسَلْنَٰكَ إِلَّا مُبَشِّرًۭا وَنَذِيرًۭا",
+        "arabic": "وَمَاۤ اَرۡسَلۡنٰكَ اِلَّا مُبَشِّرًا وَّنَذِيۡرًا‏",
         "translation_en": "Yet [withal, O Prophet,] We have sent thee only as a herald of glad tidings and a warner.",
         "translation_ur": "اور ہم نے (اے محمدﷺ) تم کو صرف خوشی اور عذاب کی خبر سنانے کو بھیجا ہے",
         "audio": {
@@ -683,7 +683,7 @@
       {
         "ayah": 57,
         "globalAyah": 2912,
-        "arabic": "قُلْ مَآ أَسْـَٔلُكُمْ عَلَيْهِ مِنْ أَجْرٍ إِلَّا مَن شَآءَ أَن يَتَّخِذَ إِلَىٰ رَبِّهِۦ سَبِيلًۭا",
+        "arabic": "قُلۡ مَاۤ اَسۡــَٔـلُكُمۡ عَلَيۡهِ مِنۡ اَجۡرٍ اِلَّا مَنۡ شَآءَ اَنۡ يَّـتَّخِذَ اِلٰى رَبِّهٖ سَبِيۡلًا‏",
         "translation_en": "Say: “For this, no reward do I ask of you [- no reward] other than that he who so wills may unto his Sustainer find a way!”",
         "translation_ur": "کہہ دو کہ میں تم سے اس (کام) کی اجرت نہیں مانگتا، ہاں جو شخص چاہے اپنے پروردگار کی طرف جانے کا رستہ اختیار کرے",
         "audio": {
@@ -695,7 +695,7 @@
       {
         "ayah": 58,
         "globalAyah": 2913,
-        "arabic": "وَتَوَكَّلْ عَلَى ٱلْحَىِّ ٱلَّذِى لَا يَمُوتُ وَسَبِّحْ بِحَمْدِهِۦ ۚ وَكَفَىٰ بِهِۦ بِذُنُوبِ عِبَادِهِۦ خَبِيرًا",
+        "arabic": "وَتَوَكَّلۡ عَلَى الۡحَـىِّ الَّذِىۡ لَا يَمُوۡتُ وَسَبِّحۡ بِحَمۡدِهٖ​ ؕ وَكَفٰى بِهٖ بِذُنُوۡبِ عِبَادِهٖ خَبِيۡرَ ا​ ۛۚ ۙ‏",
         "translation_en": "Hence, place thy trust in the Living One who dies not, and extol His limitless glory and praise: for none is as aware as His creatures’ sins as He –",
         "translation_ur": "اور اس (خدائے) زندہ پر بھروسہ رکھو جو (کبھی) نہیں مرے گا اور اس کی تعریف کے ساتھ تسبیح کرتے رہو۔ اور وہ اپنے بندوں کے گناہوں سے خبر رکھنے کو کافی ہے",
         "audio": {
@@ -707,7 +707,7 @@
       {
         "ayah": 59,
         "globalAyah": 2914,
-        "arabic": "ٱلَّذِى خَلَقَ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضَ وَمَا بَيْنَهُمَا فِى سِتَّةِ أَيَّامٍۢ ثُمَّ ٱسْتَوَىٰ عَلَى ٱلْعَرْشِ ۚ ٱلرَّحْمَٰنُ فَسْـَٔلْ بِهِۦ خَبِيرًۭا",
+        "arabic": "اۨلَّذِىۡ خَلَقَ السَّمٰوٰتِ وَالۡاَرۡضَ وَمَا بَيۡنَهُمَا فِىۡ سِتَّةِ اَيَّامٍ ثُمَّ اسۡتَوٰى عَلَى الۡعَرۡشِ ​ۛۚ اَلرَّحۡمٰنُ فَسۡـَٔـــلۡ بِهٖ خَبِيۡرًا‏",
         "translation_en": "He who has created the heavens and the earth and all that is between them in six aeons, and is established on the throne of His almightiness: the Most Gracious! Ask, then, about Him, [the] One who is [truly] aware.",
         "translation_ur": "جس نے آسمانوں اور زمین کو اور جو کچھ ان دونوں کے درمیان ہے چھ دن میں پیدا کیا پھر عرش پر جا ٹھہرا وہ (جس کا نام) رحمٰن (یعنی بڑا مہربان ہے) تو اس کا حال کسی باخبر سے دریافت کرلو",
         "audio": {
@@ -719,7 +719,7 @@
       {
         "ayah": 60,
         "globalAyah": 2915,
-        "arabic": "وَإِذَا قِيلَ لَهُمُ ٱسْجُدُوا۟ لِلرَّحْمَٰنِ قَالُوا۟ وَمَا ٱلرَّحْمَٰنُ أَنَسْجُدُ لِمَا تَأْمُرُنَا وَزَادَهُمْ نُفُورًۭا ۩",
+        "arabic": "وَاِذَا قِيۡلَ لَهُمُ اسۡجُدُوۡا لِلرَّحۡمٰنِ قَالُوۡا وَمَا الرَّحۡمٰنُ اَنَسۡجُدُ لِمَا تَاۡمُرُنَا وَزَادَهُمۡ نُفُوۡرًا ۩‏",
         "translation_en": "Yet when they [who are bent on denying the truth! are told, “Prostrate yourselves before the Most Gracious.” they are wont to ask, “And [who and] what is the Most Gracious? Are we to prostrate ourselves before whatever thou biddest us [to worship]?” - and so [thy call] but increases their aversion,",
         "translation_ur": "اور جب ان (کفار) سے کہا جاتا ہے کہ رحمٰن کو سجدہ کرو تو کہتے ہیں رحمٰن کیا؟ کیا جس کے لئے تم ہم سے کہتے ہو ہم اس کے آگے سجدہ کریں اور اس سے بدکتے ہیں",
         "audio": {
@@ -731,7 +731,7 @@
       {
         "ayah": 61,
         "globalAyah": 2916,
-        "arabic": "تَبَارَكَ ٱلَّذِى جَعَلَ فِى ٱلسَّمَآءِ بُرُوجًۭا وَجَعَلَ فِيهَا سِرَٰجًۭا وَقَمَرًۭا مُّنِيرًۭا",
+        "arabic": "تَبٰـرَكَ الَّذِىۡ جَعَلَ فِى السَّمَآءِ بُرُوۡجًا وَّجَعَلَ فِيۡهَا سِرٰجًا وَّقَمَرًا مُّنِيۡرًا‏",
         "translation_en": "HALLOWED is He who has set up in the skies great constellations, and has placed among them a [radiant] lamp and a light-giving moon.",
         "translation_ur": "اور (خدا) بڑی برکت والا ہے جس نے آسمانوں میں برج بنائے اور ان میں (آفتاب کا نہایت روشن) چراغ اور چمکتا ہوا چاند بھی بنایا",
         "audio": {
@@ -743,7 +743,7 @@
       {
         "ayah": 62,
         "globalAyah": 2917,
-        "arabic": "وَهُوَ ٱلَّذِى جَعَلَ ٱلَّيْلَ وَٱلنَّهَارَ خِلْفَةًۭ لِّمَنْ أَرَادَ أَن يَذَّكَّرَ أَوْ أَرَادَ شُكُورًۭا",
+        "arabic": "وَهُوَ الَّذِىۡ جَعَلَ الَّيۡلَ وَالنَّهَارَ خِلۡفَةً لِّمَنۡ اَرَادَ اَنۡ يَّذَّكَّرَ اَوۡ اَرَادَ شُكُوۡرًا‏",
         "translation_en": "And He it is who causes the night and the day to succeed one another, [revealing Himself in His works] unto him who has the will to take thought - that is has the will to be grateful.",
         "translation_ur": "اور وہی تو ہے جس نے رات اور دن کو ایک دوسرے کے پیچھے آنے جانے والا بنایا۔ (یہ باتیں) اس شخص کے لئے جو غور کرنا چاہے یا شکرگزاری کا ارادہ کرے (سوچنے اور سمجھنے کی ہیں)",
         "audio": {
@@ -755,7 +755,7 @@
       {
         "ayah": 63,
         "globalAyah": 2918,
-        "arabic": "وَعِبَادُ ٱلرَّحْمَٰنِ ٱلَّذِينَ يَمْشُونَ عَلَى ٱلْأَرْضِ هَوْنًۭا وَإِذَا خَاطَبَهُمُ ٱلْجَٰهِلُونَ قَالُوا۟ سَلَٰمًۭا",
+        "arabic": "وَعِبَادُ الرَّحۡمٰنِ الَّذِيۡنَ يَمۡشُوۡنَ عَلَى الۡاَرۡضِ هَوۡنًا وَّاِذَا خَاطَبَهُمُ الۡجٰهِلُوۡنَ قَالُوۡا سَلٰمًا‏",
         "translation_en": "For, [true] servants of the Most Gracious are [only] they who walk gently on earth, and who, whenever the foolish address them, reply with [words of] peace;",
         "translation_ur": "اور خدا کے بندے تو وہ ہیں جو زمین پر آہستگی سے چلتے ہیں اور جب جاہل لوگ ان سے (جاہلانہ) گفتگو کرتے ہیں تو سلام کہتے ہیں",
         "audio": {
@@ -767,7 +767,7 @@
       {
         "ayah": 64,
         "globalAyah": 2919,
-        "arabic": "وَٱلَّذِينَ يَبِيتُونَ لِرَبِّهِمْ سُجَّدًۭا وَقِيَٰمًۭا",
+        "arabic": "وَالَّذِيۡنَ يَبِيۡتُوۡنَ لِرَبِّهِمۡ سُجَّدًا وَّقِيَامًا‏",
         "translation_en": "and who remember their Sustainer far into the night, prostrating themselves and standing;",
         "translation_ur": "اور جو وہ اپنے پروردگار کے آگے سجدے کرکے اور (عجز وادب سے) کھڑے رہ کر راتیں بسر کرتے ہیں",
         "audio": {
@@ -779,7 +779,7 @@
       {
         "ayah": 65,
         "globalAyah": 2920,
-        "arabic": "وَٱلَّذِينَ يَقُولُونَ رَبَّنَا ٱصْرِفْ عَنَّا عَذَابَ جَهَنَّمَ ۖ إِنَّ عَذَابَهَا كَانَ غَرَامًا",
+        "arabic": "وَالَّذِيۡنَ يَقُوۡلُوۡنَ رَبَّنَا اصۡرِفۡ عَنَّا عَذَابَ جَهَـنَّمَ ​ۖ  اِنَّ عَذَابَهَا كَانَ غَرَامًا ​ۖ ‏",
         "translation_en": "and who pray: “O our Sustainer, avert from us the suffering of hell - for, verily, the suffering caused by it is bound to be a torment dire:",
         "translation_ur": "اور جو دعا مانگتے رہتے ہیں کہ اے پروردگار دوزخ کے عذاب کو ہم سے دور رکھیو کہ اس کا عذاب بڑی تکلیف کی چیز ہے",
         "audio": {
@@ -791,7 +791,7 @@
       {
         "ayah": 66,
         "globalAyah": 2921,
-        "arabic": "إِنَّهَا سَآءَتْ مُسْتَقَرًّۭا وَمُقَامًۭا",
+        "arabic": "اِنَّهَا سَآءَتۡ مُسۡتَقَرًّا وَّمُقَامًا‏",
         "translation_en": "verily, how evil an abode and a station!” -;",
         "translation_ur": "اور دوزخ ٹھیرنے اور رہنے کی بہت بری جگہ ہے",
         "audio": {
@@ -803,7 +803,7 @@
       {
         "ayah": 67,
         "globalAyah": 2922,
-        "arabic": "وَٱلَّذِينَ إِذَآ أَنفَقُوا۟ لَمْ يُسْرِفُوا۟ وَلَمْ يَقْتُرُوا۟ وَكَانَ بَيْنَ ذَٰلِكَ قَوَامًۭا",
+        "arabic": "وَالَّذِيۡنَ اِذَاۤ اَنۡفَقُوۡا لَمۡ يُسۡرِفُوۡا وَلَمۡ يَقۡتُرُوۡا وَكَانَ بَيۡنَ ذٰلِكَ قَوَامًا‏",
         "translation_en": "and who, whenever they spend on others, are neither wasteful nor niggardly but [remember that] there is always a just mean between those [two extremes];",
         "translation_ur": "اور وہ جب خرچ کرتے ہیں تو نہ بےجا اُڑاتے ہیں اور نہ تنگی کو کام میں لاتے ہیں بلکہ اعتدال کے ساتھ۔ نہ ضرورت سے زیادہ نہ کم",
         "audio": {
@@ -815,7 +815,7 @@
       {
         "ayah": 68,
         "globalAyah": 2923,
-        "arabic": "وَٱلَّذِينَ لَا يَدْعُونَ مَعَ ٱللَّهِ إِلَٰهًا ءَاخَرَ وَلَا يَقْتُلُونَ ٱلنَّفْسَ ٱلَّتِى حَرَّمَ ٱللَّهُ إِلَّا بِٱلْحَقِّ وَلَا يَزْنُونَ ۚ وَمَن يَفْعَلْ ذَٰلِكَ يَلْقَ أَثَامًۭا",
+        "arabic": "وَالَّذِيۡنَ لَا يَدۡعُوۡنَ مَعَ اللّٰهِ اِلٰهًا اٰخَرَ وَلَا يَقۡتُلُوۡنَ النَّفۡسَ الَّتِىۡ حَرَّمَ اللّٰهُ اِلَّا بِالۡحَـقِّ وَلَا يَزۡنُوۡنَ​ ۚ وَمَنۡ يَّفۡعَلۡ ذٰ لِكَ يَلۡقَ اَثَامًا ۙ‏",
         "translation_en": "and who never invoke any [imaginary] deity side by side with God, and do not take any human beings life - [the life] which God has willed to be sacred - otherwise than in [the pursuit of] justice, and do not commit adultery. And [know that] he who commits aught thereof shall [not only] meet with a full requital",
         "translation_ur": "اور وہ جو خدا کے ساتھ کسی اور معبود کو نہیں پکارتے اور جن جاندار کو مار ڈالنا خدا نے حرام کیا ہے اس کو قتل نہیں کرتے مگر جائز طریق پر (یعنی شریعت کے مطابق) اور بدکاری نہیں کرتے۔ اور جو یہ کام کرے گا سخت گناہ میں مبتلا ہوگا",
         "audio": {
@@ -827,7 +827,7 @@
       {
         "ayah": 69,
         "globalAyah": 2924,
-        "arabic": "يُضَٰعَفْ لَهُ ٱلْعَذَابُ يَوْمَ ٱلْقِيَٰمَةِ وَيَخْلُدْ فِيهِۦ مُهَانًا",
+        "arabic": "يُضٰعَفۡ لَهُ الۡعَذَابُ يَوۡمَ الۡقِيٰمَةِ وَيَخۡلُدۡ فِيۡهٖ مُهَانًا ۖ ‏ ﻿﻿",
         "translation_en": "[but] shall have his suffering doubled on Resurrection Day: for on that [Day] he shall abide in ignominy.",
         "translation_ur": "قیامت کے دن اس کو دونا عذاب ہوگا اور ذلت وخواری سے ہمیشہ اس میں رہے گا",
         "audio": {
@@ -839,7 +839,7 @@
       {
         "ayah": 70,
         "globalAyah": 2925,
-        "arabic": "إِلَّا مَن تَابَ وَءَامَنَ وَعَمِلَ عَمَلًۭا صَٰلِحًۭا فَأُو۟لَٰٓئِكَ يُبَدِّلُ ٱللَّهُ سَيِّـَٔاتِهِمْ حَسَنَٰتٍۢ ۗ وَكَانَ ٱللَّهُ غَفُورًۭا رَّحِيمًۭا",
+        "arabic": "اِلَّا مَنۡ تَابَ وَاٰمَنَ وَعَمِلَ عَمَلًاصَالِحًـا فَاُولٰٓٮِٕكَ يُبَدِّلُ اللّٰهُ سَيِّاٰتِهِمۡ حَسَنٰتٍ​ ؕ وَكَانَ اللّٰهُ غَفُوۡرًا رَّحِيۡمًا‏",
         "translation_en": "Excepted, however, shall be they who repent and attain to faith and do righteous deeds: for it is they whose [erstwhile] bad deeds God will transform into good ones - seeing that God is indeed much-forgiving, a dispenser of grace,",
         "translation_ur": "مگر جس نے توبہ کی اور ایمان لایا اور اچھے کام کئے تو ایسے لوگوں کے گناہوں کو خدا نیکیوں سے بدل دے گا۔ اور خدا تو بخشنے والا مہربان ہے",
         "audio": {
@@ -851,7 +851,7 @@
       {
         "ayah": 71,
         "globalAyah": 2926,
-        "arabic": "وَمَن تَابَ وَعَمِلَ صَٰلِحًۭا فَإِنَّهُۥ يَتُوبُ إِلَى ٱللَّهِ مَتَابًۭا",
+        "arabic": "وَمَنۡ تَابَ وَعَمِلَ صَالِحًـا فَاِنَّهٗ يَتُوۡبُ اِلَى اللّٰهِ مَتَابًا‏ ﻿﻿",
         "translation_en": "and seeing that he who repents and [thenceforth] does what is right has truly turned unto God by [this very act of] repent­ance.",
         "translation_ur": "اور جو توبہ کرتا اور عمل نیک کرتا ہے تو بےشک وہ خدا کی طرف رجوع کرتا ہے",
         "audio": {
@@ -863,7 +863,7 @@
       {
         "ayah": 72,
         "globalAyah": 2927,
-        "arabic": "وَٱلَّذِينَ لَا يَشْهَدُونَ ٱلزُّورَ وَإِذَا مَرُّوا۟ بِٱللَّغْوِ مَرُّوا۟ كِرَامًۭا",
+        "arabic": "وَالَّذِيۡنَ لَا يَشۡهَدُوۡنَ الزُّوۡرَۙ وَ اِذَا مَرُّوۡا بِاللَّغۡوِ مَرُّوۡا كِرَامًا‏",
         "translation_en": "And [know that true servants of God are only] those who never bear witness to what is false, and [who], whenever they pass by [people engaged in] frivolity, pass on with dignity;",
         "translation_ur": "اور وہ جو جھوٹی گواہی نہیں دیتے اور جب ان کو بیہودہ چیزوں کے پاس سے گزرنے کا اتفاق ہو تو بزرگانہ انداز سے گزرتے ہیں",
         "audio": {
@@ -875,7 +875,7 @@
       {
         "ayah": 73,
         "globalAyah": 2928,
-        "arabic": "وَٱلَّذِينَ إِذَا ذُكِّرُوا۟ بِـَٔايَٰتِ رَبِّهِمْ لَمْ يَخِرُّوا۟ عَلَيْهَا صُمًّۭا وَعُمْيَانًۭا",
+        "arabic": "وَالَّذِيۡنَ اِذَا ذُكِّرُوۡا بِاٰيٰتِ رَبِّهِمۡ لَمۡ يَخِرُّوۡا عَلَيۡهَا صُمًّا وَّعُمۡيَانًا‏",
         "translation_en": "and who, whenever they are reminded of their Sustainer’s messages, do not throw themselves upon them [as if] deaf and blind;",
         "translation_ur": "اور وہ کہ جب ان کو پروردگار کی باتیں سمجھائی جاتی ہیں تو اُن پر اندھے اور بہرے ہو کر نہیں گرتے (بلکہ غور سے سنتے ہیں)",
         "audio": {
@@ -887,7 +887,7 @@
       {
         "ayah": 74,
         "globalAyah": 2929,
-        "arabic": "وَٱلَّذِينَ يَقُولُونَ رَبَّنَا هَبْ لَنَا مِنْ أَزْوَٰجِنَا وَذُرِّيَّٰتِنَا قُرَّةَ أَعْيُنٍۢ وَٱجْعَلْنَا لِلْمُتَّقِينَ إِمَامًا",
+        "arabic": "وَالَّذِيۡنَ يَقُوۡلُوۡنَ رَبَّنَا هَبۡ لَـنَا مِنۡ اَزۡوَاجِنَا وَذُرِّيّٰتِنَا قُرَّةَ اَعۡيُنٍ وَّاجۡعَلۡنَا لِلۡمُتَّقِيۡنَ اِمَامًا‏",
         "translation_en": "and who pray “O our Sustainer! Grant that our spouses and our offspring be a joy to our eyes, and cause us to be foremost among those who are conscious of Thee!”",
         "translation_ur": "اور وہ جو (خدا سے) دعا مانگتے ہیں کہ اے پروردگار ہم کو ہماری بیویوں کی طرف سے (دل کا چین) اور اولاد کی طرف سے آنکھ کی ٹھنڈک عطا فرما اور ہمیں پرہیزگاروں کا امام بنا",
         "audio": {
@@ -899,7 +899,7 @@
       {
         "ayah": 75,
         "globalAyah": 2930,
-        "arabic": "أُو۟لَٰٓئِكَ يُجْزَوْنَ ٱلْغُرْفَةَ بِمَا صَبَرُوا۟ وَيُلَقَّوْنَ فِيهَا تَحِيَّةًۭ وَسَلَٰمًا",
+        "arabic": "اُولٰٓٮِٕكَ يُجۡزَوۡنَ الۡغُرۡفَةَ بِمَا صَبَرُوۡا وَيُلَقَّوۡنَ فِيۡهَا تَحِيَّةً وَّسَلٰمًا ۙ‏",
         "translation_en": "[Such as] these will be rewarded for all their patient endurance [in life] with a high station [in paradise], and will be met therein with a greeting of welcome and peace,",
         "translation_ur": "ان (صفات کے) لوگوں کو ان کے صبر کے بدلے اونچے اونچے محل دیئے جائیں گے۔ اور وہاں فرشتے ان سے دعا وسلام کے ساتھ ملاقات کریں گے",
         "audio": {
@@ -911,7 +911,7 @@
       {
         "ayah": 76,
         "globalAyah": 2931,
-        "arabic": "خَٰلِدِينَ فِيهَا ۚ حَسُنَتْ مُسْتَقَرًّۭا وَمُقَامًۭا",
+        "arabic": "خٰلِدِيۡنَ فِيۡهَا​ ؕ حَسُنَتۡ مُسۡتَقَرًّا وَّمُقَامًا‏",
         "translation_en": "therein to abide: [and] how goodly an abode and [how high] a station!",
         "translation_ur": "اس میں وہ ہمیشہ رہیں گے۔ اور وہ ٹھیرنے اور رہنے کی بہت ہی عمدہ جگہ ہے",
         "audio": {
@@ -923,7 +923,7 @@
       {
         "ayah": 77,
         "globalAyah": 2932,
-        "arabic": "قُلْ مَا يَعْبَؤُا۟ بِكُمْ رَبِّى لَوْلَا دُعَآؤُكُمْ ۖ فَقَدْ كَذَّبْتُمْ فَسَوْفَ يَكُونُ لِزَامًۢا",
+        "arabic": "قُلۡ مَا يَعۡبَـؤُا بِكُمۡ رَبِّىۡ لَوۡلَا دُعَآؤُكُمۡ​ۚ فَقَدۡ كَذَّبۡتُمۡ فَسَوۡفَ يَكُوۡنُ لِزَامًا‏",
         "translation_en": "SAY [unto those who believe]: “No weight or value would my Sustainer attach to you were it not for your faith [in Him]!” And say unto those who deny the truth:] “You have indeed given the lie [to God’s message], and in time this [sin] will cleave unto you!”",
         "translation_ur": "کہہ دو کہ اگر تم (خدا کو) نہیں پکارتے تو میرا پروردگار بھی تمہاری کچھ پروا نہیں کرتا۔ تم نے تکذیب کی ہے سو اس کی سزا (تمہارے لئے) لازم ہوگی",
         "audio": {

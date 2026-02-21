@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-02-14T12:15:28.305133+00:00",
-  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "generatedAt": "2026-02-21T01:14:43.309898+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
   "surah": {
     "surah": 101,
     "arabicName": "سُورَةُ القَارِعَةِ",
@@ -11,7 +11,7 @@
       {
         "ayah": 1,
         "globalAyah": 6158,
-        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ٱلْقَارِعَةُ",
+        "arabic": "اَلۡقَارِعَةُ ۙ‏",
         "translation_en": "OH, the sudden calamity!",
         "translation_ur": "کھڑ کھڑانے والی",
         "audio": {
@@ -23,7 +23,7 @@
       {
         "ayah": 2,
         "globalAyah": 6159,
-        "arabic": "مَا ٱلْقَارِعَةُ",
+        "arabic": "مَا الۡقَارِعَةُ​ ۚ‏",
         "translation_en": "How awesome the sudden calamity!",
         "translation_ur": "کھڑ کھڑانے والی کیا ہے؟",
         "audio": {
@@ -35,7 +35,7 @@
       {
         "ayah": 3,
         "globalAyah": 6160,
-        "arabic": "وَمَآ أَدْرَىٰكَ مَا ٱلْقَارِعَةُ",
+        "arabic": "وَمَاۤ اَدۡرٰٮكَ مَا الۡقَارِعَةُ ؕ‏",
         "translation_en": "And what could make thee conceive what that sudden calamity will be?",
         "translation_ur": "اور تم کیا جانوں کھڑ کھڑانے والی کیا ہے؟",
         "audio": {
@@ -47,7 +47,7 @@
       {
         "ayah": 4,
         "globalAyah": 6161,
-        "arabic": "يَوْمَ يَكُونُ ٱلنَّاسُ كَٱلْفَرَاشِ ٱلْمَبْثُوثِ",
+        "arabic": "يَوۡمَ يَكُوۡنُ النَّاسُ كَالۡفَرَاشِ الۡمَبۡثُوۡثِۙ‏",
         "translation_en": "[It will occur] on the Day when men will be like moths swarming in confusion,",
         "translation_ur": "(وہ قیامت ہے) جس دن لوگ ایسے ہوں گے جیسے بکھرے ہوئے پتنگے",
         "audio": {
@@ -59,7 +59,7 @@
       {
         "ayah": 5,
         "globalAyah": 6162,
-        "arabic": "وَتَكُونُ ٱلْجِبَالُ كَٱلْعِهْنِ ٱلْمَنفُوشِ",
+        "arabic": "وَتَكُوۡنُ الۡجِبَالُ كَالۡعِهۡنِ الۡمَنۡفُوۡشِؕ‏",
         "translation_en": "and the mountains will be like fluffy tufts of wool....",
         "translation_ur": "اور پہاڑ ایسے ہو جائیں گے جیسے دھنکی ہوئی رنگ برنگ کی اون",
         "audio": {
@@ -71,7 +71,7 @@
       {
         "ayah": 6,
         "globalAyah": 6163,
-        "arabic": "فَأَمَّا مَن ثَقُلَتْ مَوَٰزِينُهُۥ",
+        "arabic": "فَاَمَّا مَنۡ ثَقُلَتۡ مَوَازِيۡنُهٗ ۙ‏",
         "translation_en": "And then, he whose weight [of good deeds] is heavy in the balance",
         "translation_ur": "تو جس کے (اعمال کے) وزن بھاری نکلیں گے",
         "audio": {
@@ -83,7 +83,7 @@
       {
         "ayah": 7,
         "globalAyah": 6164,
-        "arabic": "فَهُوَ فِى عِيشَةٍۢ رَّاضِيَةٍۢ",
+        "arabic": "فَهُوَ فِىۡ عِيۡشَةٍ رَّاضِيَةٍ ؕ‏",
         "translation_en": "shall find himself in a happy' state of life;",
         "translation_ur": "وہ دل پسند عیش میں ہو گا",
         "audio": {
@@ -95,7 +95,7 @@
       {
         "ayah": 8,
         "globalAyah": 6165,
-        "arabic": "وَأَمَّا مَنْ خَفَّتْ مَوَٰزِينُهُۥ",
+        "arabic": "وَاَمَّا مَنۡ خَفَّتۡ مَوَازِيۡنُهٗ ۙ‏",
         "translation_en": "whereas he whose weight is light in the balance",
         "translation_ur": "اور جس کے وزن ہلکے نکلیں گے",
         "audio": {
@@ -107,7 +107,7 @@
       {
         "ayah": 9,
         "globalAyah": 6166,
-        "arabic": "فَأُمُّهُۥ هَاوِيَةٌۭ",
+        "arabic": "فَاُمُّهٗ هَاوِيَةٌ ؕ‏",
         "translation_en": "shall be engulfed by an abyss.",
         "translation_ur": "اس کا مرجع ہاویہ ہے",
         "audio": {
@@ -119,7 +119,7 @@
       {
         "ayah": 10,
         "globalAyah": 6167,
-        "arabic": "وَمَآ أَدْرَىٰكَ مَا هِيَهْ",
+        "arabic": "وَمَاۤ اَدۡرٰٮكَ مَا هِيَهۡ ؕ‏",
         "translation_en": "And what could make thee conceive what that [abyss] will be?",
         "translation_ur": "اور تم کیا سمجھے کہ ہاویہ کیا چیز ہے؟",
         "audio": {
@@ -131,7 +131,7 @@
       {
         "ayah": 11,
         "globalAyah": 6168,
-        "arabic": "نَارٌ حَامِيَةٌۢ",
+        "arabic": "نَارٌ حَامِيَةٌ‏",
         "translation_en": "A fire hotly burning!",
         "translation_ur": "دہکتی ہوئی آگ ہے",
         "audio": {

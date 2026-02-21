@@ -1,6 +1,12 @@
 @font-face {
   font-family: 'CustomArabic';
-  src: url('/fonts/PDMS_SALEEM_QURANFONTQESHIP_0.woff2') format('woff2');
+  src: url('/fonts/Naskh-Nastaleeq-IndoPak-QWBW.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'UthmanicHafs';
+  src: url('/fonts/UthmanicHafs1Ver18.woff2') format('woff2');
   font-display: swap;
 }
 
@@ -19,6 +25,11 @@
   --app-viewport-h: 100vh;
   /* Default to 0 to match Android WebView sizing; iOS gets env() below */
   --safe-bottom: 0px;
+  --qq-arabic-font-family: 'CustomArabic';
+  --qq-arabic-size: 22px;
+  --qq-arabic-weight: 100;
+  --qq-arabic-style: normal;
+  --qq-english-scale: 1;
 }
 
 @supports (height: 100svh) {
@@ -1265,12 +1276,14 @@ body:not(.reader-mode):not(.duas-mode) .container {
 
 /* Arabic name */
 .surah-arabic {
-  font-size: 1.2rem;
+  font-size: var(--qq-arabic-size);
   color: #164e64;
   direction: rtl;
   line-height: 1.34;
   margin: 0;
-  font-family: "PDMS_SALEEM_QURANFONTQESHIP_0", "Scheherazade New", serif;
+  font-family: var(--qq-arabic-font-family), "Scheherazade New", serif;
+  font-weight: var(--qq-arabic-weight);
+  font-style: var(--qq-arabic-style);
   white-space: normal;
   overflow: visible;
   text-overflow: clip;
@@ -2371,10 +2384,12 @@ body.recite-mode #surahProgressWrap {
 .recite-surah-meta {
   margin-top: 8px;
   text-align: center;
-  font-size: 0.94rem;
+  font-size: 22px;
   line-height: 1.15;
   color: rgba(13, 73, 95, 0.95);
   font-family: 'CustomArabic', serif !important;
+  font-weight: 100;
+  font-style: normal;
 }
 
 .recite-ayah-card {
@@ -2455,15 +2470,16 @@ body.recite-mode #surahProgressWrap {
   direction: rtl;
   text-align: right;
   line-height: 1.8;
-  font-size: clamp(1.9rem, 5vw, 2.45rem);
-  font-family: 'CustomArabic', serif !important;
-  font-weight: 400;
+  font-size: var(--qq-arabic-size);
+  font-family: var(--qq-arabic-font-family), serif !important;
+  font-weight: var(--qq-arabic-weight);
+  font-style: var(--qq-arabic-style);
 }
 
 .recite-ayah-translation {
   margin: 10px 0 0;
   color: #3c5965;
-  font-size: 1rem;
+  font-size: calc(1rem * var(--qq-english-scale));
   line-height: 1.42;
 }
 

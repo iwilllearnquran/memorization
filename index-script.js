@@ -572,10 +572,50 @@ const DEFAULT_SETTINGS = {
   speed: '1',
   repeat: '1',
   autoSwipe: true,
-  darkMode: false
+  darkMode: false,
+  arabicFont: 'CustomArabic',
+  arabicSize: 22,
+  arabicWeight: 100,
+  arabicItalic: false,
+  englishScale: 100
 };
 let settingsVersion = 0;
 const iframeSettingsVersion = new WeakMap();
+
+      function sanitizeTypographySettings(raw = {}) {
+        const arabicFont = raw.arabicFont === 'UthmanicHafs' ? 'UthmanicHafs' : 'CustomArabic';
+        const parsedSize = Number.parseFloat(raw.arabicSize);
+        const arabicSize = Number.isFinite(parsedSize)
+          ? Math.min(56, Math.max(16, parsedSize))
+          : 22;
+        const parsedWeight = Number.parseInt(raw.arabicWeight, 10);
+        const weightBucket = Number.isFinite(parsedWeight)
+          ? Math.round(parsedWeight / 100) * 100
+          : 100;
+        const arabicWeight = Math.min(900, Math.max(100, weightBucket));
+        const englishRaw = Number.parseFloat(raw.englishScale);
+        const englishScale = Number.isFinite(englishRaw)
+          ? Math.min(160, Math.max(70, englishRaw))
+          : 100;
+        return {
+          arabicFont,
+          arabicSize,
+          arabicWeight,
+          arabicItalic: raw.arabicItalic === true,
+          englishScale
+        };
+      }
+
+      function applyGlobalTypography(settings = {}) {
+        const typo = sanitizeTypographySettings(settings);
+        const html = document.documentElement;
+        html.setAttribute('data-arabic-font', typo.arabicFont);
+        html.style.setProperty('--qq-arabic-font-family', `'${typo.arabicFont}'`);
+        html.style.setProperty('--qq-arabic-size', `${typo.arabicSize}px`);
+        html.style.setProperty('--qq-arabic-weight', String(typo.arabicWeight));
+        html.style.setProperty('--qq-arabic-style', typo.arabicItalic ? 'italic' : 'normal');
+        html.style.setProperty('--qq-english-scale', String(typo.englishScale / 100));
+      }
 
       function getSettings() {
         let stored = {};
@@ -597,19 +637,34 @@ const iframeSettingsVersion = new WeakMap();
         return {
           ...DEFAULT_SETTINGS,
           ...migrated,
+          ...sanitizeTypographySettings(migrated),
           darkMode: false
         };
       }
 
       function saveSettings(patch) {
         const normalizedPatch = { ...patch };
+        if (
+          Object.prototype.hasOwnProperty.call(normalizedPatch, 'arabicFont') ||
+          Object.prototype.hasOwnProperty.call(normalizedPatch, 'arabicSize') ||
+          Object.prototype.hasOwnProperty.call(normalizedPatch, 'arabicWeight') ||
+          Object.prototype.hasOwnProperty.call(normalizedPatch, 'arabicItalic') ||
+          Object.prototype.hasOwnProperty.call(normalizedPatch, 'englishScale')
+        ) {
+          Object.assign(normalizedPatch, sanitizeTypographySettings(normalizedPatch));
+        }
         if (Object.prototype.hasOwnProperty.call(normalizedPatch, 'showRoot')) {
           normalizedPatch.rootPreferenceSet = true;
         }
 
+        const current = getSettings();
         const next = {
-          ...getSettings(),
-          ...normalizedPatch
+          ...current,
+          ...normalizedPatch,
+          ...sanitizeTypographySettings({
+            ...current,
+            ...normalizedPatch
+          })
         };
 
         localStorage.setItem('qq_settings', JSON.stringify(next));
@@ -621,6 +676,7 @@ const iframeSettingsVersion = new WeakMap();
       function broadcastSettings(settings) {
         console.log('Ã°Å¸â€œÂ¡ Broadcasting settings');
 
+        applyGlobalTypography(settings);
         iframePool.forEach((iframe) => {
           if (!iframeReadySet.has(iframe)) {
             console.log('Ã¢ÂÂ³ iframe not ready, skipping broadcast');
@@ -630,6 +686,12 @@ const iframeSettingsVersion = new WeakMap();
           iframeSettingsVersion.set(iframe, settingsVersion);
           postToIframe(iframe, { type: 'APPLY_SETTINGS', settings, version: settingsVersion });
         });
+        if (D.memoFrame?.contentWindow) {
+          postToIframe(D.memoFrame, { type: 'APPLY_SETTINGS', settings, version: settingsVersion });
+        }
+        if (D.duasFrame?.contentWindow) {
+          postToIframe(D.duasFrame, { type: 'APPLY_SETTINGS', settings, version: settingsVersion });
+        }
         applyTheme(settings.darkMode === true);
         if (isReciteMode && typeof refreshReciteModeView === 'function') {
           refreshReciteModeView(settings);
@@ -657,8 +719,11 @@ const iframeSettingsVersion = new WeakMap();
 
       function syncThemeToFrameOnLoad(frame) {
         if (!frame) return;
-        const darkMode = getSettings().darkMode === true;
-        const send = () => postToIframe(frame, { type: 'APPLY_THEME', darkMode });
+        const send = () => {
+          const settings = getSettings();
+          postToIframe(frame, { type: 'APPLY_THEME', darkMode: settings.darkMode === true });
+          postToIframe(frame, { type: 'APPLY_SETTINGS', settings, version: settingsVersion });
+        };
         frame.addEventListener('load', send, { once: true });
       }
 
@@ -3551,8 +3616,15 @@ case 'SAVE_HINT_DONE': {
         const recitePad3 = value => String(Number(value) || 0).padStart(3, '0');
         const sanitizeReciteArabicText = value =>
           String(value || '')
+            // Normalize tanween-before-alif rendering variant to standard fathatan.
+            .replace(/\u0657(?=\u0627)/g, '\u064B')
+            // Normalize remaining Quranic tanween variant to standard dammatan.
+            .replace(/\u0657/g, '\u064C')
+            // Normalize Quranic sukun mark to standard sukun for font compatibility.
+            .replace(/\u06E1/g, '\u0652')
             // Remove Quranic annotation marks (small pause/ornament symbols).
-            .replace(/[\u06D6-\u06ED]/g, '')
+            // Keep U+06DA (ۚ).
+            .replace(/[\u06D6-\u06D9\u06DB-\u06E0\u06E2-\u06ED]/g, '')
             .trim();
 
         const getReciteSurahPath = surahNum =>
@@ -4033,6 +4105,7 @@ case 'SAVE_HINT_DONE': {
 
         const applyReciteSettingsToDom = (settings = getSettings()) => {
           if (!D.reciteScrollView || !reciteCurrentSurahData) return;
+          applyGlobalTypography(settings);
           const showTranslation = settings.showPanelTranslation !== false;
           const useUr = settings.panelLang === 'ur';
           const autoNextEnabled = settings.autoSwipe !== false;
@@ -4341,6 +4414,39 @@ case 'SAVE_HINT_DONE': {
                 <span>Repeat count</span>
                 <input id="reciteSetRepeat" type="number" min="1" max="20" value="${settings.repeat || '1'}">
               </label>
+              <label class="recite-settings-row">
+                <span>Arabic font</span>
+                <select id="reciteSetArabicFont">
+                  <option value="CustomArabic" ${settings.arabicFont === 'CustomArabic' ? 'selected' : ''}>CustomArabic</option>
+                  <option value="UthmanicHafs" ${settings.arabicFont === 'UthmanicHafs' ? 'selected' : ''}>UthmanicHafs</option>
+                </select>
+              </label>
+              <label class="recite-settings-row">
+                <span>Arabic size (px)</span>
+                <input id="reciteSetArabicSize" type="number" min="16" max="56" step="1" value="${settings.arabicSize || 22}">
+              </label>
+              <label class="recite-settings-row">
+                <span>Arabic weight</span>
+                <select id="reciteSetArabicWeight">
+                  <option value="100" ${Number(settings.arabicWeight) === 100 ? 'selected' : ''}>100</option>
+                  <option value="200" ${Number(settings.arabicWeight) === 200 ? 'selected' : ''}>200</option>
+                  <option value="300" ${Number(settings.arabicWeight) === 300 ? 'selected' : ''}>300</option>
+                  <option value="400" ${Number(settings.arabicWeight) === 400 ? 'selected' : ''}>400</option>
+                  <option value="500" ${Number(settings.arabicWeight) === 500 ? 'selected' : ''}>500</option>
+                  <option value="600" ${Number(settings.arabicWeight) === 600 ? 'selected' : ''}>600</option>
+                  <option value="700" ${Number(settings.arabicWeight) === 700 ? 'selected' : ''}>700</option>
+                  <option value="800" ${Number(settings.arabicWeight) === 800 ? 'selected' : ''}>800</option>
+                  <option value="900" ${Number(settings.arabicWeight) === 900 ? 'selected' : ''}>900</option>
+                </select>
+              </label>
+              <label class="recite-settings-row">
+                <span>Arabic italic</span>
+                <input id="reciteSetArabicItalic" type="checkbox" ${settings.arabicItalic ? 'checked' : ''}>
+              </label>
+              <label class="recite-settings-row recite-settings-row-last">
+                <span>English size (%)</span>
+                <input id="reciteSetEnglishScale" type="number" min="70" max="160" step="5" value="${settings.englishScale || 100}">
+              </label>
               <div class="recite-settings-actions">
                 <button type="button" id="reciteSettingsCancelBtn" class="recite-settings-btn recite-settings-btn-cancel">Cancel</button>
                 <button type="button" id="reciteSettingsApplyBtn" class="recite-settings-btn recite-settings-btn-apply">Apply</button>
@@ -4371,6 +4477,11 @@ case 'SAVE_HINT_DONE': {
               audioLang: overlay.querySelector('#reciteSetAudioLang')?.value || 'ar',
               speed: overlay.querySelector('#reciteSetSpeed')?.value || '1',
               repeat: overlay.querySelector('#reciteSetRepeat')?.value || '1',
+              arabicFont: overlay.querySelector('#reciteSetArabicFont')?.value || 'CustomArabic',
+              arabicSize: Number(overlay.querySelector('#reciteSetArabicSize')?.value || 22),
+              arabicWeight: Number(overlay.querySelector('#reciteSetArabicWeight')?.value || 100),
+              arabicItalic: !!overlay.querySelector('#reciteSetArabicItalic')?.checked,
+              englishScale: Number(overlay.querySelector('#reciteSetEnglishScale')?.value || 100),
               mode: 'reciting'
             };
             saveSettings(patch);
@@ -6428,6 +6539,7 @@ async function init() {
     localStorage.setItem('qq_settings', JSON.stringify(next));
   } catch (_) {}
   bindUIActions();
+  applyGlobalTypography(getSettings());
   applyTheme(false);
   attachNativeGoogleSignInBridge();
   enableNativeTouchGuard();

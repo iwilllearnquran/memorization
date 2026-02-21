@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-02-14T12:14:20.138721+00:00",
-  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "generatedAt": "2026-02-21T01:09:47.008268+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
   "surah": {
     "surah": 1,
     "arabicName": "سُورَةُ ٱلْفَاتِحَةِ",
@@ -11,7 +11,7 @@
       {
         "ayah": 1,
         "globalAyah": 1,
-        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+        "arabic": "بِسۡمِ اللهِ الرَّحۡمٰنِ الرَّحِيۡمِ",
         "translation_en": "In the name of God, The Most Gracious, The Dispenser of Grace:",
         "translation_ur": "شروع الله کا نام لے کر جو بڑا مہربان نہایت رحم والا ہے",
         "audio": {
@@ -23,7 +23,7 @@
       {
         "ayah": 2,
         "globalAyah": 2,
-        "arabic": "ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ",
+        "arabic": "اَلۡحَمۡدُ لِلّٰهِ رَبِّ الۡعٰلَمِيۡنَۙ‏",
         "translation_en": "All praise is due to God alone, the Sustainer of all the worlds,",
         "translation_ur": "سب طرح کی تعریف خدا ہی کو (سزاوار) ہے جو تمام مخلوقات کا پروردگار ہے",
         "audio": {
@@ -35,7 +35,7 @@
       {
         "ayah": 3,
         "globalAyah": 3,
-        "arabic": "ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+        "arabic": "الرَّحۡمٰنِ الرَّحِيۡمِۙ‏",
         "translation_en": "The Most Gracious, the Dispenser of Grace,",
         "translation_ur": "بڑا مہربان نہایت رحم والا",
         "audio": {
@@ -47,7 +47,7 @@
       {
         "ayah": 4,
         "globalAyah": 4,
-        "arabic": "مَٰلِكِ يَوْمِ ٱلدِّينِ",
+        "arabic": "مٰلِكِ يَوۡمِ الدِّيۡنِؕ‏",
         "translation_en": "Lord of the Day of Judgment!",
         "translation_ur": "انصاف کے دن کا حاکم",
         "audio": {
@@ -59,7 +59,7 @@
       {
         "ayah": 5,
         "globalAyah": 5,
-        "arabic": "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ",
+        "arabic": "اِيَّاكَ نَعۡبُدُ وَاِيَّاكَ نَسۡتَعِيۡنُؕ‏",
         "translation_en": "Thee alone do we worship; and unto Thee alone do we turn for aid.",
         "translation_ur": "(اے پروردگار) ہم تیری ہی عبادت کرتے ہیں اور تجھ ہی سے مدد مانگتے ہیں",
         "audio": {
@@ -71,7 +71,7 @@
       {
         "ayah": 6,
         "globalAyah": 6,
-        "arabic": "ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ",
+        "arabic": "اِهۡدِنَا الصِّرَاطَ الۡمُسۡتَقِيۡمَۙ‏",
         "translation_en": "Guide us the straight way.",
         "translation_ur": "ہم کو سیدھے رستے چلا",
         "audio": {
@@ -83,7 +83,7 @@
       {
         "ayah": 7,
         "globalAyah": 7,
-        "arabic": "صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ",
+        "arabic": "صِرَاطَ الَّذِيۡنَ اَنۡعَمۡتَ عَلَيۡهِمۡ ۙ‏ غَيۡرِ الۡمَغۡضُوۡبِ عَلَيۡهِمۡ وَلَا الضَّآلِّيۡنَ‏",
         "translation_en": "The way of those upon whom Thou hast bestowed Thy blessings, not of those who have been condemned [by Thee], nor of those who go astray!",
         "translation_ur": "ان لوگوں کے رستے جن پر تو اپنا فضل وکرم کرتا رہا نہ ان کے جن پر غصے ہوتا رہا اور نہ گمراہوں کے",
         "audio": {

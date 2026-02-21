@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-02-14T12:15:30.786607+00:00",
-  "source": "api.alquran.cloud + derived audio URLs from existing app pattern",
+  "generatedAt": "2026-02-21T01:14:46.524223+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
   "surah": {
     "surah": 106,
     "arabicName": "سُورَةُ قُرَيۡشٍ",
@@ -11,7 +11,7 @@
       {
         "ayah": 1,
         "globalAyah": 6194,
-        "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ لِإِيلَٰفِ قُرَيْشٍ",
+        "arabic": "لِاِيۡلٰفِ قُرَيۡشٍۙ‏",
         "translation_en": "SO THAT the Quraysh might remain secure,",
         "translation_ur": "قریش کے مانوس کرنے کے سبب",
         "audio": {
@@ -23,7 +23,7 @@
       {
         "ayah": 2,
         "globalAyah": 6195,
-        "arabic": "إِۦلَٰفِهِمْ رِحْلَةَ ٱلشِّتَآءِ وَٱلصَّيْفِ",
+        "arabic": "اٖلٰفِهِمۡ رِحۡلَةَ الشِّتَآءِ وَالصَّيۡفِ​ۚ‏",
         "translation_en": "secure in their winter and summer journeys,",
         "translation_ur": "(یعنی) ان کو جاڑے اور گرمی کے سفر سے مانوس کرنے کے سبب",
         "audio": {
@@ -35,7 +35,7 @@
       {
         "ayah": 3,
         "globalAyah": 6196,
-        "arabic": "فَلْيَعْبُدُوا۟ رَبَّ هَٰذَا ٱلْبَيْتِ",
+        "arabic": "فَلۡيَـعۡبُدُوۡا رَبَّ هٰذَا الۡبَيۡتِۙ‏",
         "translation_en": "Let them, therefore, worship the Sustainer of this Temple;",
         "translation_ur": "لوگوں کو چاہیئے کہ (اس نعمت کے شکر میں) اس گھر کے مالک کی عبادت کریں",
         "audio": {
@@ -47,7 +47,7 @@
       {
         "ayah": 4,
         "globalAyah": 6197,
-        "arabic": "ٱلَّذِىٓ أَطْعَمَهُم مِّن جُوعٍۢ وَءَامَنَهُم مِّنْ خَوْفٍۭ",
+        "arabic": "الَّذِىۡۤ اَطۡعَمَهُمۡ مِّنۡ جُوۡعٍ   ۙ وَّاٰمَنَهُمۡ مِّنۡ خَوۡفٍ‏",
         "translation_en": "who has given them food against hunger, and made them safe from danger.",
         "translation_ur": "جس نے ان کو بھوک میں کھانا کھلایا اور خوف سے امن بخشا",
         "audio": {
