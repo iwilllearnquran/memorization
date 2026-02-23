@@ -20,6 +20,7 @@ RUN pip install -r /app/scripts/requirements-reel-service.txt
 # App files required by reel service
 COPY scripts /app/scripts
 COPY build/recite/surahs /app/build/recite/surahs
+COPY duas /app/duas
 COPY fonts /app/fonts
 COPY background /app/background
 COPY PDMS_SALEEM_QURANFONTQESHIP_0.ttf /app/PDMS_SALEEM_QURANFONTQESHIP_0.ttf

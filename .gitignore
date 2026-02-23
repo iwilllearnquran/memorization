@@ -71,3 +71,6 @@ node_modules/
 # Reel generator output
 generated/reels/*
 !generated/reels/.gitkeep
+
+# Local Cloud Build temp config
+.cloudbuild.reel.generated.yaml

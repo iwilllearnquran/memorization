@@ -203,13 +203,25 @@ def load_dua_payload(surah: int, ayah: int, custom_title: str = "") -> Dict:
         rows = json.load(f)
 
     ref = f"{surah}:{ayah}"
-    row = next((d for d in rows if clean_text(d.get("reference", "")) == ref), None)
+    row = next(
+        (
+            d
+            for d in rows
+            if str(d.get("reference", "")).replace(" ", "").strip() == ref
+        ),
+        None,
+    )
     if not row:
         raise ValueError(f"Dua reference {ref} not found in {DUAS_JSON_PATH.name}")
 
     payload = load_ayah_payload_local(surah, ayah, custom_title)
-    payload["arabic"] = clean_text(row.get("arabic", "")) or payload["arabic"]
-    payload["translation_en"] = clean_text(row.get("translation", "")) or payload["translation_en"]
+    # In dua mode, preserve dua JSON text exactly as stored.
+    dua_arabic = str(row.get("arabic", ""))
+    dua_translation = str(row.get("translation", ""))
+    if not dua_arabic.strip() or not dua_translation.strip():
+        raise ValueError(f"Dua reference {ref} has missing arabic/translation in {DUAS_JSON_PATH.name}")
+    payload["arabic"] = dua_arabic
+    payload["translation_en"] = dua_translation
     payload["custom_title"] = clean_text(custom_title)
     return payload
 
@@ -297,6 +309,20 @@ def measure_w(draw: ImageDraw.ImageDraw, text: str, font: ImageFont.ImageFont) -
 
 
 def pick_background_image() -> Image.Image:
+    numbered = []
+    i = 1
+    while True:
+        p = BACKGROUND_DIR / f"{i}.png"
+        if p.exists():
+            numbered.append(p)
+            i += 1
+            continue
+        break
+    if numbered:
+        chosen = random.choice(numbered)
+        img = Image.open(chosen).convert("RGB")
+        return img.resize((W, H), Image.Resampling.LANCZOS)
+
     preferred = BACKGROUND_DIR / "background_1.jpg"
     if preferred.exists():
         img = Image.open(preferred).convert("RGB")
