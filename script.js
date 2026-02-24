@@ -448,10 +448,9 @@ const LOG = {
 
 
       // 🔑 SAME FEEL CONSTANTS
-      const SWIPE_DISTANCE = 600;
-      const SWIPE_VELOCITY = 2;
       const VERTICAL_RATIO = 1.2;
-      const INTENT_DISTANCE = 0;
+      const INTENT_DISTANCE = 16;
+      const HORIZONTAL_LOCK_RATIO = 1.1;
       const DRAG_DAMPING = 0.88;
       let lastSettings = null;
 
@@ -488,6 +487,7 @@ const LOG = {
       let swipeBaseWidth = 0;
 
       function onSwipePointerDown(e) {
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
         debugSwipeState('pointerdown:before', e);
         if (swipeBlockedByHint) {
           debugSwipeState('pointerdown:blocked-hint', e);
@@ -590,7 +590,11 @@ const LOG = {
         /* --------------------------------------------------
           🔒 Lock horizontal direction (once, intentionally)
         -------------------------------------------------- */
-        if (!swipeDir && Math.abs(dx) > INTENT_DISTANCE) {
+        if (
+          !swipeDir &&
+          Math.abs(dx) > INTENT_DISTANCE &&
+          Math.abs(dx) > Math.abs(dy) * HORIZONTAL_LOCK_RATIO
+        ) {
           swipeDir = dx < 0 ? 1 : -1;
           lockSwipeScroll();
 
@@ -615,12 +619,6 @@ const LOG = {
         /* --------------------------------------------------
           🧲 Rubber band calculation
         -------------------------------------------------- */
-        function rubberBand(distance, dimension) {
-          const resistance = 0.55;
-          return (distance * dimension) /
-                (dimension + resistance * Math.abs(distance));
-        }
-
         const width = swipeBaseWidth || window.innerWidth;
         const dampedDX = dx * DRAG_DAMPING;
         swipeDX = dampedDX;
@@ -847,7 +845,7 @@ const LOG = {
               type: 'PRACTICE_MODE',
               active: isOn
             },
-            '*' // or restrict to your domain later
+            PARENT_ORIGIN
           );
       }
 
@@ -883,6 +881,10 @@ const LOG = {
         console.log('[INIT] App reset complete');
         
         isScrolling = false;
+        if (scrollEndTimer) {
+          clearTimeout(scrollEndTimer);
+          scrollEndTimer = null;
+        }
         swipeLocked = false;
         isSwiping = false;
         swipeCommitted = false;
@@ -893,6 +895,25 @@ const LOG = {
           audio.addEventListener('canplaythrough', resolve, { once: true });
           audio.addEventListener('error', reject, { once: true });
         });
+      }
+
+      function onScroll() {
+        isScrolling = true;
+        swipeLocked = true;
+
+        if (isSwiping && !swipeDir) {
+          isSwiping = false;
+          window.parent.postMessage({ type: 'SWIPE_CANCEL' }, PARENT_ORIGIN);
+        }
+
+        if (scrollEndTimer) {
+          clearTimeout(scrollEndTimer);
+        }
+        scrollEndTimer = setTimeout(() => {
+          isScrolling = false;
+          swipeLocked = false;
+          scrollEndTimer = null;
+        }, SCROLL_END_DELAY);
       }
 
       function bindAyahScroll() {
@@ -3921,8 +3942,8 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         initMessaging();
         console.log('[INIT] initMessaging complete'     );
         // Word hint is driven by parent sequencing now.
-        //bindAyahScroll(); 
-        //console.log('[INIT] bindAyahScroll complete'    );
+        bindAyahScroll(); 
+        console.log('[INIT] bindAyahScroll complete'    );
         bindSwipeEngine();
         console.log('[INIT] bindSwipeEngine complete'   );
         if (scrollEl) {

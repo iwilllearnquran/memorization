@@ -49,6 +49,12 @@
   overscroll-behavior-y: contain;
 }
 
+/* Hide learn/recite global nav when in memorization experience */
+.memorization-page #surahProgressWrap,
+.memorization-page #gameStatsNav {
+  display: none !important;
+}
+
 .memorization-page.native-app-embedded,
 .memorization-page.native-app-embedded * {
   -webkit-tap-highlight-color: transparent;
@@ -1650,12 +1656,384 @@ html.hide-grammar .memo-word-grid .word-block.verb-highlight {
   transform: scale(1.1);
 }
 
+.memo-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.memorization-page.memo-sketch-mode .memo-header {
+  display: none;
+}
+
+.memorization-page.memo-sketch-mode .memo-shell {
+  padding-top: calc(120px + env(safe-area-inset-top, 0px));
+}
+
+.memorization-page.memo-sketch-mode.memo-nav-fallback .memo-shell {
+  padding-top: calc(150px + env(safe-area-inset-top, 0px));
+}
+
+.memorization-page.memo-welcome-mode #memoNavBar {
+  display: none !important;
+}
+
+.memorization-page .memo-topbar {
+  display: none;
+}
+
+.memorization-page.memo-sketch-mode .memo-topbar {
+  display: none;
+}
+
+.memorization-page.memo-welcome-mode .memo-topbar {
+  display: none;
+}
+
+.memo-topbar .memo-sketch-toolbar-row {
+  display: none;
+}
+
+.memo-topbar .memo-top-selects {
+  display: none;
+}
+
+.memo-topbar .memo-sketch-top-icon {
+  display: none;
+}
+
+.memo-topbar .memo-sketch-top-icon .material-icons-outlined {
+  display: none;
+}
+
+.memo-topbar .memo-top-selects select {
+  display: none;
+}
+
+/* New unified memo nav bar */
+.memo-nav-bar {
+  display: none;
+}
+
+.memo-nav-selects {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.memorization-page.memo-nav-fallback .memo-nav-bar {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + 10px);
+  left: 0;
+  right: 0;
+  padding: 0 12px;
+  z-index: 1400;
+}
+
+.memorization-page.memo-nav-fallback .memo-nav-inner {
+  max-width: 920px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 42px 42px minmax(0, 1fr) 42px;
+  gap: 8px;
+  align-items: center;
+  padding: 8px;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #ffffff, #e8f2ec);
+  box-shadow: 0 10px 20px rgba(4, 45, 30, 0.18);
+}
+
+.memorization-page.memo-nav-fallback .memo-nav-selects {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.memorization-page.memo-nav-fallback .memo-nav-selects select {
+  height: 42px;
+  border-radius: 10px;
+  border: 1px solid rgba(15, 124, 84, 0.28);
+  background: #ffffff;
+  color: #0f7c54;
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6), 0 8px 14px rgba(4, 45, 30, 0.1);
+  min-width: 0;
+  width: 100%;
+}
+
+.memorization-page.memo-nav-fallback #memoHomeBtn,
+.memorization-page.memo-nav-fallback #memoReciteSettingsBtn,
+.memorization-page.memo-nav-fallback .memo-nav-icon {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  border-radius: 10px;
+  border: 1px solid rgba(15, 124, 84, 0.28);
+  background: linear-gradient(180deg, #0f7c54, #0c6545);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 14px rgba(4, 45, 30, 0.15);
+  padding: 0;
+  cursor: pointer;
+}
+
+.memorization-page.memo-nav-fallback #memoHomeBtn .material-icons-outlined,
+.memorization-page.memo-nav-fallback #memoReciteSettingsBtn .material-icons-outlined,
+.memorization-page.memo-nav-fallback .memo-nav-icon .material-icons-outlined {
+  font-size: 21px;
+}
+
+.memorization-page.memo-sketch-mode .memo-top-strip {
+  display: none !important;
+}
+
+.memorization-page.memo-sketch-mode .memo-unified-shell {
+  gap: 14px;
+  padding: 10px 10px 146px;
+  border-radius: 18px;
+}
+
+.memorization-page.memo-sketch-mode .memo-selects label {
+  font-size: 0;
+  gap: 0;
+}
+
+.memorization-page.memo-sketch-mode .memo-selects select {
+  height: 40px;
+  border-radius: 11px;
+  font-size: 13px;
+  margin-top: 0;
+  border-color: rgba(120, 170, 150, 0.48);
+}
+
+.memorization-page.memo-sketch-mode .memo-lock-msg {
+  display: none;
+}
+
+.memorization-page.memo-sketch-mode .memo-sketch-mode-row {
+  margin-top: 6px;
+  border-radius: 12px;
+  padding: 3px;
+  background: #edf5f1;
+  border: 1px solid rgba(120, 170, 150, 0.35);
+}
+
+.memorization-page.memo-sketch-mode .memo-sketch-mode-row .memo-toggle {
+  min-width: 0;
+  border-radius: 10px;
+  padding: 9px 8px;
+  font-size: 13px;
+}
+
+.memorization-page.memo-sketch-mode .memo-selects-listen .memo-note {
+  text-align: center;
+}
+
+.memorization-page.memo-sketch-mode .memo-listen-surface {
+  display: none;
+}
+
+.memorization-page.memo-sketch-mode .memo-words {
+  border: 1px solid rgba(120, 170, 150, 0.25);
+  border-radius: 14px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.memorization-page.memo-sketch-mode .memo-control-mode {
+  display: none;
+}
+
+.memorization-page.memo-sketch-mode .memo-word-controls {
+  display: none;
+}
+
+.memo-transparent-strip {
+  display: none;
+}
+
+.memorization-page.memo-sketch-mode .memo-transparent-strip {
+  display: block;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(900px, calc(100vw - 20px));
+  padding: 6px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(232, 249, 241, 0.36);
+  background: linear-gradient(180deg, rgba(235, 250, 243, 0.26), rgba(216, 240, 230, 0.18));
+  backdrop-filter: blur(14px) saturate(140%);
+  box-shadow: 0 8px 18px rgba(8, 48, 34, 0.14);
+  z-index: 1300;
+}
+
+.memorization-page.memo-sketch-mode .memo-transparent-strip-top {
+  top: env(safe-area-inset-top, 0px);
+}
+
+.memorization-page.memo-sketch-mode .memo-transparent-strip-bottom {
+  bottom: calc(var(--memo-bottom-nav-h) + env(safe-area-inset-bottom, 0px));
+}
+
+.memorization-page.memo-sketch-mode .memo-transparent-strip .memo-control-mode {
+  display: flex;
+  margin: 0;
+  width: 100%;
+}
+
+.memorization-page.memo-sketch-mode .memo-transparent-strip-bottom .memo-listen-row {
+  justify-content: flex-start;
+  align-items: center;
+  margin: 0;
+  gap: 8px;
+  flex: 1;
+}
+
+.memorization-page.memo-sketch-mode .memo-transparent-strip-bottom .memo-progress {
+  display: none;
+}
+
+.memorization-page.memo-sketch-mode .memo-transparent-strip-bottom .memo-action-icons {
+  width: auto;
+  margin: 0;
+  justify-content: flex-end;
+}
+
+.memorization-page.memo-sketch-mode .memo-transparent-strip-bottom .memo-recite-settings {
+  display: none !important;
+}
+
+.memorization-page.memo-sketch-mode .memo-transparent-strip-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.memorization-page.memo-sketch-mode .memo-control-actions {
+  justify-content: center;
+}
+
+.memorization-page.memo-sketch-mode .memo-action-icons {
+  margin-left: 0;
+}
+
+.memorization-page #memoFloatingActions {
+  display: none;
+}
+
+.memorization-page.memo-sketch-mode #memoFloatingActions {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--memo-bottom-nav-h) + env(safe-area-inset-bottom, 0px) + 74px);
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 1301;
+  pointer-events: none;
+}
+
+.memorization-page.memo-sketch-mode #memoFloatingActions > * {
+  pointer-events: auto;
+}
+
+.memorization-page.memo-sketch-mode #memoPeekBtn {
+  width: 38px;
+  height: 38px;
+}
+
+.memorization-page.memo-sketch-mode #memoStartBtn {
+  position: static;
+  width: 62px;
+  height: 62px;
+  min-width: 62px;
+  border-radius: 999px;
+  padding: 0;
+  justify-content: center;
+  z-index: 1301;
+  box-shadow: 0 10px 20px rgba(8, 36, 26, 0.34);
+}
+
+.memorization-page.memo-sketch-mode #memoStartBtn .material-icons-outlined {
+  font-size: 28px;
+}
+
+.memorization-page.memo-sketch-mode.memo-listening #memoStartBtn {
+  background: linear-gradient(135deg, #d95b5b, #b33a3a);
+}
+
+.memorization-page.memo-sketch-mode #memoStopBtn {
+  display: none;
+}
+
+.memorization-page.memo-sketch-mode #memoStopBtn:disabled {
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.memorization-page.memo-sketch-mode .memo-practice-section {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.memorization-page.memo-sketch-mode #memoPracticeToggle {
+  position: static;
+  width: 62px;
+  height: 62px;
+  border-radius: 999px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1301;
+  box-shadow: 0 10px 20px rgba(8, 36, 26, 0.24);
+  background: transparent !important;
+  border: 2px solid rgba(15, 124, 84, 0.62);
+  color: #0f7c54;
+}
+
+.memorization-page.memo-sketch-mode #memoPracticeToggle .material-icons-outlined {
+  font-size: 28px;
+}
+
+.memorization-page.memo-sketch-mode #memoPracticeToggle::after {
+  display: none;
+}
+
+.memorization-page.memo-sketch-mode #memoPracticePanel {
+  margin-top: 4px;
+}
+
+.memorization-page.memo-sketch-mode .memo-word-grid {
+  gap: 10px;
+}
+
+.memorization-page.memo-sketch-mode .memo-word-grid .word-block {
+  min-width: 64px;
+  min-height: 64px;
+  margin: 0;
+  padding: 8px 7px;
+  border-radius: 12px;
+  border: 1px solid rgba(120, 170, 150, 0.4);
+  box-shadow: 0 6px 12px rgba(10, 77, 104, 0.1);
+}
+
 @media (max-width: 520px) {
   .memo-welcome {
     min-height: calc(100svh - var(--memo-bottom-nav-h) - 92px);
   }
 
-  .memo-welcome-chips {
+.memo-welcome-chips {
   position: relative;
   z-index: 2;
   display: grid;
@@ -1663,6 +2041,52 @@ html.hide-grammar .memo-word-grid .word-block.verb-highlight {
   gap: 18px;
   margin-top: 6px;
 }
+
+  .memorization-page.memo-sketch-mode #memoStartBtn,
+  .memorization-page.memo-sketch-mode #memoPracticeToggle {
+    width: 58px;
+    height: 58px;
+  }
+
+  .memorization-page.memo-sketch-mode #memoStartBtn .material-icons-outlined,
+  .memorization-page.memo-sketch-mode #memoPracticeToggle .material-icons-outlined {
+    font-size: 25px;
+  }
+
+  .memorization-page.memo-sketch-mode #memoFloatingActions {
+    bottom: calc(var(--memo-bottom-nav-h) + env(safe-area-inset-bottom, 0px) + 70px);
+  }
+
+  .memorization-page.memo-sketch-mode .memo-transparent-strip {
+    width: calc(100vw - 14px);
+    padding: 7px 8px;
+  }
+
+  .memorization-page.memo-sketch-mode .memo-transparent-strip-top {
+    top: env(safe-area-inset-top, 0px);
+  }
+
+  .memorization-page.memo-sketch-mode .memo-transparent-strip-bottom {
+    bottom: calc(var(--memo-bottom-nav-h) + env(safe-area-inset-bottom, 0px));
+  }
+
+  .memo-topbar .memo-sketch-toolbar-row {
+    width: calc(100% - 8px);
+    grid-template-columns: 38px 38px minmax(0, 1fr) 38px;
+    gap: 8px;
+    padding: 0;
+  }
+
+  .memorization-page.memo-sketch-mode .memo-lock-msg {
+    margin-top: 8px;
+  }
+
+}
+
+.memorization-page #streakDisplay,
+.memorization-page .streak-display,
+.memorization-page .streak-pill {
+  display: none !important;
 }
 
 html.dark-mode .memorization-page,

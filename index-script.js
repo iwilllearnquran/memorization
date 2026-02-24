@@ -209,6 +209,7 @@ let pendingAutoPlay = false;
 let lastAuthenticatedUid = null;
 let nativeGoogleSignInInFlight = false;
 let previousAuthUid = null;
+const WELCOME_TOAST_UID_KEY = 'qq_welcomed_uid_v1';
 const DISABLE_CONSOLE_LOGS = true;
 if (DISABLE_CONSOLE_LOGS && typeof console !== 'undefined') {
   const noop = () => {};
@@ -238,6 +239,26 @@ let pendingDuaReturn = false;
 let namazWidgetState = null;
 let namazWidgetSaveTimer = 0;
 let namazProgressFlashTimer = 0;
+
+function hasShownWelcomeToastForUid(uid) {
+  try {
+    return sessionStorage.getItem(WELCOME_TOAST_UID_KEY) === String(uid || '');
+  } catch (_) {
+    return false;
+  }
+}
+
+function markWelcomeToastShown(uid) {
+  try {
+    sessionStorage.setItem(WELCOME_TOAST_UID_KEY, String(uid || ''));
+  } catch (_) {}
+}
+
+function clearWelcomeToastMarker() {
+  try {
+    sessionStorage.removeItem(WELCOME_TOAST_UID_KEY);
+  } catch (_) {}
+}
 let memoNavigationRevealTimer = 0;
 let reciteProgressCache = null;
 let lastDailyRefreshDateKey = '';
@@ -2146,6 +2167,10 @@ const iframeSettingsVersion = new WeakMap();
         dragState.raf = 0;
 
         if (!dragState.active) return;
+        if (!D.viewer || ring.cards.length < 3) {
+          dragState.active = false;
+          return;
+        }
 
         const { dx, dir } = dragState;
         const w = swipeWidth || D.viewer.clientWidth;
@@ -2329,6 +2354,9 @@ case 'SWIPE_START': {
     clearTimeout(swipeTransitionTimer);
     swipeTransitionTimer = 0;
   }
+  if (!D.viewer || ring.cards.length < 3) {
+    break;
+  }
   if (ring.cards.length) {
     ring.cards.forEach(card => {
       card.style.transition = 'none';
@@ -2348,6 +2376,10 @@ case 'SWIPE_COMMIT': {
     break;
   }
   if (hintBusy) {
+    postToWindow(window, { type: 'SWIPE_CANCEL' });
+    break;
+  }
+  if (!D.viewer || ring.cards.length < 3) {
     postToWindow(window, { type: 'SWIPE_CANCEL' });
     break;
   }
@@ -5596,6 +5628,7 @@ case 'SAVE_HINT_DONE': {
         const activeUser = user && !user.isAnonymous ? user : null;
         const priorUid = previousAuthUid;
         const justSignedIn = Boolean(activeUser && activeUser.uid && activeUser.uid !== priorUid);
+        previousAuthUid = activeUser?.uid || null;
 
         if (!activeUser) {
           if (lastAuthenticatedUid) {
@@ -5620,6 +5653,7 @@ case 'SAVE_HINT_DONE': {
             D.ptsEl.textContent =
               localStorage.getItem('guestPoints') || '0';
           }
+          clearWelcomeToastMarker();
 
           const flame = String.fromCodePoint(0x1F525);
           const guestHistory = JSON.parse(
@@ -5659,14 +5693,17 @@ case 'SAVE_HINT_DONE': {
         await persistProfile(activeUser.displayName, activeUser.email);
 
         if (justSignedIn) {
-          const displayName = String(activeUser.displayName || '').trim();
-          const emailPrefix = String(activeUser.email || '').split('@')[0] || '';
-          const firstName = (displayName || emailPrefix || 'Friend').split(' ')[0];
-          const isReturningUser = hasPersistedUserDataInDb(preAuthData || {});
-          const message = isReturningUser
-            ? `Welcome back, ${firstName}.`
-            : `Assalamualaikum, ${firstName}.`;
-          showInAppToast(message, '#0a4d68');
+          if (!hasShownWelcomeToastForUid(activeUser.uid)) {
+            const displayName = String(activeUser.displayName || '').trim();
+            const emailPrefix = String(activeUser.email || '').split('@')[0] || '';
+            const firstName = (displayName || emailPrefix || 'Friend').split(' ')[0];
+            const isReturningUser = hasPersistedUserDataInDb(preAuthData || {});
+            const message = isReturningUser
+              ? `Welcome back, ${firstName}.`
+              : `Assalamualaikum, ${firstName}.`;
+            showInAppToast(message, '#0a4d68');
+            markWelcomeToastShown(activeUser.uid);
+          }
         }
 
         // Load Firestore stats
@@ -5681,7 +5718,6 @@ case 'SAVE_HINT_DONE': {
         await refreshAllProgress(activeUser);
         await initStartButton(activeUser);
         await updateResumeListeningButton();
-        previousAuthUid = activeUser.uid || null;
       }
 
 /* ==========================================================

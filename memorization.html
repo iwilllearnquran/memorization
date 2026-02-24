@@ -13,6 +13,23 @@
   <link rel="stylesheet" href="/memorization.css">
 </head>
 <body class="memorization-page memo-welcome-mode">
+  <nav id="memoNavBar" class="memo-nav-bar" aria-label="Memorization navigation">
+    <div class="memo-nav-inner">
+      <button id="memoMenuBtn" class="memo-nav-icon" type="button" aria-label="Menu">
+        <span class="material-icons-outlined" aria-hidden="true">menu</span>
+      </button>
+      <button id="memoHomeBtn" class="memo-nav-icon" type="button" aria-label="Go home">
+        <span class="material-icons-outlined" aria-hidden="true">home</span>
+      </button>
+      <div class="memo-nav-selects">
+        <select id="memoSurahSelect" aria-label="Select Surah"></select>
+        <select id="memoAyahSelect" aria-label="Select Ayah"></select>
+      </div>
+      <button id="memoReciteSettingsBtn" class="memo-nav-icon" type="button" aria-label="Recite settings">
+        <span class="material-icons-outlined" aria-hidden="true">tune</span>
+      </button>
+    </div>
+  </nav>
   <div id="memoShell" class="memo-shell">
     <header class="memo-header memo-header-centered">
       <div class="memo-title">
@@ -68,19 +85,13 @@
 
     <div id="memoMain" class="memo-main is-hidden">
       <section class="memo-panel memo-unified-shell">
-        <div class="memo-selects memo-selects-listen memo-unified-block">
+        <div class="memo-selects memo-selects-listen memo-unified-block memo-sketch-toolbar-block">
             <div class="memo-selects-top">
-              <div class="memo-selects-grid">
-                <label>
-                  Surah
-                  <select id="memoSurahSelect"></select>
-                </label>
-                <label>
-                  Ayah
-                  <select id="memoAyahSelect"></select>
-                </label>
-              </div>
               <div id="memoLockMsg" class="memo-lock-msg" aria-live="polite"></div>
+              <div class="memo-control-row memo-control-mode memo-sketch-mode-row" role="group" aria-label="Recite matching mode">
+                <button id="memoReciteWordModeBtn" class="memo-toggle is-on" type="button" aria-pressed="true">Word by Word</button>
+                <button id="memoReciteFullModeBtn" class="memo-toggle is-off" type="button" aria-pressed="false">Full Ayah</button>
+              </div>
             </div>
             <div class="memo-listen-surface">
               <div class="memo-note">
@@ -111,25 +122,18 @@
                 <div class="memo-action-group">
                   <button id="memoStartBtn" class="memo-action-btn memo-icon-btn" type="button">
                     <span class="material-icons-outlined" aria-hidden="true">mic</span>
-                    <span>Start</span>
+                    <span class="memo-sr-only">Start</span>
                   </button>
                   <button id="memoStopBtn" class="memo-action-btn memo-icon-btn" type="button" disabled>
                     <span class="material-icons-outlined" aria-hidden="true">stop_circle</span>
-                    <span>Stop</span>
+                    <span class="memo-sr-only">Stop</span>
                   </button>
                 </div>
                 <div class="memo-action-icons">
                   <button id="memoPeekBtn" class="memo-icon-ghost memo-icon-only memo-peek-btn" type="button" aria-label="Peek">
                     <span class="material-icons-outlined" aria-hidden="true">visibility</span>
                   </button>
-                  <button id="memoReciteSettingsBtn" class="memo-icon-ghost memo-icon-only memo-settings-btn" type="button" aria-label="Recite settings">
-                    <span class="material-icons-outlined" aria-hidden="true">settings</span>
-                  </button>
                 </div>
-              </div>
-              <div class="memo-control-row memo-control-mode" role="group" aria-label="Recite matching mode">
-                <button id="memoReciteWordModeBtn" class="memo-toggle is-on" type="button" aria-pressed="true">Word by Word</button>
-                <button id="memoReciteFullModeBtn" class="memo-toggle is-off" type="button" aria-pressed="false">Full Ayah</button>
               </div>
               <div id="memoReciteSettingsPanel" class="memo-control-row memo-recite-settings is-hidden">
                 <button id="memoToggleMeaning" class="memo-toggle is-on memo-toggle-icon" type="button" aria-pressed="true">
@@ -157,7 +161,8 @@
 
         <div class="memo-practice-section memo-unified-block">
             <button id="memoPracticeToggle" class="memo-practice-toggle" type="button" aria-expanded="false">
-              Practice Writing
+              <span class="material-icons-outlined" aria-hidden="true">edit</span>
+              <span class="memo-sr-only">Practice Writing</span>
             </button>
             <div id="memoPracticePanel" class="memo-practice-panel" aria-hidden="true">
               <div id="memoPracticeContent" class="memo-practice-content"></div>
