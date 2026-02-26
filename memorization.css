@@ -2372,7 +2372,7 @@ body.dark-mode .memorization-page .bottom-nav-btn.active::after {
   width: 100%;
   margin-left: 0;
   margin-right: 0;
-  padding: 0;
+  padding: 0 0 84px;
   gap: 10px;
   display: flex;
   flex-direction: column;
@@ -2786,15 +2786,34 @@ body.dark-mode .memorization-page .bottom-nav-btn.active::after {
   padding: 4px 0 0;
   background: transparent;
   flex: 0 0 auto;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.memorization-page.memo-welcome-mode .memo-welcome-cta-wrap {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(536px, calc(100% - 40px));
+  bottom: calc(var(--memo-bottom-nav-h) + env(safe-area-inset-bottom, 0px) + 8px);
+  padding: 0;
+  z-index: 1300;
 }
 
 .memorization-page.embedded.memo-welcome-mode .memo-welcome-cta-wrap {
+  position: static;
+  left: auto;
+  transform: none;
+  width: 100%;
   bottom: auto;
 }
 
 .memo-welcome-cta-wrap .memo-welcome-start {
   margin: 0 auto;
-  width: min(536px, 100%);
+  width: 100%;
+  max-width: 536px;
   min-height: 46px;
   border: none;
   border-radius: 14px;
@@ -2802,7 +2821,7 @@ body.dark-mode .memorization-page .bottom-nav-btn.active::after {
   color: #ffffff;
   font-weight: 800;
   font-size: 15px;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;

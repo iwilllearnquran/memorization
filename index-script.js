@@ -4905,6 +4905,7 @@ case 'SAVE_HINT_DONE': {
               const migrationKey = getGuestMigrationKey(auth.currentUser);
               const userJourneyKey = getLearningJourneyStorageKey(auth.currentUser);
               await logout();
+              clearWelcomeToastMarker();
               clearLocalDataOnExplicitLogout();
               localStorage.removeItem(userJourneyKey);
               localStorage.removeItem(migrationKey);
@@ -5653,7 +5654,6 @@ case 'SAVE_HINT_DONE': {
             D.ptsEl.textContent =
               localStorage.getItem('guestPoints') || '0';
           }
-          clearWelcomeToastMarker();
 
           const flame = String.fromCodePoint(0x1F525);
           const guestHistory = JSON.parse(

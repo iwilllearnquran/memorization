@@ -438,6 +438,7 @@ function enforceWelcomeLayoutCentering() {
   );
   centeredBlocks.forEach(node => {
     node.style.maxWidth = '536px';
+    node.style.width = '100%';
     node.style.marginLeft = 'auto';
     node.style.marginRight = 'auto';
   });
@@ -3448,6 +3449,14 @@ if (isEmbedded) {
   document.body.classList.add('embedded');
 }
 window.addEventListener('resize', enforceWelcomeLayoutCentering);
+window.addEventListener('pageshow', () => {
+  enforceWelcomeLayoutCentering();
+});
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) {
+    enforceWelcomeLayoutCentering();
+  }
+});
 enableNativeInteractionGuard();
 bindBottomNavSystemBarColor();
 window.addEventListener('message', event => {
