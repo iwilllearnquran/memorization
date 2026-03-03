@@ -10,7 +10,48 @@
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
   <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
   <link rel="stylesheet" href="/styles.css">
-  <link rel="stylesheet" href="/memorization.css">
+  <link rel="stylesheet" href="/memorization.css?v=20260227-memo-polish11">
+  <style id="memo-nav-strip-hotfix">
+    body.memorization-page .bottom-nav,
+    body.memorization-page .memo-bottom-nav {
+      height: 40px !important;
+      min-height: 40px !important;
+      max-height: 40px !important;
+      padding-bottom: 0 !important;
+      border-top: none !important;
+      box-sizing: border-box !important;
+      overflow: hidden !important;
+    }
+
+    body.memorization-page .bottom-nav-inner,
+    body.memorization-page .memo-bottom-nav-inner {
+      height: 40px !important;
+      min-height: 40px !important;
+      max-height: 40px !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      align-items: flex-start !important;
+    }
+
+    body.memorization-page .bottom-nav-btn,
+    body.memorization-page .memo-bottom-nav-btn {
+      justify-content: flex-start !important;
+      padding-top: 1px !important;
+      gap: 0 !important;
+      font-size: 10.5px !important;
+    }
+
+    body.memorization-page.memo-sketch-mode .memo-transparent-strip-bottom {
+      bottom: 37px !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: auto !important;
+      max-width: none !important;
+      transform: none !important;
+      margin: 0 !important;
+      border-radius: 0 !important;
+    }
+  </style>
 </head>
 <body class="memorization-page memo-welcome-mode">
   <nav id="memoNavBar" class="memo-nav-bar" aria-label="Memorization navigation">
@@ -63,7 +104,7 @@
   <div id="memoShell" class="memo-shell">
     <header class="memo-header memo-header-centered">
       <div class="memo-title">
-        AI‑Powered Quran Memorization
+        AI-Powered Quran Memorization
       </div>
     </header>
 
@@ -215,6 +256,8 @@
     </div>
   </div>
 
+  <div id="memoWordOverlay" class="memo-word-overlay" aria-hidden="true"></div>
+
   <div id="memoFloatingActions">
     <button id="memoPracticeToggle" class="memo-practice-toggle" type="button" aria-expanded="false">
       <span class="material-icons-outlined" aria-hidden="true">edit</span>
@@ -238,25 +281,31 @@
       </label>
     </div>
     <div class="memo-action-icons">
+      <button id="memoPauseBtn" class="memo-icon-ghost memo-icon-only memo-pause-btn" type="button" aria-label="Pause playback">
+        <span class="material-icons-outlined" aria-hidden="true">pause</span>
+      </button>
+      <button id="memoStopPlaybackBtn" class="memo-icon-ghost memo-icon-only memo-stop-playback-btn" type="button" aria-label="Stop playback">
+        <span class="material-icons-outlined" aria-hidden="true">stop</span>
+      </button>
       <button id="memoPeekBtn" class="memo-icon-ghost memo-icon-only memo-peek-btn" type="button" aria-label="Peek">
         <span class="material-icons-outlined" aria-hidden="true">visibility</span>
       </button>
     </div>
   </div>
 
-  <nav class="bottom-nav" aria-label="Primary">
-    <div class="bottom-nav-inner">
-      <a class="bottom-nav-btn" href="/index.html" id="memoNavLearnQuran">
-        <svg class="bottom-nav-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <nav class="memo-bottom-nav" aria-label="Primary">
+    <div class="memo-bottom-nav-inner">
+      <a class="memo-bottom-nav-btn" href="/index.html" id="memoNavLearnQuran">
+        <svg class="memo-bottom-nav-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
           <path d="M456,168h-8v-44.977c0-15.027-13.623-26.219-28.109-23.648l-163.892,28.504L92.172,98.992C77.56,96.372,64,107.656,64,122.625V168h-8c-8.836,0-16,7.163-16,16v184c0,8.836,7.164,16,16,16h130.745c13.602,0,19.88,6.625,27.882,14.627c6.001,6.001,14.141,9.373,22.627,9.373c13.566,0,23.924,0,37.49,0c8.487,0,16.626-3.372,22.627-9.373c8-8,14.268-14.627,27.882-14.627H456c8.836,0,16-7.164,16-16V184C472,175.163,464.836,168,456,168z M422.633,115.141c4.748-0.848,9.367,2.787,9.367,7.883v199.109c0,3.891-2.781,7.203-6.609,7.883L264,358.469V142.727L422.633,115.141z M80,122.625c0-4.952,4.446-8.733,9.391-7.883L248,142.711v215.758L86.609,330.016c-3.828-0.68-6.609-3.992-6.609-7.883V122.625z M288.125,267.727c-0.773-4.352,2.133-8.5,6.484-9.266l104-18.336c4.336-0.82,8.5,2.133,9.266,6.484c0.773,4.352-2.133,8.5-6.484,9.266l-104,18.336c-0.469,0.086-0.938,0.125-1.398,0.125C292.18,274.336,288.805,271.609,288.125,267.727z M288.125,227.727c-0.773-4.352,2.133-8.5,6.484-9.266l104-18.336c4.336-0.805,8.5,2.133,9.266,6.484c0.773,4.352-2.133,8.5-6.484,9.266l-104,18.336c-0.469,0.086-0.938,0.125-1.398,0.125C292.18,234.336,288.805,231.609,288.125,227.727z M288.125,187.727c-0.773-4.352,2.133-8.5,6.484-9.266l104-18.336c4.336-0.82,8.5,2.133,9.266,6.484c0.773,4.352-2.133,8.5-6.484,9.266l-104,18.336c-0.469,0.086-0.938,0.125-1.398,0.125C292.18,194.336,288.805,191.609,288.125,187.727z M288.125,307.727c-0.773-4.352,2.133-8.5,6.484-9.266l104-18.336c4.336-0.805,8.5,2.133,9.266,6.484c0.773,4.352-2.133,8.5-6.484,9.266l-104,18.336c-0.469,0.086-0.938,0.125-1.398,0.125C292.18,314.336,288.805,311.609,288.125,307.727z M118.239,218.242c-11.85-14.068-13.889-33.678-3.614-45.243c12.414-13.972,35.529-10.978,49.375,5.462c13.847-11.557,36.961-6.399,49.375,11.951c10.275,15.188,8.235,34.079-3.614,43.968l-32.5,27.125c-7.318,6.108-19.204,4.012-26.522-4.677L118.239,218.242z"/>
         </svg>
         <span>Learn Quran</span>
       </a>
-      <a class="bottom-nav-btn active" href="/memorization.html">
+      <a class="memo-bottom-nav-btn active" href="/memorization.html">
         <span class="material-icons-outlined" aria-hidden="true">psychology</span>
         <span>Memorization</span>
       </a>
-      <a class="bottom-nav-btn" href="/index.html?tab=duas">
+      <a class="memo-bottom-nav-btn" href="/index.html?tab=duas">
         <span class="material-symbols-outlined" aria-hidden="true">prayer_times</span>
         <span>Ramzan Duas</span>
       </a>
@@ -324,7 +373,8 @@
     </button>
   </aside>
 
-  <script type="module" src="/memorization.js"></script>
+  <script type="module" src="/memorization.js?v=20260227-memo-polish11"></script>
 </body>
 </html>
+
 

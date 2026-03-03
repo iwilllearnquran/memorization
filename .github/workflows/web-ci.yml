@@ -1,0 +1,181 @@
+name: Web CI - Basic and Deep Tests
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: web-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  basic-checks:
+    name: Basic Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Validate JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          js_count=0
+          while IFS= read -r -d '' file; do
+            js_count=$((js_count + 1))
+            echo "Checking ${file}"
+            node --check "${file}"
+          done < <(find . -type f -name "*.js" \
+            -not -path "./node_modules/*" \
+            -not -path "./.git/*" \
+            -print0)
+          echo "Checked ${js_count} JavaScript files."
+
+      - name: Validate Python syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          py_count=0
+          while IFS= read -r -d '' file; do
+            py_count=$((py_count + 1))
+            echo "Compiling ${file}"
+            python -m py_compile "${file}"
+          done < <(find . -type f -name "*.py" \
+            -not -path "./.git/*" \
+            -not -path "./.venv/*" \
+            -print0)
+          echo "Checked ${py_count} Python files."
+
+      - name: Validate key HTML pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          HTML_FILES=(
+            "index.html"
+            "memorization.html"
+            "privacy.html"
+            "search_results.html"
+            "listen-test.html"
+            "duas/index.html"
+            "duas/duas.html"
+          )
+          FOUND_HTML=()
+          for file in "${HTML_FILES[@]}"; do
+            if [[ -f "${file}" ]]; then
+              FOUND_HTML+=("${file}")
+            fi
+          done
+
+          if [[ "${#FOUND_HTML[@]}" -eq 0 ]]; then
+            echo "No key HTML files found to validate."
+            exit 0
+          fi
+
+          npx --yes htmlhint "${FOUND_HTML[@]}"
+
+      - name: Run repo scripts when present (lint/unit/integration/build)
+        if: ${{ hashFiles('package.json') != '' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -f package-lock.json ]]; then
+            npm ci
+          else
+            npm install
+          fi
+
+          npm run lint --if-present
+          npm run test --if-present
+          npm run test:unit --if-present
+          npm run test:integration --if-present
+          npm run build --if-present
+
+      - name: Run Python test suites when present
+        shell: bash
+        run: |
+          set -euo pipefail
+          if find . -type f \( -name "test_*.py" -o -name "*_test.py" \) \
+            -not -path "./.venv/*" \
+            -not -path "./.git/*" | grep -q .; then
+            python -m pip install --upgrade pip
+            python -m pip install pytest
+            python -m pytest -q
+          else
+            echo "No Python tests found."
+          fi
+
+  deep-browser-tests:
+    name: Deep Browser Smoke/E2E
+    runs-on: ubuntu-latest
+    needs: basic-checks
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Playwright test runner
+        run: npm install --no-save @playwright/test
+
+      - name: Install Chromium browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Start local web server
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m http.server 4173 --directory . >/tmp/web-server.log 2>&1 &
+          for i in {1..30}; do
+            if curl -fsS "http://127.0.0.1:4173/index.html" >/dev/null; then
+              echo "Server is ready."
+              exit 0
+            fi
+            sleep 1
+          done
+
+          echo "Web server failed to start."
+          cat /tmp/web-server.log
+          exit 1
+
+      - name: Run Playwright smoke suite
+        run: npx playwright test --config=.github/e2e/playwright.config.js
+
+      - name: Run package E2E script when present
+        if: ${{ hashFiles('package.json') != '' }}
+        run: npm run test:e2e --if-present
+
+      - name: Upload browser test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-test-results-${{ github.run_id }}
+          path: |
+            .github/e2e/test-results
+            /tmp/web-server.log
+          if-no-files-found: ignore
+          retention-days: 14

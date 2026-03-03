@@ -9,8 +9,38 @@
   --memo-soft-surface-border: rgba(129, 180, 161, 0.3);
 }
 
+/* Hide scrollbar UI while preserving scroll behavior. */
+html,
+body,
+body * {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+body *::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
+body *::-webkit-scrollbar-thumb,
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
+body *::-webkit-scrollbar-track,
+html::-webkit-scrollbar-corner,
+body::-webkit-scrollbar-corner,
+body *::-webkit-scrollbar-corner {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
 .memorization-page {
-  --memo-bottom-nav-h: 57px;
+  --memo-bottom-nav-h: 40px;
   font-family: 'Manrope', 'Segoe UI', Tahoma, sans-serif;
   background:
     radial-gradient(
@@ -812,6 +842,10 @@ html.memo-welcome-locked body.memorization-page.memo-welcome-mode {
   padding: 0;
 }
 
+.memo-word-overlay {
+  display: none;
+}
+
 .memo-word-controls {
   display: grid;
   gap: 12px;
@@ -860,6 +894,13 @@ html.memo-welcome-locked body.memorization-page.memo-welcome-mode {
   background: rgba(24, 165, 102, 0.16);
   border-color: rgba(24, 165, 102, 0.5);
   color: #0f7c54;
+}
+
+.memo-icon-ghost:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .memo-icon-only {
@@ -1309,7 +1350,7 @@ html.memo-welcome-locked body.memorization-page.memo-welcome-mode {
 
 .memorization-page .memo-word-grid .word-text {
   font-family: var(--qq-arabic-font-family, 'CustomArabic'), serif;
-  font-size: var(--qq-arabic-size, 22px);
+  font-size: var(--qq-arabic-size, 28px);
   font-weight: var(--qq-arabic-weight, 100);
   font-style: var(--qq-arabic-style, normal);
   line-height: 1.6;
@@ -1440,15 +1481,15 @@ html.hide-grammar .memo-word-grid .word-block.verb-highlight {
   color: #2b2b2b;
 }
 
-.memorization-page .bottom-nav {
+.memorization-page .memo-bottom-nav {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: calc(var(--memo-bottom-nav-h) + env(safe-area-inset-bottom, 0px));
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  height: var(--memo-bottom-nav-h);
+  padding-bottom: 0;
   background: linear-gradient(180deg, #0b5872 0%, #0a4d68 100%);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: none;
   box-shadow: 0 6px 18px rgba(4, 18, 26, 0.24);
   z-index: 1200;
   opacity: 1;
@@ -1459,11 +1500,11 @@ html.hide-grammar .memo-word-grid .word-block.verb-highlight {
   box-sizing: border-box;
 }
 
-.memorization-page.embedded .bottom-nav {
+.memorization-page.embedded .memo-bottom-nav {
   display: none;
 }
 
-.memorization-page .bottom-nav-inner {
+.memorization-page .memo-bottom-nav-inner {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   height: 100%;
@@ -1472,20 +1513,22 @@ html.hide-grammar .memo-word-grid .word-block.verb-highlight {
   box-sizing: border-box;
   max-width: 520px;
   margin: 0 auto;
+  align-items: flex-start;
 }
 
-.memorization-page .bottom-nav-btn {
+.memorization-page .memo-bottom-nav-btn {
   border: none;
   background: transparent;
   color: rgba(255, 255, 255, 0.7);
-  font-size: 12px;
+  font-size: 10.5px;
   font-weight: 600;
   letter-spacing: 0.2px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 2px;
+  justify-content: flex-start;
+  gap: 0;
+  padding-top: 1px;
   cursor: pointer;
   text-decoration: none;
   border-radius: 12px;
@@ -1493,35 +1536,35 @@ html.hide-grammar .memo-word-grid .word-block.verb-highlight {
   transition: color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
-.memorization-page .bottom-nav-btn .material-icons-outlined,
-.memorization-page .bottom-nav-btn .material-symbols-outlined {
-  font-size: 22px;
+.memorization-page .memo-bottom-nav-btn .material-icons-outlined,
+.memorization-page .memo-bottom-nav-btn .material-symbols-outlined {
+  font-size: 19px;
   line-height: 1;
   display: block;
   transition: transform 0.2s ease;
 }
 
-.memorization-page .bottom-nav-btn .bottom-nav-icon {
-  width: 24px;
-  height: 24px;
+.memorization-page .memo-bottom-nav-btn .memo-bottom-nav-icon {
+  width: 19px;
+  height: 19px;
   display: block;
   fill: currentColor;
   transition: transform 0.2s ease;
 }
 
-.memorization-page .bottom-nav-btn span:not(.material-icons-outlined):not(.material-symbols-outlined) {
-  line-height: 1.1;
+.memorization-page .memo-bottom-nav-btn span:not(.material-icons-outlined):not(.material-symbols-outlined) {
+  line-height: 1;
 }
 
-.memorization-page .bottom-nav-btn:hover {
+.memorization-page .memo-bottom-nav-btn:hover {
   color: #ffffff;
 }
 
-.memorization-page .bottom-nav-btn.active {
+.memorization-page .memo-bottom-nav-btn.active {
   color: #ffffff;
 }
 
-.memorization-page .bottom-nav-btn.active::after {
+.memorization-page .memo-bottom-nav-btn.active::after {
   content: "";
   width: 26px;
   height: 3px;
@@ -1530,9 +1573,9 @@ html.hide-grammar .memo-word-grid .word-block.verb-highlight {
   box-shadow: 0 0 12px rgba(205, 203, 199, 0.85);
 }
 
-.memorization-page .bottom-nav-btn.active .material-icons-outlined,
-.memorization-page .bottom-nav-btn.active .material-symbols-outlined,
-.memorization-page .bottom-nav-btn.active .bottom-nav-icon {
+.memorization-page .memo-bottom-nav-btn.active .material-icons-outlined,
+.memorization-page .memo-bottom-nav-btn.active .material-symbols-outlined,
+.memorization-page .memo-bottom-nav-btn.active .memo-bottom-nav-icon {
   transform: scale(1.1);
 }
 
@@ -1892,10 +1935,108 @@ html.hide-grammar .memo-word-grid .word-block.verb-highlight {
 }
 
 .memorization-page.memo-sketch-mode .memo-words {
-  border: 1px solid rgba(120, 170, 150, 0.25);
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  min-height: 0;
+  overflow: visible;
+}
+
+.memorization-page.memo-sketch-mode.memo-word-mode .memo-words {
+  min-height: 16px;
+}
+
+.memorization-page.memo-sketch-mode.memo-full-mode .memo-words {
+  border: 1px solid rgba(138, 185, 169, 0.36);
+  border-radius: 18px;
+  padding: 12px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(244, 251, 248, 0.74)),
+    repeating-linear-gradient(
+      180deg,
+      rgba(80, 138, 114, 0.08) 0px,
+      rgba(80, 138, 114, 0.08) 1px,
+      rgba(255, 255, 255, 0) 1px,
+      rgba(255, 255, 255, 0) 38px
+    );
+  box-shadow: 0 14px 28px rgba(8, 48, 34, 0.1);
+}
+
+.memorization-page.memo-sketch-mode.memo-full-mode #memoReciteLine {
+  margin-top: 4px;
+  min-height: clamp(170px, 30vh, 280px);
+  border: 1px solid rgba(147, 187, 173, 0.48);
   border-radius: 14px;
-  padding: 8px;
-  background: rgba(255, 255, 255, 0.72);
+  padding: 12px 14px 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(243, 251, 248, 0.84)),
+    repeating-linear-gradient(
+      180deg,
+      rgba(88, 138, 117, 0.11) 0px,
+      rgba(88, 138, 117, 0.11) 1px,
+      rgba(255, 255, 255, 0) 1px,
+      rgba(255, 255, 255, 0) 34px
+    );
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+  font-family: var(--qq-arabic-font-family, 'CustomArabic'), serif;
+  font-size: clamp(20px, 3.1vw, 28px);
+  line-height: 1.86;
+}
+
+.memorization-page.memo-sketch-mode.memo-word-mode .memo-word-overlay {
+  position: fixed;
+  left: 50%;
+  top: calc(env(safe-area-inset-top, 0px) + 150px);
+  bottom: calc(var(--memo-bottom-nav-h) + env(safe-area-inset-bottom, 0px) + 142px);
+  transform: translateX(-50%);
+  width: min(900px, calc(100vw - 20px));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 8px 12px;
+  box-sizing: border-box;
+  z-index: 1288;
+  pointer-events: none;
+}
+
+.memorization-page.memo-sketch-mode.memo-word-mode .memo-word-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  background:
+    radial-gradient(420px 240px at 50% 20%, rgba(255, 255, 255, 0.52), rgba(255, 255, 255, 0)),
+    linear-gradient(180deg, rgba(231, 248, 241, 0.42), rgba(224, 243, 236, 0.2));
+  border: 1px solid rgba(168, 202, 188, 0.3);
+  box-shadow: 0 14px 28px rgba(9, 48, 35, 0.1);
+}
+
+.memorization-page.memo-sketch-mode.memo-word-mode .memo-word-overlay #memoWords {
+  position: relative;
+  width: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 8px 4px 12px;
+  pointer-events: auto;
+}
+
+.memorization-page.memo-sketch-mode.memo-word-mode .memo-word-overlay #memoWords .memo-word-grid {
+  gap: 11px 9px;
+}
+
+.memorization-page.memo-sketch-mode.memo-word-mode .memo-word-overlay #memoWords .word-block {
+  border-radius: 13px;
+  border: 1px solid rgba(133, 178, 161, 0.45);
+  box-shadow: 0 9px 16px rgba(9, 48, 35, 0.14);
+  background: rgba(255, 255, 255, 0.96);
+}
+
+.memorization-page.memo-sketch-mode.memo-word-mode .memo-word-overlay.is-locked {
+  opacity: 0.52;
+  pointer-events: none;
 }
 
 .memorization-page.memo-sketch-mode .memo-control-mode {
@@ -1916,12 +2057,17 @@ html.hide-grammar .memo-word-grid .word-block.verb-highlight {
   left: 50%;
   transform: translateX(-50%);
   width: min(900px, calc(100vw - 20px));
-  padding: 6px 10px;
-  border-radius: 12px;
-  border: 1px solid rgba(232, 249, 241, 0.36);
-  background: linear-gradient(180deg, rgba(235, 250, 243, 0.26), rgba(216, 240, 230, 0.18));
-  backdrop-filter: blur(14px) saturate(140%);
-  box-shadow: 0 8px 18px rgba(8, 48, 34, 0.14);
+  box-sizing: border-box;
+  padding: 7px 11px;
+  border-radius: 15px;
+  border: 1px solid rgba(224, 247, 238, 0.58);
+  background:
+    linear-gradient(145deg, rgba(248, 255, 252, 0.34), rgba(225, 245, 236, 0.2)),
+    radial-gradient(380px 120px at 50% 0%, rgba(255, 255, 255, 0.4), transparent 70%);
+  backdrop-filter: blur(16px) saturate(152%);
+  box-shadow:
+    0 10px 22px rgba(8, 48, 34, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.46);
   z-index: 1300;
 }
 
@@ -1930,7 +2076,24 @@ html.hide-grammar .memo-word-grid .word-block.verb-highlight {
 }
 
 .memorization-page.memo-sketch-mode .memo-transparent-strip-bottom {
-  bottom: calc(var(--memo-bottom-nav-h) + env(safe-area-inset-bottom, 0px));
+  bottom: calc(var(--memo-bottom-nav-offset, var(--memo-bottom-nav-h)) - 1px);
+  left: 0 !important;
+  right: 0 !important;
+  transform: none !important;
+  width: auto !important;
+  max-width: none !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  border: 0 !important;
+  border-top: 1px solid rgba(224, 247, 238, 0.58) !important;
+  background:
+    linear-gradient(180deg, rgba(236, 251, 244, 0.88), rgba(222, 244, 235, 0.84)) !important;
+  box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.36) !important;
+  padding:
+    4px
+    max(10px, env(safe-area-inset-right, 0px))
+    4px
+    max(10px, env(safe-area-inset-left, 0px));
 }
 
 .memorization-page.memo-sketch-mode .memo-transparent-strip .memo-control-mode {
@@ -1956,6 +2119,7 @@ html.hide-grammar .memo-word-grid .word-block.verb-highlight {
   width: auto;
   margin: 0;
   justify-content: flex-end;
+  gap: 6px;
 }
 
 .memorization-page.memo-sketch-mode .memo-transparent-strip-bottom .memo-recite-settings {
@@ -1975,6 +2139,21 @@ html.hide-grammar .memo-word-grid .word-block.verb-highlight {
 
 .memorization-page.memo-sketch-mode .memo-action-icons {
   margin-left: 0;
+}
+
+.memorization-page.memo-sketch-mode .memo-action-icons .memo-icon-only {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 12px;
+  border: 1px solid rgba(122, 179, 156, 0.45);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.88), rgba(232, 247, 240, 0.78));
+  box-shadow: 0 7px 12px rgba(9, 48, 35, 0.14);
+}
+
+.memorization-page.memo-sketch-mode .memo-action-icons .memo-icon-only.is-active {
+  border-color: rgba(25, 142, 96, 0.56);
+  background: linear-gradient(145deg, rgba(221, 247, 236, 0.94), rgba(189, 232, 214, 0.82));
 }
 
 .memorization-page #memoFloatingActions {
@@ -2151,7 +2330,41 @@ html.hide-grammar .memo-word-grid .word-block.verb-highlight {
   }
 
   .memorization-page.memo-sketch-mode .memo-transparent-strip-bottom {
-    bottom: calc(var(--memo-bottom-nav-h) + env(safe-area-inset-bottom, 0px));
+    bottom: calc(var(--memo-bottom-nav-offset, var(--memo-bottom-nav-h)) - 1px);
+    left: 0 !important;
+    right: 0 !important;
+    transform: none !important;
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    border: 0 !important;
+    border-top: 1px solid rgba(224, 247, 238, 0.58) !important;
+    background:
+      linear-gradient(180deg, rgba(236, 251, 244, 0.9), rgba(222, 244, 235, 0.86)) !important;
+    box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.36) !important;
+    padding:
+      4px
+      max(8px, env(safe-area-inset-right, 0px))
+      4px
+      max(8px, env(safe-area-inset-left, 0px));
+  }
+
+  .memorization-page.memo-sketch-mode.memo-word-mode .memo-word-overlay {
+    top: calc(env(safe-area-inset-top, 0px) + 138px);
+    bottom: calc(var(--memo-bottom-nav-h) + env(safe-area-inset-bottom, 0px) + 136px);
+    width: calc(100vw - 14px);
+    padding: 6px 4px 10px;
+  }
+
+  .memorization-page.memo-sketch-mode.memo-word-mode .memo-word-overlay #memoWords .memo-word-grid {
+    gap: 9px 7px;
+  }
+
+  .memorization-page.memo-sketch-mode.memo-full-mode #memoReciteLine {
+    min-height: 150px;
+    font-size: clamp(18px, 6vw, 24px);
+    padding: 10px 11px 15px;
   }
 
   .memo-topbar .memo-sketch-toolbar-row {
@@ -2206,15 +2419,15 @@ body.dark-mode .memo-expected-word {
   color: #cde6f3;
 }
 
-html.dark-mode .memorization-page .bottom-nav,
-body.dark-mode .memorization-page .bottom-nav {
+html.dark-mode .memorization-page .memo-bottom-nav,
+body.dark-mode .memorization-page .memo-bottom-nav {
   background: linear-gradient(180deg, #0b4e3e 0%, #083a2f 100%);
   border-top: 1px solid rgba(175, 237, 205, 0.22);
   box-shadow: 0 6px 18px rgba(2, 22, 15, 0.4);
 }
 
-html.dark-mode .memorization-page .bottom-nav-btn.active::after,
-body.dark-mode .memorization-page .bottom-nav-btn.active::after {
+html.dark-mode .memorization-page .memo-bottom-nav-btn.active::after,
+body.dark-mode .memorization-page .memo-bottom-nav-btn.active::after {
   background: #a8f5cf;
   box-shadow: 0 0 12px rgba(168, 245, 207, 0.8);
 }
@@ -2366,6 +2579,13 @@ body.dark-mode .memorization-page .bottom-nav-btn.active::after {
   padding-top: 16px;
 }
 
+/* Embedded host view should use available phone width (including landscape phones). */
+.memorization-page.embedded.memo-welcome-mode .memo-shell,
+.memorization-page.embedded.memo-welcome-mode #memoShell {
+  max-width: min(940px, calc(100% - 20px)) !important;
+  width: calc(100% - 20px) !important;
+}
+
 .memorization-page.memo-welcome-mode .memo-welcome {
   min-height: 0;
   color: #1f2937;
@@ -2378,7 +2598,9 @@ body.dark-mode .memorization-page .bottom-nav-btn.active::after {
   flex-direction: column;
   justify-items: center;
   background: transparent;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .memorization-page.memo-welcome-mode .memo-home-welcome,
@@ -2392,6 +2614,17 @@ body.dark-mode .memorization-page .bottom-nav-btn.active::after {
 
 .memorization-page.memo-welcome-mode .memo-home-quick-stats {
   display: none !important;
+}
+
+.memorization-page.embedded.memo-welcome-mode .memo-home-welcome,
+.memorization-page.embedded.memo-welcome-mode .memo-home-card,
+.memorization-page.embedded.memo-welcome-mode .memo-home-quick-stats {
+  max-width: none !important;
+  width: 100% !important;
+}
+
+.memorization-page.embedded.memo-welcome-mode .memo-welcome {
+  padding-bottom: 12px;
 }
 
 .memorization-page.memo-welcome-mode .memo-welcome::before,
@@ -2434,7 +2667,7 @@ body.dark-mode .memorization-page .bottom-nav-btn.active::after {
   box-sizing: border-box;
   padding: 10px;
   box-shadow: 0 12px 26px rgba(8, 38, 28, 0.09);
-  flex: 0 1 auto;
+  flex: 0 0 auto;
   min-height: 0;
 }
 
@@ -2810,6 +3043,10 @@ body.dark-mode .memorization-page .bottom-nav-btn.active::after {
   bottom: auto;
 }
 
+.memorization-page.embedded.memo-welcome-mode .memo-welcome-cta-wrap .memo-welcome-start {
+  max-width: none;
+}
+
 .memo-welcome-cta-wrap .memo-welcome-start {
   margin: 0 auto;
   width: 100%;
@@ -3052,3 +3289,4 @@ body.dark-mode .memorization-page .bottom-nav-btn.active::after {
     width: min(90vw, 340px);
   }
 }
+

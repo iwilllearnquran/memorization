@@ -1,6 +1,6 @@
-// src/services/firestoreService.js
+﻿// src/services/firestoreService.js
 
-// ————— Firebase Modular Imports —————
+// â€”â€”â€”â€”â€” Firebase Modular Imports â€”â€”â€”â€”â€”
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import {
   getAuth,
@@ -12,14 +12,15 @@ import {
   signOut,
   onAuthStateChanged,
   signInAnonymously,
+  updateProfile,
   setPersistence,
+  indexedDBLocalPersistence,
   browserLocalPersistence
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import {
   getFirestore,
   doc,
   getDoc,
-  updateDoc,
   setDoc,
   serverTimestamp,
   arrayUnion,
@@ -30,7 +31,7 @@ import {
 import { getMessaging, getToken, onMessage } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js';
 
 
-// ————— Your Firebase Config —————
+// â€”â€”â€”â€”â€” Your Firebase Config â€”â€”â€”â€”â€”
 const firebaseConfig = {
   apiKey: "AIzaSyBuOs0LRjbcqvJULZlWkUqYdrfmGIJm88w",
   authDomain: "myquranquest786.firebaseapp.com",
@@ -41,13 +42,23 @@ const firebaseConfig = {
   measurementId: "G-KL3ZNNX844"
 };
 
-// ————— Init Firebase —————
+// â€”â€”â€”â€”â€” Init Firebase â€”â€”â€”â€”â€”
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
-const authPersistenceReady = setPersistence(auth, browserLocalPersistence).catch(err => {
-  console.warn('[Auth] Failed to enable local persistence', err);
-});
+const authPersistenceReady = (async () => {
+  const strategies = [indexedDBLocalPersistence, browserLocalPersistence];
+  for (let i = 0; i < strategies.length; i += 1) {
+    const strategy = strategies[i];
+    try {
+      await setPersistence(auth, strategy);
+      return;
+    } catch (err) {
+      console.warn(`[Auth] Persistence strategy #${i + 1} failed`, err);
+    }
+  }
+  console.warn('[Auth] Falling back to default in-memory auth persistence');
+})();
 const POPUP_TO_REDIRECT_CODES = new Set([
   'auth/popup-blocked',
   'auth/popup-closed-by-user',
@@ -64,7 +75,6 @@ function isNativeWebViewEnvironment() {
   }
 }
 
-const DEFAULT_STREAK_FREEZES = 2;
 const NAMAZ_GOAL_KEYS = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
 
 function getLocalDateStr(date = new Date()) {
@@ -154,18 +164,18 @@ function normalizeNamazGoalsWidget(raw) {
   };
 }
 
-// ————— Ensure Anonymous Guest User —————
+// â€”â€”â€”â€”â€” Ensure Anonymous Guest User â€”â€”â€”â€”â€”
 export async function ensureGuestUser() {
   const user = auth.currentUser;
   if (!user) {
     try {
       await signInAnonymously(auth);
-      console.log('✅ Signed in anonymously as guest');
+      console.log('âœ… Signed in anonymously as guest');
       // set default display name in Firestore
       const ref = doc(db, 'users', auth.currentUser.uid);
       await setDoc(ref, { name: 'Guest', lastLogin: serverTimestamp() }, { merge: true });
     } catch (err) {
-      console.error('❌ Failed to sign in anonymously:', err);
+      console.error('âŒ Failed to sign in anonymously:', err);
       // fallback to session-only mode
       localStorage.setItem('hasSessionGuest','1');
     }
@@ -174,7 +184,7 @@ export async function ensureGuestUser() {
     const ref = doc(db, 'users', user.uid);
     await setDoc(ref, { name: 'Guest' }, { merge: true });
   } else {
-    // real user signed in — clear guest flags
+    // real user signed in â€” clear guest flags
     localStorage.removeItem('hasContinuedAsGuest');
     localStorage.removeItem('hasSessionGuest');
   }
@@ -186,20 +196,20 @@ export async function transferGuestStats(pendingPoints) {
   try {
     // save the guest points under this user
     const ref = doc(db, 'users', auth.currentUser.uid);
-    await updateDoc(ref, {
+    await setDoc(ref, {
       ajrPoints: increment(pendingPoints),
       lastLogin: serverTimestamp()
-    });
+    }, { merge: true });
     // record streak if needed
     const { updated, oldLength, newLength } = await recordStreak();
     return { updated, oldLength, newLength };
   } catch (err) {
-    console.error('❌ Failed to transfer guest stats:', err);
+    console.error('âŒ Failed to transfer guest stats:', err);
   }
 }
 
 
-// ————— Auth Helpers —————
+// â€”â€”â€”â€”â€” Auth Helpers â€”â€”â€”â€”â€”
 /**
  * Sign in via Google popup
  */
@@ -262,7 +272,7 @@ export async function resolveGoogleRedirectResult() {
  */
 export async function logout() {
   await signOut(auth);
-  // ——— Purge guest stats so they don’t linger ———
+  // â€”â€”â€” Purge guest stats so they donâ€™t linger â€”â€”â€”
   localStorage.removeItem('guestPoints');
   localStorage.removeItem('guestStreakHistory');
   localStorage.removeItem('hasSessionGuest');
@@ -284,7 +294,7 @@ export function onAuthChange(callback) {
   };
 }
 
-// ————— Profile Persistence —————
+// â€”â€”â€”â€”â€” Profile Persistence â€”â€”â€”â€”â€”
 export function persistProfile(name, email) {
   const ref = doc(db, 'users', auth.currentUser.uid);
   return setDoc(ref, {
@@ -292,6 +302,26 @@ export function persistProfile(name, email) {
     email,
     lastLogin: serverTimestamp()
   }, { merge: true });
+}
+
+export async function updateUserDisplayName(name) {
+  const user = auth.currentUser;
+  if (!user || user.isAnonymous) {
+    throw new Error('No signed-in user for profile update');
+  }
+
+  const nextName = String(name || '').replace(/\s+/g, ' ').trim().slice(0, 40);
+  if (!nextName) {
+    throw new Error('Display name cannot be empty');
+  }
+
+  await updateProfile(user, { displayName: nextName });
+  const ref = doc(db, 'users', user.uid);
+  await setDoc(ref, {
+    name: nextName,
+    lastLogin: serverTimestamp()
+  }, { merge: true });
+  return nextName;
 }
 
 export function getUserDoc(user = auth.currentUser) {
@@ -302,7 +332,7 @@ export function getUserDoc(user = auth.currentUser) {
   return getDoc(ref);
 }
 
-// ————— Stats Persistence —————
+// â€”â€”â€”â€”â€” Stats Persistence â€”â€”â€”â€”â€”
 export async function loadStatsFromFirestore() {
   const snap = await getUserDoc();
   if (!snap.exists()) return { score: 0 };
@@ -314,9 +344,9 @@ export async function addCompletedAyahToFirestore(ayahObj) {
     throw new Error('Must be signed in to record completed ayah in Firestore');
   }
   const userRef = doc(getFirestore(), 'users', auth.currentUser.uid);
-  await updateDoc(userRef, {
+  await setDoc(userRef, {
     completedAyahs: arrayUnion(ayahObj)
-  });
+  }, { merge: true });
 }
 
 export async function saveStatsToFirestore(stats) {
@@ -397,13 +427,6 @@ export async function mergeGuestData(payload) {
       const mergedStreak = Array.from(new Set([...(data.streakHistory || []), ...guestStreak]));
       mergedStreak.sort();
       updates.streakHistory = mergedStreak;
-      const existingFreezes = Number.isFinite(data.streakFreezes)
-        ? data.streakFreezes
-        : DEFAULT_STREAK_FREEZES;
-      const guestFreezes = Number.isFinite(payload?.streakFreezes)
-        ? payload.streakFreezes
-        : existingFreezes;
-      updates.streakFreezes = Math.min(existingFreezes, guestFreezes);
     }
 
     if (payload?.completedSurahs) {
@@ -570,55 +593,40 @@ export async function recordStreak() {
   const snap0     = await getDoc(userRef);
   const data0     = snap0.exists() ? snap0.data() : {};
   const history0  = data0.streakHistory || [];
-  const freezes0  = Number.isFinite(data0.streakFreezes) ? data0.streakFreezes : DEFAULT_STREAK_FREEZES;
   const oldLength = history0.length;
   if (history0.includes(todayStr)) {
-    return { updated: false, oldLength, newLength: oldLength, freezes: freezes0 };
+    return { updated: false, oldLength, newLength: oldLength };
   }
   return runTransaction(db, async tx => {
     const snap = await tx.get(userRef);
     const data = snap.exists() ? snap.data() : {};
     const hist = data.streakHistory || [];
-    const freezes = Number.isFinite(data.streakFreezes)
-      ? data.streakFreezes
-      : freezes0;
 
     if (hist.includes(todayStr)) {
-      return { updated: false, oldLength, newLength: hist.length, freezes };
+      return { updated: false, oldLength, newLength: hist.length };
     }
 
     let shouldAppend = false;
-    let shouldReset = false;
-    let nextFreezes = freezes;
 
     if (hist.length > 0) {
       const lastDate = [...hist].sort().pop();
       const diffDays = diffDaysUTC(todayStr, lastDate);
       if (diffDays === 1) {
         shouldAppend = true;
-      } else if (diffDays > 1 && freezes > 0) {
-        shouldAppend = true;
-        nextFreezes = freezes - 1;
-      } else {
-        shouldReset = true;
       }
-    } else {
-      shouldReset = true;
     }
 
     if (shouldAppend) {
-      tx.update(userRef, {
-        streakHistory: arrayUnion(todayStr),
-        streakFreezes: nextFreezes
-      });
-      return { updated: true, oldLength, newLength: oldLength + 1, freezes: nextFreezes };
+      tx.set(userRef, {
+        streakHistory: arrayUnion(todayStr)
+      }, { merge: true });
+      return { updated: true, oldLength, newLength: oldLength + 1 };
     }
 
-    tx.update(userRef, {
-      streakHistory: [todayStr],
-      streakFreezes: nextFreezes
-    });
-    return { updated: true, oldLength, newLength: 1, freezes: nextFreezes };
+    tx.set(userRef, {
+      streakHistory: [todayStr]
+    }, { merge: true });
+    return { updated: true, oldLength, newLength: 1 };
   });
 }
 
@@ -645,25 +653,27 @@ export async function resetStreakIfBroken() {
     return { reset: false };
   }
 
-  // 3) Otherwise we need to reset—run a transaction with at least one write
+  // 3) Otherwise we need to resetâ€”run a transaction with at least one write
   return runTransaction(db, async tx => {
     // re-read inside transaction
     const snap = await tx.get(userRef);
     const hist = snap.exists() ? snap.data().streakHistory || [] : [];
 
     // clear it out
-    tx.update(userRef, { streakHistory: [] });
+    tx.set(userRef, { streakHistory: [] }, { merge: true });
     return { reset: true, oldLength };
   });
 }
 
-// ————— Expose auth & db if needed elsewhere —————
+// â€”â€”â€”â€”â€” Expose auth & db if needed elsewhere â€”â€”â€”â€”â€”
 export { auth, db };
 
 
 
-// ── Initialize FCM ──
+// â”€â”€ Initialize FCM â”€â”€
 const messaging = getMessaging(app);
+const FCM_RETRY_AFTER_KEY = 'qq_fcm_retry_after_v1';
+const FCM_RETRY_COOLDOWN_MS = 2 * 60 * 1000;
 
 /**
  * Requests notification permission, fetches an FCM token,
@@ -674,14 +684,22 @@ export async function registerForNotifications() {
     if (!auth.currentUser) {
       throw new Error('No authenticated user');
     }
+    const retryAfter = Number(localStorage.getItem(FCM_RETRY_AFTER_KEY)) || 0;
+    if (Date.now() < retryAfter) {
+      throw new Error('Notifications are temporarily rate-limited. Please try again shortly.');
+    }
     const permission = await Notification.requestPermission();
     if (permission !== 'granted') {
       throw new Error('Notification permission not granted');
     }
     const swReg = await navigator.serviceWorker.register('/_private/firebase-messaging-sw.js');
     const token = await getToken(messaging, {
-      vapidKey: 'BE9W8HfVFsVQaBaU_WV2CWkgSJJJNKmve8NhXx1f0araDhnbEAxk9MlxYsCB2mjMpCdqeB2-PnwLy3uQ9g8JBik'
-    , swRegistration: swReg});
+      vapidKey: 'BE9W8HfVFsVQaBaU_WV2CWkgSJJJNKmve8NhXx1f0araDhnbEAxk9MlxYsCB2mjMpCdqeB2-PnwLy3uQ9g8JBik',
+      swRegistration: swReg
+    });
+    if (!token) {
+      throw new Error('FCM token unavailable');
+    }
 
     // Persist to Firestore under users/{uid}.fcmTokens
     const userRef = doc(db, 'users', auth.currentUser.uid);
@@ -689,9 +707,14 @@ export async function registerForNotifications() {
       fcmTokens: arrayUnion(token)
     }, { merge: true });
 
+    localStorage.removeItem(FCM_RETRY_AFTER_KEY);
     return token;
   } catch (err) {
-    console.error('❌ registerForNotifications failed:', err);
+    const details = String(err?.message || err || '');
+    if (details.includes('429') || details.toLowerCase().includes('too many requests')) {
+      localStorage.setItem(FCM_RETRY_AFTER_KEY, String(Date.now() + FCM_RETRY_COOLDOWN_MS));
+    }
+    console.error('registerForNotifications failed:', err);
     throw err;
   }
 }
@@ -703,16 +726,17 @@ export async function registerForNotifications() {
  * @param {(payload:import('firebase/messaging').MessagePayload)=>void} callback
  */
 export function onForegroundMessage(callback) {
-  onMessage(messaging, payload => {
-    console.log('🔔 FCM foreground message:', payload);
+  if (typeof callback !== 'function') return () => {};
+  return onMessage(messaging, payload => {
+    console.log('FCM foreground message:', payload);
     callback(payload);
   });
 }
 
 /**
- * Persist the user’s last‐read location to Firestore
- * @param {number} surah – the Surah number
- * @param {number} ayah  – the Ayah number
+ * Persist the userâ€™s lastâ€read location to Firestore
+ * @param {number} surah â€“ the Surah number
+ * @param {number} ayah  â€“ the Ayah number
  */
 export async function updateLastRead(surah, ayah) {
   if (!auth.currentUser) {
@@ -780,3 +804,5 @@ export async function getLastReciteFromDb(user = auth.currentUser) {
     timestamp: savedAtMs
   };
 }
+
+

@@ -12,7 +12,9 @@ import {
   signOut,
   onAuthStateChanged,
   signInAnonymously,
+  updateProfile,
   setPersistence,
+  indexedDBLocalPersistence,
   browserLocalPersistence
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import {
@@ -45,9 +47,19 @@ const firebaseConfig = {
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
-const authPersistenceReady = setPersistence(auth, browserLocalPersistence).catch(err => {
-  console.warn('[Auth] Failed to enable local persistence', err);
-});
+const authPersistenceReady = (async () => {
+  const strategies = [indexedDBLocalPersistence, browserLocalPersistence];
+  for (let i = 0; i < strategies.length; i += 1) {
+    const strategy = strategies[i];
+    try {
+      await setPersistence(auth, strategy);
+      return;
+    } catch (err) {
+      console.warn(`[Auth] Persistence strategy #${i + 1} failed`, err);
+    }
+  }
+  console.warn('[Auth] Falling back to default in-memory auth persistence');
+})();
 const POPUP_TO_REDIRECT_CODES = new Set([
   'auth/popup-blocked',
   'auth/popup-closed-by-user',
@@ -63,8 +75,6 @@ function isNativeWebViewEnvironment() {
     return false;
   }
 }
-
-const DEFAULT_STREAK_FREEZES = 2;
 
 function getISTDateStr() {
   const now = new Date();
@@ -239,6 +249,26 @@ export function persistProfile(name, email) {
   }, { merge: true });
 }
 
+export async function updateUserDisplayName(name) {
+  const user = auth.currentUser;
+  if (!user || user.isAnonymous) {
+    throw new Error('No signed-in user for profile update');
+  }
+
+  const nextName = String(name || '').replace(/\s+/g, ' ').trim().slice(0, 40);
+  if (!nextName) {
+    throw new Error('Display name cannot be empty');
+  }
+
+  await updateProfile(user, { displayName: nextName });
+  const ref = doc(db, 'users', user.uid);
+  await setDoc(ref, {
+    name: nextName,
+    lastLogin: serverTimestamp()
+  }, { merge: true });
+  return nextName;
+}
+
 export function getUserDoc(user = auth.currentUser) {
   if (!user?.uid) {
     throw new Error('No authenticated user');
@@ -326,13 +356,6 @@ export async function mergeGuestData(payload) {
       const mergedStreak = Array.from(new Set([...(data.streakHistory || []), ...guestStreak]));
       mergedStreak.sort();
       updates.streakHistory = mergedStreak;
-      const existingFreezes = Number.isFinite(data.streakFreezes)
-        ? data.streakFreezes
-        : DEFAULT_STREAK_FREEZES;
-      const guestFreezes = Number.isFinite(payload?.streakFreezes)
-        ? payload.streakFreezes
-        : existingFreezes;
-      updates.streakFreezes = Math.min(existingFreezes, guestFreezes);
     }
 
     if (payload?.completedSurahs) {
@@ -416,55 +439,40 @@ export async function recordStreak() {
   const snap0     = await getDoc(userRef);
   const data0     = snap0.exists() ? snap0.data() : {};
   const history0  = data0.streakHistory || [];
-  const freezes0  = Number.isFinite(data0.streakFreezes) ? data0.streakFreezes : DEFAULT_STREAK_FREEZES;
   const oldLength = history0.length;
   if (history0.includes(todayStr)) {
-    return { updated: false, oldLength, newLength: oldLength, freezes: freezes0 };
+    return { updated: false, oldLength, newLength: oldLength };
   }
   return runTransaction(db, async tx => {
     const snap = await tx.get(userRef);
     const data = snap.exists() ? snap.data() : {};
     const hist = data.streakHistory || [];
-    const freezes = Number.isFinite(data.streakFreezes)
-      ? data.streakFreezes
-      : freezes0;
 
     if (hist.includes(todayStr)) {
-      return { updated: false, oldLength, newLength: hist.length, freezes };
+      return { updated: false, oldLength, newLength: hist.length };
     }
 
     let shouldAppend = false;
-    let shouldReset = false;
-    let nextFreezes = freezes;
 
     if (hist.length > 0) {
       const lastDate = [...hist].sort().pop();
       const diffDays = diffDaysUTC(todayStr, lastDate);
       if (diffDays === 1) {
         shouldAppend = true;
-      } else if (diffDays > 1 && freezes > 0) {
-        shouldAppend = true;
-        nextFreezes = freezes - 1;
-      } else {
-        shouldReset = true;
       }
-    } else {
-      shouldReset = true;
     }
 
     if (shouldAppend) {
       tx.update(userRef, {
-        streakHistory: arrayUnion(todayStr),
-        streakFreezes: nextFreezes
+        streakHistory: arrayUnion(todayStr)
       });
-      return { updated: true, oldLength, newLength: oldLength + 1, freezes: nextFreezes };
+      return { updated: true, oldLength, newLength: oldLength + 1 };
     }
 
     tx.update(userRef, {
-      streakHistory: [todayStr],
-      streakFreezes: nextFreezes
+      streakHistory: [todayStr]
     });
-    return { updated: true, oldLength, newLength: 1, freezes: nextFreezes };
+    return { updated: true, oldLength, newLength: 1 };
   });
 }
 

@@ -26,7 +26,7 @@ const USE_HOST_MAIN_NAV = false;
 const FIRST_MEMO_AYAH = Object.freeze({
   surah: 1,
   ayah: 1,
-  arabic: 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ',
+  arabic: '\u0628\u0650\u0633\u0652\u0645\u0650 \u0627\u0644\u0644\u0651\u064e\u0647\u0650 \u0627\u0644\u0631\u0651\u064e\u062d\u0652\u0645\u064e\u0670\u0646\u0650 \u0627\u0644\u0631\u0651\u064e\u062d\u0650\u064a\u0645\u0650',
   translation: 'In the name of Allah, the Most Gracious, the Most Merciful.'
 });
 const RECITE_MATCH_MODE = Object.freeze({
@@ -80,6 +80,7 @@ const els = {
   lockMsg: document.getElementById('memoLockMsg'),
   lockOverlay: document.getElementById('memoLockOverlay'),
   wordsWrap: document.getElementById('memoWords'),
+  wordOverlay: document.getElementById('memoWordOverlay'),
   learnNav: document.getElementById('memoNavLearnQuran'),
   playBtn: document.getElementById('memoPlayBtn'),
   playCount: document.getElementById('memoPlayCount'),
@@ -99,6 +100,8 @@ const els = {
   toggleMeaning: document.getElementById('memoToggleMeaning'),
   toggleGrammar: document.getElementById('memoToggleGrammar'),
   toggleExpectedAfterWrong: document.getElementById('memoToggleExpectedAfterWrong'),
+  pauseBtn: document.getElementById('memoPauseBtn'),
+  stopPlaybackBtn: document.getElementById('memoStopPlaybackBtn'),
   peekBtn: document.getElementById('memoPeekBtn'),
   practiceToggle: document.getElementById('memoPracticeToggle'),
   practicePanel: document.getElementById('memoPracticePanel'),
@@ -168,6 +171,9 @@ let memoDrawerOpen = false;
 let memoWelcomeRenderToken = 0;
 let memoHostNavMount = null;
 let memoHostNavbarHiddenState = null;
+let memoHostActive = false;
+const memoWordsOriginalParent = els.wordsWrap?.parentElement || null;
+const memoWordsOriginalNextSibling = els.wordsWrap?.nextElementSibling || null;
 const wrongTryCounts = new Map();
 const viewState = {
   meaning: true,
@@ -235,7 +241,7 @@ function getSystemBarColorForHref(href) {
 
 function bindBottomNavSystemBarColor() {
   sendSystemBarColor(TAB_SYSTEM_BAR_COLORS.memo);
-  const navLinks = document.querySelectorAll('.bottom-nav .bottom-nav-btn[href]');
+  const navLinks = document.querySelectorAll('.memo-bottom-nav .memo-bottom-nav-btn[href]');
   navLinks.forEach(link => {
     link.addEventListener('click', () => {
       sendSystemBarColor(getSystemBarColorForHref(link.getAttribute('href')));
@@ -422,11 +428,14 @@ function updateLearnNavLink() {
 
 function enforceWelcomeLayoutCentering() {
   if (!document.body.classList.contains('memo-welcome-mode')) return;
+  const isEmbeddedWelcome = document.body.classList.contains('embedded');
+  const shellMaxWidth = isEmbeddedWelcome ? 940 : 536;
+  const shellHorizontalGutter = isEmbeddedWelcome ? 20 : 40;
 
   const shell = document.getElementById('memoShell');
   if (shell) {
-    shell.style.maxWidth = '536px';
-    shell.style.width = 'min(536px, calc(100% - 40px))';
+    shell.style.maxWidth = `${shellMaxWidth}px`;
+    shell.style.width = `min(${shellMaxWidth}px, calc(100% - ${shellHorizontalGutter}px))`;
     shell.style.marginLeft = 'auto';
     shell.style.marginRight = 'auto';
     shell.style.left = 'auto';
@@ -437,11 +446,121 @@ function enforceWelcomeLayoutCentering() {
     '#memoWelcome .memo-home-welcome, #memoWelcome .memo-home-card'
   );
   centeredBlocks.forEach(node => {
-    node.style.maxWidth = '536px';
+    node.style.maxWidth = isEmbeddedWelcome ? 'none' : '536px';
     node.style.width = '100%';
     node.style.marginLeft = 'auto';
     node.style.marginRight = 'auto';
   });
+}
+
+function enforceMemoBottomNavTightLayout() {
+  const nav = document.querySelector('.memorization-page .memo-bottom-nav');
+  if (!nav) return;
+
+  nav.style.height = '40px';
+  nav.style.minHeight = '40px';
+  nav.style.maxHeight = '40px';
+  nav.style.paddingBottom = '0px';
+  nav.style.overflow = 'hidden';
+  nav.style.boxSizing = 'border-box';
+  nav.style.borderTop = 'none';
+
+  const inner = nav.querySelector('.memo-bottom-nav-inner');
+  if (inner) {
+    inner.style.height = '40px';
+    inner.style.minHeight = '40px';
+    inner.style.maxHeight = '40px';
+    inner.style.alignItems = 'flex-start';
+    inner.style.paddingTop = '0px';
+    inner.style.paddingBottom = '0px';
+  }
+
+  const buttons = nav.querySelectorAll('.memo-bottom-nav-btn');
+  buttons.forEach(btn => {
+    btn.style.justifyContent = 'flex-start';
+    btn.style.paddingTop = '1px';
+    btn.style.gap = '0px';
+    btn.style.fontSize = '10.5px';
+    const label = btn.querySelector('span:not(.material-icons-outlined):not(.material-symbols-outlined)');
+    if (label) {
+      label.style.lineHeight = '1';
+    }
+    const icon = btn.querySelector('.memo-bottom-nav-icon');
+    if (icon) {
+      icon.style.width = '19px';
+      icon.style.height = '19px';
+    }
+    const materialIcon = btn.querySelector('.material-icons-outlined, .material-symbols-outlined');
+    if (materialIcon) {
+      materialIcon.style.fontSize = '19px';
+      materialIcon.style.lineHeight = '1';
+      materialIcon.style.width = '19px';
+      materialIcon.style.height = '19px';
+    }
+  });
+}
+
+function syncMemoBottomNavOffset() {
+  const root = document.documentElement;
+  enforceMemoBottomNavTightLayout();
+  const nav = document.querySelector('.memorization-page .memo-bottom-nav');
+  let offset = 0;
+  if (nav) {
+    const navStyle = window.getComputedStyle(nav);
+    if (navStyle.display !== 'none' && navStyle.visibility !== 'hidden') {
+      offset = Math.round(nav.getBoundingClientRect().height || 0);
+    }
+  }
+  root.style.setProperty('--memo-bottom-nav-offset', `${Math.max(0, offset)}px`);
+  enforceMemoBottomStripFlush();
+  window.requestAnimationFrame(() => {
+    enforceMemoBottomStripFlush();
+  });
+}
+
+function getMemoBottomNavOverlap(nav) {
+  if (!nav) return 5;
+  const navRect = nav.getBoundingClientRect();
+  const buttons = Array.from(nav.querySelectorAll('.memo-bottom-nav-btn'));
+  if (!buttons.length) return 5;
+
+  let topGap = 0;
+  buttons.forEach(btn => {
+    const btnRect = btn.getBoundingClientRect();
+    topGap = Math.max(topGap, Math.max(0, btnRect.top - navRect.top));
+
+    const iconCandidates = btn.querySelectorAll(
+      '.memo-bottom-nav-icon, .material-icons-outlined, .material-symbols-outlined, svg'
+    );
+    iconCandidates.forEach(icon => {
+      const iconRect = icon.getBoundingClientRect();
+      topGap = Math.max(topGap, Math.max(0, iconRect.top - navRect.top));
+    });
+  });
+
+  const maxOverlap = Math.max(2, Math.round(navRect.height * 0.72));
+  const overlap = Math.round(topGap + 2);
+  return Math.min(maxOverlap, Math.max(2, overlap));
+}
+
+function enforceMemoBottomStripFlush() {
+  const strip = document.getElementById('memoBottomControlStrip');
+  const nav = document.querySelector('.memorization-page .memo-bottom-nav');
+  if (!strip) return;
+  const rootStyles = window.getComputedStyle(document.documentElement);
+  const offsetRaw = rootStyles.getPropertyValue('--memo-bottom-nav-offset').trim();
+  const offsetNum = Number.parseFloat(offsetRaw);
+  const navOffset = Number.isFinite(offsetNum) ? Math.max(0, Math.round(offsetNum)) : 52;
+  const overlap = getMemoBottomNavOverlap(nav);
+  const safeOffset = Math.max(0, navOffset - overlap);
+  strip.style.left = '0';
+  strip.style.right = '0';
+  strip.style.width = 'auto';
+  strip.style.maxWidth = 'none';
+  strip.style.transform = 'none';
+  strip.style.margin = '0';
+  strip.style.borderRadius = '0';
+  strip.style.bottom = `${safeOffset}px`;
 }
 
 function syncWelcomeViewportLock() {
@@ -881,7 +1000,8 @@ function openMemorizationWorkspace() {
   document.body.classList.remove('memo-welcome-mode');
   document.body.classList.add('memo-sketch-mode');
   syncWelcomeViewportLock();
-  setHostMainNavbarHidden(true);
+  // In embedded mode, only hide host nav while host explicitly keeps memo active.
+  setHostMainNavbarHidden(!isEmbedded || memoHostActive);
   if (USE_HOST_MAIN_NAV) {
     hydrateMemoNavIntoMain();
   } else {
@@ -892,11 +1012,15 @@ function openMemorizationWorkspace() {
   }
   syncMemoMenuButtonMode();
   updateSketchNavMeta();
+  syncMemoBottomNavOffset();
+  applyReciteMatchModeUI();
+  syncPlaybackControlState();
 }
 
 function openMemorizationWelcome() {
   setMemoProfileDrawerOpen(false);
   stopListening();
+  stopAudioPlayback();
   setHostMainNavbarHidden(false);
   restoreMemoNavFromMain();
   if (els.main) {
@@ -909,8 +1033,11 @@ function openMemorizationWelcome() {
   }
   document.body.classList.remove('memo-sketch-mode');
   document.body.classList.add('memo-welcome-mode');
+  syncMemoBottomNavOffset();
   syncWelcomeViewportLock();
   syncMemoMenuButtonMode();
+  applyReciteMatchModeUI();
+  syncPlaybackControlState();
   enforceWelcomeLayoutCentering();
   refreshWelcomeDashboard();
 }
@@ -1166,7 +1293,7 @@ function renderFullReciteLine() {
   if (!els.reciteLine) return;
   if (!fullReciteTokens.length) {
     els.reciteLine.classList.add('is-empty');
-    els.reciteLine.textContent = 'Speak full ayah...';
+    els.reciteLine.textContent = '';
     return;
   }
 
@@ -1196,6 +1323,37 @@ function resetFullReciteState() {
   fullReciteIndex = 0;
   fullReciteTokens = [];
   renderFullReciteLine();
+}
+
+function setMemoReciteModeClass(fullMode) {
+  const isFullMode = Boolean(fullMode);
+  document.body.classList.toggle('memo-full-mode', isFullMode);
+  document.body.classList.toggle('memo-word-mode', !isFullMode);
+}
+
+function mountWordsToOverlay(shouldOverlay) {
+  if (!els.wordsWrap || !els.wordOverlay) return;
+  const useOverlay = Boolean(shouldOverlay);
+  const currentlyInOverlay = els.wordsWrap.parentElement === els.wordOverlay;
+
+  if (useOverlay) {
+    if (!currentlyInOverlay) {
+      els.wordOverlay.appendChild(els.wordsWrap);
+    }
+  } else if (currentlyInOverlay) {
+    const restoreParent = memoWordsOriginalParent || els.main || document.body;
+    if (
+      memoWordsOriginalNextSibling &&
+      memoWordsOriginalNextSibling.parentElement === restoreParent
+    ) {
+      restoreParent.insertBefore(els.wordsWrap, memoWordsOriginalNextSibling);
+    } else {
+      restoreParent.appendChild(els.wordsWrap);
+    }
+  }
+
+  els.wordOverlay.classList.toggle('is-active', useOverlay);
+  els.wordOverlay.setAttribute('aria-hidden', String(!useOverlay));
 }
 
 function rebuildFullReciteFromTokens(rawTokens) {
@@ -1244,14 +1402,17 @@ function rebuildFullReciteFromTokens(rawTokens) {
 
 function applyReciteMatchModeUI() {
   const fullMode = isFullAyahReciteMode();
+  const inSketchMode = document.body.classList.contains('memo-sketch-mode');
+  setMemoReciteModeClass(fullMode);
   updateToggleButton(els.reciteWordModeBtn, !fullMode);
   updateToggleButton(els.reciteFullModeBtn, fullMode);
 
   if (els.expectedHint) {
     els.expectedHint.classList.toggle('is-hidden', fullMode || !viewState.expectedAfterThreeWrong);
   }
+  mountWordsToOverlay(inSketchMode && !fullMode);
   if (els.wordsWrap) {
-    els.wordsWrap.classList.remove('is-hidden');
+    els.wordsWrap.classList.toggle('is-hidden', fullMode);
   }
   if (els.reciteLine) {
     els.reciteLine.classList.toggle('is-visible', fullMode);
@@ -1312,12 +1473,15 @@ function updateListenUI() {
 function setLockedState(isLocked) {
   const locked = ALLOW_ALL_AYAHS ? false : isLocked;
   els.lockOverlay.classList.toggle('is-visible', locked);
+  if (els.wordOverlay) {
+    els.wordOverlay.classList.toggle('is-locked', locked);
+  }
   els.lockMsg.textContent = locked ? 'This ayah is locked until you complete the previous one.' : '';
-  els.playBtn.disabled = locked;
   els.playCount.disabled = locked;
   els.startBtn.disabled = locked || listening || keepListening;
   if (els.peekBtn) els.peekBtn.disabled = locked;
   els.stopBtn.disabled = true;
+  syncPlaybackControlState();
 }
 
 function clearPeekTimer() {
@@ -1430,7 +1594,7 @@ function peekWords() {
     els.peekBtn?.classList.add('is-active');
     els.peekBtn?.setAttribute('aria-pressed', 'true');
     els.reciteLine.classList.remove('is-empty');
-    els.reciteLine.textContent = preview || '—';
+    els.reciteLine.textContent = preview || '--';
     peekTimeout = window.setTimeout(() => {
       if (wasEmpty) {
         els.reciteLine.classList.add('is-empty');
@@ -2318,11 +2482,14 @@ function syncRevealFromTranslitTranscript(transcript) {
 function completeAyah() {
   stopListening();
   updateExpectedWord();
+  const memorizedSurah = Number(current.surah) || 1;
+  const memorizedAyah = Number(current.ayah) || 1;
   setStoredLastMemorized({
-    surah: Number(current.surah) || 1,
-    ayah: Number(current.ayah) || 1,
+    surah: memorizedSurah,
+    ayah: memorizedAyah,
     timestamp: Date.now()
   });
+  notifyParentMemoAyahMemorized(memorizedSurah, memorizedAyah);
   unlockNextAyah();
   showModal(true);
   buildSurahOptions();
@@ -2484,18 +2651,70 @@ function updateListenCount(delta) {
   }
 }
 
+function isCurrentAyahLocked() {
+  return ALLOW_ALL_AYAHS ? false : isLockedAyah(current.surah, current.ayah);
+}
+
+function syncPlaybackControlState() {
+  const hasAudioQueue = audioQueue > 0;
+  const locked = isCurrentAyahLocked();
+  const pauseIcon = els.pauseBtn?.querySelector('.material-icons-outlined');
+  const paused = Boolean(audio?.paused) && hasAudioQueue;
+
+  if (els.playBtn) {
+    els.playBtn.disabled = locked || hasAudioQueue || !audio;
+  }
+  if (els.navSpeakerBtn) {
+    els.navSpeakerBtn.disabled = locked || hasAudioQueue || !audio;
+  }
+  if (els.playCount) {
+    els.playCount.disabled = locked || hasAudioQueue;
+  }
+  if (els.pauseBtn) {
+    els.pauseBtn.disabled = locked || !hasAudioQueue || !audio;
+    els.pauseBtn.classList.toggle('is-active', paused);
+    els.pauseBtn.setAttribute('aria-label', paused ? 'Resume playback' : 'Pause playback');
+  }
+  if (pauseIcon) {
+    pauseIcon.textContent = paused ? 'play_arrow' : 'pause';
+  }
+  if (els.stopPlaybackBtn) {
+    els.stopPlaybackBtn.disabled = !hasAudioQueue || !audio;
+    els.stopPlaybackBtn.classList.toggle('is-active', hasAudioQueue);
+  }
+}
+
+function togglePausePlayback() {
+  if (!audio || audioQueue <= 0 || isCurrentAyahLocked()) return;
+  if (audio.paused) {
+    audio.play().catch(() => {
+      syncPlaybackControlState();
+    });
+  } else {
+    audio.pause();
+  }
+  syncPlaybackControlState();
+}
+
+function stopAudioPlayback() {
+  if (audio) {
+    audio.pause();
+    audio.currentTime = 0;
+  }
+  audioQueue = 0;
+  syncPlaybackControlState();
+}
+
 function playAudio(times) {
-  if (!audio) return;
+  if (!audio || isCurrentAyahLocked()) return;
   if (audioQueue > 0) return;
   const count = clamp(times, 1, 50);
   audioQueue = count;
-  els.playBtn.disabled = true;
-  if (els.navSpeakerBtn) els.navSpeakerBtn.disabled = true;
   audio.currentTime = 0;
+  syncPlaybackControlState();
   audio.play().catch(() => {
-    els.playBtn.disabled = false;
-    if (els.navSpeakerBtn) els.navSpeakerBtn.disabled = false;
     audioQueue = 0;
+    syncPlaybackControlState();
   });
 }
 
@@ -2558,16 +2777,20 @@ async function navigateMemoAyah(surah, ayah, options = {}) {
 }
 
 function handleAudioEnded() {
-  if (audioQueue <= 0) return;
+  if (audioQueue <= 0) {
+    syncPlaybackControlState();
+    return;
+  }
   updateListenCount(1);
   audioQueue -= 1;
   if (audioQueue > 0) {
     audio.currentTime = 0;
-    audio.play();
-  } else {
-    els.playBtn.disabled = false;
-    if (els.navSpeakerBtn) els.navSpeakerBtn.disabled = false;
+    audio.play().catch(() => {
+      audioQueue = 0;
+      syncPlaybackControlState();
+    });
   }
+  syncPlaybackControlState();
 }
 
 async function loadAyah(surah, ayah) {
@@ -2605,10 +2828,9 @@ async function loadAyah(surah, ayah) {
       audio.removeEventListener('ended', handleAudioEnded);
     }
     audioQueue = 0;
-    els.playBtn.disabled = false;
-    if (els.navSpeakerBtn) els.navSpeakerBtn.disabled = false;
     audio = new Audio(getAudioUrl(target.surah, target.ayah));
     audio.addEventListener('ended', handleAudioEnded);
+    syncPlaybackControlState();
   } catch (err) {
     if (requestId !== loadAyahRequestId) return;
     setStatus('Failed', true);
@@ -2620,6 +2842,7 @@ async function loadAyah(surah, ayah) {
     updateExpectedWord();
     const message = err && err.message ? err.message : 'Could not load ayah';
     showFeedback(message, true);
+    syncPlaybackControlState();
   }
 }
 
@@ -3159,6 +3382,18 @@ els.playBtn.addEventListener('click', () => {
   playAudio(times);
 });
 
+if (els.pauseBtn) {
+  els.pauseBtn.addEventListener('click', () => {
+    togglePausePlayback();
+  });
+}
+
+if (els.stopPlaybackBtn) {
+  els.stopPlaybackBtn.addEventListener('click', () => {
+    stopAudioPlayback();
+  });
+}
+
 if (els.navSpeakerBtn) {
   els.navSpeakerBtn.addEventListener('click', () => {
     playAudio(1);
@@ -3200,6 +3435,17 @@ function notifyParentMemoNavigationReady(surah, ayah) {
   } catch (_) {}
 }
 
+function notifyParentMemoAyahMemorized(surah, ayah) {
+  try {
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage(
+        { type: 'MEMO_AYAH_MEMORIZED', surah, ayah },
+        window.location.origin === 'null' ? '*' : window.location.origin
+      );
+    }
+  } catch (_) {}
+}
+
 function getStoredAppSettings() {
   try {
     return JSON.parse(localStorage.getItem('qq_settings') || '{}') || {};
@@ -3219,7 +3465,7 @@ function sanitizeTypographySettings(raw = {}) {
   const parsedSize = Number.parseFloat(raw.arabicSize);
   const arabicSize = Number.isFinite(parsedSize)
     ? Math.min(56, Math.max(16, parsedSize))
-    : 22;
+    : 28;
   const parsedWeight = Number.parseInt(raw.arabicWeight, 10);
   const weightBucket = Number.isFinite(parsedWeight)
     ? Math.round(parsedWeight / 100) * 100
@@ -3260,7 +3506,7 @@ function shouldIgnoreMemoSwipeTarget(target) {
   if (!(target instanceof Element)) return false;
   return Boolean(
     target.closest(
-      'select, option, input, textarea, [contenteditable="true"], .memo-practice-panel, .memo-word-controls, .memo-sketch-toolbar-block, .memo-transparent-strip, .memo-nav-bar, .bottom-nav'
+      'select, option, input, textarea, [contenteditable="true"], .memo-practice-panel, .memo-word-controls, .memo-sketch-toolbar-block, .memo-transparent-strip, .memo-nav-bar, .memo-bottom-nav'
     )
   );
 }
@@ -3436,6 +3682,9 @@ updateLearnNavLink();
 const initialAppSettings = getStoredAppSettings();
 applyMemoTheme(initialAppSettings.darkMode === true);
 applyMemoTypography(initialAppSettings);
+if (isEmbedded) {
+  document.body.classList.add('embedded');
+}
 initWelcomeBrainAnimation();
 if (els.welcome && !els.welcome.classList.contains('is-hidden')) {
   document.body.classList.add('memo-welcome-mode');
@@ -3445,16 +3694,16 @@ if (els.welcome && !els.welcome.classList.contains('is-hidden')) {
   syncWelcomeViewportLock();
 }
 syncMemoMenuButtonMode();
-if (isEmbedded) {
-  document.body.classList.add('embedded');
-}
 window.addEventListener('resize', enforceWelcomeLayoutCentering);
+window.addEventListener('resize', syncMemoBottomNavOffset);
 window.addEventListener('pageshow', () => {
   enforceWelcomeLayoutCentering();
+  syncMemoBottomNavOffset();
 });
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden) {
     enforceWelcomeLayoutCentering();
+    syncMemoBottomNavOffset();
   }
 });
 enableNativeInteractionGuard();
@@ -3469,6 +3718,26 @@ window.addEventListener('message', event => {
   }
   if (data.type === 'APPLY_SETTINGS') {
     applyMemoTypography(data.settings || {});
+    return;
+  }
+  if (data.type === 'MEMO_HOST_DEACTIVATE') {
+    memoHostActive = false;
+    setMemoProfileDrawerOpen(false);
+    setHostMainNavbarHidden(false);
+    restoreMemoNavFromMain();
+    syncMemoBottomNavOffset();
+    return;
+  }
+  if (data.type === 'MEMO_HOST_ACTIVATE') {
+    memoHostActive = true;
+    if (document.body.classList.contains('memo-sketch-mode')) {
+      openMemorizationWorkspace();
+    } else {
+      setHostMainNavbarHidden(false);
+      restoreMemoNavFromMain();
+      syncMemoMenuButtonMode();
+      syncMemoBottomNavOffset();
+    }
     return;
   }
 
@@ -3495,6 +3764,10 @@ onAuthChange(user => {
     hydrateMemorizationFromDb();
   }
 });
+syncMemoBottomNavOffset();
 init();
+
+
+
 
 

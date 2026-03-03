@@ -5,8 +5,6 @@
  */
 const POINTS_KEY = 'guestPoints';
 const STREAK_KEY = 'guestStreakHistory';
-const STREAK_FREEZE_KEY = 'guestStreakFreezes';
-const DEFAULT_STREAK_FREEZES = 2;
 
 function getLocalDateStr(date = new Date()) {
   const y = date.getFullYear();
@@ -35,9 +33,6 @@ export function initGuestSession() {
   if (!localStorage.getItem(STREAK_KEY)) {
     localStorage.setItem(STREAK_KEY, JSON.stringify([]));
   }
-  if (!localStorage.getItem(STREAK_FREEZE_KEY)) {
-    localStorage.setItem(STREAK_FREEZE_KEY, String(DEFAULT_STREAK_FREEZES));
-  }
 }
 
 /**
@@ -47,8 +42,9 @@ export function initGuestSession() {
  */
 export function addGuestPoints(pointsDelta) {
   initGuestSession();
+  const delta = Number(pointsDelta) || 0;
   const current = parseInt(localStorage.getItem(POINTS_KEY), 10) || 0;
-  const updated = current + pointsDelta;
+  const updated = current + delta;
   localStorage.setItem(POINTS_KEY, String(updated));
   return updated;
 }
@@ -65,22 +61,17 @@ export function recordGuestStreak() {
   const today = getLocalDateStr();
   const history = JSON.parse(localStorage.getItem(STREAK_KEY)) || [];
   const oldLength = history.length;
-  const freezes = parseInt(localStorage.getItem(STREAK_FREEZE_KEY), 10) || 0;
 
   if (history[oldLength - 1] === today) {
-    return { updated: false, oldLength, newLength: oldLength, today, freezes };
+    return { updated: false, oldLength, newLength: oldLength, today };
   }
 
   let newHistory;
-  let newFreezes = freezes;
   if (oldLength > 0) {
     const lastDate = history[oldLength - 1];
     const diffDays = diffDaysUTC(today, lastDate);
     if (diffDays === 1) {
       newHistory = [...history, today];
-    } else if (diffDays > 1 && freezes > 0) {
-      newHistory = [...history, today];
-      newFreezes = freezes - 1;
     } else {
       newHistory = [today];
     }
@@ -89,19 +80,12 @@ export function recordGuestStreak() {
   }
 
   localStorage.setItem(STREAK_KEY, JSON.stringify(newHistory));
-  localStorage.setItem(STREAK_FREEZE_KEY, String(newFreezes));
   return {
     updated: true,
     oldLength,
     newLength: newHistory.length,
-    today,
-    freezes: newFreezes
+    today
   };
-}
-
-export function getGuestStreakFreezes() {
-  initGuestSession();
-  return parseInt(localStorage.getItem(STREAK_FREEZE_KEY), 10) || 0;
 }
 
 /**
@@ -124,7 +108,7 @@ const LAST_READ_KEY = 'quranQuestLastRead';
  */
 export function setGuestLastRead(surah, ayah) {
   localStorage.setItem(
-    'lastReadAyah',
+    LAST_READ_KEY,
     JSON.stringify({
       surah,
       ayah,
@@ -140,7 +124,17 @@ export function setGuestLastRead(surah, ayah) {
  */
 export function getGuestLastRead() {
   try {
-    return JSON.parse(localStorage.getItem('lastReadAyah'));
+    const parsed = JSON.parse(localStorage.getItem(LAST_READ_KEY));
+    const surah = Number(parsed?.surah);
+    const ayah = Number(parsed?.ayah);
+    if (!Number.isFinite(surah) || !Number.isFinite(ayah) || surah <= 0 || ayah <= 0) {
+      return null;
+    }
+    return {
+      surah,
+      ayah,
+      savedAt: parsed?.savedAt || null
+    };
   } catch {
     return null;
   }

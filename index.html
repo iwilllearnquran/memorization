@@ -38,10 +38,14 @@
   href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600&display=swap"
   rel="stylesheet"
 />
+<link
+  href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+  rel="stylesheet"
+/>
 
   
 
-  <link rel="stylesheet" href="/index-style.css">
+<link rel="stylesheet" href="/index-style.css?v=20260228-responsive1">
 </head>
 <body>
 
@@ -75,7 +79,7 @@
     </div>
     <div class="navbar-right">
       
-      <button id="returnToAyah" class="return-btn">Return to Ayah</button>
+      <button id="returnToAyah" class="return-btn">Return to Main Page</button>
       <button id="learnSettingsBtn" class="top-settings-btn" type="button" aria-label="Learn settings">
         <span class="material-symbols-outlined nav-action-icon" aria-hidden="true">tune</span>
       </button>
@@ -110,7 +114,19 @@
 
   <div class="drawer-user" id="drawerUser">
     <div id="drawerGreeting" class="drawer-greeting">Assalamualaikum,</div>
-    <div id="drawerSubtext" class="drawer-subtext">Guest</div>
+    <div class="drawer-name-row">
+      <div id="drawerSubtext" class="drawer-subtext">Guest</div>
+      <button
+        id="drawerEditNameBtn"
+        class="drawer-edit-name-btn"
+        type="button"
+        aria-label="Edit display name"
+        title="Edit display name"
+        style="display:none;"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">edit</span>
+      </button>
+    </div>
     <div class="drawer-auth-actions">
       <button id="drawerLoginBtn" class="drawer-auth-btn" type="button">
         Continue with Google
@@ -140,11 +156,6 @@
     <button class="qq-nav-item" id="namazHistoryBtn" type="button">
       <span class="material-symbols-outlined drawer-menu-icon" aria-hidden="true">mosque</span>
       <span>Namaz History</span>
-    </button>
-
-    <button class="qq-nav-item is-placeholder" id="drawerPlaceholderBtn" type="button">
-      <span class="material-symbols-outlined drawer-menu-icon" aria-hidden="true">more_horiz</span>
-      <span>Placeholder (Coming Soon)</span>
     </button>
   </nav>
 
@@ -230,9 +241,13 @@
       </div>
       <div class="hero-dua-meta">Al-Baqarah - 2:201</div>
     </div>
+    <h2 id="quickAccessTitle" class="hero-quick-access-title hero-quick-access-title-main">Quick Access</h2>
     <section class="hero-namaz-widget" id="namazGoalsWidget" aria-labelledby="namazGoalsTitle">
       <button class="hero-namaz-summary" id="namazGoalsSummary" type="button" aria-label="Open Namaz tracker history">
-        <span class="hero-namaz-title" id="namazGoalsTitle">Namaz<br>Tracker</span>
+        <span class="hero-namaz-summary-inner">
+          <span class="hero-namaz-summary-icon material-symbols-outlined" aria-hidden="true">dark_mode</span>
+          <span class="hero-namaz-title" id="namazGoalsTitle">Namaz Tracker</span>
+        </span>
       </button>
       <div class="hero-namaz-rows" id="namazGoalsRows">
         <button class="hero-namaz-item" type="button" data-prayer-row="fajr" data-prayer="fajr" data-label="Fajr">
@@ -254,6 +269,28 @@
         <button class="hero-namaz-item" type="button" data-prayer-row="isha" data-prayer="isha" data-label="Isha">
           <span class="hero-namaz-dot" aria-hidden="true"></span>
           <span class="hero-namaz-name">Isha</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="hero-quick-access" aria-label="Quick actions">
+      <div class="hero-quick-access-grid">
+        <button class="hero-quick-card" id="quickWhyBtn" type="button" aria-label="Open Why Quran Quest">
+          <span class="material-symbols-outlined hero-quick-card-icon" aria-hidden="true">auto_stories</span>
+          <span class="hero-quick-card-label">Why Quran Quest</span>
+        </button>
+        <button class="hero-quick-card" id="quickNamazHistoryBtn" type="button" aria-label="Open Namaz history">
+          <span class="material-symbols-outlined hero-quick-card-icon" aria-hidden="true">history</span>
+          <span class="hero-quick-card-label">Namaz History</span>
+        </button>
+        <button
+          class="hero-quick-card"
+          id="quickSurahListBtn"
+          type="button"
+          aria-label="Open Surah list page"
+        >
+          <span class="material-symbols-outlined hero-quick-card-icon" aria-hidden="true">menu_book</span>
+          <span class="hero-quick-card-label">Surah List</span>
         </button>
       </div>
     </section>
@@ -321,9 +358,6 @@
 </nav>
 
   <script src="/_private/firebase-init.js" defer></script>
-  <script type="module" src="/index-script.js" defer></script> 
+<script type="module" src="/index-script.js?v=20260228-homequickaccess1" defer></script>
 </body>
 </html>
-
-
-

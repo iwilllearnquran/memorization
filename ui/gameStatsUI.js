@@ -4,7 +4,7 @@ import gameSession     from '/state/gameSession.js';
 
 let statsEl = null;
 
-// 🧱 Initializes the stats bar
+// Initializes the stats bar
 export function initStats(parentSelector) {
   const parent = document.querySelector(parentSelector);
   if (!parent) {
@@ -23,28 +23,24 @@ export function initStats(parentSelector) {
   updateStats();
 }
 
-// 🎯 Updates stats bar in UI only
+// Updates stats bar in UI only
 export function updateStats() {
   if (!statsEl) return;
 
-  const username  = gameSession.username || 'Player';
-  const avatar    = gameSession.avatar || 'https://via.placeholder.com/24';
-  const ajrPoints = gameSession.score;
-  const lives     = gameSession.lives;
+  const ajrPoints = Number(gameSession.score) || 0;
+  const lives = Number(gameSession.lives) || GAME_CONFIG.maxLives;
 
   const userHTML = `
     <div class="user-pill">
-      <span class="coin">✨${ajrPoints} Points</span>
+      <span class="coin">${ajrPoints} Points</span>
     </div>
   `;
 
   const statsHTML = `
     <div class="score-pill">
-      <span class="score">♥️${lives} Lives</span>
+      <span class="score">${lives} Lives</span>
     </div>
   `;
 
   statsEl.innerHTML = userHTML + statsHTML;
 }
-
-

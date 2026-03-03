@@ -64,7 +64,7 @@ function sanitizeTypographySettings(raw = {}) {
   const parsedSize = Number.parseFloat(raw.arabicSize);
   const arabicSize = Number.isFinite(parsedSize)
     ? Math.min(56, Math.max(16, parsedSize))
-    : 22;
+    : 28;
   const parsedWeight = Number.parseInt(raw.arabicWeight, 10);
   const weightBucket = Number.isFinite(parsedWeight)
     ? Math.round(parsedWeight / 100) * 100
@@ -467,6 +467,17 @@ const LOG = {
         return !!target.closest(SWIPE_IGNORE_SELECTOR);
       }
 
+      function isGameModeActive() {
+        const gameEl = document.getElementById('game-mode-content');
+        if (!gameEl) return false;
+        const style = window.getComputedStyle(gameEl);
+        return (
+          document.body.classList.contains('game-active') &&
+          style.display !== 'none' &&
+          style.visibility !== 'hidden'
+        );
+      }
+
       const SWIPE_DEBUG_TAPS = false;
       function debugSwipeState(label, e) {
         if (!SWIPE_DEBUG_TAPS) return;
@@ -488,6 +499,13 @@ const LOG = {
 
       function onSwipePointerDown(e) {
         if (e.pointerType === 'mouse' && e.button !== 0) return;
+        if (isGameModeActive()) {
+          swipeLocked = false;
+          isSwiping = false;
+          swipeCommitted = false;
+          unlockSwipeScroll();
+          return;
+        }
         debugSwipeState('pointerdown:before', e);
         if (swipeBlockedByHint) {
           debugSwipeState('pointerdown:blocked-hint', e);
@@ -550,6 +568,7 @@ const LOG = {
       }
 
       function onSwipePointerMove(e) {
+        if (isGameModeActive()) return;
         if (swipeBlockedByHint) return;
         debugSwipeState('pointermove', e);
         if (!isSwiping || swipeLocked) return;
@@ -656,6 +675,7 @@ const LOG = {
       }
 
       function onSwipePointerUp(e) {
+    if (isGameModeActive()) return;
     if (swipeBlockedByHint) return;
     debugSwipeState('pointerup:before', e);
     unlockSwipeScroll();
@@ -733,13 +753,14 @@ const LOG = {
 
     const t = Math.min(speed / 1.1, 1); // normalize velocity
     const requiredDistance = maxDist - (maxDist - minDist) * t;
-    const quickFlick = speed > 0.1 && distance > width * 0.0001; // very short but fast
-
-
+    // Guard against accidental commits from tiny taps that report non-zero velocity.
+    const quickFlickDistance = Math.max(24, width * 0.06);
+    const speedCommitDistance = Math.max(14, width * 0.03);
+    const quickFlick = speed > 0.85 && distance > quickFlickDistance;
 
     const commitByDistance = distance > requiredDistance;
-    const commitBySpeed = speed > 0.45;
-    const commit = commitByDistance || commitBySpeed || quickFlick;;
+    const commitBySpeed = speed > 0.65 && distance > speedCommitDistance;
+    const commit = commitByDistance || commitBySpeed || quickFlick;
 
     console.log('Commit evaluation', {
       distance: distance.toFixed(1),
@@ -1223,7 +1244,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
               <span>Arabic Font</span>
             </div>
             <select id="arabicFontSelect">
-              <option value="CustomArabic">CustomArabic</option>
+              <option value="CustomArabic">IndoPak</option>
               <option value="UthmanicHafs">UthmanicHafs</option>
             </select>
           </div>
@@ -1233,7 +1254,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
               <i class="material-icons-outlined">format_size</i>
               <span>Arabic Size</span>
             </div>
-            <input type="number" id="arabicSizeInput" min="16" max="56" step="1" value="22"/>
+            <input type="number" id="arabicSizeInput" min="16" max="56" step="1" value="28"/>
           </div>
 
           <div class="sm-row">
@@ -1408,7 +1429,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
 
         menuEl.querySelector('#arabicSizeInput')
           ?.addEventListener('change', e =>
-            updateSetting({ arabicSize: Number(e.target.value) || 22 })
+            updateSetting({ arabicSize: Number(e.target.value) || 28 })
           );
 
         menuEl.querySelector('#arabicWeightSelect')
@@ -3167,20 +3188,45 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
           }
 
           case 'RETURN_TO_AYAH': {
+            const forceExit = data.force === true;
             if (typeof togglePracticeNav === 'function' && pracBox?.style.display === 'block') {
               togglePracticeNav();
             }
 
+            const cleanupGameShell = () => {
+              const gameEl = document.getElementById('game-mode-content');
+              if (gameEl) {
+                gameEl.classList.remove('fullscreen-game');
+                gameEl.style.overflowX = '';
+                gameEl.style.overflowY = '';
+                gameEl.style.webkitOverflowScrolling = '';
+                gameEl.style.touchAction = '';
+                gameEl.style.overscrollBehaviorY = '';
+              }
+              document.body.classList.remove('game-active');
+            };
+
             const backBtn = document.getElementById('navBackBtn');
+            if (forceExit && typeof window.__qqForceExitGameToAyah === 'function') {
+              window.__qqForceExitGameToAyah();
+              cleanupGameShell();
+              return;
+            }
+
             if (backBtn) {
-              backBtn.click();
+              if (forceExit && typeof window.__qqForceReturnToGamesSelector === 'function') {
+                window.__qqForceReturnToGamesSelector();
+              } else {
+                backBtn.click();
+              }
+              cleanupGameShell();
               return;
             }
 
             const gameEl = document.getElementById('game-mode-content');
             if (gameEl) {
               gameEl.style.display = 'none';
-              document.body.classList.remove('game-active');
+              cleanupGameShell();
             }
             return;
           }

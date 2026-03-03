@@ -5,7 +5,6 @@ import { updateStats } from '/ui/gameStatsUI.js';
 import { showGameOverPopup } from '/ui/gameOverPopup.js';
 import { startArrangeGame } from '/ui/arrangeGameUI.js';
 import { startVerbGame } from '/ui/verbMatchUI.js';
-import { toggleGames } from '/ui/toggleGames.js';
 
 
 

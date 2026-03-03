@@ -1021,7 +1021,7 @@ export const VERB_DATA = {
   "يُبَطِّئَ": { rank: 4072, meaning: "to lag behind" },
   "يُبَصَّرُ": { rank: 70011, meaning: "to make (someone) see" },
   "يُبَتِّكُ": { rank: 4119, meaning: "to surely cut off" },
-  "يُؤْلُ": { rank: 2226, meaning: "oto swear" },
+  "يُؤْلُ": { rank: 2226, meaning: "to swear" },
   "يُؤْثَرُ": { rank: 74024, meaning: "to imitate" },
   "تَشْتَكِىٓ": { rank: 58001, meaning: "to direct the complaints" },
   "تَشْخَصُ": { rank: 14042, meaning: "to stare" },
