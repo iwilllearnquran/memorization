@@ -649,6 +649,25 @@ html.memo-welcome-locked body.memorization-page.memo-welcome-mode {
   gap: 8px;
 }
 
+body.memo-practice-open .memo-ayah-panel {
+  display: none !important;
+}
+
+body.memo-practice-open #memoWords {
+  display: none !important;
+}
+
+body.memo-practice-open .memo-practice-panel,
+body.memo-practice-open .memo-practice-panel.is-open {
+  display: block !important;
+}
+
+body.memo-practice-open .memo-main,
+body.memo-practice-open .memo-panel {
+  align-items: flex-start;
+}
+
+
 .memo-home-resume-quote {
   margin: 0;
   font-size: 10px;

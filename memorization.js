@@ -39,6 +39,8 @@ const RECITE_MATCH_MODE = Object.freeze({
   WORD: 'word',
   FULL: 'full'
 });
+const modeBar = document.createElement('div');
+modeBar.style.display = 'none';
 const SPEECH_TOKEN_ALIASES = {
   '\u062E\u0627\u0644\u0648': '\u0642\u0627\u0644\u0648\u0627',
   '\u062E\u0627\u0644\u0648\u0627': '\u0642\u0627\u0644\u0648\u0627'
@@ -65,6 +67,18 @@ const SIMILAR_SOUND_MAP = (() => {
   });
   return map;
 })();
+
+let expectedTokenObjects = [];
+
+const reciteEngine = {
+  epoch: 0,
+  stableMatchedIndex: 0,
+  candidateMatchedIndex: 0,
+  lastAlignment: null,
+  lastCommittedSignature: '',
+  stableRepeatCount: 0,
+  lastSpeechTokensSignature: ''
+};
 
 const els = {
   welcome: document.getElementById('memoWelcome'),
@@ -1780,30 +1794,53 @@ function syncSpeechControlState() {
 
 function setPracticeOpen(isOpen) {
   if (!els.practicePanel || !els.practiceToggle) return;
+
   const active = Boolean(isOpen);
+
   document.body.classList.toggle('memo-practice-open', active);
+
   els.practicePanel.classList.toggle('is-open', active);
   els.practicePanel.setAttribute('aria-hidden', String(!active));
+
   els.practiceToggle.classList.toggle('is-open', active);
   els.practiceToggle.setAttribute('aria-expanded', String(active));
-  els.practiceToggle.setAttribute('aria-label', active ? 'Return to recitation' : 'Practice writing');
+  els.practiceToggle.setAttribute(
+    'aria-label',
+    active ? 'Return to recitation' : 'Practice writing'
+  );
 
   const icon = els.practiceToggle.querySelector('.material-icons-outlined');
   if (icon) {
-    icon.textContent = active ? 'keyboard_voice' : 'edit';
+    icon.textContent = active ? 'record_voice_over' : 'edit';
   }
+
   const srLabel = els.practiceToggle.querySelector('.memo-sr-only');
   if (srLabel) {
     srLabel.textContent = active ? 'Return to recitation' : 'Practice writing';
+  }
+
+  // Hide word/ayah recitation area while practice is open
+  if (els.wordsWrap) {
+    els.wordsWrap.hidden = active;
+    els.wordsWrap.setAttribute('aria-hidden', String(active));
+  }
+
+  // If you have a larger ayah panel wrapper, hide it too
+  const ayahPanel = document.querySelector('.memo-ayah-panel');
+  if (ayahPanel) {
+    ayahPanel.classList.toggle('is-hidden', active);
+    ayahPanel.setAttribute('aria-hidden', String(active));
   }
 
   if (active) {
     if (keepListening || listening) {
       stopListening();
     }
+
     if (els.reciteSettingsPanel) {
       els.reciteSettingsPanel.classList.add('is-hidden');
     }
+
     updateSpokenPreview('');
   }
 
@@ -1812,7 +1849,15 @@ function setPracticeOpen(isOpen) {
 
   if (active) {
     window.requestAnimationFrame(() => {
-      const target = els.practiceContent?.querySelector('.translit-input, [contenteditable="true"]');
+      if (els.main) els.main.scrollTop = 0;
+      if (els.practicePanel) els.practicePanel.scrollTop = 0;
+      if (els.practiceContent) els.practiceContent.scrollTop = 0;
+
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+
+      const target = els.practiceContent?.querySelector(
+        '.translit-input, [contenteditable="true"]'
+      );
       if (target && document.body.classList.contains('memo-practice-open')) {
         target.focus();
       }
@@ -2108,6 +2153,17 @@ function applyReciteMatchModeUI() {
     els.reciteLine.classList.add('is-empty');
     els.reciteLine.textContent = '';
   }
+
+  const practiceWordsMode = els.practiceContent?.querySelector('.memo-practice-mode-words');
+const practiceParagraphMode = els.practiceContent?.querySelector('.memo-practice-mode-paragraph');
+
+if (practiceWordsMode) {
+  practiceWordsMode.classList.toggle('is-active', !fullMode);
+}
+if (practiceParagraphMode) {
+  practiceParagraphMode.classList.toggle('is-active', fullMode);
+}
+
 }
 
 function setReciteMatchMode(mode, options = {}) {
@@ -2141,9 +2197,21 @@ function resetTranscript() {
   showFeedback('');
   setLastMatchedWord('');
   updateExpectedWord();
+  resetAlignmentEngine();
   if (isFullAyahReciteMode()) {
     resetFullReciteState();
   }
+}
+
+
+function resetAlignmentEngine() {
+  reciteEngine.epoch = 0;
+  reciteEngine.stableMatchedIndex = 0;
+  reciteEngine.candidateMatchedIndex = 0;
+  reciteEngine.lastAlignment = null;
+  reciteEngine.lastCommittedSignature = '';
+  reciteEngine.stableRepeatCount = 0;
+  reciteEngine.lastSpeechTokensSignature = '';
 }
 
 function updateListenUI() {
@@ -2416,6 +2484,15 @@ function extractExpectedTranslit(practiceBlocks) {
   });
 }
 
+function buildExpectedTokenObjects() {
+  return expectedWords.map((word, idx) => ({
+    index: idx,
+    original: word,
+    normalizedArabic: normalize(word).replace(/\s+/g, ''),
+    normalizedTranslit: normalizeTranslit(expectedTranslit[idx] || '')
+  }));
+}
+
 function renderWords(wordBlocks, translitWords = []) {
   els.wordsWrap.innerHTML = '';
   expectedWords = [];
@@ -2438,14 +2515,302 @@ function renderWords(wordBlocks, translitWords = []) {
     clone.classList.add('memo-word', 'hidden-word');
     clone.dataset.index = String(index);
     expectedWords.push(word);
+
+    
     wordsContainer.appendChild(clone);
     index += 1;
   });
 
   expectedNormalized = expectedWords.map(normalize);
   expectedTranslit = expectedWords.map((_, idx) => normalizeTranslit(translitWords[idx] || ''));
+  expectedTokenObjects = buildExpectedTokenObjects();
   els.wordsWrap.appendChild(wordsContainer);
 }
+
+
+function buildSpeechTokenObjects(rawTokens) {
+  return Array.from(rawTokens || [])
+    .map((raw, idx) => ({
+      index: idx,
+      raw: String(raw || '').trim(),
+      normalizedArabic: normalize(raw).replace(/\s+/g, ''),
+      normalizedTranslit: normalizeTranslit(raw),
+      phoneticTranslit: normalizeTranslitPhonetic(raw)
+    }))
+    .filter(token => token.raw);
+}
+
+
+function getTokenMatchScore(expectedToken, speechToken) {
+  if (!expectedToken || !speechToken) return { matched: false, score: Number.NEGATIVE_INFINITY, type: 'none' };
+
+  const expectedArabic = expectedToken.normalizedArabic;
+  const speechArabic = speechToken.normalizedArabic;
+  const expectedTranslitNorm = expectedToken.normalizedTranslit;
+  const speechRaw = speechToken.raw;
+
+  if (expectedArabic && speechArabic && expectedArabic === speechArabic) {
+    return { matched: true, score: 3.2, type: 'exact-arabic' };
+  }
+
+  if (expectedArabic && speechArabic && isSpeechArabicMatch(expectedArabic, speechArabic)) {
+    return { matched: true, score: 2.35, type: 'fuzzy-arabic' };
+  }
+
+  if (expectedTranslitNorm && speechRaw && isTranslitSpeechMatch(expectedTranslitNorm, speechRaw)) {
+    return { matched: true, score: 2.0, type: 'translit' };
+  }
+
+  return { matched: false, score: -1.25, type: 'none' };
+}
+
+
+function alignSpeechTokensToExpected(expectedTokens, speechTokens) {
+  const eLen = expectedTokens.length;
+  const sLen = speechTokens.length;
+
+  const dp = Array.from({ length: eLen + 1 }, () =>
+    Array(sLen + 1).fill(Number.NEGATIVE_INFINITY)
+  );
+  const back = Array.from({ length: eLen + 1 }, () =>
+    Array(sLen + 1).fill(null)
+  );
+
+  dp[0][0] = 0;
+
+  for (let i = 0; i <= eLen; i += 1) {
+    for (let j = 0; j <= sLen; j += 1) {
+      const base = dp[i][j];
+      if (!Number.isFinite(base)) continue;
+
+      if (i < eLen && j < sLen) {
+        const match = getTokenMatchScore(expectedTokens[i], speechTokens[j]);
+        const nextScore = base + match.score;
+        if (nextScore > dp[i + 1][j + 1]) {
+          dp[i + 1][j + 1] = nextScore;
+          back[i + 1][j + 1] = {
+            type: 'match',
+            fromI: i,
+            fromJ: j,
+            matchType: match.type,
+            matched: match.matched
+          };
+        }
+      }
+
+      if (i < eLen) {
+        const nextScore = base - 0.82;
+        if (nextScore > dp[i + 1][j]) {
+          dp[i + 1][j] = nextScore;
+          back[i + 1][j] = {
+            type: 'skip-expected',
+            fromI: i,
+            fromJ: j
+          };
+        }
+      }
+
+      if (j < sLen) {
+        const nextScore = base - 0.58;
+        if (nextScore > dp[i][j + 1]) {
+          dp[i][j + 1] = nextScore;
+          back[i][j + 1] = {
+            type: 'skip-spoken',
+            fromI: i,
+            fromJ: j
+          };
+        }
+      }
+    }
+  }
+
+  let bestI = 0;
+  let bestJ = 0;
+  let bestScore = Number.NEGATIVE_INFINITY;
+
+  for (let i = 0; i <= eLen; i += 1) {
+    for (let j = 0; j <= sLen; j += 1) {
+      if (dp[i][j] > bestScore) {
+        bestScore = dp[i][j];
+        bestI = i;
+        bestJ = j;
+      }
+    }
+  }
+
+  const steps = [];
+  let i = bestI;
+  let j = bestJ;
+
+  while (i > 0 || j > 0) {
+    const step = back[i][j];
+    if (!step) break;
+    steps.push({ ...step, toI: i, toJ: j });
+    i = step.fromI;
+    j = step.fromJ;
+  }
+  steps.reverse();
+
+  const matchedPairs = [];
+  for (const step of steps) {
+    if (step.type === 'match' && step.matched) {
+      matchedPairs.push({
+        expectedIdx: step.toI - 1,
+        spokenIdx: step.toJ - 1,
+        matchType: step.matchType
+      });
+    }
+  }
+
+  return {
+    score: bestScore,
+    matchedPairs,
+    stableMatchedIndex: computeStablePrefixFromPairs(matchedPairs),
+    candidateMatchedIndex: computeCandidateIndexFromPairs(matchedPairs)
+  };
+}
+
+
+function computeStablePrefixFromPairs(matchedPairs) {
+  const matched = new Set((matchedPairs || []).map(p => p.expectedIdx));
+  let idx = 0;
+  while (matched.has(idx)) idx += 1;
+  return idx;
+}
+
+function computeCandidateIndexFromPairs(matchedPairs) {
+  if (!matchedPairs?.length) return 0;
+  return Math.max(...matchedPairs.map(p => p.expectedIdx)) + 1;
+}
+
+
+function applyRevealFromAlignment(alignment, speechTokens) {
+  if (!alignment) return;
+
+  const nextStable = clamp(alignment.stableMatchedIndex || 0, 0, expectedWords.length);
+  if (nextStable <= revealIndex) return;
+
+  const pairByExpected = new Map();
+  (alignment.matchedPairs || []).forEach(pair => {
+    if (!pairByExpected.has(pair.expectedIdx)) {
+      pairByExpected.set(pair.expectedIdx, pair);
+    }
+  });
+
+  for (let idx = revealIndex; idx < nextStable; idx += 1) {
+    const pair = pairByExpected.get(idx);
+    const spokenText = pair ? speechTokens[pair.spokenIdx]?.raw || '' : '';
+    if (spokenText) {
+      setSpokenText(idx, spokenText);
+    }
+    revealWord(idx);
+  }
+
+  revealIndex = nextStable;
+  updateExpectedWord();
+  setLastProgressSnapshot();
+  updateSpokenPreview('');
+
+  if (revealIndex >= expectedWords.length) {
+    completeAyah();
+  }
+}
+
+
+function commitAlignment(alignment, speechTokens) {
+  if (!alignment) return;
+
+  reciteEngine.candidateMatchedIndex = Math.max(
+    reciteEngine.candidateMatchedIndex,
+    alignment.candidateMatchedIndex || 0
+  );
+
+  const stableIndex = alignment.stableMatchedIndex || 0;
+  const signature = `${stableIndex}|${(alignment.matchedPairs || [])
+    .map(p => `${p.expectedIdx}:${p.spokenIdx}:${p.matchType}`)
+    .join(',')}`;
+
+  if (signature === reciteEngine.lastCommittedSignature) {
+    reciteEngine.stableRepeatCount += 1;
+  } else {
+    reciteEngine.lastCommittedSignature = signature;
+    reciteEngine.stableRepeatCount = 1;
+  }
+
+  const shouldCommit =
+    stableIndex > revealIndex &&
+    (reciteEngine.stableRepeatCount >= 2 || stableIndex >= expectedWords.length);
+
+  reciteEngine.lastAlignment = alignment;
+
+  if (shouldCommit) {
+    reciteEngine.stableMatchedIndex = stableIndex;
+    applyRevealFromAlignment(alignment, speechTokens);
+  }
+}
+
+function recomputeSpeechAlignment(finalText, interimText = '') {
+  const liveTokensRaw = buildFullReciteLiveTokens(finalText, interimText);
+  const speechTokens = buildSpeechTokenObjects(liveTokensRaw);
+  if (!speechTokens.length || !expectedTokenObjects.length) return;
+
+  const signature = speechTokens.map(t => getSpeechTokenSignature(t.raw)).join('|');
+  if (signature && signature === reciteEngine.lastSpeechTokensSignature) {
+    return;
+  }
+  reciteEngine.lastSpeechTokensSignature = signature;
+
+  const alignment = alignSpeechTokensToExpected(expectedTokenObjects, speechTokens);
+  commitAlignment(alignment, speechTokens);
+
+  if (isFullAyahReciteMode()) {
+    renderFullReciteFromAlignment(alignment, speechTokens);
+  } else {
+    renderWordPreviewFromAlignment(alignment, speechTokens);
+  }
+}
+
+function renderFullReciteFromAlignment(alignment, speechTokens) {
+  if (!els.reciteLine) return;
+
+  const pairMap = new Map();
+  (alignment?.matchedPairs || []).forEach(pair => {
+    pairMap.set(pair.spokenIdx, pair);
+  });
+
+  fullReciteTokens = (speechTokens || []).map((token, idx) => {
+    const pair = pairMap.get(idx);
+    if (!pair) {
+      return { text: token.raw, status: 'wrong' };
+    }
+
+    const isExact = pair.matchType === 'exact-arabic';
+    return {
+      text: expectedWords[pair.expectedIdx] || token.raw,
+      status: isExact ? 'correct' : 'fuzzy'
+    };
+  });
+
+  fullReciteIndex = alignment?.stableMatchedIndex || 0;
+  renderFullReciteLine();
+}
+
+function renderWordPreviewFromAlignment(alignment, speechTokens) {
+  if (isFullAyahReciteMode()) return;
+  if (!alignment?.matchedPairs?.length) {
+    updateSpokenPreview('');
+    return;
+  }
+
+  const nextPair = alignment.matchedPairs.find(pair => pair.expectedIdx === revealIndex);
+  if (!nextPair) {
+    updateSpokenPreview('');
+    return;
+  }
+
+  updateSpokenPreview(speechTokens[nextPair.spokenIdx]?.raw || '');
+}
+
 
 function normalizeTranslit(str) {
   return (str || '')
@@ -2933,9 +3298,11 @@ function renderPractice(practiceBlocks) {
   paragraphModeBtn.className = 'memo-practice-mode-btn';
   paragraphModeBtn.textContent = 'Full Ayah';
 
+
+
   modeBar.appendChild(wordsModeBtn);
   modeBar.appendChild(paragraphModeBtn);
-  els.practiceContent.appendChild(modeBar);
+  
 
   const wordsMode = document.createElement('div');
   wordsMode.className = 'memo-practice-mode memo-practice-mode-words';
@@ -3515,6 +3882,7 @@ function initRecognition() {
     if (keepListening) {
       setStatus('Reconnecting');
       scheduleRecognitionRestart();
+      handleSpeechRestartBoundary(); 
       return;
     }
     setStatus('Idle');
@@ -3536,6 +3904,7 @@ function initRecognition() {
       return;
     }
     if (keepListening) {
+      handleSpeechRestartBoundary();  
       scheduleRecognitionRestart(420);
     }
   };
@@ -3568,6 +3937,7 @@ function initRecognition() {
     }
 
     interimPreview = interim;
+    recomputeSpeechAlignment(finalTranscript, interim);
     const previewTokens = dedupeSpeechTokens(tokenizeRaw(interimPreview), SPEECH_PREVIEW_DUPLICATE_RUN_LIMIT);
     updateSpokenPreview(previewTokens.slice(-2).join(' '));
 
@@ -3607,6 +3977,14 @@ function initRecognition() {
   return rec;
 }
 
+
+function handleSpeechRestartBoundary() {
+  reciteEngine.epoch += 1;
+  reciteEngine.lastSpeechTokensSignature = '';
+  reciteEngine.lastCommittedSignature = '';
+  reciteEngine.stableRepeatCount = 0;
+}
+
 function startListening() {
   if (isPracticeOpen()) {
     showFeedback('Close practice mode to use speech recitation.', true);
@@ -3622,7 +4000,9 @@ function startListening() {
   keepListening = true;
   clearRecognitionRestartTimer();
   resetTranscript();
+  handleSpeechRestartBoundary();  
   setStatus('Starting');
+  
   syncSpeechControlState();
   try {
     recognition.start();
