@@ -22,6 +22,8 @@ const STORAGE_RECITE_MATCH_MODE = 'memo_recite_match_mode_v1';
 const MAX_ALIGN_EXPECTED_SPAN = 5;
 const MAX_ALIGN_ACTUAL_SPAN = 3;
 const SPEECH_TRANSLIT_ACCEPT_SIMILARITY = 0.5;
+const SPEECH_DUPLICATE_RUN_LIMIT = 2;
+const SPEECH_PREVIEW_DUPLICATE_RUN_LIMIT = 1;
 const PEEK_DURATION_MS = 1000;
 const EXPECTED_HINT_WRONG_TRIES = 3;
 const QURAN_TOTAL_AYAHS = 6236;
@@ -170,6 +172,10 @@ let isHydratingMemo = false;
 let reciteMatchMode = RECITE_MATCH_MODE.WORD;
 let fullReciteIndex = 0;
 let fullReciteTokens = [];
+let speechCommittedTranscript = '';
+let speechSessionFinals = [];
+let lastFullReciteSignature = '';
+let speechCaptureBlocked = false;
 let memoSwipeStartX = 0;
 let memoSwipeStartY = 0;
 let memoSwipeTracking = false;
@@ -1758,12 +1764,60 @@ async function hydrateMemorizationFromDb() {
   }
 }
 
+function isPracticeOpen() {
+  return Boolean(els.practicePanel?.classList.contains('is-open'));
+}
+
+function syncSpeechControlState() {
+  if (!els.startBtn) return;
+  const locked = isCurrentAyahLocked();
+  const disabledForPractice = isPracticeOpen();
+  const canToggleListening = !speechCaptureBlocked && (listening || keepListening || !locked);
+  els.startBtn.disabled = disabledForPractice || !canToggleListening;
+  els.startBtn.classList.toggle('is-muted', disabledForPractice);
+  els.startBtn.setAttribute('aria-disabled', String(els.startBtn.disabled));
+}
+
 function setPracticeOpen(isOpen) {
   if (!els.practicePanel || !els.practiceToggle) return;
-  els.practicePanel.classList.toggle('is-open', isOpen);
-  els.practicePanel.setAttribute('aria-hidden', String(!isOpen));
-  els.practiceToggle.classList.toggle('is-open', isOpen);
-  els.practiceToggle.setAttribute('aria-expanded', String(isOpen));
+  const active = Boolean(isOpen);
+  document.body.classList.toggle('memo-practice-open', active);
+  els.practicePanel.classList.toggle('is-open', active);
+  els.practicePanel.setAttribute('aria-hidden', String(!active));
+  els.practiceToggle.classList.toggle('is-open', active);
+  els.practiceToggle.setAttribute('aria-expanded', String(active));
+  els.practiceToggle.setAttribute('aria-label', active ? 'Return to recitation' : 'Practice writing');
+
+  const icon = els.practiceToggle.querySelector('.material-icons-outlined');
+  if (icon) {
+    icon.textContent = active ? 'keyboard_voice' : 'edit';
+  }
+  const srLabel = els.practiceToggle.querySelector('.memo-sr-only');
+  if (srLabel) {
+    srLabel.textContent = active ? 'Return to recitation' : 'Practice writing';
+  }
+
+  if (active) {
+    if (keepListening || listening) {
+      stopListening();
+    }
+    if (els.reciteSettingsPanel) {
+      els.reciteSettingsPanel.classList.add('is-hidden');
+    }
+    updateSpokenPreview('');
+  }
+
+  syncSpeechControlState();
+  scheduleMemoLayoutSync();
+
+  if (active) {
+    window.requestAnimationFrame(() => {
+      const target = els.practiceContent?.querySelector('.translit-input, [contenteditable="true"]');
+      if (target && document.body.classList.contains('memo-practice-open')) {
+        target.focus();
+      }
+    });
+  }
 }
 
 function setLastProgressSnapshot() {
@@ -1832,6 +1886,7 @@ function setMemoListeningUI(isListeningNow) {
     icon.textContent = active ? 'stop_circle' : 'mic';
   }
   els.startBtn.setAttribute('aria-label', active ? 'Stop recitation' : 'Start recitation');
+  syncSpeechControlState();
 }
 
 function showFeedback(text, isError = false) {
@@ -1925,6 +1980,7 @@ function renderFullReciteLine() {
 function resetFullReciteState() {
   fullReciteIndex = 0;
   fullReciteTokens = [];
+  lastFullReciteSignature = '';
   renderFullReciteLine();
 }
 
@@ -1991,7 +2047,7 @@ function rebuildFullReciteFromTokens(rawTokens) {
     const expected = expectedNormalized[idx] || '';
     const expectedTranslitNorm = expectedTranslit[idx] || '';
     const matches =
-      (expected && (normalizedToken === expected || isFuzzyMatch(expected, normalizedToken))) ||
+      (expected && (normalizedToken === expected || isSpeechArabicMatch(expected, normalizedToken))) ||
       isTranslitSpeechMatch(expectedTranslitNorm, rawToken);
 
     if (matches) {
@@ -2075,6 +2131,9 @@ function setReciteMatchMode(mode, options = {}) {
 
 function resetTranscript() {
   finalTranscript = '';
+  speechCommittedTranscript = '';
+  speechSessionFinals = [];
+  lastFullReciteSignature = '';
   lastFinalCount = 0;
   interimPreview = '';
   if (els.finalText) els.finalText.textContent = '--';
@@ -2112,9 +2171,7 @@ function setLockedState(isLocked) {
   if (els.playCount) {
     els.playCount.disabled = locked;
   }
-  if (els.startBtn) {
-    els.startBtn.disabled = locked || listening || keepListening;
-  }
+  syncSpeechControlState();
   if (els.peekBtn) {
     els.peekBtn.disabled = locked;
   }
@@ -2433,22 +2490,30 @@ function levenshtein(a, b) {
 function normalizeTranslitPhonetic(str) {
   return normalizeTranslit(str)
     .replace(/aa+/g, 'a')
+    .replace(/ah\b/g, 'a')
     .replace(/ee+/g, 'i')
+    .replace(/ei/g, 'i')
+    .replace(/ey/g, 'i')
     .replace(/ii+/g, 'i')
+    .replace(/iy/g, 'i')
     .replace(/oo+/g, 'u')
     .replace(/uu+/g, 'u')
     .replace(/ou/g, 'u')
     .replace(/ow/g, 'u')
+    .replace(/aw/g, 'u')
     .replace(/kh/g, 'x')
     .replace(/gh/g, 'g')
     .replace(/sh/g, 's')
     .replace(/ch/g, 's')
     .replace(/th/g, 't')
-    .replace(/dh/g, 'd')
+    .replace(/dh/g, 'z')
+    .replace(/zh/g, 'z')
     .replace(/ph/g, 'f')
+    .replace(/ck/g, 'k')
+    .replace(/qu/g, 'k')
     .replace(/q/g, 'k')
     .replace(/c/g, 'k')
-    .replace(/z/g, 's')
+    .replace(/j/g, 'g')
     .replace(/v/g, 'f')
     .replace(/w/g, 'u')
     .replace(/y/g, 'i')
@@ -2658,12 +2723,138 @@ function phoneticLevenshtein(a, b) {
   return dp[a.length][b.length];
 }
 
+function getArabicSpeechSimilarity(expected, candidate) {
+  if (!expected || !candidate) return 0;
+  const maxLen = Math.max(expected.length, candidate.length, 1);
+  const strict = 1 - levenshtein(expected, candidate) / maxLen;
+  const phonetic = 1 - phoneticLevenshtein(expected, candidate) / maxLen;
+  return Math.max(strict, phonetic * 0.995);
+}
+
+function isSpeechArabicMatch(expected, candidate) {
+  if (!expected || !candidate) return false;
+  const similarity = getArabicSpeechSimilarity(expected, candidate);
+  return similarity >= 0.58 || (expected.length <= 4 && similarity >= 0.52);
+}
+
+function getSpeechTokenSignature(rawToken) {
+  const arabicNorm = normalize(rawToken).replace(/\s+/g, '');
+  if (arabicNorm) return `ar:${arabicNorm}`;
+  const phoneticNorm = normalizeTranslitPhonetic(rawToken);
+  if (phoneticNorm) return `tr:${phoneticNorm}`;
+  const translitNorm = normalizeTranslit(rawToken);
+  return translitNorm ? `tr:${translitNorm}` : '';
+}
+
+function dedupeSpeechTokens(rawTokens, maxRun = SPEECH_DUPLICATE_RUN_LIMIT) {
+  const deduped = [];
+  let prevSignature = '';
+  let runCount = 0;
+  for (const rawToken of Array.from(rawTokens || [])) {
+    const cleaned = String(rawToken || '').trim();
+    if (!cleaned) continue;
+    const signature = getSpeechTokenSignature(cleaned);
+    if (!signature) continue;
+    if (signature === prevSignature) {
+      runCount += 1;
+      if (runCount > maxRun) continue;
+    } else {
+      prevSignature = signature;
+      runCount = 1;
+    }
+    deduped.push(cleaned);
+  }
+  return deduped;
+}
+
+function mergeSpeechTranscriptParts(...parts) {
+  return parts
+    .map(part => String(part || '').trim())
+    .filter(Boolean)
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function getSessionFinalTranscript() {
+  return speechSessionFinals
+    .filter(Boolean)
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function commitRecognitionSessionTranscript() {
+  const sessionTranscript = getSessionFinalTranscript();
+  if (!sessionTranscript) return;
+  speechCommittedTranscript = mergeSpeechTranscriptParts(speechCommittedTranscript, sessionTranscript);
+  speechSessionFinals = [];
+  finalTranscript = speechCommittedTranscript;
+}
+
+function buildFullReciteLiveTokens(finalText, interimText = '') {
+  const stableTokens = dedupeSpeechTokens(tokenizeRaw(finalText), SPEECH_DUPLICATE_RUN_LIMIT);
+  let previewTokens = dedupeSpeechTokens(tokenizeRaw(interimText), SPEECH_PREVIEW_DUPLICATE_RUN_LIMIT);
+  if (stableTokens.length && previewTokens.length) {
+    const stableTailSignature = getSpeechTokenSignature(stableTokens[stableTokens.length - 1]);
+    while (previewTokens.length && getSpeechTokenSignature(previewTokens[0]) === stableTailSignature) {
+      previewTokens.shift();
+    }
+  }
+  return dedupeSpeechTokens(stableTokens.concat(previewTokens), SPEECH_DUPLICATE_RUN_LIMIT);
+}
+
+function scoreRecognitionTranscriptCandidate(rawTranscript, expectedIndex = revealIndex) {
+  const transcript = String(rawTranscript || '').trim();
+  if (!transcript) return Number.NEGATIVE_INFINITY;
+  const expectedArabic = expectedNormalized[expectedIndex] || '';
+  const expectedTranslitNorm = expectedTranslit[expectedIndex] || '';
+  if (!expectedArabic && !expectedTranslitNorm) return 0;
+
+  const rawTokens = tokenizeRaw(transcript);
+  if (!rawTokens.length) return Number.NEGATIVE_INFINITY;
+
+  let bestScore = 0;
+  const maxSpan = Math.min(3, rawTokens.length);
+  for (let span = 1; span <= maxSpan; span += 1) {
+    const rawCandidate = rawTokens.slice(0, span).join(' ');
+    const candidateArabic = normalize(rawCandidate).replace(/\s+/g, '');
+    const candidateTranslit = normalizeTranslit(rawCandidate);
+    if (expectedArabic && candidateArabic) {
+      bestScore = Math.max(bestScore, getArabicSpeechSimilarity(expectedArabic, candidateArabic));
+    }
+    if (expectedTranslitNorm && candidateTranslit) {
+      bestScore = Math.max(bestScore, translitSimilarity(candidateTranslit, expectedTranslitNorm));
+    }
+  }
+  return bestScore;
+}
+
+function pickBestRecognitionTranscript(result, expectedIndex = revealIndex) {
+  if (!result || !result.length) return '';
+  let bestTranscript = '';
+  let bestScore = Number.NEGATIVE_INFINITY;
+  for (let i = 0; i < result.length; i += 1) {
+    const option = result[i];
+    const transcript = String(option?.transcript || '').trim();
+    if (!transcript) continue;
+    const confidence = Number(option?.confidence) || 0;
+    const score = scoreRecognitionTranscriptCandidate(transcript, expectedIndex) + confidence * 0.08;
+    if (score > bestScore) {
+      bestScore = score;
+      bestTranscript = transcript;
+    }
+  }
+  return bestTranscript || String(result[0]?.transcript || '').trim();
+}
+
 function updateTranslitFeedback(input) {
   const block = input.closest('.word-block-translit');
   if (!block) return;
   const expected = normalizeTranslit(input.dataset.expected || '');
   const actual = normalizeTranslit(input.value || '');
-  const dist = levenshtein(actual, expected);
+  const similarity = translitSimilarity(actual, expected);
+  const status = actual ? classifyTranslitSimilarity(similarity) : '';
 
   block.style.borderColor = 'gray';
   block.classList.remove('confetti');
@@ -2673,11 +2864,11 @@ function updateTranslitFeedback(input) {
     return;
   }
 
-  if (dist === 0) {
+  if (status === 'correct') {
     block.style.backgroundColor = '#d4edda';
     block.style.borderColor = '#28a745';
     block.classList.add('confetti');
-  } else if (dist <= 2) {
+  } else if (status === 'fuzzy') {
     block.style.backgroundColor = '#fff3cd';
     block.style.borderColor = '#ffc107';
   } else {
@@ -2756,7 +2947,20 @@ function renderPractice(practiceBlocks) {
     const clone = block.cloneNode(true);
     clone.removeAttribute('onclick');
     clone.removeAttribute('style');
+    clone.classList.add('memo-practice-word-card');
     clone.querySelectorAll('[style]').forEach(el => el.removeAttribute('style'));
+    clone.querySelectorAll('details').forEach(detail => {
+      detail.open = false;
+    });
+
+    const input = clone.querySelector('.translit-input');
+    if (input) {
+      input.setAttribute('autocomplete', 'off');
+      input.setAttribute('autocorrect', 'off');
+      input.setAttribute('autocapitalize', 'off');
+      input.setAttribute('spellcheck', 'false');
+    }
+
     wordGrid.appendChild(clone);
   });
   els.practiceContent.appendChild(wordsMode);
@@ -3178,7 +3382,7 @@ function processTokens(tokens, rawTokens) {
     for (let n = 1; n <= 4 && i + n <= tokens.length; n += 1) {
       const candidate = tokens.slice(i, i + n).join('');
       const rawCandidate = rawTokens ? rawTokens.slice(i, i + n).join(' ') : tokens.slice(i, i + n).join(' ');
-      const isArabicMatch = candidate === expected || isFuzzyMatch(expected, candidate);
+      const isArabicMatch = candidate === expected || isSpeechArabicMatch(expected, candidate);
       const isTranslitMatch = isTranslitSpeechMatch(expectedNormTranslit, rawCandidate);
       if (isArabicMatch || isTranslitMatch) {
         setSpokenText(revealIndex, rawCandidate);
@@ -3282,28 +3486,31 @@ function completeAyah() {
 function initRecognition() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) {
+    speechCaptureBlocked = true;
     setStatus('Speech not supported', true);
-    els.startBtn.disabled = true;
+    syncSpeechControlState();
     return null;
   }
 
   const rec = new SpeechRecognition();
   rec.continuous = true;
   rec.interimResults = true;
-  rec.maxAlternatives = 1;
+  rec.maxAlternatives = 3;
   rec.lang = 'ar-SA';
 
   rec.onstart = () => {
     listening = true;
+    speechCaptureBlocked = false;
     clearRecognitionRestartTimer();
+    speechSessionFinals = [];
     setStatus('Listening');
-    els.startBtn.disabled = false;
     els.stopBtn.disabled = false;
     setMemoListeningUI(true);
   };
 
   rec.onend = () => {
     listening = false;
+    commitRecognitionSessionTranscript();
     els.stopBtn.disabled = true;
     if (keepListening) {
       setStatus('Reconnecting');
@@ -3311,7 +3518,6 @@ function initRecognition() {
       return;
     }
     setStatus('Idle');
-    els.startBtn.disabled = isLockedAyah(current.surah, current.ayah);
     setMemoListeningUI(false);
     updateListenUI();
   };
@@ -3321,9 +3527,11 @@ function initRecognition() {
     showFeedback(evt.error || 'Speech error', true);
     if (evt.error === 'not-allowed' || evt.error === 'service-not-allowed') {
       keepListening = false;
+      speechCaptureBlocked = true;
       clearRecognitionRestartTimer();
-      els.startBtn.disabled = true;
       els.stopBtn.disabled = true;
+      setStatus('Mic blocked', true);
+      showFeedback('Microphone permission denied', true);
       setMemoListeningUI(false);
       return;
     }
@@ -3333,34 +3541,53 @@ function initRecognition() {
   };
 
   rec.onresult = evt => {
-    let interim = '';
+    const interimParts = [];
     for (let i = evt.resultIndex; i < evt.results.length; i += 1) {
       const res = evt.results[i];
+      const expectedIndexBase = isFullAyahReciteMode() ? fullReciteIndex : revealIndex;
+      const expectedIndex = expectedWords.length
+        ? Math.min(expectedWords.length - 1, Math.max(0, expectedIndexBase + (i - evt.resultIndex)))
+        : 0;
+      const transcript = pickBestRecognitionTranscript(res, expectedIndex);
+      if (!transcript) continue;
       if (res.isFinal) {
-        finalTranscript += `${res[0].transcript} `;
+        speechSessionFinals[i] = transcript;
       } else {
-        interim += `${res[0].transcript} `;
+        interimParts.push(transcript);
       }
     }
+
+    finalTranscript = mergeSpeechTranscriptParts(speechCommittedTranscript, getSessionFinalTranscript());
+    const interim = interimParts.join(' ').replace(/\s+/g, ' ').trim();
+
     if (els.finalText) {
-      els.finalText.textContent = finalTranscript.trim() || '--';
+      els.finalText.textContent = finalTranscript || '--';
     }
     if (els.interimText) {
-      els.interimText.textContent = interim.trim() || '--';
+      els.interimText.textContent = interim || '--';
     }
-    interimPreview = interim.trim();
-    const previewTokens = tokenizeRaw(interimPreview);
+
+    interimPreview = interim;
+    const previewTokens = dedupeSpeechTokens(tokenizeRaw(interimPreview), SPEECH_PREVIEW_DUPLICATE_RUN_LIMIT);
     updateSpokenPreview(previewTokens.slice(-2).join(' '));
 
     if (isFullAyahReciteMode()) {
-      const liveText = `${finalTranscript} ${interim}`.trim();
-      const liveTokens = tokenizeRaw(liveText);
-      rebuildFullReciteFromTokens(liveTokens);
+      const liveTokens = buildFullReciteLiveTokens(finalTranscript, interim);
+      const liveSignature = liveTokens.map(getSpeechTokenSignature).filter(Boolean).join('|');
+      if (liveSignature !== lastFullReciteSignature) {
+        lastFullReciteSignature = liveSignature;
+        rebuildFullReciteFromTokens(liveTokens);
+      }
       return;
     }
 
-    const tokens = tokenize(finalTranscript);
-    const rawTokens = tokenizeRaw(finalTranscript);
+    const finalRawTokens = dedupeSpeechTokens(tokenizeRaw(finalTranscript), SPEECH_DUPLICATE_RUN_LIMIT);
+    const stableTranscript = finalRawTokens.join(' ');
+    const tokens = tokenize(stableTranscript);
+    const rawTokens = finalRawTokens;
+    if (tokens.length < lastFinalCount) {
+      lastFinalCount = tokens.length;
+    }
     if (tokens.length > lastFinalCount) {
       const nextTokens = tokens.slice(lastFinalCount);
       const nextRawTokens = rawTokens.slice(lastFinalCount);
@@ -3374,13 +3601,18 @@ function initRecognition() {
         lastFinalCount = tokens.length;
       }
     }
-    syncRevealFromTranslitTranscript(finalTranscript);
+    syncRevealFromTranslitTranscript(stableTranscript);
   };
 
   return rec;
 }
 
 function startListening() {
+  if (isPracticeOpen()) {
+    showFeedback('Close practice mode to use speech recitation.', true);
+    syncSpeechControlState();
+    return;
+  }
   if (!recognition) recognition = initRecognition();
   if (!recognition) return;
   if (keepListening || listening) {
@@ -3391,15 +3623,16 @@ function startListening() {
   clearRecognitionRestartTimer();
   resetTranscript();
   setStatus('Starting');
-  els.startBtn.disabled = true;
+  syncSpeechControlState();
   try {
     recognition.start();
   } catch (err) {
     const name = err && err.name ? String(err.name) : '';
     if (name === 'NotAllowedError' || name === 'SecurityError') {
       keepListening = false;
-      els.startBtn.disabled = true;
+      speechCaptureBlocked = true;
       els.stopBtn.disabled = true;
+      syncSpeechControlState();
       setStatus('Mic blocked', true);
       showFeedback('Microphone permission denied', true);
       return;
@@ -3415,7 +3648,6 @@ function stopListening() {
     recognition.stop();
     return;
   }
-  els.startBtn.disabled = isLockedAyah(current.surah, current.ayah);
   els.stopBtn.disabled = true;
   setMemoListeningUI(false);
   setStatus('Idle');

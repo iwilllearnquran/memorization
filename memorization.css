@@ -1195,6 +1195,14 @@ html.hide-grammar .memo-word-grid .pos-tag {
   padding: 12px;
 }
 
+.memorization-page.memo-practice-open #memoWords,
+.memorization-page.memo-practice-open #memoReciteLine,
+.memorization-page.memo-practice-open #memoExpectedHint,
+.memorization-page.memo-practice-open #memoFeedback,
+.memorization-page.memo-practice-open #memoWordOverlay {
+  display: none !important;
+}
+
 .memo-practice-panel {
   display: none;
 }
@@ -1245,8 +1253,86 @@ html.hide-grammar .memo-word-grid .pos-tag {
 
 .memo-practice-word-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+  gap: 10px;
+}
+
+.memo-practice-word-grid .word-block-translit,
+.memo-practice-word-grid .memo-practice-word-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   gap: 8px;
+  min-width: 0;
+  min-height: 100%;
+  padding: 12px 10px;
+  border-radius: 16px;
+  border: 1px solid rgba(10, 40, 30, 0.1);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 10px 24px rgba(10, 40, 30, 0.08);
+  position: relative;
+}
+
+.memo-practice-word-grid .translit-input {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(10, 40, 30, 0.16);
+  background: #f7fffc;
+  color: var(--memo-ink);
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.memo-practice-word-grid .translit-input:focus {
+  outline: none;
+  border-color: rgba(15, 118, 110, 0.45);
+  box-shadow: 0 0 0 3px rgba(24, 160, 148, 0.14);
+}
+
+.memo-practice-word-grid .translit-input.small-placeholder::placeholder {
+  font-size: 11px;
+  color: #8ba39b;
+}
+
+.memo-practice-word-grid .translation {
+  display: block;
+  min-height: 34px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--memo-muted);
+  text-align: center;
+}
+
+.memo-practice-word-grid details {
+  width: 100%;
+  margin-top: auto;
+  font-size: 11px;
+  color: var(--memo-muted);
+}
+
+.memo-practice-word-grid summary {
+  cursor: pointer;
+  list-style: none;
+  color: var(--memo-brand);
+  font-weight: 800;
+}
+
+.memo-practice-word-grid summary::-webkit-details-marker {
+  display: none;
+}
+
+.memo-practice-word-grid details > div {
+  margin-top: 6px;
+  padding: 7px 8px;
+  border-radius: 10px;
+  background: rgba(24, 160, 148, 0.08);
+  color: var(--memo-ink);
+  font-weight: 700;
+  overflow-wrap: anywhere;
 }
 
 .memo-paragraph-box {
@@ -1317,7 +1403,7 @@ html.hide-grammar .memo-word-grid .pos-tag {
   transform: translateX(-50%);
   width: min(460px, 100%);
   padding: 0 var(--memo-pad);
-  bottom: calc(var(--memo-bottom-nav-h) + var(--memo-bottom-safe) + 86px);
+  bottom: calc(var(--memo-bottom-nav-h) + var(--memo-bottom-safe) + 72px);
   z-index: 1260;
   pointer-events: none;
 }
@@ -1358,9 +1444,24 @@ html.hide-grammar .memo-word-grid .pos-tag {
   border: 1px solid rgba(15, 118, 110, 0.2);
 }
 
+#memoPracticeToggle.is-open {
+  background: linear-gradient(180deg, #18a094, #0f766e);
+  color: #fff;
+  border-color: transparent;
+}
+
 #memoStartBtn {
   background: linear-gradient(180deg, #19b3a6, #0f766e);
   color: #fff;
+}
+
+#memoStartBtn:disabled,
+#memoStartBtn.is-muted {
+  background: linear-gradient(180deg, #c8d3d0, #9eadaa);
+  color: rgba(255, 255, 255, 0.94);
+  border-color: rgba(255, 255, 255, 0.38);
+  box-shadow: 0 10px 24px rgba(34, 55, 50, 0.14);
+  cursor: not-allowed;
 }
 
 #memoPracticeToggle .material-icons-outlined,
@@ -1844,7 +1945,7 @@ body.dark-mode .memo-word-grid .word-text {
   #memoFloatingActions {
     padding-left: 12px;
     padding-right: 12px;
-    bottom: calc(var(--memo-bottom-nav-h) + var(--memo-bottom-safe) + 82px);
+    bottom: calc(var(--memo-bottom-nav-h) + var(--memo-bottom-safe) + 68px);
   }
 
   #memoPracticeToggle,
