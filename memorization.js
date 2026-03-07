@@ -8,9 +8,12 @@ import {
 } from './services/_private/firestoreService.js';
 
 const REQUIRED_LISTENS = 20;
+const RANDOM_AYAH_MIN_MEMORIZED = 10;
+const REVIEW_LAST5_MIN_MEMORIZED = 5;
 const ALLOW_ALL_AYAHS = true;
 const STORAGE_PROGRESS = 'memo_progress_v1';
 const STORAGE_LISTENS = 'memo_listens_v1';
+const STORAGE_MEMORIZED_KEYS = 'memo_memorized_keys_v1';
 const STORAGE_LAST_PROGRESS = 'memo_last_progress_v1';
 const STORAGE_LAST_MEMORIZED = 'memo_last_memorized_v1';
 const STORAGE_PRACTICE_MODE = 'memo_practice_mode_v1';
@@ -22,6 +25,7 @@ const SPEECH_TRANSLIT_ACCEPT_SIMILARITY = 0.5;
 const PEEK_DURATION_MS = 1000;
 const EXPECTED_HINT_WRONG_TRIES = 3;
 const QURAN_TOTAL_AYAHS = 6236;
+const MEMO_AYAH_HTML_CACHE_MAX = 180;
 const USE_HOST_MAIN_NAV = false;
 const FIRST_MEMO_AYAH = Object.freeze({
   surah: 1,
@@ -62,7 +66,6 @@ const SIMILAR_SOUND_MAP = (() => {
 
 const els = {
   welcome: document.getElementById('memoWelcome'),
-  welcomeBrain: document.getElementById('memoWelcomeBrain'),
   main: document.getElementById('memoMain'),
   welcomeStartBtn: document.getElementById('memoWelcomeStartBtn'),
   welcomeStartLabel: document.getElementById('memoWelcomeStartLabel'),
@@ -75,6 +78,7 @@ const els = {
   navSketchAyah: document.getElementById('memoNavSketchAyah'),
   navModeHost: document.getElementById('memoNavModeHost'),
   status: document.getElementById('memoStatus'),
+  statusText: document.getElementById('memoStatusText'),
   surahSelect: document.getElementById('memoSurahSelect'),
   ayahSelect: document.getElementById('memoAyahSelect'),
   lockMsg: document.getElementById('memoLockMsg'),
@@ -100,8 +104,6 @@ const els = {
   toggleMeaning: document.getElementById('memoToggleMeaning'),
   toggleGrammar: document.getElementById('memoToggleGrammar'),
   toggleExpectedAfterWrong: document.getElementById('memoToggleExpectedAfterWrong'),
-  pauseBtn: document.getElementById('memoPauseBtn'),
-  stopPlaybackBtn: document.getElementById('memoStopPlaybackBtn'),
   peekBtn: document.getElementById('memoPeekBtn'),
   practiceToggle: document.getElementById('memoPracticeToggle'),
   practicePanel: document.getElementById('memoPracticePanel'),
@@ -110,22 +112,29 @@ const els = {
   reviseBtn: document.getElementById('memoReviseBtn'),
   nextBtn: document.getElementById('memoNextBtn'),
   navStreakCount: document.getElementById('memoNavStreakCount'),
-  welcomeName: document.getElementById('memoWelcomeName'),
-  welcomeSubline: document.getElementById('memoWelcomeSubline'),
+  navTopStreakCount: document.getElementById('memoNavTopStreakCount'),
+  welcomeTitle: document.getElementById('memoWelcomeTitle'),
   welcomeQuranProgressRing: document.getElementById('memoWelcomeQuranProgressRing'),
   welcomeProgressRing: document.getElementById('memoWelcomeProgressRing'),
+  welcomeQuranPct: document.getElementById('memoWelcomeQuranPct'),
   welcomeProgressPct: document.getElementById('memoWelcomeProgressPct'),
   welcomeMemorized: document.getElementById('memoWelcomeMemorized'),
-  welcomeTotalAyahs: document.getElementById('memoWelcomeTotalAyahs'),
+  welcomeWordsLearnt: document.getElementById('memoWelcomeWordsLearnt'),
+  welcomeStreakDays: document.getElementById('memoStreakDays'),
   welcomeLastWhen: document.getElementById('memoWelcomeLastWhen'),
   welcomeLastTitle: document.getElementById('memoWelcomeLastTitle'),
   welcomeLastRef: document.getElementById('memoWelcomeLastRef'),
   welcomeLastArabic: document.getElementById('memoWelcomeLastArabic'),
   welcomeLastTranslation: document.getElementById('memoWelcomeLastTranslation'),
-  techniqueListenBtn: document.getElementById('memoTechniqueListenBtn'),
   techniqueReciteBtn: document.getElementById('memoTechniqueReciteBtn'),
-  techniqueWriteBtn: document.getElementById('memoTechniqueWriteBtn'),
+  techniqueSurahListBtn: document.getElementById('memoTechniqueSurahListBtn'),
   techniqueRepeatBtn: document.getElementById('memoTechniqueRepeatBtn'),
+  techniquePracticeBtn: document.getElementById('memoTechniquePracticeBtn'),
+  externalView: document.getElementById('memoExternalView'),
+  externalFrame: document.getElementById('memoExternalFrame'),
+  externalTitle: document.getElementById('memoExternalTitle'),
+  externalCloseBtn: document.getElementById('memoExternalCloseBtn'),
+  toast: document.getElementById('memoToast'),
   profileDrawer: document.getElementById('memoProfileDrawer'),
   profileDrawerBackdrop: document.getElementById('memoProfileDrawerBackdrop'),
   profileDrawerCloseBtn: document.getElementById('memoProfileDrawerCloseBtn'),
@@ -139,6 +148,7 @@ let surahList = [];
 let current = { surah: 1, ayah: 1 };
 let unlocked = { surah: 1, ayah: 1 };
 let listenCounts = {};
+let memoMemorizedAyahSet = new Set();
 let audio = null;
 let audioQueue = 0;
 let loadAyahRequestId = 0;
@@ -157,7 +167,6 @@ let interimPreview = '';
 let memoUser = null;
 let memoSyncTimer = 0;
 let isHydratingMemo = false;
-let welcomeBrainAnimation = null;
 let reciteMatchMode = RECITE_MATCH_MODE.WORD;
 let fullReciteIndex = 0;
 let fullReciteTokens = [];
@@ -172,15 +181,38 @@ let memoWelcomeRenderToken = 0;
 let memoHostNavMount = null;
 let memoHostNavbarHiddenState = null;
 let memoHostActive = false;
+let memoApplyingPopState = false;
+let memoNavRestoredOnce = false;
+let memoLayoutRaf = 0;
+let memoToastTimer = 0;
+let memoExternalViewKind = '';
+let memoEnsureWordBoxesRaf = 0;
+let memoUiEventsBound = false;
 const memoWordsOriginalParent = els.wordsWrap?.parentElement || null;
 const memoWordsOriginalNextSibling = els.wordsWrap?.nextElementSibling || null;
 const wrongTryCounts = new Map();
+const memoAyahHtmlCache = new Map();
+const memoAyahWordCountCache = new Map();
 const viewState = {
   meaning: true,
   grammar: false,
   expectedAfterThreeWrong: true
 };
-const isEmbedded = new URLSearchParams(window.location.search).get('embedded') === '1';
+const isEmbedded = (() => {
+  const fromQuery = new URLSearchParams(window.location.search).get('embedded') === '1';
+  if (fromQuery) return true;
+  try {
+    if (window.parent && window.parent !== window) {
+      const parentDoc = window.parent.document;
+      if (parentDoc?.getElementById('mainNavbar') || parentDoc?.querySelector('.bottom-nav')) {
+        return true;
+      }
+    }
+  } catch {}
+  return false;
+})();
+const MEMO_QUERY_PRESERVE_KEYS = Object.freeze(['embedded', 't']);
+const MEMO_HISTORY_ROUTE_STATE_KEY = 'memoRoute';
 const isNativeContainer = (() => {
   try {
     return Boolean(
@@ -197,17 +229,6 @@ const TAB_SYSTEM_BAR_COLORS = Object.freeze({
   memo: '#0f766e',
   duas: '#8b5e00'
 });
-
-function renderWelcomeBrainFallback() {
-  if (!els.welcomeBrain) return;
-  if (els.welcomeBrain.querySelector('.memo-welcome-brain-fallback')) return;
-  els.welcomeBrain.innerHTML = '';
-  const icon = document.createElement('span');
-  icon.className = 'material-icons-outlined memo-welcome-brain-fallback';
-  icon.setAttribute('aria-hidden', 'true');
-  icon.textContent = 'psychology';
-  els.welcomeBrain.appendChild(icon);
-}
 
 function clamp(num, min, max) {
   return Math.max(min, Math.min(max, num));
@@ -315,6 +336,143 @@ function isValidAyahRef(surah, ayah) {
   return Number.isInteger(surah) && surah > 0 && Number.isInteger(ayah) && ayah > 0;
 }
 
+function normalizeEmbeddedRouteParam() {
+  if (!isEmbedded) return;
+  let parsed;
+  try {
+    parsed = new URL(window.location.href);
+  } catch {
+    return;
+  }
+  if (parsed.searchParams.get('embedded') === '1') return;
+  parsed.searchParams.set('embedded', '1');
+  try {
+    const existingState =
+      window.history.state && typeof window.history.state === 'object'
+        ? window.history.state
+        : {};
+    window.history.replaceState(existingState, '', `${parsed.pathname}${parsed.search}${parsed.hash || ''}`);
+  } catch (_) {}
+}
+function getMemoRouteFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const forceHome = params.get('home') === '1';
+  if (!forceHome) {
+    const surah = Number(params.get('surah'));
+    const ayah = Number(params.get('ayah'));
+    if (isValidAyahRef(surah, ayah)) {
+      return { view: 'ayah', surah, ayah };
+    }
+  }
+  return { view: 'home' };
+}
+
+function buildMemoRouteUrl(route = { view: 'home' }) {
+  const params = new URLSearchParams();
+  const currentParams = new URLSearchParams(window.location.search);
+
+  MEMO_QUERY_PRESERVE_KEYS.forEach(key => {
+    if (!currentParams.has(key)) return;
+    params.set(key, currentParams.get(key));
+  });
+
+  if (route?.view === 'ayah' && isValidAyahRef(Number(route?.surah), Number(route?.ayah))) {
+    params.set('surah', String(Number(route.surah)));
+    params.set('ayah', String(Number(route.ayah)));
+  } else if (route?.view === 'home') {
+    params.set('home', '1');
+  }
+
+  const query = params.toString();
+  const hash = window.location.hash || '';
+  return `${window.location.pathname}${query ? `?${query}` : ''}${hash}`;
+}
+
+function writeMemoRouteToHistory(route, mode = 'replace') {
+  if (mode === 'none' || memoApplyingPopState) return;
+
+  const normalizedRoute = route?.view === 'ayah' && isValidAyahRef(Number(route?.surah), Number(route?.ayah))
+    ? { view: 'ayah', surah: Number(route.surah), ayah: Number(route.ayah) }
+    : { view: 'home' };
+
+  const url = buildMemoRouteUrl(normalizedRoute);
+  const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash || ''}`;
+  if (mode === 'push' && url === currentUrl) return;
+
+  const existingState =
+    window.history.state && typeof window.history.state === 'object'
+      ? window.history.state
+      : {};
+  const nextState = {
+    ...existingState,
+    [MEMO_HISTORY_ROUTE_STATE_KEY]: normalizedRoute
+  };
+
+  try {
+    if (mode === 'push') {
+      window.history.pushState(nextState, '', url);
+    } else {
+      window.history.replaceState(nextState, '', url);
+    }
+  } catch (_) {}
+}
+
+function syncMemoHistoryForWelcome(mode = 'replace') {
+  writeMemoRouteToHistory({ view: 'home' }, mode);
+}
+
+function syncMemoHistoryForAyah(surah, ayah, mode = 'replace') {
+  if (!isValidAyahRef(Number(surah), Number(ayah))) return;
+  writeMemoRouteToHistory(
+    {
+      view: 'ayah',
+      surah: Number(surah),
+      ayah: Number(ayah)
+    },
+    mode
+  );
+}
+function setHostMainNavbarHidden(hidden = false) {
+  if (!isEmbedded) return;
+  try {
+    const hostDoc = window.parent?.document;
+    const mainNavbar = hostDoc?.getElementById('mainNavbar');
+    const progressWrap = hostDoc?.getElementById('surahProgressWrap');
+    if (mainNavbar) {
+      mainNavbar.classList.remove('memo-host-active');
+      mainNavbar.style.display = hidden ? 'none' : '';
+      if (!hidden) {
+        mainNavbar.style.visibility = '';
+      }
+    }
+    if (progressWrap) {
+      progressWrap.style.display = hidden ? 'none' : '';
+    }
+  } catch (_) {}
+}
+
+function hydrateMemoNavIntoMain() {
+  if (!USE_HOST_MAIN_NAV) return false;
+  return false;
+}
+
+function restoreMemoNavFromMain() {
+  if (!USE_HOST_MAIN_NAV) {
+    if (memoNavRestoredOnce) {
+      setHostMainNavbarHidden(false);
+      return;
+    }
+    memoNavRestoredOnce = true;
+    setHostMainNavbarHidden(false);
+    const memoNavBar = document.getElementById('memoNavBar');
+    if (memoNavBar) memoNavBar.style.display = '';
+    document.body.classList.remove('memo-host-mounted', 'memo-nav-fallback');
+    return;
+  }
+
+  setHostMainNavbarHidden(false);
+}
+
 function getStoredProgress() {
   try {
     const raw = localStorage.getItem(STORAGE_PROGRESS);
@@ -349,6 +507,102 @@ function getStoredListenCounts() {
 function setStoredListenCounts(next) {
   localStorage.setItem(STORAGE_LISTENS, JSON.stringify(next));
   if (!isHydratingMemo) scheduleMemoSync();
+}
+
+function getStoredMemorizedAyahSet() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(STORAGE_MEMORIZED_KEYS) || '[]');
+    if (!Array.isArray(raw)) return new Set();
+    const keys = raw
+      .map(entry => {
+        const [surah, ayah] = String(entry || '').split(':').map(Number);
+        if (!isValidAyahRef(surah, ayah)) return '';
+        return ayahKey(surah, ayah);
+      })
+      .filter(Boolean);
+    return new Set(keys);
+  } catch {
+    return new Set();
+  }
+}
+
+function setStoredMemorizedAyahSet(nextSet) {
+  try {
+    const normalized = Array.from(nextSet || [])
+      .map(key => {
+        const [surah, ayah] = String(key || '').split(':').map(Number);
+        if (!isValidAyahRef(surah, ayah)) return '';
+        return ayahKey(surah, ayah);
+      })
+      .filter(Boolean)
+      .sort((a, b) => {
+        const [sa, aa] = a.split(':').map(Number);
+        const [sb, ab] = b.split(':').map(Number);
+        if (sa !== sb) return sa - sb;
+        return aa - ab;
+      });
+    localStorage.setItem(STORAGE_MEMORIZED_KEYS, JSON.stringify(normalized));
+  } catch {}
+}
+
+function markAyahMemorized(surah, ayah) {
+  const s = Number(surah);
+  const a = Number(ayah);
+  if (!isValidAyahRef(s, a)) return;
+  memoMemorizedAyahSet.add(ayahKey(s, a));
+  setStoredMemorizedAyahSet(memoMemorizedAyahSet);
+}
+
+function mergeMemorizedAyahsFromSavedHistory() {
+  const prefix = 'qq_saved_ayah_history_v1';
+  let changed = false;
+  try {
+    for (let i = 0; i < localStorage.length; i += 1) {
+      const key = localStorage.key(i);
+      if (!key || !key.startsWith(prefix)) continue;
+      const raw = JSON.parse(localStorage.getItem(key) || '[]');
+      if (!Array.isArray(raw)) continue;
+      raw.forEach(entry => {
+        if (String(entry?.mode || '').toLowerCase() !== 'memorization') return;
+        const surah = Number(entry?.surah);
+        const ayah = Number(entry?.ayah);
+        if (!isValidAyahRef(surah, ayah)) return;
+        const refKey = ayahKey(surah, ayah);
+        if (memoMemorizedAyahSet.has(refKey)) return;
+        memoMemorizedAyahSet.add(refKey);
+        changed = true;
+      });
+    }
+  } catch {
+    return;
+  }
+  if (changed) {
+    setStoredMemorizedAyahSet(memoMemorizedAyahSet);
+  }
+}
+
+function getMemorizedAyahRefsForStats(listensMap = listenCounts) {
+  const byKey = new Map();
+
+  if (memoMemorizedAyahSet && memoMemorizedAyahSet.size) {
+    memoMemorizedAyahSet.forEach(key => {
+      const [surah, ayah] = String(key).split(':').map(Number);
+      if (!isValidAyahRef(surah, ayah)) return;
+      byKey.set(ayahKey(surah, ayah), { surah, ayah });
+    });
+  }
+
+  if (listensMap && typeof listensMap === 'object') {
+    Object.entries(listensMap).forEach(([key, value]) => {
+      const listens = Number(value) || 0;
+      if (listens < REQUIRED_LISTENS) return;
+      const [surah, ayah] = String(key).split(':').map(Number);
+      if (!isValidAyahRef(surah, ayah)) return;
+      byKey.set(ayahKey(surah, ayah), { surah, ayah });
+    });
+  }
+
+  return Array.from(byKey.values()).sort(compareAyah);
 }
 
 function getStoredLastProgress() {
@@ -417,105 +671,75 @@ function getLastLearnedAyah() {
 }
 
 function updateLearnNavLink() {
-  if (!els.learnNav) return;
+  const links = Array.from(document.querySelectorAll('[data-memo-learn-link]'));
+  if (!links.length) return;
+
   const last = getLastLearnedAyah();
-  if (!last) {
-    els.learnNav.setAttribute('href', '/index.html');
-    return;
-  }
-  els.learnNav.setAttribute('href', `/index.html?surah=${last.surah}&ayah=${last.ayah}`);
+  const href = last
+    ? `/index.html?surah=${last.surah}&ayah=${last.ayah}`
+    : '/index.html';
+
+  links.forEach(link => {
+    link.setAttribute('href', href);
+  });
 }
-
 function enforceWelcomeLayoutCentering() {
-  if (!document.body.classList.contains('memo-welcome-mode')) return;
-  const isEmbeddedWelcome = document.body.classList.contains('embedded');
-  const shellMaxWidth = isEmbeddedWelcome ? 940 : 536;
-  const shellHorizontalGutter = isEmbeddedWelcome ? 20 : 40;
-
+  // Keep welcome layout CSS-driven. Clear stale inline overrides from older builds.
   const shell = document.getElementById('memoShell');
   if (shell) {
-    shell.style.maxWidth = `${shellMaxWidth}px`;
-    shell.style.width = `min(${shellMaxWidth}px, calc(100% - ${shellHorizontalGutter}px))`;
-    shell.style.marginLeft = 'auto';
-    shell.style.marginRight = 'auto';
-    shell.style.left = 'auto';
-    shell.style.transform = 'none';
+    shell.style.maxWidth = '';
+    shell.style.width = '';
+    shell.style.marginLeft = '';
+    shell.style.marginRight = '';
+    shell.style.left = '';
+    shell.style.transform = '';
   }
 
   const centeredBlocks = document.querySelectorAll(
     '#memoWelcome .memo-home-welcome, #memoWelcome .memo-home-card'
   );
   centeredBlocks.forEach(node => {
-    node.style.maxWidth = isEmbeddedWelcome ? 'none' : '536px';
-    node.style.width = '100%';
-    node.style.marginLeft = 'auto';
-    node.style.marginRight = 'auto';
-  });
-}
-
-function enforceMemoBottomNavTightLayout() {
-  const nav = document.querySelector('.memorization-page .memo-bottom-nav');
-  if (!nav) return;
-
-  nav.style.height = '40px';
-  nav.style.minHeight = '40px';
-  nav.style.maxHeight = '40px';
-  nav.style.paddingBottom = '0px';
-  nav.style.overflow = 'hidden';
-  nav.style.boxSizing = 'border-box';
-  nav.style.borderTop = 'none';
-
-  const inner = nav.querySelector('.memo-bottom-nav-inner');
-  if (inner) {
-    inner.style.height = '40px';
-    inner.style.minHeight = '40px';
-    inner.style.maxHeight = '40px';
-    inner.style.alignItems = 'flex-start';
-    inner.style.paddingTop = '0px';
-    inner.style.paddingBottom = '0px';
-  }
-
-  const buttons = nav.querySelectorAll('.memo-bottom-nav-btn');
-  buttons.forEach(btn => {
-    btn.style.justifyContent = 'flex-start';
-    btn.style.paddingTop = '1px';
-    btn.style.gap = '0px';
-    btn.style.fontSize = '10.5px';
-    const label = btn.querySelector('span:not(.material-icons-outlined):not(.material-symbols-outlined)');
-    if (label) {
-      label.style.lineHeight = '1';
-    }
-    const icon = btn.querySelector('.memo-bottom-nav-icon');
-    if (icon) {
-      icon.style.width = '19px';
-      icon.style.height = '19px';
-    }
-    const materialIcon = btn.querySelector('.material-icons-outlined, .material-symbols-outlined');
-    if (materialIcon) {
-      materialIcon.style.fontSize = '19px';
-      materialIcon.style.lineHeight = '1';
-      materialIcon.style.width = '19px';
-      materialIcon.style.height = '19px';
-    }
+    node.style.maxWidth = '';
+    node.style.width = '';
+    node.style.marginLeft = '';
+    node.style.marginRight = '';
   });
 }
 
 function syncMemoBottomNavOffset() {
-  const root = document.documentElement;
-  enforceMemoBottomNavTightLayout();
-  const nav = document.querySelector('.memorization-page .memo-bottom-nav');
-  let offset = 0;
-  if (nav) {
-    const navStyle = window.getComputedStyle(nav);
-    if (navStyle.display !== 'none' && navStyle.visibility !== 'hidden') {
-      offset = Math.round(nav.getBoundingClientRect().height || 0);
-    }
+  let measured = 0;
+
+  const localNav = document.querySelector('.memo-bottom-nav');
+  if (localNav && !isEmbedded) {
+    const localRect = localNav.getBoundingClientRect();
+    measured = Math.max(0, Math.round(localRect.height || 0));
   }
-  root.style.setProperty('--memo-bottom-nav-offset', `${Math.max(0, offset)}px`);
-  enforceMemoBottomStripFlush();
-  window.requestAnimationFrame(() => {
-    enforceMemoBottomStripFlush();
-  });
+
+  if (isEmbedded) {
+    try {
+      const hostNav = window.parent?.document?.querySelector('.bottom-nav');
+      const frameEl = window.frameElement;
+      if (hostNav && frameEl) {
+        const hostRect = hostNav.getBoundingClientRect();
+        const frameRect = frameEl.getBoundingClientRect();
+        // Use only the actual overlap between iframe and host bottom-nav.
+        // If iframe already ends above host nav, offset remains 0 (no gap).
+        measured = Math.max(0, Math.round(frameRect.bottom - hostRect.top));
+      }
+    } catch (_) {
+      measured = 0;
+    }
+
+    document.documentElement.style.setProperty('--memo-bottom-nav-offset', `${measured}px`);
+    return;
+  }
+
+  if (!measured) {
+    document.documentElement.style.removeProperty('--memo-bottom-nav-offset');
+    return;
+  }
+
+  document.documentElement.style.setProperty('--memo-bottom-nav-offset', `${measured}px`);
 }
 
 function getMemoBottomNavOverlap(nav) {
@@ -545,27 +769,34 @@ function getMemoBottomNavOverlap(nav) {
 
 function enforceMemoBottomStripFlush() {
   const strip = document.getElementById('memoBottomControlStrip');
-  const nav = document.querySelector('.memorization-page .memo-bottom-nav');
   if (!strip) return;
-  const rootStyles = window.getComputedStyle(document.documentElement);
-  const offsetRaw = rootStyles.getPropertyValue('--memo-bottom-nav-offset').trim();
-  const offsetNum = Number.parseFloat(offsetRaw);
-  const navOffset = Number.isFinite(offsetNum) ? Math.max(0, Math.round(offsetNum)) : 52;
-  const overlap = getMemoBottomNavOverlap(nav);
-  const safeOffset = Math.max(0, navOffset - overlap);
-  strip.style.left = '0';
-  strip.style.right = '0';
-  strip.style.width = 'auto';
-  strip.style.maxWidth = 'none';
-  strip.style.transform = 'none';
-  strip.style.margin = '0';
-  strip.style.borderRadius = '0';
-  strip.style.bottom = `${safeOffset}px`;
+  // Remove legacy inline overrides so CSS remains the single source of truth.
+  strip.style.left = '';
+  strip.style.right = '';
+  strip.style.width = '';
+  strip.style.maxWidth = '';
+  strip.style.transform = '';
+  strip.style.margin = '';
+  strip.style.borderRadius = '';
+  strip.style.bottom = '';
 }
 
 function syncWelcomeViewportLock() {
-  const inWelcomeMode = document.body.classList.contains('memo-welcome-mode');
-  document.documentElement.classList.toggle('memo-welcome-locked', inWelcomeMode);
+  document.documentElement.classList.remove('memo-welcome-locked');
+}
+
+function scheduleMemoLayoutSync() {
+  if (memoLayoutRaf) return;
+  memoLayoutRaf = window.requestAnimationFrame(() => {
+    memoLayoutRaf = 0;
+    enforceWelcomeLayoutCentering();
+    syncMemoBottomNavOffset();
+    enforceMemoBottomStripFlush();
+    syncWelcomeViewportLock();
+    if (isEmbedded) {
+      setHostMainNavbarHidden(false);
+    }
+  });
 }
 
 function getGuestStreakDays() {
@@ -578,11 +809,42 @@ function getGuestStreakDays() {
 }
 
 function countMemorizedAyahs(listensMap) {
-  if (!listensMap || typeof listensMap !== 'object') return 0;
-  return Object.values(listensMap).reduce((sum, value) => {
-    const listens = Number(value) || 0;
-    return sum + (listens >= REQUIRED_LISTENS ? 1 : 0);
-  }, 0);
+  return getMemorizedAyahRefsForStats(listensMap).length;
+}
+
+async function getAyahWordCount(surah, ayah) {
+  const s = Number(surah);
+  const a = Number(ayah);
+  if (!isValidAyahRef(s, a)) return 0;
+  const key = ayahKey(s, a);
+  if (memoAyahWordCountCache.has(key)) {
+    return Number(memoAyahWordCountCache.get(key)) || 0;
+  }
+  try {
+    const { wordBlocks } = await fetchAyahContent(s, a);
+    const count = Array.isArray(wordBlocks)
+      ? wordBlocks.reduce((sum, block) => {
+          const txt = block?.querySelector?.('.word-text')?.textContent?.trim?.() || '';
+          return sum + (txt ? 1 : 0);
+        }, 0)
+      : 0;
+    memoAyahWordCountCache.set(key, count);
+    return count;
+  } catch {
+    memoAyahWordCountCache.set(key, 0);
+    return 0;
+  }
+}
+
+async function countTotalWordsLearnt(listensMap) {
+  const refs = getMemorizedAyahRefsForStats(listensMap);
+  if (!refs.length) return 0;
+
+  let total = 0;
+  for (const ref of refs) {
+    total += await getAyahWordCount(ref.surah, ref.ayah);
+  }
+  return total;
 }
 
 function getSurahAyahCount(surahNumber) {
@@ -594,16 +856,12 @@ function getSurahAyahCount(surahNumber) {
 }
 
 function countMemorizedAyahsInSurah(listensMap, surahNumber, ayahCount) {
-  if (!listensMap || typeof listensMap !== 'object') return 0;
   const surah = Number(surahNumber) || 1;
   const totalAyahs = Number(ayahCount) || 0;
   if (totalAyahs <= 0) return 0;
-  let memorized = 0;
-  for (let ayah = 1; ayah <= totalAyahs; ayah += 1) {
-    const listens = Number(listensMap[ayahKey(surah, ayah)]) || 0;
-    if (listens >= REQUIRED_LISTENS) memorized += 1;
-  }
-  return memorized;
+  return getMemorizedAyahRefsForStats(listensMap).filter(ref => (
+    Number(ref.surah) === surah && Number(ref.ayah) >= 1 && Number(ref.ayah) <= totalAyahs
+  )).length;
 }
 
 function getDisplayName(user, fallbackName = '') {
@@ -659,18 +917,20 @@ function formatLastWhen(timestampMs) {
 }
 
 function setMemoProfileDrawerOpen(open) {
+  if (isEmbedded || !els.profileDrawer || !els.profileDrawerBackdrop) {
+    memoDrawerOpen = false;
+    document.body.classList.remove('memo-profile-drawer-open');
+    return;
+  }
+
   const isOpen = Boolean(open);
   memoDrawerOpen = isOpen;
-  if (els.profileDrawer) {
-    els.profileDrawer.classList.toggle('is-open', isOpen);
-    els.profileDrawer.setAttribute('aria-hidden', String(!isOpen));
-  }
-  if (els.profileDrawerBackdrop) {
-    if (isOpen) {
-      els.profileDrawerBackdrop.removeAttribute('hidden');
-    } else {
-      els.profileDrawerBackdrop.setAttribute('hidden', '');
-    }
+  els.profileDrawer.classList.toggle('is-open', isOpen);
+  els.profileDrawer.setAttribute('aria-hidden', String(!isOpen));
+  if (isOpen) {
+    els.profileDrawerBackdrop.removeAttribute('hidden');
+  } else {
+    els.profileDrawerBackdrop.setAttribute('hidden', '');
   }
   document.body.classList.toggle('memo-profile-drawer-open', isOpen);
 }
@@ -806,7 +1066,8 @@ async function getWelcomeSnapshot() {
     hasMemorizedAyah: Boolean(inferredLast?.isMemorized),
     activeSurah,
     surahAyahCount: getSurahAyahCount(activeSurah),
-    surahMemorizedAyahs: 0
+    surahMemorizedAyahs: 0,
+    totalWordsLearnt: 0
   };
   snapshot.surahMemorizedAyahs = countMemorizedAyahsInSurah(
     effectiveListens,
@@ -873,6 +1134,7 @@ async function getWelcomeSnapshot() {
     snapshot.activeSurah,
     snapshot.surahAyahCount
   );
+  snapshot.totalWordsLearnt = await countTotalWordsLearnt(effectiveListens);
 
   const quranRatio = snapshot.totalAyahs > 0
     ? (snapshot.memorizedAyahs / snapshot.totalAyahs)
@@ -890,9 +1152,11 @@ function applyWelcomeSnapshot(snapshot) {
   if (!snapshot) return;
   const hasMemorized = Boolean(snapshot.hasMemorizedAyah) && isValidAyahRef(snapshot.lastSurah, snapshot.lastAyah);
   const startSurahName = getSurahDisplayName(FIRST_MEMO_AYAH.surah);
-
-  if (els.welcomeName) {
-    els.welcomeName.textContent = snapshot.firstName || 'Friend';
+  if (els.welcomeTitle) {
+    els.welcomeTitle.textContent = `Assalamu Alaikum, ${snapshot.firstName || 'Friend'}`;
+  }
+  if (els.navTopStreakCount) {
+    els.navTopStreakCount.textContent = String(snapshot.streakDays || 0);
   }
   if (els.navStreakCount) {
     els.navStreakCount.textContent = String(snapshot.streakDays || 0);
@@ -900,11 +1164,17 @@ function applyWelcomeSnapshot(snapshot) {
   if (els.welcomeMemorized) {
     els.welcomeMemorized.textContent = String(snapshot.memorizedAyahs || 0);
   }
-  if (els.welcomeTotalAyahs) {
-    els.welcomeTotalAyahs.textContent = String(snapshot.surahAyahCount || 0);
+  if (els.welcomeWordsLearnt) {
+    els.welcomeWordsLearnt.textContent = String(snapshot.totalWordsLearnt || 0);
+  }
+  if (els.welcomeStreakDays) {
+    els.welcomeStreakDays.textContent = String(snapshot.streakDays || 0);
   }
   if (els.welcomeProgressPct) {
     els.welcomeProgressPct.textContent = formatProgressPctLabel(snapshot.surahProgressPct);
+  }
+  if (els.welcomeQuranPct) {
+    els.welcomeQuranPct.textContent = formatProgressPctLabel(snapshot.quranProgressPct);
   }
   if (els.welcomeLastTitle) {
     els.welcomeLastTitle.textContent = hasMemorized ? 'Last Ayah' : 'Begin your memorization journey';
@@ -970,7 +1240,10 @@ async function refreshWelcomeDashboard() {
   const hasMemorized = Boolean(snapshot.hasMemorizedAyah) && isValidAyahRef(snapshot.lastSurah, snapshot.lastAyah);
   const previewSurah = hasMemorized ? snapshot.lastSurah : FIRST_MEMO_AYAH.surah;
   const previewAyah = hasMemorized ? snapshot.lastAyah : FIRST_MEMO_AYAH.ayah;
-  if (!isValidAyahRef(previewSurah, previewAyah)) return;
+  if (!isValidAyahRef(previewSurah, previewAyah)) {
+    refreshQuickActionAvailability();
+    return;
+  }
   const preview = await fetchWelcomeLastAyahText(previewSurah, previewAyah);
   if (renderToken !== memoWelcomeRenderToken) return;
   const previewArabic = preview.arabic && preview.arabic !== '--'
@@ -985,10 +1258,246 @@ async function refreshWelcomeDashboard() {
   if (els.welcomeLastTranslation) {
     els.welcomeLastTranslation.textContent = truncateToWordLimit(previewTranslation, 8);
   }
+  refreshQuickActionAvailability();
 }
 
-function openMemorizationWorkspace() {
+
+function getMemorizedAyahRefs(listensMap = listenCounts) {
+  return getMemorizedAyahRefsForStats(listensMap);
+}
+
+function getFirstGlobalAyahRefs(limit = RANDOM_AYAH_MIN_MEMORIZED) {
+  const count = Math.max(0, Number(limit) || 0);
+  if (!count || !Array.isArray(surahList) || !surahList.length) return [];
+
+  const refs = [];
+  const ordered = [...surahList].sort((a, b) => Number(a?.number) - Number(b?.number));
+  for (const item of ordered) {
+    const surah = Number(item?.number);
+    const ayahCount = Number(item?.ayahCount) || 0;
+    if (!Number.isInteger(surah) || surah <= 0 || ayahCount <= 0) continue;
+    for (let ayah = 1; ayah <= ayahCount; ayah += 1) {
+      refs.push({ surah, ayah });
+      if (refs.length >= count) {
+        return refs;
+      }
+    }
+  }
+  return refs;
+}
+
+function hasMemorizedFirstNAyahs(limit = RANDOM_AYAH_MIN_MEMORIZED, listensMap = listenCounts) {
+  const firstRefs = getFirstGlobalAyahRefs(limit);
+  if (firstRefs.length < Number(limit)) return false;
+  const memorizedSet = new Set(getMemorizedAyahRefsForStats(listensMap).map(ref => ayahKey(ref.surah, ref.ayah)));
+  return firstRefs.every(ref => memorizedSet.has(ayahKey(ref.surah, ref.ayah)));
+}
+
+function pickRandomAyahRef(refs) {
+  if (!Array.isArray(refs) || !refs.length) return null;
+  const idx = Math.floor(Math.random() * refs.length);
+  return refs[idx] || refs[0] || null;
+}
+
+function showMemoToast(message, duration = 2200) {
+  const text = String(message || '').trim();
+  if (!text) return;
+  if (!els.toast) {
+    console.info('[MEMO]', text);
+    return;
+  }
+  if (memoToastTimer) {
+    window.clearTimeout(memoToastTimer);
+    memoToastTimer = 0;
+  }
+  els.toast.textContent = text;
+  els.toast.hidden = false;
+  memoToastTimer = window.setTimeout(() => {
+    memoToastTimer = 0;
+    if (!els.toast) return;
+    els.toast.hidden = true;
+    els.toast.textContent = '';
+  }, Math.max(1000, Number(duration) || 0));
+}
+
+function setQuickActionState(button, enabled) {
+  if (!button) return;
+  const isEnabled = Boolean(enabled);
+  button.classList.toggle('is-disabled', !isEnabled);
+  button.setAttribute('aria-disabled', String(!isEnabled));
+}
+
+function refreshQuickActionAvailability() {
+  const memorizedRefs = getMemorizedAyahRefs();
+  const canUseRandomAyah = memorizedRefs.length > 0 && hasMemorizedFirstNAyahs(RANDOM_AYAH_MIN_MEMORIZED);
+  const canUseReviewLast5 = memorizedRefs.length >= REVIEW_LAST5_MIN_MEMORIZED;
+  setQuickActionState(els.techniqueReciteBtn, canUseRandomAyah);
+  setQuickActionState(els.techniqueRepeatBtn, canUseReviewLast5);
+}
+
+function buildMemoChildUrl(pathname) {
+  const url = new URL(pathname, window.location.href);
+  if (isEmbedded) {
+    url.searchParams.set('embedded', '1');
+  }
+  url.searchParams.set('t', String(Date.now()));
+  return url.toString();
+}
+
+function openMemoExternalView(kind, { title, url } = {}) {
+  if (!els.externalView || !els.externalFrame) return;
+  memoExternalViewKind = String(kind || '').trim().toLowerCase();
+  document.body.classList.remove('memo-external-practice');
+  if (memoExternalViewKind === 'practice') {
+    document.body.classList.add('memo-external-practice');
+  }
+  if (els.externalTitle) {
+    els.externalTitle.textContent = String(title || '').trim() || 'External view';
+  }
+  els.externalFrame.src = String(url || 'about:blank');
+  document.body.classList.add('memo-external-open');
+  els.externalView.classList.remove('is-hidden');
+  els.externalView.setAttribute('aria-hidden', 'false');
+  scheduleMemoLayoutSync();
+  window.requestAnimationFrame(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  });
+}
+
+function closeMemoExternalView({ clearFrame = true } = {}) {
+  if (!els.externalView) return;
+  els.externalView.classList.add('is-hidden');
+  els.externalView.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('memo-external-open', 'memo-external-practice');
+  memoExternalViewKind = '';
+  if (clearFrame && els.externalFrame) {
+    try {
+      els.externalFrame.src = 'about:blank';
+    } catch (_) {}
+  }
+  scheduleMemoLayoutSync();
+}
+
+function openMemoSurahListView() {
+  openMemoExternalView('surah-list', {
+    title: 'Surah list',
+    url: buildMemoChildUrl('./surah-list.html')
+  });
+}
+
+function openMemoPracticeView() {
+  openMemoExternalView('practice', {
+    title: 'Practice',
+    url: buildMemoChildUrl('./memorization-practice.html')
+  });
+}
+
+function forwardSurahListActionToHost(action, surah, ayah) {
+  const targetAction = String(action || 'learn').toLowerCase();
+  const targetSurah = Number(surah) || 1;
+  const targetAyah = Math.max(1, Number(ayah) || 1);
+  if (window.parent && window.parent !== window) {
+    try {
+      window.parent.postMessage(
+        {
+          type: 'SURAH_LIST_ACTION',
+          action: targetAction,
+          surah: targetSurah,
+          ayah: targetAyah
+        },
+        window.location.origin === 'null' ? '*' : window.location.origin
+      );
+      return;
+    } catch (_) {}
+  }
+  const next = new URL('./index.html', window.location.href);
+  next.searchParams.set('surah', String(targetSurah));
+  next.searchParams.set('ayah', String(targetAyah));
+  next.searchParams.set('action', targetAction);
+  window.location.href = next.toString();
+}
+
+function handleMemoNestedSurahListAction(payload = {}) {
+  const actionRaw = String(payload.action || '').trim().toLowerCase();
+  const action = ['learn', 'recite', 'listen', 'memorize'].includes(actionRaw)
+    ? actionRaw
+    : 'learn';
+  const surah = Number(payload.surah);
+  const ayah = Math.max(1, Number(payload.ayah) || 1);
+  if (!Number.isFinite(surah) || surah < 1) return;
+
+  closeMemoExternalView();
+  if (action === 'memorize') {
+    void goMemo({ view: 'ayah', surah, ayah }, { historyMode: 'push' });
+    return;
+  }
+  forwardSurahListActionToHost(action, surah, ayah);
+}
+function setMemoMode(mode) {
+  const isWelcome = mode === 'welcome';
+  document.body.classList.remove('memo-welcome-mode', 'memo-sketch-mode');
+  document.body.classList.add(isWelcome ? 'memo-welcome-mode' : 'memo-sketch-mode');
+  if (!isWelcome) {
+    document.documentElement.classList.remove('memo-welcome-locked');
+  }
+  syncWelcomeViewportLock();
+}
+function stopAllMemoActivity() {
+  stopListening();
+  stopAudioPlayback();
+  clearPeekTimer();
+  clearRecognitionRestartTimer();
+  keepListening = false;
+  listening = false;
+  audioQueue = 0;
+}
+
+function setModeWelcome({ historyMode = 'none' } = {}) {
+  document.body.classList.remove('memo-external-open', 'memo-external-practice');
   setMemoProfileDrawerOpen(false);
+  stopAllMemoActivity();
+  setHostMainNavbarHidden(false);
+  restoreMemoNavFromMain();
+
+  if (els.main) {
+    els.main.classList.add('is-hidden');
+    els.main.setAttribute('aria-hidden', 'true');
+  }
+  if (els.welcome) {
+    els.welcome.classList.remove('is-hidden');
+    els.welcome.setAttribute('aria-hidden', 'false');
+    els.welcome.scrollTop = 0;
+  }
+
+  setMemoMode('welcome');
+  syncMemoSketchTopNavLayout();
+  syncMemoMenuButtonMode();
+  applyReciteMatchModeUI();
+  syncPlaybackControlState();
+  if (historyMode !== 'none') syncMemoHistoryForWelcome(historyMode);
+  scheduleMemoLayoutSync();
+  refreshWelcomeDashboard();
+
+  window.requestAnimationFrame(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  });
+}
+
+function notifyParentMemoNavigationReadyStable(surah, ayah) {
+  const targetSurah = Number(surah) || Number(current?.surah) || 1;
+  const targetAyah = Number(ayah) || Number(current?.ayah) || 1;
+  const ping = () => {
+    notifyParentMemoNavigationReady(targetSurah, targetAyah);
+  };
+  ping();
+  if (!isEmbedded) return;
+  window.requestAnimationFrame(ping);
+  window.setTimeout(ping, 90);
+}
+function setModeSketch() {
+  closeMemoExternalView();
+  setMemoProfileDrawerOpen(false);
+
   if (els.welcome) {
     els.welcome.classList.add('is-hidden');
     els.welcome.setAttribute('aria-hidden', 'true');
@@ -997,51 +1506,126 @@ function openMemorizationWorkspace() {
     els.main.classList.remove('is-hidden');
     els.main.setAttribute('aria-hidden', 'false');
   }
-  document.body.classList.remove('memo-welcome-mode');
-  document.body.classList.add('memo-sketch-mode');
-  syncWelcomeViewportLock();
-  // In embedded mode, only hide host nav while host explicitly keeps memo active.
-  setHostMainNavbarHidden(!isEmbedded || memoHostActive);
+
+  setMemoMode('sketch');
+  syncMemoSketchTopNavLayout();
+  setHostMainNavbarHidden(false);
+
   if (USE_HOST_MAIN_NAV) {
     hydrateMemoNavIntoMain();
   } else {
     const memoNavBar = document.getElementById('memoNavBar');
-    document.body.classList.remove('memo-host-mounted');
-    document.body.classList.remove('memo-nav-fallback');
+    document.body.classList.remove('memo-host-mounted', 'memo-nav-fallback');
     if (memoNavBar) memoNavBar.style.display = '';
   }
+
   syncMemoMenuButtonMode();
+  applyReciteMatchModeUI();
+  syncPlaybackControlState();
+  scheduleMemoLayoutSync();
+  scheduleEnsureMemoWordBoxesRendered();
+  if (isEmbedded) {
+    notifyParentMemoNavigationReadyStable(current.surah, current.ayah);
+  }
+
+  window.requestAnimationFrame(() => {
+    if (isEmbedded) setHostMainNavbarHidden(false);
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  });
+}
+
+function openMemorizationWorkspace() {
+  setModeSketch();
+}
+
+function openMemorizationWelcome(options = {}) {
+  setModeWelcome(options);
+}
+
+function resetMemoAyahRuntimeState() {
+  showModal(false);
+  stopAllMemoActivity();
+  setMemoListeningUI(false);
+  wrongTryCounts.clear();
+  resetTranscript();
+  resetFullReciteState();
+  setExpectedHintText('');
+  showFeedback('');
+
+  if (els.peekBtn) {
+    els.peekBtn.classList.remove('is-active');
+    els.peekBtn.setAttribute('aria-pressed', 'false');
+  }
+  if (els.reciteSettingsPanel) {
+    els.reciteSettingsPanel.classList.add('is-hidden');
+  }
+  setPracticeOpen(false);
+
+  if (els.lockOverlay) {
+    els.lockOverlay.classList.remove('is-visible');
+    els.lockOverlay.setAttribute('aria-hidden', 'true');
+  }
+  if (els.wordOverlay) {
+    els.wordOverlay.classList.remove('is-locked');
+  }
+}
+
+function resolveMemoAyahTarget(surah, ayah) {
+  const nextSurah = Number(surah);
+  const nextAyah = Number(ayah);
+  if (!isValidAyahRef(nextSurah, nextAyah)) return null;
+  if (isLockedAyah(nextSurah, nextAyah)) {
+    return { ...unlocked };
+  }
+  return { surah: nextSurah, ayah: nextAyah };
+}
+
+async function enterMemoAyah(surah, ayah, options = {}) {
+  const historyMode = options.historyMode || 'none';
+  const target = resolveMemoAyahTarget(surah, ayah);
+  if (!target) return false;
+
+  const enteringFromWelcome = document.body.classList.contains('memo-welcome-mode');
+
+  // 1-2) Mode switch first so measurements happen only with visible workspace.
+  setModeSketch();
+
+  // Always start fresh ayah entry in word-by-word mode when coming from memo home.
+  if (enteringFromWelcome && reciteMatchMode !== RECITE_MATCH_MODE.WORD) {
+    reciteMatchMode = RECITE_MATCH_MODE.WORD;
+    resetFullReciteState();
+    applyReciteMatchModeUI();
+  }
+
+  // 3) Reset transient workspace state to prevent leakage from previous route/ayah.
+  resetMemoAyahRuntimeState();
+
+  // 4-5) Set reference and selector state before loading.
+  current = { ...target };
+  buildAyahOptions(target.surah);
+  updateAyahSelectors();
+
+  // 6) Load ayah content with no direct history writes.
+  const loaded = await loadAyah(target.surah, target.ayah, { historyMode: 'none' });
+
+  // 7-8) Post-render layout + nav consistency pass.
+  window.requestAnimationFrame(() => {
+    if (isEmbedded) setHostMainNavbarHidden(false);
+    scheduleMemoLayoutSync();
+  });
+  applyReciteMatchModeUI();
+  scheduleEnsureMemoWordBoxesRendered();
   updateSketchNavMeta();
-  syncMemoBottomNavOffset();
-  applyReciteMatchModeUI();
-  syncPlaybackControlState();
-}
-
-function openMemorizationWelcome() {
-  setMemoProfileDrawerOpen(false);
-  stopListening();
-  stopAudioPlayback();
-  setHostMainNavbarHidden(false);
-  restoreMemoNavFromMain();
-  if (els.main) {
-    els.main.classList.add('is-hidden');
-    els.main.setAttribute('aria-hidden', 'true');
+  if (isEmbedded) {
+    notifyParentMemoNavigationReadyStable(target.surah, target.ayah);
   }
-  if (els.welcome) {
-    els.welcome.classList.remove('is-hidden');
-    els.welcome.setAttribute('aria-hidden', 'false');
-  }
-  document.body.classList.remove('memo-sketch-mode');
-  document.body.classList.add('memo-welcome-mode');
-  syncMemoBottomNavOffset();
-  syncWelcomeViewportLock();
-  syncMemoMenuButtonMode();
-  applyReciteMatchModeUI();
-  syncPlaybackControlState();
-  enforceWelcomeLayoutCentering();
-  refreshWelcomeDashboard();
-}
 
+  // 9) History sync from one authoritative entry path only.
+  if (loaded && historyMode !== 'none') {
+    syncMemoHistoryForAyah(target.surah, target.ayah, historyMode);
+  }
+  return Boolean(loaded);
+}
 function syncMemoMenuButtonMode() {
   const icon = els.menuBtn?.querySelector('.material-icons-outlined');
   if (!els.menuBtn || !icon) return;
@@ -1054,6 +1638,18 @@ function syncMemoMenuButtonMode() {
   els.menuBtn.setAttribute('aria-label', 'Menu');
 }
 
+function syncMemoSketchTopNavLayout() {
+  // Keep nav visibility CSS-driven to avoid inline style conflicts between modes.
+  const titleWrap = document.querySelector('.memo-nav-title-wrap');
+  const streakPill = document.getElementById('memoNavStreakPill');
+  const navModeHost = els.navModeHost;
+  const navMeta = document.querySelector('.memo-nav-sketch-meta');
+  const navSelects = document.querySelector('.memo-nav-selects');
+
+  [titleWrap, streakPill, navModeHost, navMeta, navSelects].forEach(node => {
+    if (node) node.style.display = '';
+  });
+}
 function updateSketchNavMeta() {
   const currentSurah = Number(current?.surah) || 1;
   const currentAyah = Number(current?.ayah) || 1;
@@ -1062,8 +1658,11 @@ function updateSketchNavMeta() {
     : null;
 
   if (els.navSketchSurah) {
-    const name = String(surahInfo?.englishName || `Surah ${currentSurah}`);
-    els.navSketchSurah.textContent = `Surah ${name}`;
+    if (surahInfo?.englishName) {
+      els.navSketchSurah.textContent = `Surah ${currentSurah}: ${surahInfo.englishName}`;
+    } else {
+      els.navSketchSurah.textContent = `Surah ${currentSurah}`;
+    }
   }
   if (els.navSketchAyah) {
     els.navSketchAyah.textContent = `Ayah ${currentAyah}`;
@@ -1195,9 +1794,13 @@ function shouldUpdateProgressSnapshot() {
 
 function setStatus(text, isError = false) {
   if (!els.status) return;
-  els.status.textContent = text;
-  els.status.style.background = isError ? '#fdeaea' : '#e9eef3';
-  els.status.style.color = isError ? '#b33a3a' : '#6b7a86';
+  const label = String(text || '').trim();
+  if (els.statusText) {
+    els.statusText.textContent = label || 'Idle';
+  } else {
+    els.status.textContent = label || 'Idle';
+  }
+  els.status.classList.toggle('is-error', Boolean(isError));
 }
 
 function updateToggleButton(btn, isOn) {
@@ -1356,6 +1959,27 @@ function mountWordsToOverlay(shouldOverlay) {
   els.wordOverlay.setAttribute('aria-hidden', String(!useOverlay));
 }
 
+function hasMemoWordBoxesRendered() {
+  return Boolean(
+    els.wordsWrap?.querySelector('.memo-word-grid .memo-word, .memo-word-grid .word-block')
+  );
+}
+async function ensureMemoWordBoxesRendered() {
+  if (isFullAyahReciteMode()) return;
+  if (hasMemoWordBoxesRendered()) return;
+  if (!isValidAyahRef(Number(current?.surah), Number(current?.ayah))) return;
+  const loaded = await loadAyah(current.surah, current.ayah, { historyMode: 'none' });
+  if (!loaded) return;
+  applyReciteMatchModeUI();
+  scheduleMemoLayoutSync();
+}
+function scheduleEnsureMemoWordBoxesRendered() {
+  if (memoEnsureWordBoxesRaf) return;
+  memoEnsureWordBoxesRaf = window.requestAnimationFrame(() => {
+    memoEnsureWordBoxesRaf = 0;
+    void ensureMemoWordBoxesRendered();
+  });
+}
 function rebuildFullReciteFromTokens(rawTokens) {
   const nextTokens = [];
   let idx = 0;
@@ -1402,7 +2026,6 @@ function rebuildFullReciteFromTokens(rawTokens) {
 
 function applyReciteMatchModeUI() {
   const fullMode = isFullAyahReciteMode();
-  const inSketchMode = document.body.classList.contains('memo-sketch-mode');
   setMemoReciteModeClass(fullMode);
   updateToggleButton(els.reciteWordModeBtn, !fullMode);
   updateToggleButton(els.reciteFullModeBtn, fullMode);
@@ -1410,9 +2033,10 @@ function applyReciteMatchModeUI() {
   if (els.expectedHint) {
     els.expectedHint.classList.toggle('is-hidden', fullMode || !viewState.expectedAfterThreeWrong);
   }
-  mountWordsToOverlay(inSketchMode && !fullMode);
+  mountWordsToOverlay(false);
   if (els.wordsWrap) {
     els.wordsWrap.classList.toggle('is-hidden', fullMode);
+    els.wordsWrap.style.display = fullMode ? 'none' : '';
   }
   if (els.reciteLine) {
     els.reciteLine.classList.toggle('is-visible', fullMode);
@@ -1443,6 +2067,10 @@ function setReciteMatchMode(mode, options = {}) {
   }
   resetFullReciteState();
   applyReciteMatchModeUI();
+
+  if (nextMode === RECITE_MATCH_MODE.WORD) {
+    scheduleEnsureMemoWordBoxesRendered();
+  }
 }
 
 function resetTranscript() {
@@ -1466,21 +2094,33 @@ function updateListenUI() {
     els.progressFill.style.width = `${pct}%`;
   }
   if (els.progressText) {
-    els.progressText.textContent = `Listens: ${count} / ${REQUIRED_LISTENS}`;
+    els.progressText.textContent = `${count} / ${REQUIRED_LISTENS}`;
   }
 }
 
 function setLockedState(isLocked) {
   const locked = ALLOW_ALL_AYAHS ? false : isLocked;
-  els.lockOverlay.classList.toggle('is-visible', locked);
+  if (els.lockOverlay) {
+    els.lockOverlay.classList.toggle('is-visible', locked);
+  }
   if (els.wordOverlay) {
     els.wordOverlay.classList.toggle('is-locked', locked);
   }
-  els.lockMsg.textContent = locked ? 'This ayah is locked until you complete the previous one.' : '';
-  els.playCount.disabled = locked;
-  els.startBtn.disabled = locked || listening || keepListening;
-  if (els.peekBtn) els.peekBtn.disabled = locked;
-  els.stopBtn.disabled = true;
+  if (els.lockMsg) {
+    els.lockMsg.textContent = locked ? 'This ayah is locked until you complete the previous one.' : '';
+  }
+  if (els.playCount) {
+    els.playCount.disabled = locked;
+  }
+  if (els.startBtn) {
+    els.startBtn.disabled = locked || listening || keepListening;
+  }
+  if (els.peekBtn) {
+    els.peekBtn.disabled = locked;
+  }
+  if (els.stopBtn) {
+    els.stopBtn.disabled = true;
+  }
   syncPlaybackControlState();
 }
 
@@ -1622,43 +2262,89 @@ function peekWords() {
   }, PEEK_DURATION_MS);
 }
 
+function setMemoAyahHtmlCacheEntry(key, html) {
+  if (!key || typeof html !== 'string') return;
+  if (memoAyahHtmlCache.has(key)) {
+    memoAyahHtmlCache.delete(key);
+  }
+  memoAyahHtmlCache.set(key, html);
+  while (memoAyahHtmlCache.size > MEMO_AYAH_HTML_CACHE_MAX) {
+    const oldestKey = memoAyahHtmlCache.keys().next().value;
+    if (!oldestKey) break;
+    memoAyahHtmlCache.delete(oldestKey);
+  }
+}
+
+function parseMemoAyahContent(html) {
+  const doc = new DOMParser().parseFromString(String(html || ''), 'text/html');
+  const learning = doc.querySelector('#learning-mode-content');
+  if (!learning) {
+    throw new Error('Ayah layout not found.');
+  }
+  let wordBlocks = Array.from(learning.querySelectorAll('.word-block'));
+  if (!wordBlocks.length) {
+    const fallbackText = String(
+      doc.querySelector('#reciting-mode-content')?.textContent || learning.textContent || ''
+    )
+      .replace(/\s+/g, ' ')
+      .trim();
+    const fallbackWords = fallbackText.match(/[\u0600-\u06FF]+/g) || [];
+    wordBlocks = fallbackWords.map(word => {
+      const block = doc.createElement('span');
+      block.className = 'word-block';
+      const text = doc.createElement('span');
+      text.className = 'word-text';
+      text.textContent = word;
+      const metadata = doc.createElement('span');
+      metadata.className = 'metadata';
+      block.appendChild(text);
+      block.appendChild(metadata);
+      return block;
+    });
+  }
+  if (!wordBlocks.length) {
+    throw new Error('No words found for this ayah.');
+  }
+  const practiceBox = doc.querySelector('#transliteration-box');
+  const practiceBlocks = practiceBox
+    ? Array.from(practiceBox.querySelectorAll('.word-block-translit'))
+    : [];
+  return { wordBlocks, practiceBlocks };
+}
+
 async function fetchAyahContent(surah, ayah) {
   const safeSurah = Number(surah);
   const safeAyah = Number(ayah);
   if (!Number.isFinite(safeSurah) || !Number.isFinite(safeAyah)) {
     throw new Error('Invalid ayah');
   }
+
+  const cacheKey = `${safeSurah}:${safeAyah}`;
+  const cachedHtml = memoAyahHtmlCache.get(cacheKey);
+  if (typeof cachedHtml === 'string' && cachedHtml) {
+    return parseMemoAyahContent(cachedHtml);
+  }
+
   const path = `ayahs/surah_${safeSurah}/ayah_${safeSurah}_${safeAyah}.html`;
   const candidates = [path, `/${path}`];
   let lastError = null;
+
   for (const candidate of candidates) {
     try {
-      const res = await fetch(candidate, { cache: 'no-store' });
+      const res = await fetch(candidate, { cache: 'force-cache' });
       if (!res.ok) {
         lastError = new Error(`HTTP ${res.status}`);
         continue;
       }
       const html = await res.text();
-      const doc = new DOMParser().parseFromString(html, 'text/html');
-      const learning = doc.querySelector('#learning-mode-content');
-      if (!learning) {
-        lastError = new Error('Ayah layout not found.');
-        continue;
-      }
-      const wordBlocks = Array.from(learning.querySelectorAll('.word-block'));
-      if (!wordBlocks.length) {
-        lastError = new Error('No words found for this ayah.');
-        continue;
-      }
-      const practiceBox = doc.querySelector('#transliteration-box');
-      const practiceBlocks = practiceBox
-        ? Array.from(practiceBox.querySelectorAll('.word-block-translit'))
-        : [];
-      return { wordBlocks, practiceBlocks };
+      const parsed = parseMemoAyahContent(html);
+      setMemoAyahHtmlCacheEntry(cacheKey, html);
+      return parsed;
     } catch (err) {
       lastError = err;
     }
   }
+
   if (window.location.protocol === 'file:') {
     throw new Error('Open this page with a local web server to load ayah files.');
   }
@@ -1683,7 +2369,6 @@ function renderWords(wordBlocks, translitWords = []) {
   wordBlocks.forEach(block => {
     const clone = block.cloneNode(true);
     clone.removeAttribute('onclick');
-    clone.querySelectorAll('.root-tag').forEach(el => el.remove());
     if (!clone.querySelector('.memo-spoken')) {
       const spoken = document.createElement('span');
       spoken.className = 'memo-spoken';
@@ -2298,7 +2983,101 @@ function renderPractice(practiceBlocks) {
   setPracticeMode(preferredMode === 'paragraph' ? 'paragraph' : 'words');
 }
 
+function handleAudioEnded() {
+  if (!audioQueue) {
+    syncPlaybackControlState();
+    return;
+  }
+
+  updateListenCount(1);
+  audioQueue = Math.max(0, audioQueue - 1);
+
+  if (audioQueue > 0 && audio) {
+    audio.currentTime = 0;
+    syncPlaybackControlState();
+    audio.play().catch(() => {
+      audioQueue = 0;
+      syncPlaybackControlState();
+    });
+    return;
+  }
+
+  audioQueue = 0;
+  syncPlaybackControlState();
+}
+
+async function loadAyah(surah, ayah) {
+  const requestId = ++loadAyahRequestId;
+  stopAllMemoActivity();
+
+  const nextSurah = Number(surah);
+  const nextAyah = Number(ayah);
+  const target = isValidAyahRef(nextSurah, nextAyah)
+    ? { surah: nextSurah, ayah: nextAyah }
+    : { ...unlocked };
+
+  current = { ...target };
+  updateAyahSelectors();
+  setStatus('Loading');
+  resetTranscript();
+
+  const locked = isLockedAyah(target.surah, target.ayah);
+  setLockedState(locked);
+
+  try {
+    const { wordBlocks, practiceBlocks } = await fetchAyahContent(target.surah, target.ayah);
+    if (requestId !== loadAyahRequestId) return false;
+    if (current.surah !== target.surah || current.ayah !== target.ayah) return false;
+
+    const translitWords = extractExpectedTranslit(practiceBlocks);
+    renderWords(wordBlocks, translitWords);
+    renderPractice(practiceBlocks);
+    resetReveals();
+    setStatus('Idle');
+
+    const key = ayahKey(target.surah, target.ayah);
+    if (!listenCounts[key]) listenCounts[key] = 0;
+    updateListenUI();
+
+    if (audio) {
+      audio.pause();
+      audio.removeEventListener('ended', handleAudioEnded);
+    }
+    audio = new Audio(getAudioUrl(target.surah, target.ayah));
+    audioQueue = 0;
+    audio.addEventListener('ended', handleAudioEnded);
+    syncPlaybackControlState();
+    scheduleMemoLayoutSync();
+    return true;
+  } catch (err) {
+    if (requestId !== loadAyahRequestId) return false;
+    setStatus('Failed', true);
+    expectedWords = [];
+    expectedNormalized = [];
+    expectedTranslit = [];
+    revealIndex = 0;
+    if (els.wordsWrap) {
+      els.wordsWrap.innerHTML = '';
+    }
+    updateExpectedWord();
+    syncPlaybackControlState();
+    const message = err && err.message ? err.message : 'Could not load ayah';
+    showFeedback(message, true);
+    return false;
+  }
+}
+
+function getAudioUrl(surah, ayah) {
+  const safeSurah = String(Number(surah) || 1).padStart(3, '0');
+  const safeAyah = String(Number(ayah) || 1).padStart(3, '0');
+  return `https://verses.quran.com/Alafasy/mp3/${safeSurah}${safeAyah}.mp3`;
+}
+
 function updateAyahSelectors() {
+  if (!els.surahSelect || !els.ayahSelect) {
+    updateSketchNavMeta();
+    return;
+  }
   const surahOpt = els.surahSelect.querySelector(`option[value="${current.surah}"]`);
   if (surahOpt) surahOpt.selected = true;
   buildAyahOptions(current.surah);
@@ -2308,6 +3087,7 @@ function updateAyahSelectors() {
 }
 
 function buildSurahOptions() {
+  if (!els.surahSelect) return;
   els.surahSelect.innerHTML = '';
   surahList.forEach(s => {
     const opt = document.createElement('option');
@@ -2321,7 +3101,8 @@ function buildSurahOptions() {
 }
 
 function buildAyahOptions(surahNum) {
-  const surahInfo = surahList.find(s => s.number === Number(surahNum));
+  if (!els.ayahSelect) return;
+  const surahInfo = surahList.find(s => Number(s.number) === Number(surahNum));
   const ayahCount = surahInfo ? surahInfo.ayahCount : 0;
   els.ayahSelect.innerHTML = '';
   for (let i = 1; i <= ayahCount; i += 1) {
@@ -2342,14 +3123,14 @@ function isLockedAyah(surah, ayah) {
 }
 
 function getNextAyah() {
-  const surahInfo = surahList.find(s => s.number === current.surah);
+  const surahInfo = surahList.find(s => Number(s.number) === Number(current.surah));
   if (!surahInfo) return null;
   if (current.ayah < surahInfo.ayahCount) {
     return { surah: current.surah, ayah: current.ayah + 1 };
   }
-  const nextSurah = surahList.find(s => s.number === current.surah + 1);
+  const nextSurah = surahList.find(s => Number(s.number) === Number(current.surah) + 1);
   if (!nextSurah) return null;
-  return { surah: nextSurah.number, ayah: 1 };
+  return { surah: Number(nextSurah.number), ayah: 1 };
 }
 
 function unlockNextAyah() {
@@ -2484,6 +3265,7 @@ function completeAyah() {
   updateExpectedWord();
   const memorizedSurah = Number(current.surah) || 1;
   const memorizedAyah = Number(current.ayah) || 1;
+  markAyahMemorized(memorizedSurah, memorizedAyah);
   setStoredLastMemorized({
     surah: memorizedSurah,
     ayah: memorizedAyah,
@@ -2646,6 +3428,7 @@ function updateListenCount(delta) {
   listenCounts[key] = Math.max(0, currentCount + change);
   setStoredListenCounts(listenCounts);
   updateListenUI();
+  refreshQuickActionAvailability();
   if (document.body.classList.contains('memo-welcome-mode')) {
     refreshWelcomeDashboard();
   }
@@ -2658,11 +3441,15 @@ function isCurrentAyahLocked() {
 function syncPlaybackControlState() {
   const hasAudioQueue = audioQueue > 0;
   const locked = isCurrentAyahLocked();
-  const pauseIcon = els.pauseBtn?.querySelector('.material-icons-outlined');
-  const paused = Boolean(audio?.paused) && hasAudioQueue;
+  const playIcon = els.playBtn?.querySelector('.material-icons-outlined');
 
   if (els.playBtn) {
-    els.playBtn.disabled = locked || hasAudioQueue || !audio;
+    els.playBtn.disabled = locked || !audio;
+    els.playBtn.classList.toggle('is-active', hasAudioQueue);
+    els.playBtn.setAttribute('aria-label', hasAudioQueue ? 'Stop playback' : 'Play ayah');
+  }
+  if (playIcon) {
+    playIcon.textContent = hasAudioQueue ? 'stop' : 'play_arrow';
   }
   if (els.navSpeakerBtn) {
     els.navSpeakerBtn.disabled = locked || hasAudioQueue || !audio;
@@ -2670,30 +3457,6 @@ function syncPlaybackControlState() {
   if (els.playCount) {
     els.playCount.disabled = locked || hasAudioQueue;
   }
-  if (els.pauseBtn) {
-    els.pauseBtn.disabled = locked || !hasAudioQueue || !audio;
-    els.pauseBtn.classList.toggle('is-active', paused);
-    els.pauseBtn.setAttribute('aria-label', paused ? 'Resume playback' : 'Pause playback');
-  }
-  if (pauseIcon) {
-    pauseIcon.textContent = paused ? 'play_arrow' : 'pause';
-  }
-  if (els.stopPlaybackBtn) {
-    els.stopPlaybackBtn.disabled = !hasAudioQueue || !audio;
-    els.stopPlaybackBtn.classList.toggle('is-active', hasAudioQueue);
-  }
-}
-
-function togglePausePlayback() {
-  if (!audio || audioQueue <= 0 || isCurrentAyahLocked()) return;
-  if (audio.paused) {
-    audio.play().catch(() => {
-      syncPlaybackControlState();
-    });
-  } else {
-    audio.pause();
-  }
-  syncPlaybackControlState();
 }
 
 function stopAudioPlayback() {
@@ -2718,12 +3481,8 @@ function playAudio(times) {
   });
 }
 
-function getMemoTransitionRoot() {
-  return els.main || els.wordsWrap?.closest('.memo-panel') || null;
-}
-
 function animateMemoAyahTransition(direction = 1, phase = 'out') {
-  const root = getMemoTransitionRoot();
+  const root = els.main || els.wordsWrap?.closest('.memo-panel') || null;
   if (!root || typeof root.animate !== 'function') return Promise.resolve();
   const dir = Number(direction) < 0 ? -1 : 1;
   const distance = Math.max(18, Math.min(44, Math.round((window.innerWidth || 360) * 0.06)));
@@ -2740,695 +3499,57 @@ function animateMemoAyahTransition(direction = 1, phase = 'out') {
       ];
   const animation = root.animate(keyframes, {
     duration: phase === 'out' ? 130 : 170,
-    easing: phase === 'out' ? 'cubic-bezier(0.42, 0, 1, 1)' : 'cubic-bezier(0.22, 0.61, 0.36, 1)',
-    fill: 'forwards'
+    easing: phase === 'out' ? 'cubic-bezier(0.4, 0, 1, 1)' : 'cubic-bezier(0.16, 1, 0.3, 1)',
+    fill: 'both'
   });
   return animation.finished
     .catch(() => undefined)
-    .then(() => {
-      animation.cancel();
+    .finally(() => {
+      root.style.transform = '';
+      root.style.opacity = '';
     });
 }
 
-async function navigateMemoAyah(surah, ayah, options = {}) {
-  const nextSurah = Number(surah);
-  const nextAyah = Number(ayah);
-  if (!isValidAyahRef(nextSurah, nextAyah)) return;
-  const animated = options.animated === true;
-  const direction = Number(options.direction) < 0 ? -1 : 1;
-  if (memoAyahNavInFlight) return;
+async function goMemo(route, opts = {}) {
+  const {
+    historyMode = 'replace',
+    animated = false,
+    direction = 1,
+    notify = true
+  } = opts;
 
-  memoAyahNavInFlight = true;
-  const navToken = ++memoAyahNavToken;
-  try {
-    if (animated) {
-      await animateMemoAyahTransition(direction, 'out');
-      if (navToken !== memoAyahNavToken) return;
-    }
-    await loadAyah(nextSurah, nextAyah);
-    if (animated && navToken === memoAyahNavToken) {
-      await animateMemoAyahTransition(direction, 'in');
-    }
-  } finally {
-    if (navToken === memoAyahNavToken) {
-      memoAyahNavInFlight = false;
-    }
-  }
-}
-
-function handleAudioEnded() {
-  if (audioQueue <= 0) {
-    syncPlaybackControlState();
-    return;
-  }
-  updateListenCount(1);
-  audioQueue -= 1;
-  if (audioQueue > 0) {
-    audio.currentTime = 0;
-    audio.play().catch(() => {
-      audioQueue = 0;
-      syncPlaybackControlState();
-    });
-  }
-  syncPlaybackControlState();
-}
-
-async function loadAyah(surah, ayah) {
-  const requestId = ++loadAyahRequestId;
-  stopListening();
-  clearPeekTimer();
-  const nextSurah = Number(surah);
-  const nextAyah = Number(ayah);
-  const target = isValidAyahRef(nextSurah, nextAyah)
-    ? { surah: nextSurah, ayah: nextAyah }
-    : { ...unlocked };
-  current = { ...target };
-  updateAyahSelectors();
-  setStatus('Loading');
-  resetTranscript();
-
-  const locked = isLockedAyah(target.surah, target.ayah);
-  setLockedState(locked);
-
-  try {
-    const { wordBlocks, practiceBlocks } = await fetchAyahContent(target.surah, target.ayah);
-    if (requestId !== loadAyahRequestId) return;
-    if (current.surah !== target.surah || current.ayah !== target.ayah) return;
-
-    const translitWords = extractExpectedTranslit(practiceBlocks);
-    renderWords(wordBlocks, translitWords);
-    renderPractice(practiceBlocks);
-    resetReveals();
-    setStatus('Idle');
-    const key = ayahKey(target.surah, target.ayah);
-    if (!listenCounts[key]) listenCounts[key] = 0;
-    updateListenUI();
-    if (audio) {
-      audio.pause();
-      audio.removeEventListener('ended', handleAudioEnded);
-    }
-    audioQueue = 0;
-    audio = new Audio(getAudioUrl(target.surah, target.ayah));
-    audio.addEventListener('ended', handleAudioEnded);
-    syncPlaybackControlState();
-  } catch (err) {
-    if (requestId !== loadAyahRequestId) return;
-    setStatus('Failed', true);
-    expectedWords = [];
-    expectedNormalized = [];
-    expectedTranslit = [];
-    revealIndex = 0;
-    els.wordsWrap.innerHTML = '';
-    updateExpectedWord();
-    const message = err && err.message ? err.message : 'Could not load ayah';
-    showFeedback(message, true);
-    syncPlaybackControlState();
-  }
-}
-
-function getAudioUrl(surah, ayah) {
-  const s = String(surah).padStart(3, '0');
-  const a = String(ayah).padStart(3, '0');
-  return `https://verses.quran.com/Alafasy/mp3/${s}${a}.mp3`;
-}
-
-function setFromURL() {
-  const params = new URLSearchParams(window.location.search);
-  const surahParam = params.get('surah');
-  const ayahParam = params.get('ayah');
-  if (!surahParam || !ayahParam) return null;
-  const surah = Number(surahParam);
-  const ayah = Number(ayahParam);
-  if (isValidAyahRef(surah, ayah)) return { surah, ayah };
-  return null;
-}
-
-function initWelcomeBrainAnimation() {
-  if (!els.welcomeBrain || welcomeBrainAnimation) return;
-  if (typeof window.lottie === 'undefined') {
-    renderWelcomeBrainFallback();
-    return;
-  }
-
-  const candidates = [
-    new URL('./assets/brain-animation.json', window.location.href).href,
-    '/assets/brain-animation.json',
-    '/utils/assets/brain-animation.json',
-    '/brain-animation.json'
-  ];
-
-  const tryLoad = index => {
-    if (index >= candidates.length) {
-      renderWelcomeBrainFallback();
-      return;
-    }
-    const path = candidates[index];
-    let localAnimation = null;
-    try {
-      localAnimation = window.lottie.loadAnimation({
-        container: els.welcomeBrain,
-        renderer: 'svg',
-        loop: true,
-        autoplay: true,
-        path,
-        rendererSettings: {
-          preserveAspectRatio: 'xMidYMid meet'
-        }
-      });
-    } catch (err) {
-      console.warn('[MEMO] Failed to start brain lottie load', err);
-      tryLoad(index + 1);
-      return;
-    }
-
-    const onReady = () => {
-      welcomeBrainAnimation = localAnimation;
-      localAnimation.removeEventListener?.('data_ready', onReady);
-      localAnimation.removeEventListener?.('data_failed', onFail);
-    };
-    const onFail = () => {
-      localAnimation.removeEventListener?.('data_ready', onReady);
-      localAnimation.removeEventListener?.('data_failed', onFail);
-      localAnimation.destroy?.();
-      tryLoad(index + 1);
-    };
-
-    localAnimation.addEventListener?.('data_ready', onReady);
-    localAnimation.addEventListener?.('data_failed', onFail);
-  };
-
-  try {
-    tryLoad(0);
-  } catch (err) {
-    console.warn('[MEMO] Failed to load brain lottie', err);
-    renderWelcomeBrainFallback();
-  }
-}
-
-async function init() {
-  const appSettings = getStoredAppSettings();
-  applyMemoTheme(appSettings.darkMode === true);
-  unlocked = getStoredProgress();
-  listenCounts = getStoredListenCounts();
-  try {
-    const rawView = localStorage.getItem(STORAGE_VIEW_STATE);
-    if (rawView) {
-      const parsed = JSON.parse(rawView);
-      if (parsed && typeof parsed === 'object') {
-        viewState.meaning = parsed.meaning !== false;
-        viewState.grammar = Boolean(parsed.grammar);
-        viewState.expectedAfterThreeWrong = parsed.expectedAfterThreeWrong !== false;
-      }
-    }
-  } catch {}
-  try {
-    const storedMode = localStorage.getItem(STORAGE_RECITE_MATCH_MODE);
-    reciteMatchMode = storedMode === RECITE_MATCH_MODE.FULL
-      ? RECITE_MATCH_MODE.FULL
-      : RECITE_MATCH_MODE.WORD;
-  } catch {
-    reciteMatchMode = RECITE_MATCH_MODE.WORD;
-  }
-  applyReciteMatchModeUI();
-  applyViewState();
-  surahList = await fetchSurahList();
-  if (!surahList.length) {
-    setStatus('No data', true);
-    els.lockMsg.textContent = 'Unable to load surah list.';
-    return;
-  }
-
-  buildSurahOptions();
-
-  const fromUrl = setFromURL();
-  if (fromUrl && !isLockedAyah(fromUrl.surah, fromUrl.ayah)) {
-    current = fromUrl;
-    openMemorizationWorkspace();
-  } else if (fromUrl && isLockedAyah(fromUrl.surah, fromUrl.ayah)) {
-    current = unlocked;
-    openMemorizationWorkspace();
-  } else {
-    current = unlocked;
-  }
-
-  buildAyahOptions(current.surah);
-  await loadAyah(current.surah, current.ayah);
-  await refreshWelcomeDashboard();
-  if (fromUrl) {
-    notifyParentMemoNavigationReady(current.surah, current.ayah);
-  }
-  bindMemoSwipeNavigation();
-}
-
-function hydrateMemoNavIntoMain() {
-  const memoNavBar = document.getElementById('memoNavBar');
-  const memoNavInner = memoNavBar?.querySelector('.memo-nav-inner');
-  const memoSketchHead = els.menuBtn?.closest('.memo-nav-sketch-head') || memoNavBar?.querySelector('.memo-nav-sketch-head');
-  const memoModeHost = els.navModeHost;
-  if (!memoNavBar || !memoNavInner || !memoSketchHead || !memoModeHost) return;
-  memoNavBar.style.display = 'none';
-
-  const ensureHostStyles = hostDoc => {
-    if (!hostDoc) return;
-    if (hostDoc.getElementById('memoHostNavStyles')) return;
-    const style = hostDoc.createElement('style');
-    style.id = 'memoHostNavStyles';
-    style.textContent = `
-#mainNavbar.memo-host-active {
-  height: auto !important;
-  min-height: 0 !important;
-  display: block !important;
-  padding: calc(var(--safe-top, 0px) + 20px) 0 6px !important;
-}
-#mainNavbar.memo-host-active .navbar-left,
-#mainNavbar.memo-host-active .navbar-center,
-#mainNavbar.memo-host-active .navbar-right,
-#mainNavbar.memo-host-active .dropdowns,
-#mainNavbar.memo-host-active .recite-surah-tabs-wrap,
-#mainNavbar.memo-host-active #gameStatsNav,
-#mainNavbar.memo-host-active #returnToAyah,
-#mainNavbar.memo-host-active #learnSettingsBtn,
-#mainNavbar.memo-host-active #reciteHomeBtn,
-#mainNavbar.memo-host-active #streakDisplay {
-  display: none !important;
-}
-#mainNavbar.memo-host-active #memoHostSketchPanel {
-  width: 100%;
-  margin-left: 0;
-  padding: 0 8px;
-  box-sizing: border-box;
-  display: grid;
-  gap: 6px;
-}
-#mainNavbar.memo-host-active #memoHostSketchPanel .memo-nav-sketch-head {
-  display: grid !important;
-  grid-template-columns: 34px minmax(0, 1fr) auto;
-  gap: 10px;
-  align-items: center;
-}
-#mainNavbar.memo-host-active #memoHostSketchPanel .memo-nav-sketch-meta {
-  display: grid !important;
-  min-width: 0;
-  color: #ffffff;
-}
-#mainNavbar.memo-host-active #memoHostSketchPanel .memo-nav-sketch-surah {
-  font-size: 12px;
-  line-height: 1.1;
-  font-weight: 700;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-#mainNavbar.memo-host-active #memoHostSketchPanel .memo-nav-sketch-ayah {
-  margin-top: 3px;
-  font-size: 22px;
-  line-height: 1;
-  font-weight: 800;
-}
-#mainNavbar.memo-host-active #memoHostSketchPanel .memo-nav-sketch-actions {
-  display: inline-flex !important;
-  align-items: center;
-  gap: 5px;
-}
-#mainNavbar.memo-host-active #memoHostSketchPanel #memoMenuBtn,
-#mainNavbar.memo-host-active #memoHostSketchPanel #memoHomeBtn,
-#mainNavbar.memo-host-active #memoHostSketchPanel #memoNavSpeakerBtn,
-#mainNavbar.memo-host-active #memoHostSketchPanel #memoNavPrevBtn,
-#mainNavbar.memo-host-active #memoHostSketchPanel #memoNavNextBtn {
-  width: 30px;
-  height: 30px;
-  min-width: 30px;
-  border-radius: 0;
-  border: none;
-  background: transparent;
-  color: #ffffff;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  cursor: pointer;
-}
-#mainNavbar.memo-host-active #memoHostSketchPanel #memoMenuBtn .material-icons-outlined,
-#mainNavbar.memo-host-active #memoHostSketchPanel #memoHomeBtn .material-icons-outlined,
-#mainNavbar.memo-host-active #memoHostSketchPanel #memoNavSpeakerBtn .material-icons-outlined,
-#mainNavbar.memo-host-active #memoHostSketchPanel #memoNavPrevBtn .material-icons-outlined,
-#mainNavbar.memo-host-active #memoHostSketchPanel #memoNavNextBtn .material-icons-outlined {
-  font-size: 20px;
-}
-#mainNavbar.memo-host-active #memoHostSketchPanel #memoNavPrevBtn:disabled,
-#mainNavbar.memo-host-active #memoHostSketchPanel #memoNavNextBtn:disabled,
-#mainNavbar.memo-host-active #memoHostSketchPanel #memoNavSpeakerBtn:disabled {
-  opacity: 0.42;
-  cursor: not-allowed;
-}
-#mainNavbar.memo-host-active #memoHostSketchPanel .memo-nav-mode-host {
-  display: block !important;
-}
-#mainNavbar.memo-host-active #memoHostSketchPanel .memo-sketch-mode-row {
-  display: flex !important;
-  margin: 20px 20px 10px 20px;
-  border-radius: 12px;
-  padding: 3px;
-  background: rgba(255, 255, 255, 0.18);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  gap: 6px;
-}
-#mainNavbar.memo-host-active #memoHostSketchPanel .memo-sketch-mode-row .memo-toggle {
-  min-width: 0;
-  flex: 1;
-  border-radius: 10px;
-  padding: 10px 8px;
-  font-size: 15px;
-  font-weight: 700;
-  border: none;
-  color: rgba(255, 255, 255, 0.9);
-  background: transparent;
-}
-#mainNavbar.memo-host-active #memoHostSketchPanel .memo-sketch-mode-row .memo-toggle.is-on {
-  color: #0f7c54;
-  background: #eef7f3;
-}
-#mainNavbar.memo-host-active + #surahProgressWrap {
-  display: none !important;
-}
-@media (max-width: 520px) {
-  #mainNavbar.memo-host-active #memoHostSketchPanel {
-    padding: 0 5px;
-    gap: 5px;
-  }
-  #mainNavbar.memo-host-active #memoHostSketchPanel .memo-nav-sketch-head {
-    grid-template-columns: 32px minmax(0, 1fr) auto;
-    gap: 8px;
-  }
-  #mainNavbar.memo-host-active #memoHostSketchPanel #memoMenuBtn,
-  #mainNavbar.memo-host-active #memoHostSketchPanel #memoHomeBtn,
-  #mainNavbar.memo-host-active #memoHostSketchPanel #memoNavSpeakerBtn,
-  #mainNavbar.memo-host-active #memoHostSketchPanel #memoNavPrevBtn,
-  #mainNavbar.memo-host-active #memoHostSketchPanel #memoNavNextBtn {
-    width: 28px;
-    height: 28px;
-    min-width: 28px;
-  }
-  #mainNavbar.memo-host-active #memoHostSketchPanel .memo-nav-sketch-surah {
-    font-size: 11px;
-  }
-  #mainNavbar.memo-host-active #memoHostSketchPanel .memo-nav-sketch-ayah {
-    font-size: 19px;
-  }
-  #mainNavbar.memo-host-active #memoHostSketchPanel .memo-sketch-mode-row .memo-toggle {
-    font-size: 14px;
-    padding: 9px 7px;
-  }
-}
-`;
-    hostDoc.head?.appendChild(style);
-  };
-
-  const attach = () => {
-    const host = resolveMemoHostNavbar();
-    if (!host) return false;
-    const { hostDoc, mainNavbar } = host;
-    const left = mainNavbar?.querySelector('.navbar-left');
-    const center = mainNavbar?.querySelector('.navbar-center');
-    const right = mainNavbar?.querySelector('.navbar-right');
-    if (!left || !center || !right) return false;
-
-    ensureHostStyles(hostDoc);
-    let panel = hostDoc.getElementById('memoHostSketchPanel');
-    if (!panel) {
-      panel = hostDoc.createElement('div');
-      panel.id = 'memoHostSketchPanel';
-    }
-    if (!mainNavbar.contains(panel)) {
-      mainNavbar.appendChild(panel);
-    }
-    mainNavbar.classList.add('memo-host-active');
-
-    if (!panel.contains(memoSketchHead)) {
-      panel.appendChild(memoSketchHead);
-    }
-    if (!panel.contains(memoModeHost)) {
-      panel.appendChild(memoModeHost);
-    }
-
-    memoHostNavMount = { hostDoc, mainNavbar };
-    document.body.classList.add('memo-host-mounted');
-    memoNavBar.style.display = 'none';
-    document.body.classList.remove('memo-nav-fallback');
+  if (!route || route.view === 'home') {
+    setModeWelcome({ historyMode });
+    if (notify) notifyParentMemoNavigationReady(current.surah, current.ayah);
     return true;
-  };
-
-  if (attach()) return;
-
-  // Retry briefly while host app finishes booting. Show fallback only if never attached.
-  let attempts = 0;
-  const maxAttempts = 40;
-  const retryAttach = () => {
-    if (attach()) return;
-    attempts += 1;
-    if (attempts < maxAttempts) {
-      window.setTimeout(retryAttach, 120);
-      return;
-    }
-    restoreMemoNavFromMain();
-    memoNavBar.style.display = 'block';
-    document.body.classList.add('memo-nav-fallback');
-  };
-  window.setTimeout(retryAttach, 60);
-}
-
-function resolveMemoHostNavbar() {
-  const localNavbar = document.getElementById('mainNavbar');
-  if (localNavbar) {
-    return { hostDoc: document, mainNavbar: localNavbar };
-  }
-  try {
-    if (window.parent && window.parent !== window) {
-      const parentDoc = window.parent.document;
-      const parentNavbar = parentDoc?.getElementById('mainNavbar');
-      if (parentNavbar) {
-        return { hostDoc: parentDoc, mainNavbar: parentNavbar };
-      }
-    }
-  } catch (_) {}
-  return null;
-}
-
-function setHostMainNavbarHidden(hidden) {
-  const host = resolveMemoHostNavbar();
-  if (!host?.mainNavbar) return;
-
-  const { hostDoc, mainNavbar } = host;
-  const progressWrap = hostDoc?.getElementById('surahProgressWrap') || null;
-
-  if (hidden) {
-    if (!memoHostNavbarHiddenState || memoHostNavbarHiddenState.navbar !== mainNavbar) {
-      memoHostNavbarHiddenState = {
-        navbar: mainNavbar,
-        navbarDisplay: mainNavbar.style.display,
-        progress: progressWrap,
-        progressDisplay: progressWrap ? progressWrap.style.display : ''
-      };
-    }
-    mainNavbar.style.display = 'none';
-    if (progressWrap) progressWrap.style.display = 'none';
-    return;
   }
 
-  if (memoHostNavbarHiddenState && memoHostNavbarHiddenState.navbar === mainNavbar) {
-    mainNavbar.style.display = memoHostNavbarHiddenState.navbarDisplay || '';
-    if (memoHostNavbarHiddenState.progress) {
-      memoHostNavbarHiddenState.progress.style.display = memoHostNavbarHiddenState.progressDisplay || '';
-    }
-    memoHostNavbarHiddenState = null;
-    return;
+  const surah = Number(route.surah);
+  const ayah = Number(route.ayah);
+  if (!isValidAyahRef(surah, ayah)) return false;
+
+  if (animated) {
+    await animateMemoAyahTransition(direction, 'out');
   }
 
-  mainNavbar.style.display = '';
-  if (progressWrap) progressWrap.style.display = '';
-}
-
-function restoreMemoNavFromMain() {
-  if (!USE_HOST_MAIN_NAV) {
-    setHostMainNavbarHidden(false);
-    const memoNavBar = document.getElementById('memoNavBar');
-    if (memoNavBar) memoNavBar.style.display = '';
-    document.body.classList.remove('memo-host-mounted');
-    document.body.classList.remove('memo-nav-fallback');
-    return;
+  const ok = await enterMemoAyah(surah, ayah, { historyMode });
+  if (ok && animated) {
+    await animateMemoAyahTransition(direction, 'in');
   }
-
-  const memoNavBar = document.getElementById('memoNavBar');
-  const memoNavInner = memoNavBar?.querySelector('.memo-nav-inner');
-  const memoSketchHead = els.menuBtn?.closest('.memo-nav-sketch-head') || memoNavBar?.querySelector('.memo-nav-sketch-head');
-  const memoModeHost = els.navModeHost;
-
-  if (memoNavInner) {
-    if (memoSketchHead && memoSketchHead.parentElement !== memoNavInner) {
-      memoNavInner.insertBefore(memoSketchHead, memoNavInner.firstChild || null);
-    }
-    if (memoModeHost && memoModeHost.parentElement !== memoNavInner) {
-      memoNavInner.appendChild(memoModeHost);
-    }
-  }
-
-  const host = memoHostNavMount || resolveMemoHostNavbar();
-  if (host?.mainNavbar) {
-    host.mainNavbar.classList.remove('memo-host-active');
-  }
-  const panel = host?.hostDoc?.getElementById('memoHostSketchPanel');
-  if (panel) panel.remove();
-  const hostStyles = host?.hostDoc?.getElementById('memoHostNavStyles');
-  if (hostStyles) hostStyles.remove();
-  memoHostNavMount = null;
-  setHostMainNavbarHidden(false);
-  document.body.classList.remove('memo-host-mounted');
-  if (memoNavBar) memoNavBar.style.display = '';
-  document.body.classList.remove('memo-nav-fallback');
+  if (ok && notify) notifyParentMemoNavigationReady(current.surah, current.ayah);
+  return ok;
 }
 
-// Ensure old host-mounted nav artifacts are removed on script load.
-restoreMemoNavFromMain();
-
-const handleMemoHomeOrExit = e => {
-  restoreMemoNavFromMain();
-  if (isEmbedded) {
-    e.preventDefault();
-    parent.postMessage({ type: 'EXIT_MEMO' }, window.location.origin === 'null' ? '*' : window.location.origin);
-    return;
-  }
-  window.location.href = '/index.html';
-};
-
-const handleMemoMenuOpen = e => {
-  if (e) e.preventDefault();
-  if (document.body.classList.contains('memo-sketch-mode')) {
-    openMemorizationWelcome();
-    return;
-  }
-  setMemoProfileDrawerOpen(true);
-};
-
-const handleMemoDrawerClose = () => {
-  setMemoProfileDrawerOpen(false);
-};
-
-const handleMemoSignOut = async () => {
-  try {
-    await logout();
-  } catch (err) {
-    console.warn('[MEMO] Logout failed', err);
-  } finally {
-    restoreMemoNavFromMain();
-    setMemoProfileDrawerOpen(false);
-    window.location.href = '/index.html';
-  }
-};
-
-if (els.homeBtn) {
-  els.homeBtn.addEventListener('click', handleMemoHomeOrExit);
-}
-
-if (els.menuBtn) {
-  els.menuBtn.addEventListener('click', handleMemoMenuOpen);
-}
-
-if (els.profileDrawerBackdrop) {
-  els.profileDrawerBackdrop.addEventListener('click', handleMemoDrawerClose);
-}
-
-if (els.profileDrawerCloseBtn) {
-  els.profileDrawerCloseBtn.addEventListener('click', handleMemoDrawerClose);
-}
-
-if (els.drawerSignOutBtn) {
-  els.drawerSignOutBtn.addEventListener('click', handleMemoSignOut);
-}
-
-if (els.welcomeStartBtn) {
-  els.welcomeStartBtn.addEventListener('click', () => {
-    openMemorizationWorkspace();
-  });
-}
-
-[
-  els.techniqueListenBtn,
-  els.techniqueReciteBtn,
-  els.techniqueWriteBtn,
-  els.techniqueRepeatBtn
-].filter(Boolean).forEach(btn => {
-  btn.setAttribute('aria-disabled', 'true');
-  btn.addEventListener('click', event => {
-    event.preventDefault();
-  });
-});
-
-els.surahSelect.addEventListener('change', () => {
-  const surah = Number(els.surahSelect.value);
-  if (!Number.isFinite(surah)) return;
-  buildAyahOptions(surah);
-  const firstAyah = Number(els.ayahSelect.value) || 1;
-  loadAyah(surah, firstAyah);
-});
-
-els.ayahSelect.addEventListener('change', () => {
-  const ayah = Number(els.ayahSelect.value);
-  if (!Number.isFinite(ayah)) return;
-  loadAyah(Number(els.surahSelect.value), ayah);
-});
-
-els.playBtn.addEventListener('click', () => {
-  const times = Number(els.playCount.value || 1);
-  playAudio(times);
-});
-
-if (els.pauseBtn) {
-  els.pauseBtn.addEventListener('click', () => {
-    togglePausePlayback();
-  });
-}
-
-if (els.stopPlaybackBtn) {
-  els.stopPlaybackBtn.addEventListener('click', () => {
-    stopAudioPlayback();
-  });
-}
-
-if (els.navSpeakerBtn) {
-  els.navSpeakerBtn.addEventListener('click', () => {
-    playAudio(1);
-  });
-}
-
-if (els.navPrevBtn) {
-  els.navPrevBtn.addEventListener('click', () => {
-    const prev = getAdjacentAyah(-1);
-    if (!prev) return;
-    buildAyahOptions(prev.surah);
-    navigateMemoAyah(prev.surah, prev.ayah, { animated: true, direction: -1 });
-  });
-}
-
-if (els.navNextBtn) {
-  els.navNextBtn.addEventListener('click', () => {
-    const next = getAdjacentAyah(1);
-    if (!next) return;
-    buildAyahOptions(next.surah);
-    navigateMemoAyah(next.surah, next.ayah, { animated: true, direction: 1 });
-  });
-}
-
-if (els.reciteWordModeBtn) {
-  els.reciteWordModeBtn.addEventListener('click', () => {
-    setReciteMatchMode(RECITE_MATCH_MODE.WORD);
-  });
+function applyMemoRouteFromUrlNavigation() {
+  goMemo(getMemoRouteFromUrl(), { historyMode: 'none', notify: false });
 }
 
 function notifyParentMemoNavigationReady(surah, ayah) {
+  const view = document.body.classList.contains('memo-sketch-mode') ? 'ayah' : 'home';
   try {
     if (window.parent && window.parent !== window) {
       window.parent.postMessage(
-        { type: 'MEMO_NAVIGATION_READY', surah, ayah },
+        { type: 'MEMO_NAVIGATION_READY', surah, ayah, view },
         window.location.origin === 'null' ? '*' : window.location.origin
       );
     }
@@ -3512,7 +3633,7 @@ function shouldIgnoreMemoSwipeTarget(target) {
 }
 
 function bindMemoSwipeNavigation() {
-  const swipeRoot = els.main || document.body;
+  const swipeRoot = document.body;
   if (!swipeRoot || swipeRoot.dataset.memoSwipeBound === '1') return;
   swipeRoot.dataset.memoSwipeBound = '1';
 
@@ -3537,8 +3658,8 @@ function bindMemoSwipeNavigation() {
     const next = getAdjacentAyah(dx < 0 ? 1 : -1);
     if (!next) return;
     memoSwipeLockUntil = Date.now() + 280;
-    buildAyahOptions(next.surah);
-    navigateMemoAyah(next.surah, next.ayah, {
+    goMemo({ view: 'ayah', surah: next.surah, ayah: next.ayah }, {
+      historyMode: 'push',
       animated: true,
       direction: dx < 0 ? 1 : -1
     });
@@ -3575,6 +3696,212 @@ function bindMemoSwipeNavigation() {
   }, { passive: true });
 }
 
+function getMemoResumeTarget() {
+  const lastProgress = getStoredLastProgress();
+  if (isValidStoredAyahRef(lastProgress)) {
+    return {
+      surah: Number(lastProgress.surah),
+      ayah: Number(lastProgress.ayah)
+    };
+  }
+  if (isValidStoredAyahRef(unlocked)) {
+    return {
+      surah: Number(unlocked.surah),
+      ayah: Number(unlocked.ayah)
+    };
+  }
+  return { ...FIRST_MEMO_AYAH };
+}
+
+function bindMemoUiEvents() {
+  if (memoUiEventsBound) return;
+  memoUiEventsBound = true;
+
+  if (els.homeBtn) {
+    els.homeBtn.addEventListener('click', event => {
+      event.preventDefault();
+      void goMemo({ view: 'home' }, { historyMode: 'push', notify: true });
+    });
+  }
+
+  if (els.menuBtn) {
+    els.menuBtn.addEventListener('click', event => {
+      event.preventDefault();
+      if (document.body.classList.contains('memo-sketch-mode')) {
+        void goMemo({ view: 'home' }, { historyMode: 'push', notify: true });
+        return;
+      }
+      setMemoProfileDrawerOpen(true);
+    });
+  }
+
+  if (els.profileDrawerBackdrop) {
+    els.profileDrawerBackdrop.addEventListener('click', () => {
+      setMemoProfileDrawerOpen(false);
+    });
+  }
+
+  if (els.profileDrawerCloseBtn) {
+    els.profileDrawerCloseBtn.addEventListener('click', () => {
+      setMemoProfileDrawerOpen(false);
+    });
+  }
+
+  if (els.drawerSignOutBtn) {
+    els.drawerSignOutBtn.addEventListener('click', async () => {
+      try {
+        await logout();
+      } catch (err) {
+        console.warn('[MEMO] Logout failed', err);
+      } finally {
+        setMemoProfileDrawerOpen(false);
+        void goMemo({ view: 'home' }, { historyMode: 'replace', notify: true });
+      }
+    });
+  }
+
+  if (els.welcomeStartBtn) {
+    els.welcomeStartBtn.addEventListener('click', async () => {
+      const target = getMemoResumeTarget();
+      await goMemo(
+        { view: 'ayah', surah: target.surah, ayah: target.ayah },
+        { historyMode: 'push', notify: true }
+      );
+    });
+  }
+
+  if (els.techniquePracticeBtn) {
+    els.techniquePracticeBtn.addEventListener('click', () => {
+      openMemoPracticeView();
+    });
+  }
+
+  if (els.techniqueSurahListBtn) {
+    els.techniqueSurahListBtn.addEventListener('click', () => {
+      openMemoSurahListView();
+    });
+  }
+
+  if (els.techniqueReciteBtn) {
+    els.techniqueReciteBtn.addEventListener('click', () => {
+      const memorizedRefs = getMemorizedAyahRefs();
+      const canUseRandomAyah = memorizedRefs.length > 0 && hasMemorizedFirstNAyahs(RANDOM_AYAH_MIN_MEMORIZED);
+      if (!canUseRandomAyah) {
+        showMemoToast(`Memorize the first ${RANDOM_AYAH_MIN_MEMORIZED} ayahs to enable this.`);
+        return;
+      }
+      const target = pickRandomAyahRef(memorizedRefs);
+      if (!target) {
+        showMemoToast('No memorized ayah available yet.');
+        return;
+      }
+      void goMemo({ view: 'ayah', surah: target.surah, ayah: target.ayah }, { historyMode: 'push' });
+    });
+  }
+
+  if (els.techniqueRepeatBtn) {
+    els.techniqueRepeatBtn.addEventListener('click', () => {
+      const memorizedRefs = getMemorizedAyahRefs();
+      if (memorizedRefs.length < REVIEW_LAST5_MIN_MEMORIZED) {
+        showMemoToast(`Memorize at least ${REVIEW_LAST5_MIN_MEMORIZED} ayahs to enable this.`);
+        return;
+      }
+      const reviewPool = memorizedRefs.slice(-REVIEW_LAST5_MIN_MEMORIZED);
+      const target = pickRandomAyahRef(reviewPool) || reviewPool[reviewPool.length - 1];
+      if (!target) {
+        showMemoToast('No review ayah available yet.');
+        return;
+      }
+      void goMemo({ view: 'ayah', surah: target.surah, ayah: target.ayah }, { historyMode: 'push' });
+    });
+  }
+
+  if (els.externalCloseBtn) {
+    els.externalCloseBtn.addEventListener('click', () => {
+      closeMemoExternalView();
+    });
+  }
+
+  if (els.surahSelect) {
+    els.surahSelect.addEventListener('change', () => {
+      const surah = Number(els.surahSelect.value);
+      if (!Number.isFinite(surah)) return;
+      buildAyahOptions(surah);
+      const ayah = Number(els.ayahSelect?.value) || 1;
+      void goMemo({ view: 'ayah', surah, ayah }, { historyMode: 'push' });
+    });
+  }
+
+  if (els.ayahSelect) {
+    els.ayahSelect.addEventListener('change', () => {
+      const surah = Number(els.surahSelect?.value) || Number(current?.surah) || 1;
+      const ayah = Number(els.ayahSelect.value);
+      if (!Number.isFinite(ayah)) return;
+      void goMemo({ view: 'ayah', surah, ayah }, { historyMode: 'push' });
+    });
+  }
+}
+
+async function init() {
+  normalizeEmbeddedRouteParam();
+
+  const appSettings = getStoredAppSettings();
+  applyMemoTheme(appSettings.darkMode === true);
+  applyMemoTypography(appSettings);
+
+  unlocked = getStoredProgress();
+  listenCounts = getStoredListenCounts();
+  memoMemorizedAyahSet = getStoredMemorizedAyahSet();
+  mergeMemorizedAyahsFromSavedHistory();
+
+  try {
+    const rawView = localStorage.getItem(STORAGE_VIEW_STATE);
+    if (rawView) {
+      const parsed = JSON.parse(rawView);
+      if (parsed && typeof parsed === 'object') {
+        viewState.meaning = parsed.meaning !== false;
+        viewState.grammar = Boolean(parsed.grammar);
+        viewState.expectedAfterThreeWrong = parsed.expectedAfterThreeWrong !== false;
+      }
+    }
+  } catch {}
+
+  try {
+    const storedMode = localStorage.getItem(STORAGE_RECITE_MATCH_MODE);
+    reciteMatchMode = storedMode === RECITE_MATCH_MODE.FULL
+      ? RECITE_MATCH_MODE.FULL
+      : RECITE_MATCH_MODE.WORD;
+  } catch {
+    reciteMatchMode = RECITE_MATCH_MODE.WORD;
+  }
+
+  applyReciteMatchModeUI();
+  applyViewState();
+  bindMemoUiEvents();
+
+  surahList = await fetchSurahList();
+  if (!Array.isArray(surahList) || !surahList.length) {
+    setStatus('No data', true);
+    if (els.welcomeStartBtn) {
+      els.welcomeStartBtn.disabled = true;
+    }
+    refreshQuickActionAvailability();
+    scheduleMemoLayoutSync();
+    return;
+  }
+
+  current = getMemoResumeTarget();
+  buildSurahOptions();
+  buildAyahOptions(current.surah);
+  updateAyahSelectors();
+  refreshQuickActionAvailability();
+
+  const initialRoute = getMemoRouteFromUrl();
+  await goMemo(initialRoute, { historyMode: 'replace', notify: true });
+  await refreshWelcomeDashboard();
+  bindMemoSwipeNavigation();
+  scheduleMemoLayoutSync();
+}
 function enableNativeInteractionGuard() {
   if (!isNativeContainer) return;
 
@@ -3590,9 +3917,48 @@ function enableNativeInteractionGuard() {
   document.addEventListener('selectstart', blockIfNotEditable, { capture: true });
 }
 
+if (els.reciteWordModeBtn) {
+  els.reciteWordModeBtn.addEventListener('click', () => {
+    setReciteMatchMode(RECITE_MATCH_MODE.WORD);
+  });
+}
+
 if (els.reciteFullModeBtn) {
   els.reciteFullModeBtn.addEventListener('click', () => {
     setReciteMatchMode(RECITE_MATCH_MODE.FULL);
+  });
+}
+
+if (els.playBtn) {
+  els.playBtn.addEventListener('click', () => {
+    if (audioQueue > 0) {
+      stopAudioPlayback();
+      return;
+    }
+    const times = Number(els.playCount?.value || 1);
+    playAudio(times);
+  });
+}
+
+if (els.navSpeakerBtn) {
+  els.navSpeakerBtn.addEventListener('click', () => {
+    playAudio(1);
+  });
+}
+
+if (els.navPrevBtn) {
+  els.navPrevBtn.addEventListener('click', () => {
+    const prev = getAdjacentAyah(-1);
+    if (!prev) return;
+    goMemo({ view: 'ayah', surah: prev.surah, ayah: prev.ayah }, { historyMode: 'push', animated: true, direction: -1 });
+  });
+}
+
+if (els.navNextBtn) {
+  els.navNextBtn.addEventListener('click', () => {
+    const next = getAdjacentAyah(1);
+    if (!next) return;
+    goMemo({ view: 'ayah', surah: next.surah, ayah: next.ayah }, { historyMode: 'push', animated: true, direction: 1 });
   });
 }
 
@@ -3614,12 +3980,8 @@ els.nextBtn.addEventListener('click', () => {
   showModal(false);
   const next = getNextAyah();
   if (next) {
-    loadAyah(next.surah, next.ayah);
+    goMemo({ view: 'ayah', surah: next.surah, ayah: next.ayah }, { historyMode: 'push' });
   }
-});
-
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) stopListening();
 });
 
 document.addEventListener('keydown', event => {
@@ -3632,9 +3994,6 @@ window.addEventListener('pagehide', () => {
   restoreMemoNavFromMain();
 });
 
-window.addEventListener('beforeunload', () => {
-  restoreMemoNavFromMain();
-});
 
 if (els.toggleMeaning) {
   els.toggleMeaning.addEventListener('click', () => {
@@ -3677,41 +4036,64 @@ if (els.practiceToggle) {
   });
 }
 
-applyViewState();
 updateLearnNavLink();
-const initialAppSettings = getStoredAppSettings();
-applyMemoTheme(initialAppSettings.darkMode === true);
-applyMemoTypography(initialAppSettings);
 if (isEmbedded) {
   document.body.classList.add('embedded');
 }
-initWelcomeBrainAnimation();
-if (els.welcome && !els.welcome.classList.contains('is-hidden')) {
-  document.body.classList.add('memo-welcome-mode');
-  syncWelcomeViewportLock();
-  enforceWelcomeLayoutCentering();
+
+if (els.main && !els.main.classList.contains('is-hidden')) {
+  setMemoMode('sketch');
 } else {
-  syncWelcomeViewportLock();
+  setMemoMode('welcome');
 }
 syncMemoMenuButtonMode();
-window.addEventListener('resize', enforceWelcomeLayoutCentering);
-window.addEventListener('resize', syncMemoBottomNavOffset);
-window.addEventListener('pageshow', () => {
-  enforceWelcomeLayoutCentering();
-  syncMemoBottomNavOffset();
-});
+syncMemoSketchTopNavLayout();
+scheduleMemoLayoutSync();
+window.addEventListener('resize', scheduleMemoLayoutSync);
+window.addEventListener('pageshow', scheduleMemoLayoutSync);
 document.addEventListener('visibilitychange', () => {
-  if (!document.hidden) {
-    enforceWelcomeLayoutCentering();
-    syncMemoBottomNavOffset();
+  if (document.hidden) {
+    stopListening();
+    return;
+  }
+  scheduleMemoLayoutSync();
+});
+window.addEventListener('popstate', () => {
+  if (memoApplyingPopState) return;
+  memoApplyingPopState = true;
+  try {
+    applyMemoRouteFromUrlNavigation();
+  } finally {
+    memoApplyingPopState = false;
   }
 });
 enableNativeInteractionGuard();
 bindBottomNavSystemBarColor();
 window.addEventListener('message', event => {
-  if (event?.source && event.source !== window.parent) return;
+  const source = event?.source || null;
+  const fromParent = Boolean(source && source === window.parent);
+  const fromExternalFrame = Boolean(source && source === els.externalFrame?.contentWindow);
+  if (source && !fromParent && !fromExternalFrame) return;
+
   const data = event?.data;
   if (!data || typeof data !== 'object') return;
+
+  if (data.type === 'SURAH_LIST_ACTION' && fromExternalFrame) {
+    handleMemoNestedSurahListAction(data);
+    return;
+  }
+
+  if (data.type === 'MEMO_PRACTICE_GO_HOME' && fromExternalFrame) {
+    closeMemoExternalView();
+    goMemo({ view: 'home' }, { historyMode: 'replace', notify: true });
+    return;
+  }
+
+  if (data.type === 'MEMO_PRACTICE_FINISH' && fromExternalFrame) {
+    showMemoToast('Practice finished.');
+    return;
+  }
+
   if (data.type === 'APPLY_THEME') {
     applyMemoTheme(data.darkMode === true);
     return;
@@ -3720,24 +4102,34 @@ window.addEventListener('message', event => {
     applyMemoTypography(data.settings || {});
     return;
   }
+  if (data.type === 'OPEN_MEMO_SETTINGS') {
+    if (!document.body.classList.contains('memo-sketch-mode')) return;
+    if (!els.reciteSettingsPanel) return;
+    els.reciteSettingsPanel.classList.toggle('is-hidden');
+    scheduleMemoLayoutSync();
+    return;
+  }
   if (data.type === 'MEMO_HOST_DEACTIVATE') {
+    if (!USE_HOST_MAIN_NAV) return;
     memoHostActive = false;
     setMemoProfileDrawerOpen(false);
     setHostMainNavbarHidden(false);
     restoreMemoNavFromMain();
-    syncMemoBottomNavOffset();
+    scheduleMemoLayoutSync();
     return;
   }
   if (data.type === 'MEMO_HOST_ACTIVATE') {
-    memoHostActive = true;
-    if (document.body.classList.contains('memo-sketch-mode')) {
-      openMemorizationWorkspace();
-    } else {
+    if (USE_HOST_MAIN_NAV) {
+      memoHostActive = true;
       setHostMainNavbarHidden(false);
-      restoreMemoNavFromMain();
-      syncMemoMenuButtonMode();
-      syncMemoBottomNavOffset();
+      scheduleMemoLayoutSync();
     }
+    notifyParentMemoNavigationReady(current.surah, current.ayah);
+    return;
+  }
+
+  if (data.type === 'NAVIGATE_MEMO_HOME') {
+    goMemo({ view: 'home' }, { historyMode: 'none', notify: true });
     return;
   }
 
@@ -3745,16 +4137,7 @@ window.addEventListener('message', event => {
     const surah = Number(data.surah);
     const ayah = Number(data.ayah);
     if (!isValidAyahRef(surah, ayah)) return;
-    openMemorizationWorkspace();
-    if (current.surah === surah && current.ayah === ayah) {
-      notifyParentMemoNavigationReady(surah, ayah);
-      return;
-    }
-    current = { surah, ayah };
-    buildAyahOptions(surah);
-    loadAyah(surah, ayah).finally(() => {
-      notifyParentMemoNavigationReady(surah, ayah);
-    });
+    goMemo({ view: 'ayah', surah, ayah }, { historyMode: 'none' });
   }
 });
 onAuthChange(user => {
@@ -3764,10 +4147,12 @@ onAuthChange(user => {
     hydrateMemorizationFromDb();
   }
 });
-syncMemoBottomNavOffset();
-init();
-
-
-
-
+init().catch(err => {
+  console.error('[MEMO] Init failed', err);
+  setStatus('Failed', true);
+  if (els.welcomeStartBtn) {
+    els.welcomeStartBtn.disabled = true;
+  }
+  showMemoToast('Memorization failed to initialize.');
+});
 
