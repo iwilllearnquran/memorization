@@ -8,6 +8,7 @@
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700&family=Material+Symbols+Outlined"
     rel="stylesheet"
   >
+    <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
   <style>
     :root {
       --bg-base: #0b536b;
@@ -114,11 +115,18 @@
       background: linear-gradient(180deg, rgba(52, 136, 161, 0.72) 0%, rgba(40, 114, 138, 0.74) 100%);
     }
 
-    .top-nav-btn .material-symbols-outlined {
-      font-size: 24px;
-      line-height: 1;
-      color: #dbeeff;
-      font-variation-settings: 'FILL' 1, 'wght' 450, 'GRAD' 0, 'opsz' 24;
+    .top-nav-home-lottie {
+      width: 24px;
+      height: 24px;
+      display: block;
+      pointer-events: none;
+      filter: brightness(0) invert(1);
+    }
+
+
+    .top-nav-home-lottie svg {
+      width: 100% !important;
+      height: 100% !important;
     }
 
     .head {
@@ -370,7 +378,7 @@
     <section class="top">
       <div class="top-nav">
         <a class="top-nav-btn" href="index.html" aria-label="Go to home">
-          <span class="material-symbols-outlined" aria-hidden="true">cottage</span>
+          <div id="surahListHomeLottie" class="top-nav-home-lottie" aria-hidden="true"></div>
         </a>
       </div>
       <div class="head">
@@ -398,6 +406,25 @@
   <script type="module">
     const SORT_PREF_KEY = 'qq_surah_list_sort_v1';
     const VALID_SORT_VALUES = new Set(['number', 'name', 'short', 'long']);
+    const HOME_LOTTIE_PATH = '/utils/assets/icons8-home.json';
+
+    function animateHomeIconOnce() {
+      const container = document.getElementById('surahListHomeLottie');
+      if (!container || typeof window.lottie?.loadAnimation !== 'function') return;
+      try {
+        const animation = window.lottie.loadAnimation({
+          container,
+          renderer: 'svg',
+          loop: false,
+          autoplay: false,
+          path: HOME_LOTTIE_PATH
+        });
+        animation.stop();
+        animation.goToAndPlay(0, true);
+      } catch {
+        // no-op
+      }
+    }
 
     const ACTIONS = [
       { key: 'listen', label: 'Listen', icon: 'headset', className: 'action-listen' },
@@ -437,17 +464,35 @@
     const sortEl = document.getElementById('sortSelect');
 
     const normalize = value => String(value || '').trim().toLowerCase();
+    const isEmbeddedInHost = window.parent && window.parent !== window;
 
     function buildLaunchUrl(surah, action) {
+      const targetSurah = Number(surah) || 1;
       const next = new URL('./index.html', window.location.href);
-      next.searchParams.set('surah', String(surah));
+      next.searchParams.set('surah', String(targetSurah));
       next.searchParams.set('ayah', '1');
       next.searchParams.set('action', action);
       return next.toString();
     }
 
     function launchAction(surah, action) {
-      window.location.href = buildLaunchUrl(surah, action);
+      const targetSurah = Number(surah) || 1;
+      const targetAction = String(action || 'learn').trim().toLowerCase() || 'learn';
+
+      if (isEmbeddedInHost) {
+        window.parent.postMessage(
+          {
+            type: 'SURAH_LIST_ACTION',
+            action: targetAction,
+            surah: targetSurah,
+            ayah: 1
+          },
+          '*'
+        );
+        return;
+      }
+
+      window.location.href = buildLaunchUrl(targetSurah, targetAction);
     }
 
     function getVisibleSurahs() {
@@ -594,6 +639,7 @@
     }
 
     async function init() {
+      animateHomeIconOnce();
       const preloaded = readPreloadedSurahs();
       const surahs = preloaded.length ? preloaded : await fetchSurahsFallback();
       state.surahs = Array.isArray(surahs) ? surahs : [];
@@ -622,3 +668,10 @@
   </script>
 </body>
 </html>
+
+
+
+
+
+
+

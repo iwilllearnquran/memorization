@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Quran Word Practice</title>
+  <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg0: #f3fbf8;
+      --bg1: #e5f3ee;
+      --card: #ffffff;
+      --ink: #0b2b22;
+      --muted: #5f7970;
+      --brand: #0f766e;
+      --brand-strong: #0b5d57;
+      --stroke: rgba(10, 40, 30, 0.12);
+      --shadow: 0 10px 28px rgba(10, 40, 30, 0.12);
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      height: 100%;
+      font-family: 'Manrope', 'Segoe UI', sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(860px 460px at 8% -8%, rgba(136, 221, 194, 0.22), transparent 62%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+    }
+
+    .shell {
+      min-height: 100dvh;
+      width: 100%;
+      padding: calc(var(--safe-top) + 12px) 12px calc(var(--safe-bottom) + 14px);
+      display: grid;
+      align-content: start;
+      gap: 10px;
+    }
+
+    .card {
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.9));
+      box-shadow: var(--shadow);
+      padding: 12px;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 900;
+      line-height: 1.15;
+    }
+
+    .sub {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .word-card {
+      text-align: center;
+      padding: 14px 12px;
+      background: rgba(240, 252, 248, 0.86);
+      border-radius: 16px;
+      border: 1px solid rgba(10, 40, 30, 0.08);
+    }
+
+    .word-label {
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 800;
+    }
+
+    .word {
+      margin: 8px 0 0;
+      font-family: 'El Messiri', serif;
+      font-size: clamp(34px, 12vw, 52px);
+      line-height: 1.2;
+      direction: rtl;
+      min-height: 58px;
+    }
+
+    .translit {
+      margin: 2px 0 0;
+      color: #1a665f;
+      font-size: 13px;
+      font-weight: 700;
+      min-height: 18px;
+    }
+
+    .heard {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      min-height: 17px;
+    }
+
+    .word-meaning {
+      margin: 10px 0 0;
+      min-height: 42px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #0f4f47;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.35;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.18s ease;
+    }
+
+    .word-meaning.is-visible {
+      visibility: visible;
+      opacity: 1;
+      border-color: rgba(15, 118, 110, 0.22);
+      background: rgba(15, 118, 110, 0.08);
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid rgba(10, 40, 30, 0.12);
+      background: rgba(255, 255, 255, 0.82);
+      color: var(--ink);
+      min-height: 34px;
+    }
+
+    .status.ok {
+      background: rgba(15, 118, 110, 0.14);
+      border-color: rgba(15, 118, 110, 0.28);
+      color: var(--brand-strong);
+    }
+
+    .status.warn {
+      background: rgba(245, 158, 11, 0.14);
+      border-color: rgba(217, 119, 6, 0.24);
+      color: #8a5a00;
+    }
+
+    .status.err {
+      background: rgba(239, 68, 68, 0.14);
+      border-color: rgba(220, 38, 38, 0.24);
+      color: #a52727;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .stat {
+      border-radius: 12px;
+      border: 1px solid var(--stroke);
+      background: #fff;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 22px;
+      font-weight: 950;
+      line-height: 1;
+    }
+
+    .stat span {
+      margin-top: 3px;
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 12px;
+      min-height: 40px;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: linear-gradient(180deg, #18a094, #0f766e);
+      box-shadow: 0 8px 18px rgba(15, 118, 110, 0.2);
+    }
+
+    .btn-secondary {
+      color: var(--ink);
+      border: 1px solid var(--stroke);
+      background: #fff;
+    }
+
+    .next-row {
+      margin-top: 10px;
+    }
+
+    .btn-next {
+      width: 100%;
+    }
+
+    .footer-actions {
+      display: grid;
+      gap: 8px;
+    }
+
+    .btn-finish {
+      color: #fff;
+      background: linear-gradient(180deg, #0f766e, #0b5d57);
+    }
+
+    .btn-home {
+      color: var(--brand-strong);
+      border: 1px solid rgba(15, 118, 110, 0.24);
+      background: rgba(255, 255, 255, 0.9);
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="card">
+      <h1 class="title">Practice Quran words</h1>
+      <p class="sub"><em>Selected words from the Quran vocabulary. Tap Start listening to practise pronunciation.</em></p>
+    </section>
+
+    <section class="card word-card">
+      
+      <div id="practiceWord" class="word" dir="rtl" lang="ar">--</div>
+      <div id="practiceTranslit" class="translit">--</div>
+      <div id="practiceHeard" class="heard">Heard: --</div>
+      <p id="practiceMeaning" class="word-meaning" aria-live="polite">Meaning</p>
+    </section>
+
+    <section class="card">
+      <div id="practiceStatus" class="status">Loading words...</div>
+      <div class="stats">
+        <div class="stat">
+          <strong id="practiceSolved">0</strong>
+          <span>Words completed</span>
+        </div>
+        <div class="stat">
+          <strong id="practiceSeen">0</strong>
+          <span>Words shown</span>
+        </div>
+      </div>
+      <div class="controls">
+        <button id="practiceListenBtn" class="btn btn-primary" type="button" disabled>Start listening</button>
+        <button id="practiceSkipBtn" class="btn btn-secondary" type="button" disabled>Skip word</button>
+      </div>
+      <div class="next-row">
+        <button id="practiceNextBtn" class="btn btn-primary btn-next" type="button" disabled>Next word</button>
+      </div>
+    </section>
+
+    <section class="card footer-actions">
+      <button id="practiceFinishBtn" class="btn btn-finish" type="button">Finish</button>
+      <button id="practiceHomeBtn" class="btn btn-home" type="button">Go Home</button>
+    </section>
+  </main>
+
+  <script>
+    const WORD_DATA_URL = './generated/memo-practice-words.json';
+    const WORD_DATA_CACHE_KEY = 'memo_practice_word_dataset_v2';
+    const WORD_DATA_CACHE_TS_KEY = 'memo_practice_word_dataset_ts_v2';
+    const WORD_DATA_CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+
+    const els = {
+      word: document.getElementById('practiceWord'),
+      translit: document.getElementById('practiceTranslit'),
+      heard: document.getElementById('practiceHeard'),
+      status: document.getElementById('practiceStatus'),
+      meaning: document.getElementById('practiceMeaning'),
+      solved: document.getElementById('practiceSolved'),
+      seen: document.getElementById('practiceSeen'),
+      listenBtn: document.getElementById('practiceListenBtn'),
+      skipBtn: document.getElementById('practiceSkipBtn'),
+      nextBtn: document.getElementById('practiceNextBtn'),
+      finishBtn: document.getElementById('practiceFinishBtn'),
+      homeBtn: document.getElementById('practiceHomeBtn')
+    };
+
+    let recognition = null;
+    let listening = false;
+    let finished = false;
+    let solvedCount = 0;
+    let seenCount = 0;
+    let currentWord = null;
+    let wordPool = [];
+    let wordOrder = [];
+    let wordOrderIndex = 0;
+    let advanceTimer = 0;
+    let restartTimer = 0;
+    let currentWordSolved = false;
+
+    function normalizeArabic(text) {
+      return String(text || '')
+        .toLowerCase()
+        .replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g, '')
+        .replace(/[\u0640]/g, '')
+        .replace(/[\s\u200f\u200e]/g, '')
+        .replace(/[\u061F\u060C\u06D4.,!?;:'"()\-]/g, '')
+        .trim();
+    }
+
+    function levenshtein(a, b) {
+      if (a === b) return 0;
+      if (!a.length) return b.length;
+      if (!b.length) return a.length;
+      const prev = Array.from({ length: b.length + 1 }, (_, i) => i);
+      for (let i = 0; i < a.length; i += 1) {
+        let left = i + 1;
+        let diag = i;
+        for (let j = 0; j < b.length; j += 1) {
+          const up = prev[j + 1];
+          const cost = a[i] === b[j] ? 0 : 1;
+          const val = Math.min(up + 1, left + 1, diag + cost);
+          diag = up;
+          prev[j + 1] = val;
+          left = val;
+        }
+        prev[0] = i + 1;
+      }
+      return prev[b.length];
+    }
+
+    function matchesWord(transcript, targetWord) {
+      const spoken = normalizeArabic(transcript);
+      const target = normalizeArabic(targetWord);
+      if (!spoken || !target) return false;
+      if (spoken === target) return true;
+      if (spoken.includes(target) || target.includes(spoken)) return true;
+      const tolerance = Math.max(1, Math.floor(target.length * 0.2));
+      return levenshtein(spoken, target) <= tolerance;
+    }
+
+    function setStatus(text, tone = 'idle') {
+      els.status.textContent = text;
+      els.status.classList.remove('ok', 'warn', 'err');
+      if (tone === 'ok') els.status.classList.add('ok');
+      if (tone === 'warn') els.status.classList.add('warn');
+      if (tone === 'err') els.status.classList.add('err');
+    }
+
+    function updateCounters() {
+      els.solved.textContent = String(solvedCount);
+      els.seen.textContent = String(seenCount);
+    }
+
+    function setControlsEnabled(enabled) {
+      const ready = Boolean(enabled);
+      els.listenBtn.disabled = !ready;
+      els.skipBtn.disabled = !ready;
+    }
+
+    function clearAdvanceTimer() {
+      if (!advanceTimer) return;
+      window.clearTimeout(advanceTimer);
+      advanceTimer = 0;
+    }
+
+    function clearRecognitionRestartTimer() {
+      if (!restartTimer) return;
+      window.clearTimeout(restartTimer);
+      restartTimer = 0;
+    }
+
+    function queueRecognitionRestart(delay = 180) {
+      clearRecognitionRestartTimer();
+      restartTimer = window.setTimeout(() => {
+        restartTimer = 0;
+        if (!listening || finished || currentWordSolved || !recognition) return;
+        try {
+          recognition.start();
+        } catch (_) {
+          setStatus('Microphone is reconnecting...', 'warn');
+          queueRecognitionRestart(260);
+        }
+      }, delay);
+    }
+
+    function hideReveal() {
+      if (!els.meaning) return;
+      els.meaning.textContent = 'Meaning';
+      els.meaning.classList.remove('is-visible');
+    }
+
+    function showReveal(entry) {
+      if (!entry || !els.meaning) return;
+      els.meaning.textContent = entry.meaning || 'Meaning not available';
+      els.meaning.classList.add('is-visible');
+    }
+
+    function readCachedWords() {
+      try {
+        const ts = Number(localStorage.getItem(WORD_DATA_CACHE_TS_KEY) || 0);
+        if (!ts || Date.now() - ts > WORD_DATA_CACHE_TTL_MS) return [];
+        const raw = localStorage.getItem(WORD_DATA_CACHE_KEY);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function writeCachedWords(words) {
+      try {
+        localStorage.setItem(WORD_DATA_CACHE_KEY, JSON.stringify(words));
+        localStorage.setItem(WORD_DATA_CACHE_TS_KEY, String(Date.now()));
+      } catch (_) {}
+    }
+
+    function sanitizeWordRecord(record) {
+      if (!record || typeof record !== 'object') return null;
+      const arabic = String(record.arabic || '').trim();
+      const transliteration = String(record.transliteration || '').trim();
+      const meaning = String(record.meaning || '').trim();
+      const occurrences = Math.max(0, Number(record.occurrences) || 0);
+      if (!arabic) return null;
+      if (!normalizeArabic(arabic)) return null;
+      return {
+        arabic,
+        transliteration,
+        meaning,
+        occurrences
+      };
+    }
+
+    function parseCorpusPayload(payload) {
+      const list = Array.isArray(payload)
+        ? payload
+        : Array.isArray(payload?.words)
+          ? payload.words
+          : [];
+      return list
+        .map(sanitizeWordRecord)
+        .filter(Boolean);
+    }
+
+    async function fetchWordCorpus() {
+      const response = await fetch(`${WORD_DATA_URL}?v=${Date.now()}`, { cache: 'no-store' });
+      if (!response.ok) {
+        throw new Error(`Word dataset request failed (${response.status})`);
+      }
+      const payload = await response.json();
+      const words = parseCorpusPayload(payload);
+      if (!words.length) {
+        throw new Error('Word dataset is empty');
+      }
+      writeCachedWords(words);
+      return words;
+    }
+
+    function shuffleIndices(size) {
+      const arr = Array.from({ length: size }, (_, i) => i);
+      for (let i = arr.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+      }
+      return arr;
+    }
+
+    function ensureWordOrder() {
+      if (!wordPool.length) {
+        wordOrder = [];
+        wordOrderIndex = 0;
+        return;
+      }
+      if (!wordOrder.length || wordOrderIndex >= wordOrder.length) {
+        wordOrder = shuffleIndices(wordPool.length);
+        wordOrderIndex = 0;
+      }
+    }
+
+    function nextWordEntry() {
+      ensureWordOrder();
+      if (!wordOrder.length) return null;
+      const nextIdx = wordOrder[wordOrderIndex];
+      wordOrderIndex += 1;
+      return wordPool[nextIdx] || null;
+    }
+
+    function presentWord(entry) {
+      currentWord = entry;
+      currentWordSolved = false;
+      if (els.nextBtn) {
+        els.nextBtn.disabled = true;
+      }
+      if (!entry) {
+        els.word.textContent = '--';
+        els.translit.textContent = '--';
+        els.heard.textContent = 'Heard: --';
+        return;
+      }
+      seenCount += 1;
+      updateCounters();
+      hideReveal();
+      els.word.textContent = entry.arabic;
+      els.translit.textContent = entry.transliteration || '--';
+      els.heard.textContent = 'Heard: --';
+      if (!finished) {
+        setStatus(listening ? 'Listening for your recitation' : 'Ready. Tap Start listening.', listening ? 'warn' : 'idle');
+      }
+    }
+
+    function pickNextWord() {
+      clearAdvanceTimer();
+      presentWord(nextWordEntry());
+    }
+
+    function handleSuccess() {
+      if (!currentWord || currentWordSolved) return;
+      currentWordSolved = true;
+      solvedCount += 1;
+      updateCounters();
+      showReveal(currentWord);
+      if (els.nextBtn) {
+        els.nextBtn.disabled = false;
+      }
+      stopListening();
+      setStatus('Correct pronunciation. Tap Next word when ready.', 'ok');
+    }
+
+    function stopListening() {
+      listening = false;
+      clearRecognitionRestartTimer();
+      if (recognition) {
+        try {
+          recognition.stop();
+        } catch (_) {}
+      }
+      els.listenBtn.textContent = 'Start listening';
+    }
+
+    function startListening() {
+      if (finished || !currentWord) return;
+      if (currentWordSolved) {
+        setStatus('This word is complete. Tap Next word.', 'ok');
+        return;
+      }
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        setStatus('Speech recognition is not supported on this browser.', 'err');
+        return;
+      }
+
+      if (!recognition) {
+        recognition = new SpeechRecognition();
+        recognition.lang = 'ar-SA';
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.maxAlternatives = 1;
+
+        recognition.onresult = event => {
+          let heardFinal = '';
+          for (let i = event.resultIndex; i < event.results.length; i += 1) {
+            const segment = event.results[i];
+            const transcript = String(segment[0]?.transcript || '').trim();
+            if (!transcript) continue;
+            els.heard.textContent = `Heard: ${transcript}`;
+            if (!segment.isFinal) continue;
+            heardFinal = transcript;
+            if (currentWord && matchesWord(transcript, currentWord.arabic)) {
+              handleSuccess();
+              return;
+            }
+          }
+          if (heardFinal && !currentWordSolved) {
+            setStatus('Not quite yet. Keep repeating the word.', 'warn');
+          }
+        };
+
+        recognition.onerror = event => {
+          const code = String(event?.error || 'error');
+          if (code === 'not-allowed' || code === 'service-not-allowed') {
+            setStatus('Microphone permission denied.', 'err');
+            stopListening();
+            return;
+          }
+          if (code === 'aborted') {
+            return;
+          }
+          if (code === 'no-speech') {
+            setStatus('No speech detected. Keep trying.', 'warn');
+            return;
+          }
+          setStatus('Speech error. Listening will continue.', 'warn');
+        };
+
+        recognition.onend = () => {
+          if (!listening || finished || currentWordSolved) return;
+          queueRecognitionRestart(180);
+        };
+      }
+
+      clearRecognitionRestartTimer();
+      listening = true;
+      try {
+        recognition.start();
+        els.listenBtn.textContent = 'Stop listening';
+        setStatus('Listening...', 'warn');
+      } catch (_) {
+        queueRecognitionRestart(220);
+        setStatus('Microphone is reconnecting...', 'warn');
+      }
+    }
+
+    function finishPractice() {
+      finished = true;
+      clearAdvanceTimer();
+      clearRecognitionRestartTimer();
+      stopListening();
+      setStatus('Practice finished.', 'ok');
+      try {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'MEMO_PRACTICE_FINISH' }, '*');
+        }
+      } catch (_) {}
+    }
+
+    function goHome() {
+      const shouldLeave = window.confirm('Go home now? Your current practice word will be closed.');
+      if (!shouldLeave) return;
+      clearAdvanceTimer();
+      clearRecognitionRestartTimer();
+      stopListening();
+      try {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'MEMO_PRACTICE_GO_HOME' }, '*');
+          return;
+        }
+      } catch (_) {}
+      const url = new URL('./memorization.html', window.location.href);
+      url.searchParams.set('home', '1');
+      window.location.href = url.toString();
+    }
+
+    async function initPracticeWords() {
+      setControlsEnabled(false);
+      setStatus('Loading Quran word corpus...', 'warn');
+      let words = [];
+
+      try {
+        words = await fetchWordCorpus();
+      } catch (err) {
+        words = readCachedWords();
+        if (!words.length) {
+          console.error(err);
+          setStatus('Could not load Quran words. Please reload.', 'err');
+          return;
+        }
+        setStatus('Using cached words (offline mode).', 'warn');
+      }
+
+      wordPool = words;
+      wordOrder = [];
+      wordOrderIndex = 0;
+      setControlsEnabled(true);
+      pickNextWord();
+      if (!listening) {
+        setStatus('Ready. Tap Start listening.', 'idle');
+      }
+    }
+
+    els.listenBtn.addEventListener('click', () => {
+      if (listening) {
+        stopListening();
+        setStatus('Paused', 'idle');
+        return;
+      }
+      startListening();
+    });
+
+    els.skipBtn.addEventListener('click', () => {
+      if (finished) return;
+      pickNextWord();
+      if (listening) {
+        setStatus('Listening...', 'warn');
+      }
+    });
+
+    els.nextBtn.addEventListener('click', () => {
+      if (finished || !currentWordSolved) return;
+      pickNextWord();
+      startListening();
+    });
+
+    els.finishBtn.addEventListener('click', finishPractice);
+    els.homeBtn.addEventListener('click', goHome);
+
+    updateCounters();
+    hideReveal();
+    initPracticeWords();
+  </script>
+</body>
+</html>
+
+
+
+
+

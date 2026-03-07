@@ -289,11 +289,17 @@ const StreakLogicAndUI = (function() {
       let bg = '#d8dee6';
       let icon = '';
       let iconColor = '#344054';
+      let iconOpacity = '1';
 
       if (item.status === 'kept') {
         bg = 'linear-gradient(180deg,#ffd166,#f59f0b)';
         icon = '&#10003;';
         iconColor = '#4a2c00';
+      } else if (item.status === 'missed') {
+        bg = '#e8edf3';
+        icon = '&times;';
+        iconColor = '#7b8794';
+        iconOpacity = '0.72';
       } else if (item.status === 'today') {
         bg = '#ffffff';
       } else if (item.status === 'future') {
@@ -303,7 +309,7 @@ const StreakLogicAndUI = (function() {
       const left = idx * segWidth;
       return `
         <div style="position:absolute;left:${left}%;width:${segWidth}%;top:0;bottom:0;background:${bg};">
-          ${icon ? `<span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:${iconColor};z-index:1;">${icon}</span>` : ''}
+          ${icon ? `<span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:${item.status === 'missed' ? '0.76rem' : '0.8rem'};font-weight:${item.status === 'missed' ? '600' : '700'};color:${iconColor};opacity:${iconOpacity};z-index:1;">${icon}</span>` : ''}
         </div>
       `;
     }).join('');
@@ -445,3 +451,4 @@ const StreakLogicAndUI = (function() {
 
 window.StreakUI = StreakLogicAndUI;
 export { StreakLogicAndUI as StreakUI };
+

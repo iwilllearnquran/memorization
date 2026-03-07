@@ -7,7 +7,12 @@
   <script>
     (function () {
       const params = new URLSearchParams(window.location.search);
-      if (params.has('surah') && params.has('ayah')) {
+      const action = String(params.get('action') || '').trim().toLowerCase();
+      const shouldShowPendingAyah =
+        params.has('surah') &&
+        params.has('ayah') &&
+        (!action || action === 'learn');
+      if (shouldShowPendingAyah) {
         document.documentElement.classList.add('pending-ayah');
       }
     })();
@@ -43,9 +48,9 @@
   rel="stylesheet"
 />
 
-  
 
-<link rel="stylesheet" href="/index-style.css?v=20260228-responsive1">
+
+<link rel="stylesheet" href="/index-style.css?v=20260307-progress-overlay-fix1">
 </head>
 <body>
 
@@ -58,27 +63,24 @@
       <!--<button class="login-btn" id="loginBtn">User</button> -->
       <button class="menu-btn" id="menuBtn" aria-label="Open profile menu">
         <div id="menuLottie" aria-hidden="true"></div>
-        <span class="material-symbols-outlined menu-home-icon nav-action-icon" aria-hidden="true">cottage</span>
+        <div id="menuHomeLottie" class="menu-home-icon nav-home-lottie" aria-hidden="true"></div>
       </button>
       <button class="menu-btn recite-home-btn" id="reciteHomeBtn" aria-label="Back to Learn Home">
-        <span class="material-icons-outlined" aria-hidden="true">home</span>
+        <div id="reciteHomeLottie" class="nav-home-lottie" aria-hidden="true"></div>
       </button>
 
-   
+
     </div>
     <div class="navbar-center">
       <div class="dropdowns">
         <select id="surahSelect"></select>
         <select id="ayahSelect"></select>
       </div>
-      <div class="recite-surah-tabs-wrap" id="reciteSurahTabsWrap" aria-hidden="true">
-        <div class="recite-surah-tabs" id="reciteSurahTabs" role="tablist" aria-label="Surah tabs"></div>
-      </div>
     </div>
     <div id="gameStatsNav">
     </div>
     <div class="navbar-right">
-      
+
       <button id="returnToAyah" class="return-btn">Return to Main Page</button>
       <button id="learnSettingsBtn" class="top-settings-btn" type="button" aria-label="Learn settings">
         <span class="material-symbols-outlined nav-action-icon" aria-hidden="true">tune</span>
@@ -151,6 +153,10 @@
     <button class="qq-nav-item" id="memorizedAyahsBtn" type="button">
       <span class="material-symbols-outlined drawer-menu-icon" aria-hidden="true">bar_chart</span>
       <span>My Memorized Ayahs</span>
+    </button>
+    <button class="qq-nav-item" id="savedHistoryBtn" type="button">
+      <span class="material-symbols-outlined drawer-menu-icon" aria-hidden="true">bookmarks</span>
+      <span>Saved Ayah History</span>
     </button>
 
     <button class="qq-nav-item" id="namazHistoryBtn" type="button">
@@ -225,7 +231,7 @@
 
 
 
-    
+
     <p class="hero-description">
       We treat every verse as its own universe
     </p>
@@ -318,11 +324,15 @@
   <iframe id="memorizationFrame" title="Memorization" loading="eager" allow="autoplay"></iframe>
 </div>
 
+<div id="surahListView" class="surah-list-view" aria-hidden="true">
+  <iframe id="surahListFrame" title="Surah List" loading="eager"></iframe>
+</div>
+
 <div id="reciteScrollView" class="recite-scroll-view" aria-hidden="true"></div>
 
 
   <div class="container" id="surahContainer">
-    
+
   </div>
 
 
@@ -330,13 +340,13 @@
 <div class="viewer" id="viewer">
   <div id="gestureLayer"></div>
 
-  <!-- 🃏 Card wrapper -->
+  <!-- ÃƒÂ°Ã…Â¸Ã†â€™Ã‚Â Card wrapper -->
   <div id="ayahCard" class="ayah-card">
     <iframe id="ayahViewer" allow="autoplay"></iframe>
   </div>
 </div>
 
-  
+
 
 <nav class="bottom-nav" id="bottomNav" aria-label="Primary">
   <div class="bottom-nav-inner">
@@ -358,6 +368,23 @@
 </nav>
 
   <script src="/_private/firebase-init.js" defer></script>
-<script type="module" src="/index-script.js?v=20260228-homequickaccess1" defer></script>
+<script type="module" src="/index-script.js?v=20260307-progress-overlay-fix1" defer></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

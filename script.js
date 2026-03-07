@@ -9,6 +9,7 @@ let panelIcon;
 let floatingBtn;
 let playToggleBtn;
 let currentMode = 'learning';
+const LEGACY_IFRAME_RECITE_MODE_ENABLED = false;
 let floatingClone = null;
 let currentKey = null;
 const root = document.body;
@@ -92,6 +93,14 @@ function applyTypographySettings(rawSettings = {}) {
   html.style.setProperty('--qq-arabic-weight', String(settings.arabicWeight));
   html.style.setProperty('--qq-arabic-style', settings.arabicItalic ? 'italic' : 'normal');
   html.style.setProperty('--qq-english-scale', String(settings.englishScale / 100));
+}
+
+function normalizeIframeReaderMode(modeCandidate) {
+  const mode = String(modeCandidate || '').trim().toLowerCase();
+  if (mode === 'reciting') {
+    return LEGACY_IFRAME_RECITE_MODE_ENABLED ? 'reciting' : 'learning';
+  }
+  return mode === 'learning' ? 'learning' : 'learning';
 }
 
 function isEditableTarget(target) {
@@ -1032,10 +1041,11 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
           LOG.ui('Panel language set:', settings.panelLang);
         }
 
-        // Learning / Reciting mode
+                // Learning / Reciting mode
         if (settings.mode === 'learning' || settings.mode === 'reciting') {
-          if (currentMode !== settings.mode) {
-            currentMode = settings.mode;
+          const nextMode = normalizeIframeReaderMode(settings.mode);
+          if (currentMode !== nextMode) {
+            currentMode = nextMode;
             toggleMode(currentMode);
           } else {
             toggleMode(currentMode);
@@ -2298,6 +2308,13 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
       function toggleModeNav() {
         console.log('[MODE] toggleModeNav called');
 
+        if (!LEGACY_IFRAME_RECITE_MODE_ENABLED) {
+          currentMode = 'learning';
+          toggleMode(currentMode);
+          updateSetting({ mode: currentMode });
+          return;
+        }
+
         // ---------------------------------------------
         // Always disable Practice mode first
         // ---------------------------------------------
@@ -2339,15 +2356,17 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
        * Applies UI changes for the given mode.
        * This function ONLY handles Learn ↔ Recite display.
        */
-      function toggleMode(mode) {
-        console.log('[MODE] toggleMode called with:', mode);
+            function toggleMode(mode) {
+        const resolvedMode = normalizeIframeReaderMode(mode);
+        currentMode = resolvedMode;
+        console.log('[MODE] toggleMode called with:', mode, '=>', resolvedMode);
 
         if (!learnSection || !recitSection) return;
         learnSection.style.display =
-          mode === 'learning' ? 'block' : 'none';
+          resolvedMode === 'learning' ? 'block' : 'none';
 
         recitSection.style.display =
-          mode === 'reciting' ? 'block' : 'none';
+          resolvedMode === 'reciting' ? 'block' : 'none';
 
         if (pracBox) pracBox.style.display = 'none';
 
@@ -2357,7 +2376,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
 
 
 
-        if (mode === 'learning') {
+        if (resolvedMode === 'learning') {
           const navMode = document.getElementById('navMode');
           if (navMode) {
             navMode.classList.remove('active');
@@ -2370,7 +2389,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         // ---------------------------------------------
         updateNavModeActionUI();
 
-        console.log('[MODE] UI + nav applied for mode:', mode);
+        console.log('[MODE] UI + nav applied for mode:', resolvedMode);
       }
       window.toggleMode = toggleMode;
 
@@ -2754,7 +2773,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
 
         // Restore nav buttons
         if (gamesNav) gamesNav.style.display = '';
-        if (modeNav)  modeNav.style.display  = '';
+        if (modeNav)  modeNav.style.display  = LEGACY_IFRAME_RECITE_MODE_ENABLED ? '' : 'none';
         if (saveNav)  saveNav.style.display  = '';
 
         // Restore nav button label
@@ -2936,6 +2955,19 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         );
       }
 
+      function setSaveButtonsSavedState(saved) {
+        const isSaved = !!saved;
+        ['stripSaveProgress', 'navSaveProgress'].forEach(id => {
+          const btn = document.getElementById(id);
+          if (!btn) return;
+          btn.classList.toggle('is-saved', isSaved);
+          btn.setAttribute('aria-pressed', isSaved ? 'true' : 'false');
+          const icon = btn.querySelector('.material-symbols-outlined');
+          if (icon) {
+            icon.textContent = isSaved ? 'bookmark_added' : 'bookmark';
+          }
+        });
+      }
       function ensureInlineSaveProgressButton() {
         const playPracticeBtn = document.getElementById('stripNavGames');
         if (!playPracticeBtn) return;
@@ -2964,6 +2996,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
           host.appendChild(saveBtn);
         }
         saveBtn.classList.add('strip-btn-inline');
+        saveBtn.classList.remove('is-saved');
         saveBtn.type = 'button';
         saveBtn.innerHTML = `
           <span class="material-symbols-outlined" aria-hidden="true">bookmark</span>
@@ -3005,6 +3038,35 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
  * IFRAME ↔ PARENT MESSAGE ROUTER
  *************************************************/
 
+      function bindInternalAppLinkRouting() {
+        if (bindInternalAppLinkRouting.done) return;
+        bindInternalAppLinkRouting.done = true;
+
+        const normalizeHost = host => String(host || '').toLowerCase().replace(/^www\./, '');
+
+        document.addEventListener('click', evt => {
+          const anchor = evt.target instanceof Element ? evt.target.closest('a[href]') : null;
+          if (!anchor) return;
+
+          const href = anchor.getAttribute('href');
+          if (!href || href.startsWith('#') || href.startsWith('javascript:')) return;
+
+          let parsed;
+          try {
+            parsed = new URL(href, window.location.href);
+          } catch (_) {
+            return;
+          }
+
+          const sameAppHost = normalizeHost(parsed.hostname) === 'myquranquest.com';
+          const relativeLink = href.startsWith('/') || href.startsWith('./') || href.startsWith('../');
+          if (!sameAppHost && !relativeLink) return;
+
+          evt.preventDefault();
+          evt.stopPropagation();
+          window.parent.postMessage({ type: 'OPEN_INTERNAL_LINK', url: parsed.href }, PARENT_ORIGIN);
+        }, { capture: true });
+      }
       function initMessaging() {
           if (initMessaging.done) return;
           initMessaging.done = true;
@@ -3012,6 +3074,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
           console.log('[INIT] initMessaging');
 
           on(window, 'message', onParentMessage);
+          bindInternalAppLinkRouting();
       }
 
       function bindInlineReplacements() {
@@ -3032,13 +3095,18 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
           });
         }
 
-        const navModeBtn = document.getElementById('navMode');
+                const navModeBtn = document.getElementById('navMode');
         if (navModeBtn) {
-          navModeBtn.addEventListener('click', e => {
-            e.preventDefault();
-            toggleModeNav();
-            navModeBtn.blur();
-          });
+          if (!LEGACY_IFRAME_RECITE_MODE_ENABLED) {
+            navModeBtn.style.display = 'none';
+            navModeBtn.setAttribute('aria-hidden', 'true');
+          } else {
+            navModeBtn.addEventListener('click', e => {
+              e.preventDefault();
+              toggleModeNav();
+              navModeBtn.blur();
+            });
+          }
         }
 
         const playBtnEl = document.getElementById('playToggleBtn');
@@ -3255,6 +3323,7 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
           // =============================================
           case 'SAVE_PROGRESS_SUCCESS': {
             console.log('[IFRAME] Progress saved successfully');
+            setSaveButtonsSavedState(true);
 
             showToast(
               data.streakUpdated
@@ -3953,6 +4022,13 @@ el.addEventListener('pointermove', onSwipePointerMove, { passive: false, capture
         console.log('[INIT] initIframeApp'              );
         ensureInlineSaveProgressButton();
         cacheDOM();
+        if (!LEGACY_IFRAME_RECITE_MODE_ENABLED) {
+          currentMode = 'learning';
+          if (recitSection) {
+            recitSection.style.display = 'none';
+            recitSection.setAttribute('aria-hidden', 'true');
+          }
+        }
         normalizeArabicDisplayInView();
         bindInlineReplacements();
         if (scrollEl) {

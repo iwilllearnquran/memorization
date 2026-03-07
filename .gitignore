@@ -74,3 +74,12 @@ generated/reels/*
 
 # Local Cloud Build temp config
 .cloudbuild.reel.generated.yaml
+
+# Local browser and audit output
+.github/e2e/test-results/
+artifacts/
+test-results/
+
+# Local scratch files
+home
+tmpbg.txt
