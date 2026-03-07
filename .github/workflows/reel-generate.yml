@@ -11,14 +11,6 @@ on:
         description: "Ayah number"
         required: true
         type: number
-      source:
-        description: "Data source: ayah or dua"
-        required: false
-        default: "ayah"
-        type: choice
-        options:
-          - ayah
-          - dua
       title:
         description: "Video title text"
         required: false
@@ -57,14 +49,14 @@ jobs:
           python scripts/generate_reel_once.py \
             --surah "${{ github.event.inputs.surah }}" \
             --ayah "${{ github.event.inputs.ayah }}" \
-            --source "${{ github.event.inputs.source || 'ayah' }}" \
+
             --title "${{ github.event.inputs.title }}" \
             --out-json generated/reels/result.json
 
       - name: Upload reel artifact
         uses: actions/upload-artifact@v4
         with:
-          name: reel-${{ github.event.inputs.source || 'ayah' }}-s${{ github.event.inputs.surah }}-a${{ github.event.inputs.ayah }}-${{ github.run_id }}
+
           path: |
             generated/reels/*.mp4
             generated/reels/result.json
