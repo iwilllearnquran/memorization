@@ -1,0 +1,29 @@
+# Exclude VCS and editor files
+.git
+.github
+.vscode
+.expo
+
+# Node/web app artifacts not needed by reel container build
+node_modules
+audio
+ayahs
+AyahControl
+services
+state
+ui
+utils
+verbsgame
+verbs_tables
+_private
+
+# Local outputs
+generated/reels/*
+!generated/reels/.gitkeep
+*.mp4
+*.zip
+*.log
+firebase-debug.log*
+
+# Local temp build file
+.cloudbuild.reel.generated.yaml

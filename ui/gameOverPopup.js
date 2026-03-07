@@ -1,70 +1,127 @@
 // ui/gameOverPopup.js
 
-import { toggleGames }   from '/ui/toggleGames.js';
-import gameSession       from '/state/gameSession.js';
-import { updateStats }   from '/ui/gameStatsUI.js';
+import { toggleGames } from '/ui/toggleGames.js';
+import gameSession from '/state/gameSession.js';
 
 /**
- * Shows a “Game Over” overlay with Retry and New Game buttons.
- * Keeps itself UI-agnostic: it only resets state or switches back
- * to the selector. The actual game-type restart is handled by
- * gameSession.resetToBeforeGame(), which knows how to rebuild
- * the correct game UI.
+ * Shows a game result overlay with Retry and New Game buttons.
+ *
+ * @param {string} title
+ * @param {string} customMessage
+ * @param {boolean} resetStats - when true, Retry uses resetToBeforeGame().
  */
-export function showGameOverPopup(title = 'Oh no!',customMessage = 'You’ve run out of lives.', resetStats = true) {
-  // 1️⃣ Create the semi-opaque overlay
+export function showGameOverPopup(
+  title = 'Oh no!',
+  customMessage = "You've run out of lives.",
+  resetStats = false
+) {
+  if (document.getElementById('gameOverOverlay')) return;
+
+  const isFailure = resetStats === false;
+  const animationPath = isFailure
+    ? '/utils/assets/heartbreak.json'
+    : '/utils/assets/heart.json';
+  const accentColor = isFailure ? '#1aa179' : '#0a4d68';
+
   const overlay = document.createElement('div');
-  overlay.id = 'gameOverPopup';
+  overlay.id = 'gameOverOverlay';
   Object.assign(overlay.style, {
-    position:       'fixed',
-    top:            0,
-    left:           0,
-    right:          0,
-    bottom:         0,
-    background:     'rgba(0,0,0,0.7)',
-    display:        'flex',
-    alignItems:     'center',
+    position: 'fixed',
+    inset: 0,
+    background: 'rgba(0,0,0,0.65)',
+    display: 'flex',
+    alignItems: 'center',
     justifyContent: 'center',
-    zIndex:         '10000'
+    zIndex: 10000
   });
 
-  // 2️⃣ Create the dialog box
   const dialog = document.createElement('div');
   Object.assign(dialog.style, {
-    background:   '#fff',
-    padding:      '24px',
-    borderRadius: '8px',
-    textAlign:    'center',
-    maxWidth:     '320px',
-    width:        '80%'
+    background: '#fff',
+    borderRadius: '18px',
+    padding: '26px 22px',
+    width: '90%',
+    maxWidth: '360px',
+    textAlign: 'center',
+    position: 'relative',
+    boxShadow: '0 20px 50px rgba(0,0,0,0.25)',
+    animation: 'modalPop 0.25s ease-out'
   });
-dialog.innerHTML = `
-  <h2 style="margin-bottom: 12px;">${title}</h2>
-  <p style="margin-bottom: 20px;">${customMessage}</p>
-  <div style="display: flex; justify-content: center; gap: 12px;">
-    <button id="retryBtn" class="game-play-btn-verbs">Play Again</button>
-    <button id="newGameBtn" class="game-play-btn-verbs">Different Game</button>
-  </div>
-`;
+
+  dialog.innerHTML = `
+    <div id="gameOverAnim" style="width:96px;height:96px;margin:0 auto 14px;"></div>
+
+    <h2 style="margin:0 0 6px;font-size:22px;font-weight:700;color:${accentColor};">
+      ${title}
+    </h2>
+
+    <p style="margin:0 0 22px;font-size:15px;color:#555;line-height:1.5;">
+      ${customMessage}
+    </p>
+
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <button
+        id="retryBtn"
+        style="
+          padding:12px;
+          border-radius:10px;
+          border:none;
+          background:linear-gradient(135deg,#0a4d68,#0d6efd);
+          color:#fff;
+          font-size:15px;
+          font-weight:600;
+          cursor:pointer;
+        "
+      >
+        Play Again
+      </button>
+
+      <button
+        id="newGameBtn"
+        style="
+          padding:12px;
+          border-radius:10px;
+          border:1px solid #ddd;
+          background:#f9f9f9;
+          color:#333;
+          font-size:14px;
+          cursor:pointer;
+        "
+      >
+        Choose Different Game
+      </button>
+    </div>
+  `;
 
   overlay.appendChild(dialog);
   document.body.appendChild(overlay);
 
-  // 3️⃣ Wire the Retry button
-  const retryBtn = dialog.querySelector('#retryBtn');
-  dialog.querySelector('#retryBtn').addEventListener('click', async () => {
-    overlay.remove();
-    if (resetStats) {
-      await gameSession.resetToBeforeGame();  // Reset points & restart game
-    } else {
-      await gameSession.restartGameOnly();  // Preserve points, just restart
-    }
-  });
+  if (window.lottie?.loadAnimation) {
+    window.lottie.loadAnimation({
+      container: overlay.querySelector('#gameOverAnim'),
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      path: animationPath
+    });
+  }
 
-  // 4️⃣ Wire the New Game button
-  const newGameBtn = dialog.querySelector('#newGameBtn');
-  newGameBtn.addEventListener('click', () => {
-    overlay.remove();             // remove the popup
-    toggleGames('selector');      // go back to the game selector
-  });
+  dialog.querySelector('#retryBtn').onclick = async () => {
+    closePopup();
+    if (resetStats) {
+      await gameSession.resetToBeforeGame();
+    } else {
+      await gameSession.restartGameOnly();
+    }
+  };
+
+  dialog.querySelector('#newGameBtn').onclick = () => {
+    closePopup();
+    toggleGames('selector');
+  };
+
+  function closePopup() {
+    overlay.remove();
+    document.body.classList.remove('modal-open');
+  }
 }

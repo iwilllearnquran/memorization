@@ -49,13 +49,14 @@ jobs:
           python scripts/generate_reel_once.py \
             --surah "${{ github.event.inputs.surah }}" \
             --ayah "${{ github.event.inputs.ayah }}" \
+
             --title "${{ github.event.inputs.title }}" \
             --out-json generated/reels/result.json
 
       - name: Upload reel artifact
         uses: actions/upload-artifact@v4
         with:
-          name: reel-s${{ github.event.inputs.surah }}-a${{ github.event.inputs.ayah }}-${{ github.run_id }}
+
           path: |
             generated/reels/*.mp4
             generated/reels/result.json

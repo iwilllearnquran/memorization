@@ -1,18 +1,36 @@
 name: Deploy to Firebase Hosting
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows:
+      - Web CI - Basic and Deep Tests
+    types:
+      - completed
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: firebase-hosting-deploy-main
+  cancel-in-progress: true
 
 jobs:
   deploy:
+    if: >-
+      ${{
+        github.event_name == 'workflow_dispatch' ||
+        (github.event.workflow_run.conclusion == 'success' &&
+         github.event.workflow_run.head_branch == 'main')
+      }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
         with:
-          node-version: '18'
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
 
       - run: npm install -g firebase-tools
 

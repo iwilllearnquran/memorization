@@ -16,7 +16,7 @@ def main() -> int:
     parser.add_argument("--out-json", type=str, default="generated/reels/result.json")
     args = parser.parse_args()
 
-    result = generate_for_ayah(args.surah, args.ayah, args.title)
+
     out_path = Path(args.out_json)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")

@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>Quran Quest | Surah List</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700&family=Material+Symbols+Outlined"
+    rel="stylesheet"
+  >
+    <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
+  <style>
+    :root {
+      --bg-base: #0b536b;
+      --bg-grad-a: #0f6a82;
+      --bg-grad-b: #176f83;
+      --text-main: #f5f9ff;
+      --text-soft: #c8d8ea;
+      --text-dim: #9fb2c7;
+      --card-bg: linear-gradient(180deg, rgba(45, 125, 150, 0.58) 0%, rgba(37, 104, 129, 0.62) 100%);
+      --card-border: rgba(177, 214, 242, 0.2);
+      --card-gold: rgba(246, 197, 67, 0.26);
+      --surface: rgba(19, 82, 108, 0.66);
+      --focus: #7ed3ff;
+      --listen: #1f89ae;
+      --recite: #1d83a7;
+      --learn: #1a7b9f;
+      --memorize: #177295;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    /* Hide scrollbar UI while preserving scroll behavior. */
+    html,
+    body,
+    body * {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar,
+    body *::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      display: none;
+    }
+
+    html::-webkit-scrollbar-thumb,
+    body::-webkit-scrollbar-thumb,
+    body *::-webkit-scrollbar-thumb,
+    html::-webkit-scrollbar-track,
+    body::-webkit-scrollbar-track,
+    body *::-webkit-scrollbar-track,
+    html::-webkit-scrollbar-corner,
+    body::-webkit-scrollbar-corner,
+    body *::-webkit-scrollbar-corner {
+      background: transparent;
+      border: none;
+      box-shadow: none;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+    }
+
+    body {
+      font-family: "Manrope", sans-serif;
+      color: var(--text-main);
+      background:
+        radial-gradient(900px 420px at 6% -8%, rgba(176, 232, 255, 0.16), transparent 66%),
+        radial-gradient(760px 420px at 92% 6%, rgba(102, 196, 232, 0.15), transparent 68%),
+        linear-gradient(135deg, var(--bg-base) 0%, var(--bg-grad-a) 52%, var(--bg-grad-b) 100%);
+      padding: 20px 16px 28px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .shell {
+      width: min(1200px, 100%);
+      margin: 0 auto;
+    }
+
+    .top {
+      margin-bottom: 18px;
+    }
+
+    .top-nav {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .top-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      text-decoration: none;
+      color: var(--text-main);
+      border: 1px solid var(--card-border);
+      background: linear-gradient(180deg, rgba(45, 125, 150, 0.66) 0%, rgba(37, 104, 129, 0.7) 100%);
+      border-radius: 12px;
+      box-shadow: 0 8px 18px rgba(6, 17, 27, 0.24);
+      transition: border-color 0.16s ease, background 0.16s ease;
+    }
+
+    .top-nav-btn:hover {
+      border-color: rgba(173, 224, 255, 0.46);
+      background: linear-gradient(180deg, rgba(52, 136, 161, 0.72) 0%, rgba(40, 114, 138, 0.74) 100%);
+    }
+
+    .top-nav-home-lottie {
+      width: 24px;
+      height: 24px;
+      display: block;
+      pointer-events: none;
+      filter: brightness(0) invert(1);
+    }
+
+
+    .top-nav-home-lottie svg {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .head {
+      flex: 1;
+    }
+
+    .kicker {
+      margin: 0 0 4px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(36px, 6vw, 54px);
+      line-height: 0.95;
+      letter-spacing: 0.02em;
+    }
+
+    .sub {
+      margin: 10px 0 0;
+      color: var(--text-soft);
+      font-size: 14px;
+      max-width: 700px;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: minmax(200px, 1fr) repeat(2, minmax(140px, 180px));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .controls input,
+    .controls select {
+      width: 100%;
+      border: 1px solid var(--card-border);
+      background: var(--surface);
+      color: var(--text-main);
+      border-radius: 12px;
+      padding: 11px 12px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+    }
+
+    .controls input:focus,
+    .controls select:focus,
+    .action-btn:focus,
+    .top-nav-btn:focus {
+      border-color: var(--focus);
+      box-shadow: 0 0 0 3px rgba(126, 211, 255, 0.2);
+    }
+
+    .summary {
+      margin: 0 0 14px;
+      color: var(--text-soft);
+      font-size: 13px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+      contain: layout;
+    }
+
+    .card {
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      background: var(--card-bg);
+      padding: 14px;
+      box-shadow: 0 6px 12px rgba(6, 17, 27, 0.18);
+      transition: border-color 140ms ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      contain: layout paint style;
+      content-visibility: auto;
+      contain-intrinsic-size: 280px;
+    }
+
+    .card:hover {
+      border-color: rgba(246, 197, 67, 0.4);
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      border: 1px solid var(--card-gold);
+      pointer-events: none;
+    }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .surah-no {
+      font-size: 12px;
+      color: var(--text-dim);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .verse-pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 11px;
+      color: #d6ebff;
+      background: rgba(123, 171, 212, 0.18);
+    }
+
+    .english {
+      margin: 10px 0 0;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .inline-arabic {
+      font-size: 17px;
+      font-weight: 600;
+      color: #e9f6ff;
+      white-space: nowrap;
+    }
+
+    .translation {
+      margin: 8px 0 0;
+      font-size: 13px;
+      color: var(--text-soft);
+      line-height: 1.35;
+      min-height: 18px;
+    }
+
+    .meta {
+      margin-top: 10px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .meta-tag {
+      border-radius: 999px;
+      padding: 4px 9px;
+      font-size: 11px;
+      color: #d9edff;
+      background: rgba(163, 210, 242, 0.12);
+      border: 1px solid rgba(163, 210, 242, 0.22);
+    }
+
+    .actions {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .action-btn {
+      border: none;
+      color: #fff;
+      border-radius: 10px;
+      padding: 9px 8px;
+      border: 1px solid rgba(176, 225, 248, 0.22);
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      box-shadow: 0 8px 14px rgba(5, 20, 33, 0.26);
+      transition: filter 0.12s ease;
+    }
+
+    .action-btn:hover {
+      filter: brightness(1.05);
+    }
+
+    .action-btn .material-symbols-outlined {
+      font-size: 17px;
+      line-height: 1;
+    }
+
+    .action-listen {
+      background: linear-gradient(135deg, #1f8ab0, var(--listen));
+    }
+
+    .action-recite {
+      background: linear-gradient(135deg, #1c84aa, var(--recite));
+    }
+
+    .action-learn {
+      background: linear-gradient(135deg, #1a7e9f, var(--learn));
+    }
+
+    .action-memorize {
+      background: linear-gradient(135deg, #167698, var(--memorize));
+    }
+
+    .empty {
+      border: 1px dashed rgba(184, 218, 247, 0.35);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      color: var(--text-soft);
+      background: rgba(13, 35, 51, 0.5);
+    }
+
+    @media (max-width: 900px) {
+      .controls {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .controls input {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 560px) {
+      body {
+        padding: 14px 12px 20px;
+      }
+
+      .controls {
+        grid-template-columns: 1fr;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="top">
+      <div class="top-nav">
+        <a class="top-nav-btn" href="index.html" aria-label="Go to home">
+          <div id="surahListHomeLottie" class="top-nav-home-lottie" aria-hidden="true"></div>
+        </a>
+      </div>
+      <div class="head">
+        <p class="kicker">Quran Quest</p>
+        <h1>Surah Action List</h1>
+        <p class="sub">Open any Surah with one tap and choose how you want to continue: Listen, Recite, Learn In-Depth, or Memorize.</p>
+      </div>
+    </section>
+
+    <section class="controls" aria-label="Surah filters">
+      <input id="searchInput" type="search" placeholder="Search by number, English name, Arabic name, or translation">
+      <select id="sortSelect" aria-label="Sort surahs">
+        <option value="number">Sort: Number</option>
+        <option value="name">Sort: Name A-Z</option>
+        <option value="short">Sort: Shortest first</option>
+        <option value="long">Sort: Longest first</option>
+      </select>
+    </section>
+
+    <p id="summaryLine" class="summary">Loading surahs...</p>
+    <section id="surahGrid" class="grid" aria-live="polite"></section>
+  </main>
+
+  <script id="preloadedSurahList" type="application/json">[{"number":1,"englishName":"Al-Faatiha","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0671\u0644\u0652\u0641\u064e\u0627\u062a\u0650\u062d\u064e\u0629\u0650","translation":"The Opening","ayahCount":7},{"number":2,"englishName":"Al-Baqara","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0628\u064e\u0642\u064e\u0631\u064e\u0629\u0650","translation":"The Cow","ayahCount":286},{"number":3,"englishName":"Aal-i-Imraan","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0653\u0644\u0650 \u0639\u0650\u0645\u06e1\u0631\u064e\u0627\u0646\u064e","translation":"The Family of Imraan","ayahCount":200},{"number":4,"englishName":"An-Nisaa","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0646\u0651\u0650\u0633\u064e\u0627\u0621\u0650","translation":"The Women","ayahCount":176},{"number":5,"englishName":"Al-Maaida","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0645\u064e\u0627\u0626\u0640\u0650\u062f\u064e\u0629\u0650","translation":"The Table","ayahCount":120},{"number":6,"englishName":"Al-An\u0027aam","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0623\u064e\u0646\u06e1\u0639\u064e\u0627\u0645\u0650","translation":"The Cattle","ayahCount":165},{"number":7,"englishName":"Al-A\u0027raaf","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0623\u064e\u0639\u06e1\u0631\u064e\u0627\u0641\u0650","translation":"The Heights","ayahCount":206},{"number":8,"englishName":"Al-Anfaal","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0623\u064e\u0646\u0641\u064e\u0627\u0644\u0650","translation":"The Spoils of War","ayahCount":75},{"number":9,"englishName":"At-Tawba","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u062a\u0651\u064e\u0648\u06e1\u0628\u064e\u0629\u0650","translation":"The Repentance","ayahCount":129},{"number":10,"englishName":"Yunus","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u064a\u064f\u0648\u0646\u064f\u0633\u064e","translation":"Jonas","ayahCount":109},{"number":11,"englishName":"Hud","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0647\u064f\u0648\u062f\u064d","translation":"Hud","ayahCount":123},{"number":12,"englishName":"Yusuf","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u064a\u064f\u0648\u0633\u064f\u0641\u064e","translation":"Joseph","ayahCount":111},{"number":13,"englishName":"Ar-Ra\u0027d","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0631\u0651\u064e\u0639\u06e1\u062f\u0650","translation":"The Thunder","ayahCount":43},{"number":14,"englishName":"Ibrahim","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0625\u0650\u0628\u06e1\u0631\u064e\u0627\u0647\u0650\u064a\u0645\u064e","translation":"Abraham","ayahCount":52},{"number":15,"englishName":"Al-Hijr","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u062d\u0650\u062c\u06e1\u0631\u0650","translation":"The Rock","ayahCount":99},{"number":16,"englishName":"An-Nahl","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0646\u0651\u064e\u062d\u06e1\u0644\u0650","translation":"The Bee","ayahCount":128},{"number":17,"englishName":"Al-Israa","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0625\u0650\u0633\u06e1\u0631\u064e\u0627\u0621\u0650","translation":"The Night Journey","ayahCount":111},{"number":18,"englishName":"Al-Kahf","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0643\u064e\u0647\u06e1\u0641\u0650","translation":"The Cave","ayahCount":110},{"number":19,"englishName":"Maryam","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0645\u064e\u0631\u06e1\u064a\u064e\u0645\u064e","translation":"Mary","ayahCount":98},{"number":20,"englishName":"Taa-Haa","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0637\u0647","translation":"Taa-Haa","ayahCount":135},{"number":21,"englishName":"Al-Anbiyaa","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0623\u064e\u0646\u0628\u0650\u064a\u064e\u0627\u0621\u0650","translation":"The Prophets","ayahCount":112},{"number":22,"englishName":"Al-Hajj","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u062d\u064e\u062c\u0651\u0650","translation":"The Pilgrimage","ayahCount":78},{"number":23,"englishName":"Al-Muminoon","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0645\u064f\u0624\u06e1\u0645\u0650\u0646\u064f\u0648\u0646\u064e","translation":"The Believers","ayahCount":118},{"number":24,"englishName":"An-Noor","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0646\u0651\u064f\u0648\u0631\u0650","translation":"The Light","ayahCount":64},{"number":25,"englishName":"Al-Furqaan","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0641\u064f\u0631\u06e1\u0642\u064e\u0627\u0646\u0650","translation":"The Criterion","ayahCount":77},{"number":26,"englishName":"Ash-Shu\u0027araa","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0634\u0651\u064f\u0639\u064e\u0631\u064e\u0627\u0621\u0650","translation":"The Poets","ayahCount":227},{"number":27,"englishName":"An-Naml","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0646\u0651\u064e\u0645\u06e1\u0644\u0650","translation":"The Ant","ayahCount":93},{"number":28,"englishName":"Al-Qasas","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0642\u064e\u0635\u064e\u0635\u0650","translation":"The Stories","ayahCount":88},{"number":29,"englishName":"Al-Ankaboot","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0639\u064e\u0646\u0643\u064e\u0628\u064f\u0648\u062a\u0650","translation":"The Spider","ayahCount":69},{"number":30,"englishName":"Ar-Room","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0631\u0651\u064f\u0648\u0645\u0650","translation":"The Romans","ayahCount":60},{"number":31,"englishName":"Luqman","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0644\u064f\u0642\u06e1\u0645\u064e\u0627\u0646\u064e","translation":"Luqman","ayahCount":34},{"number":32,"englishName":"As-Sajda","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0633\u0651\u064e\u062c\u06e1\u062f\u064e\u0629\u0650","translation":"The Prostration","ayahCount":30},{"number":33,"englishName":"Al-Ahzaab","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0623\u064e\u062d\u06e1\u0632\u064e\u0627\u0628\u0650","translation":"The Clans","ayahCount":73},{"number":34,"englishName":"Saba","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0633\u064e\u0628\u064e\u0625\u064d","translation":"Sheba","ayahCount":54},{"number":35,"englishName":"Faatir","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0641\u064e\u0627\u0637\u0650\u0631\u064d","translation":"The Originator","ayahCount":45},{"number":36,"englishName":"Yaseen","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u064a\u0633\u0653","translation":"Yaseen","ayahCount":83},{"number":37,"englishName":"As-Saaffaat","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0635\u0651\u064e\u0627\u0641\u0651\u064e\u0627\u062a\u0650","translation":"Those drawn up in Ranks","ayahCount":182},{"number":38,"englishName":"Saad","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0635\u0653","translation":"The letter Saad","ayahCount":88},{"number":39,"englishName":"Az-Zumar","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0632\u0651\u064f\u0645\u064e\u0631\u0650","translation":"The Groups","ayahCount":75},{"number":40,"englishName":"Ghafir","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u063a\u064e\u0627\u0641\u0650\u0631\u064d","translation":"The Forgiver","ayahCount":85},{"number":41,"englishName":"Fussilat","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0641\u064f\u0635\u0651\u0650\u0644\u064e\u062a\u06e1","translation":"Explained in detail","ayahCount":54},{"number":42,"englishName":"Ash-Shura","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0634\u0651\u064f\u0648\u0631\u064e\u0649\u0670","translation":"Consultation","ayahCount":53},{"number":43,"englishName":"Az-Zukhruf","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0632\u0651\u064f\u062e\u06e1\u0631\u064f\u0641\u0650","translation":"Ornaments of gold","ayahCount":89},{"number":44,"englishName":"Ad-Dukhaan","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u062f\u0651\u064f\u062e\u064e\u0627\u0646\u0650","translation":"The Smoke","ayahCount":59},{"number":45,"englishName":"Al-Jaathiya","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u062c\u064e\u0627\u062b\u0650\u064a\u064e\u0629\u0650","translation":"Crouching","ayahCount":37},{"number":46,"englishName":"Al-Ahqaf","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0623\u064e\u062d\u06e1\u0642\u064e\u0627\u0641\u0650","translation":"The Dunes","ayahCount":35},{"number":47,"englishName":"Muhammad","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0645\u064f\u062d\u064e\u0645\u0651\u064e\u062f\u064d","translation":"Muhammad","ayahCount":38},{"number":48,"englishName":"Al-Fath","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0641\u064e\u062a\u06e1\u062d\u0650","translation":"The Victory","ayahCount":29},{"number":49,"englishName":"Al-Hujuraat","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u062d\u064f\u062c\u064f\u0631\u064e\u0627\u062a\u0650","translation":"The Inner Apartments","ayahCount":18},{"number":50,"englishName":"Qaaf","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0642\u0653","translation":"The letter Qaaf","ayahCount":45},{"number":51,"englishName":"Adh-Dhaariyat","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0630\u0651\u064e\u0627\u0631\u0650\u064a\u064e\u0627\u062a\u0650","translation":"The Winnowing Winds","ayahCount":60},{"number":52,"englishName":"At-Tur","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0637\u0651\u064f\u0648\u0631\u0650","translation":"The Mount","ayahCount":49},{"number":53,"englishName":"An-Najm","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0646\u0651\u064e\u062c\u06e1\u0645\u0650","translation":"The Star","ayahCount":62},{"number":54,"englishName":"Al-Qamar","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0642\u064e\u0645\u064e\u0631\u0650","translation":"The Moon","ayahCount":55},{"number":55,"englishName":"Ar-Rahmaan","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0631\u0651\u064e\u062d\u06e1\u0645\u064e\u0670\u0646","translation":"The Beneficent","ayahCount":78},{"number":56,"englishName":"Al-Waaqia","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0648\u064e\u0627\u0642\u0650\u0639\u064e\u0629\u0650","translation":"The Inevitable","ayahCount":96},{"number":57,"englishName":"Al-Hadid","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u062d\u064e\u062f\u0650\u064a\u062f\u0650","translation":"The Iron","ayahCount":29},{"number":58,"englishName":"Al-Mujaadila","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0645\u064f\u062c\u064e\u0627\u062f\u0644\u064e\u0629\u0650","translation":"The Pleading Woman","ayahCount":22},{"number":59,"englishName":"Al-Hashr","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u062d\u064e\u0634\u06e1\u0631\u0650","translation":"The Exile","ayahCount":24},{"number":60,"englishName":"Al-Mumtahana","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0645\u064f\u0645\u06e1\u062a\u064e\u062d\u0646\u064e\u0629\u0650","translation":"She that is to be examined","ayahCount":13},{"number":61,"englishName":"As-Saff","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0635\u0651\u064e\u0641\u0651\u0650","translation":"The Ranks","ayahCount":14},{"number":62,"englishName":"Al-Jumu\u0027a","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u062c\u064f\u0645\u064f\u0639\u064e\u0629\u0650","translation":"Friday","ayahCount":11},{"number":63,"englishName":"Al-Munaafiqoon","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0645\u064f\u0646\u064e\u0627\u0641\u0650\u0642\u064f\u0648\u0646\u064e","translation":"The Hypocrites","ayahCount":11},{"number":64,"englishName":"At-Taghaabun","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u062a\u0651\u064e\u063a\u064e\u0627\u0628\u064f\u0646\u0650","translation":"Mutual Disillusion","ayahCount":18},{"number":65,"englishName":"At-Talaaq","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0637\u0651\u064e\u0644\u064e\u0627\u0642\u0650","translation":"Divorce","ayahCount":12},{"number":66,"englishName":"At-Tahrim","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u062a\u0651\u064e\u062d\u06e1\u0631\u0650\u064a\u0645\u0650","translation":"The Prohibition","ayahCount":12},{"number":67,"englishName":"Al-Mulk","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0645\u064f\u0644\u06e1\u0643\u0650","translation":"The Sovereignty","ayahCount":30},{"number":68,"englishName":"Al-Qalam","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0642\u064e\u0644\u064e\u0645\u0650","translation":"The Pen","ayahCount":52},{"number":69,"englishName":"Al-Haaqqa","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u062d\u064e\u0627\u0642\u0651\u064e\u0629\u0650","translation":"The Reality","ayahCount":52},{"number":70,"englishName":"Al-Ma\u0027aarij","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0645\u064e\u0639\u064e\u0627\u0631\u0650\u062c\u0650","translation":"The Ascending Stairways","ayahCount":44},{"number":71,"englishName":"Nooh","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0646\u064f\u0648\u062d\u064d","translation":"Noah","ayahCount":28},{"number":72,"englishName":"Al-Jinn","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u062c\u0650\u0646\u0651\u0650","translation":"The Jinn","ayahCount":28},{"number":73,"englishName":"Al-Muzzammil","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0645\u064f\u0632\u0651\u064e\u0645\u0651\u0650\u0644\u0650","translation":"The Enshrouded One","ayahCount":20},{"number":74,"englishName":"Al-Muddaththir","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0645\u064f\u062f\u0651\u064e\u062b\u0651\u0650\u0631\u0650","translation":"The Cloaked One","ayahCount":56},{"number":75,"englishName":"Al-Qiyaama","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0642\u0650\u064a\u064e\u0627\u0645\u064e\u0629\u0650","translation":"The Resurrection","ayahCount":40},{"number":76,"englishName":"Al-Insaan","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0625\u0650\u0646\u0633\u064e\u0627\u0646\u0650","translation":"Man","ayahCount":31},{"number":77,"englishName":"Al-Mursalaat","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0645\u064f\u0631\u06e1\u0633\u064e\u0644\u064e\u0627\u062a\u0650","translation":"The Emissaries","ayahCount":50},{"number":78,"englishName":"An-Naba","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0646\u0651\u064e\u0628\u064e\u0625\u0650","translation":"The Announcement","ayahCount":40},{"number":79,"englishName":"An-Naazi\u0027aat","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0646\u0651\u064e\u0627\u0632\u0650\u0639\u064e\u0627\u062a\u0650","translation":"Those who drag forth","ayahCount":46},{"number":80,"englishName":"Abasa","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0639\u064e\u0628\u064e\u0633\u064e","translation":"He frowned","ayahCount":42},{"number":81,"englishName":"At-Takwir","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u062a\u0651\u064e\u0643\u06e1\u0648\u0650\u064a\u0631\u0650","translation":"The Overthrowing","ayahCount":29},{"number":82,"englishName":"Al-Infitaar","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0627\u0646\u0641\u0650\u0637\u064e\u0627\u0631\u0650","translation":"The Cleaving","ayahCount":19},{"number":83,"englishName":"Al-Mutaffifin","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0645\u064f\u0637\u064e\u0641\u0651\u0650\u0641\u0650\u064a\u0646\u064e","translation":"Defrauding","ayahCount":36},{"number":84,"englishName":"Al-Inshiqaaq","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0627\u0646\u0634\u0650\u0642\u064e\u0627\u0642\u0650","translation":"The Splitting Open","ayahCount":25},{"number":85,"englishName":"Al-Burooj","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0628\u064f\u0631\u064f\u0648\u062c\u0650","translation":"The Constellations","ayahCount":22},{"number":86,"englishName":"At-Taariq","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0637\u0651\u064e\u0627\u0631\u0650\u0642\u0650","translation":"The Morning Star","ayahCount":17},{"number":87,"englishName":"Al-A\u0027laa","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0623\u064e\u0639\u06e1\u0644\u064e\u0649\u0670","translation":"The Most High","ayahCount":19},{"number":88,"englishName":"Al-Ghaashiya","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u063a\u064e\u0627\u0634\u0650\u064a\u064e\u0629\u0650","translation":"The Overwhelming","ayahCount":26},{"number":89,"englishName":"Al-Fajr","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0641\u064e\u062c\u06e1\u0631\u0650","translation":"The Dawn","ayahCount":30},{"number":90,"englishName":"Al-Balad","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0628\u064e\u0644\u064e\u062f\u0650","translation":"The City","ayahCount":20},{"number":91,"englishName":"Ash-Shams","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0634\u0651\u064e\u0645\u06e1\u0633\u0650","translation":"The Sun","ayahCount":15},{"number":92,"englishName":"Al-Lail","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0644\u0651\u064e\u064a\u06e1\u0644\u0650","translation":"The Night","ayahCount":21},{"number":93,"englishName":"Ad-Dhuhaa","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0636\u0651\u064f\u062d\u064e\u0649\u0670","translation":"The Morning Hours","ayahCount":11},{"number":94,"englishName":"Ash-Sharh","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0634\u0651\u064e\u0631\u06e1\u062d\u0650","translation":"The Consolation","ayahCount":8},{"number":95,"englishName":"At-Tin","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u062a\u0651\u0650\u064a\u0646\u0650","translation":"The Fig","ayahCount":8},{"number":96,"englishName":"Al-Alaq","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0639\u064e\u0644\u064e\u0642\u0650","translation":"The Clot","ayahCount":19},{"number":97,"englishName":"Al-Qadr","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0642\u064e\u062f\u06e1\u0631\u0650","translation":"The Power, Fate","ayahCount":5},{"number":98,"englishName":"Al-Bayyina","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0628\u064e\u064a\u0651\u0650\u0646\u064e\u0629\u0650","translation":"The Evidence","ayahCount":8},{"number":99,"englishName":"Az-Zalzala","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0632\u0651\u064e\u0644\u06e1\u0632\u064e\u0644\u064e\u0629\u0650","translation":"The Earthquake","ayahCount":8},{"number":100,"englishName":"Al-Aadiyaat","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0639\u064e\u0627\u062f\u0650\u064a\u064e\u0627\u062a\u0650","translation":"The Chargers","ayahCount":11},{"number":101,"englishName":"Al-Qaari\u0027a","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0642\u064e\u0627\u0631\u0650\u0639\u064e\u0629\u0650","translation":"The Calamity","ayahCount":11},{"number":102,"englishName":"At-Takaathur","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u062a\u0651\u064e\u0643\u064e\u0627\u062b\u064f\u0631\u0650","translation":"Competition","ayahCount":8},{"number":103,"englishName":"Al-Asr","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0639\u064e\u0635\u06e1\u0631\u0650","translation":"The Declining Day, Epoch","ayahCount":3},{"number":104,"englishName":"Al-Humaza","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0647\u064f\u0645\u064e\u0632\u064e\u0629\u0650","translation":"The Traducer","ayahCount":9},{"number":105,"englishName":"Al-Fil","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0641\u0650\u064a\u0644\u0650","translation":"The Elephant","ayahCount":5},{"number":106,"englishName":"Quraish","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0642\u064f\u0631\u064e\u064a\u06e1\u0634\u064d","translation":"Quraysh","ayahCount":4},{"number":107,"englishName":"Al-Maa\u0027un","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0645\u064e\u0627\u0639\u064f\u0648\u0646\u0650","translation":"Almsgiving","ayahCount":7},{"number":108,"englishName":"Al-Kawthar","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0643\u064e\u0648\u06e1\u062b\u064e\u0631\u0650","translation":"Abundance","ayahCount":3},{"number":109,"englishName":"Al-Kaafiroon","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0643\u064e\u0627\u0641\u0650\u0631\u064f\u0648\u0646\u064e","translation":"The Disbelievers","ayahCount":6},{"number":110,"englishName":"An-Nasr","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0646\u0651\u064e\u0635\u06e1\u0631\u0650","translation":"Divine Support","ayahCount":3},{"number":111,"englishName":"Al-Masad","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0645\u064e\u0633\u064e\u062f\u0650","translation":"The Palm Fibre","ayahCount":5},{"number":112,"englishName":"Al-Ikhlaas","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0625\u0650\u062e\u06e1\u0644\u064e\u0627\u0635\u0650","translation":"Sincerity","ayahCount":4},{"number":113,"englishName":"Al-Falaq","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0641\u064e\u0644\u064e\u0642\u0650","translation":"The Dawn","ayahCount":5},{"number":114,"englishName":"An-Naas","arabicName":"\u0633\u064f\u0648\u0631\u064e\u0629\u064f \u0627\u0644\u0646\u0651\u064e\u0627\u0633\u0650","translation":"Mankind","ayahCount":6}]</script>
+  <script type="module">
+    const SORT_PREF_KEY = 'qq_surah_list_sort_v1';
+    const VALID_SORT_VALUES = new Set(['number', 'name', 'short', 'long']);
+    const HOME_LOTTIE_PATH = '/utils/assets/icons8-home.json';
+
+    function animateHomeIconOnce() {
+      const container = document.getElementById('surahListHomeLottie');
+      if (!container || typeof window.lottie?.loadAnimation !== 'function') return;
+      try {
+        const animation = window.lottie.loadAnimation({
+          container,
+          renderer: 'svg',
+          loop: false,
+          autoplay: false,
+          path: HOME_LOTTIE_PATH
+        });
+        animation.stop();
+        animation.goToAndPlay(0, true);
+      } catch {
+        // no-op
+      }
+    }
+
+    const ACTIONS = [
+      { key: 'listen', label: 'Listen', icon: 'headset', className: 'action-listen' },
+      { key: 'recite', label: 'Recite', icon: 'record_voice_over', className: 'action-recite' },
+      { key: 'learn', label: 'Learn In-Depth', icon: 'auto_stories', className: 'action-learn' },
+      { key: 'memorize', label: 'Memorize', icon: 'psychology', className: 'action-memorize' }
+    ];
+
+    function readSortPreference() {
+      try {
+        const saved = String(localStorage.getItem(SORT_PREF_KEY) || '').trim();
+        if (VALID_SORT_VALUES.has(saved)) return saved;
+      } catch {
+        // ignore storage read failures
+      }
+      return 'number';
+    }
+
+    function writeSortPreference(value) {
+      if (!VALID_SORT_VALUES.has(value)) return;
+      try {
+        localStorage.setItem(SORT_PREF_KEY, value);
+      } catch {
+        // ignore storage write failures
+      }
+    }
+
+    const state = {
+      surahs: [],
+      query: '',
+      sort: readSortPreference()
+    };
+
+    const gridEl = document.getElementById('surahGrid');
+    const summaryEl = document.getElementById('summaryLine');
+    const searchEl = document.getElementById('searchInput');
+    const sortEl = document.getElementById('sortSelect');
+
+    const normalize = value => String(value || '').trim().toLowerCase();
+    const isEmbeddedInHost = window.parent && window.parent !== window;
+
+    function buildLaunchUrl(surah, action) {
+      const targetSurah = Number(surah) || 1;
+      const next = new URL('./index.html', window.location.href);
+      next.searchParams.set('surah', String(targetSurah));
+      next.searchParams.set('ayah', '1');
+      next.searchParams.set('action', action);
+      return next.toString();
+    }
+
+    function launchAction(surah, action) {
+      const targetSurah = Number(surah) || 1;
+      const targetAction = String(action || 'learn').trim().toLowerCase() || 'learn';
+
+      if (isEmbeddedInHost) {
+        window.parent.postMessage(
+          {
+            type: 'SURAH_LIST_ACTION',
+            action: targetAction,
+            surah: targetSurah,
+            ayah: 1
+          },
+          '*'
+        );
+        return;
+      }
+
+      window.location.href = buildLaunchUrl(targetSurah, targetAction);
+    }
+
+    function getVisibleSurahs() {
+      const q = normalize(state.query);
+
+      let list = state.surahs.filter(item => {
+        if (!q) return true;
+
+        const haystack = [
+          item.number,
+          item.englishName,
+          item.arabicName,
+          item.translation
+        ].map(normalize).join(' ');
+
+        return haystack.includes(q);
+      });
+
+      if (state.sort === 'name') {
+        list.sort((a, b) => normalize(a.englishName).localeCompare(normalize(b.englishName)));
+      } else if (state.sort === 'short') {
+        list.sort((a, b) => (Number(a.ayahCount) || 0) - (Number(b.ayahCount) || 0));
+      } else if (state.sort === 'long') {
+        list.sort((a, b) => (Number(b.ayahCount) || 0) - (Number(a.ayahCount) || 0));
+      } else {
+        list.sort((a, b) => (Number(a.number) || 0) - (Number(b.number) || 0));
+      }
+
+      return list;
+    }
+
+    function renderCards() {
+      const list = getVisibleSurahs();
+      summaryEl.textContent = `${list.length} surah${list.length === 1 ? '' : 's'} shown`;
+      gridEl.innerHTML = '';
+      const fragment = document.createDocumentFragment();
+
+      if (!list.length) {
+        const empty = document.createElement('div');
+        empty.className = 'empty';
+        empty.textContent = 'No surah matched your filters.';
+        gridEl.appendChild(empty);
+        return;
+      }
+
+      list.forEach(surah => {
+        const card = document.createElement('article');
+        card.className = 'card';
+        card.tabIndex = 0;
+        card.dataset.surah = String(surah.number);
+        card.setAttribute('role', 'button');
+        card.setAttribute('aria-label', `Open Surah ${surah.number} ${surah.englishName} in learn mode`);
+
+        const actionsHtml = ACTIONS.map(action => `
+          <button
+            type="button"
+            class="action-btn ${action.className}"
+            data-action="${action.key}"
+            data-surah="${surah.number}"
+            aria-label="${action.label} Surah ${surah.number}"
+          >
+            <span class="material-symbols-outlined" aria-hidden="true">${action.icon}</span>
+            <span>${action.label}</span>
+          </button>
+        `).join('');
+
+        card.innerHTML = `
+          <div class="card-head">
+            <span class="surah-no">Surah ${surah.number}</span>
+            <span class="verse-pill">${surah.ayahCount} verses</span>
+          </div>
+          <h2 class="english">${surah.englishName}${surah.arabicName ? ` <span class="inline-arabic">(${surah.arabicName})</span>` : ''}</h2>
+          <p class="translation">${surah.translation || ''}</p>
+          <div class="meta">
+            <span class="meta-tag">Start at Ayah 1</span>
+          </div>
+          <div class="actions">${actionsHtml}</div>
+        `;
+
+        fragment.appendChild(card);
+      });
+
+      gridEl.appendChild(fragment);
+    }
+
+    function bindGridInteractions() {
+      gridEl.addEventListener('click', event => {
+        const actionBtn = event.target.closest('.action-btn');
+        if (actionBtn && gridEl.contains(actionBtn)) {
+          event.preventDefault();
+          event.stopPropagation();
+          const action = actionBtn.dataset.action || 'learn';
+          const targetSurah = Number(actionBtn.dataset.surah) || 1;
+          launchAction(targetSurah, action);
+          return;
+        }
+
+        const card = event.target.closest('.card[data-surah]');
+        if (!card || !gridEl.contains(card)) return;
+        const targetSurah = Number(card.dataset.surah) || 1;
+        launchAction(targetSurah, 'learn');
+      });
+
+      gridEl.addEventListener('keydown', event => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        if (event.target.closest('.action-btn')) return;
+        const card = event.target.closest('.card[data-surah]');
+        if (!card || !gridEl.contains(card)) return;
+        event.preventDefault();
+        const targetSurah = Number(card.dataset.surah) || 1;
+        launchAction(targetSurah, 'learn');
+      });
+    }
+
+    function readPreloadedSurahs() {
+      const node = document.getElementById('preloadedSurahList');
+      if (!node) return [];
+      try {
+        const parsed = JSON.parse(node.textContent || '[]');
+        if (!Array.isArray(parsed)) return [];
+        return parsed
+          .map(item => ({
+            number: Number(item.number) || 0,
+            englishName: String(item.englishName || ''),
+            arabicName: String(item.arabicName || ''),
+            translation: String(item.translation || ''),
+            ayahCount: Number(item.ayahCount) || 0
+          }))
+          .filter(item => item.number > 0 && item.ayahCount > 0);
+      } catch {
+        return [];
+      }
+    }
+
+    async function fetchSurahsFallback() {
+      try {
+        const mod = await import('./services/quranApi.js');
+        if (typeof mod.fetchSurahList !== 'function') return [];
+        const list = await mod.fetchSurahList();
+        return Array.isArray(list) ? list : [];
+      } catch {
+        return [];
+      }
+    }
+
+    async function init() {
+      animateHomeIconOnce();
+      const preloaded = readPreloadedSurahs();
+      const surahs = preloaded.length ? preloaded : await fetchSurahsFallback();
+      state.surahs = Array.isArray(surahs) ? surahs : [];
+      if (!state.surahs.length) {
+        summaryEl.textContent = 'Could not load surah list right now.';
+        gridEl.innerHTML = '<div class="empty">Please try again in a moment.</div>';
+        return;
+      }
+      renderCards();
+    }
+
+    searchEl.addEventListener('input', () => {
+      state.query = searchEl.value;
+      renderCards();
+    });
+
+    sortEl.addEventListener('change', () => {
+      state.sort = sortEl.value;
+      writeSortPreference(state.sort);
+      renderCards();
+    });
+
+    sortEl.value = state.sort;
+    bindGridInteractions();
+    init();
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+

@@ -1,0 +1,5 @@
+steps:
+- name: gcr.io/cloud-builders/docker
+  args: ['build','-f','Dockerfile.reel','-t','gcr.io/reelgenarartor/quran-reel-service:20260221-145254','.']
+images:
+- 'gcr.io/reelgenarartor/quran-reel-service:20260221-145254'

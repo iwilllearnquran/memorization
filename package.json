@@ -1,0 +1,11 @@
+﻿{
+  "name": "memorization",
+  "private": true,
+  "scripts": {
+    "validate:repo": "node scripts/repo_static_checks.js",
+    "test:e2e": "playwright test --config=.github/e2e/playwright.config.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.58.2"
+  }
+}

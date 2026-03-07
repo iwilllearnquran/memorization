@@ -2,8 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>📖 Quran Quest</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title> Quran Quest</title>
+  <script>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const action = String(params.get('action') || '').trim().toLowerCase();
+      const shouldShowPendingAyah =
+        params.has('surah') &&
+        params.has('ayah') &&
+        (!action || action === 'learn');
+      if (shouldShowPendingAyah) {
+        document.documentElement.classList.add('pending-ayah');
+      }
+    })();
+  </script>
 
   <!-- Firebase compat SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js" defer></script>
@@ -11,11 +24,33 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js" defer></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
+
+<link rel="preload" href="/fonts/PDMS_SALEEM_QURANFONTQESHIP_0.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/Gilroy-Medium.woff2" as="font" type="font/woff2" crossorigin>
 
 
-  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="/index-style.css">
+  <link
+  href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600&display=swap"
+  rel="stylesheet"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+  rel="stylesheet"
+/>
+
+
+
+<link rel="stylesheet" href="/index-style.css?v=20260307-progress-overlay-fix1">
 </head>
 <body>
 
@@ -25,96 +60,331 @@
 
   <div class="navbar" id="mainNavbar">
     <div class="navbar-left">
-      <button class="login-btn" id="loginBtn">👤</button>
+      <!--<button class="login-btn" id="loginBtn">User</button> -->
+      <button class="menu-btn" id="menuBtn" aria-label="Open profile menu">
+        <div id="menuLottie" aria-hidden="true"></div>
+        <div id="menuHomeLottie" class="menu-home-icon nav-home-lottie" aria-hidden="true"></div>
+      </button>
+      <button class="menu-btn recite-home-btn" id="reciteHomeBtn" aria-label="Back to Learn Home">
+        <div id="reciteHomeLottie" class="nav-home-lottie" aria-hidden="true"></div>
+      </button>
+
+
     </div>
-    <div class="navbar-center dropdowns">
-      <select id="surahSelect"></select>
-      <select id="ayahSelect"></select>
-      
+    <div class="navbar-center">
+      <div class="dropdowns">
+        <select id="surahSelect"></select>
+        <select id="ayahSelect"></select>
+      </div>
     </div>
     <div id="gameStatsNav">
     </div>
     <div class="navbar-right">
-      
-      <button id="returnToAyah" class="return-btn">Return to Ayah</button>
-      <div class="streak-info" id="streakDisplay">🔥0</div>
+
+      <button id="returnToAyah" class="return-btn">Return to Main Page</button>
+      <button id="learnSettingsBtn" class="top-settings-btn" type="button" aria-label="Learn settings">
+        <span class="material-symbols-outlined nav-action-icon" aria-hidden="true">tune</span>
+      </button>
+      <div class="streak-info" id="streakDisplay">&#128293;0</div>
     </div>
+  </div>
+  <div id="surahProgressWrap" aria-hidden="true">
+    <div id="surahProgressFill"></div>
+    <div id="surahProgressMarkers" aria-hidden="true">
+      <span data-pct="10"></span>
+      <span data-pct="35"></span>
+      <span data-pct="50"></span>
+      <span data-pct="90"></span>
+      <span data-pct="100"></span>
+    </div>
+    <button id="surahProgressInfo" type="button" aria-label="Surah progress info"></button>
+    <div id="surahProgressTip" role="status" aria-live="polite"></div>
   </div>
 
   <!-- HTML -->
-<div id="profileDrawer" class="profile-drawer">
-  <div class="drawer-header">
-    <button id="drawerCloseBtn" aria-label="Close profile drawer">‹‹‹</button>
-    <h3>Your Profile</h3>
+<div id="profileDrawer" class="profile-drawer qq-sidebar">
+
+  <div class="drawer-header qq-sidebar-header">
+    <span class="qq-logo">
+      <span class="material-symbols-outlined" aria-hidden="true">menu_book</span>
+    </span>
+    <span class="qq-title">My Quran Quest</span>
+    <button id="drawerCloseBtn" class="drawer-close" type="button" aria-label="Close menu">
+      <span class="material-symbols-outlined" aria-hidden="true">close</span>
+    </button>
   </div>
-  <div class="drawer-content">
-    <div class="profile-field">
-      <label>Name</label>
-      <span id="userName">Guest</span>
+
+  <div class="drawer-user" id="drawerUser">
+    <div id="drawerGreeting" class="drawer-greeting">Assalamualaikum,</div>
+    <div class="drawer-name-row">
+      <div id="drawerSubtext" class="drawer-subtext">Guest</div>
+      <button
+        id="drawerEditNameBtn"
+        class="drawer-edit-name-btn"
+        type="button"
+        aria-label="Edit display name"
+        title="Edit display name"
+        style="display:none;"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">edit</span>
+      </button>
     </div>
-    <div class="profile-field">
-      <label>Ajr Points</label>
-      <span id="ajrPoints">0</span>
+    <div class="drawer-auth-actions">
+      <button id="drawerLoginBtn" class="drawer-auth-btn" type="button">
+        Continue with Google
+      </button>
+      <button id="drawerLogoutBtn" class="drawer-auth-btn secondary" type="button" style="display:none;">
+        Sign out
+      </button>
     </div>
-    <div class="drawer-info">
-      <h4>About Quran Quest</h4>
-      <p>
-        Quran Quest is a fun and interactive way to learn the Quran. 
-        You can track your progress, earn points, and challenge yourself with quizzes.
-        Whether you're a beginner or an advanced learner, Quran Quest has something for everyone.
-        Join us on this spiritual journey and deepen your understanding of the Quran.
-        <br><br>
-        <strong>Note:</strong> This is first version. More features are coming soon.  
-        <br><br>
-      </p>
+  </div>
+
+  <nav class="qq-nav">
+    <button class="qq-nav-item" id="aboutBtn" type="button">
+      <span class="material-symbols-outlined drawer-menu-icon" aria-hidden="true">info</span>
+      <span>About Us</span>
+    </button>
+
+    <button class="qq-nav-item" id="learningJourneyBtn" type="button">
+      <span class="material-symbols-outlined drawer-menu-icon" aria-hidden="true">query_stats</span>
+      <span>My Quran Reading History</span>
+    </button>
+
+    <button class="qq-nav-item" id="memorizedAyahsBtn" type="button">
+      <span class="material-symbols-outlined drawer-menu-icon" aria-hidden="true">bar_chart</span>
+      <span>My Memorized Ayahs</span>
+    </button>
+    <button class="qq-nav-item" id="savedHistoryBtn" type="button">
+      <span class="material-symbols-outlined drawer-menu-icon" aria-hidden="true">bookmarks</span>
+      <span>Saved Ayah History</span>
+    </button>
+
+    <button class="qq-nav-item" id="namazHistoryBtn" type="button">
+      <span class="material-symbols-outlined drawer-menu-icon" aria-hidden="true">mosque</span>
+      <span>Namaz History</span>
+    </button>
+  </nav>
+
+  <div class="drawer-glass-divider" aria-hidden="true"></div>
+
+  <div class="drawer-footer">
+    <div class="drawer-follow-title">Follow us on:</div>
+    <div class="drawer-links">
+      <a
+        class="drawer-link"
+        href="https://www.instagram.com/my.quran.quest._?igsh=MTNtMnAxMjAzanY3Zg=="
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Instagram"
+      >
+        <img class="drawer-icon" src="assets/social-icons/instagram.svg" alt="" aria-hidden="true" />
+      </a>
+
+      <a
+        class="drawer-link"
+        href="https://youtube.com/@daily_quran_on_your_feed?si=GM2EIPt_eMUpxNhm"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="YouTube"
+      >
+        <img class="drawer-icon" src="assets/social-icons/youtube.svg" alt="" aria-hidden="true" />
+      </a>
+
+      <a
+        class="drawer-link"
+        href="https://whatsapp.com/channel/0029VbCTA0KGU3BFsTZR6L2m"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="WhatsApp Channel"
+      >
+        <img class="drawer-icon" src="assets/social-icons/whatsapp.svg" alt="" aria-hidden="true" />
+      </a>
     </div>
-    <div class="profile-actions">
-      <button id="logoutBtn">Logout</button>
+    <button id="contactUsBtn" class="drawer-contact" type="button">
+      Contact Us
+    </button>
+  </div>
+
+</div>
+<div id="swipeHint" class="swipe-hint hidden">
+  <div class="swipe-content">
+    <div id="swipeLottie"></div>
+    <div class="swipe-text">
+      Swipe left or right to change verses
     </div>
   </div>
 </div>
 
-
-<div id="calendarPopup"></div>
 
 <div id="hero" class="hero">
   <div class="hero-content">
+    <div class="hero-moon" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="72" height="72" viewBox="0 0 256 256" xml:space="preserve">
+        <g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;" transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)">
+          <path d="M 69.491 71.08 c -18.67 3.414 -36.573 -8.953 -39.988 -27.623 S 38.456 6.884 57.126 3.469 c 1.777 -0.325 3.541 -0.463 5.292 -0.511 C 54.979 0.112 46.69 -0.796 38.282 0.742 C 13.839 5.212 -2.353 28.651 2.117 53.094 s 27.909 40.634 52.352 36.164 c 16.252 -2.972 28.847 -14.334 34.155 -28.798 C 83.739 65.803 77.161 69.677 69.491 71.08 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(247,215,127); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round"/>
+        </g>
+      </svg>
+    </div>
 
     <h1>Quran Quest</h1>
-    <p>Learn Quran in a fun, interactive way—anywhere, anytime.</p>
 
-     <p class="hero-subtitle">
-      "The best among you are those who learn the Quran and teach it."<br>
-      -The Prophet (ﷺ)
+
+
+
+
+    <p class="hero-description">
+      We treat every verse as its own universe
     </p>
-        <div class="hero-actions">
-      <button id="startLearningBtn" class="cta-btn">Start Learning</button>
+    <p class="hero-subtitle">
+      <span class="hero-subtitle-quote">"The best among you are those who learn the Quran and teach it."</span>
+      <span class="hero-subtitle-attribution">Prophet Muhammad (&#65018;)</span>
+    </p>
+
+    <div class="hero-dua-card" id="randomDuaCard" data-ref="2:201" role="button" tabindex="0">
+      <div class="hero-dua-title">Ayah of the Day</div>
+      <div class="hero-dua-text">
+        Our Lord, grant us good in this world and good in the Hereafter, and protect us from the torment of the Fire.
+      </div>
+      <div class="hero-dua-meta">Al-Baqarah - 2:201</div>
     </div>
+    <h2 id="quickAccessTitle" class="hero-quick-access-title hero-quick-access-title-main">Quick Access</h2>
+    <section class="hero-namaz-widget" id="namazGoalsWidget" aria-labelledby="namazGoalsTitle">
+      <button class="hero-namaz-summary" id="namazGoalsSummary" type="button" aria-label="Open Namaz tracker history">
+        <span class="hero-namaz-summary-inner">
+          <span class="hero-namaz-summary-icon material-symbols-outlined" aria-hidden="true">dark_mode</span>
+          <span class="hero-namaz-title" id="namazGoalsTitle">Namaz Tracker</span>
+        </span>
+      </button>
+      <div class="hero-namaz-rows" id="namazGoalsRows">
+        <button class="hero-namaz-item" type="button" data-prayer-row="fajr" data-prayer="fajr" data-label="Fajr">
+          <span class="hero-namaz-dot" aria-hidden="true"></span>
+          <span class="hero-namaz-name">Fajr</span>
+        </button>
+        <button class="hero-namaz-item" type="button" data-prayer-row="dhuhr" data-prayer="dhuhr" data-label="Dhuhr">
+          <span class="hero-namaz-dot" aria-hidden="true"></span>
+          <span class="hero-namaz-name">Dhuhr</span>
+        </button>
+        <button class="hero-namaz-item" type="button" data-prayer-row="asr" data-prayer="asr" data-label="Asr">
+          <span class="hero-namaz-dot" aria-hidden="true"></span>
+          <span class="hero-namaz-name">Asr</span>
+        </button>
+        <button class="hero-namaz-item" type="button" data-prayer-row="maghrib" data-prayer="maghrib" data-label="Maghrib">
+          <span class="hero-namaz-dot" aria-hidden="true"></span>
+          <span class="hero-namaz-name">Maghrib</span>
+        </button>
+        <button class="hero-namaz-item" type="button" data-prayer-row="isha" data-prayer="isha" data-label="Isha">
+          <span class="hero-namaz-dot" aria-hidden="true"></span>
+          <span class="hero-namaz-name">Isha</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="hero-quick-access" aria-label="Quick actions">
+      <div class="hero-quick-access-grid">
+        <button class="hero-quick-card" id="quickWhyBtn" type="button" aria-label="Open Why Quran Quest">
+          <span class="material-symbols-outlined hero-quick-card-icon" aria-hidden="true">auto_stories</span>
+          <span class="hero-quick-card-label">Why Quran Quest</span>
+        </button>
+        <button class="hero-quick-card" id="quickNamazHistoryBtn" type="button" aria-label="Open Namaz history">
+          <span class="material-symbols-outlined hero-quick-card-icon" aria-hidden="true">history</span>
+          <span class="hero-quick-card-label">Namaz History</span>
+        </button>
+        <button
+          class="hero-quick-card"
+          id="quickSurahListBtn"
+          type="button"
+          aria-label="Open Surah list page"
+        >
+          <span class="material-symbols-outlined hero-quick-card-icon" aria-hidden="true">menu_book</span>
+          <span class="hero-quick-card-label">Surah List</span>
+        </button>
+      </div>
+    </section>
+
+    <div class="hero-actions">
+      <button id="startLearningBtn" class="cta-btn">
+        <span class="material-symbols-outlined cta-btn-icon" aria-hidden="true">auto_stories</span>
+        <span class="cta-btn-text">Start In-Depth Study</span>
+      </button>
+      <button id="startRecitingBtn" class="cta-btn cta-btn-secondary" type="button">
+        <span class="material-symbols-outlined cta-btn-icon" aria-hidden="true">headset</span>
+        <span class="cta-btn-text">Start Reading / Listening</span>
+      </button>
+    </div>
+
   </div>
 </div>
 
 
+<div id="duasView" class="duas-view" aria-hidden="true">
+  <iframe id="duasFrame" title="Daily Ramzan Duas" loading="eager" allow="autoplay"></iframe>
+</div>
+
+<div id="memorizationView" class="memorization-view" aria-hidden="true">
+  <iframe id="memorizationFrame" title="Memorization" loading="eager" allow="autoplay"></iframe>
+</div>
+
+<div id="surahListView" class="surah-list-view" aria-hidden="true">
+  <iframe id="surahListFrame" title="Surah List" loading="eager"></iframe>
+</div>
+
+<div id="reciteScrollView" class="recite-scroll-view" aria-hidden="true"></div>
+
+
   <div class="container" id="surahContainer">
-    
+
   </div>
 
 
 
 <div class="viewer" id="viewer">
-  <button class="side-arrow prev" onclick="navigateAyah(-1)">
-    <span></span>
-  </button>
-  <iframe id="ayahViewer"></iframe>
-  <button class="side-arrow next" onclick="navigateAyah(1)">
-    <span></span>
-  </button>
+  <div id="gestureLayer"></div>
+
+  <!-- ÃƒÂ°Ã…Â¸Ã†â€™Ã‚Â Card wrapper -->
+  <div id="ayahCard" class="ayah-card">
+    <iframe id="ayahViewer" allow="autoplay"></iframe>
+  </div>
 </div>
 
 
 
-  
+<nav class="bottom-nav" id="bottomNav" aria-label="Primary">
+  <div class="bottom-nav-inner">
+    <button class="bottom-nav-btn active" id="navLearnQuran" type="button">
+      <svg class="bottom-nav-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+        <path d="M456,168h-8v-44.977c0-15.027-13.623-26.219-28.109-23.648l-163.892,28.504L92.172,98.992C77.56,96.372,64,107.656,64,122.625V168h-8c-8.836,0-16,7.163-16,16v184c0,8.836,7.164,16,16,16h130.745c13.602,0,19.88,6.625,27.882,14.627c6.001,6.001,14.141,9.373,22.627,9.373c13.566,0,23.924,0,37.49,0c8.487,0,16.626-3.372,22.627-9.373c8-8,14.268-14.627,27.882-14.627H456c8.836,0,16-7.164,16-16V184C472,175.163,464.836,168,456,168z M422.633,115.141c4.748-0.848,9.367,2.787,9.367,7.883v199.109c0,3.891-2.781,7.203-6.609,7.883L264,358.469V142.727L422.633,115.141z M80,122.625c0-4.952,4.446-8.733,9.391-7.883L248,142.711v215.758L86.609,330.016c-3.828-0.68-6.609-3.992-6.609-7.883V122.625z M288.125,267.727c-0.773-4.352,2.133-8.5,6.484-9.266l104-18.336c4.336-0.82,8.5,2.133,9.266,6.484c0.773,4.352-2.133,8.5-6.484,9.266l-104,18.336c-0.469,0.086-0.938,0.125-1.398,0.125C292.18,274.336,288.805,271.609,288.125,267.727z M288.125,227.727c-0.773-4.352,2.133-8.5,6.484-9.266l104-18.336c4.336-0.805,8.5,2.133,9.266,6.484c0.773,4.352-2.133,8.5-6.484,9.266l-104,18.336c-0.469,0.086-0.938,0.125-1.398,0.125C292.18,234.336,288.805,231.609,288.125,227.727z M288.125,187.727c-0.773-4.352,2.133-8.5,6.484-9.266l104-18.336c4.336-0.82,8.5,2.133,9.266,6.484c0.773,4.352-2.133,8.5-6.484,9.266l-104,18.336c-0.469,0.086-0.938,0.125-1.398,0.125C292.18,194.336,288.805,191.609,288.125,187.727z M288.125,307.727c-0.773-4.352,2.133-8.5,6.484-9.266l104-18.336c4.336-0.805,8.5,2.133,9.266,6.484c0.773,4.352-2.133,8.5-6.484,9.266l-104,18.336c-0.469,0.086-0.938,0.125-1.398,0.125C292.18,314.336,288.805,311.609,288.125,307.727z M118.239,218.242c-11.85-14.068-13.889-33.678-3.614-45.243c12.414-13.972,35.529-10.978,49.375,5.462c13.847-11.557,36.961-6.399,49.375,11.951c10.275,15.188,8.235,34.079-3.614,43.968l-32.5,27.125c-7.318,6.108-19.204,4.012-26.522-4.677L118.239,218.242z"/>
+      </svg>
+      <span>Learn Quran</span>
+    </button>
+    <button class="bottom-nav-btn" id="navMemorization" type="button">
+      <span class="material-icons-outlined" aria-hidden="true">psychology</span>
+      <span>Memorization</span>
+    </button>
+    <button class="bottom-nav-btn" id="navRamzanDuas" type="button">
+      <span class="material-symbols-outlined" aria-hidden="true">prayer_times</span>
+      <span>Ramzan Duas</span>
+    </button>
+  </div>
+</nav>
 
   <script src="/_private/firebase-init.js" defer></script>
-  <script type="module" src="/index-script.js" defer></script> 
+<script type="module" src="/index-script.js?v=20260307-progress-overlay-fix1" defer></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,88 @@
+﻿name: Web CI - Basic and Deep Tests
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: web-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  basic-checks:
+    name: Static Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install repo dependencies
+        run: npm ci
+
+      - name: Validate repo sources and local references
+        run: npm run validate:repo
+
+      - name: Validate Python syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          py_count=0
+          while IFS= read -r -d '' file; do
+            py_count=$((py_count + 1))
+            echo "Compiling ${file}"
+            python -m py_compile "${file}"
+          done < <(find . -type f -name "*.py" \
+            -not -path "./.git/*" \
+            -not -path "./.venv/*" \
+            -print0)
+          echo "Checked ${py_count} Python files."
+
+  deep-browser-tests:
+    name: Browser Smoke + Screen Evaluation
+    runs-on: ubuntu-latest
+    needs: basic-checks
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install repo dependencies
+        run: npm ci
+
+      - name: Install Chromium browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright smoke suite
+        run: npm run test:e2e
+
+      - name: Upload browser test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-test-results-${{ github.run_id }}
+          path: test-results/playwright
+          if-no-files-found: ignore
+          retention-days: 14

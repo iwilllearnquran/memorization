@@ -1,0 +1,989 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Qur’anic Duas</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
+
+<style>
+:root {
+  --teal-900:#5e2b42;
+  --teal-700:#7f4960;
+  --gold-500:#d6a23a;
+  --paper:rgba(255, 255, 255, 0.95);
+  --ink:#2f1b25;
+  --muted:#68525c;
+  --shadow:0 12px 28px rgba(39,16,27,.12);
+  --ring:0 0 0 3px rgba(214,162,58,.45);
+  --qq-arabic-font-family: 'CustomArabic';
+  --qq-arabic-size: 26px;
+  --qq-arabic-weight: 100;
+  --qq-arabic-style: normal;
+  --qq-english-scale: 1;
+}
+
+/* Hide scrollbar UI while preserving scroll behavior. */
+html,
+body,
+body * {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+body *::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
+body *::-webkit-scrollbar-thumb,
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
+body *::-webkit-scrollbar-track,
+html::-webkit-scrollbar-corner,
+body::-webkit-scrollbar-corner,
+body *::-webkit-scrollbar-corner {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+@font-face {
+  font-family: 'CustomArabic';
+  src: url('/fonts/Naskh-Nastaleeq-IndoPak-QWBW.ttf') format('truetype');
+  font-display: swap;       /* 🔥 critical */
+}
+
+@font-face {
+  font-family: 'UthmanicHafs';
+  src: url('/fonts/UthmanicHafs1Ver18.woff2') format('woff2');
+  font-display: swap;
+}
+
+
+body {
+  margin:0;
+  font-family:Manrope, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+background:
+    radial-gradient(
+      980px 520px at 12% -8%,
+      rgba(255, 233, 194, 0.26),
+      transparent 62%
+    ),
+    radial-gradient(
+      1100px 600px at 84% 12%,
+      rgba(170, 102, 128, 0.2),
+      transparent 66%
+    ),
+    linear-gradient(
+      180deg,
+      #8c5a6d 0%,
+      #98667a 52%,
+      #865569 100%
+    );
+
+  background-attachment: fixed;
+  padding:0;
+}
+
+html {
+  background: linear-gradient(180deg, #8c5a6d 0%, #98667a 52%, #865569 100%);
+}
+
+.page {
+  max-width:100%;
+  margin:0;
+  padding:20px 15px 40px;
+}
+
+.app-header {
+  text-align:center;
+  padding:88px 20px 22px;
+  background:linear-gradient(135deg, rgba(143, 42, 71, 0.88) 0%, rgba(101, 23, 45, 0.92) 100%);
+  border-radius:20px;
+  box-shadow:var(--shadow);
+  margin-bottom:20px;
+  border:1px solid rgba(255,255,255,0.22);
+  position:relative;
+  overflow:hidden;
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+  box-shadow:
+    0 14px 30px rgba(39, 16, 27, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.app-header::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.03) 45%);
+  z-index:0;
+  pointer-events:none;
+}
+
+.app-header::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(66, 14, 33, 0.06) 0%, rgba(66, 14, 33, 0.16) 55%, rgba(66, 14, 33, 0.26) 100%);
+  z-index:0;
+  pointer-events:none;
+}
+
+.app-moon-strip {
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:92px;
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  grid-template-rows:1fr;
+  pointer-events:none;
+  z-index:0;
+  opacity:0.85;
+}
+
+.app-moon-tile {
+  overflow:hidden;
+  display:grid;
+  place-items:center;
+}
+
+.app-moon-lottie {
+  width:128px;
+  height:128px;
+  transform:translateY(-10px);
+}
+
+.app-moon-tile.is-center .app-moon-lottie {
+  transform:translateY(-10px) scaleX(-1);
+}
+
+.app-title {
+  font-family:"Cormorant Garamond", serif;
+  font-size:32px;
+  color:#fff;
+  margin:0 0 6px;
+  position:relative;
+  z-index:1;
+}
+
+.app-subtitle {
+  color:rgba(255,255,255,0.85);
+  margin:0;
+  position:relative;
+  z-index:1;
+}
+
+.dua-page-quote {
+  margin:8px auto 0;
+  max-width:420px;
+  font-size:0.7rem;
+  font-style:italic;
+  line-height:1.45;
+  color:rgba(255,255,255,0.82);
+  position:relative;
+  z-index:1;
+}
+
+.dua-list {
+  display:grid;
+  gap:22px;
+}
+
+.dua-card {
+  background:linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,253,254,0.95) 100%);
+  border-radius:22px;
+  padding:24px;
+  border:1px solid rgba(129, 78, 99, 0.14);
+  box-shadow:var(--shadow);
+  text-align:center;
+  transition:box-shadow .25s ease, transform .25s ease;
+  backdrop-filter: blur(8px) saturate(106%);
+  -webkit-backdrop-filter: blur(8px) saturate(106%);
+}
+
+.dua-card.playing {
+  box-shadow:var(--shadow), var(--ring), inset 0 1px 0 rgba(255,255,255,0.28);
+  transform:scale(1.01);
+}
+
+.dua-reference {
+  font-size:12px;
+  color:var(--teal-700);
+  margin-bottom:12px;
+  font-weight:600;
+}
+
+.dua-ref-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(143, 42, 71, 0.5);
+}
+
+.dua-ref-link:hover {
+  color: var(--teal-900);
+  text-decoration-color: rgba(101, 23, 45, 0.8);
+}
+
+.dua-arabic {
+  font-family:var(--qq-arabic-font-family), serif;
+  font-size:var(--qq-arabic-size);
+  font-weight:var(--qq-arabic-weight);
+  font-style:var(--qq-arabic-style);
+  line-height:1.95;
+  word-spacing:-0.12em;
+  letter-spacing:-0.01em;
+  direction:rtl;
+  margin-bottom:14px;
+  color:var(--ink);
+}
+
+.dua-divider {
+  width:64px;
+  height:1px;
+  margin:0 auto 14px;
+  background:linear-gradient(90deg,transparent,var(--gold-500),transparent);
+}
+
+.dua-transliteration {
+  font-style:italic;
+  color:var(--muted);
+  font-size: calc(16px * var(--qq-english-scale));
+  margin-bottom:10px;
+}
+
+.dua-translation {
+  font-size: calc(16px * var(--qq-english-scale));
+  color:#1a2d3a;
+}
+
+.play-btn {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin:18px auto 0;
+  padding:10px 18px;
+  font-size:13px;
+  font-weight:600;
+  border-radius:999px;
+  border:1px solid rgba(101,23,45,.25);
+  background:rgba(101,23,45,.08);
+  color:var(--teal-900);
+  cursor:pointer;
+  transition:all .2s ease;
+}
+
+.play-btn:hover {
+  background:rgba(101,23,45,.14);
+}
+
+.play-btn.playing {
+  background:var(--teal-900);
+  color:#fff;
+  border-color:var(--teal-900);
+}
+
+.play-btn .material-icons {
+  font-size:18px;
+}
+
+.dua-share-btn {
+  border: 1px solid rgba(101, 23, 45, 0.25);
+  background: rgba(101, 23, 45, 0.08);
+  color: var(--teal-900);
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease;
+  margin-top: 12px;
+}
+
+.dua-share-btn:hover {
+  background: rgba(101, 23, 45, 0.16);
+}
+
+.dua-share-btn .material-icons {
+  font-size: 18px;
+}
+
+.dua-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.dua-actions .play-btn,
+.dua-actions .dua-share-btn {
+  margin: 0;
+}
+</style>
+<script>
+(() => {
+  const clamp = (value, min, max, fallback) => {
+    const numeric = Number.parseFloat(value);
+    if (!Number.isFinite(numeric)) return fallback;
+    return Math.min(max, Math.max(min, numeric));
+  };
+
+  try {
+    const raw = JSON.parse(localStorage.getItem("qq_settings") || "{}") || {};
+    const duasProfile =
+      raw?.typographyByMode &&
+      typeof raw.typographyByMode === "object" &&
+      raw.typographyByMode.duas &&
+      typeof raw.typographyByMode.duas === "object"
+        ? raw.typographyByMode.duas
+        : null;
+    const source = duasProfile ? { ...raw, ...duasProfile } : raw;
+    const arabicFont = source.arabicFont === "UthmanicHafs" ? "UthmanicHafs" : "CustomArabic";
+    const arabicSize = clamp(source.arabicSize, 16, 56, 26);
+    const weightRaw = Number.parseInt(source.arabicWeight, 10);
+    const arabicWeight = Number.isFinite(weightRaw)
+      ? Math.min(900, Math.max(100, Math.round(weightRaw / 100) * 100))
+      : 100;
+    const englishScale = clamp(source.englishScale, 70, 160, 100);
+    const arabicItalic = source.arabicItalic === true;
+    const root = document.documentElement;
+
+    root.setAttribute("data-arabic-font", arabicFont);
+    root.style.setProperty("--qq-arabic-font-family", `'${arabicFont}'`);
+    root.style.setProperty("--qq-arabic-size", `${arabicSize}px`);
+    root.style.setProperty("--qq-arabic-weight", String(arabicWeight));
+    root.style.setProperty("--qq-arabic-style", arabicItalic ? "italic" : "normal");
+    root.style.setProperty("--qq-english-scale", String(englishScale / 100));
+  } catch (_) {}
+})();
+</script>
+</head>
+
+<body>
+<div class="page">
+
+<header class="app-header">
+  <div id="duaMoonStrip" class="app-moon-strip" aria-hidden="true"></div>
+  <div class="app-title">Qur’anic Duas</div>
+  <div class="app-subtitle">Powerful Duas from the Qur’an</div>
+  <p class="dua-page-quote">
+    "Call upon Me; I will respond to you."<br>
+    &mdash; Quran (40:60)
+  </p>
+</header>
+
+<main class="dua-list" id="duaList"></main>
+
+</div>
+
+<script>
+if (window.top === window.self) {
+  window.location.replace('/?tab=duas');
+}
+
+const RAW_ORIGIN = window.location.origin;
+const PARENT_ORIGIN = RAW_ORIGIN === 'null' ? '*' : RAW_ORIGIN;
+
+function isTrustedParentMessage(e) {
+  if (!e || !e.origin) return false;
+  if (RAW_ORIGIN === 'null') {
+    if (e.origin !== 'null') return false;
+  } else if (e.origin !== RAW_ORIGIN) {
+    return false;
+  }
+  return e.source === window.parent;
+}
+
+function postToParent(message) {
+  if (!window.parent || window.parent === window) return;
+  window.parent.postMessage(message, PARENT_ORIGIN);
+}
+
+function resolveDuaTypographySource(rawSettings = {}) {
+  if (!rawSettings || typeof rawSettings !== "object") return {};
+  const byMode = rawSettings.typographyByMode;
+  const duasProfile =
+    byMode && typeof byMode === "object" &&
+    byMode.duas && typeof byMode.duas === "object"
+      ? byMode.duas
+      : null;
+  return duasProfile ? { ...rawSettings, ...duasProfile } : rawSettings;
+}
+
+function sanitizeTypographySettings(raw = {}) {
+  const arabicFont = raw.arabicFont === "UthmanicHafs" ? "UthmanicHafs" : "CustomArabic";
+  const parsedSize = Number.parseFloat(raw.arabicSize);
+  const arabicSize = Number.isFinite(parsedSize) ? Math.min(56, Math.max(16, parsedSize)) : 26;
+  const parsedWeight = Number.parseInt(raw.arabicWeight, 10);
+  const weightBucket = Number.isFinite(parsedWeight) ? Math.round(parsedWeight / 100) * 100 : 100;
+  const arabicWeight = Math.min(900, Math.max(100, weightBucket));
+  const englishRaw = Number.parseFloat(raw.englishScale);
+  const englishScale = Number.isFinite(englishRaw) ? Math.min(160, Math.max(70, englishRaw)) : 100;
+  return {
+    arabicFont,
+    arabicSize,
+    arabicWeight,
+    arabicItalic: raw.arabicItalic === true,
+    englishScale
+  };
+}
+
+let currentTypography = sanitizeTypographySettings({});
+
+function applyDuaTypography(rawSettings = {}) {
+  const source = resolveDuaTypographySource(rawSettings);
+  currentTypography = sanitizeTypographySettings(source);
+  const html = document.documentElement;
+  html.setAttribute("data-arabic-font", currentTypography.arabicFont);
+  html.style.setProperty("--qq-arabic-font-family", `'${currentTypography.arabicFont}'`);
+  html.style.setProperty("--qq-arabic-size", `${currentTypography.arabicSize}px`);
+  html.style.setProperty("--qq-arabic-weight", String(currentTypography.arabicWeight));
+  html.style.setProperty("--qq-arabic-style", currentTypography.arabicItalic ? "italic" : "normal");
+  html.style.setProperty("--qq-english-scale", String(currentTypography.englishScale / 100));
+}
+
+const SHARE_URL = "https://myquranquest.com/duas";
+let moonAnimations = [];
+
+function initDuaMoonAnimation() {
+  const stripEl = document.getElementById("duaMoonStrip");
+  if (!stripEl || typeof window.lottie === "undefined") return;
+  try {
+    moonAnimations.forEach(anim => {
+      try {
+        anim.destroy();
+      } catch (_) {}
+    });
+    moonAnimations = [];
+    const animationPath = new URL("../assets/dua-moon-animation.json", window.location.href).href;
+    stripEl.innerHTML = "";
+    const tileCount = 3;
+    for (let i = 0; i < tileCount; i += 1) {
+      const tile = document.createElement("div");
+      tile.className = "app-moon-tile";
+      if (i === 1) {
+        tile.classList.add("is-center");
+      }
+      const host = document.createElement("div");
+      host.className = "app-moon-lottie";
+      tile.appendChild(host);
+      stripEl.appendChild(tile);
+      const anim = window.lottie.loadAnimation({
+        container: host,
+        renderer: "svg",
+        loop: false,
+        autoplay: true,
+        path: animationPath,
+        rendererSettings: { preserveAspectRatio: "xMidYMid meet" }
+      });
+      anim.addEventListener("complete", () => {
+        anim.goToAndStop(anim.totalFrames - 1, true);
+      });
+      moonAnimations.push(anim);
+    }
+  } catch (err) {
+    console.warn("[DUAS] Failed to load moon lottie", err);
+  }
+}
+
+function replayDuaMoonAnimation() {
+  if (!moonAnimations.length) {
+    initDuaMoonAnimation();
+    return;
+  }
+  moonAnimations.forEach(anim => {
+    try {
+      anim.goToAndPlay(0, true);
+    } catch (_) {}
+  });
+}
+initDuaMoonAnimation();
+
+try {
+  const stored = JSON.parse(localStorage.getItem("qq_settings") || "{}");
+  applyDuaTypography(stored || {});
+} catch (_) {
+  applyDuaTypography({});
+}
+
+/* ---------------- TEXT CLEANING ---------------- */
+
+function cleanHtml(text) {
+  let t = String(text || "");
+  t = t.replace(/<[^>]*>/g, "");
+  t = t.replace(/\[\d+\]/g, "");
+  t = t.replace(/foot_note=\d+/g, "");
+  t = t.replace(/,\s*\d+/g, ".");
+  t = t.replace(/\.\s*\d+/g, ".");
+  t = t.replace(/\s+/g, " ").trim();
+  t = t.replace(/,\s*$/, ".").trim();
+  if (t) t = t[0].toUpperCase() + t.slice(1);
+  return t;
+}
+
+function removeQuranicSymbols(text) {
+  const pattern =
+    /[ۖۗۘۙۛۜ۝۞ۣ۟۠ۢۤۥۦۧۨ۩۪ۭ۫۬ۮۯـ\u0660-\u0669\u06F0-\u06F9]/g;
+  return String(text || "")
+    .replace(/\u0657(?=\u0627)/g, "\u064B")
+    .replace(/\u0657/g, "\u064C")
+    .replace(/\u06E1/g, "\u0652")
+    .replace(pattern, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/* ---------------- AUDIO LOGIC ---------------- */
+
+let cards = [];
+let currentAudio = null;
+let currentIndex = -1;
+let pendingScrollRef = null;
+
+function buildAudioUrl(ref) {
+  const [s, a] = ref.split(":");
+  return `https://everyayah.com/data/Alafasy_128kbps/${s.padStart(3,"0")}${a.padStart(3,"0")}.mp3`;
+}
+
+function setPlay(btn) {
+  btn.classList.remove("playing");
+  btn.innerHTML =
+    `<span class="material-icons">play_arrow</span><span>Play full dua</span>`;
+}
+
+function setPause(btn) {
+  btn.classList.add("playing");
+  btn.innerHTML =
+    `<span class="material-icons">pause</span><span>Pause</span>`;
+}
+
+function resetUI() {
+  document.querySelectorAll(".dua-card").forEach(c => c.classList.remove("playing"));
+  document.querySelectorAll(".play-btn").forEach(setPlay);
+}
+
+function pauseAllDuaAudio() {
+  if (currentAudio) {
+    currentAudio.pause();
+  }
+  resetUI();
+  currentAudio = null;
+  currentIndex = -1;
+}
+
+function scrollToDuaByRef(ref) {
+  if (!ref) return false;
+  const refStr = String(ref);
+  const refButtons = document.querySelectorAll(".dua-ref-link");
+  for (const btn of refButtons) {
+    if (btn?.dataset?.ref === refStr) {
+      const card = btn.closest(".dua-card");
+      if (card) {
+        card.scrollIntoView({ behavior: "smooth", block: "center" });
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+window.addEventListener("message", e => {
+  if (!isTrustedParentMessage(e)) return;
+  if (e?.data?.type === "APPLY_SETTINGS") {
+    applyDuaTypography(e?.data?.settings || {});
+    return;
+  }
+  if (e?.data?.type === "PAUSE_DUAS_AUDIO") {
+    pauseAllDuaAudio();
+    return;
+  }
+  if (e?.data?.type === "SCROLL_TO_DUA") {
+    const ref = e?.data?.reference;
+    if (!scrollToDuaByRef(ref)) {
+      pendingScrollRef = ref;
+    }
+    return;
+  }
+  if (e?.data?.type === "REPLAY_MOON_ANIMATION") {
+    replayDuaMoonAnimation();
+  }
+});
+
+function wrapLines(ctx, text, maxWidth) {
+  const words = String(text || "").split(" ");
+  const lines = [];
+  let line = "";
+  words.forEach(word => {
+    const test = line ? `${line} ${word}` : word;
+    if (ctx.measureText(test).width > maxWidth && line) {
+      lines.push(line);
+      line = word;
+    } else {
+      line = test;
+    }
+  });
+  if (line) lines.push(line);
+  return lines;
+}
+
+async function buildShareCanvas(card) {
+  if (document.fonts?.ready) {
+    try {
+      await document.fonts.ready;
+    } catch (_) {}
+  }
+
+  const reference = card.querySelector(".dua-reference")?.innerText?.trim() || "";
+  const arabic = card.querySelector(".dua-arabic")?.innerText?.trim() || "";
+  const transliteration = card.querySelector(".dua-transliteration")?.innerText?.trim() || "";
+  const translation = card.querySelector(".dua-translation")?.innerText?.trim() || "";
+  const caption = "Qur’anic Duas";
+
+  const width = 1080;
+  const outerPad = 80;
+  const cardPad = 70;
+  const innerWidth = width - outerPad * 2 - cardPad * 2;
+
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+
+  ctx.font = "600 38px 'Manrope', sans-serif";
+  const refLines = wrapLines(ctx, reference, innerWidth);
+  const shareArabicFont = `${currentTypography.arabicItalic ? "italic" : "normal"} ${currentTypography.arabicWeight} ${currentTypography.arabicSize}px '${currentTypography.arabicFont}', serif`;
+  ctx.font = shareArabicFont;
+  const arabicLines = wrapLines(ctx, arabic, innerWidth);
+  ctx.font = "italic 32px 'Manrope', sans-serif";
+  const translitLines = wrapLines(ctx, transliteration, innerWidth);
+  ctx.font = "32px 'Manrope', sans-serif";
+  const translationLines = wrapLines(ctx, translation, innerWidth);
+
+  const lineHeights = {
+    ref: 44,
+    arabic: Math.round(currentTypography.arabicSize * 2.1),
+    translit: 44,
+    translation: 46
+  };
+
+  const gaps = {
+    afterArabic: 22,
+    afterTranslit: 18
+  };
+
+  const contentHeight =
+    refLines.length * lineHeights.ref +
+    arabicLines.length * lineHeights.arabic +
+    gaps.afterArabic +
+    translitLines.length * lineHeights.translit +
+    gaps.afterTranslit +
+    translationLines.length * lineHeights.translation +
+    80;
+
+  const footerHeight = 42;
+  const height = outerPad * 2 + cardPad * 2 + contentHeight + footerHeight + 40;
+  canvas.width = width;
+  canvas.height = height;
+
+  const bg = ctx.createLinearGradient(0, height, 0, 0);
+  bg.addColorStop(0, "#fddb92");
+  bg.addColorStop(1, "#d1fdff");
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, width, height);
+
+  // Subtle floral pattern
+  ctx.save();
+  ctx.globalAlpha = 0.08;
+  ctx.strokeStyle = "#0a4d68";
+  ctx.lineWidth = 1.2;
+  for (let y = 120; y < height; y += 140) {
+    for (let x = 80; x < width; x += 140) {
+      const r = 10;
+      ctx.beginPath();
+      ctx.arc(x, y - r, r, 0, Math.PI * 2);
+      ctx.arc(x + r, y, r, 0, Math.PI * 2);
+      ctx.arc(x, y + r, r, 0, Math.PI * 2);
+      ctx.arc(x - r, y, r, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
+
+  ctx.fillStyle = "#0a4d68";
+  ctx.font = "600 44px 'Cormorant Garamond', serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  ctx.fillText(caption, width / 2, outerPad - 10);
+
+  const cardX = outerPad;
+  const cardY = outerPad + 60;
+  const cardW = width - outerPad * 2;
+  const cardH = height - cardY - outerPad - footerHeight;
+
+  const radius = 36;
+  ctx.fillStyle = "#fffdf8";
+  ctx.shadowColor = "rgba(10, 32, 42, 0.18)";
+  ctx.shadowBlur = 24;
+  ctx.shadowOffsetY = 10;
+  ctx.beginPath();
+  ctx.moveTo(cardX + radius, cardY);
+  ctx.arcTo(cardX + cardW, cardY, cardX + cardW, cardY + cardH, radius);
+  ctx.arcTo(cardX + cardW, cardY + cardH, cardX, cardY + cardH, radius);
+  ctx.arcTo(cardX, cardY + cardH, cardX, cardY, radius);
+  ctx.arcTo(cardX, cardY, cardX + cardW, cardY, radius);
+  ctx.closePath();
+  ctx.fill();
+  ctx.shadowColor = "transparent";
+
+  let cursorY = cardY + cardPad;
+  ctx.textAlign = "center";
+
+  ctx.font = "600 28px 'Manrope', sans-serif";
+  ctx.fillStyle = "#13728f";
+  refLines.forEach(line => {
+    ctx.fillText(line, width / 2, cursorY);
+    cursorY += lineHeights.ref;
+  });
+
+  cursorY += 8;
+  ctx.font = shareArabicFont;
+  ctx.fillStyle = "#102a36";
+  if (ctx.direction !== undefined) ctx.direction = "rtl";
+  arabicLines.forEach(line => {
+    ctx.fillText(line, width / 2, cursorY);
+    cursorY += lineHeights.arabic;
+  });
+  if (ctx.direction !== undefined) ctx.direction = "ltr";
+
+  cursorY += gaps.afterArabic;
+  ctx.fillStyle = "#5f6b76";
+  ctx.font = "italic 32px 'Manrope', sans-serif";
+  translitLines.forEach(line => {
+    ctx.fillText(line, width / 2, cursorY);
+    cursorY += lineHeights.translit;
+  });
+
+  cursorY += gaps.afterTranslit;
+  ctx.fillStyle = "#1a2d3a";
+  ctx.font = "32px 'Manrope', sans-serif";
+  translationLines.forEach(line => {
+    ctx.fillText(line, width / 2, cursorY);
+    cursorY += lineHeights.translation;
+  });
+
+  ctx.fillStyle = "rgba(10, 77, 104, 0.7)";
+  ctx.font = "italic 24px 'Manrope', sans-serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  const shareLabel = SHARE_URL.replace(/^https?:\/\//, "");
+  ctx.fillText(`Visit: ${shareLabel}`, width / 2, height - outerPad + 4);
+
+  return canvas;
+}
+
+async function shareDuaCard(card) {
+  if (!card) return;
+
+  const canvas = await buildShareCanvas(card);
+  const shareText = "Powerful Duas from the Qur’an";
+
+  /* ---------------- WEBVIEW BRIDGE ---------------- */
+  const dataUrl = canvas.toDataURL("image/png");
+
+  if (window.ReactNativeWebView) {
+    window.ReactNativeWebView.postMessage(
+      JSON.stringify({
+        type: "SHARE_IMAGE",
+        dataUrl,
+        text: shareText,
+        url: SHARE_URL
+      })
+    );
+    return; // 🔴 IMPORTANT: stop here for app
+  }
+
+  /* ---------------- NORMAL WEB SHARE ---------------- */
+  const blob = await new Promise(resolve =>
+    canvas.toBlob(resolve, "image/png")
+  );
+  if (!blob) return;
+
+  const ref =
+    card
+      .querySelector(".dua-reference")
+      ?.innerText?.replace(/\s+/g, "-") || "dua";
+
+  const file = new File([blob], `${ref}.png`, { type: "image/png" });
+
+  if (navigator.share && navigator.canShare?.({ files: [file] })) {
+    await navigator.share({
+      title: "Qur’anic Duas",
+      text: shareText,
+      url: SHARE_URL,
+      files: [file]
+    });
+  } else {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${ref}.png`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+}
+
+
+function playIndex(index) {
+  if (index < 0 || index >= cards.length) {
+    if (currentAudio) currentAudio.pause();
+    resetUI();
+    currentAudio = null;
+    currentIndex = -1;
+    return;
+  }
+
+  const { audio, card, btn } = cards[index];
+
+  if (currentAudio === audio) {
+    if (audio.paused) {
+      audio.play();
+      card.classList.add("playing");
+      setPause(btn);
+    } else {
+      audio.pause();
+      card.classList.remove("playing");
+      setPlay(btn);
+    }
+    return;
+  }
+
+  if (currentAudio) currentAudio.pause();
+  resetUI();
+
+  currentAudio = audio;
+  currentIndex = index;
+
+  card.classList.add("playing");
+  setPause(btn);
+  card.scrollIntoView({ behavior: "smooth", block: "center" });
+
+  audio.play();
+  audio.onended = () => playIndex(index + 1);
+}
+
+/* ---------------- LOAD DUAS ---------------- */
+
+fetch("quranwbw_duas.json")
+  .then(res => res.json())
+  .then(duas => {
+    const list = document.getElementById("duaList");
+
+    duas.forEach((d, i) => {
+      const card = document.createElement("div");
+      card.className = "dua-card";
+
+      const btn = document.createElement("button");
+      btn.className = "play-btn";
+      setPlay(btn);
+
+      const audio = new Audio(buildAudioUrl(d.reference));
+      btn.onclick = () => playIndex(i);
+
+      const arabic = removeQuranicSymbols(d.arabic);
+      const transliteration = cleanHtml(d.transliteration);
+      const translation = cleanHtml(d.translation);
+
+      const refWrap = document.createElement("div");
+      refWrap.className = "dua-reference";
+      const refBtn = document.createElement("button");
+      refBtn.className = "dua-ref-link";
+      refBtn.type = "button";
+      refBtn.dataset.ref = d.reference;
+      refBtn.textContent = `Qur’an ${d.reference}`;
+      refWrap.appendChild(refBtn);
+
+      const arabicEl = document.createElement("div");
+      arabicEl.className = "dua-arabic";
+      arabicEl.textContent = arabic;
+
+      const divider = document.createElement("div");
+      divider.className = "dua-divider";
+
+      const translitEl = document.createElement("div");
+      translitEl.className = "dua-transliteration";
+      translitEl.textContent = transliteration;
+
+      const translationEl = document.createElement("div");
+      translationEl.className = "dua-translation";
+      translationEl.textContent = translation;
+
+      const shareBtn = document.createElement("button");
+      shareBtn.className = "dua-share-btn";
+      shareBtn.type = "button";
+      shareBtn.setAttribute("aria-label", "Share dua");
+      const shareIcon = document.createElement("span");
+      shareIcon.className = "material-icons";
+      shareIcon.textContent = "ios_share";
+      shareBtn.appendChild(shareIcon);
+      shareBtn.appendChild(document.createTextNode(" Share"));
+
+      card.appendChild(refWrap);
+      card.appendChild(arabicEl);
+      card.appendChild(divider);
+      card.appendChild(translitEl);
+      card.appendChild(translationEl);
+      const actionRow = document.createElement("div");
+      actionRow.className = "dua-actions";
+      actionRow.appendChild(shareBtn);
+      actionRow.appendChild(btn);
+      card.appendChild(actionRow);
+      list.appendChild(card);
+
+      if (refBtn) {
+        refBtn.addEventListener("click", () => {
+          const [s, a] = String(d.reference || "").split(":").map(Number);
+          if (!Number.isFinite(s) || !Number.isFinite(a)) return;
+          pauseAllDuaAudio();
+          postToParent({ type: "NAVIGATE_TO_AYAH", surah: s, ayah: a });
+        });
+      }
+
+      if (shareBtn) {
+        shareBtn.addEventListener("click", () => shareDuaCard(card));
+      }
+
+      cards.push({ audio, card, btn });
+    });
+    if (pendingScrollRef) {
+      if (scrollToDuaByRef(pendingScrollRef)) {
+        pendingScrollRef = null;
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

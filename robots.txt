@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /ayahs/
+Disallow: /build/recite/
+Disallow: /audio/
+Disallow: /verbs_tables/
+Disallow: /verbsgame/
+Allow: /

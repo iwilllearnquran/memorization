@@ -1,0 +1,73 @@
+{
+  "generatedAt": "2026-02-21T01:14:45.966619+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
+  "surah": {
+    "surah": 105,
+    "arabicName": "سُورَةُ الفِيلِ",
+    "englishName": "Al-Fil",
+    "englishNameTranslation": "The Elephant",
+    "ayahCount": 5,
+    "ayahs": [
+      {
+        "ayah": 1,
+        "globalAyah": 6189,
+        "arabic": "اَلَمۡ تَرَ كَيۡفَ فَعَلَ رَبُّكَ بِاَصۡحٰبِ الۡفِيۡلِؕ‏",
+        "translation_en": "ART THOU NOT aware of how thy Sustainer dealt with the Army of the Elephant?",
+        "translation_ur": "کیا تم نے نہیں دیکھا کہ تمہارے پروردگار نے ہاتھی والوں کے ساتھ کیا کیا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/105001.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6189.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6189.mp3"
+        }
+      },
+      {
+        "ayah": 2,
+        "globalAyah": 6190,
+        "arabic": "اَلَمۡ يَجۡعَلۡ كَيۡدَهُمۡ فِىۡ تَضۡلِيۡلٍۙ‏",
+        "translation_en": "Did He not utterly confound their artful planning?",
+        "translation_ur": "کیا ان کا داؤں غلط نہیں کیا؟ (گیا)",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/105002.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6190.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6190.mp3"
+        }
+      },
+      {
+        "ayah": 3,
+        "globalAyah": 6191,
+        "arabic": "وَّاَرۡسَلَ عَلَيۡهِمۡ طَيۡرًا اَبَابِيۡلَۙ‏",
+        "translation_en": "Thus, He let loose upon them great swarms of flying creatures",
+        "translation_ur": "اور ان پر جھلڑ کے جھلڑ جانور بھیجے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/105003.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6191.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6191.mp3"
+        }
+      },
+      {
+        "ayah": 4,
+        "globalAyah": 6192,
+        "arabic": "تَرۡمِيۡهِمۡ بِحِجَارَةٍ مِّنۡ سِجِّيۡلٍۙ‏",
+        "translation_en": "which smote them with stone-hard blows of chastisement pre-ordained,",
+        "translation_ur": "جو ان پر کھنگر کی پتھریاں پھینکتے تھے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/105004.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6192.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6192.mp3"
+        }
+      },
+      {
+        "ayah": 5,
+        "globalAyah": 6193,
+        "arabic": "فَجَعَلَهُمۡ كَعَصۡفٍ مَّاۡكُوۡلٍ‏",
+        "translation_en": "and caused them to become like a field of grain that has been eaten down to stubble",
+        "translation_ur": "تو ان کو ایسا کر دیا جیسے کھایا ہوا بھس",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/105005.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6193.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6193.mp3"
+        }
+      }
+    ]
+  }
+}

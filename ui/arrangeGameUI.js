@@ -1,12 +1,13 @@
 import { GAME_CONFIG }        from '/config/gameConfig.js';
 import gameSession            from '/state/gameSession.js';
 import { $, hide, show }      from '/utils/domHelpers.js';
-import { initStats, updateStats } from '/ui/gameStatsUI.js';
+import { updateStats } from '/ui/gameStatsUI.js';
 import { showCompletionPopup } from '/ui/gameCompletionUI.js';
 import { showGameOverPopup } from '/ui/gameOverPopup.js';
 
+
+
 export async function startArrangeGame() {
-  initStats('#arrangeGameContainer');
   // 1️⃣ Swap panels
   const arrangeUI = $('#arrangeGameContainer');
   if (!arrangeUI) {
@@ -16,8 +17,8 @@ export async function startArrangeGame() {
   show(arrangeUI);
 
   // 2️⃣ Init session
-  await gameSession.init('arrange');
-  updateStats();  // Now will show correct Firestore score
+  //await gameSession.init('arrange');
+  //updateStats();  // Now will show correct Firestore score
 
 
   // 3️⃣ Grab the _real_ word-blocks & derive correctOrder
@@ -70,6 +71,13 @@ function placeWord(box, correctOrder) {
   const emptySlot = slots.find(s => !s.dataset.word);
   if (!emptySlot) return;
 
+  // Restore tap feedback so the pressed word immediately gives a blue pulse.
+  box.classList.remove('tap-feedback');
+  // Force reflow so repeated taps replay the animation.
+  void box.offsetWidth;
+  box.classList.add('tap-feedback');
+  setTimeout(() => box.classList.remove('tap-feedback'), 260);
+
   const slotIndex   = slots.indexOf(emptySlot);
   const correctText = correctOrder[slotIndex];
 
@@ -78,13 +86,6 @@ function placeWord(box, correctOrder) {
   const pickedText = span
     ? span.textContent.trim()
     : box.textContent.trim();
-
-  // 3️⃣ DEBUG: see why it’s “wrong”
-  console.log(
-    'Arrange → slot', slotIndex,
-    'picked:', JSON.stringify(pickedText),
-    ' vs correct:', JSON.stringify(correctText)
-  );
 
   // 4️⃣ Now the test
   if (pickedText !== correctText) {
@@ -95,12 +96,15 @@ function placeWord(box, correctOrder) {
     gameSession.loseLife();
     updateStats();
     if (gameSession.lives === 0) {
+      gameSession.end(false);
       showGameOverPopup();
     }
-    window.showToast?.('❌ Incorrect!', '#c0392b');
+    window.showToast?.('Incorrect!', '#c0392b');
     return;
   }
   if (navigator.vibrate) navigator.vibrate(20);
+  emptySlot.classList.add('slot-target');
+  setTimeout(() => emptySlot.classList.remove('slot-target'), 260);
   // 3️⃣ Correct guess: animate clone from box → slot
   const fromRect = box.getBoundingClientRect();
   const toRect   = emptySlot.getBoundingClientRect();
@@ -126,7 +130,7 @@ function placeWord(box, correctOrder) {
   });
 
   // 4️⃣ After animation completes, show glass effect, cleanup, and update state
-  setTimeout(() => {
+  setTimeout(async () => {
     // Glass burst effect
     const glass = document.getElementById('glassEffect');
     if (glass) {
@@ -150,35 +154,27 @@ function placeWord(box, correctOrder) {
 
     // Award points for correct guess
     gameSession.addPoints(GAME_CONFIG.correctActionPoints);
-    updateStats();
+    //guestGameSession.addPoints(GAME_CONFIG.correctActionPoints)
+    //updateStats();
 
 
     const slots = Array.from(document.querySelectorAll('.slot'));
-    console.log('🔍 slot data-words:', slots.map((s,i) => [i, s.dataset.word]));
     const allFilled = slots.every(s => Boolean(s.dataset.word && s.dataset.word.trim()));
-    console.log('🔍 allFilled?', allFilled);
   
     // 5️⃣ Check for game completion
     if (allFilled) {
-      gameSession.addPoints(GAME_CONFIG.fullGameBonus);
-      updateStats();
+      gameSession.addPoints(GAME_CONFIG.fullGameBonus); //--!resue later 
+      //guestGameSession.addPoints(GAME_CONFIG.fullGameBonus)
+      //updateStats();
       /**
       showCompletionPopup(
         'You have earned ' +
         (GAME_CONFIG.fullGameBonus) + ' extra Ajr points for forming a complete ayah!',
       ); **/
-      gameSession.end(true);
-      window.parent.postMessage({
-        type: 'persistStats',
-        score: gameSession.sessionScore,  // total earned this session
-        recordStreak: true                // ask them to record today’s streak too
-      }, '*');
-      window.parent.postMessage({
-        type: 'streakUpdate',
-        date: new Date().toISOString().split('T')[0]
-      }, '*');
+      await gameSession.end(true);
     
     }
   }, 400);
 }
+
 
