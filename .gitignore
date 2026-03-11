@@ -67,3 +67,8 @@ node_modules/
 
 # dataconnect generated files
 .dataconnect
+
+# Local generated artifacts and test folders
+artifacts/
+test/
+test-results/
