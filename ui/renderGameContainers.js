@@ -4,6 +4,8 @@ import { GAME_CONFIG }         from '/config/gameConfig.js';
 import { $ }                   from '/utils/domHelpers.js';
 import { startArrangeGame }    from '/ui/arrangeGameUI.js';
 import { startVerbGame }       from '/ui/verbMatchUI.js';
+import { startWordTypeGame }   from '/ui/wordTypeUI.js';
+import { startVerbFormGame }   from '/ui/verbFormUI.js';
 import { toggleGames }         from '/ui/toggleGames.js';
 
 export function renderGameContainers() {
@@ -46,6 +48,10 @@ export function renderGameContainers() {
           startArrangeGame();
         } else if (type === 'verb') {
           startVerbGame();
+        } else if (type === 'wordType') {
+          startWordTypeGame();
+        } else if (type === 'verbForm') {
+          startVerbFormGame();
         }
       });
     }
@@ -102,6 +108,12 @@ export function renderGameContainers() {
         </div>
       `;
       console.log('    -> Fill in Verb UI');
+    } else if (type === 'wordType') {
+      // wordTypeUI.js populates this container dynamically
+      console.log('    -> Fill in Word Type UI');
+    } else if (type === 'verbForm') {
+      // verbFormUI.js populates this container dynamically
+      console.log('    -> Fill in Verb Form UI');
     }
 
     container.appendChild(div);

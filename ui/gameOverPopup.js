@@ -48,57 +48,52 @@ export function showGameOverPopup(
     animation: 'modalPop 0.25s ease-out'
   });
 
-  dialog.innerHTML = `
-    <div id="gameOverAnim" style="width:96px;height:96px;margin:0 auto 14px;"></div>
+  // Build dialog content via DOM to avoid innerHTML injection
+  const animDiv = document.createElement('div');
+  animDiv.id = 'gameOverAnim';
+  Object.assign(animDiv.style, { width: '96px', height: '96px', margin: '0 auto 14px' });
 
-    <h2 style="margin:0 0 6px;font-size:22px;font-weight:700;color:${accentColor};">
-      ${title}
-    </h2>
+  const heading = document.createElement('h2');
+  Object.assign(heading.style, { margin: '0 0 6px', fontSize: '22px', fontWeight: '700', color: accentColor });
+  heading.textContent = title;
 
-    <p style="margin:0 0 22px;font-size:15px;color:#555;line-height:1.5;">
-      ${customMessage}
-    </p>
+  const msg = document.createElement('p');
+  Object.assign(msg.style, { margin: '0 0 22px', fontSize: '15px', color: '#555', lineHeight: '1.5' });
+  msg.textContent = customMessage;
 
-    <div style="display:flex;flex-direction:column;gap:12px;">
-      <button
-        id="retryBtn"
-        style="
-          padding:12px;
-          border-radius:10px;
-          border:none;
-          background:linear-gradient(135deg,#0a4d68,#0d6efd);
-          color:#fff;
-          font-size:15px;
-          font-weight:600;
-          cursor:pointer;
-        "
-      >
-        Play Again
-      </button>
+  const btnWrap = document.createElement('div');
+  Object.assign(btnWrap.style, { display: 'flex', flexDirection: 'column', gap: '12px' });
 
-      <button
-        id="newGameBtn"
-        style="
-          padding:12px;
-          border-radius:10px;
-          border:1px solid #ddd;
-          background:#f9f9f9;
-          color:#333;
-          font-size:14px;
-          cursor:pointer;
-        "
-      >
-        Choose Different Game
-      </button>
-    </div>
-  `;
+  const retryBtn = document.createElement('button');
+  retryBtn.id = 'retryBtn';
+  Object.assign(retryBtn.style, {
+    padding: '12px', borderRadius: '10px', border: 'none',
+    background: 'linear-gradient(135deg,#0a4d68,#0d6efd)',
+    color: '#fff', fontSize: '15px', fontWeight: '600', cursor: 'pointer'
+  });
+  retryBtn.textContent = 'Play Again';
+
+  const newGameBtn = document.createElement('button');
+  newGameBtn.id = 'newGameBtn';
+  Object.assign(newGameBtn.style, {
+    padding: '12px', borderRadius: '10px', border: '1px solid #ddd',
+    background: '#f9f9f9', color: '#333', fontSize: '14px', cursor: 'pointer'
+  });
+  newGameBtn.textContent = 'Choose Different Game';
+
+  btnWrap.appendChild(retryBtn);
+  btnWrap.appendChild(newGameBtn);
+  dialog.appendChild(animDiv);
+  dialog.appendChild(heading);
+  dialog.appendChild(msg);
+  dialog.appendChild(btnWrap);
 
   overlay.appendChild(dialog);
   document.body.appendChild(overlay);
 
   if (window.lottie?.loadAnimation) {
     window.lottie.loadAnimation({
-      container: overlay.querySelector('#gameOverAnim'),
+      container: animDiv,
       renderer: 'svg',
       loop: true,
       autoplay: true,
@@ -106,7 +101,7 @@ export function showGameOverPopup(
     });
   }
 
-  dialog.querySelector('#retryBtn').onclick = async () => {
+  retryBtn.onclick = async () => {
     closePopup();
     if (resetStats) {
       await gameSession.resetToBeforeGame();
@@ -115,7 +110,7 @@ export function showGameOverPopup(
     }
   };
 
-  dialog.querySelector('#newGameBtn').onclick = () => {
+  newGameBtn.onclick = () => {
     closePopup();
     toggleGames('selector');
   };

@@ -3082,16 +3082,18 @@ body.game-mode #returnToAyah {
   content: 'Verb Arena';
 }
 
-#game-mode-content > .game-card[data-game="comingSoon"] {
-  border-left: 5px solid #7d8b95 !important;
-  opacity: 0.9;
+#game-mode-content > .game-card[data-game="wordType"] {
+  border-left: 5px solid #8b2252 !important;
 }
-#game-mode-content > .game-card[data-game="comingSoon"]::after {
-  content: 'Soon';
+#game-mode-content > .game-card[data-game="wordType"]::after {
+  content: 'Grammar';
 }
 
-#game-mode-content > .game-card[data-game="comingSoon"] button {
-  filter: grayscale(0.4);
+#game-mode-content > .game-card[data-game="verbForm"] {
+  border-left: 5px solid #7c3aed !important;
+}
+#game-mode-content > .game-card[data-game="verbForm"]::after {
+  content: 'Sarf';
 }
 
 #arrangeGameContainer {
@@ -3607,6 +3609,414 @@ body.game-mode #returnToAyah {
 
 #game-mode-content .selector-return-ayah-btn:active {
   transform: translateY(1px) !important;
+}
+
+/* ── Word Type Game ─────────────────────────────────────────────── */
+
+#wordTypeGameContainer {
+  padding: 56px 14px 18px !important;
+  overflow-y: auto !important;
+  direction: rtl;
+}
+
+.wt-instruction {
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+  margin: 0 0 14px;
+  direction: ltr;
+}
+
+.wt-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 4px 16px;
+  direction: rtl;
+}
+
+.wt-word {
+  display: inline-block;
+  font-family: 'KFGQPC Uthman Taha Naskh', 'Traditional Arabic', 'Scheherazade New', serif;
+  font-size: 1.35rem;
+  padding: 8px 14px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.wt-word:active {
+  transform: scale(0.96);
+}
+
+.wt-word.wt-selected {
+  border-color: #3399ff;
+  background: #e8f2ff;
+  box-shadow: 0 0 0 2px rgba(51, 153, 255, 0.25);
+}
+
+.wt-word.wt-correct {
+  opacity: 0.75;
+  cursor: default;
+  pointer-events: none;
+}
+
+.wt-word.wt-wrong {
+  border-color: #dc3545 !important;
+  background: #f8d7da !important;
+  animation: wtShake 0.35s ease;
+}
+
+@keyframes wtShake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-4px); }
+  40%      { transform: translateX(4px); }
+  60%      { transform: translateX(-3px); }
+  80%      { transform: translateX(3px); }
+}
+
+.wt-hint {
+  text-align: center;
+  font-size: 13px;
+  color: #888;
+  min-height: 20px;
+  margin: 0 0 12px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  direction: ltr;
+}
+
+.wt-btn-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 8px 14px;
+  direction: ltr;
+}
+
+.wt-cat-btn {
+  flex: 1;
+  max-width: 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 12px 8px;
+  border: 2px solid var(--cat-color, #666);
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.wt-cat-btn:active {
+  transform: scale(0.95);
+  background: color-mix(in srgb, var(--cat-color) 12%, #fff);
+}
+
+.wt-cat-ar {
+  font-family: 'KFGQPC Uthman Taha Naskh', 'Traditional Arabic', serif;
+  font-size: 1.25rem;
+  color: var(--cat-color, #333);
+  font-weight: 700;
+}
+
+.wt-cat-en {
+  font-size: 11px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.wt-controls {
+  padding: 8px 0;
+  text-align: center;
+  direction: ltr;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Verb Form Game  –  صرف  (Sarf)
+   ═══════════════════════════════════════════════════════════════════ */
+
+#verbFormGameContainer {
+  padding: 56px 16px 24px !important;
+  overflow-y: auto !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.vf-empty {
+  text-align: center;
+  padding: 32px 16px;
+  color: #888;
+  font-size: 14px;
+}
+
+/* ─ Progress track ─ */
+.vf-track {
+  position: relative;
+  width: min(420px, 100%);
+  height: 6px;
+  background: rgba(124, 58, 237, 0.12);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.vf-track-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #7c3aed, #a78bfa);
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vf-track-label {
+  position: absolute;
+  right: 0;
+  top: 10px;
+  font-size: 11px;
+  color: #888;
+  letter-spacing: 0.3px;
+}
+
+/* ─ Verb showcase card ─ */
+.vf-card {
+  position: relative;
+  width: min(420px, 100%);
+  margin-top: 16px;
+  padding: 28px 20px 22px;
+  border-radius: 20px;
+  background:
+    linear-gradient(160deg, #f5f0ff 0%, #ede5ff 40%, #f8f5ff 100%);
+  border: 1px solid rgba(124, 58, 237, 0.18);
+  box-shadow:
+    0 8px 32px rgba(124, 58, 237, 0.10),
+    0 2px 8px rgba(124, 58, 237, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  text-align: center;
+  opacity: 0;
+  transform: translateY(12px) scale(0.97);
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vf-card.vf-card-enter {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.vf-pill {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: #7c3aed;
+  background: rgba(124, 58, 237, 0.10);
+  border: 1px solid rgba(124, 58, 237, 0.18);
+  border-radius: 999px;
+  padding: 3px 12px;
+  margin-bottom: 10px;
+}
+
+.vf-arabic {
+  font-family: 'KFGQPC Uthman Taha Naskh', 'Traditional Arabic', 'Scheherazade New', serif;
+  font-size: clamp(2rem, 8vw, 3rem);
+  line-height: 1.4;
+  color: #2d1a4e;
+  letter-spacing: 1px;
+  direction: rtl;
+}
+
+.vf-meaning {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #6b5894;
+  font-style: italic;
+}
+
+.vf-badge-correct {
+  margin-top: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #16a34a;
+  background: rgba(22, 163, 74, 0.08);
+  border: 1px solid rgba(22, 163, 74, 0.22);
+  border-radius: 999px;
+  padding: 4px 14px;
+}
+
+.vf-badge-icon {
+  font-size: 14px;
+}
+
+/* ─ Question ─ */
+.vf-question {
+  width: min(420px, 100%);
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  color: #3b2066;
+  line-height: 1.5;
+}
+
+.vf-q-icon {
+  margin-right: 5px;
+}
+
+.vf-q-sub {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  color: #888;
+  margin-top: 2px;
+}
+
+/* ─ Options grid ─ */
+.vf-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: min(420px, 100%);
+}
+
+.vf-opt {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 16px 8px;
+  min-height: 72px;
+  border: 2px solid rgba(124, 58, 237, 0.18);
+  border-radius: 16px;
+  background: #fff;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    background 0.15s,
+    transform 0.1s,
+    box-shadow 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow:
+    0 2px 8px rgba(124, 58, 237, 0.06);
+}
+
+.vf-opt:hover {
+  border-color: rgba(124, 58, 237, 0.35);
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.12);
+}
+
+.vf-opt:active {
+  transform: scale(0.96);
+}
+
+.vf-opt:disabled {
+  opacity: 0.45;
+  cursor: default;
+  pointer-events: none;
+}
+
+.vf-opt-pronoun {
+  font-family: 'KFGQPC Uthman Taha Naskh', 'Traditional Arabic', 'Scheherazade New', serif;
+  font-size: 1.45rem;
+  color: #3b2066;
+  direction: rtl;
+}
+
+.vf-opt-label {
+  font-size: 11px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.vf-opt-hint {
+  font-size: 11px;
+  color: #888;
+  font-style: italic;
+}
+
+/* ─ Root options (wider) ─ */
+.vf-grid-root .vf-opt {
+  min-height: 64px;
+}
+
+.vf-grid-root .vf-opt-pronoun {
+  font-size: 1.6rem;
+}
+
+/* ─ Correct / Wrong ─ */
+.vf-opt-correct {
+  border-color: #16a34a !important;
+  background: linear-gradient(135deg, #dcfce7, #f0fdf4) !important;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15) !important;
+  animation: vfPop 0.4s ease;
+}
+
+.vf-opt-correct .vf-opt-pronoun {
+  color: #15803d !important;
+}
+
+.vf-opt-wrong {
+  border-color: #dc2626 !important;
+  background: #fef2f2 !important;
+  animation: vfShake 0.4s ease;
+}
+
+@keyframes vfPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+@keyframes vfShake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-5px); }
+  40%      { transform: translateX(5px); }
+  60%      { transform: translateX(-4px); }
+  80%      { transform: translateX(4px); }
+}
+
+/* ─ Controls ─ */
+.vf-controls {
+  width: min(420px, 100%);
+  padding: 4px 0 0;
+  text-align: center;
+}
+
+/* ─ Mobile tweaks ─ */
+@media (max-width: 420px) {
+  #verbFormGameContainer {
+    padding: 50px 10px 18px !important;
+    gap: 12px;
+  }
+
+  .vf-card {
+    padding: 22px 14px 18px;
+    border-radius: 16px;
+  }
+
+  .vf-opt {
+    padding: 12px 6px;
+    min-height: 64px;
+    border-radius: 12px;
+  }
+
+  .vf-grid {
+    gap: 8px;
+  }
 }
 
 

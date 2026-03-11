@@ -11,6 +11,7 @@ Usage:
 from __future__ import annotations
 
 import datetime as dt
+import hmac
 import json
 import os
 import random
@@ -58,10 +59,13 @@ FREE_TIER_VCPU_SECONDS = float(os.getenv("REEL_FREE_TIER_VCPU_SECONDS", "180000"
 FREE_TIER_GIB_SECONDS = float(os.getenv("REEL_FREE_TIER_GIB_SECONDS", "360000"))
 ALLOCATED_VCPU = float(os.getenv("REEL_ALLOCATED_VCPU", "1"))
 ALLOCATED_MEMORY_GIB = float(os.getenv("REEL_ALLOCATED_MEMORY_GIB", "0.5"))
+CORS_ORIGIN = os.getenv("REEL_CORS_ORIGIN", "https://myquranquest.com").strip() or "https://myquranquest.com"
 
 
 def require_token(incoming: str) -> bool:
-    return bool(ADMIN_TOKEN) and incoming == ADMIN_TOKEN
+    if not ADMIN_TOKEN or not incoming:
+        return False
+    return hmac.compare_digest(incoming, ADMIN_TOKEN)
 
 
 def clean_text(text: str) -> str:
@@ -719,7 +723,7 @@ app = Flask(__name__)
 
 @app.after_request
 def apply_cors(resp):
-    resp.headers["Access-Control-Allow-Origin"] = "*"
+    resp.headers["Access-Control-Allow-Origin"] = CORS_ORIGIN
     resp.headers["Access-Control-Allow-Methods"] = "GET,POST,OPTIONS"
     resp.headers["Access-Control-Allow-Headers"] = "Content-Type, X-Reel-Token"
     return resp
@@ -727,20 +731,22 @@ def apply_cors(resp):
 
 @app.get("/api/reel/health")
 def health():
-    missing = get_missing_assets()
-    return jsonify(
-        {
-            "ok": True,
-            "service": "quran-reel-generator",
-            "tokenConfigured": bool(ADMIN_TOKEN),
-            "outputDir": str(OUTPUT_DIR),
-            "missingAssets": missing,
-            "wandAvailable": WAND_AVAILABLE,
-            "wandImportError": WAND_IMPORT_ERROR,
-            "useRemoteIndopak": USE_REMOTE_INDOPAK,
-            "rendererMode": REEL_RENDERER,
-        }
-    )
+    result = {"ok": True, "service": "quran-reel-generator"}
+    token = str(request.headers.get("X-Reel-Token", "")).strip()
+    if require_token(token):
+        missing = get_missing_assets()
+        result.update(
+            {
+                "tokenConfigured": bool(ADMIN_TOKEN),
+                "outputDir": str(OUTPUT_DIR),
+                "missingAssets": missing,
+                "wandAvailable": WAND_AVAILABLE,
+                "wandImportError": WAND_IMPORT_ERROR,
+                "useRemoteIndopak": USE_REMOTE_INDOPAK,
+                "rendererMode": REEL_RENDERER,
+            }
+        )
+    return jsonify(result)
 
 
 @app.route("/api/reel/generate", methods=["POST", "OPTIONS"])
@@ -772,7 +778,7 @@ def generate():
 
     try:
         result = generate_for_ayah(surah, ayah, title, source=source)
-        download_url = f"{request.host_url.rstrip('/')}/api/reel/download/{result['filename']}?token={token}"
+        download_url = f"{request.host_url.rstrip('/')}/api/reel/download/{result['filename']}"
         result["download_url"] = download_url
         return jsonify(result)
     except subprocess.CalledProcessError as e:
@@ -852,11 +858,16 @@ def usage():
         return jsonify({"ok": False, "error": str(e)}), 500
 
 
-@app.get("/api/reel/download/<path:name>")
+@app.get("/api/reel/download/<name>")
 def download(name: str):
-    token = str(request.args.get("token", "")).strip()
+    token = (
+        request.headers.get("X-Reel-Token", "").strip()
+        or str(request.args.get("token", "")).strip()
+    )
     if not require_token(token):
         return jsonify({"ok": False, "error": "unauthorized"}), 403
+    if "/" in name or "\\" in name or ".." in name:
+        return jsonify({"ok": False, "error": "invalid filename"}), 400
     return send_from_directory(OUTPUT_DIR, name, as_attachment=True)
 
 

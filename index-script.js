@@ -3901,7 +3901,7 @@ case 'SAVE_HINT_DONE': {
             }
             return;
           }
-          maybeShowMotivation({ force });
+          //maybeShowMotivation({ force });
         }, delay);
       }
 
@@ -6844,25 +6844,88 @@ case 'SAVE_HINT_DONE': {
           overlay.innerHTML = `
             <div class="qq-modal" style="
               background: #fff;
-              padding: 20px;
-              border-radius: 12px;
-              max-width: 340px;
-              width: 85%;
+              padding: 24px 20px;
+              border-radius: 16px;
+              max-width: 370px;
+              width: 88%;
               text-align: center;
+              max-height: 85vh;
+              overflow-y: auto;
             ">
-              <h3>About Quran Quest</h3>
+              <h3 style="margin: 0 0 4px; font-size: 18px; color: #0a4d68;">About Quran Quest</h3>
+              <p style="font-size: 13px; color: #666; margin: 0 0 16px; line-height: 1.5;">
+                Every ayah is its own universe &mdash; pause, listen, and let the meaning meet you where you are.
+              </p>
 
-              <p style="
-                font-size: 14px;
-                color: #444;
-                line-height: 1.5;
-              ">
-                Quran Quest treats each ayah as its own universe &mdash; a place to
-                pause, listen, and let the meaning meet you where you are.
-                Read gently, return often, and let every ayah leave a small
-                mark on your heart.
-                <br><br>
-                More features coming soon, In shaa Allah &#127769;
+              <div style="display: flex; flex-direction: column; gap: 14px; text-align: left;">
+
+                <div style="background: linear-gradient(135deg, #e8f0fb, #f0f5fd); border-radius: 12px; padding: 14px 16px;">
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                    <span class="material-icons-outlined" style="font-size: 22px; color: #1a5fb4;">auto_stories</span>
+                    <strong style="font-size: 14.5px; color: #1a4d8e;">Learn in Depth</strong>
+                  </div>
+                  <div style="font-size: 13px; color: #444; line-height: 1.55;">
+                    <p style="margin: 6px 0; display: flex; align-items: flex-start; gap: 7px;">
+                      <span class="material-icons-outlined" style="font-size: 17px; color: #1a5fb4; flex-shrink: 0; margin-top: 1px;">translate</span>
+                      <span>Read each word with its meaning, transliteration, and grammar breakdown side by side.</span>
+                    </p>
+                    <p style="margin: 6px 0; display: flex; align-items: flex-start; gap: 7px;">
+                      <span class="material-icons-outlined" style="font-size: 17px; color: #1a5fb4; flex-shrink: 0; margin-top: 1px;">headphones</span>
+                      <span>Listen to professional recitation and follow along at your own pace.</span>
+                    </p>
+                    <p style="margin: 6px 0; display: flex; align-items: flex-start; gap: 7px;">
+                      <span class="material-icons-outlined" style="font-size: 17px; color: #1a5fb4; flex-shrink: 0; margin-top: 1px;">search</span>
+                      <span>Explore root words and verb forms to understand the Quran beyond translation.</span>
+                    </p>
+                  </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #e8f6f3, #f0faf7); border-radius: 12px; padding: 14px 16px;">
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                    <span class="material-icons-outlined" style="font-size: 22px; color: #0f766e;">psychology</span>
+                    <strong style="font-size: 14.5px; color: #0a5d52;">Memorization</strong>
+                  </div>
+                  <div style="font-size: 13px; color: #444; line-height: 1.55;">
+                    <p style="margin: 6px 0; display: flex; align-items: flex-start; gap: 7px;">
+                      <span class="material-icons-outlined" style="font-size: 17px; color: #0f766e; flex-shrink: 0; margin-top: 1px;">mic</span>
+                      <span>Recite into your mic and watch words light up with real-time speech matching.</span>
+                    </p>
+                    <p style="margin: 6px 0; display: flex; align-items: flex-start; gap: 7px;">
+                      <span class="material-icons-outlined" style="font-size: 17px; color: #0f766e; flex-shrink: 0; margin-top: 1px;">edit_note</span>
+                      <span>Write each ayah from memory with instant letter-by-letter feedback.</span>
+                    </p>
+                    <p style="margin: 6px 0; display: flex; align-items: flex-start; gap: 7px;">
+                      <span class="material-icons-outlined" style="font-size: 17px; color: #0f766e; flex-shrink: 0; margin-top: 1px;">trending_up</span>
+                      <span>Track streaks, progress rings, and words learnt to stay motivated every day.</span>
+                    </p>
+                  </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #fbe8ee, #fdf0f4); border-radius: 12px; padding: 14px 16px;">
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                    <span class="material-icons-outlined" style="font-size: 22px; color: #8b2252;">front_hand</span>
+                    <strong style="font-size: 14.5px; color: #6e1a3e;">Ramadan Duas</strong>
+                  </div>
+                  <div style="font-size: 13px; color: #444; line-height: 1.55;">
+                    <p style="margin: 6px 0; display: flex; align-items: flex-start; gap: 7px;">
+                      <span class="material-icons-outlined" style="font-size: 17px; color: #8b2252; flex-shrink: 0; margin-top: 1px;">wb_twilight</span>
+                      <span>A fresh dua every day to keep your heart connected through the blessed month.</span>
+                    </p>
+                    <p style="margin: 6px 0; display: flex; align-items: flex-start; gap: 7px;">
+                      <span class="material-icons-outlined" style="font-size: 17px; color: #8b2252; flex-shrink: 0; margin-top: 1px;">bookmark</span>
+                      <span>Beautiful cards with Arabic text, translation, and meaning at a glance.</span>
+                    </p>
+                    <p style="margin: 6px 0; display: flex; align-items: flex-start; gap: 7px;">
+                      <span class="material-icons-outlined" style="font-size: 17px; color: #8b2252; flex-shrink: 0; margin-top: 1px;">share</span>
+                      <span>Share any dua as an image with friends and family in one tap.</span>
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+
+              <p style="font-size: 12.5px; color: #888; margin: 16px 0 0; font-style: italic; line-height: 1.5;">
+                Read gently. Return often. Let every ayah leave a mark on your heart.
               </p>
 
               <button id="closeAboutPopup" style="
@@ -8250,7 +8313,7 @@ function finalizeSwipe(dir) {
           fromSwipe: true
         });
         maybeTriggerQueuedHints();
-        maybeShowMotivation();
+        //maybeShowMotivation();
 
         const shouldAutoPlay = pendingAutoPlay;
         if (pendingAutoPlay) pendingAutoPlay = false;

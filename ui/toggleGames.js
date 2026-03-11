@@ -68,9 +68,23 @@ function isVerbGameFinished() {
   return cards.every(card => card.classList.contains('matched'));
 }
 
+function isWordTypeGameFinished() {
+  const words = Array.from(document.querySelectorAll('#wordTypeGameContainer .wt-word'));
+  if (!words.length) return false;
+  return words.every(w => w.classList.contains('wt-correct'));
+}
+
+function isVerbFormGameFinished() {
+  const container = document.getElementById('verbFormGameContainer');
+  if (!container) return false;
+  return !!container.querySelector('.vf-empty') || false;
+}
+
 function isCurrentGameFinished() {
   if (currentMode === 'arrange') return isArrangeGameFinished();
   if (currentMode === 'verb') return isVerbGameFinished();
+  if (currentMode === 'wordType') return isWordTypeGameFinished();
+  if (currentMode === 'verbForm') return isVerbFormGameFinished();
   return true;
 }
 
@@ -202,6 +216,8 @@ function _showSection(mode) {
   const cards = container.querySelectorAll('.game-card');
   const arrange = container.querySelector('.game-section[data-game="arrange"]');
   const verb = container.querySelector('.game-section[data-game="verb"]');
+  const wordType = container.querySelector('.game-section[data-game="wordType"]');
+  const verbForm = container.querySelector('.game-section[data-game="verbForm"]');
   const selectorReturn = container.querySelector('#selectorReturnWrap');
 
   if (mode === 'selector') {
@@ -211,6 +227,8 @@ function _showSection(mode) {
     if (selectorReturn) selectorReturn.style.display = '';
     if (arrange) arrange.style.display = 'none';
     if (verb) verb.style.display = 'none';
+    if (wordType) wordType.style.display = 'none';
+    if (verbForm) verbForm.style.display = 'none';
     return;
   }
 
@@ -220,6 +238,8 @@ function _showSection(mode) {
   if (selectorReturn) selectorReturn.style.display = 'none';
   if (arrange) arrange.style.display = mode === 'arrange' ? '' : 'none';
   if (verb) verb.style.display = mode === 'verb' ? '' : 'none';
+  if (wordType) wordType.style.display = mode === 'wordType' ? '' : 'none';
+  if (verbForm) verbForm.style.display = mode === 'verbForm' ? '' : 'none';
 }
 
 // Helper: hide non-keepers and inject back icon
