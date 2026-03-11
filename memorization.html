@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
   <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
-  <link rel="stylesheet" href="/memorization.css?v=20260307-memo-home-fonts1">
+  <link rel="stylesheet" href="/memorization.css?v=20260310-memo-home-layout3">
 </head>
 <body class="memorization-page memo-welcome-mode memo-word-mode">
   <div class="memo-app">
@@ -19,7 +19,8 @@
           <section class="memo-home-hero memo-home-card memo-home-welcome">
             <div class="memo-home-hero-top">
               <div class="memo-home-hello">
-                <h1 id="memoWelcomeTitle"><i>Assalamu Alaikum, Friend</i></h1>
+                <h1 id="memoWelcomeTitle">Assalamu Alaikum, Friend</h1>
+                <p class="memo-home-guidance">For effective memorization, listen to the ayah at least 20 times, read it 20 times, then read from memory and, to lock it in, write it once.</p>
               </div>
 
               <div class="memo-home-rings" aria-label="Progress rings">
@@ -140,9 +141,7 @@
               <button id="memoReciteWordModeBtn" class="memo-segmented-btn is-active" type="button" aria-pressed="true">Word by word</button>
               <button id="memoReciteFullModeBtn" class="memo-segmented-btn" type="button" aria-pressed="false">Full Ayah</button>
             </div>
-            <button id="memoReciteSettingsBtn" class="memo-settings-ghost memo-icon-btn" type="button" aria-expanded="false" aria-controls="memoReciteSettingsPanel" aria-label="Open recitation settings">
-              <span class="material-icons-outlined" aria-hidden="true">tune</span>
-            </button>
+
           </div>
 
           <div id="memoReciteSettingsPanel" class="memo-settings-panel is-hidden" aria-hidden="true">
@@ -230,6 +229,10 @@
           <button id="memoReviseBtn" type="button">Revise</button>
           <button id="memoNextBtn" type="button">Next Ayah</button>
         </div>
+        <label class="memo-auto-next-label">
+          <input type="checkbox" id="memoAutoNextToggle">
+          <span>Auto-advance to next ayah</span>
+        </label>
       </div>
     </div>
 
@@ -286,7 +289,7 @@
     <div id="memoToast" class="memo-toast" role="status" aria-live="polite" hidden></div>
   </div>
 
-  <script type="module" src="/memorization.js?v=20260307-memo-home-gapfix1"></script>
+  <script type="module" src="/memorization.js?v=20260310-memo-home-progress2"></script>
 </body>
 </html>
 

@@ -8,7 +8,7 @@ const firebaseConfig = {
     projectId: "myquranquest786",
     storageBucket: "myquranquest786.appspot.com",
     messagingSenderId: "970275375391",
-    appId: "1:970275375391:web:d1cac99878334834cb482a",
+    appId: "1:970275375391:web:d1cac998783348cb482a",
     measurementId: "G-KL3ZNNX844"
   };
 

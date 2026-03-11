@@ -19,6 +19,7 @@ const STORAGE_LAST_MEMORIZED = 'memo_last_memorized_v1';
 const STORAGE_PRACTICE_MODE = 'memo_practice_mode_v1';
 const STORAGE_VIEW_STATE = 'memo_view_state_v1';
 const STORAGE_RECITE_MATCH_MODE = 'memo_recite_match_mode_v1';
+const STORAGE_AUTO_NEXT = 'memo_auto_next_v1';
 const MAX_ALIGN_EXPECTED_SPAN = 5;
 const MAX_ALIGN_ACTUAL_SPAN = 3;
 const SPEECH_TRANSLIT_ACCEPT_SIMILARITY = 0.5;
@@ -184,6 +185,8 @@ let memoUser = null;
 let memoSyncTimer = 0;
 let isHydratingMemo = false;
 let reciteMatchMode = RECITE_MATCH_MODE.WORD;
+let autoNextOnComplete = false;
+try { autoNextOnComplete = localStorage.getItem(STORAGE_AUTO_NEXT) === '1'; } catch {}
 let fullReciteIndex = 0;
 let fullReciteTokens = [];
 let speechCommittedTranscript = '';
@@ -1068,7 +1071,7 @@ async function fetchWelcomeLastAyahText(surah, ayah) {
 }
 
 async function getWelcomeSnapshot() {
-  const activeSurah = Number(current?.surah) || Number(unlocked?.surah) || 1;
+  const fallbackSurah = Number(current?.surah) || Number(unlocked?.surah) || 1;
   const effectiveListens = (listenCounts && typeof listenCounts === 'object')
     ? { ...listenCounts }
     : {};
@@ -1084,8 +1087,8 @@ async function getWelcomeSnapshot() {
     lastAyah: Number(inferredLast?.ayah) || 1,
     lastTimestamp: Number(inferredLast?.timestamp) || 0,
     hasMemorizedAyah: Boolean(inferredLast?.isMemorized),
-    activeSurah,
-    surahAyahCount: getSurahAyahCount(activeSurah),
+    activeSurah: fallbackSurah,
+    surahAyahCount: getSurahAyahCount(fallbackSurah),
     surahMemorizedAyahs: 0,
     totalWordsLearnt: 0
   };
@@ -1148,10 +1151,14 @@ async function getWelcomeSnapshot() {
 
   snapshot.memorizedAyahs = countMemorizedAyahs(effectiveListens);
   snapshot.hasMemorizedAyah = snapshot.hasMemorizedAyah || snapshot.memorizedAyahs > 0;
-  snapshot.surahAyahCount = getSurahAyahCount(snapshot.activeSurah);
+  const progressSurah = snapshot.hasMemorizedAyah && isValidAyahRef(snapshot.lastSurah, snapshot.lastAyah)
+    ? Number(snapshot.lastSurah)
+    : fallbackSurah;
+  snapshot.activeSurah = progressSurah;
+  snapshot.surahAyahCount = getSurahAyahCount(progressSurah);
   snapshot.surahMemorizedAyahs = countMemorizedAyahsInSurah(
     effectiveListens,
-    snapshot.activeSurah,
+    progressSurah,
     snapshot.surahAyahCount
   );
   snapshot.totalWordsLearnt = await countTotalWordsLearnt(effectiveListens);
@@ -2026,6 +2033,12 @@ function resetFullReciteState() {
   fullReciteIndex = 0;
   fullReciteTokens = [];
   lastFullReciteSignature = '';
+  reciteEngine.stableMatchedIndex = 0;
+  reciteEngine.candidateMatchedIndex = 0;
+  reciteEngine.lastAlignment = null;
+  reciteEngine.lastCommittedSignature = '';
+  reciteEngine.stableRepeatCount = 0;
+  reciteEngine.lastSpeechTokensSignature = '';
   renderFullReciteLine();
 }
 
@@ -2725,7 +2738,11 @@ function commitAlignment(alignment, speechTokens) {
     alignment.candidateMatchedIndex || 0
   );
 
-  const stableIndex = alignment.stableMatchedIndex || 0;
+  // Never regress stableMatchedIndex
+  const stableIndex = Math.max(
+    alignment.stableMatchedIndex || 0,
+    reciteEngine.stableMatchedIndex
+  );
   const signature = `${stableIndex}|${(alignment.matchedPairs || [])
     .map(p => `${p.expectedIdx}:${p.spokenIdx}:${p.matchType}`)
     .join(',')}`;
@@ -2737,15 +2754,46 @@ function commitAlignment(alignment, speechTokens) {
     reciteEngine.stableRepeatCount = 1;
   }
 
+  // Commit when stable index advances and alignment is confirmed stable
+  // Accept on first alignment if all expected words are matched (completion)
+  const isCompletion = stableIndex >= expectedWords.length;
+  const hasExactMajority = (alignment.matchedPairs || []).filter(
+    p => p.matchType === 'exact-arabic'
+  ).length >= Math.floor(stableIndex * 0.5);
   const shouldCommit =
     stableIndex > revealIndex &&
-    (reciteEngine.stableRepeatCount >= 2 || stableIndex >= expectedWords.length);
+    (reciteEngine.stableRepeatCount >= 2 || isCompletion || (stableIndex === revealIndex + 1 && hasExactMajority));
 
   reciteEngine.lastAlignment = alignment;
 
   if (shouldCommit) {
     reciteEngine.stableMatchedIndex = stableIndex;
-    applyRevealFromAlignment(alignment, speechTokens);
+    if (isFullAyahReciteMode()) {
+      // In full ayah mode, update revealIndex and check for completion
+      if (stableIndex > revealIndex) {
+        const pairByExpected = new Map();
+        (alignment.matchedPairs || []).forEach(pair => {
+          if (!pairByExpected.has(pair.expectedIdx)) {
+            pairByExpected.set(pair.expectedIdx, pair);
+          }
+        });
+        for (let idx = revealIndex; idx < stableIndex; idx += 1) {
+          const pair = pairByExpected.get(idx);
+          const spokenText = pair ? speechTokens[pair.spokenIdx]?.raw || '' : '';
+          if (spokenText) setSpokenText(idx, spokenText);
+          revealWord(idx);
+        }
+        revealIndex = stableIndex;
+        updateExpectedWord();
+        setLastProgressSnapshot();
+      }
+      if (revealIndex >= expectedWords.length) {
+        showFeedback('Ayah complete.', false);
+        completeAyah();
+      }
+    } else {
+      applyRevealFromAlignment(alignment, speechTokens);
+    }
   }
 }
 
@@ -2773,25 +2821,45 @@ function recomputeSpeechAlignment(finalText, interimText = '') {
 function renderFullReciteFromAlignment(alignment, speechTokens) {
   if (!els.reciteLine) return;
 
-  const pairMap = new Map();
+  // Map expected indices to their alignment pair for match-type info
+  const matchedExpected = new Map();
   (alignment?.matchedPairs || []).forEach(pair => {
-    pairMap.set(pair.spokenIdx, pair);
-  });
-
-  fullReciteTokens = (speechTokens || []).map((token, idx) => {
-    const pair = pairMap.get(idx);
-    if (!pair) {
-      return { text: token.raw, status: 'wrong' };
+    if (!matchedExpected.has(pair.expectedIdx)) {
+      matchedExpected.set(pair.expectedIdx, pair);
     }
-
-    const isExact = pair.matchType === 'exact-arabic';
-    return {
-      text: expectedWords[pair.expectedIdx] || token.raw,
-      status: isExact ? 'correct' : 'fuzzy'
-    };
   });
 
-  fullReciteIndex = alignment?.stableMatchedIndex || 0;
+  // Never show fewer revealed words than already committed
+  const committedStable = reciteEngine.stableMatchedIndex;
+  const alignmentStable = alignment?.stableMatchedIndex || 0;
+  const effectiveStable = Math.max(committedStable, alignmentStable);
+  const candidateIdx = Math.max(
+    reciteEngine.candidateMatchedIndex,
+    alignment?.candidateMatchedIndex || 0,
+    effectiveStable
+  );
+
+  // Build token list from expected ayah words with progressive status
+  fullReciteTokens = expectedWords.map((word, idx) => {
+    if (idx < effectiveStable) {
+      // Stably matched — permanently revealed
+      const pair = matchedExpected.get(idx);
+      const isFuzzy = pair && pair.matchType !== 'exact-arabic';
+      return { text: word, status: isFuzzy ? 'fuzzy' : 'correct' };
+    }
+    if (matchedExpected.has(idx)) {
+      // Matched in current alignment but not yet committed stable
+      return { text: word, status: 'candidate' };
+    }
+    if (idx < candidateIdx) {
+      // Between stable and candidate — skipped/pending
+      return { text: word, status: 'pending' };
+    }
+    // Future words not yet reached
+    return { text: word, status: 'pending' };
+  });
+
+  fullReciteIndex = effectiveStable;
   renderFullReciteLine();
 }
 
@@ -3099,7 +3167,7 @@ function getArabicSpeechSimilarity(expected, candidate) {
 function isSpeechArabicMatch(expected, candidate) {
   if (!expected || !candidate) return false;
   const similarity = getArabicSpeechSimilarity(expected, candidate);
-  return similarity >= 0.58 || (expected.length <= 4 && similarity >= 0.52);
+  return similarity >= 0.48 || (expected.length <= 4 && similarity >= 0.42);
 }
 
 function getSpeechTokenSignature(rawToken) {
@@ -3832,6 +3900,7 @@ function syncRevealFromTranslitTranscript(transcript) {
 }
 
 function completeAyah() {
+  const wasListening = keepListening || listening;
   stopListening();
   updateExpectedWord();
   const memorizedSurah = Number(current.surah) || 1;
@@ -3844,10 +3913,21 @@ function completeAyah() {
   });
   notifyParentMemoAyahMemorized(memorizedSurah, memorizedAyah);
   unlockNextAyah();
-  showModal(true);
   buildSurahOptions();
   buildAyahOptions(current.surah);
   refreshWelcomeDashboard();
+
+  if (autoNextOnComplete) {
+    const next = getNextAyah();
+    if (next) {
+      showFeedback('Ayah complete — next ayah', false);
+      goMemo({ view: 'ayah', surah: next.surah, ayah: next.ayah }, { historyMode: 'push' }).then(() => {
+        if (wasListening) startListening();
+      });
+      return;
+    }
+  }
+  showModal(true);
 }
 
 function initRecognition() {
@@ -3913,7 +3993,9 @@ function initRecognition() {
     const interimParts = [];
     for (let i = evt.resultIndex; i < evt.results.length; i += 1) {
       const res = evt.results[i];
-      const expectedIndexBase = isFullAyahReciteMode() ? fullReciteIndex : revealIndex;
+      const expectedIndexBase = isFullAyahReciteMode()
+        ? Math.max(reciteEngine.stableMatchedIndex, fullReciteIndex)
+        : revealIndex;
       const expectedIndex = expectedWords.length
         ? Math.min(expectedWords.length - 1, Math.max(0, expectedIndexBase + (i - evt.resultIndex)))
         : 0;
@@ -3942,12 +4024,8 @@ function initRecognition() {
     updateSpokenPreview(previewTokens.slice(-2).join(' '));
 
     if (isFullAyahReciteMode()) {
-      const liveTokens = buildFullReciteLiveTokens(finalTranscript, interim);
-      const liveSignature = liveTokens.map(getSpeechTokenSignature).filter(Boolean).join('|');
-      if (liveSignature !== lastFullReciteSignature) {
-        lastFullReciteSignature = liveSignature;
-        rebuildFullReciteFromTokens(liveTokens);
-      }
+      // Full ayah rendering is handled by recomputeSpeechAlignment above
+      // via renderFullReciteFromAlignment — no separate token rebuild needed.
       return;
     }
 
@@ -4595,6 +4673,15 @@ els.nextBtn.addEventListener('click', () => {
     goMemo({ view: 'ayah', surah: next.surah, ayah: next.ayah }, { historyMode: 'push' });
   }
 });
+
+const autoNextToggle = document.getElementById('memoAutoNextToggle');
+if (autoNextToggle) {
+  autoNextToggle.checked = autoNextOnComplete;
+  autoNextToggle.addEventListener('change', () => {
+    autoNextOnComplete = autoNextToggle.checked;
+    try { localStorage.setItem(STORAGE_AUTO_NEXT, autoNextOnComplete ? '1' : '0'); } catch {}
+  });
+}
 
 document.addEventListener('keydown', event => {
   if (event.key === 'Escape' && memoDrawerOpen) {

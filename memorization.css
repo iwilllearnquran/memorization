@@ -520,6 +520,11 @@ html.memo-welcome-locked body.memorization-page.memo-welcome-mode {
   justify-content: space-between;
 }
 
+.memo-home-hello {
+  flex: 1;
+  min-width: 0;
+}
+
 .memo-home-hello h1 {
   margin: 0;
   font-size: 18px;
@@ -552,9 +557,10 @@ html.memo-welcome-locked body.memorization-page.memo-welcome-mode {
 
 .memo-home-rings {
   display: flex;
-  gap: 10px;
-  align-items: center;
-  justify-content: flex-end;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+  justify-content: flex-start;
   flex-shrink: 0;
 }
 
@@ -841,8 +847,15 @@ body.memorization-page.memo-welcome-mode {
 }
 
 .memorization-page.memo-welcome-mode .memo-home-hello h1 {
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 600;
+  font-family: 'El Messiri', serif;
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: 0.01em;
+}
+
+.memorization-page.memo-welcome-mode .memo-home-guidance {
+  max-width: none;
+  line-height: 1.45;
 }
 
 .memorization-page.memo-welcome-mode .memo-home-preview-ar {
@@ -984,24 +997,33 @@ body.memorization-page.memo-welcome-mode {
 }
 
 .memo-recite-token {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin: 2px 3px;
-  padding: 4px 8px;
-  border-radius: 10px;
-  border: 1px solid rgba(10, 40, 30, 0.1);
-  background: rgba(255, 255, 255, 0.9);
+  display: inline;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  transition: color 0.18s ease, opacity 0.18s ease;
 }
 
 .memo-recite-token.is-correct {
-  background: #e8f8ef;
-  border-color: #2f8f66;
+  color: #1a7a4c;
+}
+
+.memo-recite-token.is-fuzzy {
+  color: #b8860b;
+}
+
+.memo-recite-token.is-candidate {
+  color: #3a7fc2;
+  opacity: 0.8;
+}
+
+.memo-recite-token.is-pending {
+  color: rgba(0, 0, 0, 0.18);
 }
 
 .memo-recite-token.is-wrong {
-  background: #ffe9e9;
-  border-color: #d15a5a;
+  color: #c04040;
 }
 
 .memo-words-wrap {
@@ -1689,6 +1711,26 @@ html.hide-grammar .memo-word-grid .pos-tag {
 #memoNextBtn {
   background: linear-gradient(180deg, #18a094, #0f766e);
   color: #fff;
+}
+
+.memo-auto-next-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: 12.5px;
+  color: var(--memo-muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.memo-auto-next-label input[type="checkbox"] {
+  accent-color: #0f766e;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  cursor: pointer;
 }
 
 /* Profile drawer */

@@ -16,9 +16,27 @@
     "ignore": [
       "firebase.json",
       "**/node_modules/**",
-      "**/.git/**"
+      "**/.git/**",
+      "_private/**",
+      "scripts/**",
+      "generated/**",
+      "Dockerfile.*",
+      "cloudbuild.*"
     ],
     "headers": [
+      {
+        "source": "**",
+        "headers": [
+          {
+            "key": "X-Content-Type-Options",
+            "value": "nosniff"
+          },
+          {
+            "key": "Referrer-Policy",
+            "value": "strict-origin-when-cross-origin"
+          }
+        ]
+      },
       {
         "source": "/index.html",
         "headers": [

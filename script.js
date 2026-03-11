@@ -457,10 +457,10 @@ const LOG = {
 
 
       // 🔑 SAME FEEL CONSTANTS
-      const VERTICAL_RATIO = 1.2;
-      const INTENT_DISTANCE = 16;
-      const HORIZONTAL_LOCK_RATIO = 1.1;
-      const DRAG_DAMPING = 0.88;
+      const VERTICAL_RATIO = 1;
+      const INTENT_DISTANCE = 2; // tap/click dead-zone
+      const HORIZONTAL_LOCK_RATIO = 1;
+      const DRAG_DAMPING = 1;
       let lastSettings = null;
 
       const SWIPE_IGNORE_SELECTOR = [
@@ -620,7 +620,6 @@ const LOG = {
         -------------------------------------------------- */
         if (
           !swipeDir &&
-          Math.abs(dx) > INTENT_DISTANCE &&
           Math.abs(dx) > Math.abs(dy) * HORIZONTAL_LOCK_RATIO
         ) {
           swipeDir = dx < 0 ? 1 : -1;
@@ -628,7 +627,7 @@ const LOG = {
 
           console.log('[SWIPE →] Horizontal intent LOCKED', {
             swipeDir,
-            reason: `|dx| > ${INTENT_DISTANCE}`
+            reason: `|dx| > |dy| * ${HORIZONTAL_LOCK_RATIO}`
           });
           if (e.pointerId && el.setPointerCapture) {
             try {
@@ -763,12 +762,12 @@ const LOG = {
     const t = Math.min(speed / 1.1, 1); // normalize velocity
     const requiredDistance = maxDist - (maxDist - minDist) * t;
     // Guard against accidental commits from tiny taps that report non-zero velocity.
-    const quickFlickDistance = Math.max(24, width * 0.06);
-    const speedCommitDistance = Math.max(14, width * 0.03);
-    const quickFlick = speed > 0.85 && distance > quickFlickDistance;
+    const quickFlickDistance = Math.max(10, width * 0.025);
+    const speedCommitDistance = Math.max(4, width * 0.01);
+    const quickFlick = speed > 0.75 && distance > quickFlickDistance;
 
     const commitByDistance = distance > requiredDistance;
-    const commitBySpeed = speed > 0.65 && distance > speedCommitDistance;
+    const commitBySpeed = speed > 0.5 && distance > speedCommitDistance;
     const commit = commitByDistance || commitBySpeed || quickFlick;
 
     console.log('Commit evaluation', {
