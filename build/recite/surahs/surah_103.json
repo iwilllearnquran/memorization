@@ -1,0 +1,49 @@
+{
+  "generatedAt": "2026-02-21T01:14:44.590515+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
+  "surah": {
+    "surah": 103,
+    "arabicName": "سُورَةُ العَصۡرِ",
+    "englishName": "Al-Asr",
+    "englishNameTranslation": "The Declining Day, Epoch",
+    "ayahCount": 3,
+    "ayahs": [
+      {
+        "ayah": 1,
+        "globalAyah": 6177,
+        "arabic": "وَالۡعَصۡرِۙ‏",
+        "translation_en": "CONSIDER the flight of time!",
+        "translation_ur": "عصر کی قسم",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/103001.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6177.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6177.mp3"
+        }
+      },
+      {
+        "ayah": 2,
+        "globalAyah": 6178,
+        "arabic": "اِنَّ الۡاِنۡسَانَ لَفِىۡ خُسۡرٍۙ‏",
+        "translation_en": "Verily, man is bound to lose himself",
+        "translation_ur": "کہ انسان نقصان میں ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/103002.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6178.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6178.mp3"
+        }
+      },
+      {
+        "ayah": 3,
+        "globalAyah": 6179,
+        "arabic": "اِلَّا الَّذِيۡنَ اٰمَنُوۡا وَ عَمِلُوا الصّٰلِحٰتِ وَتَوَاصَوۡا بِالۡحَقِّ   ۙ وَتَوَاصَوۡا بِالصَّبۡرِ‏",
+        "translation_en": "unless he be of those who attain to faith, and do good works, and enjoin upon one another the keeping to truth, and enjoin upon one another patience in adversity.",
+        "translation_ur": "مگر وہ لوگ جو ایمان لائے اور نیک عمل کرتے رہے اور آپس میں حق (بات) کی تلقین اور صبر کی تاکید کرتے رہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/103003.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6179.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6179.mp3"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "generatedAt": "2026-02-21T01:14:50.813823+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
+  "surah": {
+    "surah": 113,
+    "arabicName": "سُورَةُ الفَلَقِ",
+    "englishName": "Al-Falaq",
+    "englishNameTranslation": "The Dawn",
+    "ayahCount": 5,
+    "ayahs": [
+      {
+        "ayah": 1,
+        "globalAyah": 6226,
+        "arabic": "قُلۡ اَعُوۡذُ بِرَبِّ الۡفَلَقِۙ‏",
+        "translation_en": "SAY: \"I seek refuge with the Sustainer of the rising dawn,",
+        "translation_ur": "کہو کہ میں صبح کے پروردگار کی پناہ مانگتا ہوں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/113001.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6226.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6226.mp3"
+        }
+      },
+      {
+        "ayah": 2,
+        "globalAyah": 6227,
+        "arabic": "مِنۡ شَرِّ مَا خَلَقَۙ‏",
+        "translation_en": "\"from the evil of aught that He has created,",
+        "translation_ur": "ہر چیز کی بدی سے جو اس نے پیدا کی",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/113002.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6227.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6227.mp3"
+        }
+      },
+      {
+        "ayah": 3,
+        "globalAyah": 6228,
+        "arabic": "وَمِنۡ شَرِّ غَاسِقٍ اِذَا وَقَبَۙ‏",
+        "translation_en": "\"and from the evil of the black darkness whenever it descends,",
+        "translation_ur": "اور شب تاریکی کی برائی سے جب اس کااندھیرا چھا جائے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/113003.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6228.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6228.mp3"
+        }
+      },
+      {
+        "ayah": 4,
+        "globalAyah": 6229,
+        "arabic": "وَمِنۡ شَرِّ النَّفّٰثٰتِ فِى الۡعُقَدِۙ‏",
+        "translation_en": "\"and from the evil of all human beings bent on occult endeavours,",
+        "translation_ur": "اور گنڈوں پر (پڑھ پڑھ کر) پھونکنے والیوں کی برائی سے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/113004.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6229.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6229.mp3"
+        }
+      },
+      {
+        "ayah": 5,
+        "globalAyah": 6230,
+        "arabic": "وَمِنۡ شَرِّ حَاسِدٍ اِذَا حَسَدَ‏",
+        "translation_en": "\"and from the evil of the envious when he envies.\"",
+        "translation_ur": "اور حسد کرنے والے کی برائی سے جب حسد کرنے لگے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/113005.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6230.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6230.mp3"
+        }
+      }
+    ]
+  }
+}

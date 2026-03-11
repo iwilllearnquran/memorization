@@ -6,6 +6,21 @@
 const POINTS_KEY = 'guestPoints';
 const STREAK_KEY = 'guestStreakHistory';
 
+function getLocalDateStr(date = new Date()) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+function diffDaysUTC(aStr, bStr) {
+  const [ay, am, ad] = aStr.split('-').map(Number);
+  const [by, bm, bd] = bStr.split('-').map(Number);
+  const a = Date.UTC(ay, am - 1, ad);
+  const b = Date.UTC(by, bm - 1, bd);
+  return Math.round((a - b) / 86400000);
+}
+
 /**
  * Ensure the guest session storage is initialized.
  * - Sets points to 0 if unset
@@ -27,8 +42,9 @@ export function initGuestSession() {
  */
 export function addGuestPoints(pointsDelta) {
   initGuestSession();
+  const delta = Number(pointsDelta) || 0;
   const current = parseInt(localStorage.getItem(POINTS_KEY), 10) || 0;
-  const updated = current + pointsDelta;
+  const updated = current + delta;
   localStorage.setItem(POINTS_KEY, String(updated));
   return updated;
 }
@@ -42,18 +58,18 @@ export function addGuestPoints(pointsDelta) {
  */
 export function recordGuestStreak() {
   initGuestSession();
-  const today = new Date().toISOString().split('T')[0];
+  const today = getLocalDateStr();
   const history = JSON.parse(localStorage.getItem(STREAK_KEY)) || [];
   const oldLength = history.length;
 
   if (history[oldLength - 1] === today) {
-    return { updated: false, oldLength, newLength: oldLength };
+    return { updated: false, oldLength, newLength: oldLength, today };
   }
 
   let newHistory;
   if (oldLength > 0) {
     const lastDate = history[oldLength - 1];
-    const diffDays = Math.round((new Date(today) - new Date(lastDate)) / (1000 * 60 * 60 * 24));
+    const diffDays = diffDaysUTC(today, lastDate);
     if (diffDays === 1) {
       newHistory = [...history, today];
     } else {
@@ -64,7 +80,12 @@ export function recordGuestStreak() {
   }
 
   localStorage.setItem(STREAK_KEY, JSON.stringify(newHistory));
-  return { updated: true, oldLength, newLength: newHistory.length };
+  return {
+    updated: true,
+    oldLength,
+    newLength: newHistory.length,
+    today
+  };
 }
 
 /**
@@ -87,7 +108,7 @@ const LAST_READ_KEY = 'quranQuestLastRead';
  */
 export function setGuestLastRead(surah, ayah) {
   localStorage.setItem(
-    'lastReadAyah',
+    LAST_READ_KEY,
     JSON.stringify({
       surah,
       ayah,
@@ -103,7 +124,17 @@ export function setGuestLastRead(surah, ayah) {
  */
 export function getGuestLastRead() {
   try {
-    return JSON.parse(localStorage.getItem('lastReadAyah'));
+    const parsed = JSON.parse(localStorage.getItem(LAST_READ_KEY));
+    const surah = Number(parsed?.surah);
+    const ayah = Number(parsed?.ayah);
+    if (!Number.isFinite(surah) || !Number.isFinite(ayah) || surah <= 0 || ayah <= 0) {
+      return null;
+    }
+    return {
+      surah,
+      ayah,
+      savedAt: parsed?.savedAt || null
+    };
   } catch {
     return null;
   }

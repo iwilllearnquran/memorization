@@ -1,0 +1,649 @@
+{
+  "generatedAt": "2026-02-21T01:12:43.459836+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
+  "surah": {
+    "surah": 42,
+    "arabicName": "سُورَةُ الشُّورَىٰ",
+    "englishName": "Ash-Shura",
+    "englishNameTranslation": "Consultation",
+    "ayahCount": 53,
+    "ayahs": [
+      {
+        "ayah": 1,
+        "globalAyah": 4273,
+        "arabic": "حٰمٓ‏",
+        "translation_en": "Ha. Mim.",
+        "translation_ur": "حٰمٓ",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042001.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4273.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4273.mp3"
+        }
+      },
+      {
+        "ayah": 2,
+        "globalAyah": 4274,
+        "arabic": "عٓسٓقٓ‏",
+        "translation_en": "Ayn. Sin. Qaf.",
+        "translation_ur": "عٓسٓقٓ",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042002.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4274.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4274.mp3"
+        }
+      },
+      {
+        "ayah": 3,
+        "globalAyah": 4275,
+        "arabic": "كَذٰلِكَ يُوۡحِىۡۤ اِلَيۡكَ وَاِلَى الَّذِيۡنَ مِنۡ قَبۡلِكَۙ اللّٰهُ الۡعَزِيۡزُ الۡحَكِيۡمُ‏",
+        "translation_en": "THUS has God, the Almighty, the Wise, revealed [the truth] unto thee, [O Muhammad,] and unto those who preceded thee:",
+        "translation_ur": "خدائے غالب و دانا اسی طرح تمہاری طرف مضامین اور (براہین) بھیجتا ہے جس طرح تم سے پہلے لوگوں کی طرف وحی بھیجتا رہا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042003.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4275.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4275.mp3"
+        }
+      },
+      {
+        "ayah": 4,
+        "globalAyah": 4276,
+        "arabic": "لَهٗ مَا فِى السَّمٰوٰتِ وَمَا فِى الۡاَرۡضِ​ؕ وَهُوَ الۡعَلِىُّ الۡعَظِيۡمُ‏ ﻿﻿",
+        "translation_en": "His is all that is in the heavens and all that is on earth; and most exalted, tremendous is He.",
+        "translation_ur": "جو کچھ آسمانوں میں اور جو کچھ زمین میں ہے سب اسی کا ہے۔ اور وہ عالی رتبہ اور گرامی قدر ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042004.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4276.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4276.mp3"
+        }
+      },
+      {
+        "ayah": 5,
+        "globalAyah": 4277,
+        "arabic": "تَـكَادُ السَّمٰوٰتُ يَتَفَطَّرۡنَ مِنۡ فَوۡقِهِنَّ​ وَالۡمَلٰٓٮِٕكَةُ يُسَبِّحُوۡنَ بِحَمۡدِ رَبِّهِمۡ وَيَسۡتَغۡفِرُوۡنَ لِمَنۡ فِى الۡاَرۡضِ​ؕ اَلَاۤ اِنَّ اللّٰهَ هُوَ الۡغَفُوۡرُ الرَّحِيۡمُ‏",
+        "translation_en": "The uppermost heavens are well-nigh rent asunder [for awe of Him]; and the angels extol their Sustainer’s limitless glory and praise, and ask for­giveness for all who are on earth. Oh, verily, God alone is truly-forgiving, a dispenser of grace!",
+        "translation_ur": "قریب ہے کہ آسمان اوپر سے پھٹ پڑیں اور فرشتے اپنے پروردگار کی تعریف کے ساتھ اس کی تسبیج کرتے رہتے ہیں اور جو لوگ زمین میں ہیں ان کے لئے معافی مانگتے رہتے ہیں۔ سن رکھو کہ خدا بخشنے والا مہربان ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042005.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4277.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4277.mp3"
+        }
+      },
+      {
+        "ayah": 6,
+        "globalAyah": 4278,
+        "arabic": "وَالَّذِيۡنَ اتَّخَذُوۡا مِنۡ دُوۡنِهٖۤ اَوۡلِيَآءَ اللّٰهُ حَفِيۡظٌ عَلَيۡهِمۡ​ۖ وَمَاۤ اَنۡتَ عَلَيۡهِمۡ بِوَكِيۡلٍ‏",
+        "translation_en": "NOW AS FOR those who take aught beside Him for their protectors - God watches them, and thou art not responsible for their conduct.",
+        "translation_ur": "اور جن لوگوں نے اس کے سوا کارساز بنا رکھے ہیں وہ خدا کو یاد ہیں۔ اور تم ان پر داروغہ نہیں ہو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042006.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4278.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4278.mp3"
+        }
+      },
+      {
+        "ayah": 7,
+        "globalAyah": 4279,
+        "arabic": "وَكَذٰلِكَ اَوۡحَيۡنَاۤ اِلَيۡكَ قُرۡاٰنًا عَرَبِيًّا لِّـتُـنۡذِرَ اُمَّ الۡقُرٰى وَمَنۡ حَوۡلَهَا وَتُنۡذِرَ يَوۡمَ الۡجَمۡعِ لَا رَيۡبَ فِيۡهِ​ؕ فَرِيۡقٌ فِى الۡجَنَّةِ وَفَرِيۡقٌ فِى السَّعِيۡرِ‏",
+        "translation_en": "[Thou art but entrusted with Our message:] and so We have revealed unto thee a discourse in the Arabic tongue in order that thou mayest warn the foremost of all cities and all who dwell around it to wit, warn [them] of the Day of the Gathering, [the coming of] which is beyond all doubt: [the Day when] some shall find themselves in paradise, and some in the blazing flame.",
+        "translation_ur": "اور اسی طرح تمہارے پاس قرآن عربی بھیجا ہے تاکہ تم بڑے گاؤں (یعنی مکّے) کے رہنے والوں کو اور جو لوگ اس کے اردگرد رہتے ہیں ان کو رستہ دکھاؤ اور انہیں قیامت کے دن کا بھی جس میں کچھ شک نہیں ہے خوف دلاؤ۔ اس روز ایک فریق بہشت میں ہوگا اور ایک فریق دوزخ میں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042007.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4279.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4279.mp3"
+        }
+      },
+      {
+        "ayah": 8,
+        "globalAyah": 4280,
+        "arabic": "وَلَوۡ شَآءَ اللّٰهُ لَجَعَلَهُمۡ اُمَّةً وَّاحِدَةً وَّلٰـكِنۡ يُّدۡخِلُ مَنۡ يَّشَآءُ فِىۡ رَحۡمَتِهٖ​ؕ وَالظّٰلِمُوۡنَ مَا لَهُمۡ مِّنۡ وَّلِىٍّ وَّلَا نَصِيۡرٍ‏",
+        "translation_en": "Now had God so willed, He could surely have made them all one single community: none the less, He admits unto His grace him that wills [to be admitted] whereas the evildoers shall have none to protect them and none to succour them [on Judgment Day].",
+        "translation_ur": "اور اگر خدا چاہتا تو ان کو ایک ہی جماعت کردیتا لیکن وہ جس کو چاہتا ہے اپنی رحمت میں داخل کرلیتا ہے اور ظالموں کا نہ کوئی یار ہے اور نہ مددگار",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042008.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4280.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4280.mp3"
+        }
+      },
+      {
+        "ayah": 9,
+        "globalAyah": 4281,
+        "arabic": "اَمِ اتَّخَذُوۡا مِنۡ دُوۡنِهٖۤ اَوۡلِيَآءَ​ۚ فَاللّٰهُ هُوَ الۡوَلِىُّ وَهُوَ يُحۡىِ الۡمَوۡتٰى وَهُوَ عَلٰى كُلِّ شَىۡءٍ قَدِيۡرٌ‏",
+        "translation_en": "Did they, perchance, [think that they could] choose protectors other than Him? But God alone is the Protector [of all that exists], since it is He alone who brings the dead to life, and He alone who has the power to will anything.",
+        "translation_ur": "کیا انہوں نے اس کے سوا کارساز بنائے ہیں؟ کارساز تو خدا ہی ہے اور وہی مردوں کو زندہ کرے گا اور وہ ہر چیز پر قدرت رکھتا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042009.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4281.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4281.mp3"
+        }
+      },
+      {
+        "ayah": 10,
+        "globalAyah": 4282,
+        "arabic": "وَمَا اخۡتَلَـفۡتُمۡ فِيۡهِ مِنۡ شَىۡءٍ فَحُكۡمُهٗۤ اِلَى اللّٰهِ​ ؕ ذٰ لِكُمُ اللّٰهُ رَبِّىۡ عَلَيۡهِ تَوَكَّلۡتُۖ وَاِلَيۡهِ اُنِيۡبُ‏",
+        "translation_en": "AND ON WHATEVER you may differ, [O believers,] the verdict thereon rests with God. [Say, therefore:] “Such is God, my Sustainer: in Him have I placed my trust, and unto Him do I always turn!”",
+        "translation_ur": "اور تم جس بات میں اختلاف کرتے ہو اس کا فیصلہ خدا کی طرف (سے ہوگا) یہی خدا میرا پروردگار ہے میں اسی پر بھروسہ رکھتا ہوں۔ اور اسی کی طرف رجوع کرتا ہوں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042010.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4282.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4282.mp3"
+        }
+      },
+      {
+        "ayah": 11,
+        "globalAyah": 4283,
+        "arabic": "فَاطِرُ السَّمٰوٰتِ وَالۡاَرۡضِ​ؕ جَعَلَ لَـكُمۡ مِّنۡ اَنۡفُسِكُمۡ اَزۡوَاجًا وَّ مِنَ الۡاَنۡعَامِ اَزۡوَاجًا​ ۚ يَذۡرَؤُكُمۡ فِيۡهِ​ ؕ لَيۡسَ كَمِثۡلِهٖ شَىۡءٌ ​ۚ وَهُوَ السَّمِيۡعُ الۡبَصِيۡرُ‏",
+        "translation_en": "The Originator [is He] of the heavens and the earth. He has given you mates of your own kind just as [He has willed that] among the beasts [there be] mates - to multiply you thereby: [but] there is nothing like unto Him, and He alone is all-hearing, all-seeing.",
+        "translation_ur": "آسمانوں اور زمین کا پیدا کرنے والا (وہی ہے) ۔ اسی نے تمہارے لئے تمہاری ہی جنس کے جوڑے بنائے اور چارپایوں کے بھی جوڑے (بنائے اور) اسی طریق پر تم کو پھیلاتا رہتا ہے۔ اس جیسی کوئی چیز نہیں۔ اور وہ دیکھتا سنتا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042011.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4283.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4283.mp3"
+        }
+      },
+      {
+        "ayah": 12,
+        "globalAyah": 4284,
+        "arabic": "لَهٗ مَقَالِيۡدُ السَّمٰوٰتِ وَالۡاَرۡضِ​ۚ يَبۡسُطُ الرِّزۡقَ لِمَنۡ يَّشَآءُ وَيَقۡدِرُ​ؕ اِنَّهٗ بِكُلِّ شَىۡءٍ عَلِيۡمٌ‏",
+        "translation_en": "His are the keys of the heavens and the earth: He grants abundant sustenance, or gives it in scant measure, unto whomever He wills: for, behold, He has full knowledge of everything.",
+        "translation_ur": "آسمانوں اور زمین کی کنجیاں اسی کے ہاتھ میں ہیں۔ وہ جس کے لئے چاہتا ہے رزق فراخ کردیتا ہے (اور جس کے لئے چاہتا ہے) تنگ کردیتا ہے۔ بےشک وہ ہر چیز سے واقف ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042012.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4284.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4284.mp3"
+        }
+      },
+      {
+        "ayah": 13,
+        "globalAyah": 4285,
+        "arabic": "شَرَعَ لَـكُمۡ مِّنَ الدِّيۡنِ مَا وَصّٰى بِهٖ نُوۡحًا وَّالَّذِىۡۤ اَوۡحَيۡنَاۤ اِلَيۡكَ وَمَا وَصَّيۡنَا بِهٖۤ اِبۡرٰهِيۡمَ وَمُوۡسٰى وَعِيۡسٰٓى اَنۡ اَقِيۡمُوا الدِّيۡنَ وَ لَا تَتَفَرَّقُوۡا فِيۡهِ​ؕ كَبُـرَ عَلَى الۡمُشۡرِكِيۡنَ مَا تَدۡعُوۡهُمۡ اِلَيۡهِ​ ؕ اَللّٰهُ يَجۡتَبِىۡۤ اِلَيۡهِ مَنۡ يَّشَآءُ وَيَهۡدِىۡۤ اِلَيۡهِ مَنۡ يُّنِيۡبُ‏",
+        "translation_en": "In matters of faith, He has ordained for you that which He had enjoined upon Noah - and into which We gave thee [O Muhammad] insight through revelation as well as that which We had enjoined upon Abraham, and Moses, and Jesus: Steadfastly uphold the [true] faith, and do not break up your unity therein. [And even though] that [unity of faith] to which thou callest them appears oppressive to those who are wont to ascribe to other beings or forces a share in His divinity, God draws unto Himself everyone who is willing, and guides unto Himself everyone who turns unto Him.",
+        "translation_ur": "اسی نے تمہارے لئے دین کا وہی رستہ مقرر کیا جس (کے اختیار کرنے کا) نوح کو حکم دیا تھا اور جس کی (اے محمدﷺ) ہم نے تمہاری طرف وحی بھیجی ہے اور جس کا ابراہیم اور موسیٰ اور عیسیٰ کو حکم دیا تھا (وہ یہ) کہ دین کو قائم رکھنا اور اس میں پھوٹ نہ ڈالنا۔ جس چیز کی طرف تم مشرکوں کو بلاتے ہو وہ ان کو دشوار گزرتی ہے۔ الله جس کو چاہتا ہے اپنی بارگاہ کا برگزیدہ کرلیتا ہے اور جو اس کی طرف رجوع کرے اسے اپنی طرف رستہ دکھا دیتا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042013.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4285.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4285.mp3"
+        }
+      },
+      {
+        "ayah": 14,
+        "globalAyah": 4286,
+        "arabic": "وَمَا تَفَرَّقُوۡۤا اِلَّا مِنۡۢ بَعۡدِ مَا جَآءَهُمُ الۡعِلۡمُ بَغۡيًاۢ بَيۡنَهُمۡ​ؕ وَلَوۡلَا كَلِمَةٌ سَبَقَتۡ مِنۡ رَّبِّكَ اِلٰٓى اَجَلٍ مُّسَمًّى لَّقُضِىَ بَيۡنَهُمۡ​ؕ وَ اِنَّ الَّذِيۡنَ اُوۡرِثُوا الۡكِتٰبَ مِنۡۢ بَعۡدِهِمۡ لَفِىۡ شَكٍّ مِّنۡهُ مُرِيۡبٍ‏",
+        "translation_en": "And [as for the followers of earlier revelation,] they broke up their unity, out of mutual jealousy, only after they had come to know [the truth]. And had it not been for a decree that had already gone forth from thy Sustainer, [postponing all decision] until a term set [by Him], all would indeed have been decided between them [from the outset]. As it is, behold, they who have inherited their divine writ from those who preceded them are [now] in grave doubt, amounting to suspicion, about what it por­tends.",
+        "translation_ur": "اور یہ لوگ جو الگ الگ ہوئے ہیں تو علم (حق) آچکنے کے بعد آپس کی ضد سے (ہوئے ہیں) ۔ اور اگر تمہارے پروردگار کی طرف سے ایک وقت مقرر تک کے لئے بات نہ ٹھہر چکی ہوتی تو ان میں فیصلہ کردیا جاتا۔ اور جو لوگ ان کے بعد (خدا کی) کتاب کے وارث ہوئے وہ اس (کی طرف) سے شبہے کی الجھن میں (پھنسے ہوئے) ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042014.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4286.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4286.mp3"
+        }
+      },
+      {
+        "ayah": 15,
+        "globalAyah": 4287,
+        "arabic": "فَلِذٰلِكَ فَادۡعُ​ ۚ وَاسۡتَقِمۡ كَمَاۤ اُمِرۡتَ​ۚ وَلَا تَتَّبِعۡ اَهۡوَآءَهُمۡ​ۚ وَقُلۡ اٰمَنۡتُ بِمَاۤ اَنۡزَلَ اللّٰهُ مِنۡ كِتٰبٍ​​ۚ وَاُمِرۡتُ لِاَعۡدِلَ بَيۡنَكُمُ​ؕ اَللّٰهُ رَبُّنَا وَرَبُّكُمۡ​ؕ لَـنَاۤ اَعۡمَالُـنَا وَلَـكُمۡ اَعۡمَالُكُمۡ​ۚ لَا حُجَّةَ بَيۡنَنَا وَبَيۡنَكُمُ​ؕ اَللّٰهُ يَجۡمَعُ بَيۡنَنَا​ۚ وَاِلَيۡهِ الۡمَصِيۡرُؕ‏ ﻿﻿",
+        "translation_en": "Because of this, then, summon [all mankind], and pursue the right course, as thou hast been bidden [by God]; and do not follow their likes and dislikes, but say: “I believe in whatever revelation God has be­stowed from on high; and I am bidden to bring about equity in your mutual views. God is our Sustainer as well as your Sustainer. To us shall be accounted our deeds, and to you, your deeds. Let there be no contention between us and you: God will bring us all together - for with Him is all journeys’ end.”",
+        "translation_ur": "تو (اے محمدﷺ) اسی (دین کی) طرف (لوگوں کو) بلاتے رہنا اور جیسا تم کو حکم ہوا ہے (اسی پر) قائم رہنا۔ اور ان کی خواہشوں کی پیروی نہ کرنا۔ اور کہہ دو کہ جو کتاب خدا نے نازل فرمائی ہے میں اس پر ایمان رکھتا ہوں۔ اور مجھے حکم ہوا ہے کہ تم میں انصاف کروں۔ خدا ہی ہمارا اور تمہارا پروردگار ہے۔ ہم کو ہمارے اعمال (کا بدلہ ملے گا) اور تم کو تمہارے اعمال کا۔ ہم میں اور تم میں کچھ بحث وتکرار نہیں۔ خدا ہم (سب) کو اکھٹا کرے گا۔ اور اسی کی طرف لوٹ کر جانا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042015.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4287.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4287.mp3"
+        }
+      },
+      {
+        "ayah": 16,
+        "globalAyah": 4288,
+        "arabic": "وَالَّذِيۡنَ يُحَآجُّوۡنَ فِى اللّٰهِ مِنۡۢ بَعۡدِ مَا اسۡتُجِيۡبَ لَهٗ حُجَّتُهُمۡ دَاحِضَةٌ عِنۡدَ رَبِّهِمۡ وَعَلَيۡهِمۡ غَضَبٌ وَّلَهُمۡ عَذَابٌ شَدِيۡدٌ‏",
+        "translation_en": "And as for those who would [still] argue about God after He has been acknowledged [by them] all their arguments are null and void in their Sustainer’s sight, and upon them will fall [His] condemnation, and for them is suffering severe in store:",
+        "translation_ur": "اور جو لوگ خدا (کے بارے) میں بعد اس کے کہ اسے (مومنوں نے) مان لیا ہو جھگڑتے ہیں ان کے پروردگار کے نزدیک ان کا جھگڑا لغو ہے۔ اور ان پر (خدا کا) غضب اور ان کے لئے سخت عذاب ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042016.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4288.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4288.mp3"
+        }
+      },
+      {
+        "ayah": 17,
+        "globalAyah": 4289,
+        "arabic": "اَللّٰهُ الَّذِىۡۤ اَنۡزَلَ الۡكِتٰبَ بِالۡحَقِّ وَالۡمِيۡزَانَ​ؕ وَمَا يُدۡرِيۡكَ لَعَلَّ السَّاعَةَ قَرِيۡبٌ‏",
+        "translation_en": "[for] it is God [Himself] who has bestowed revelation from on high, setting forth the truth, and [thus given man] a balance [wherewith to weigh right and wrong]. And for all thou knowest, the Last Hour may well be near!",
+        "translation_ur": "خدا ہی تو ہے جس نے سچائی کے ساتھ کتاب نازل فرمائی اور (عدل وانصاف کی) ترازو۔ اور تم کو کیا معلوم شاید قیامت قریب ہی آ پہنچی ہو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042017.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4289.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4289.mp3"
+        }
+      },
+      {
+        "ayah": 18,
+        "globalAyah": 4290,
+        "arabic": "يَسۡتَعۡجِلُ بِهَا الَّذِيۡنَ لَا يُؤۡمِنُوۡنَ بِهَا​ ۚ وَالَّذِيۡنَ اٰمَنُوۡا مُشۡفِقُوۡنَ مِنۡهَا ۙ وَيَعۡلَمُوۡنَ اَنَّهَا الۡحَقُّ ​ ؕ اَلَاۤ اِنَّ الَّذِيۡنَ يُمَارُوۡنَ فِى السَّاعَةِ لَفِىۡ ضَلٰلٍۢ بَعِيۡدٍ‏",
+        "translation_en": "Those who do not believe in it [mockingly] ask for its speedy advent whereas those who have attained to faith stand in awe of it, and know it to be the truth. Oh, verily, they who call the Last Hour in question have indeed gone far astray!",
+        "translation_ur": "جو لوگ اس پر ایمان نہیں رکھتے وہ اس کے لئے جلدی کر رہے ہیں۔ اور جو مومن ہیں وہ اس سے ڈرتے ہیں۔ اور جانتے ہیں کہ وہ برحق ہے۔ دیکھو جو لوگ قیامت میں جھگڑتے ہیں وہ پرلے درجے کی گمراہی میں ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042018.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4290.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4290.mp3"
+        }
+      },
+      {
+        "ayah": 19,
+        "globalAyah": 4291,
+        "arabic": "اَللّٰهُ لَطِيۡفٌۢ بِعِبَادِهٖ يَرۡزُقُ مَنۡ يَّشَآءُ​ۚ وَهُوَ الۡقَوِىُّ الۡعَزِيۡزُ‏",
+        "translation_en": "GOD is most kind unto His creatures: He provides sustenance for whomever He wills - for He alone is powerful, almighty!",
+        "translation_ur": "خدا اپنے بندوں پر مہربان ہے وہ جس کو چاہتا ہے رزق دیتا ہے۔ اور وہ زور والا (اور) زبردست ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042019.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4291.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4291.mp3"
+        }
+      },
+      {
+        "ayah": 20,
+        "globalAyah": 4292,
+        "arabic": "مَنۡ كَانَ يُرِيۡدُ حَرۡثَ الۡاٰخِرَةِ نَزِدۡ لَهٗ فِىۡ حَرۡثِهٖ​ۚ وَمَنۡ كَانَ يُرِيۡدُ حَرۡثَ الدُّنۡيَا نُؤۡتِهٖ مِنۡهَا وَمَا لَهٗ فِى الۡاٰخِرَةِ مِنۡ نَّصِيۡبٍ‏",
+        "translation_en": "To him who desires a harvest in the life to come, We shall grant an increase in his harvest; whereas to him who desires [but] a harvest in this world, We [may] give something thereof - but he will have no share in [the blessings of] the life to come.",
+        "translation_ur": "جو شخص آخرت کی کھیتی کا خواستگار ہو اس کو ہم اس میں سے دیں گے۔ اور جو دنیا کی کھیتی کا خواستگار ہو اس کو ہم اس میں سے دے دیں گے۔ اور اس کا آخرت میں کچھ حصہ نہ ہوگا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042020.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4292.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4292.mp3"
+        }
+      },
+      {
+        "ayah": 21,
+        "globalAyah": 4293,
+        "arabic": "اَمۡ لَهُمۡ شُرَكٰٓؤُا شَرَعُوۡا لَهُمۡ مِّنَ الدِّيۡنِ مَا لَمۡ يَاۡذَنۡۢ بِهِ اللّٰهُ​ؕ وَلَوۡلَا كَلِمَةُ الۡفَصۡلِ لَقُضِىَ بَيۡنَهُمۡ​ؕ وَاِنَّ الظّٰلِمِيۡنَ لَهُمۡ عَذَابٌ اَلِيۡمٌ‏",
+        "translation_en": "Is it that they [who care for no more than this world] believe in forces supposed to have a share in God’s divinity, which enjoin upon them as a moral law something that God has never allowed? Now were it not for [God’s] decree on the final judgment, all would indeed have been decided be­tween them [in this world]: but, verily, grievous suffering awaits the evildoers [in the life to come].",
+        "translation_ur": "کیا ان کے وہ شریک ہیں جنہوں نے ان کے لئے ایسا دین مقرر کیا ہے جس کا خدا نے حکم نہیں دیا۔ اور اگر فیصلے (کے دن) کا وعدہ نہ ہوتا تو ان میں فیصلہ کردیا جاتا اور جو ظالم ہیں ان کے لئے درد دینے والا عذاب ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042021.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4293.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4293.mp3"
+        }
+      },
+      {
+        "ayah": 22,
+        "globalAyah": 4294,
+        "arabic": "تَرَى الظّٰلِمِيۡنَ مُشۡفِقِيۡنَ مِمَّا كَسَبُوۡا وَهُوَ وَاقِعٌۢ بِهِمۡ​ؕ وَالَّذِيۡنَ اٰمَنُوۡا وَعَمِلُوا الصّٰلِحٰتِ فِىۡ رَوۡضَاتِ الۡجَـنّٰتِ​ۚ لَهُمۡ مَّا يَشَآءُوۡنَ عِنۡدَ رَبِّهِمۡ​ؕ ذٰلِكَ هُوَ الۡفَضۡلُ الۡكَبِيۡرُ‏",
+        "translation_en": "[In that life to come,] thou wilt see the evil­doers full of fear at [the thought of] what they have earned: for [now] it is bound to fall back upon them. And in the flowering meadows of the gardens [of paradise thou wilt see] those who have attained to faith and done righteous deeds: all that they might desire shall they have with their Sustainer: [and] this, this is the great bounty –",
+        "translation_ur": "تم دیکھو گے کہ ظالم اپنے اعمال (کے وبال) سے ڈر رہے ہوں گے اور وہ ان پر پڑے گا۔ اور جو لوگ ایمان لائے اور نیک عمل کرتے رہے وہ بہشت کے باغوں میں ہوں گے۔ وہ جو کچھ چاہیں گے ان کے لیے ان کے پروردگار کے پاس (موجود) ہوگا۔ یہی بڑا فضل ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042022.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4294.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4294.mp3"
+        }
+      },
+      {
+        "ayah": 23,
+        "globalAyah": 4295,
+        "arabic": "ذٰ لِكَ الَّذِىۡ يُبَشِّرُ اللّٰهُ عِبَادَهُ الَّذِيۡنَ اٰمَنُوۡا وَعَمِلُوا الصّٰلِحٰتِ​ؕ قُلْ لَّاۤ اَسۡـَٔـــلُـكُمۡ عَلَيۡهِ اَجۡرًا اِلَّا الۡمَوَدَّةَ فِى الۡقُرۡبٰى​ؕ وَمَنۡ يَّقۡتَرِفۡ حَسَنَةً نَّزِدۡ لَهٗ فِيۡهَا حُسۡنًا​ ؕ اِنَّ اللّٰهَ غَفُوۡرٌ شَكُوۡرٌ‏",
+        "translation_en": "that [bounty] whereof God gives the glad tiding to such of His servants as attain to faith and do righteous deeds. Say [O Prophet]: “No reward do I ask of you for this [message] other than [that you should] love your fellow-men.” For, if anyone gains [the merit of] a good deed, We shall grant him through it an increase of good: and, verily, God is much-forgiving, ever responsive to gratitude.",
+        "translation_ur": "یہی وہ (انعام ہے) جس کی خدا اپنے ان بندوں کو جو ایمان لاتے اور عمل نیک کرتے ہیں بشارت دیتا ہے۔ کہہ دو کہ میں اس کا تم سے صلہ نہیں مانگتا مگر (تم کو) قرابت کی محبت (تو چاہیئے) اور جو کوئی نیکی کرے گا ہم اس کے لئے اس میں ثواب بڑھائیں گے۔ بےشک خدا بخشنے والا قدردان ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042023.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4295.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4295.mp3"
+        }
+      },
+      {
+        "ayah": 24,
+        "globalAyah": 4296,
+        "arabic": "اَمۡ يَقُوۡلُوۡنَ افۡتَـرٰى عَلَى اللّٰهِ كَذِبًا​ ۚ فَاِنۡ يَّشَاِ اللّٰهُ يَخۡتِمۡ عَلٰى قَلۡبِكَ​ ؕ وَيَمۡحُ اللّٰهُ الۡبَاطِلَ وَيُحِقُّ الۡحَقَّ بِكَلِمٰتِهٖۤ​ ؕ اِنَّهٗ عَلِيۡمٌۢ بِذَاتِ الصُّدُوۡرِ‏",
+        "translation_en": "DO THEY, perchance, say, “[Muhammad] has attri­buted his own lying inventions to God”? But then, had God so willed, He could have sealed thy heart [forever]: for God blots out all falsehood, and by His words proves the truth to be true. Verily, He has full knowledge of what is in the hearts [of men];",
+        "translation_ur": "کیا یہ لوگ کہتے ہیں کہ پیغمبر نے خدا پر جھوٹ باندھ لیا ہے؟ اگر خدا چاہے تو (اے محمدﷺ) تمہارے دل پر مہر لگا دے۔ اور خدا جھوٹ کو نابود کرتا اور اپنی باتوں سے حق کو ثابت کرتا ہے۔ بےشک وہ سینے تک کی باتوں سے واقف ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042024.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4296.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4296.mp3"
+        }
+      },
+      {
+        "ayah": 25,
+        "globalAyah": 4297,
+        "arabic": "وَهُوَ الَّذِىۡ يَقۡبَلُ التَّوۡبَةَ عَنۡ عِبَادِهٖ وَيَعۡفُوۡا عَنِ السَّيِّاٰتِ وَيَعۡلَمُ مَا تَفۡعَلُوۡنَ ۙ‏",
+        "translation_en": "and it is He who accepts repen­tance from His servants, and pardons bad deeds, and knows all that you do,",
+        "translation_ur": "اور وہی تو ہے جو اپنے بندوں کی توبہ قبول کرتا اور (ان کے) قصور معاف فرماتا ہے اور جو تم کرتے ہو (سب) جانتا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042025.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4297.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4297.mp3"
+        }
+      },
+      {
+        "ayah": 26,
+        "globalAyah": 4298,
+        "arabic": "وَيَسۡتَجِيۡبُ الَّذِيۡنَ اٰمَنُوۡا وَعَمِلُوا الصّٰلِحٰتِ وَيَزِيۡدُهُمۡ مِّنۡ فَضۡلِهٖ​ؕ وَالۡكٰفِرُوۡنَ لَهُمۡ عَذَابٌ شَدِيۡدٌ‏",
+        "translation_en": "and responds unto all who attain to faith and do righteous deeds; and [it is He who, in the life to come,] will give them, out of His bounty, far more [than they will have deserved], whereas for the deniers of the truth there is [but] suffering severe in store.",
+        "translation_ur": "اور جو ایمان لائے اور عمل نیک کئے ان کی (دعا) قبول فرماتا ہے اور ان کو اپنے فضل سے بڑھاتا ہے۔ اور جو کافر ہیں ان کے لئے سخت عذاب ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042026.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4298.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4298.mp3"
+        }
+      },
+      {
+        "ayah": 27,
+        "globalAyah": 4299,
+        "arabic": "وَلَوۡ بَسَطَ اللّٰهُ الرِّزۡقَ لِعِبَادِهٖ لَبَغَوۡا فِى الۡاَرۡضِ وَلٰكِنۡ يُّنَزِّلُ بِقَدَرٍ مَّا يَشَآءُ ​ؕ اِنَّهٗ بِعِبَادِهٖ خَبِيۡرٌۢ بَصِيۡرٌ‏",
+        "translation_en": "For, if God were to grant [in this world] abundant sustenance to [all of] His servants, they would behave on earth with wanton insolence: but as it is, He bestows [His grace] from on high in due measure, as He wills: for, verily, He is fully aware of [the needs of] His creatures, and sees them all.",
+        "translation_ur": "اور اگر خدا اپنے بندوں کے لئے رزق میں فراخی کردیتا تو زمین میں فساد کرنے لگتے۔ لیکن وہ جو چیز چاہتا ہے اندازے کے ساتھ نازل کرتا ہے۔ بےشک وہ اپنے بندوں کو جانتا اور دیکھتا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042027.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4299.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4299.mp3"
+        }
+      },
+      {
+        "ayah": 28,
+        "globalAyah": 4300,
+        "arabic": "وَهُوَ الَّذِىۡ يُنَزِّلُ الۡغَيۡثَ مِنۡۢ بَعۡدِ مَا قَنَطُوۡا وَيَنۡشُرُ رَحۡمَتَهٗ​ ؕ وَهُوَ الۡوَلِىُّ الۡحَمِيۡدُ‏",
+        "translation_en": "And it is He who sends down rain after [men] have lost all hope, and unfolds His grace [thereby]: for He alone is [their] Protector, the One to whom all praise is due.",
+        "translation_ur": "اور وہی تو ہے جو لوگوں کے ناامید ہوجانے کے بعد مینہ برساتا اور اپنی رحمت (یعنی بارش) کی برکت کو پھیلا دیتا ہے۔ اور وہ کارساز اور سزاوار تعریف ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042028.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4300.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4300.mp3"
+        }
+      },
+      {
+        "ayah": 29,
+        "globalAyah": 4301,
+        "arabic": "وَ مِنۡ اٰيٰتِهٖ خَلۡقُ السَّمٰوٰتِ وَالۡاَرۡضِ وَمَا بَثَّ فِيۡهِمَا مِنۡ دَآبَّةٍ​ ؕ وَهُوَ عَلٰى جَمۡعِهِمۡ اِذَا يَشَآءُ قَدِيۡرٌ‏",
+        "translation_en": "And among His signs is the [very] creation of the heavens and the earth, and of all the living creatures which He has caused to multiply throughout them: and [since He has created them,] He has [also] the power to gather them [unto Him­self] whenever He wills.",
+        "translation_ur": "اور اسی کی نشانیوں میں سے ہے آسمانوں اور زمین کا پیدا کرنا اور ان جانوروں کا جو اس نے ان میں پھیلا رکھے ہیں اور وہ جب چاہے ان کے جمع کرلینے پر قادر ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042029.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4301.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4301.mp3"
+        }
+      },
+      {
+        "ayah": 30,
+        "globalAyah": 4302,
+        "arabic": "وَمَاۤ اَصَابَكُمۡ مِّنۡ مُّصِيۡبَةٍ فَبِمَا كَسَبَتۡ اَيۡدِيۡكُمۡ وَيَعۡفُوۡا عَنۡ كَثِيۡرٍؕ‏",
+        "translation_en": "Now whatever calamity may befall you [on Judgment Day] will be an outcome of what your own hands have wrought, although He pardons much;",
+        "translation_ur": "اور جو مصیبت تم پر واقع ہوتی ہے سو تمہارے اپنے فعلوں سے اور وہ بہت سے گناہ تو معاف ہی کردیتا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042030.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4302.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4302.mp3"
+        }
+      },
+      {
+        "ayah": 31,
+        "globalAyah": 4303,
+        "arabic": "وَمَاۤ اَنۡـتُمۡ بِمُعۡجِزِيۡنَ فِى الۡاَرۡضِ ۖۚ وَمَا لَـكُمۡ مِّنۡ دُوۡنِ اللّٰهِ مِنۡ وَّلِىٍّ وَّلَا نَصِيۡرٍ‏",
+        "translation_en": "and you cannot elude Him on earth, and you will have none to protect you from God [in the life to come], and none to bring you succour.",
+        "translation_ur": "اور تم زمین میں (خدا کو) عاجز نہیں کرسکتے۔ اور خدا کے سوا نہ تمہارا کوئی دوست ہے اور نہ مددگار",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042031.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4303.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4303.mp3"
+        }
+      },
+      {
+        "ayah": 32,
+        "globalAyah": 4304,
+        "arabic": "وَمِنۡ اٰيٰتِهِ الۡجَوَارِ فِى الۡبَحۡرِ كَالۡاَعۡلَامِؕ‏",
+        "translation_en": "And among His signs are the ships that sail like [floating] mountains through the seas:",
+        "translation_ur": "اور اسی کی نشانیوں میں سے سمندر کے جہاز ہیں (جو) گویا پہاڑ (ہیں)",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042032.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4304.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4304.mp3"
+        }
+      },
+      {
+        "ayah": 33,
+        "globalAyah": 4305,
+        "arabic": "اِنۡ يَّشَاۡ يُسۡكِنِ الرِّيۡحَ فَيَظۡلَلۡنَ رَوَاكِدَ عَلٰى ظَهۡرِهٖؕ اِنَّ فِىۡ ذٰلِكَ لَاٰيٰتٍ لِّـكُلِّ صَبَّارٍ شَكُوۡرٍۙ‏",
+        "translation_en": "if He so wills, He stills the wind, and then they lie motion­less on the sea’s surface - [and] herein, behold, there are messages indeed for all who are wholly patient in adversity and deeply grateful [to God];",
+        "translation_ur": "اگر خدا چاہے تو ہوا کو ٹھیرا دے اور جہاز اس کی سطح پر کھڑے رہ جائیں۔ تمام صبر اور شکر کرنے والوں کے لئے ان (باتوں) میں قدرت خدا کے نمونے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042033.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4305.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4305.mp3"
+        }
+      },
+      {
+        "ayah": 34,
+        "globalAyah": 4306,
+        "arabic": "اَوۡ يُوۡبِقۡهُنَّ بِمَا كَسَبُوۡا وَيَعۡفُ عَنۡ كَثِيۡرٍ‏",
+        "translation_en": "or else He may cause them to perish because of what they have wrought; and [withal,] He pardons much.",
+        "translation_ur": "یا ان کے اعمال کے سبب ان کو تباہ کردے۔ اور بہت سے قصور معاف کردے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042034.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4306.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4306.mp3"
+        }
+      },
+      {
+        "ayah": 35,
+        "globalAyah": 4307,
+        "arabic": "وَّيَعۡلَمَ الَّذِيۡنَ يُجَادِلُوۡنَ فِىۡۤ اٰيٰتِنَا ؕ مَا لَهُمۡ مِّنۡ مَّحِيۡصٍ‏ ﻿﻿",
+        "translation_en": "And let them know, those who call Our mes­sages in question, that for them there is no escape.",
+        "translation_ur": "اور (انتقام اس لئے لیا جائے کہ) جو لوگ ہماری آیتوں میں جھگڑتے ہیں۔ وہ جان لیں کہ ان کے لئے خلاصی نہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042035.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4307.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4307.mp3"
+        }
+      },
+      {
+        "ayah": 36,
+        "globalAyah": 4308,
+        "arabic": "فَمَاۤ اُوۡتِيۡتُمۡ مِّنۡ شَىۡءٍ فَمَتَاعُ الۡحَيٰوةِ الدُّنۡيَا​ۚ وَمَا عِنۡدَ اللّٰهِ خَيۡرٌ وَّاَبۡقٰى لِلَّذِيۡنَ اٰمَنُوۡا وَعَلٰى رَبِّهِمۡ يَتَوَكَّلُوۡنَۚ‏ ﻿﻿",
+        "translation_en": "AND [remember that] whatever you are given [now] is but for the [passing] enjoyment of life in this world - whereas that which is with God is far better and more enduring. [It shall be given] to all who attain to faith and in their Sustainer place their trust;",
+        "translation_ur": "(لوگو) جو (مال ومتاع) تم کو دیا گیا ہے وہ دنیا کی زندگی کا (ناپائدار) فائدہ ہے۔ اور جو کچھ خدا کے ہاں ہے وہ بہتر اور قائم رہنے والا ہے (یعنی) ان لوگوں کے لئے جو ایمان لائے اور اپنے پروردگار پر بھروسا رکھتے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042036.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4308.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4308.mp3"
+        }
+      },
+      {
+        "ayah": 37,
+        "globalAyah": 4309,
+        "arabic": "وَالَّذِيۡنَ يَجۡتَنِبُوۡنَ كَبٰٓٮِٕرَ الۡاِثۡمِ وَالۡفَوَاحِشَ وَاِذَا مَا غَضِبُوۡا هُمۡ يَغۡفِرُوۡنَ​ۚ‏",
+        "translation_en": "and who shun the more heinous sins and abominations; and who, whenever they are moved to anger, readily forgive;",
+        "translation_ur": "اور جو بڑے بڑے گناہوں اور بےحیائی کی باتوں سے پرہیز کرتے ہیں۔ اور جب غصہ آتا ہے تو معاف کردیتے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042037.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4309.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4309.mp3"
+        }
+      },
+      {
+        "ayah": 38,
+        "globalAyah": 4310,
+        "arabic": "وَالَّذِيۡنَ اسۡتَجَابُوا لِرَبِّهِمۡ وَاَقَامُوۡا الصَّلٰوةَ وَاَمۡرُهُمۡ شُوۡرٰى بَيۡنَهُمۡ وَمِمَّا رَزَقۡنٰهُمۡ يُنۡفِقُوۡنَ​ۚ‏",
+        "translation_en": "and who respond to [the call of] their Sustainer and are constant in prayer; and whose rule [in all matters of common concern] is consultation among themselves; and who spend on others out of what We provide for them as sustenance;",
+        "translation_ur": "اور جو اپنے پروردگار کا فرمان قبول کرتے ہیں اور نماز پڑھتے ہیں۔ اور اپنے کام آپس کے مشورے سے کرتے ہیں۔ اور جو مال ہم نے ان کو عطا فرمایا ہے اس میں سے خرچ کرتے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042038.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4310.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4310.mp3"
+        }
+      },
+      {
+        "ayah": 39,
+        "globalAyah": 4311,
+        "arabic": "وَالَّذِيۡنَ اِذَاۤ اَصَابَهُمُ الۡبَغۡىُ هُمۡ يَنۡتَصِرُوۡنَ‏",
+        "translation_en": "and who, whenever tyranny afflicts them, defend themselves.",
+        "translation_ur": "اور جو ایسے ہیں کہ جب ان پر ظلم وتعدی ہو تو (مناسب طریقے سے) بدلہ لیتے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042039.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4311.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4311.mp3"
+        }
+      },
+      {
+        "ayah": 40,
+        "globalAyah": 4312,
+        "arabic": "وَجَزٰٓؤُا سَيِّئَةٍ سَيِّئَةٌ مِّثۡلُهَا​ۚ فَمَنۡ عَفَا وَاَصۡلَحَ فَاَجۡرُهٗ عَلَى اللّٰهِ​ؕ اِنَّهٗ لَا يُحِبُّ الظّٰلِمِيۡنَ‏",
+        "translation_en": "But [remember that an attempt at] requiting evil may, too, become an evil: hence, whoever par­dons [his foe] and makes peace, his reward rests with God - for, verily, He does not love evildoers.",
+        "translation_ur": "اور برائی کا بدلہ تو اسی طرح کی برائی ہے۔ مگر جو درگزر کرے اور (معاملے کو) درست کردے تو اس کا بدلہ خدا کے ذمے ہے۔ اس میں شک نہیں کہ وہ ظلم کرنے والوں کو پسند نہیں کرتا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042040.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4312.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4312.mp3"
+        }
+      },
+      {
+        "ayah": 41,
+        "globalAyah": 4313,
+        "arabic": "وَلَمَنِ انْتَصَرَ بَعۡدَ ظُلۡمِهٖ فَاُولٰٓٮِٕكَ مَا عَلَيۡهِمۡ مِّنۡ سَبِيۡلٍؕ‏ ﻿﻿",
+        "translation_en": "Yet indeed, as for any who defend themselves after having been wronged - no blame whatever attaches to them:",
+        "translation_ur": "اور جس پر ظلم ہوا ہو اگر وہ اس کے بعد انتقام لے تو ایسے لوگوں پر کچھ الزام نہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042041.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4313.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4313.mp3"
+        }
+      },
+      {
+        "ayah": 42,
+        "globalAyah": 4314,
+        "arabic": "اِنَّمَا السَّبِيۡلُ عَلَى الَّذِيۡنَ يَظۡلِمُوۡنَ النَّاسَ وَ يَبۡغُوۡنَ فِى الۡاَرۡضِ بِغَيۡرِ الۡحَقِّ​ؕ اُولٰٓٮِٕكَ لَهُمۡ عَذَابٌ اَلِيۡمٌ‏",
+        "translation_en": "blame attaches but to those who oppress [other] people and behave outrageously on earth, offending against all right: for them there is grievous suffering in store!",
+        "translation_ur": "الزام تو ان لوگوں پر ہے جو لوگوں پر ظلم کرتے ہیں اور ملک میں ناحق فساد پھیلاتے ہیں۔ یہی لوگ ہیں جن کو تکلیف دینے والا عذاب ہوگا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042042.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4314.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4314.mp3"
+        }
+      },
+      {
+        "ayah": 43,
+        "globalAyah": 4315,
+        "arabic": "وَلَمَنۡ صَبَرَ وَغَفَرَ اِنَّ ذٰلِكَ لَمِنۡ عَزۡمِ الۡاُمُوۡرِ‏",
+        "translation_en": "But withal, if one is patient in adversity and forgives - this, behold, is indeed something to set one’s heart upon!",
+        "translation_ur": "اور جو صبر کرے اور قصور معاف کردے تو یہ ہمت کے کام ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042043.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4315.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4315.mp3"
+        }
+      },
+      {
+        "ayah": 44,
+        "globalAyah": 4316,
+        "arabic": "وَمَنۡ يُّضۡلِلِ اللّٰهُ فَمَا لَهٗ مِنۡ وَّلِىٍّ مِّنۡۢ بَعۡدِهٖ​ ؕ وَتَرَى الظّٰلِمِيۡنَ لَمَّا رَاَوُا الۡعَذَابَ يَقُوۡلُوۡنَ هَلۡ اِلٰى مَرَدٍّ مِّنۡ سَبِيۡلٍ​ۚ‏ ﻿﻿",
+        "translation_en": "AND [thus it is:] he whom God lets go astray has henceforth no protector whatever: and so thou wilt see such evildoers [on Judgment Day, and wilt hear how] they exclaim as soon as they behold the suffering [that awaits them], “Is there any way of return?”",
+        "translation_ur": "اور جس شخص کو خدا گمراہ کرے تو اس کے بعد اس کا کوئی دوست نہیں۔ اور تم ظالموں کو دیکھو گے کہ جب وہ (دوزخ کا) عذاب دیکھیں گے تو کہیں گے کیا (دنیا میں) واپس جانے کی بھی کوئی سبیل ہے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042044.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4316.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4316.mp3"
+        }
+      },
+      {
+        "ayah": 45,
+        "globalAyah": 4317,
+        "arabic": "وَتَرٰٮهُمۡ يُعۡرَضُوۡنَ عَلَيۡهَا خٰشِعِيۡنَ مِنَ الذُّلِّ يَنۡظُرُوۡنَ مِنۡ طَرۡفٍ خَفِىٍّ​ ؕ وَقَالَ الَّذِيۡنَ اٰمَنُوۡۤا اِنَّ الۡخٰسِرِيۡنَ الَّذِيۡنَ خَسِرُوۡۤا اَنۡفُسَهُمۡ وَاَهۡلِيۡهِمۡ يَوۡمَ الۡقِيٰمَةِ​ ؕ اَلَاۤ اِنَّ الظّٰلِمِيۡنَ فِىۡ عَذَابٍ مُّقِيۡمٍ‏",
+        "translation_en": "And thou wilt see them exposed to that [doom], humbling themselves in abasement, looking [around] with a furtive glance - the while those who had attained to faith will say, “Verily, lost on [this] Day of Resurrection are they who have squandered their own and their followers’ selves!” Oh, verily, the evildoers will fall into long-lasting suffering,",
+        "translation_ur": "اور تم ان کو دیکھو گے کہ دوزخ کے سامنے لائے جائیں گے ذلت سے عاجزی کرتے ہوئے چھپی (اور نیچی) نگاہ سے دیکھ رہے ہوں گے۔ اور مومن لوگ کہیں کے کہ خسارہ اٹھانے والے تو وہ ہیں جنہوں نے قیامت کے دن اپنے آپ کو اور اپنے گھر والوں کو خسارے میں ڈالا۔ دیکھو کہ بےانصاف لوگ ہمیشہ کے دکھ میں (پڑے) رہیں گے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042045.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4317.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4317.mp3"
+        }
+      },
+      {
+        "ayah": 46,
+        "globalAyah": 4318,
+        "arabic": "وَمَا كَانَ لَهُمۡ مِّنۡ اَوۡلِيَآءَ يَنۡصُرُوۡنَهُمۡ مِّنۡ دُوۡنِ اللّٰهِ​ؕ وَمَنۡ يُّضۡلِلِ اللّٰهُ فَمَا لَهٗ مِنۡ سَبِيۡلٍؕ‏",
+        "translation_en": "and will have no protector whatever to succour them against God: for he whom God lets go astray shall find no way [of escape].",
+        "translation_ur": "اور خدا کے سوا ان کے کوئی دوست نہ ہوں گے کہ خدا کے سوا ان کو مدد دے سکیں۔ اور جس کو خدا گمراہ کرے اس کے لئے (ہدایت کا) کوئی رستہ نہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042046.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4318.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4318.mp3"
+        }
+      },
+      {
+        "ayah": 47,
+        "globalAyah": 4319,
+        "arabic": "اِسۡتَجِيۡبُوۡا لِرَبِّكُمۡ مِّنۡ قَبۡلِ اَنۡ يَّاۡتِىَ يَوۡمٌ لَّا مَرَدَّ لَهٗ مِنَ اللّٰهِ​ؕ مَا لَكُمۡ مِّنۡ مَّلۡجَاٍ يَّوۡمَٮِٕذٍ وَّمَا لَكُمۡ مِّنۡ نَّكِيۡرٍ‏",
+        "translation_en": "[Hence, O men,] respond to your Sustainer before there comes, at God’s behest, a Day on which there will be no turning back: [for] on that Day you will have no place of refuge, and neither will you be able to deny aught [of the wrong that you have done].",
+        "translation_ur": "ان سے کہہ دو کہ) قبل اس کے کہ وہ دن جو ٹلے گا نہیں خدا کی طرف سے آ موجود ہو اپنے پروردگار کا حکم قبول کرو۔ اس دن تمہارے لئے نہ کوئی جائے پناہ ہوگی اور نہ تم سے گناہوں کا انکار ہی بن پڑے گا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042047.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4319.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4319.mp3"
+        }
+      },
+      {
+        "ayah": 48,
+        "globalAyah": 4320,
+        "arabic": "فَاِنۡ اَعۡرَضُوۡا فَمَاۤ اَرۡسَلۡنٰكَ عَلَيۡهِمۡ حَفِيۡظًا​ؕ اِنۡ عَلَيۡكَ اِلَّا الۡبَلٰغُ​ ؕ وَاِنَّاۤ اِذَاۤ اَذَقۡنَا الۡاِنۡسَانَ مِنَّا رَحۡمَةً فَرِحَ بِهَا​ۚ وَاِنۡ تُصِبۡهُمۡ سَيِّئَةٌۢ بِمَا قَدَّمَتۡ اَيۡدِيۡهِمۡ فَاِنَّ الۡاِنۡسَانَ كَفُوۡرٌ‏",
+        "translation_en": "BUT IF they turn away [from thee, O Prophet, know that] We have not sent thee to be their keeper: thou art not bound to do more than deliver the message [entrusted to thee]. And, behold, [such as turn away from Our mes­sages are but impelled by the weakness and incon­stancy of human nature: thus,] when We give man a taste of Our grace, he is prone to exult in it; but if misfortune befalls [any of] them in result of what their own hands have sent forth, then, behold, man shows how bereft he is of all gratitude!",
+        "translation_ur": "پھر اگر یہ منہ پھیر لیں تو ہم نے تم کو ان پر نگہبان بنا کر نہیں بھیجا۔ تمہارا کام تو صرف (احکام کا) پہنچا دینا ہے۔ اور جب ہم انسان کو اپنی رحمت کا مزہ چکھاتے ہیں تو اس سے خوش ہوجاتا ہے۔ اور اگر ان کو ان ہی کے اعمال کے سبب کوئی سختی پہنچتی ہے تو (سب احسانوں کو بھول جاتے ہیں) بےشک انسان بڑا ناشکرا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042048.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4320.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4320.mp3"
+        }
+      },
+      {
+        "ayah": 49,
+        "globalAyah": 4321,
+        "arabic": "لِّـلَّـهِ مُلۡكُ السَّمٰوٰتِ وَالۡاَرۡضِ ​ؕ يَخۡلُقُ مَا يَشَآءُ​ ؕ يَهَبُ لِمَنۡ يَّشَآءُ اِنَاثًا وَّيَهَبُ لِمَنۡ يَّشَآءُ الذُّكُوۡرَ ۙ‏",
+        "translation_en": "God’s alone is the dominion over the heavens and the earth. He creates whatever He wills: He bestows the gift of female offspring on whomever He wills, and the gift of male offspring on whomever He wills;",
+        "translation_ur": "(تمام) بادشاہت خدا ہی کی ہے آسمانوں کی بھی اور زمین کی بھی۔ وہ جو چاہتا ہے پیدا کرتا ہے۔ جسے چاہتا ہے بیٹیاں عطا کرتا ہے اور جسے چاہتا ہے بیٹے بخشتا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042049.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4321.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4321.mp3"
+        }
+      },
+      {
+        "ayah": 50,
+        "globalAyah": 4322,
+        "arabic": "اَوۡ يُزَوِّجُهُمۡ ذُكۡرَانًا وَّاِنَاثًا​ ۚ وَيَجۡعَلُ مَنۡ يَّشَآءُ عَقِيۡمًا​ؕ اِنَّهٗ عَلِيۡمٌ قَدِيۡرٌ‏",
+        "translation_en": "or He gives both male and female [to whomever He wills], and causes to be barren whomever He wills: for, verily, He is all-knowing, infinite in His power.",
+        "translation_ur": "یا ان کو بیٹے اور بیٹیاں دونوں عنایت فرماتا ہے۔ اور جس کو چاہتا ہے بےاولاد رکھتا ہے۔ وہ تو جاننے والا (اور) قدرت والا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042050.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4322.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4322.mp3"
+        }
+      },
+      {
+        "ayah": 51,
+        "globalAyah": 4323,
+        "arabic": "وَمَا كَانَ لِبَشَرٍ اَنۡ يُّكَلِّمَهُ اللّٰهُ اِلَّا وَحۡيًا اَوۡ مِنۡ وَّرَآىٴِ حِجَابٍ اَوۡ يُرۡسِلَ رَسُوۡلًا فَيُوۡحِىَ بِاِذۡنِهٖ مَا يَشَآءُ​ؕ اِنَّهٗ عَلِىٌّ حَكِيۡمٌ‏",
+        "translation_en": "And it is not given to mortal man that God should speak unto him otherwise than through sudden inspiration, or [by a voice, as it were,] from behind a veil, or by sending an apostle to reveal, by His leave, whatever He wills [to reveal]: for, verily, He is exalted, wise.",
+        "translation_ur": "اور کسی آدمی کے لئے ممکن نہیں کہ خدا اس سے بات کرے مگر الہام (کے ذریعے) سے یا پردے کے پیچھے سے یا کوئی فرشتہ بھیج دے تو وہ خدا کے حکم سے جو خدا چاہے القا کرے۔ بےشک وہ عالی رتبہ (اور) حکمت والا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042051.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4323.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4323.mp3"
+        }
+      },
+      {
+        "ayah": 52,
+        "globalAyah": 4324,
+        "arabic": "وَكَذٰلِكَ اَوۡحَيۡنَاۤ اِلَيۡكَ رُوۡحًا مِّنۡ اَمۡرِنَا​ ؕ مَا كُنۡتَ تَدۡرِىۡ مَا الۡكِتٰبُ وَلَا الۡاِيۡمَانُ وَلٰـكِنۡ جَعَلۡنٰهُ نُوۡرًا نَّهۡدِىۡ بِهٖ مَنۡ نَّشَآءُ مِنۡ عِبَادِنَا​ ؕ وَاِنَّكَ لَتَهۡدِىۡۤ اِلٰى صِرَاطٍ مُّسۡتَقِيۡمٍۙ‏ ﻿﻿",
+        "translation_en": "And thus, too, [O Muhammad,] have We revealed unto thee a life-giving message, [coming] at Our behest. [Ere this message came unto thee,] thou didst not know what revelation is, nor what faith [implies]: but [now] We have caused this [message] to be a light, whereby We guide whom We will of Our ser­vants: and, verily, [on the strength thereof] thou, too, shalt guide [men] onto the straight way –",
+        "translation_ur": "اور اسی طرح ہم نے اپنے حکم سے تمہاری طرف روح القدس کے ذریعے سے (قرآن) بھیجا ہے۔ تم نہ تو کتاب کو جانتے تھے اور نہ ایمان کو۔ لیکن ہم نے اس کو نور بنایا ہے کہ اس سے ہم اپنے بندوں میں سے جس کو چاہتے ہیں ہدایت کرتے ہیں۔ اور بےشک (اے محمدﷺ) تم سیدھا رستہ دکھاتے ہو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042052.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4324.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4324.mp3"
+        }
+      },
+      {
+        "ayah": 53,
+        "globalAyah": 4325,
+        "arabic": "صِرَاطِ اللّٰهِ الَّذِىۡ لَهٗ مَا فِى السَّمٰوٰتِ وَمَا فِى الۡاَرۡضِ​ؕ اَلَاۤ اِلَى اللّٰهِ تَصِيۡرُ الۡاُمُوۡرُ‏",
+        "translation_en": "the way that leads to God, to whom all that is in the heavens and all that is on earth belongs. Oh, verily, with God is the beginning and the end of all things!",
+        "translation_ur": "(یعنی) خدا کا رستہ جو آسمانوں اور زمین کی سب چیزوں کا مالک ہے۔ دیکھو سب کام خدا کی طرف رجوع ہوں گے (اور وہی ان میں فیصلہ کرے گا)",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/042053.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4325.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4325.mp3"
+        }
+      }
+    ]
+  }
+}

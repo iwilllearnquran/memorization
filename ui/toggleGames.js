@@ -1,44 +1,191 @@
-import { GAME_CONFIG }          from '/config/gameConfig.js';
-import { hide, show, $ }        from '/utils/domHelpers.js';
-import gameSession              from '/state/gameSession.js';
+import { GAME_CONFIG } from '/config/gameConfig.js';
+import { hide, show, $ } from '/utils/domHelpers.js';
+import gameSession from '/state/gameSession.js';
 import { renderGameContainers } from '/ui/renderGameContainers.js';
-import { initStats, updateStats } from '/ui/gameStatsUI.js';
-
+import { initStats } from '/ui/gameStatsUI.js';
 
 const { learnSection, translationSection, gameContainer, bottomNav } = GAME_CONFIG.selectors;
-const KEEP_NAV_IDS = ['playToggleBtn', 'navSettings'];
-let uiInitialized    = false;
-let currentMode      = 'learn';
-let originalNavItems = [];
+const KEEP_NAV_IDS = ['navSettings'];
 
-// ── 1) Capture original nav nodes & order ─────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
+let uiInitialized = false;
+let currentMode = 'learn';
+let originalNavItems = [];
+let inGameReturnBound = false;
+let suppressReturnConfirm = false;
+
+function ensureOriginalNavItems(nav) {
+  if (!nav || originalNavItems.length > 0) return;
+  originalNavItems = Array.from(nav.children);
+}
+
+function applyGameShell(container) {
+  if (!container) return;
+  document.body.classList.add('game-active');
+  container.classList.add('fullscreen-game');
+  container.style.overflowX = 'hidden';
+  container.style.overflowY = 'auto';
+  container.style.webkitOverflowScrolling = 'touch';
+  container.style.touchAction = 'pan-y';
+  container.style.overscrollBehaviorY = 'contain';
+}
+
+function applyModeInteraction(container, mode) {
+  if (!container) return;
+
+  // Selector/arrange remain naturally scrollable; verb stays fixed and static.
+  if (mode === 'verb') {
+    container.scrollTop = 0;
+    container.style.setProperty('overflow-y', 'hidden', 'important');
+    container.style.setProperty('touch-action', 'manipulation', 'important');
+    return;
+  }
+
+  container.style.setProperty('overflow-y', 'auto', 'important');
+  container.style.setProperty('touch-action', 'pan-y', 'important');
+}
+
+function clearGameShell(container) {
+  if (!container) return;
+  document.body.classList.remove('game-active');
+  container.classList.remove('fullscreen-game');
+  container.removeAttribute('data-mode');
+  container.style.overflowX = '';
+  container.style.overflowY = '';
+  container.style.webkitOverflowScrolling = '';
+  container.style.touchAction = '';
+  container.style.overscrollBehaviorY = '';
+}
+
+function isArrangeGameFinished() {
+  const slots = Array.from(document.querySelectorAll('#slotContainer .slot'));
+  if (!slots.length) return false;
+  return slots.every(slot => String(slot.dataset.word || '').trim().length > 0);
+}
+
+function isVerbGameFinished() {
+  const cards = Array.from(document.querySelectorAll('#verbGameContainer .match-card'));
+  if (!cards.length) return false;
+  return cards.every(card => card.classList.contains('matched'));
+}
+
+function isWordTypeGameFinished() {
+  const words = Array.from(document.querySelectorAll('#wordTypeGameContainer .wt-word'));
+  if (!words.length) return false;
+  return words.every(w => w.classList.contains('wt-correct'));
+}
+
+function isVerbFormGameFinished() {
+  const container = document.getElementById('verbFormGameContainer');
+  if (!container) return false;
+  return !!container.querySelector('.vf-empty') || false;
+}
+
+function isCurrentGameFinished() {
+  if (currentMode === 'arrange') return isArrangeGameFinished();
+  if (currentMode === 'verb') return isVerbGameFinished();
+  if (currentMode === 'wordType') return isWordTypeGameFinished();
+  if (currentMode === 'verbForm') return isVerbFormGameFinished();
+  return true;
+}
+
+function requestReturnToGamesSelector() {
+  if (currentMode === 'selector' || currentMode === 'learn') return;
+
+  if (!suppressReturnConfirm && !isCurrentGameFinished()) {
+    const ok = window.confirm(
+      'Finish game before going to main page?\nPress OK to return now and lose current progress.'
+    );
+    if (!ok) return;
+  }
+
+  toggleGames('selector');
+}
+
+export function forceReturnToGamesSelector() {
+  suppressReturnConfirm = true;
+  try {
+    requestReturnToGamesSelector();
+  } finally {
+    suppressReturnConfirm = false;
+  }
+}
+
+export function forceExitGameToAyah() {
+  const gc = $(gameContainer);
+  if (!gc) return;
+
+  clearGameShell(gc);
+  gc.style.display = 'none';
+
+  const nav = document.querySelector(bottomNav);
+  _restoreNav(nav);
+
+  const learn = $(learnSection);
+  const translation = $(translationSection);
+  if (learn) learn.style.display = '';
+  if (translation) translation.style.display = '';
+
+  currentMode = 'learn';
+}
+
+if (typeof window !== 'undefined') {
+  window.__qqForceReturnToGamesSelector = forceReturnToGamesSelector;
+  window.__qqForceExitGameToAyah = forceExitGameToAyah;
+}
+
+function bindInGameReturnActions(container) {
+  if (!container || inGameReturnBound) return;
+
+  container.addEventListener('click', event => {
+    const ayahBtn = event.target.closest('[data-action="return-ayah"]');
+    if (ayahBtn) {
+      event.preventDefault();
+      forceExitGameToAyah();
+      return;
+    }
+
+    const btn = event.target.closest('[data-action="return-games"]');
+    if (!btn) return;
+    event.preventDefault();
+    requestReturnToGamesSelector();
+  });
+
+  inGameReturnBound = true;
+}
+
+// 1) Capture original nav nodes & order
+window.addEventListener('DOMContentLoaded', () => {
   const nav = document.querySelector(bottomNav);
   if (!nav) return;
-  originalNavItems = Array.from(nav.children);
+  ensureOriginalNavItems(nav);
 });
 
 /**
  * Main entry: modes are 'selector', 'arrange', or 'verb'
  */
 export function toggleGames(mode = 'selector') {
-  initStats("#game-mode-content");
+  initStats('#game-mode-content');
 
-  const container = document.querySelector(GAME_CONFIG.selectors.gameContainer);
-  document.body.classList.add('game-active');
-  container.classList.add('fullscreen-game');
-
-
-  console.log(`[toggleGames] →`, mode);
-  currentMode = mode;
-
+  const container = document.querySelector(gameContainer);
+  if (!container) return;
   const navEl = document.querySelector(bottomNav);
-  // ② Hide for verb, show otherwise
-  navEl.classList.toggle('nav-hidden', mode === 'verb');
+  ensureOriginalNavItems(navEl);
 
+  applyGameShell(container);
 
-  history.pushState({ mode }, '');
+  currentMode = mode;
+  container.dataset.mode = mode;
+  applyModeInteraction(container, mode);
 
+  if (navEl) {
+    navEl.classList.toggle('nav-hidden', mode === 'verb');
+  }
+
+  if (history.state?.mode !== mode) {
+    history.pushState({ mode }, '');
+  } else {
+    history.replaceState({ mode }, '');
+  }
 
   // 2) Hide learn/translate, show game UI
   hide($(learnSection), $(translationSection));
@@ -50,6 +197,8 @@ export function toggleGames(mode = 'selector') {
     uiInitialized = true;
   }
 
+  bindInGameReturnActions(container);
+
   // 4) Show the right sub-section
   _showSection(mode);
 
@@ -60,117 +209,109 @@ export function toggleGames(mode = 'selector') {
   gameSession.init(mode);
 }
 
-// ── Helper: pick which panel to show ─────────────────────────────
+// Helper: pick which panel to show
 function _showSection(mode) {
   const container = $(gameContainer);
-  const cards     = container.querySelectorAll('.game-card');
-  const arrange   = container.querySelector('.game-section[data-game="arrange"]');
-  const verb      = container.querySelector('.game-section[data-game="verb"]');
+  if (!container) return;
+  const cards = container.querySelectorAll('.game-card');
+  const arrange = container.querySelector('.game-section[data-game="arrange"]');
+  const verb = container.querySelector('.game-section[data-game="verb"]');
+  const wordType = container.querySelector('.game-section[data-game="wordType"]');
+  const verbForm = container.querySelector('.game-section[data-game="verbForm"]');
+  const selectorReturn = container.querySelector('#selectorReturnWrap');
 
   if (mode === 'selector') {
-    cards.forEach(c => c.style.display = '');
-    arrange.style.display = 'none';
-    verb.style.display    = 'none';
-  } else {
-    cards.forEach(c => c.style.display = 'none');
-    arrange.style.display = (mode === 'arrange') ? '' : 'none';
-    verb.style.display    = (mode === 'verb')    ? '' : 'none';
+    cards.forEach(card => {
+      card.style.display = '';
+    });
+    if (selectorReturn) selectorReturn.style.display = '';
+    if (arrange) arrange.style.display = 'none';
+    if (verb) verb.style.display = 'none';
+    if (wordType) wordType.style.display = 'none';
+    if (verbForm) verbForm.style.display = 'none';
+    return;
   }
+
+  cards.forEach(card => {
+    card.style.display = 'none';
+  });
+  if (selectorReturn) selectorReturn.style.display = 'none';
+  if (arrange) arrange.style.display = mode === 'arrange' ? '' : 'none';
+  if (verb) verb.style.display = mode === 'verb' ? '' : 'none';
+  if (wordType) wordType.style.display = mode === 'wordType' ? '' : 'none';
+  if (verbForm) verbForm.style.display = mode === 'verbForm' ? '' : 'none';
 }
 
-// ── Helper: hide non-keepers & inject Google-style Back icon ──────
+// Helper: hide non-keepers and inject back icon
 function _updateNav() {
   const nav = document.querySelector(bottomNav);
   if (!nav) return;
-  // remove old back btn if still there
+  ensureOriginalNavItems(nav);
+  if (!originalNavItems.length) return;
+
   nav.querySelector('.back-btn')?.remove();
 
-  // hide everything except audio & settings
-  Array.from(nav.children).forEach(ch => {
-    ch.style.display = KEEP_NAV_IDS.includes(ch.id) ? '' : 'none';
+  Array.from(nav.children).forEach(child => {
+    child.style.display = KEEP_NAV_IDS.includes(child.id) ? '' : 'none';
   });
 
-  // inject a Material-Icons back button
   const back = document.createElement('div');
   back.className = 'nav-item back-btn';
-  back.id        = 'navBackBtn';
-  back.innerHTML = `<span class="material-icons-outlined">arrow_back</span>`;
+  back.id = 'navBackBtn';
+  back.innerHTML = '<span class="material-icons-outlined">arrow_back</span>';
   back.addEventListener('click', () => _handleBack());
   nav.prepend(back);
 }
 
-// ── Helper: handle Back click, with confirm in-game ──────────────
+// Helper: handle Back click
 function _handleBack() {
-  console.log('[_handleBack] currentMode =', currentMode);
   const nav = document.querySelector(bottomNav);
 
-
-
   if (currentMode === 'selector') {
-    console.log('→ Back from selector: restoring learn + translation');
-    
     // 1) Hide game container
     const gc = $(gameContainer);
-    gc.style.display = 'none';
-    console.log('   hid gameContainer');
+    if (gc) {
+      clearGameShell(gc);
+      gc.style.display = 'none';
+    }
 
     // 2) Restore nav
     _restoreNav(nav);
-    console.log('   nav restored');
 
     // 3) Force-show learn & translation
     const ls = $(learnSection);
     const ts = $(translationSection);
-    ls.style.display = '';
-    ts.style.display = '';
-    console.log('   show learnSection & translationSection');
+    if (ls) ls.style.display = '';
+    if (ts) ts.style.display = '';
 
     currentMode = 'learn';
-    console.log('   currentMode set to', currentMode);
-
-  } else {
-    console.log('→ Back from in-game: asking confirmation');
-    const ok = confirm(
-      'Are you sure you want to go back?\nYour game progress will be lost.'
-    );
-    if (ok) {
-      console.log('   confirmed, switching to selector');
-      toggleGames('selector');
-    } else {
-      console.log('   cancelled, staying in', currentMode);
-    }
+    return;
   }
 
-
-
+  requestReturnToGamesSelector();
 }
 
-
-// ── Helper: wipe nav & re-append originals in order ───────────────
+// Helper: wipe nav and re-append originals in order
 function _restoreNav(nav) {
+  if (!nav) return;
+  ensureOriginalNavItems(nav);
+  if (!originalNavItems.length) return;
+  nav.classList.remove('nav-hidden');
   nav.innerHTML = '';
   originalNavItems.forEach(node => {
     node.style.display = '';
     nav.appendChild(node);
   });
 }
-// ── Helper: show/hide elements by ID ──────────────────────────────
-function _show(id) {
-  const el = document.getElementById(id);
-  if (el) el.style.display = '';
-}
 
 // handle hardware/browser back button
-window.addEventListener('popstate', (evt) => {
-  // if we have game state, intercept
+window.addEventListener('popstate', () => {
   if (currentMode !== 'learn') {
-    console.log('[popstate] intercept, currentMode=', currentMode);
-    // restore our UI instead of letting the browser navigate away
     _handleBack();
-    // push a fresh “learn” state so further back presses keep working
     history.pushState({ mode: 'learn' }, '');
   }
 });
 
 // ensure initial state in history
 history.replaceState({ mode: 'learn' }, '');
+

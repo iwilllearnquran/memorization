@@ -32,8 +32,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js"></script>
-
-
 </head>
 <body>
 
@@ -44,7 +42,7 @@
 
 
 
-<div class="overlay" id="overlay" onclick="hidePopup()"></div>
+<div class="overlay" id="overlay" ></div>
 <div class="popup-content" id="popupContent"></div>
 
 <!-- Hidden audio element that togglePlay() uses -->
@@ -58,7 +56,7 @@
 <div id= "main-grammar-section" class="section">
 <div id="learning-mode-content" style="text-align: center; direction: rtl;">
 
-    <span class="word-block click-animate  " onclick="showPopup({&quot;Word&quot;: &quot;إِنَّكُمْ&quot;, &quot;Quran Morph Info&quot;: &quot;has 1 pronoun suffixes -  2nd person masculine plural form&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;https://verses.quran.com/wbw/037_038_001.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Accusative Part+Pron.&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;, &quot;Main Verb Grammar&quot;: &quot;&quot;, &quot;root_from_txt&quot;: &quot;إِنّ كُمْ&quot;, &quot;Meaning Of Verb&quot;: &quot;&quot;})">
+    <span class="word-block click-animate  " data-popup="{&quot;Word&quot;: &quot;إِنَّكُمْ&quot;, &quot;Quran Morph Info&quot;: &quot;has 1 pronoun suffixes -  2nd person masculine plural form&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;https://verses.quran.com/wbw/037_038_001.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Accusative Part+Pron.&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;, &quot;Main Verb Grammar&quot;: &quot;&quot;, &quot;root_from_txt&quot;: &quot;إِنّ كُمْ&quot;, &quot;Meaning Of Verb&quot;: &quot;&quot;}">
     
     <!-- Arabic word only -->
     <span class="word-text">إِنَّكُمْ</span>
@@ -74,7 +72,7 @@
     
 
 
-    <span class="word-block click-animate nominative " onclick="showPopup({&quot;Word&quot;: &quot;لَذَآئِقُوا۟&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;https://verses.quran.com/wbw/037_038_002.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Emphatic Part+Noun&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;, &quot;Main Verb Grammar&quot;: &quot;&quot;, &quot;root_from_txt&quot;: &quot;لَ ذَآئِقُوا&quot;, &quot;Meaning Of Verb&quot;: &quot;&quot;})">
+    <span class="word-block click-animate nominative " data-popup="{&quot;Word&quot;: &quot;لَذَآئِقُوا۟&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;https://verses.quran.com/wbw/037_038_002.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Emphatic Part+Noun&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;, &quot;Main Verb Grammar&quot;: &quot;&quot;, &quot;root_from_txt&quot;: &quot;لَ ذَآئِقُوا&quot;, &quot;Meaning Of Verb&quot;: &quot;&quot;}">
     
     <!-- Arabic word only -->
     <span class="word-text">لَذَآئِقُوا۟</span>
@@ -90,7 +88,7 @@
     
 
 
-    <span class="word-block click-animate genitive " onclick="showPopup({&quot;Word&quot;: &quot;ٱلْعَذَابِ&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;https://verses.quran.com/wbw/037_038_003.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Al++Noun&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;, &quot;Main Verb Grammar&quot;: &quot;&quot;, &quot;root_from_txt&quot;: &quot;ٱلْ عَذَاب&quot;, &quot;Meaning Of Verb&quot;: &quot;&quot;})">
+    <span class="word-block click-animate genitive " data-popup="{&quot;Word&quot;: &quot;ٱلْعَذَابِ&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;https://verses.quran.com/wbw/037_038_003.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Al++Noun&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;, &quot;Main Verb Grammar&quot;: &quot;&quot;, &quot;root_from_txt&quot;: &quot;ٱلْ عَذَاب&quot;, &quot;Meaning Of Verb&quot;: &quot;&quot;}">
     
     <!-- Arabic word only -->
     <span class="word-text">ٱلْعَذَابِ</span>
@@ -106,7 +104,7 @@
     
 
 
-    <span class="word-block click-animate genitive " onclick="showPopup({&quot;Word&quot;: &quot;ٱلْأَلِيمِ&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;https://verses.quran.com/wbw/037_038_004.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Al++Adj&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;, &quot;Main Verb Grammar&quot;: &quot;&quot;, &quot;root_from_txt&quot;: &quot;ٱلْ أَلِيم&quot;, &quot;Meaning Of Verb&quot;: &quot;&quot;})">
+    <span class="word-block click-animate genitive " data-popup="{&quot;Word&quot;: &quot;ٱلْأَلِيمِ&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;https://verses.quran.com/wbw/037_038_004.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Al++Adj&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;, &quot;Main Verb Grammar&quot;: &quot;&quot;, &quot;root_from_txt&quot;: &quot;ٱلْ أَلِيم&quot;, &quot;Meaning Of Verb&quot;: &quot;&quot;}">
     
     <!-- Arabic word only -->
     <span class="word-text">ٱلْأَلِيمِ</span>
@@ -149,8 +147,11 @@
   </div>
 
   <!-- 🔵 PLAY Button -->
-  <div style="margin-top: 20px; text-align: center;">
-<button id="stripNavGames" class="strip-btn">
+  <div class="strip-action-row" style="margin-top: 20px; text-align: center;">
+<button id="stripSaveProgress" class="strip-btn strip-btn-inline" type="button">
+  <span class="btn-text">Save Progress</span>
+</button>
+<button id="stripNavGames" class="strip-btn strip-btn-inline">
   <span class="btn-text">Play and Practise →</span>
 </button>
 
@@ -260,19 +261,19 @@
 
 
 
-  <a href="#" id="navPractice" class="nav-item" onclick="togglePracticeNav(); this.blur();">
+  <a href="#" id="navPractice" class="nav-item" >
     <span class="material-icons-outlined">edit</span>
     <span class="nav-label">Practice</span>
   </a>
-    <a href="#" id="navMode" class="nav-item" onclick="toggleModeNav(); this.blur();">
+    <a href="#" id="navMode" class="nav-item" >
     <span id="navModeIcon" class="material-icons-outlined">psychology</span>
     <span class="nav-label">Recite</span>
   </a>
 
-    <a href="#" id="playToggleBtn" class="nav-item" onclick="togglePlay(event);">
+    <a href="#" id="playToggleBtn" class="nav-item" >
     <span class="material-icons-outlined" id="navPlayIcon">play_arrow</span>
   </a>
-    <a href="#" id="navSettings" class="nav-item" onclick="toggleSettingsNav(event); this.blur();">
+    <a href="#" id="navSettings" class="nav-item" >
     <span class="material-icons-outlined">settings</span>
     <span class="nav-label">Settings</span>
   </a>
@@ -316,7 +317,7 @@
 
     function notifyParent(type) {
       console.log(`[iframe] notifyParent → ${type}`);
-      parent.postMessage({ type }, '*');
+      parent.postMessage({ type }, (window.location.origin === 'null' ? '*' : window.location.origin));
     }
 
     function checkVisibility() {
@@ -356,3 +357,7 @@
 
 </body>
 </html>
+
+
+
+

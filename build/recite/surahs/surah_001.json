@@ -1,0 +1,97 @@
+{
+  "generatedAt": "2026-02-21T01:09:47.008268+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
+  "surah": {
+    "surah": 1,
+    "arabicName": "سُورَةُ ٱلْفَاتِحَةِ",
+    "englishName": "Al-Faatiha",
+    "englishNameTranslation": "The Opening",
+    "ayahCount": 7,
+    "ayahs": [
+      {
+        "ayah": 1,
+        "globalAyah": 1,
+        "arabic": "بِسۡمِ اللهِ الرَّحۡمٰنِ الرَّحِيۡمِ",
+        "translation_en": "In the name of God, The Most Gracious, The Dispenser of Grace:",
+        "translation_ur": "شروع الله کا نام لے کر جو بڑا مہربان نہایت رحم والا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/001001.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1.mp3"
+        }
+      },
+      {
+        "ayah": 2,
+        "globalAyah": 2,
+        "arabic": "اَلۡحَمۡدُ لِلّٰهِ رَبِّ الۡعٰلَمِيۡنَۙ‏",
+        "translation_en": "All praise is due to God alone, the Sustainer of all the worlds,",
+        "translation_ur": "سب طرح کی تعریف خدا ہی کو (سزاوار) ہے جو تمام مخلوقات کا پروردگار ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/001002.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/2.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/2.mp3"
+        }
+      },
+      {
+        "ayah": 3,
+        "globalAyah": 3,
+        "arabic": "الرَّحۡمٰنِ الرَّحِيۡمِۙ‏",
+        "translation_en": "The Most Gracious, the Dispenser of Grace,",
+        "translation_ur": "بڑا مہربان نہایت رحم والا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/001003.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/3.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/3.mp3"
+        }
+      },
+      {
+        "ayah": 4,
+        "globalAyah": 4,
+        "arabic": "مٰلِكِ يَوۡمِ الدِّيۡنِؕ‏",
+        "translation_en": "Lord of the Day of Judgment!",
+        "translation_ur": "انصاف کے دن کا حاکم",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/001004.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4.mp3"
+        }
+      },
+      {
+        "ayah": 5,
+        "globalAyah": 5,
+        "arabic": "اِيَّاكَ نَعۡبُدُ وَاِيَّاكَ نَسۡتَعِيۡنُؕ‏",
+        "translation_en": "Thee alone do we worship; and unto Thee alone do we turn for aid.",
+        "translation_ur": "(اے پروردگار) ہم تیری ہی عبادت کرتے ہیں اور تجھ ہی سے مدد مانگتے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/001005.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5.mp3"
+        }
+      },
+      {
+        "ayah": 6,
+        "globalAyah": 6,
+        "arabic": "اِهۡدِنَا الصِّرَاطَ الۡمُسۡتَقِيۡمَۙ‏",
+        "translation_en": "Guide us the straight way.",
+        "translation_ur": "ہم کو سیدھے رستے چلا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/001006.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6.mp3"
+        }
+      },
+      {
+        "ayah": 7,
+        "globalAyah": 7,
+        "arabic": "صِرَاطَ الَّذِيۡنَ اَنۡعَمۡتَ عَلَيۡهِمۡ ۙ‏ غَيۡرِ الۡمَغۡضُوۡبِ عَلَيۡهِمۡ وَلَا الضَّآلِّيۡنَ‏",
+        "translation_en": "The way of those upon whom Thou hast bestowed Thy blessings, not of those who have been condemned [by Thee], nor of those who go astray!",
+        "translation_ur": "ان لوگوں کے رستے جن پر تو اپنا فضل وکرم کرتا رہا نہ ان کے جن پر غصے ہوتا رہا اور نہ گمراہوں کے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/001007.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/7.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/7.mp3"
+        }
+      }
+    ]
+  }
+}

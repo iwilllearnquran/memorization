@@ -1,0 +1,110 @@
+{
+  "generatedAt": "2026-02-14T12:05:30.679081+00:00",
+  "sourceApis": {
+    "surahList": "https://api.alquran.cloud/v1/surah",
+    "arabic": "https://api.alquran.cloud/v1/surah/{surah}/quran-uthmani",
+    "english": "https://api.alquran.cloud/v1/surah/{surah}/en.asad",
+    "urdu": "https://api.alquran.cloud/v1/surah/{surah}/ur.jalandhry",
+    "audioPattern": {
+      "ar": "https://verses.quran.com/Alafasy/mp3/{surah3}{ayah3}.mp3",
+      "en": "https://cdn.islamic.network/quran/audio/192/en.walk/{globalAyah}.mp3",
+      "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/{globalAyah}.mp3"
+    }
+  },
+  "surahCount": 1,
+  "surahs": [
+    {
+      "surah": 1,
+      "arabicName": "سُورَةُ ٱلْفَاتِحَةِ",
+      "englishName": "Al-Faatiha",
+      "englishNameTranslation": "The Opening",
+      "ayahCount": 7,
+      "ayahs": [
+        {
+          "ayah": 1,
+          "globalAyah": 1,
+          "arabic": "﻿بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+          "translation_en": "In the name of God, The Most Gracious, The Dispenser of Grace:",
+          "translation_ur": "شروع الله کا نام لے کر جو بڑا مہربان نہایت رحم والا ہے",
+          "audio": {
+            "ar": "https://verses.quran.com/Alafasy/mp3/001001.mp3",
+            "en": "https://cdn.islamic.network/quran/audio/192/en.walk/1.mp3",
+            "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/1.mp3"
+          }
+        },
+        {
+          "ayah": 2,
+          "globalAyah": 2,
+          "arabic": "ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ",
+          "translation_en": "All praise is due to God alone, the Sustainer of all the worlds,",
+          "translation_ur": "سب طرح کی تعریف خدا ہی کو (سزاوار) ہے جو تمام مخلوقات کا پروردگار ہے",
+          "audio": {
+            "ar": "https://verses.quran.com/Alafasy/mp3/001002.mp3",
+            "en": "https://cdn.islamic.network/quran/audio/192/en.walk/2.mp3",
+            "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/2.mp3"
+          }
+        },
+        {
+          "ayah": 3,
+          "globalAyah": 3,
+          "arabic": "ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+          "translation_en": "The Most Gracious, the Dispenser of Grace,",
+          "translation_ur": "بڑا مہربان نہایت رحم والا",
+          "audio": {
+            "ar": "https://verses.quran.com/Alafasy/mp3/001003.mp3",
+            "en": "https://cdn.islamic.network/quran/audio/192/en.walk/3.mp3",
+            "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/3.mp3"
+          }
+        },
+        {
+          "ayah": 4,
+          "globalAyah": 4,
+          "arabic": "مَٰلِكِ يَوْمِ ٱلدِّينِ",
+          "translation_en": "Lord of the Day of Judgment!",
+          "translation_ur": "انصاف کے دن کا حاکم",
+          "audio": {
+            "ar": "https://verses.quran.com/Alafasy/mp3/001004.mp3",
+            "en": "https://cdn.islamic.network/quran/audio/192/en.walk/4.mp3",
+            "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/4.mp3"
+          }
+        },
+        {
+          "ayah": 5,
+          "globalAyah": 5,
+          "arabic": "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ",
+          "translation_en": "Thee alone do we worship; and unto Thee alone do we turn for aid.",
+          "translation_ur": "(اے پروردگار) ہم تیری ہی عبادت کرتے ہیں اور تجھ ہی سے مدد مانگتے ہیں",
+          "audio": {
+            "ar": "https://verses.quran.com/Alafasy/mp3/001005.mp3",
+            "en": "https://cdn.islamic.network/quran/audio/192/en.walk/5.mp3",
+            "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/5.mp3"
+          }
+        },
+        {
+          "ayah": 6,
+          "globalAyah": 6,
+          "arabic": "ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ",
+          "translation_en": "Guide us the straight way.",
+          "translation_ur": "ہم کو سیدھے رستے چلا",
+          "audio": {
+            "ar": "https://verses.quran.com/Alafasy/mp3/001006.mp3",
+            "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6.mp3",
+            "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6.mp3"
+          }
+        },
+        {
+          "ayah": 7,
+          "globalAyah": 7,
+          "arabic": "صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ",
+          "translation_en": "The way of those upon whom Thou hast bestowed Thy blessings, not of those who have been condemned [by Thee], nor of those who go astray!",
+          "translation_ur": "ان لوگوں کے رستے جن پر تو اپنا فضل وکرم کرتا رہا نہ ان کے جن پر غصے ہوتا رہا اور نہ گمراہوں کے",
+          "audio": {
+            "ar": "https://verses.quran.com/Alafasy/mp3/001007.mp3",
+            "en": "https://cdn.islamic.network/quran/audio/192/en.walk/7.mp3",
+            "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/7.mp3"
+          }
+        }
+      ]
+    }
+  ]
+}

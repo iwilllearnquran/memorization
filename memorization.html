@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Memorization Corner</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@600;700&family=Manrope:wght@500;600;700;800&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+  <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
+  <link rel="stylesheet" href="/memorization.css?v=20260310-memo-home-layout3">
+</head>
+<body class="memorization-page memo-welcome-mode memo-word-mode">
+  <div class="memo-app">
+    <div id="memoShell" class="memo-shell">
+      <section id="memoWelcome" class="memo-welcome" aria-labelledby="memoWelcomeTitle">
+        <main class="memo-home-content">
+          <section class="memo-home-hero memo-home-card memo-home-welcome">
+            <div class="memo-home-hero-top">
+              <div class="memo-home-hello">
+                <h1 id="memoWelcomeTitle">Assalamu Alaikum, Friend</h1>
+                <p class="memo-home-guidance">For effective memorization, listen to the ayah at least 20 times, read it 20 times, then read from memory and, to lock it in, write it once.</p>
+              </div>
+
+              <div class="memo-home-rings" aria-label="Progress rings">
+                <div class="memo-home-ring" title="Surah progress">
+                  <svg class="memo-home-ring-svg" viewBox="0 0 80 80" aria-hidden="true">
+                    <circle class="memo-home-ring-track" cx="40" cy="40" r="30"></circle>
+                    <circle id="memoWelcomeProgressRing" class="memo-home-ring-value memo-home-ring-value-surah" cx="40" cy="40" r="30"></circle>
+                  </svg>
+                  <div class="memo-home-ring-label">
+                    <span id="memoWelcomeProgressPct" class="memo-home-ring-pct">0%</span>
+                    Surah
+                  </div>
+                </div>
+
+                <div class="memo-home-ring" title="Quran progress">
+                  <svg class="memo-home-ring-svg" viewBox="0 0 80 80" aria-hidden="true">
+                    <circle class="memo-home-ring-track" cx="40" cy="40" r="30"></circle>
+                    <circle id="memoWelcomeQuranProgressRing" class="memo-home-ring-value memo-home-ring-value-quran" cx="40" cy="40" r="30"></circle>
+                  </svg>
+                  <div class="memo-home-ring-label">
+                    <span id="memoWelcomeQuranPct" class="memo-home-ring-pct" aria-hidden="true"></span>
+                    Quran
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div class="memo-home-grid">
+
+                        <section class="memo-home-card">
+              <div class="memo-home-card-title-row">
+                <h2>Your Stats</h2>
+               
+              </div>
+
+              <div class="memo-home-stats">
+                <div class="memo-home-stat">
+                  <div id="memoWelcomeMemorized" class="memo-home-stat-num">0</div>
+                  <div class="memo-home-stat-label">Total ayahs memorized</div>
+                </div>
+                <div class="memo-home-stat">
+                  <div id="memoWelcomeWordsLearnt" class="memo-home-stat-num">0</div>
+                  <div class="memo-home-stat-label">Total words learnt</div>
+                </div>
+                <div class="memo-home-stat">
+                  <div id="memoStreakDays" class="memo-home-stat-num">0</div>
+                  <div class="memo-home-stat-label">Streak days</div>
+                </div>
+              </div>
+
+
+            </section>
+
+            <section class="memo-home-card">
+              <div class="memo-home-card-title-row">
+                <h2 id="memoWelcomeLastTitle">Last Ayah</h2>
+                 <span id="memoWelcomeLastRef" class="memo-home-badge">Surah 1: Al-Fatihah - Ayah 1</span>
+              </div>
+              <p id="memoWelcomeLastWhen" class="memo-home-last-meta"></p>
+
+              
+
+              <div class="memo-home-preview">
+                <div id="memoWelcomeLastArabic" class="memo-home-preview-ar" dir="rtl" lang="ar">--</div>
+                <div id="memoWelcomeLastTranslation" class="memo-home-preview-en">--</div>
+              </div>
+
+                            <div class="memo-home-summary-actions">
+                <button id="memoWelcomeStartBtn" class="memo-home-btn memo-home-btn-primary" type="button">
+                  <span class="material-icons-outlined" aria-hidden="true">play_arrow</span>
+                  <span id="memoWelcomeStartLabel">Resume</span>
+                </button>
+                <p class="memo-home-resume-quote"><em>And We have certainly made the Quran easy to remember (Quran 54:17)</em></p>
+              </div>
+            </section>
+
+
+            <section class="memo-home-card">
+              <div class="memo-home-card-title-row">
+                <h2>Quick actions</h2>
+              </div>
+
+              <div class="memo-home-quick-grid">
+                <button id="memoTechniquePracticeBtn" class="memo-home-quick-btn memo-home-quick-btn-wide" type="button">
+                  <span class="memo-home-quick-icon material-icons-outlined" aria-hidden="true">fitness_center</span>
+                  <span class="memo-home-quick-copy"><strong>Practice</strong><span>Complex words</span></span>
+                </button>
+                <button id="memoTechniqueRepeatBtn" class="memo-home-quick-btn" type="button">
+                  <span class="memo-home-quick-icon material-icons-outlined" aria-hidden="true">playlist_add_check</span>
+                  <span class="memo-home-quick-copy"><strong>Review last 5</strong><span>Strengthen recall</span></span>
+                </button>
+                <button id="memoTechniqueReciteBtn" class="memo-home-quick-btn" type="button">
+                  <span class="memo-home-quick-icon material-icons-outlined" aria-hidden="true">casino</span>
+                  <span class="memo-home-quick-copy"><strong>Random Ayah</strong><span>Surprise practice</span></span>
+                </button>
+              </div>
+            </section>
+          </div>
+        </main>
+      </section>
+
+      <section id="memoExternalView" class="memo-external-view is-hidden" aria-hidden="true">
+        <header class="memo-external-head">
+          <h2 id="memoExternalTitle">Surah list</h2>
+          <button id="memoExternalCloseBtn" class="memo-external-close" type="button" aria-label="Close">
+            <span class="material-icons-outlined" aria-hidden="true">close</span>
+          </button>
+        </header>
+        <iframe id="memoExternalFrame" class="memo-external-frame" title="Memorization external view" loading="lazy"></iframe>
+      </section>
+
+      <div id="memoMain" class="memo-main is-hidden">
+        <div id="memoStatus" class="memo-sr-only" aria-live="polite">Status: <span id="memoStatusText">Idle</span></div>
+        <section class="memo-panel memo-mode-panel">
+          <div class="memo-mode-row">
+            <div class="memo-segmented" role="group" aria-label="Memorization mode">
+              <button id="memoReciteWordModeBtn" class="memo-segmented-btn is-active" type="button" aria-pressed="true">Word by word</button>
+              <button id="memoReciteFullModeBtn" class="memo-segmented-btn" type="button" aria-pressed="false">Full Ayah</button>
+            </div>
+
+          </div>
+
+          <div id="memoReciteSettingsPanel" class="memo-settings-panel is-hidden" aria-hidden="true">
+            <button id="memoToggleMeaning" class="memo-toggle is-on memo-toggle-icon" type="button" aria-pressed="true">
+              <span class="material-icons-outlined" aria-hidden="true">translate</span>
+              <span>Meaning</span>
+            </button>
+            <button id="memoToggleGrammar" class="memo-toggle is-off memo-toggle-icon" type="button" aria-pressed="false">
+              <span class="material-icons-outlined" aria-hidden="true">school</span>
+              <span>Grammar</span>
+            </button>
+            <button id="memoToggleExpectedAfterWrong" class="memo-toggle is-on memo-toggle-icon" type="button" aria-pressed="true">
+              <span class="material-icons-outlined" aria-hidden="true">tips_and_updates</span>
+              <span>Expected after 3 wrong tries</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="memo-panel memo-ayah-panel memo-words">
+          <button id="memoStopBtn" class="memo-action-btn memo-icon-btn memo-hidden-control" type="button" disabled aria-hidden="true" tabindex="-1">
+            <span class="material-icons-outlined" aria-hidden="true">stop_circle</span>
+            <span class="memo-sr-only">Stop</span>
+          </button>
+
+         
+          
+
+          <div id="memoReciteLine" class="memo-recite-line" aria-live="polite"></div>
+          <div id="memoWords" class="memo-words-wrap"></div>
+          <div id="memoExpectedHint" class="memo-expected-hint is-hidden"></div>
+           <div id="memoFeedback" class="memo-feedback memo-feedback-inline"></div>
+
+          <div id="memoLockOverlay" class="memo-lock-overlay" aria-hidden="true">
+            Locked. Finish the previous ayah to unlock this one.
+          </div>
+
+          <div class="memo-transcript-readout" aria-live="polite">
+            <div>Final: <span id="memoFinalText">--</span></div>
+            <div>Interim: <span id="memoInterimText">--</span></div>
+          </div>
+        </section>
+
+        <section class="memo-practice-section memo-panel">
+          <div id="memoPracticePanel" class="memo-practice-panel" aria-hidden="true">
+            <div id="memoPracticeContent" class="memo-practice-content"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div id="memoWordOverlay" class="memo-word-overlay" aria-hidden="true"></div>
+
+    <div id="memoFloatingActions">
+      <button id="memoPracticeToggle" class="memo-practice-toggle" type="button" aria-expanded="false">
+        <span class="material-icons-outlined" aria-hidden="true">edit</span>
+        <span class="memo-sr-only">Practice writing</span>
+      </button>
+      <button id="memoStartBtn" class="memo-action-btn memo-icon-btn" type="button" aria-label="Start recitation">
+        <span class="material-icons-outlined" aria-hidden="true">mic</span>
+        <span class="memo-sr-only">Start</span>
+      </button>
+    </div>
+
+    <div id="memoBottomControlStrip" class="memo-transparent-strip memo-transparent-strip-bottom">
+      <div class="memo-action-icons">
+        <button id="memoPlayBtn" type="button" class="memo-icon-btn memo-icon-only memo-play-btn" aria-label="Play ayah">
+          <span class="material-icons-outlined" aria-hidden="true">play_arrow</span>
+        </button>
+
+        <label class="memo-play-count memo-play-count-inline">
+          <span class="memo-play-label">Plays</span>
+          <input id="memoPlayCount" type="number" min="1" max="50" value="5">
+        </label>
+        <button id="memoPeekBtn" class="memo-icon-ghost memo-icon-only memo-peek-btn" type="button" aria-label="Peek">
+          <span class="material-icons-outlined" aria-hidden="true">visibility</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="memoCompleteModal" class="memo-modal hidden" role="dialog" aria-modal="true">
+      <div class="memo-modal-card">
+        <h3>Ayah completed!</h3>
+        <p>Would you like to revise or move to the next ayah?</p>
+        <div class="memo-modal-actions">
+          <button id="memoReviseBtn" type="button">Revise</button>
+          <button id="memoNextBtn" type="button">Next Ayah</button>
+        </div>
+        <label class="memo-auto-next-label">
+          <input type="checkbox" id="memoAutoNextToggle">
+          <span>Auto-advance to next ayah</span>
+        </label>
+      </div>
+    </div>
+
+    <div id="memoProfileDrawerBackdrop" class="memo-profile-backdrop" hidden></div>
+    <aside id="memoProfileDrawer" class="memo-profile-drawer" aria-hidden="true" aria-label="Profile drawer">
+      <header class="memo-profile-drawer-header">
+        <div class="memo-profile-avatar" aria-hidden="true">
+          <span class="material-icons-outlined">person</span>
+        </div>
+        <button id="memoProfileDrawerCloseBtn" class="memo-profile-close" type="button" aria-label="Close drawer">
+          <span class="material-icons-outlined" aria-hidden="true">close</span>
+        </button>
+        <div class="memo-profile-name" id="memoDrawerName">Guest</div>
+        <div class="memo-profile-role">Student of the Quran</div>
+      </header>
+      <div class="memo-profile-drawer-stats">
+        <div class="memo-profile-stat">
+          <strong id="memoDrawerStreak">0</strong>
+          <span>Day Streak</span>
+        </div>
+        <div class="memo-profile-stat">
+          <strong id="memoDrawerMemorized">0</strong>
+          <span>Ayahs Memorized</span>
+        </div>
+      </div>
+      <nav class="memo-profile-drawer-links" aria-label="Profile links">
+        <button class="memo-profile-link" type="button">
+          <span class="material-icons-outlined" aria-hidden="true">person_outline</span>
+          <span>My Profile</span>
+        </button>
+        <button class="memo-profile-link" type="button">
+          <span class="material-icons-outlined" aria-hidden="true">insights</span>
+          <span>My Progress</span>
+        </button>
+        <button class="memo-profile-link" type="button">
+          <span class="material-icons-outlined" aria-hidden="true">emoji_events</span>
+          <span>Achievements</span>
+        </button>
+        <button class="memo-profile-link" type="button">
+          <span class="material-icons-outlined" aria-hidden="true">calendar_today</span>
+          <span>Schedule</span>
+        </button>
+        <button class="memo-profile-link" type="button">
+          <span class="material-icons-outlined" aria-hidden="true">settings</span>
+          <span>Settings</span>
+        </button>
+      </nav>
+      <button id="memoDrawerSignOutBtn" class="memo-profile-signout" type="button">
+        <span class="material-icons-outlined" aria-hidden="true">logout</span>
+        <span>Sign Out</span>
+      </button>
+    </aside>
+
+    <div id="memoToast" class="memo-toast" role="status" aria-live="polite" hidden></div>
+  </div>
+
+  <script type="module" src="/memorization.js?v=20260310-memo-home-progress2"></script>
+</body>
+</html>
+
+
+
+
+
+

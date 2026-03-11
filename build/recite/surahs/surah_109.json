@@ -1,0 +1,85 @@
+{
+  "generatedAt": "2026-02-21T01:14:48.360193+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
+  "surah": {
+    "surah": 109,
+    "arabicName": "سُورَةُ الكَافِرُونَ",
+    "englishName": "Al-Kaafiroon",
+    "englishNameTranslation": "The Disbelievers",
+    "ayahCount": 6,
+    "ayahs": [
+      {
+        "ayah": 1,
+        "globalAyah": 6208,
+        "arabic": "قُلۡ يٰۤاَيُّهَا الۡكٰفِرُوۡنَۙ‏",
+        "translation_en": "SAY: \"O you who deny the truth!",
+        "translation_ur": "(اے پیغمبر ان منکران اسلام سے) کہہ دو کہ اے کافرو!",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/109001.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6208.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6208.mp3"
+        }
+      },
+      {
+        "ayah": 2,
+        "globalAyah": 6209,
+        "arabic": "لَاۤ اَعۡبُدُ مَا تَعۡبُدُوۡنَۙ‏",
+        "translation_en": "\"I do not worship that which you worship,",
+        "translation_ur": "جن (بتوں) کو تم پوچتے ہو ان کو میں نہیں پوجتا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/109002.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6209.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6209.mp3"
+        }
+      },
+      {
+        "ayah": 3,
+        "globalAyah": 6210,
+        "arabic": "وَلَاۤ اَنۡـتُمۡ عٰبِدُوۡنَ مَاۤ اَعۡبُدُ​ ۚ‏",
+        "translation_en": "and neither do you worship that which I worship!",
+        "translation_ur": "اور جس (خدا) کی میں عبادت کرتا ہوں اس کی تم عبادت نہیں کرتے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/109003.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6210.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6210.mp3"
+        }
+      },
+      {
+        "ayah": 4,
+        "globalAyah": 6211,
+        "arabic": "وَلَاۤ اَنَا عَابِدٌ مَّا عَبَدۡتُّمۡۙ‏",
+        "translation_en": "\"And I will not worship ~hat which you have [ever] worshipped,",
+        "translation_ur": "اور (میں پھر کہتا ہوں کہ) جن کی تم پرستش کرتے ہوں ان کی میں پرستش کرنے والا نہیں ہوں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/109004.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6211.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6211.mp3"
+        }
+      },
+      {
+        "ayah": 5,
+        "globalAyah": 6212,
+        "arabic": "وَ لَاۤ اَنۡـتُمۡ عٰبِدُوۡنَ مَاۤ اَعۡبُدُ ؕ‏",
+        "translation_en": "and neither will you [ever] worship that which I worship.",
+        "translation_ur": "اور نہ تم اس کی بندگی کرنے والے (معلوم ہوتے) ہو جس کی میں بندگی کرتا ہوں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/109005.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6212.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6212.mp3"
+        }
+      },
+      {
+        "ayah": 6,
+        "globalAyah": 6213,
+        "arabic": "لَـكُمۡ دِيۡنُكُمۡ وَلِىَ دِيۡنِ‏",
+        "translation_en": "Unto you, your moral law, and unto me, mine!\"",
+        "translation_ur": "تم اپنے دین پر میں اپنے دین پر",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/109006.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6213.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6213.mp3"
+        }
+      }
+    ]
+  }
+}

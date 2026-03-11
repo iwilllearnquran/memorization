@@ -1,15 +1,13 @@
 import { GAME_CONFIG }        from '/config/gameConfig.js';
 import gameSession            from '/state/gameSession.js';
 import { $, hide, show }      from '/utils/domHelpers.js';
-import { initStats, updateStats } from '/ui/gameStatsUI.js';
+import { updateStats } from '/ui/gameStatsUI.js';
 import { showCompletionPopup } from '/ui/gameCompletionUI.js';
 import { showGameOverPopup } from '/ui/gameOverPopup.js';
 
 
 
 export async function startArrangeGame() {
-  
-  initStats('#arrangeGameContainer');
   // 1️⃣ Swap panels
   const arrangeUI = $('#arrangeGameContainer');
   if (!arrangeUI) {
@@ -73,6 +71,13 @@ function placeWord(box, correctOrder) {
   const emptySlot = slots.find(s => !s.dataset.word);
   if (!emptySlot) return;
 
+  // Restore tap feedback so the pressed word immediately gives a blue pulse.
+  box.classList.remove('tap-feedback');
+  // Force reflow so repeated taps replay the animation.
+  void box.offsetWidth;
+  box.classList.add('tap-feedback');
+  setTimeout(() => box.classList.remove('tap-feedback'), 260);
+
   const slotIndex   = slots.indexOf(emptySlot);
   const correctText = correctOrder[slotIndex];
 
@@ -94,10 +99,12 @@ function placeWord(box, correctOrder) {
       gameSession.end(false);
       showGameOverPopup();
     }
-    window.showToast?.('❌ Incorrect!', '#c0392b');
+    window.showToast?.('Incorrect!', '#c0392b');
     return;
   }
   if (navigator.vibrate) navigator.vibrate(20);
+  emptySlot.classList.add('slot-target');
+  setTimeout(() => emptySlot.classList.remove('slot-target'), 260);
   // 3️⃣ Correct guess: animate clone from box → slot
   const fromRect = box.getBoundingClientRect();
   const toRect   = emptySlot.getBoundingClientRect();
@@ -123,7 +130,7 @@ function placeWord(box, correctOrder) {
   });
 
   // 4️⃣ After animation completes, show glass effect, cleanup, and update state
-  setTimeout(() => {
+  setTimeout(async () => {
     // Glass burst effect
     const glass = document.getElementById('glassEffect');
     if (glass) {
@@ -164,18 +171,10 @@ function placeWord(box, correctOrder) {
         'You have earned ' +
         (GAME_CONFIG.fullGameBonus) + ' extra Ajr points for forming a complete ayah!',
       ); **/
-      gameSession.end(true);
-      window.parent.postMessage({
-        type: 'persistStats',
-        score: gameSession.sessionScore,  // total earned this session
-        recordStreak: false,                // ask them to record today’s streak too
-      }, '*');
-      //window.parent.postMessage({
-       // type: 'streakUpdate',
-      //  date: new Date().toISOString().split('T')[0]
-     // }, '*');
+      await gameSession.end(true);
     
     }
   }, 400);
 }
+
 

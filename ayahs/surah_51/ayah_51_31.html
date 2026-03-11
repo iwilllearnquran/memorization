@@ -1,0 +1,390 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Bootstrap CSS (v4.6 or v5.x recommended) -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+<link rel="stylesheet" href="/styles.css">
+
+<title>Ayah Memorization</title>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KL3ZNNX844"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-KL3ZNNX844');
+  </script>
+
+<!-- ✅ Firebase Compat SDKs for static HTML -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js"></script>
+
+
+
+
+</head>
+<body>
+
+<div class="overlay" id="overlay" ></div>
+<div class="popup-content" id="popupContent"></div>
+
+<!-- Hidden audio element that togglePlay() uses -->
+<audio id="ayahAudio" src="https://verses.quran.com/Alafasy/mp3/051031.mp3" preload="metadata"></audio>
+<audio id="audio-url-ar" data-src="https://verses.quran.com/Alafasy/mp3/051031.mp3" preload="metadata"></audio>
+<audio id="audio-url-en" data-src="https://cdn.islamic.network/quran/audio/192/en.walk/4706.mp3" preload="metadata"></audio>
+<audio id="audio-url-ur" data-src="https://cdn.islamic.network/quran/audio/64/ur.khan/4706.mp3" preload="metadata"></audio>
+
+
+
+<div id= "main-grammar-section" class="section">
+<div id="learning-mode-content" style="text-align: center; direction: rtl;">
+
+    <span class="word-block click-animate  verb-highlight" data-popup="{&quot;Word&quot;: &quot;قَالَ&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;\n        <b style=\&quot;font-size:15px; margin-bottom:10px; color:#0a4d68; display:flex; align-items:center; justify-content:space-between;\&quot;>\n         <span>\n          📋 Verb Conjugation Table (Active & Passive)\n            <a id=\&quot;open-new-tab-link\&quot; href=\&quot;/memorization/verbs_tables/قَالَ.html\&quot; target=\&quot;_blank\&quot; title=\&quot;Open full table in new tab\&quot; style=\&quot;\n              margin-left: 5px;\n              display: inline-flex;\n              align-items: center;\n              font-size: 16px;\n              text-decoration: none;\n            \&quot;>\n              ↗️\n            </a>\n\n\n        </span>\n        </b>\n        <table style =\&quot;box-shadow: 0 2px 6px rgba(0,0,0,0.1);\&quot;>\n          <thead>\n            <tr style=\&quot;background-color: #f2f2f2; text-align: center;\&quot;>\n              <th style=\&quot;padding:4px 6px; border:1px solid #ccc; min-width:160px;\&quot;>\n                Pronoun\n              </th>\n              <th style=\&quot;padding:4px 6px; border:1px solid #ccc;\&quot;>\n                <a href=\&quot;#\&quot; onclick=\&quot;playVerbAudio('قَالَ', 'past', this); return false;\&quot; style=\&quot;text-decoration:none; color:inherit;\&quot;>\n                  Past (He taught) <span class=\&quot;audio-icon\&quot;>🔊</span>\n                </a>\n              </th>\n              <th style=\&quot;padding:4px 6px; border:1px solid #ccc;\&quot;>\n                <a href=\&quot;#\&quot; onclick=\&quot;playVerbAudio('قَالَ', 'present', this); return false;\&quot; style=\&quot;text-decoration:none; color:inherit;\&quot;>\n                  Present (He teaches) <span class=\&quot;audio-icon\&quot;>🔊</span>\n                </a>\n              </th>\n              <th style=\&quot;padding:4px 6px; border:1px solid #ccc;\&quot;>Negation (Not teaching)</th>\n              <th style=\&quot;padding:4px 6px; border:1px solid #ccc;\&quot;>Subjunctive (Might teach)</th>\n              <th style=\&quot;padding:4px 6px; border:1px solid #ccc;\&quot;>Emphatic (Must teach)</th>\n              <th style=\&quot;padding:4px 6px; border:1px solid #ccc;\&quot;>Command!</th>\n              <th style=\&quot;padding:4px 6px; border:1px solid #ccc;\&quot;>Past Passive (Was taught)</th>\n              <th style=\&quot;padding:4px 6px; border:1px solid #ccc;\&quot;>Present Passive (Is being taught)</th>\n              <th style=\&quot;padding:4px 6px; border:1px solid #ccc;\&quot;>Jussive Passive (Not being taught)</th>\n              <th style=\&quot;padding:4px 6px; border:1px solid #ccc;\&quot;>Subjunctive Passive (Might be taught)</th>\n              <th style=\&quot;padding:4px 6px; border:1px solid #ccc;\&quot;>Emphatic Passive (Must be taught)</th>\n            </tr>\n          </thead>\n          <tbody>\n        \n        <tr style=\&quot;background-color: #fff8dc; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>هُوَ (he)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قَالَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَقُولُ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَقُلْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَقُولَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَقُولَنَّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;></td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قِيلَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُقَالُ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُقَلْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُقَالَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُقَالَنَّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #fff8dc; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>هُمَا (those 2 men)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قَالَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَقُولَانِ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَقُولَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَقُولَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَقُولَانِّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;></td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قِيلَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُقَالَانِ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُقَالَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُقَالَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُقَالَانِّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #fff8dc; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>هُمْ (those men)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قَالُوا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَقُولُونَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَقُولُوا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَقُولُوا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَقُولُنَّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;></td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قِيلُوا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُقَالُونَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُقَالُوا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُقَالُوا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُقَالُنَّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #fff8dc; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>هِيَ (she)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قَالَتْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولُ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُلْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولَنَّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;></td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قِيلَتْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالُ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَلْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالَنَّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #fff8dc; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>هُمَا (those 2 women)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قَالَتَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولَانِ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولَانِّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;></td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قِيلَتَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالَانِ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالَانِّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #fff8dc; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>هُنَّ (those women)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قُلْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَقُلْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَقُلْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَقُلْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يَقُلْنَانِّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;></td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قِلْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُقَلْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُقَلْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُقَلْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>يُقَلْنَانِّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #e6f0ff; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>أَنْتَ (you masc.)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قُلْتَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولُ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُلْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولَنَّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قُلْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قِلْتَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالُ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَلْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالَنَّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #e6f0ff; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>أَنْتُمَا (you 2 men)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قُلْتُمَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولَانِ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولَانِّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قُولَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قِلْتُمَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالَانِ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالَانِّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #e6f0ff; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>أَنْتُمْ (you all men)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قُلْتُم</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولُونَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولُوا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولُوا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولُنَّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قُولُوا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قِلْتُم</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالُونَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالُوا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالُوا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالُنَّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #e6f0ff; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>أَنْتِ (you fem.)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قُلْتِ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولِينَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولِي</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولِي</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولِنَّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قُولِي</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قِلْتِ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالِينَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالِي</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالِي</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالِنَّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #e6f0ff; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>أَنْتُمَا (you 2 fem.)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قُلْتُمَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولَانِ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُولَانِّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قُولَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قِلْتُمَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالَانِ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَالَانِّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #e6f0ff; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>أَنْتُنَّ (you all fem.)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قُلْتُنَّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُلْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُلْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُلْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تَقُلْنَانِّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قُلْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قِلْتُنَّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَلْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَلْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَلْنَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>تُقَلْنَانِّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #eaffea; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>أَنَا (I)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قُلْتُ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>أَقُولُ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>أَقُلْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>أَقُولَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>أَقُولَنَّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;></td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قِلْتُ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>أُقَالُ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>أُقَلْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>أُقَالَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>أُقَالَنَّ</td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #eaffea; text-align: center;\&quot;>\n            <td style=\&quot;padding: 3px 12px; border: 1px solid #ccc; font-size: 16px; vertical-align: middle; font-weight: bold;\&quot;>نَحْنُ (we)</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قُلْنَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>نَقُولُ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>نَقُلْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>نَقُولَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>نَقُولَنَّ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;></td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>قِلْنَا</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>نُقَالُ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>نُقَلْ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>نُقَالَ</td>\n            <td style=\&quot;padding: 4px 6px; border: 1px solid #ccc; font-size: 18px;\&quot;>نُقَالَنَّ</td>\n        </tr>\n        </tbody></table>\n    <br/><b style=\&quot;font-size: 15px; margin-bottom: 10px; color: #0a4d68;text-align: left;\&quot;>🔗 Attached Pronouns Table with Examples (كَتَبَ)</b>\n    <table style=\&quot;\n        width: 100%;\n        border-collapse: collapse;\n        box-shadow: 0 2px 6px rgba(0,0,0,0.1);\n    \&quot;>\n        <thead>\n            <tr style=\&quot;background-color: #f2f2f2; text-align: center;\&quot;>\n                <th style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;>Pronoun</th>\n                <th style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;>Doer (Past)</th>\n                <th style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;>Doer (Present)</th>\n                <th style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;>Done-To (Object)</th>\n            </tr>\n        </thead>\n        <tbody>\n    \n        <tr style=\&quot;background-color: #fff8dc; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>هُوَ (he)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـَ → كَتَبَ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>يَـ → يَكْتُبُ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـهُ → كَتَبَهُ</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #fff8dc; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>هُمَا (those two men)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـَا → كَتَبَا</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>يَـ...ـانِ → يَكْتُبَانِ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـهُمَا → كَتَبَهُمَا</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #fff8dc; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>هُمْ (those men)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـُوا → كَتَبُوا</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>يَـ...ـونَ → يَكْتُبُونَ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـهُمْ → كَتَبَهُمْ</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #fff8dc; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>هِيَ (she)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـَتْ → كَتَبَتْ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>تَـ → تَكْتُبُ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـهَا → كَتَبَهَا</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #fff8dc; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>هُمَا (those two women)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـَتَا → كَتَبَتَا</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>تَـ...ـانِ → تَكْتُبَانِ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـهُمَا → كَتَبَهُمَا</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #fff8dc; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>هُنَّ (those women)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـْنَ → كَتَبْنَ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>يَـ...ـنَ → يَكْتُبْنَ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـهُنَّ → كَتَبْهُنَّ</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #e6f0ff; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>أَنْتَ (you, masc)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـْتَ → كَتَبْتَ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>تَـ → تَكْتُبُ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـكَ → كَتَبَكَ</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #e6f0ff; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>أَنْتُمَا (you two men)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـْتُمَا → كَتَبْتُمَا</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>تَـ...ـانِ → تَكْتُبَانِ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـكُمَا → كَتَبَكُمَا</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #e6f0ff; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>أَنْتُمْ (you all men)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـْتُمْ → كَتَبْتُمْ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>تَـ...ـونَ → تَكْتُبُونَ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـكُمْ → كَتَبَكُمْ</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #e6f0ff; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>أَنْتِ (you, fem)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـْتِ → كَتَبْتِ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>تَـ...ـينَ → تَكْتُبِينَ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـكِ → كَتَبَكِ</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #e6f0ff; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>أَنْتُمَا (you two women)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـْتُمَا → كَتَبْتُمَا</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>تَـ...ـانِ → تَكْتُبَانِ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـكُمَا → كَتَبَكُمَا</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #e6f0ff; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>أَنْتُنَّ (you all women)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـْتُنَّ → كَتَبْتُنَّ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>تَـ...ـنَ → تَكْتُبْنَ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـكُنَّ → كَتَبَكُنَّ</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #eaffea; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>أَنَا (I)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـْتُ → كَتَبْتُ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>أَـ → أَكْتُبُ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـنِي → كَتَبَنِي</b></td>\n        </tr>\n        \n        <tr style=\&quot;background-color: #eaffea; text-align: center;\&quot;>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>نَحْنُ (we)</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـْنَا → كَتَبْنَا</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>نَـ → نَكْتُبُ</b></td>\n            <td style=\&quot;padding: 8px; border: 1px solid #ccc;\&quot;><b>ـنَا → كَتَبَنَا</b></td>\n        </tr>\n        </tbody></table>&quot;, &quot;Audio URL&quot;: &quot;https://verses.quran.com/wbw/051_031_001.mp3&quot;, &quot;VERB_FORM&quot;: &quot;I - كَتَبَ&quot;, &quot;tags_joined&quot;: &quot;Verb&quot;, &quot;count_of_verb&quot;: 1618.0, &quot;root_from_gpt&quot;: &quot;قَالَ&quot;, &quot;Main Verb Grammar&quot;: &quot;third person masculine singular&quot;, &quot;root_from_txt&quot;: &quot;قَالَ&quot;, &quot;Meaning Of Verb&quot;: &quot;to say&quot;}">
+    
+    <!-- Arabic word only -->
+    <span class="word-text">قَالَ</span>
+
+    <!-- Metadata: translation, root, POS -->
+    <span class="metadata">
+        <span class="translation toggle-translation">He said</span>
+        <span class="translation toggle-root root-tag ">قَالَ</span>
+        <span class="translation toggle-pos pos-tag ">verb</span>
+    </span>
+
+</span>
+    
+
+
+    <span class="word-block click-animate  " data-popup="{&quot;Word&quot;: &quot;فَمَا&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;https://verses.quran.com/wbw/051_031_002.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Resumption Part+Rel. Pronoun&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;, &quot;Main Verb Grammar&quot;: &quot;&quot;, &quot;root_from_txt&quot;: &quot;فَ مَا&quot;, &quot;Meaning Of Verb&quot;: &quot;&quot;}">
+    
+    <!-- Arabic word only -->
+    <span class="word-text">فَمَا</span>
+
+    <!-- Metadata: translation, root, POS -->
+    <span class="metadata">
+        <span class="translation toggle-translation">Then what</span>
+        <span class="translation toggle-root root-tag ">فَ مَا</span>
+        <span class="translation toggle-pos pos-tag ">rem+rel</span>
+    </span>
+
+</span>
+    
+
+
+    <span class="word-block click-animate nominative " data-popup="{&quot;Word&quot;: &quot;خَطْبُكُمْ&quot;, &quot;Quran Morph Info&quot;: &quot;has 1 pronoun suffixes -  2nd person masculine plural form&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;https://verses.quran.com/wbw/051_031_003.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Noun+Pron.&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;, &quot;Main Verb Grammar&quot;: &quot;&quot;, &quot;root_from_txt&quot;: &quot;خَطْب كُمْ&quot;, &quot;Meaning Of Verb&quot;: &quot;&quot;}">
+    
+    <!-- Arabic word only -->
+    <span class="word-text">خَطْبُكُمْ</span>
+
+    <!-- Metadata: translation, root, POS -->
+    <span class="metadata">
+        <span class="translation toggle-translation">(is) your mission</span>
+        <span class="translation toggle-root root-tag ">خَطْب كُمْ</span>
+        <span class="translation toggle-pos pos-tag ">noun+pron</span>
+    </span>
+
+</span>
+    
+
+
+    <span class="word-block click-animate nominative " data-popup="{&quot;Word&quot;: &quot;أَيُّهَا&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;https://verses.quran.com/wbw/051_031_004.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Noun&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;, &quot;Main Verb Grammar&quot;: &quot;&quot;, &quot;root_from_txt&quot;: &quot;أَيُّهَا&quot;, &quot;Meaning Of Verb&quot;: &quot;&quot;}">
+    
+    <!-- Arabic word only -->
+    <span class="word-text">أَيُّهَا</span>
+
+    <!-- Metadata: translation, root, POS -->
+    <span class="metadata">
+        <span class="translation toggle-translation">O messengers</span>
+        <span class="translation toggle-root root-tag ">أَيُّهَا</span>
+        <span class="translation toggle-pos pos-tag ">noun</span>
+    </span>
+
+</span>
+    
+
+
+    <span class="word-block click-animate nominative " data-popup="{&quot;Word&quot;: &quot;ٱلْمُرْسَلُونَ&quot;, &quot;Quran Morph Info&quot;: &quot;&quot;, &quot;Conjugation Table&quot;: &quot;&quot;, &quot;Audio URL&quot;: &quot;https://verses.quran.com/wbw/051_031_005.mp3&quot;, &quot;VERB_FORM&quot;: &quot;Unknown&quot;, &quot;tags_joined&quot;: &quot;Al++Noun&quot;, &quot;count_of_verb&quot;: 0, &quot;root_from_gpt&quot;: &quot;&quot;, &quot;Main Verb Grammar&quot;: &quot;&quot;, &quot;root_from_txt&quot;: &quot;ٱلْ مُّرْسَل&quot;, &quot;Meaning Of Verb&quot;: &quot;&quot;}">
+    
+    <!-- Arabic word only -->
+    <span class="word-text">ٱلْمُرْسَلُونَ</span>
+
+    <!-- Metadata: translation, root, POS -->
+    <span class="metadata">
+        <span class="translation toggle-translation">O messengers</span>
+        <span class="translation toggle-root root-tag ">ٱلْ مُّرْسَل</span>
+        <span class="translation toggle-pos pos-tag ">det+noun</span>
+    </span>
+
+</span>
+    
+
+
+
+<div class="grammar-info">
+  <div style="display: flex; justify-content: center; flex-wrap: wrap; row-gap: 10px; column-gap: 20px; margin-top: 12px;">
+
+    <!-- Nominative -->
+    <div class="grammar-item" data-grammar="nominative"
+         style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+      <div style="width: 12px; height: 12px; background-color: #ffe6e6; border-radius: 3px; border: 1px solid #ccc;"></div>
+      <span><b>Nominative</b> <i>(Rafʿ / Subject)</i></span>
+    </div>
+
+    <!-- Accusative -->
+    <div class="grammar-item" data-grammar="accusative"
+         style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+      <div style="width: 12px; height: 12px; background-color: #e6f0ff; border-radius: 3px; border: 1px solid #ccc;"></div>
+      <span><b>Accusative</b> <i>(Naṣb / Object)</i></span>
+    </div>
+
+    <!-- Genitive -->
+    <div class="grammar-item" data-grammar="genitive"
+         style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+      <div style="width: 12px; height: 12px; background-color: #e6ffe6; border-radius: 3px; border: 1px solid #ccc;"></div>
+      <span><b>Genitive</b> <i>(Jarr / Possession)</i></span>
+    </div>
+
+    <!-- Verb -->
+    <div class="grammar-item" data-grammar="verb"
+         style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+      <div style="width: 12px; height: 12px; background-color: #fff3cd; border-radius: 3px; border: 1px solid #ccc;"></div>
+      <span><b>Verb</b> <i>(Fiʿl / Action)</i></span>
+    </div>
+
+  </div>
+</div>
+
+
+
+  <!-- 🔵 PLAY Button -->
+  <div class="strip-action-row" style="margin-top: 20px; text-align: center;">
+<button id="stripSaveProgress" class="strip-btn strip-btn-inline" type="button">
+  <span class="btn-text">Save Progress</span>
+</button>
+<button id="stripNavGames" class="strip-btn strip-btn-inline">
+  <span class="btn-text">Play and Practise →</span>
+</button>
+
+  </div>
+</div>
+
+
+
+        </div>
+        <div id="reciting-mode-content" class="ayah-arabic" style="display: none; text-align: center; font-size: 28px; direction: rtl; ">
+        قَالَ فَمَا خَطۡبُكُمۡ اَيُّهَا الۡمُرۡسَلُوۡنَ‏
+        </div>
+
+        
+        
+
+</div>
+
+<div id="translation-section" class="section" style="text-align: center;">
+<h2 class="practice-title" style="
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0a4d68;
+  margin-bottom: 12px;
+">
+    Translation
+  </h2>
+
+  <div id="englishTranslation" class="ayah-english" style="text-align: center;">
+    [Abraham] said, &quot;Then what is your business [here], O messengers?&quot;
+  </div>
+  <div id="urduTranslation" class="ayah-english" style="text-align: center;">
+    ابراہیمؑ نے کہا کہ فرشتو! تمہارا مدعا کیا ہے؟
+  </div>
+</div>
+
+          <div id="game-mode-content" style="display:none;">
+    <!-- Game layout will be injected here via JS -->
+    
+  </div>
+
+
+
+            <div id="transliteration-box" class="section" style="display:none; text-align:left">
+                 <div class="section practice-header">
+                    <h2 class="practice-title">✍️ Practice Mode: Write the Arabic Words</h2>
+                    <p class="practice-desc" style="margin-bottom:4px"  >
+                       Type the Arabic word above using English letters. Our check uses fuzzy matching, so small spelling variations may still be accepted.
+                    </p>
+                    <p class="practice-desc">
+                       (Use the <strong>Settings</strong> (⚙️) to clear your inputs or toggle translations on/off).
+                    </p>
+                 </div>
+                 <div class="dropdown-menu-custom">
+                 </div>
+               
+                <span class="word-block-translit " style="display: inline-block; text-align: center; margin: 8px; padding: 5px">
+                   <input type="text" class="translit-input small-placeholder" data-key="translit-31-0" data-expected="qāla"
+                      placeholder="Type transliteration" 
+                      style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+                   <div class="translation toggle-translation" style="margin: 2px; font-size:10px">He said</div>
+                   <details style="font-size:10px; color:gray; margin-top:4px;">
+                      <summary style="cursor:pointer;">show translit</summary>
+                      <div>qāla</div>
+                   </details>
+                </span>
+
+                <span class="word-block-translit " style="display: inline-block; text-align: center; margin: 8px; padding: 5px">
+                   <input type="text" class="translit-input small-placeholder" data-key="translit-31-1" data-expected="famā"
+                      placeholder="Type transliteration" 
+                      style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+                   <div class="translation toggle-translation" style="margin: 2px; font-size:10px">Then what</div>
+                   <details style="font-size:10px; color:gray; margin-top:4px;">
+                      <summary style="cursor:pointer;">show translit</summary>
+                      <div>famā</div>
+                   </details>
+                </span>
+
+                <span class="word-block-translit " style="display: inline-block; text-align: center; margin: 8px; padding: 5px">
+                   <input type="text" class="translit-input small-placeholder" data-key="translit-31-2" data-expected="khaṭbukum"
+                      placeholder="Type transliteration" 
+                      style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+                   <div class="translation toggle-translation" style="margin: 2px; font-size:10px">(is) your mission</div>
+                   <details style="font-size:10px; color:gray; margin-top:4px;">
+                      <summary style="cursor:pointer;">show translit</summary>
+                      <div>khaṭbukum</div>
+                   </details>
+                </span>
+
+                <span class="word-block-translit " style="display: inline-block; text-align: center; margin: 8px; padding: 5px">
+                   <input type="text" class="translit-input small-placeholder" data-key="translit-31-3" data-expected="ayyuhā"
+                      placeholder="Type transliteration" 
+                      style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+                   <div class="translation toggle-translation" style="margin: 2px; font-size:10px">O messengers</div>
+                   <details style="font-size:10px; color:gray; margin-top:4px;">
+                      <summary style="cursor:pointer;">show translit</summary>
+                      <div>ayyuhā</div>
+                   </details>
+                </span>
+
+                <span class="word-block-translit " style="display: inline-block; text-align: center; margin: 8px; padding: 5px">
+                   <input type="text" class="translit-input small-placeholder" data-key="translit-31-4" data-expected="l-mur&#x27;salūna"
+                      placeholder="Type transliteration" 
+                      style="width:150px; font-size:15px; height: 42px; text-align:center; border-radius: 8px; border: 1px solid #ccc; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);" />
+                   <div class="translation toggle-translation" style="margin: 2px; font-size:10px">O messengers</div>
+                   <details style="font-size:10px; color:gray; margin-top:4px;">
+                      <summary style="cursor:pointer;">show translit</summary>
+                      <div>l-mur&#x27;salūna</div>
+                   </details>
+                </span>
+ 
+</div> 
+
+
+
+<nav class="bottom-nav">
+
+
+
+  <a href="#" id="navPractice" class="nav-item" >
+    <span class="material-icons-outlined">edit</span>
+    <span class="nav-label">Practice</span>
+  </a>
+    <a href="#" id="navMode" class="nav-item" >
+    <span id="navModeIcon" class="material-icons-outlined">menu_book</span>
+    <span class="nav-label">Recite</span>
+  </a>
+
+    <a href="#" id="playToggleBtn" class="nav-item" >
+    <span class="material-icons-outlined" id="navPlayIcon">play_arrow</span>
+  </a>
+    <a href="#" id="navSettings" class="nav-item" >
+    <span class="material-icons-outlined">settings</span>
+    <span class="nav-label">Settings</span>
+  </a>
+
+<a href="#" id="navSaveProgress" class="nav-item" >
+  <span class="material-icons-outlined">bookmark_add</span>
+  <span class="nav-label">Save</span>
+</a>
+
+</nav>
+
+
+
+
+
+
+
+
+
+<script src="/script.js" defer></script> 
+
+<script type="module" defer>
+  import { toggleGames } from '/ui/toggleGames.js';
+
+  document.getElementById('navGames')?.addEventListener('click', e => {
+    e.preventDefault();
+    toggleGames();
+  });
+
+  document.getElementById('stripNavGames')?.addEventListener('click', e => {
+    e.preventDefault();
+    toggleGames();
+  });
+</script>
+
+<script>
+  const gameEl = document.getElementById('game-mode-content');
+  if (!gameEl) {
+  } else {
+    function notifyParent(type) {
+      parent.postMessage({ type }, (window.location.origin === 'null' ? '*' : window.location.origin));
+    }
+
+    function checkVisibility() {
+      const style = window.getComputedStyle(gameEl);
+      const isVisible =
+        style.display !== 'none' &&
+        style.visibility !== 'hidden' &&
+        gameEl.offsetWidth > 0 &&
+        gameEl.offsetHeight > 0;
+      notifyParent(isVisible ? 'gamesReady' : 'gameExited');
+    }
+
+    // Observe both class _and_ style attribute changes
+    const observer = new MutationObserver(muts => {
+      checkVisibility();
+    });
+    observer.observe(gameEl, {
+      attributes: true,
+      attributeFilter: ['style', 'class']
+    });
+
+    // Initial check (once the DOM is parsed)
+    window.addEventListener('DOMContentLoaded', () => {
+      checkVisibility();
+    });
+
+    // (Optional) Poll every 500ms as a fallback if your game code swaps styles via JS without touching class/style attrs:
+    // setInterval(checkVisibility, 500);
+  }
+</script>
+                
+  <div id="wordHintOverlay" class="word-hint-overlay hidden">
+    <div class="word-hint-text">
+    Click on each word to view details
+    </div>
+    <div id="wordHint" class="word-hint">
+      <div id="wordHintLottie"></div>
+    </div>
+  </div>
+
+</body>
+</html>
+
+

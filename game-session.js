@@ -91,17 +91,21 @@ gameContainer.innerHTML = `
   ❤️ Lives: 10 | ⭐ Points: 0
 </div>
 
-<div id="gameSelector" style="max-width: 600px; margin: auto; padding: 16px;">
-  <div style="background: #f9f9f9; border: 2px solid #0a4d68; border-radius: 8px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); font-family: 'Roboto', sans-serif;">
-    <h3 style="margin: 0 0 8px; color: #0a4d68;">Arrange Words</h3>
-    <p style="margin: 0 0 12px; direction: ltr !important;">Rearrange the words to match the correct order in the Ayah</p>
-    <button onclick="startArrangeGameFromCard()" style="padding: 8px 16px; background: #0a4d68; color: white; border: none; border-radius: 6px; cursor: pointer;">Play Game</button>
+<div id="gameSelector" class="game-selector">
+  <div class="game-card">
+    <h3>Arrange Words</h3>
+    <p>Rearrange the words to match the correct order in the Ayah</p>
+    <div class="game-card-actions">
+      <button type="button" onclick="startArrangeGameFromCard()">Play Game</button>
+    </div>
   </div>
 
-  <div style="background: #f9f9f9; border: 2px solid #0a4d68; border-radius: 8px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); font-family: 'Roboto', sans-serif;">
-    <h3 style="margin: 0 0 8px; color: #0a4d68;">Verb Match</h3>
-    <p style="margin: 0 0 12px; direction: ltr !important;">Match Arabic verbs to their English meanings</p>
-    <button onclick="startVerbGameFromCard()" style="padding: 8px 16px; background: #0a4d68; color: white; border: none; border-radius: 6px; cursor: pointer;">Play Game</button>
+  <div class="game-card">
+    <h3>Verb Match</h3>
+    <p>Match Arabic verbs to their English meanings</p>
+    <div class="game-card-actions">
+      <button type="button" onclick="startVerbGameFromCard()">Play Game</button>
+    </div>
   </div>
 </div>
 
@@ -115,34 +119,8 @@ gameContainer.innerHTML = `
 
   <div id="verbMatchGame" style="display: none;">
     <div class="prompt">Match the verb to its meaning</div>
-
-<div style="
-  display: grid;
-  grid-template-columns: 100px 1fr;
-  gap: 1px !important;;
-  max-width: 100%;
-  padding: 1px !important;;
-  margin: 1px;
-  box-sizing: border-box;
-">
-  <div id="verbOptions" style="
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    min-width: 0;
-	width: 80px !important;
-  "></div>
-
-  <div id="meaningOptions" style="
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    min-width: 0;
-	
-  "></div>
-</div>
-
-</div>
+    <div id="verbMatchGrid" class="verb-match-grid"></div>
+  </div>
 
 
   </div>
@@ -366,16 +344,15 @@ function startVerbGame() {
   document.getElementById("arrangeGameContainer").style.display = "none";
   document.getElementById("verbMatchGame").style.display = "flex";
 
-  const verbOptions = document.getElementById("verbOptions");
-  const meaningOptions = document.getElementById("meaningOptions");
+  const matchGrid = document.getElementById("verbMatchGrid");
+  if (!matchGrid) return;
 
-  verbOptions.innerHTML = "";
-  meaningOptions.innerHTML = "";
+  matchGrid.innerHTML = "";
 
   const currentRank = currentSurah * 1000 + currentAyah;
 
   const allPairs = Object.entries(VERB_DATA).filter(([_, data]) =>
-    typeof data.rank !== 'undefined' &&
+    typeof data.rank !== "undefined" &&
     !isNaN(Number(data.rank)) &&
     Number(data.rank) <= currentRank
   );
@@ -387,7 +364,7 @@ function startVerbGame() {
 
   const shuffle = arr => arr.sort(() => 0.5 - Math.random());
 
-  const selectedPairs = shuffle(allPairs).slice(0, 5); // ⬅️ only 10 pairs
+  const selectedPairs = shuffle(allPairs).slice(0, 5); // ⬅️ only 5 pairs
 
   let selectedVerb = null;
   let selectedMeaning = null;
@@ -395,34 +372,43 @@ function startVerbGame() {
   const verbs = shuffle(selectedPairs.map(([verb]) => verb));
   const meanings = shuffle(selectedPairs.map(([_, data]) => data.meaning));
 
-  verbs.forEach(verb => {
-    const el = document.createElement("div");
-    el.className = "match-card";
-    el.textContent = verb;
-    el.dataset.verb = verb;
-    el.onclick = () => {
-      if (el.classList.contains("matched")) return;
-      document.querySelectorAll("#verbOptions .match-card").forEach(c => c.classList.remove("selected"));
-      el.classList.add("selected");
-      selectedVerb = el;
-      tryMatch();
-    };
-    verbOptions.appendChild(el);
-  });
+  const clearSelection = role => {
+    matchGrid
+      .querySelectorAll(`.match-card[data-role="${role}"]`)
+      .forEach(c => c.classList.remove("selected"));
+  };
 
-  meanings.forEach(meaning => {
-    const el = document.createElement("div");
-    el.className = "match-card";
-    el.textContent = meaning;
-    el.dataset.verb = selectedPairs.find(([verb, data]) => data.meaning === meaning)?.[0];
-    el.onclick = () => {
-      if (el.classList.contains("matched")) return;
-      document.querySelectorAll("#meaningOptions .match-card").forEach(c => c.classList.remove("selected"));
-      el.classList.add("selected");
-      selectedMeaning = el;
+  verbs.forEach((verb, index) => {
+    const meaning = meanings[index];
+
+    const verbEl = document.createElement("div");
+    verbEl.className = "match-card";
+    verbEl.textContent = verb;
+    verbEl.dataset.verb = verb;
+    verbEl.dataset.role = "verb";
+    verbEl.onclick = () => {
+      if (verbEl.classList.contains("matched")) return;
+      clearSelection("verb");
+      verbEl.classList.add("selected");
+      selectedVerb = verbEl;
       tryMatch();
     };
-    meaningOptions.appendChild(el);
+
+    const meaningEl = document.createElement("div");
+    meaningEl.className = "match-card";
+    meaningEl.textContent = meaning;
+    meaningEl.dataset.verb = selectedPairs.find(([v, data]) => data.meaning === meaning)?.[0];
+    meaningEl.dataset.role = "meaning";
+    meaningEl.onclick = () => {
+      if (meaningEl.classList.contains("matched")) return;
+      clearSelection("meaning");
+      meaningEl.classList.add("selected");
+      selectedMeaning = meaningEl;
+      tryMatch();
+    };
+
+    matchGrid.appendChild(verbEl);
+    matchGrid.appendChild(meaningEl);
   });
 
   function tryMatch() {
@@ -436,34 +422,26 @@ function startVerbGame() {
       selectedMeaning.classList.add("matched");
       selectedVerb.classList.remove("selected");
       selectedMeaning.classList.remove("selected");
-      selectedVerb.style.background = "#d4edda";
-      selectedMeaning.style.background = "#d4edda";
-      selectedVerb.style.borderColor = "#28a745";
-      selectedMeaning.style.borderColor = "#28a745";
       showToast("✅ Correct!");
 
       selectedVerb = null;
       selectedMeaning = null;
 
-      const allMatched = [...verbOptions.children].every(el => el.classList.contains("matched"));
+      const allMatched = [
+        ...matchGrid.querySelectorAll('.match-card[data-role="verb"]')
+      ].every(el => el.classList.contains("matched"));
       if (allMatched) {
         document.getElementById("gameResultMessage").textContent = "All matched! 🌟 You’re amazing!";
         document.getElementById("gameResultPopup").style.display = "block";
       }
     } else {
-      selectedVerb.style.background = "#f8d7da";
-      selectedMeaning.style.background = "#f8d7da";
-      selectedVerb.style.borderColor = "#dc3545";
-      selectedMeaning.style.borderColor = "#dc3545";
+      selectedVerb.classList.add("wrong");
+      selectedMeaning.classList.add("wrong");
       showToast("❌ Try again");
 
       setTimeout(() => {
-        //selectedVerb.style.background = "";
-        //selectedMeaning.style.background = "";
-        selectedVerb.style.borderColor = "";
-        selectedMeaning.style.borderColor = "";
-        selectedVerb.classList.remove("selected");
-        selectedMeaning.classList.remove("selected");
+        selectedVerb.classList.remove("wrong", "selected");
+        selectedMeaning.classList.remove("wrong", "selected");
         selectedVerb = null;
         selectedMeaning = null;
       }, 800);

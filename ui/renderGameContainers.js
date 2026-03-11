@@ -4,63 +4,102 @@ import { GAME_CONFIG }         from '/config/gameConfig.js';
 import { $ }                   from '/utils/domHelpers.js';
 import { startArrangeGame }    from '/ui/arrangeGameUI.js';
 import { startVerbGame }       from '/ui/verbMatchUI.js';
+import { startWordTypeGame }   from '/ui/wordTypeUI.js';
+import { startVerbFormGame }   from '/ui/verbFormUI.js';
 import { toggleGames }         from '/ui/toggleGames.js';
 
 export function renderGameContainers() {
-  console.group('🎲 renderGameContainers');
+  console.group('renderGameContainers');
   const container = $(GAME_CONFIG.selectors.gameContainer);
-  console.log('[🔍] gameContainer element:', container);
+  console.log('[game] gameContainer element:', container);
+  if (!container) {
+    console.warn('[game] gameContainer not found; skipping renderGameContainers');
+    console.groupEnd();
+    return;
+  }
 
-  // 1️⃣ Render selector cards
-  console.log('[1️⃣] Rendering selector cards...');
-  GAME_CONFIG.games.forEach(({ type, id, title, description, buttonId , fontFamily, fontSize, textAlign, disabled }) => {
-    console.log(`   • Creating card for game type="${type}", id="${id}"`);
+  // 1) Render selector cards
+  console.log('[1] Rendering selector cards...');
+  GAME_CONFIG.games.forEach(({ type, id, title, description, buttonId, fontFamily, fontSize, textAlign }) => {
+    console.log(`  - Creating card for game type="${type}", id="${id}"`);
     const card = document.createElement('div');
-    card.id           = id;               // e.g. "arrangeSelector"
-    card.className    = 'game-card';
-    card.dataset.game = type;             // so toggleGames can find it
-    card.style.fontFamily = fontFamily  || "'Roboto', sans-serif";
-    card.style.fontSize   = fontSize    || '1rem';
-    if (textAlign)  card.style.setProperty('text-align', textAlign, 'important');
-    card.innerHTML    = `
+    card.id = id;
+    card.className = 'game-card';
+    card.dataset.game = type;
+    card.style.fontFamily = fontFamily || "'Roboto', sans-serif";
+    card.style.fontSize = fontSize || '1rem';
+    if (textAlign) card.style.setProperty('text-align', textAlign, 'important');
+
+    card.innerHTML = `
       <h3>${title}</h3>
       <p>${description}</p>
       ${buttonId ? `<button id="${buttonId}" class="game-play-btn">Play ${title}</button>` : ''}
     `;
-    container.appendChild(card);
-    console.log(`     → Appended card #${id}`);
 
-const btn = card.querySelector('button');
-if (btn) {
-  btn.addEventListener('click', () => {
-    console.log(`[🕹] Play button clicked for "${type}"`);
-    toggleGames(type);
-    if (type === 'arrange') {
-      startArrangeGame();
-    } else if (type === 'verb') {
-      startVerbGame();
+    container.appendChild(card);
+    console.log(`    -> Appended card #${id}`);
+
+    const btn = card.querySelector('button');
+    if (btn) {
+      btn.addEventListener('click', () => {
+        console.log(`[game] Play button clicked for "${type}"`);
+        toggleGames(type);
+        if (type === 'arrange') {
+          startArrangeGame();
+        } else if (type === 'verb') {
+          startVerbGame();
+        } else if (type === 'wordType') {
+          startWordTypeGame();
+        } else if (type === 'verbForm') {
+          startVerbFormGame();
+        }
+      });
     }
   });
-}
 
-  });
+  // Selector-level quick exit back to current Learn ayah
+  const selectorReturnWrap = document.createElement('div');
+  selectorReturnWrap.id = 'selectorReturnWrap';
+  selectorReturnWrap.className = 'game-selector-return';
+  selectorReturnWrap.innerHTML = `
+    <button
+      id="selectorReturnAyahBtn"
+      class="game-play-btn selector-return-ayah-btn"
+      data-action="return-ayah"
+      type="button"
+    >
+      Return to Ayah
+    </button>
+  `;
+  container.appendChild(selectorReturnWrap);
+  console.log('    -> Appended selector return-to-ayah control');
 
-  // 2️⃣ Render hidden game panes
-  console.log('[2️⃣] Rendering hidden game panes...');
+  // 2) Render hidden game panes
+  console.log('[2] Rendering hidden game panes...');
   GAME_CONFIG.games.forEach(({ type }) => {
-    console.log(`   • Creating pane for game type="${type}"`);
+    console.log(`  - Creating pane for game type="${type}"`);
     const div = document.createElement('div');
-    div.id               = `${type}GameContainer`;   // e.g. "arrangeGameContainer"
-    div.dataset.game     = type;                     // data-game="arrange"
-    div.style.display    = 'none';
+    div.id = `${type}GameContainer`;
+    div.dataset.game = type;
+    div.style.display = 'none';
     div.classList.add('game-section');
 
     if (type === 'arrange') {
       div.innerHTML = `
-        <div class="slots"   id="slotContainer"></div>
+        <div class="slots" id="slotContainer"></div>
         <div class="options" id="optionsContainer"></div>
+        <div id="arrangeControls" class="game-inline-controls">
+          <button
+            id="arrangeReturnBtn"
+            class="game-play-btn return-games-btn"
+            data-action="return-games"
+            type="button"
+          >
+            Return to Games
+          </button>
+        </div>
       `;
-      console.log('     → Fill in Arrange UI');
+      console.log('    -> Fill in Arrange UI');
     } else if (type === 'verb') {
       div.innerHTML = `
         <div class="match-grid">
@@ -68,16 +107,22 @@ if (btn) {
           <div id="verbOptions" class="match-column-ar"></div>
         </div>
       `;
-      console.log('     → Fill in Verb UI');
+      console.log('    -> Fill in Verb UI');
+    } else if (type === 'wordType') {
+      // wordTypeUI.js populates this container dynamically
+      console.log('    -> Fill in Word Type UI');
+    } else if (type === 'verbForm') {
+      // verbFormUI.js populates this container dynamically
+      console.log('    -> Fill in Verb Form UI');
     }
 
     container.appendChild(div);
-    console.log(`     → Appended pane #${div.id}`);
+    console.log(`    -> Appended pane #${div.id}`);
   });
 
-  // 3️⃣ Add shared SVG “glassEffect”
+  // 3) Add shared SVG "glassEffect"
   if (!document.getElementById('glassEffect')) {
-    console.log('[3️⃣] Injecting glassEffect SVG');
+    console.log('[3] Injecting glassEffect SVG');
     document.body.insertAdjacentHTML('beforeend', `
       <svg id="glassEffect" viewBox="0 0 100 100"
            style="display:none; position:fixed; width:100px; height:100px;
@@ -89,10 +134,11 @@ if (btn) {
         </circle>
       </svg>
     `);
-    console.log('     → glassEffect SVG appended');
+    console.log('    -> glassEffect SVG appended');
   } else {
-    console.log('[3️⃣] glassEffect SVG already exists, skipping');
+    console.log('[3] glassEffect SVG already exists, skipping');
   }
 
   console.groupEnd();
 }
+

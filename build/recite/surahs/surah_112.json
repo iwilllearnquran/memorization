@@ -1,0 +1,61 @@
+{
+  "generatedAt": "2026-02-21T01:14:50.172586+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
+  "surah": {
+    "surah": 112,
+    "arabicName": "سُورَةُ الإِخۡلَاصِ",
+    "englishName": "Al-Ikhlaas",
+    "englishNameTranslation": "Sincerity",
+    "ayahCount": 4,
+    "ayahs": [
+      {
+        "ayah": 1,
+        "globalAyah": 6222,
+        "arabic": "قُلۡ هُوَ اللّٰهُ اَحَدٌ​ ۚ‏",
+        "translation_en": "SAY: \"He is the One God:",
+        "translation_ur": "کہو کہ وہ (ذات پاک جس کا نام) الله (ہے) ایک ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/112001.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6222.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6222.mp3"
+        }
+      },
+      {
+        "ayah": 2,
+        "globalAyah": 6223,
+        "arabic": "اَللّٰهُ الصَّمَدُ​ ۚ‏",
+        "translation_en": "\"God the Eternal, the Uncaused Cause of All Being.",
+        "translation_ur": "معبود برحق جو بےنیاز ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/112002.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6223.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6223.mp3"
+        }
+      },
+      {
+        "ayah": 3,
+        "globalAyah": 6224,
+        "arabic": "لَمۡ يَلِدۡ   ۙ وَلَمۡ يُوۡلَدۡ ۙ‏",
+        "translation_en": "\"He begets not, and neither is He begotten;",
+        "translation_ur": "نہ کسی کا باپ ہے اور نہ کسی کا بیٹا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/112003.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6224.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6224.mp3"
+        }
+      },
+      {
+        "ayah": 4,
+        "globalAyah": 6225,
+        "arabic": "وَلَمۡ يَكُنۡ لَّهٗ كُفُوًا اَحَدٌ‏",
+        "translation_en": "\"and there is nothing that could be compared with Him.",
+        "translation_ur": "اور کوئی اس کا ہمسر نہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/112004.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6225.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6225.mp3"
+        }
+      }
+    ]
+  }
+}

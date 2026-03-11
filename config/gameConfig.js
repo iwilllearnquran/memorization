@@ -34,18 +34,28 @@ export const GAME_CONFIG = {
       textAlign:    'center',
       disabled:     false,
     },
-        {
-      type:         'comingSoon',
-      // Placeholder for a future game
-      id:           'comingSoonSelector',
-      // This is a placeholder for a future game
-      title:        'Coming Soon',
-      description:  'More practice games are on the way! Stay tuned for more ways to learn and practice Quranic Arabic',
-      //buttonId:     'comingSoonBtn',
+    {
+      type:         'wordType',
+      id:           'wordTypeSelector',
+      title:        'Word Type',
+      description:  'Identify each word as Verb (فعل), Noun (اسم), or Particle (حرف) — the three pillars of Arabic grammar',
+      buttonId:     'playWordTypeBtn',
       fontFamily:   "'Roboto', sans-serif",
       fontSize:     '1rem',
       textAlign:    'center',
-      disabled:     true,  // Optional: Use this flag in your UI logic to skip r
+      disabled:     false,
+    },
+
+    {
+      type:         'verbForm',
+      id:           'verbFormSelector',
+      title:        'Verb Forms',
+      description:  'Identify the grammatical person of each verb, then find its root — master Arabic صرف (morphology)',
+      buttonId:     'playVerbFormBtn',
+      fontFamily:   "'Roboto', sans-serif",
+      fontSize:     '1rem',
+      textAlign:    'center',
+      disabled:     false,
     },
 
     // …add more games here…

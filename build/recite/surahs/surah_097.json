@@ -1,0 +1,73 @@
+{
+  "generatedAt": "2026-02-21T01:14:40.188729+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
+  "surah": {
+    "surah": 97,
+    "arabicName": "سُورَةُ القَدۡرِ",
+    "englishName": "Al-Qadr",
+    "englishNameTranslation": "The Power, Fate",
+    "ayahCount": 5,
+    "ayahs": [
+      {
+        "ayah": 1,
+        "globalAyah": 6126,
+        "arabic": "اِنَّاۤ اَنۡزَلۡنٰهُ فِىۡ لَيۡلَةِ الۡقَدۡرِ ۖ ۚ‏",
+        "translation_en": "BEHOLD, from on high have We bestowed this [divine writ] on Night of Destiny.",
+        "translation_ur": "ہم نے اس (قرآن) کو شب قدر میں نازل (کرنا شروع) کیا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/097001.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6126.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6126.mp3"
+        }
+      },
+      {
+        "ayah": 2,
+        "globalAyah": 6127,
+        "arabic": "وَمَاۤ اَدۡرٰٮكَ مَا لَيۡلَةُ الۡقَدۡرِؕ‏",
+        "translation_en": "And what could make thee conceive what it is, that Night of Destiny?",
+        "translation_ur": "اور تمہیں کیا معلوم کہ شب قدر کیا ہے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/097002.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6127.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6127.mp3"
+        }
+      },
+      {
+        "ayah": 3,
+        "globalAyah": 6128,
+        "arabic": "لَيۡلَةُ الۡقَدۡرِ  ۙ خَيۡرٌ مِّنۡ اَلۡفِ شَهۡرٍؕ‏",
+        "translation_en": "The Night of Destiny is better than a thousand months:",
+        "translation_ur": "شب قدر ہزار مہینے سے بہتر ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/097003.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6128.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6128.mp3"
+        }
+      },
+      {
+        "ayah": 4,
+        "globalAyah": 6129,
+        "arabic": "تَنَزَّلُ الۡمَلٰٓٮِٕكَةُ وَالرُّوۡحُ فِيۡهَا بِاِذۡنِ رَبِّهِمۡ​ۚ مِّنۡ كُلِّ اَمۡرٍ ۛۙ‏",
+        "translation_en": "in hosts descend in it the angels, bearing divine inspiration by their Sustainer's leave; from all [evil] that may happen",
+        "translation_ur": "اس میں روح (الامین) اور فرشتے ہر کام کے (انتظام کے) لیے اپنے پروردگار کے حکم سے اترتے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/097004.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6129.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6129.mp3"
+        }
+      },
+      {
+        "ayah": 5,
+        "globalAyah": 6130,
+        "arabic": "سَلٰمٌ   ۛهِىَ حَتّٰى مَطۡلَعِ الۡفَجۡرِ‏",
+        "translation_en": "does it make secure, until the rise of dawn.",
+        "translation_ur": "یہ (رات) طلوع صبح تک (امان اور) سلامتی ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/097005.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6130.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6130.mp3"
+        }
+      }
+    ]
+  }
+}

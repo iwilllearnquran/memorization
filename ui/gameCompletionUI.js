@@ -35,9 +35,9 @@ export function showCompletionPopup(messageHtml, options = {}) {
     boxShadow: '0 2px 10px rgba(0,0,0,0.3)'
   });
 
-  // 3️⃣ Insert HTML message safely
+  // 3️⃣ Insert message safely using textContent to prevent XSS
   const msgContainer = document.createElement('div');
-  msgContainer.innerHTML = messageHtml;
+  msgContainer.textContent = messageHtml;
   msgContainer.style.marginBottom = '16px';
   popup.appendChild(msgContainer);
 

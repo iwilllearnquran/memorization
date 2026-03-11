@@ -9,7 +9,6 @@ import { toggleGames } from '/ui/toggleGames.js';
 
 
 import {
-  auth,
   loadStatsFromFirestore,
   saveStatsToFirestore,
   addCompletedAyahToFirestore
@@ -28,8 +27,13 @@ class UserGameSession {
     this.lives = GAME_CONFIG.maxLives;
     this.sessionScore = 0;
 
-    const { score } = await loadStatsFromFirestore();
-    this.score = score;
+    try {
+      const { score } = await loadStatsFromFirestore();
+      this.score = Number(score) || 0;
+    } catch (err) {
+      console.warn('[GameSession] Failed to load Firestore score; using in-memory fallback', err);
+      this.score = Number(this.score) || 0;
+    }
 
     updateStats();
   }
@@ -89,7 +93,7 @@ async restartGameOnly() {
   this.lives = GAME_CONFIG.maxLives;
   updateStats();
 
-  toggleGames(null);
+  toggleGames('selector');
   toggleGames(this.type);
 
   switch (this.type) {
@@ -118,22 +122,30 @@ async restartGameOnly() {
     }
 
     const earned = this.sessionScore;
-    this.score += earned;
+    const nextScore = (Number(this.score) || 0) + (Number(earned) || 0);
 
-    await saveStatsToFirestore({ score: this.score });
+    try {
+      await saveStatsToFirestore({ score: nextScore });
+      await addCompletedAyahToFirestore({
+        surah: window.currentSurah,
+        ayah: window.currentAyah
+      });
+      this.score = nextScore;
+      this.sessionScore = 0;
 
-    await addCompletedAyahToFirestore({
-      surah: window.currentSurah,
-      ayah: window.currentAyah
-    });
-
-    this.sessionScore = 0;
-
-    showGameOverPopup(
-      'Nice work!',
-      `You've earned ${earned} points.`,
-      true
-    );
+      showGameOverPopup(
+        'Nice work!',
+        `You've earned ${earned} points.`,
+        true
+      );
+    } catch (err) {
+      console.error('[GameSession] Failed to persist end-of-game progress', err);
+      showGameOverPopup(
+        'Save failed',
+        'Could not save this round right now. Please try again.',
+        false
+      );
+    }
 
     updateStats();
   }

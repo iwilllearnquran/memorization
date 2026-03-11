@@ -1,0 +1,97 @@
+{
+  "generatedAt": "2026-02-21T01:14:47.226994+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
+  "surah": {
+    "surah": 107,
+    "arabicName": "سُورَةُ المَاعُونِ",
+    "englishName": "Al-Maa'un",
+    "englishNameTranslation": "Almsgiving",
+    "ayahCount": 7,
+    "ayahs": [
+      {
+        "ayah": 1,
+        "globalAyah": 6198,
+        "arabic": "اَرَءَيۡتَ الَّذِىۡ يُكَذِّبُ بِالدِّيۡنِؕ‏",
+        "translation_en": "HAST THOU ever considered [the kind of man] who gives the lie to all moral law?",
+        "translation_ur": "بھلا تم نے اس شخص کو دیکھا جو (روزِ) جزا کو جھٹلاتا ہے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/107001.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6198.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6198.mp3"
+        }
+      },
+      {
+        "ayah": 2,
+        "globalAyah": 6199,
+        "arabic": "فَذٰلِكَ الَّذِىۡ يَدُعُّ الۡيَتِيۡمَۙ‏",
+        "translation_en": "Behold, it is this [kind of man] that thrusts the orphan away,",
+        "translation_ur": "یہ وہی (بدبخت) ہے، جو یتیم کو دھکے دیتا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/107002.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6199.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6199.mp3"
+        }
+      },
+      {
+        "ayah": 3,
+        "globalAyah": 6200,
+        "arabic": "وَ لَا يَحُضُّ عَلٰى طَعَامِ الۡمِسۡكِيۡنِؕ‏",
+        "translation_en": "and feels no urge to feed the needy.",
+        "translation_ur": "اور فقیر کو کھانا کھلانے کے لیے (لوگوں کو) ترغیب نہیں دیتا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/107003.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6200.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6200.mp3"
+        }
+      },
+      {
+        "ayah": 4,
+        "globalAyah": 6201,
+        "arabic": "فَوَيۡلٌ لِّلۡمُصَلِّيۡنَۙ‏",
+        "translation_en": "Woe, then, unto those praying ones",
+        "translation_ur": "تو ایسے نمازیوں کی خرابی ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/107004.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6201.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6201.mp3"
+        }
+      },
+      {
+        "ayah": 5,
+        "globalAyah": 6202,
+        "arabic": "الَّذِيۡنَ هُمۡ عَنۡ صَلَاتِهِمۡ سَاهُوۡنَۙ‏",
+        "translation_en": "whose hearts from their prayer are remote",
+        "translation_ur": "جو نماز کی طرف سے غافل رہتے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/107005.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6202.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6202.mp3"
+        }
+      },
+      {
+        "ayah": 6,
+        "globalAyah": 6203,
+        "arabic": "الَّذِيۡنَ هُمۡ يُرَآءُوۡنَۙ‏",
+        "translation_en": "those who want only to be seen and praised,",
+        "translation_ur": "جو ریا کاری کرتے ہیں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/107006.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6203.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6203.mp3"
+        }
+      },
+      {
+        "ayah": 7,
+        "globalAyah": 6204,
+        "arabic": "وَيَمۡنَعُوۡنَ الۡمَاعُوۡنَ‏",
+        "translation_en": "and, withal, deny all assistance [to their fellow-men]!",
+        "translation_ur": "اور برتنے کی چیزیں عاریتہً نہیں دیتے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/107007.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6204.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6204.mp3"
+        }
+      }
+    ]
+  }
+}

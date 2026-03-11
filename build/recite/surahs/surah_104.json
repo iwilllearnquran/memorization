@@ -1,0 +1,121 @@
+{
+  "generatedAt": "2026-02-21T01:14:45.297860+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
+  "surah": {
+    "surah": 104,
+    "arabicName": "سُورَةُ الهُمَزَةِ",
+    "englishName": "Al-Humaza",
+    "englishNameTranslation": "The Traducer",
+    "ayahCount": 9,
+    "ayahs": [
+      {
+        "ayah": 1,
+        "globalAyah": 6180,
+        "arabic": "وَيۡلٌ لِّـكُلِّ هُمَزَةٍ لُّمَزَةِ ۙ‏",
+        "translation_en": "WOE unto every slanderer, fault-finder!",
+        "translation_ur": "ہر طعن آمیز اشارتیں کرنے والے چغل خور کی خرابی ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/104001.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6180.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6180.mp3"
+        }
+      },
+      {
+        "ayah": 2,
+        "globalAyah": 6181,
+        "arabic": "اۨلَّذِىۡ جَمَعَ مَالًا وَّعَدَّدَهٗ ۙ‏",
+        "translation_en": "[Woe unto him who amasses wealth and counts it a safeguard,",
+        "translation_ur": "جو مال جمع کرتا اور اس کو گن گن کر رکھتا ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/104002.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6181.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6181.mp3"
+        }
+      },
+      {
+        "ayah": 3,
+        "globalAyah": 6182,
+        "arabic": "يَحۡسَبُ اَنَّ مَالَهٗۤ اَخۡلَدَهٗ​ ۚ‏",
+        "translation_en": "thinking that his wealth will make him live forever!",
+        "translation_ur": "(اور) خیال کرتا ہے کہ اس کا مال اس کی ہمیشہ کی زندگی کا موجب ہو گا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/104003.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6182.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6182.mp3"
+        }
+      },
+      {
+        "ayah": 4,
+        "globalAyah": 6183,
+        "arabic": "كَلَّا​ لَيُنۡۢبَذَنَّ فِى الۡحُطَمَةِ  ۖ‏",
+        "translation_en": "Nay, but [in the life to come such as] he shall indeed be abandoned to crushing torment!",
+        "translation_ur": "ہر گز نہیں وہ ضرور حطمہ میں ڈالا جائے گا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/104004.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6183.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6183.mp3"
+        }
+      },
+      {
+        "ayah": 5,
+        "globalAyah": 6184,
+        "arabic": "وَمَاۤ اَدۡرٰٮكَ مَا الۡحُطَمَةُ ؕ‏",
+        "translation_en": "And what could make thee conceive what that crushing torment will be?",
+        "translation_ur": "اور تم کیا سمجھے حطمہ کیا ہے؟",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/104005.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6184.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6184.mp3"
+        }
+      },
+      {
+        "ayah": 6,
+        "globalAyah": 6185,
+        "arabic": "نَارُ اللّٰهِ الۡمُوۡقَدَةُ ۙ‏",
+        "translation_en": "A fire kindled by God,",
+        "translation_ur": "وہ خدا کی بھڑکائی ہوئی آگ ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/104006.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6185.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6185.mp3"
+        }
+      },
+      {
+        "ayah": 7,
+        "globalAyah": 6186,
+        "arabic": "الَّتِىۡ تَطَّلِعُ عَلَى الۡاَفۡـــِٕدَةِ ؕ‏",
+        "translation_en": "which will rise over the [guilty] hearts:",
+        "translation_ur": "جو دلوں پر جا لپٹے گی",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/104007.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6186.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6186.mp3"
+        }
+      },
+      {
+        "ayah": 8,
+        "globalAyah": 6187,
+        "arabic": "اِنَّهَا عَلَيۡهِمۡ مُّؤۡصَدَةٌ ۙ‏",
+        "translation_en": "verily, it will close in upon them",
+        "translation_ur": "(اور) وہ اس میں بند کر دیئے جائیں گے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/104008.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6187.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6187.mp3"
+        }
+      },
+      {
+        "ayah": 9,
+        "globalAyah": 6188,
+        "arabic": "فِىۡ عَمَدٍ مُّمَدَّدَةٍ‏",
+        "translation_en": "in endless columns!",
+        "translation_ur": "(یعنی آگ کے) لمبے لمبے ستونوں میں",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/104009.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6188.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6188.mp3"
+        }
+      }
+    ]
+  }
+}

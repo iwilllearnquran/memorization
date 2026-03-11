@@ -1,0 +1,73 @@
+{
+  "generatedAt": "2026-02-21T01:14:49.555553+00:00",
+  "source": "api.quran.com (indopak Arabic) + api.alquran.cloud (EN/UR) + derived audio URLs",
+  "surah": {
+    "surah": 111,
+    "arabicName": "سُورَةُ المَسَدِ",
+    "englishName": "Al-Masad",
+    "englishNameTranslation": "The Palm Fibre",
+    "ayahCount": 5,
+    "ayahs": [
+      {
+        "ayah": 1,
+        "globalAyah": 6217,
+        "arabic": "تَبَّتۡ يَدَاۤ اَبِىۡ لَهَبٍ وَّتَبَّؕ‏",
+        "translation_en": "DOOMED are the hands of him of the glowing countence: and doomed is he!",
+        "translation_ur": "ابولہب کے ہاتھ ٹوٹیں اور وہ ہلاک ہو",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/111001.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6217.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6217.mp3"
+        }
+      },
+      {
+        "ayah": 2,
+        "globalAyah": 6218,
+        "arabic": "مَاۤ اَغۡنٰى عَنۡهُ مَالُهٗ وَمَا كَسَبَؕ‏",
+        "translation_en": "What will his wealth avail him, and all that he has gained?",
+        "translation_ur": "نہ تو اس کا مال ہی اس کے کچھ کام آیا اور نہ وہ جو اس نے کمایا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/111002.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6218.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6218.mp3"
+        }
+      },
+      {
+        "ayah": 3,
+        "globalAyah": 6219,
+        "arabic": "سَيَصۡلٰى نَارًا ذَاتَ لَهَبٍ ۖۚ‏",
+        "translation_en": "[In the life to come] he shall have to endure a fire fiercely glowing;",
+        "translation_ur": "وہ جلد بھڑکتی ہوئی آگ میں داخل ہو گا",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/111003.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6219.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6219.mp3"
+        }
+      },
+      {
+        "ayah": 4,
+        "globalAyah": 6220,
+        "arabic": "وَّامۡرَاَ تُهٗ ؕ حَمَّالَةَ الۡحَطَبِ​ۚ‏",
+        "translation_en": "together with his wife, that carrier of evil tales,",
+        "translation_ur": "اور اس کی جورو بھی جو ایندھن سر پر اٹھائے پھرتی ہے",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/111004.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6220.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6220.mp3"
+        }
+      },
+      {
+        "ayah": 5,
+        "globalAyah": 6221,
+        "arabic": "فِىۡ جِيۡدِهَا حَبۡلٌ مِّنۡ مَّسَدٍ‏",
+        "translation_en": "[who bears] around her neck a rope of twisted strands!",
+        "translation_ur": "اس کے گلے میں مونج کی رسّی ہو گی",
+        "audio": {
+          "ar": "https://verses.quran.com/Alafasy/mp3/111005.mp3",
+          "en": "https://cdn.islamic.network/quran/audio/192/en.walk/6221.mp3",
+          "ur": "https://cdn.islamic.network/quran/audio/64/ur.khan/6221.mp3"
+        }
+      }
+    ]
+  }
+}

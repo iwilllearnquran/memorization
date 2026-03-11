@@ -2,19 +2,21 @@ import { GAME_CONFIG }           from '/config/gameConfig.js';
 import { hide, show, $ }         from '/utils/domHelpers.js';
 import gameSession               from '/state/gameSession.js';
 import { VERB_DATA }             from '../verbs_data.js'; 
-import { initStats, updateStats }from '/ui/gameStatsUI.js'; 
+import { updateStats }from '/ui/gameStatsUI.js'; 
 import { showCompletionPopup }   from '/ui/gameCompletionUI.js';
 import { showGameOverPopup }     from '/ui/gameOverPopup.js';
-import { saveStatsToFirestore, auth } from '/services//_private/firestoreService.js';
-import { addPointsToFirestore } from '../services//_private/firestoreService.js';
 
 const importantStyles = {
-  display:         'flex',
-  'flex-wrap':     'wrap',
-  gap:             '12px',
-  'justify-content':'center',
-  'align-items':   'center',
-  'margin-top':    '8px',
+  display:            'grid',
+  'grid-auto-rows':   'minmax(0, 1fr)',
+  gap:                '8px',
+  'justify-content':  'stretch',
+  'align-content':    'stretch',
+  'align-items':      'stretch',
+  'margin-top':       '0',
+  width:              '100%',
+  height:             '100%',
+  overflow:           'hidden',
 };
 
 function applyImportant(el, styles) {
@@ -38,8 +40,6 @@ let isAnimating = false;
  * Entry point
  */
 export async function startVerbGame() {
-  initStats('#verbGameContainer');
-  
   hide($('#arrangeGameContainer'));
   show($('#verbGameContainer'));
 
@@ -58,6 +58,10 @@ export async function startVerbGame() {
   renderVerbSet();
 }
 
+function getRoundPairCount() {
+  return 10;
+}
+
 function renderVerbSet() {
   // 1️⃣ Clear any existing cards & reset animation flag
   verbOptions.innerHTML    = '';
@@ -72,9 +76,9 @@ function renderVerbSet() {
   // 3️⃣ Shuffle helper
   const shuffle = arr => arr.sort(() => 0.5 - Math.random());
 
-  // 4️⃣ Pick 8 pairs and give each a unique ID
+  // 4️⃣ Pick 12 pairs and give each a unique ID
   const selectedPairs = shuffle(allPairs)
-    .slice(0, 8)
+    .slice(0, getRoundPairCount())
     .map(([verb, data], idx) => ({
       id:      idx.toString(),   // unique even if data.meaning duplicates
       verb,
@@ -97,7 +101,7 @@ function renderVerbSet() {
       });
       gameSession.addPoints();
       updateStats();
-      window.showToast('✅ Correct!');
+      window.showToast('Correct!');
       selVerb = selMeaning = null;
 
       // enable “More” / “End” once all matched
@@ -127,7 +131,7 @@ function renderVerbSet() {
         showGameOverPopup();
 
       }
-      window.showToast('❌ Try again', '#c0392b');
+      window.showToast('Try again', '#c0392b');
 
       setTimeout(() => {
         [selVerb, selMeaning].forEach(el => {
@@ -183,15 +187,20 @@ function _addControls() {
   const ctr = document.createElement('div');
   ctr.id = 'verbControls';
   Object.assign(ctr.style, {
-    display: 'relative',
-    justifyContent: 'center',
-    gap: '16px',
-    marginTop: '24px'
+    position: 'relative'
   });
 
   ctr.innerHTML = `
-    <button id="verbNextBtn" class="game-play-btn-verbs disabled-control">More</button>
-    <button id="verbEndBtn"  class="game-play-btn-verbs disabled-control">End</button>
+    <button id="verbNextBtn" class="game-play-btn-verbs disabled-control">Next Round</button>
+    <button id="verbEndBtn"  class="game-play-btn-verbs disabled-control secondary">Finish</button>
+    <button
+      id="verbReturnBtn"
+      class="game-play-btn-verbs secondary return-games-btn"
+      data-action="return-games"
+      type="button"
+    >
+      Return to Games
+    </button>
   `;
 
     // after
@@ -261,13 +270,7 @@ function _addControls() {
          Your progress is saved locally and will sync once you log in.`
       );
     }**/
-    const earned = gameSession.sessionScore; // ✅ capture BEFORE end
     await gameSession.end(true);
-    window.parent.postMessage({
-      type: 'persistStats',
-      score: gameSession.sessionScore,  // total earned this session
-      recordStreak: false                // ask them to record today’s streak too
-    }, '*');
    // window.parent.postMessage({
    //   type: 'streakUpdate',
    //   date: new Date().toISOString().split('T')[0]
@@ -279,5 +282,6 @@ function _addControls() {
   
 
 }
+
 
 
