@@ -638,7 +638,7 @@ html.memo-welcome-locked body.memorization-page.memo-welcome-mode {
 }
 
 .memo-home-btn-primary {
-  background: linear-gradient(180deg, #18a094, #0f766e);
+  background: linear-gradient(180deg, #0f6650, #0f6650);
   color: #fff;
   box-shadow: 0 10px 20px rgba(15, 118, 110, 0.18);
 }
