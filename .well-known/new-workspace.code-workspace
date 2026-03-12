@@ -8,6 +8,7 @@
 		}
 	],
 	"settings": {
-		"chatgpt.runCodexInWindowsSubsystemForLinux": true
+		"chatgpt.runCodexInWindowsSubsystemForLinux": true,
+		"liveServer.settings.multiRootWorkspaceName": "memorization"
 	}
 }

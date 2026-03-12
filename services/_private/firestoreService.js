@@ -110,6 +110,158 @@ function mergeProgressMap(current = {}, incoming = {}) {
   return merged;
 }
 
+const SAVE_HISTORY_LIMIT = 240;
+const SAVE_HISTORY_MODES = new Set(['learn', 'memorization', 'recite']);
+
+function isValidAyahRef(ref) {
+  const surah = Number(ref?.surah);
+  const ayah = Number(ref?.ayah);
+  return Number.isInteger(surah) && surah > 0 && Number.isInteger(ayah) && ayah > 0;
+}
+
+function normalizeAyahRef(ref, fallback = { surah: 1, ayah: 1 }) {
+  if (!isValidAyahRef(ref)) return { ...fallback };
+  return {
+    surah: Number(ref.surah),
+    ayah: Number(ref.ayah)
+  };
+}
+
+function compareAyahKey(a, b) {
+  const [sa, aa] = String(a || '').split(':').map(Number);
+  const [sb, ab] = String(b || '').split(':').map(Number);
+  if (sa !== sb) return sa - sb;
+  return aa - ab;
+}
+
+function normalizeMemorizedKeys(raw) {
+  const source = Array.isArray(raw) ? raw : [];
+  const deduped = new Set();
+  source.forEach(value => {
+    const [surah, ayah] = String(value || '').split(':').map(Number);
+    if (!isValidAyahRef({ surah, ayah })) return;
+    deduped.add(`${surah}:${ayah}`);
+  });
+  return Array.from(deduped).sort(compareAyahKey);
+}
+
+function normalizeAyahMistakeStats(raw) {
+  if (!raw || typeof raw !== 'object') return {};
+  const normalized = {};
+  Object.entries(raw).forEach(([key, value]) => {
+    const [surah, ayah] = String(key || '').split(':').map(Number);
+    if (!isValidAyahRef({ surah, ayah })) return;
+    const countSource = typeof value === 'number' ? value : value?.count;
+    const count = Math.max(0, Math.round(Number(countSource) || 0));
+    if (!count) return;
+    normalized[`${surah}:${ayah}`] = {
+      count,
+      lastMistakeAt: Math.max(0, Number(value?.lastMistakeAt) || 0)
+    };
+  });
+  return normalized;
+}
+
+function mergeAyahMistakeStats(current = {}, incoming = {}) {
+  const merged = normalizeAyahMistakeStats(current);
+  Object.entries(normalizeAyahMistakeStats(incoming)).forEach(([key, value]) => {
+    const existing = merged[key] || { count: 0, lastMistakeAt: 0 };
+    merged[key] = {
+      count: Math.max(Number(existing.count) || 0, Number(value?.count) || 0),
+      lastMistakeAt: Math.max(
+        Number(existing.lastMistakeAt) || 0,
+        Number(value?.lastMistakeAt) || 0
+      )
+    };
+  });
+  return merged;
+}
+
+function sanitizeSaveHistoryEntry(raw) {
+  if (!raw || typeof raw !== 'object') return null;
+  const mode = String(raw.mode || '').toLowerCase();
+  if (!SAVE_HISTORY_MODES.has(mode)) return null;
+  const surah = Number(raw.surah);
+  const ayah = Number(raw.ayah);
+  if (!isValidAyahRef({ surah, ayah })) return null;
+  const timestamp = Number(raw.timestamp || raw.savedAt || Date.now());
+  const source = typeof raw.source === 'string' ? raw.source : mode;
+  return {
+    id: typeof raw.id === 'string' && raw.id ? raw.id : `${mode}:${surah}:${ayah}:${timestamp}`,
+    mode,
+    surah,
+    ayah,
+    source,
+    timestamp: Number.isFinite(timestamp) ? timestamp : Date.now()
+  };
+}
+
+function mergeSaveHistoryEntries(primary = [], secondary = []) {
+  const byKey = new Map();
+  [...primary, ...secondary].forEach(item => {
+    const entry = sanitizeSaveHistoryEntry(item);
+    if (!entry) return;
+    const key = `${entry.mode}:${entry.surah}:${entry.ayah}`;
+    const prev = byKey.get(key);
+    if (!prev || entry.timestamp >= prev.timestamp) {
+      byKey.set(key, entry);
+    }
+  });
+  return Array.from(byKey.values())
+    .sort((a, b) => b.timestamp - a.timestamp)
+    .slice(0, SAVE_HISTORY_LIMIT);
+}
+
+function mergeMemorizationPayload(current = {}, incoming = {}) {
+  const merged = {
+    ...(current && typeof current === 'object' ? current : {})
+  };
+
+  if (incoming?.unlocked) {
+    const currentUnlocked = normalizeAyahRef(merged.unlocked, { surah: 1, ayah: 1 });
+    const incomingUnlocked = normalizeAyahRef(incoming.unlocked, currentUnlocked);
+    merged.unlocked =
+      compareAyahRef(incomingUnlocked, currentUnlocked) > 0
+        ? incomingUnlocked
+        : currentUnlocked;
+  } else if (merged.unlocked) {
+    merged.unlocked = normalizeAyahRef(merged.unlocked, { surah: 1, ayah: 1 });
+  }
+
+  merged.listens = mergeProgressMap(merged.listens || {}, incoming?.listens || {});
+
+  if (incoming?.lastProgress) {
+    const currentProgressTs = Number(merged?.lastProgress?.timestamp) || 0;
+    const incomingProgressTs = Number(incoming?.lastProgress?.timestamp) || 0;
+    if (!merged.lastProgress || incomingProgressTs >= currentProgressTs) {
+      merged.lastProgress = incoming.lastProgress;
+    }
+  }
+
+  if (incoming?.lastMemorized) {
+    const currentLastMemorizedTs = Number(merged?.lastMemorized?.timestamp) || 0;
+    const incomingLastMemorizedTs = Number(incoming?.lastMemorized?.timestamp) || 0;
+    if (!merged.lastMemorized || incomingLastMemorizedTs >= currentLastMemorizedTs) {
+      merged.lastMemorized = incoming.lastMemorized;
+    }
+  }
+
+  const memorizedKeys = normalizeMemorizedKeys([
+    ...normalizeMemorizedKeys(merged.memorizedKeys),
+    ...normalizeMemorizedKeys(incoming?.memorizedKeys)
+  ]);
+  if (memorizedKeys.length) {
+    merged.memorizedKeys = memorizedKeys;
+  }
+
+  const ayahMistakes = mergeAyahMistakeStats(merged.ayahMistakes, incoming?.ayahMistakes);
+  if (Object.keys(ayahMistakes).length) {
+    merged.ayahMistakes = ayahMistakes;
+  }
+
+  return merged;
+}
+
 function normalizeNamazStatus(value) {
   if (value === true || value === 'yes') return true;
   if (value === false || value === 'no') return false;
@@ -380,14 +532,45 @@ export async function updateCompletedSurahsProgress(surah, ayah) {
 export async function saveMemorizationData(memoData) {
   if (!auth.currentUser) return;
   const userRef = doc(db, 'users', auth.currentUser.uid);
-  await setDoc(userRef, { memorization: memoData }, { merge: true });
+  await runTransaction(db, async tx => {
+    const snap = await tx.get(userRef);
+    const data = snap.exists() ? snap.data() : {};
+    const mergedMemo = mergeMemorizationPayload(data.memorization || {}, memoData || {});
+    tx.set(userRef, {
+      memorization: mergedMemo,
+      lastLogin: serverTimestamp()
+    }, { merge: true });
+  });
 }
 
 export async function getMemorizationData() {
   if (!auth.currentUser) return null;
   const snap = await getUserDoc();
   if (!snap.exists()) return null;
-  return snap.data()?.memorization || null;
+  const memo = snap.data()?.memorization;
+  if (!memo || typeof memo !== 'object') return null;
+  return mergeMemorizationPayload({}, memo);
+}
+
+export async function saveSavedAyahHistory(entries) {
+  if (!auth.currentUser) return;
+  const userRef = doc(db, 'users', auth.currentUser.uid);
+  await runTransaction(db, async tx => {
+    const snap = await tx.get(userRef);
+    const data = snap.exists() ? snap.data() : {};
+    const mergedHistory = mergeSaveHistoryEntries(data.savedAyahHistory || [], entries || []);
+    tx.set(userRef, {
+      savedAyahHistory: mergedHistory,
+      lastLogin: serverTimestamp()
+    }, { merge: true });
+  });
+}
+
+export async function getSavedAyahHistory() {
+  if (!auth.currentUser) return [];
+  const snap = await getUserDoc();
+  if (!snap.exists()) return [];
+  return mergeSaveHistoryEntries(snap.data()?.savedAyahHistory || [], []);
 }
 
 export async function saveNamazGoalsWidget(widgetData) {
@@ -491,29 +674,17 @@ export async function mergeGuestData(payload) {
     }
 
     if (payload?.memorization) {
-      const memo = data.memorization || {};
-      const mergedMemo = { ...memo };
-      if (payload.memorization.unlocked) {
-        const incoming = payload.memorization.unlocked;
-        const current = memo.unlocked || { surah: 1, ayah: 1 };
-        mergedMemo.unlocked =
-          compareAyahRef(incoming, current) > 0 ? incoming : current;
-      }
+      updates.memorization = mergeMemorizationPayload(
+        data.memorization || {},
+        payload.memorization
+      );
+    }
 
-      if (payload.memorization.listens) {
-        const currentListens = memo.listens || {};
-        mergedMemo.listens = mergeProgressMap(currentListens, payload.memorization.listens);
-      }
-
-      if (payload.memorization.lastProgress) {
-        const incoming = payload.memorization.lastProgress;
-        const current = memo.lastProgress;
-        if (!current || (incoming?.timestamp || 0) > (current?.timestamp || 0)) {
-          mergedMemo.lastProgress = incoming;
-        }
-      }
-
-      updates.memorization = mergedMemo;
+    if (payload?.savedAyahHistory) {
+      updates.savedAyahHistory = mergeSaveHistoryEntries(
+        data.savedAyahHistory || [],
+        payload.savedAyahHistory
+      );
     }
 
     if (payload?.namazGoalsWidget) {
@@ -588,33 +759,21 @@ export async function addPointsToFirestore(pointsDelta) {
 }
 
 export async function recordStreak() {
-  const userRef  = doc(db, 'users', auth.currentUser.uid);
+  const userRef = doc(db, 'users', auth.currentUser.uid);
   const todayStr = getLocalDateStr();
-  const snap0     = await getDoc(userRef);
-  const data0     = snap0.exists() ? snap0.data() : {};
-  const history0  = data0.streakHistory || [];
-  const oldLength = history0.length;
-  if (history0.includes(todayStr)) {
-    return { updated: false, oldLength, newLength: oldLength };
-  }
+
   return runTransaction(db, async tx => {
     const snap = await tx.get(userRef);
     const data = snap.exists() ? snap.data() : {};
-    const hist = data.streakHistory || [];
+    const hist = Array.isArray(data.streakHistory) ? data.streakHistory : [];
+    const oldLength = hist.length;
 
     if (hist.includes(todayStr)) {
-      return { updated: false, oldLength, newLength: hist.length };
+      return { updated: false, oldLength, newLength: oldLength };
     }
 
-    let shouldAppend = false;
-
-    if (hist.length > 0) {
-      const lastDate = [...hist].sort().pop();
-      const diffDays = diffDaysUTC(todayStr, lastDate);
-      if (diffDays === 1) {
-        shouldAppend = true;
-      }
-    }
+    const lastDate = oldLength > 0 ? [...hist].sort().pop() : null;
+    const shouldAppend = lastDate ? diffDaysUTC(todayStr, lastDate) === 1 : false;
 
     if (shouldAppend) {
       tx.set(userRef, {

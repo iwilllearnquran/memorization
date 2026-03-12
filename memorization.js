@@ -10,6 +10,7 @@ import {
 const REQUIRED_LISTENS = 20;
 const RANDOM_AYAH_MIN_MEMORIZED = 10;
 const REVIEW_LAST5_MIN_MEMORIZED = 5;
+const MISTAKE_DRILL_MIN_MEMORIZED = 10;
 const ALLOW_ALL_AYAHS = true;
 const STORAGE_PROGRESS = 'memo_progress_v1';
 const STORAGE_LISTENS = 'memo_listens_v1';
@@ -20,6 +21,7 @@ const STORAGE_PRACTICE_MODE = 'memo_practice_mode_v1';
 const STORAGE_VIEW_STATE = 'memo_view_state_v1';
 const STORAGE_RECITE_MATCH_MODE = 'memo_recite_match_mode_v1';
 const STORAGE_AUTO_NEXT = 'memo_auto_next_v1';
+const STORAGE_AYAH_MISTAKES = 'memo_ayah_mistakes_v1';
 const MAX_ALIGN_EXPECTED_SPAN = 5;
 const MAX_ALIGN_ACTUAL_SPAN = 3;
 const SPEECH_TRANSLIT_ACCEPT_SIMILARITY = 0.5;
@@ -147,6 +149,7 @@ const els = {
   techniqueSurahListBtn: document.getElementById('memoTechniqueSurahListBtn'),
   techniqueRepeatBtn: document.getElementById('memoTechniqueRepeatBtn'),
   techniquePracticeBtn: document.getElementById('memoTechniquePracticeBtn'),
+  techniqueMistakeBtn: document.getElementById('memoTechniqueMistakeBtn'),
   externalView: document.getElementById('memoExternalView'),
   externalFrame: document.getElementById('memoExternalFrame'),
   externalTitle: document.getElementById('memoExternalTitle'),
@@ -166,6 +169,10 @@ let current = { surah: 1, ayah: 1 };
 let unlocked = { surah: 1, ayah: 1 };
 let listenCounts = {};
 let memoMemorizedAyahSet = new Set();
+let memoAyahMistakeStats = {};
+let memoMistakeDrillQueue = [];
+let memoMistakeDrillIndex = -1;
+let memoMistakeDrillAdvancing = false;
 let audio = null;
 let audioQueue = 0;
 let loadAyahRequestId = 0;
@@ -566,6 +573,69 @@ function setStoredMemorizedAyahSet(nextSet) {
       });
     localStorage.setItem(STORAGE_MEMORIZED_KEYS, JSON.stringify(normalized));
   } catch {}
+  if (!isHydratingMemo) scheduleMemoSync();
+}
+
+function normalizeAyahMistakeStats(raw) {
+  if (!raw || typeof raw !== 'object') return {};
+  const normalized = {};
+  Object.entries(raw).forEach(([key, value]) => {
+    const [surah, ayah] = String(key || '').split(':').map(Number);
+    if (!isValidAyahRef(surah, ayah)) return;
+    const countSource = typeof value === 'number' ? value : value?.count;
+    const count = Math.max(0, Math.round(Number(countSource) || 0));
+    if (!count) return;
+    const lastMistakeAt = Math.max(0, Number(value?.lastMistakeAt) || 0);
+    normalized[ayahKey(surah, ayah)] = { count, lastMistakeAt };
+  });
+  return normalized;
+}
+
+function getStoredAyahMistakeStats() {
+  try {
+    const rawMistakes = localStorage.getItem(STORAGE_AYAH_MISTAKES);
+    if (!rawMistakes) return {};
+    return normalizeAyahMistakeStats(JSON.parse(rawMistakes));
+  } catch {
+    return {};
+  }
+}
+
+function setStoredAyahMistakeStats(next) {
+  memoAyahMistakeStats = normalizeAyahMistakeStats(next);
+  try {
+    localStorage.setItem(STORAGE_AYAH_MISTAKES, JSON.stringify(memoAyahMistakeStats));
+  } catch {}
+  if (!isHydratingMemo) scheduleMemoSync();
+}
+
+function mergeAyahMistakeStats(primary, incoming) {
+  const merged = normalizeAyahMistakeStats(primary);
+  const nextEntries = normalizeAyahMistakeStats(incoming);
+  Object.entries(nextEntries).forEach(([key, value]) => {
+    const current = merged[key] || { count: 0, lastMistakeAt: 0 };
+    merged[key] = {
+      count: Math.max(Number(current.count) || 0, Number(value?.count) || 0),
+      lastMistakeAt: Math.max(Number(current.lastMistakeAt) || 0, Number(value?.lastMistakeAt) || 0)
+    };
+  });
+  return merged;
+}
+
+function recordAyahMistake(surah, ayah, amount = 1) {
+  const safeSurah = Number(surah);
+  const safeAyah = Number(ayah);
+  const increment = Math.max(0, Math.round(Number(amount) || 0));
+  if (!isValidAyahRef(safeSurah, safeAyah) || !increment) return;
+  const key = ayahKey(safeSurah, safeAyah);
+  const currentEntry = memoAyahMistakeStats[key] || { count: 0, lastMistakeAt: 0 };
+  setStoredAyahMistakeStats({
+    ...memoAyahMistakeStats,
+    [key]: {
+      count: (Number(currentEntry.count) || 0) + increment,
+      lastMistakeAt: Date.now()
+    }
+  });
 }
 
 function markAyahMemorized(surah, ayah) {
@@ -659,8 +729,15 @@ function buildMemoPayload() {
   return {
     unlocked,
     listens: listenCounts,
+    memorizedKeys: Array.from(memoMemorizedAyahSet || []).sort((a, b) => {
+      const [sa, aa] = String(a || '').split(':').map(Number);
+      const [sb, ab] = String(b || '').split(':').map(Number);
+      if (sa !== sb) return sa - sb;
+      return aa - ab;
+    }),
     lastProgress: getStoredLastProgress(),
-    lastMemorized: getStoredLastMemorized()
+    lastMemorized: getStoredLastMemorized(),
+    ayahMistakes: memoAyahMistakeStats
   };
 }
 
@@ -1326,6 +1403,33 @@ function pickRandomAyahRef(refs) {
   return refs[idx] || refs[0] || null;
 }
 
+function getCanUseMistakeDrill(memorizedRefs = getMemorizedAyahRefs()) {
+  return Array.isArray(memorizedRefs) && memorizedRefs.length >= MISTAKE_DRILL_MIN_MEMORIZED;
+}
+
+function getMistakeDrillAyahRefs(memorizedRefs = getMemorizedAyahRefs()) {
+  const memorizedKeys = new Set((memorizedRefs || []).map(ref => ayahKey(ref.surah, ref.ayah)));
+  return Object.entries(memoAyahMistakeStats)
+    .map(([key, value]) => {
+      const [surah, ayah] = String(key).split(':').map(Number);
+      const count = Number(value?.count) || 0;
+      if (!isValidAyahRef(surah, ayah) || !count) return null;
+      return {
+        key: ayahKey(surah, ayah),
+        surah,
+        ayah,
+        count,
+        lastMistakeAt: Number(value?.lastMistakeAt) || 0
+      };
+    })
+    .filter(entry => entry && memorizedKeys.has(entry.key))
+    .sort((a, b) => {
+      if (b.count !== a.count) return b.count - a.count;
+      if (b.lastMistakeAt !== a.lastMistakeAt) return b.lastMistakeAt - a.lastMistakeAt;
+      return compareAyah(a, b);
+    });
+}
+
 function showMemoToast(message, duration = 2200) {
   const text = String(message || '').trim();
   if (!text) return;
@@ -1358,8 +1462,96 @@ function refreshQuickActionAvailability() {
   const memorizedRefs = getMemorizedAyahRefs();
   const canUseRandomAyah = memorizedRefs.length > 0 && hasMemorizedFirstNAyahs(RANDOM_AYAH_MIN_MEMORIZED);
   const canUseReviewLast5 = memorizedRefs.length >= REVIEW_LAST5_MIN_MEMORIZED;
+  const canUseMistakeDrill = getCanUseMistakeDrill(memorizedRefs);
   setQuickActionState(els.techniqueReciteBtn, canUseRandomAyah);
   setQuickActionState(els.techniqueRepeatBtn, canUseReviewLast5);
+  setQuickActionState(els.techniqueMistakeBtn, canUseMistakeDrill);
+}
+
+function clearMistakeDrillSession() {
+  memoMistakeDrillQueue = [];
+  memoMistakeDrillIndex = -1;
+  memoMistakeDrillAdvancing = false;
+}
+
+function isMistakeDrillActive() {
+  return memoMistakeDrillIndex >= 0 && memoMistakeDrillIndex < memoMistakeDrillQueue.length;
+}
+
+function getMistakeDrillCurrentEntry() {
+  return isMistakeDrillActive() ? memoMistakeDrillQueue[memoMistakeDrillIndex] : null;
+}
+
+function playMistakeDrillCurrentAyah() {
+  if (!audio) return;
+  const currentEntry = getMistakeDrillCurrentEntry();
+  if (!currentEntry) return;
+  const repeatCount = clamp(Number(els.playCount?.value || 1), 1, 50);
+  playAudio(repeatCount);
+}
+
+function openMistakeDrillAyah(index, historyMode = 'push') {
+  const target = memoMistakeDrillQueue[index];
+  if (!target) {
+    clearMistakeDrillSession();
+    return Promise.resolve(false);
+  }
+  memoMistakeDrillIndex = index;
+  return goMemo(
+    { view: 'ayah', surah: target.surah, ayah: target.ayah },
+    { historyMode, source: 'mistake-drill' }
+  ).then(ok => {
+    if (!ok) {
+      clearMistakeDrillSession();
+      return false;
+    }
+    playMistakeDrillCurrentAyah();
+    return true;
+  });
+}
+
+function advanceMistakeDrill(reason = 'manual') {
+  if (!isMistakeDrillActive() || memoMistakeDrillAdvancing) return;
+  const nextIndex = memoMistakeDrillIndex + 1;
+  if (nextIndex >= memoMistakeDrillQueue.length) {
+    const completedCount = memoMistakeDrillQueue.length;
+    clearMistakeDrillSession();
+    if (completedCount === 1) {
+      showMemoToast('Mistake drill finished.');
+    } else {
+      showMemoToast('Mistake drill finished: ' + completedCount + ' ayahs reviewed.');
+    }
+    return;
+  }
+  memoMistakeDrillAdvancing = true;
+  if (reason === 'complete') {
+    showFeedback('Mistake drill - next ayah', false);
+  }
+  void openMistakeDrillAyah(nextIndex, 'push').finally(() => {
+    memoMistakeDrillAdvancing = false;
+  });
+}
+
+function startMistakeDrill() {
+  const memorizedRefs = getMemorizedAyahRefs();
+  if (!getCanUseMistakeDrill(memorizedRefs)) {
+    showMemoToast('Memorize at least ' + MISTAKE_DRILL_MIN_MEMORIZED + ' ayahs to enable this.');
+    return;
+  }
+  const queue = getMistakeDrillAyahRefs(memorizedRefs);
+  if (!queue.length) {
+    showMemoToast('No mistake drill ayahs yet. Ayahs with repeated mistakes will appear here.');
+    return;
+  }
+  memoMistakeDrillQueue = queue;
+  memoMistakeDrillIndex = -1;
+  memoMistakeDrillAdvancing = false;
+  if (queue.length === 1) {
+    showMemoToast('Mistake drill started.');
+  } else {
+    showMemoToast('Mistake drill started: ' + queue.length + ' ayahs queued.');
+  }
+  void openMistakeDrillAyah(0, 'push');
 }
 
 function buildMemoChildUrl(pathname) {
@@ -1705,8 +1897,10 @@ function mergeMemorizationState(localData, remoteData) {
   const merged = {
     unlocked: localData.unlocked || { surah: 1, ayah: 1 },
     listens: { ...(localData.listens || {}) },
+    memorizedKeys: new Set(Array.from(localData.memorizedKeys || [])),
     lastProgress: localData.lastProgress || null,
-    lastMemorized: localData.lastMemorized || null
+    lastMemorized: localData.lastMemorized || null,
+    ayahMistakes: normalizeAyahMistakeStats(localData.ayahMistakes)
   };
 
   if (remoteData?.unlocked) {
@@ -1726,23 +1920,41 @@ function mergeMemorizationState(localData, remoteData) {
     });
   }
 
+  if (Array.isArray(remoteData?.memorizedKeys)) {
+    remoteData.memorizedKeys.forEach(key => {
+      const [surah, ayah] = String(key || '').split(':').map(Number);
+      if (!isValidAyahRef(surah, ayah)) return;
+      merged.memorizedKeys.add(ayahKey(surah, ayah));
+    });
+  }
+
   if (remoteData?.lastProgress) {
     const incoming = remoteData.lastProgress;
-    const current = merged.lastProgress;
-    if (!current || (incoming?.timestamp || 0) > (current?.timestamp || 0)) {
+    const currentLastProgress = merged.lastProgress;
+    if (!currentLastProgress || (incoming?.timestamp || 0) > (currentLastProgress?.timestamp || 0)) {
       merged.lastProgress = incoming;
     }
   }
 
   if (remoteData?.lastMemorized) {
     const incoming = remoteData.lastMemorized;
-    const current = merged.lastMemorized;
-    if (!current || (incoming?.timestamp || 0) > (current?.timestamp || 0)) {
+    const currentLastMemorized = merged.lastMemorized;
+    if (!currentLastMemorized || (incoming?.timestamp || 0) > (currentLastMemorized?.timestamp || 0)) {
       merged.lastMemorized = incoming;
     }
   }
 
+  merged.ayahMistakes = mergeAyahMistakeStats(merged.ayahMistakes, remoteData?.ayahMistakes);
+  merged.memorizedKeys = Array.from(merged.memorizedKeys).sort(compareAyahKeyFromString);
+
   return merged;
+}
+
+function compareAyahKeyFromString(a, b) {
+  const [sa, aa] = String(a || '').split(':').map(Number);
+  const [sb, ab] = String(b || '').split(':').map(Number);
+  if (sa !== sb) return sa - sb;
+  return aa - ab;
 }
 
 async function hydrateMemorizationFromDb() {
@@ -1758,15 +1970,21 @@ async function hydrateMemorizationFromDb() {
     const localMemo = {
       unlocked: getStoredProgress(),
       listens: getStoredListenCounts(),
+      memorizedKeys: Array.from(getStoredMemorizedAyahSet()),
       lastProgress: getStoredLastProgress(),
-      lastMemorized: getStoredLastMemorized()
+      lastMemorized: getStoredLastMemorized(),
+      ayahMistakes: getStoredAyahMistakeStats()
     };
     const merged = mergeMemorizationState(localMemo, remoteMemo);
 
     unlocked = merged.unlocked || unlocked;
     listenCounts = merged.listens || listenCounts;
+    memoMemorizedAyahSet = new Set(Array.from(merged.memorizedKeys || []));
+    memoAyahMistakeStats = mergeAyahMistakeStats(memoAyahMistakeStats, merged.ayahMistakes);
     setStoredProgress(unlocked);
     setStoredListenCounts(listenCounts);
+    setStoredMemorizedAyahSet(memoMemorizedAyahSet);
+    setStoredAyahMistakeStats(memoAyahMistakeStats);
     if (merged.lastProgress) {
       localStorage.setItem(STORAGE_LAST_PROGRESS, JSON.stringify(merged.lastProgress));
     }
@@ -1966,6 +2184,7 @@ function registerWrongTryForCurrentWord() {
   const idx = Number(revealIndex);
   const prev = wrongTryCounts.get(idx) || 0;
   wrongTryCounts.set(idx, prev + 1);
+  recordAyahMistake(current.surah, current.ayah, 1);
   updateExpectedWord();
 }
 
@@ -3643,6 +3862,7 @@ function handleAudioEnded() {
 
   audioQueue = 0;
   syncPlaybackControlState();
+  advanceMistakeDrill('playback');
 }
 
 async function loadAyah(surah, ayah) {
@@ -3917,10 +4137,15 @@ function completeAyah() {
   buildAyahOptions(current.surah);
   refreshWelcomeDashboard();
 
+  if (isMistakeDrillActive()) {
+    advanceMistakeDrill('complete');
+    return;
+  }
+
   if (autoNextOnComplete) {
     const next = getNextAyah();
     if (next) {
-      showFeedback('Ayah complete — next ayah', false);
+      showFeedback('Ayah complete - next ayah', false);
       goMemo({ view: 'ayah', surah: next.surah, ayah: next.ayah }, { historyMode: 'push' }).then(() => {
         if (wasListening) startListening();
       });
@@ -4205,8 +4430,13 @@ async function goMemo(route, opts = {}) {
     historyMode = 'replace',
     animated = false,
     direction = 1,
-    notify = true
+    notify = true,
+    source = 'default'
   } = opts;
+
+  if (source !== 'mistake-drill' && memoMistakeDrillQueue.length) {
+    clearMistakeDrillSession();
+  }
 
   if (!route || route.view === 'home') {
     setModeWelcome({ historyMode });
@@ -4466,6 +4696,12 @@ function bindMemoUiEvents() {
     });
   }
 
+  if (els.techniqueMistakeBtn) {
+    els.techniqueMistakeBtn.addEventListener('click', () => {
+      startMistakeDrill();
+    });
+  }
+
   if (els.techniqueSurahListBtn) {
     els.techniqueSurahListBtn.addEventListener('click', () => {
       openMemoSurahListView();
@@ -4542,6 +4778,7 @@ async function init() {
   unlocked = getStoredProgress();
   listenCounts = getStoredListenCounts();
   memoMemorizedAyahSet = getStoredMemorizedAyahSet();
+  memoAyahMistakeStats = getStoredAyahMistakeStats();
   mergeMemorizedAyahsFromSavedHistory();
 
   try {
