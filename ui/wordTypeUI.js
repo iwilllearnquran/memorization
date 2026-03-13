@@ -149,9 +149,9 @@ function renderWordTypeGame(container, words) {
   ctr.className = 'wt-controls';
   ctr.innerHTML = `
     <button id="wtReturnBtn"
-      class="game-play-btn-verbs secondary return-games-btn"
-      data-action="return-games" type="button">
-      Return to Games
+      class="game-play-btn-verbs secondary return-ayah-btn"
+      data-action="return-ayah" type="button">
+      Return to Ayah
     </button>
   `;
   container.appendChild(ctr);

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -649,6 +649,36 @@ function wrapLines(ctx, text, maxWidth) {
   return lines;
 }
 
+const SHARE_BACKGROUND_IMAGES = Array.from({ length: 13 }, (_, index) => `./background/${index + 1}.png`);
+
+function loadShareBackgroundImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+}
+
+function drawImageCover(ctx, image, width, height) {
+  const imageRatio = image.width / image.height;
+  const canvasRatio = width / height;
+  let drawWidth = width;
+  let drawHeight = height;
+  let drawX = 0;
+  let drawY = 0;
+
+  if (imageRatio > canvasRatio) {
+    drawWidth = height * imageRatio;
+    drawX = (width - drawWidth) / 2;
+  } else {
+    drawHeight = width / imageRatio;
+    drawY = (height - drawHeight) / 2;
+  }
+
+  ctx.drawImage(image, drawX, drawY, drawWidth, drawHeight);
+}
+
 async function buildShareCanvas(card) {
   if (document.fonts?.ready) {
     try {
@@ -660,66 +690,58 @@ async function buildShareCanvas(card) {
   const arabic = card.querySelector(".dua-arabic")?.innerText?.trim() || "";
   const transliteration = card.querySelector(".dua-transliteration")?.innerText?.trim() || "";
   const translation = card.querySelector(".dua-translation")?.innerText?.trim() || "";
-  const caption = "Qur’anic Duas";
+  const caption = "Qur'anic Duas";
 
-  const width = 1080;
-  const outerPad = 80;
-  const cardPad = 70;
-  const innerWidth = width - outerPad * 2 - cardPad * 2;
+  const randomBackground = SHARE_BACKGROUND_IMAGES[Math.floor(Math.random() * SHARE_BACKGROUND_IMAGES.length)];
+  let bgImage = null;
+  try {
+    bgImage = await loadShareBackgroundImage(randomBackground);
+  } catch (_) {
+    bgImage = null;
+  }
+
+  const width = Math.max(1024, Math.round(bgImage?.width || 1024));
+  const height = Math.max(700, Math.round(bgImage?.height || 700));
+  const scale = width / 1024;
+  const outerPad = Math.round(68 * scale);
+  const cardPad = Math.round(42 * scale);
+  const footerHeight = Math.round(34 * scale);
+  const cardTopOffset = Math.round(42 * scale);
+  const captionFontSize = Math.round(46 * scale);
+  const footerFontSize = Math.round(23 * scale);
+  const refBaseSize = Math.round(30 * scale);
+  const translitBaseSize = Math.round(29 * scale);
+  const translationBaseSize = Math.round(31 * scale);
+  const baseArabicSize = Math.round((Number(currentTypography.arabicSize) || 28) * 1.48 * scale);
 
   const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-
-  ctx.font = "600 38px 'Manrope', sans-serif";
-  const refLines = wrapLines(ctx, reference, innerWidth);
-  const shareArabicFont = `${currentTypography.arabicItalic ? "italic" : "normal"} ${currentTypography.arabicWeight} ${currentTypography.arabicSize}px '${currentTypography.arabicFont}', serif`;
-  ctx.font = shareArabicFont;
-  const arabicLines = wrapLines(ctx, arabic, innerWidth);
-  ctx.font = "italic 32px 'Manrope', sans-serif";
-  const translitLines = wrapLines(ctx, transliteration, innerWidth);
-  ctx.font = "32px 'Manrope', sans-serif";
-  const translationLines = wrapLines(ctx, translation, innerWidth);
-
-  const lineHeights = {
-    ref: 44,
-    arabic: Math.round(currentTypography.arabicSize * 2.1),
-    translit: 44,
-    translation: 46
-  };
-
-  const gaps = {
-    afterArabic: 22,
-    afterTranslit: 18
-  };
-
-  const contentHeight =
-    refLines.length * lineHeights.ref +
-    arabicLines.length * lineHeights.arabic +
-    gaps.afterArabic +
-    translitLines.length * lineHeights.translit +
-    gaps.afterTranslit +
-    translationLines.length * lineHeights.translation +
-    80;
-
-  const footerHeight = 42;
-  const height = outerPad * 2 + cardPad * 2 + contentHeight + footerHeight + 40;
   canvas.width = width;
   canvas.height = height;
+  const ctx = canvas.getContext("2d");
 
-  const bg = ctx.createLinearGradient(0, height, 0, 0);
-  bg.addColorStop(0, "#fddb92");
-  bg.addColorStop(1, "#d1fdff");
-  ctx.fillStyle = bg;
+  if (bgImage) {
+    drawImageCover(ctx, bgImage, width, height);
+  } else {
+    const fallbackBg = ctx.createLinearGradient(0, height, 0, 0);
+    fallbackBg.addColorStop(0, "#1c1f27");
+    fallbackBg.addColorStop(1, "#4b5563");
+    ctx.fillStyle = fallbackBg;
+    ctx.fillRect(0, 0, width, height);
+  }
+
+  const bgOverlay = ctx.createLinearGradient(0, 0, 0, height);
+  bgOverlay.addColorStop(0, "rgba(6, 8, 12, 0.16)");
+  bgOverlay.addColorStop(1, "rgba(6, 8, 12, 0.28)");
+  ctx.fillStyle = bgOverlay;
   ctx.fillRect(0, 0, width, height);
 
-  // Subtle floral pattern
   ctx.save();
-  ctx.globalAlpha = 0.08;
-  ctx.strokeStyle = "#0a4d68";
-  ctx.lineWidth = 1.2;
-  for (let y = 120; y < height; y += 140) {
-    for (let x = 80; x < width; x += 140) {
-      const r = 10;
+  ctx.globalAlpha = 0.06;
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.42)";
+  ctx.lineWidth = Math.max(1, 1.1 * scale);
+  for (let y = Math.round(120 * scale); y < height; y += Math.round(140 * scale)) {
+    for (let x = Math.round(80 * scale); x < width; x += Math.round(140 * scale)) {
+      const r = Math.max(8, Math.round(10 * scale));
       ctx.beginPath();
       ctx.arc(x, y - r, r, 0, Math.PI * 2);
       ctx.arc(x + r, y, r, 0, Math.PI * 2);
@@ -730,74 +752,125 @@ async function buildShareCanvas(card) {
   }
   ctx.restore();
 
-  ctx.fillStyle = "#0a4d68";
-  ctx.font = "600 44px 'Cormorant Garamond', serif";
+  ctx.fillStyle = "rgba(255, 255, 255, 0.96)";
+  ctx.font = `600 ${captionFontSize}px 'Cormorant Garamond', serif`;
   ctx.textAlign = "center";
   ctx.textBaseline = "top";
-  ctx.fillText(caption, width / 2, outerPad - 10);
+  ctx.fillText(caption, width / 2, outerPad - Math.round(10 * scale));
 
   const cardX = outerPad;
-  const cardY = outerPad + 60;
+  const cardY = outerPad + cardTopOffset;
   const cardW = width - outerPad * 2;
   const cardH = height - cardY - outerPad - footerHeight;
+  const innerWidth = cardW - cardPad * 2;
+  const maxContentHeight = Math.max(220, cardH - cardPad * 2);
+  const radius = Math.round(36 * scale);
 
-  const radius = 36;
-  ctx.fillStyle = "#fffdf8";
-  ctx.shadowColor = "rgba(10, 32, 42, 0.18)";
-  ctx.shadowBlur = 24;
-  ctx.shadowOffsetY = 10;
-  ctx.beginPath();
-  ctx.moveTo(cardX + radius, cardY);
-  ctx.arcTo(cardX + cardW, cardY, cardX + cardW, cardY + cardH, radius);
-  ctx.arcTo(cardX + cardW, cardY + cardH, cardX, cardY + cardH, radius);
-  ctx.arcTo(cardX, cardY + cardH, cardX, cardY, radius);
-  ctx.arcTo(cardX, cardY, cardX + cardW, cardY, radius);
-  ctx.closePath();
-  ctx.fill();
-  ctx.shadowColor = "transparent";
+  const measureLayout = ratio => {
+    const refSize = Math.max(21, Math.round(refBaseSize * ratio));
+    const arabicSize = Math.max(34, Math.round(baseArabicSize * ratio));
+    const translitSize = Math.max(20, Math.round(translitBaseSize * ratio));
+    const translationSize = Math.max(22, Math.round(translationBaseSize * ratio));
+    const shareArabicFont = `${currentTypography.arabicItalic ? "italic" : "normal"} ${currentTypography.arabicWeight} ${arabicSize}px '${currentTypography.arabicFont}', serif`;
 
-  let cursorY = cardY + cardPad;
+    ctx.font = `600 ${refSize}px 'Manrope', sans-serif`;
+    const refLines = wrapLines(ctx, reference, innerWidth);
+    ctx.font = shareArabicFont;
+    const arabicLines = wrapLines(ctx, arabic, innerWidth);
+    ctx.font = `italic ${translitSize}px 'Manrope', sans-serif`;
+    const translitLines = wrapLines(ctx, transliteration, innerWidth);
+    ctx.font = `${translationSize}px 'Manrope', sans-serif`;
+    const translationLines = wrapLines(ctx, translation, innerWidth);
+
+    const lineHeights = {
+      ref: Math.round(refSize * 1.42),
+      arabic: Math.round(arabicSize * 1.68),
+      translit: Math.round(translitSize * 1.36),
+      translation: Math.round(translationSize * 1.34)
+    };
+
+    const gaps = {
+      afterArabic: Math.max(12, Math.round(18 * scale * ratio)),
+      afterTranslit: Math.max(10, Math.round(14 * scale * ratio))
+    };
+
+    const contentHeight =
+      refLines.length * lineHeights.ref +
+      arabicLines.length * lineHeights.arabic +
+      gaps.afterArabic +
+      translitLines.length * lineHeights.translit +
+      gaps.afterTranslit +
+      translationLines.length * lineHeights.translation +
+      Math.max(20, Math.round(28 * scale));
+
+    return {
+      refSize,
+      arabicSize,
+      translitSize,
+      translationSize,
+      shareArabicFont,
+      refLines,
+      arabicLines,
+      translitLines,
+      translationLines,
+      lineHeights,
+      gaps,
+      contentHeight
+    };
+  };
+
+  let layoutRatio = 1;
+  let layout = measureLayout(layoutRatio);
+  while (layout.contentHeight > maxContentHeight && layoutRatio > 0.72) {
+    layoutRatio -= 0.04;
+    layout = measureLayout(layoutRatio);
+  }
+
+
+  const referenceLift = Math.round(8 * scale);
+  const contentOffsetY = Math.max(cardPad - referenceLift, Math.round((cardH - layout.contentHeight) / 2) - referenceLift);
+  let cursorY = cardY + contentOffsetY;
   ctx.textAlign = "center";
 
-  ctx.font = "600 28px 'Manrope', sans-serif";
-  ctx.fillStyle = "#13728f";
-  refLines.forEach(line => {
+  ctx.font = `600 ${layout.refSize}px 'Manrope', sans-serif`;
+  ctx.fillStyle = "rgba(255, 255, 255, 0.86)";
+  layout.refLines.forEach(line => {
     ctx.fillText(line, width / 2, cursorY);
-    cursorY += lineHeights.ref;
+    cursorY += layout.lineHeights.ref;
   });
 
-  cursorY += 8;
-  ctx.font = shareArabicFont;
-  ctx.fillStyle = "#102a36";
+  cursorY += Math.max(12, Math.round(16 * scale));
+  ctx.font = layout.shareArabicFont;
+  ctx.fillStyle = "rgba(255, 255, 255, 0.98)";
   if (ctx.direction !== undefined) ctx.direction = "rtl";
-  arabicLines.forEach(line => {
+  layout.arabicLines.forEach(line => {
     ctx.fillText(line, width / 2, cursorY);
-    cursorY += lineHeights.arabic;
+    cursorY += layout.lineHeights.arabic;
   });
   if (ctx.direction !== undefined) ctx.direction = "ltr";
 
-  cursorY += gaps.afterArabic;
-  ctx.fillStyle = "#5f6b76";
-  ctx.font = "italic 32px 'Manrope', sans-serif";
-  translitLines.forEach(line => {
+  cursorY += layout.gaps.afterArabic;
+  ctx.fillStyle = "rgba(255, 255, 255, 0.74)";
+  ctx.font = `italic ${layout.translitSize}px 'Manrope', sans-serif`;
+  layout.translitLines.forEach(line => {
     ctx.fillText(line, width / 2, cursorY);
-    cursorY += lineHeights.translit;
+    cursorY += layout.lineHeights.translit;
   });
 
-  cursorY += gaps.afterTranslit;
-  ctx.fillStyle = "#1a2d3a";
-  ctx.font = "32px 'Manrope', sans-serif";
-  translationLines.forEach(line => {
+  cursorY += layout.gaps.afterTranslit;
+  ctx.fillStyle = "rgba(255, 255, 255, 0.90)";
+  ctx.font = `${layout.translationSize}px 'Manrope', sans-serif`;
+  layout.translationLines.forEach(line => {
     ctx.fillText(line, width / 2, cursorY);
-    cursorY += lineHeights.translation;
+    cursorY += layout.lineHeights.translation;
   });
 
-  ctx.fillStyle = "rgba(10, 77, 104, 0.7)";
-  ctx.font = "italic 24px 'Manrope', sans-serif";
+  ctx.fillStyle = "rgba(255, 255, 255, 0.88)";
+  ctx.font = `italic ${footerFontSize}px 'Manrope', sans-serif`;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   const shareLabel = SHARE_URL.replace(/^https?:\/\//, "");
-  ctx.fillText(`Visit: ${shareLabel}`, width / 2, height - outerPad + 4);
+  ctx.fillText(`Visit: ${shareLabel}`, width / 2, height - outerPad + Math.round(4 * scale));
 
   return canvas;
 }
@@ -806,7 +879,7 @@ async function shareDuaCard(card) {
   if (!card) return;
 
   const canvas = await buildShareCanvas(card);
-  const shareText = "Powerful Duas from the Qur’an";
+  const shareText = "Powerful Duas from the Qur'an";
 
   /* ---------------- WEBVIEW BRIDGE ---------------- */
   const dataUrl = canvas.toDataURL("image/png");

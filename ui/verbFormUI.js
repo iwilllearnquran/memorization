@@ -215,9 +215,9 @@ function renderQuestion(container) {
   const ctr = document.createElement('div');
   ctr.className = 'vf-controls';
   ctr.innerHTML = `
-    <button class="game-play-btn-verbs secondary return-games-btn"
-      data-action="return-games" type="button">
-      Return to Games
+    <button class="game-play-btn-verbs secondary return-ayah-btn"
+      data-action="return-ayah" type="button">
+      Return to Ayah
     </button>
   `;
   container.appendChild(ctr);

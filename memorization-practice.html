@@ -4,8 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Quran Word Practice</title>
-  <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet"/>
   <style>
+    @font-face {
+      font-family: 'CustomArabic';
+      src: url('/fonts/Naskh-Nastaleeq-IndoPak-QWBW.ttf') format('truetype');
+      font-display: swap;
+    }
     :root {
       --bg0: #f3fbf8;
       --bg1: #e5f3ee;
@@ -16,6 +21,10 @@
       --brand-strong: #0b5d57;
       --stroke: rgba(10, 40, 30, 0.12);
       --shadow: 0 10px 28px rgba(10, 40, 30, 0.12);
+      --arabic-font-family: 'CustomArabic';
+      --feedback-ok: #0f766e;
+      --feedback-warn: #d97706;
+      --feedback-err: #dc2626;
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
     }
@@ -41,8 +50,8 @@
       min-height: 100dvh;
       width: 100%;
       padding: calc(var(--safe-top) + 12px) 12px calc(var(--safe-bottom) + 14px);
-      display: grid;
-      align-content: start;
+      display: flex;
+      flex-direction: column;
       gap: 10px;
     }
 
@@ -69,11 +78,28 @@
     }
 
     .word-card {
+      --word-tone: var(--ink);
+      --heard-tone: var(--muted);
       text-align: center;
       padding: 14px 12px;
       background: rgba(240, 252, 248, 0.86);
       border-radius: 16px;
       border: 1px solid rgba(10, 40, 30, 0.08);
+    }
+
+    .word-card.is-ok {
+      --word-tone: var(--feedback-ok);
+      --heard-tone: var(--feedback-ok);
+    }
+
+    .word-card.is-warn {
+      --word-tone: var(--feedback-warn);
+      --heard-tone: #b45309;
+    }
+
+    .word-card.is-err {
+      --word-tone: var(--feedback-err);
+      --heard-tone: #b91c1c;
     }
 
     .word-label {
@@ -87,11 +113,14 @@
 
     .word {
       margin: 8px 0 0;
-      font-family: 'El Messiri', serif;
+      color: var(--word-tone);
+      font-family: var(--arabic-font-family), 'Scheherazade New', serif;
       font-size: clamp(34px, 12vw, 52px);
+      font-weight: 100;
       line-height: 1.2;
       direction: rtl;
       min-height: 58px;
+      transition: color 0.18s ease;
     }
 
     .translit {
@@ -104,9 +133,10 @@
 
     .heard {
       margin-top: 8px;
-      color: var(--muted);
+      color: var(--heard-tone);
       font-size: 12px;
       min-height: 17px;
+      transition: color 0.18s ease;
     }
 
     .word-meaning {
@@ -238,6 +268,7 @@
     .footer-actions {
       display: grid;
       gap: 8px;
+      margin-top: auto;
     }
 
     .btn-finish {
@@ -295,12 +326,16 @@
   </main>
 
   <script>
-    const WORD_DATA_URL = './generated/memo-practice-words.json';
+    const WORD_DATA_URLS = [
+      './memo-practice-words.json',
+      './generated/memo-practice-words.json'
+    ];
     const WORD_DATA_CACHE_KEY = 'memo_practice_word_dataset_v2';
     const WORD_DATA_CACHE_TS_KEY = 'memo_practice_word_dataset_ts_v2';
     const WORD_DATA_CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
     const els = {
+      wordCard: document.querySelector('.word-card'),
       word: document.getElementById('practiceWord'),
       translit: document.getElementById('practiceTranslit'),
       heard: document.getElementById('practiceHeard'),
@@ -372,9 +407,15 @@
     function setStatus(text, tone = 'idle') {
       els.status.textContent = text;
       els.status.classList.remove('ok', 'warn', 'err');
+      if (els.wordCard) {
+        els.wordCard.classList.remove('is-ok', 'is-warn', 'is-err');
+      }
       if (tone === 'ok') els.status.classList.add('ok');
       if (tone === 'warn') els.status.classList.add('warn');
       if (tone === 'err') els.status.classList.add('err');
+      if (els.wordCard && tone === 'ok') els.wordCard.classList.add('is-ok');
+      if (els.wordCard && tone === 'warn') els.wordCard.classList.add('is-warn');
+      if (els.wordCard && tone === 'err') els.wordCard.classList.add('is-err');
     }
 
     function updateCounters() {
@@ -474,17 +515,25 @@
     }
 
     async function fetchWordCorpus() {
-      const response = await fetch(`${WORD_DATA_URL}?v=${Date.now()}`, { cache: 'no-store' });
-      if (!response.ok) {
-        throw new Error(`Word dataset request failed (${response.status})`);
+      let lastError = null;
+      for (const url of WORD_DATA_URLS) {
+        try {
+          const response = await fetch(`${url}?v=${Date.now()}`, { cache: 'no-store' });
+          if (!response.ok) {
+            throw new Error(`Word dataset request failed (${response.status}) for ${url}`);
+          }
+          const payload = await response.json();
+          const words = parseCorpusPayload(payload);
+          if (!words.length) {
+            throw new Error(`Word dataset is empty for ${url}`);
+          }
+          writeCachedWords(words);
+          return words;
+        } catch (err) {
+          lastError = err;
+        }
       }
-      const payload = await response.json();
-      const words = parseCorpusPayload(payload);
-      if (!words.length) {
-        throw new Error('Word dataset is empty');
-      }
-      writeCachedWords(words);
-      return words;
+      throw lastError || new Error('Word dataset request failed');
     }
 
     function shuffleIndices(size) {
@@ -537,7 +586,7 @@
       els.translit.textContent = entry.transliteration || '--';
       els.heard.textContent = 'Heard: --';
       if (!finished) {
-        setStatus(listening ? 'Listening for your recitation' : 'Ready. Tap Start listening.', listening ? 'warn' : 'idle');
+        setStatus(listening ? 'Listening for your recitation' : 'Ready. Tap Start listening.', 'idle');
       }
     }
 
@@ -636,7 +685,7 @@
       try {
         recognition.start();
         els.listenBtn.textContent = 'Stop listening';
-        setStatus('Listening...', 'warn');
+        setStatus('Listening...', 'idle');
       } catch (_) {
         queueRecognitionRestart(220);
         setStatus('Microphone is reconnecting...', 'warn');
@@ -713,7 +762,7 @@
       if (finished) return;
       pickNextWord();
       if (listening) {
-        setStatus('Listening...', 'warn');
+        setStatus('Listening...', 'idle');
       }
     });
 

@@ -377,13 +377,13 @@
   <main class="shell">
     <section class="top">
       <div class="top-nav">
-        <a class="top-nav-btn" href="index.html" aria-label="Go to home">
+        <a id="surahListHomeBtn" class="top-nav-btn" href="index.html" aria-label="Go to home">
           <div id="surahListHomeLottie" class="top-nav-home-lottie" aria-hidden="true"></div>
         </a>
       </div>
       <div class="head">
         <p class="kicker">Quran Quest</p>
-        <h1>Surah Action List</h1>
+        <h1>Surah List</h1>
         <p class="sub">Open any Surah with one tap and choose how you want to continue: Listen, Recite, Learn In-Depth, or Memorize.</p>
       </div>
     </section>
@@ -462,9 +462,17 @@
     const summaryEl = document.getElementById('summaryLine');
     const searchEl = document.getElementById('searchInput');
     const sortEl = document.getElementById('sortSelect');
+    const homeBtnEl = document.getElementById('surahListHomeBtn');
 
     const normalize = value => String(value || '').trim().toLowerCase();
     const isEmbeddedInHost = window.parent && window.parent !== window;
+
+    if (homeBtnEl && isEmbeddedInHost) {
+      homeBtnEl.addEventListener('click', event => {
+        event.preventDefault();
+        window.parent.postMessage({ type: 'SURAH_LIST_HOME' }, '*');
+      });
+    }
 
     function buildLaunchUrl(surah, action) {
       const targetSurah = Number(surah) || 1;

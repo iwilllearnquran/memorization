@@ -5,7 +5,10 @@ const path = require('path');
 
 const ROOT = process.cwd();
 const AYAHS_DIR = path.join(ROOT, 'ayahs');
-const OUTPUT_PATH = path.join(ROOT, 'generated', 'memo-practice-words.json');
+const OUTPUT_PATHS = [
+  path.join(ROOT, 'memo-practice-words.json'),
+  path.join(ROOT, 'generated', 'memo-practice-words.json')
+];
 
 const WORD_TRANSLATION_RE =
   /<span\s+class="word-text"[^>]*>([\s\S]*?)<\/span>[\s\S]*?<span\s+class="translation[^"]*toggle-translation[^"]*"[^>]*>([\s\S]*?)<\/span>/g;
@@ -152,13 +155,15 @@ function main() {
     words
   };
 
-  fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true });
-  fs.writeFileSync(OUTPUT_PATH, `${JSON.stringify(payload, null, 2)}\n`, 'utf8');
+  for (const outputPath of OUTPUT_PATHS) {
+    fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+    fs.writeFileSync(outputPath, `${JSON.stringify(payload, null, 2)}\n`, 'utf8');
+  }
 
   console.log(
     JSON.stringify(
       {
-        output: path.relative(ROOT, OUTPUT_PATH),
+        outputs: OUTPUT_PATHS.map(outputPath => path.relative(ROOT, outputPath)),
         totalAyahFiles: files.length,
         totalTokens,
         totalUniqueWords: words.length,

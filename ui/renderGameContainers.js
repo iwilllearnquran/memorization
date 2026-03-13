@@ -1,6 +1,6 @@
 // renderGameContainers.js
 
-import { GAME_CONFIG }         from '/config/gameConfig.js';
+import { GAME_CONFIG, getEnabledGames } from '/config/gameConfig.js';
 import { $ }                   from '/utils/domHelpers.js';
 import { startArrangeGame }    from '/ui/arrangeGameUI.js';
 import { startVerbGame }       from '/ui/verbMatchUI.js';
@@ -18,9 +18,11 @@ export function renderGameContainers() {
     return;
   }
 
+  const enabledGames = getEnabledGames();
+
   // 1) Render selector cards
   console.log('[1] Rendering selector cards...');
-  GAME_CONFIG.games.forEach(({ type, id, title, description, buttonId, fontFamily, fontSize, textAlign }) => {
+  enabledGames.forEach(({ type, id, title, description, buttonId, fontFamily, fontSize, textAlign }) => {
     console.log(`  - Creating card for game type="${type}", id="${id}"`);
     const card = document.createElement('div');
     card.id = id;
@@ -76,7 +78,7 @@ export function renderGameContainers() {
 
   // 2) Render hidden game panes
   console.log('[2] Rendering hidden game panes...');
-  GAME_CONFIG.games.forEach(({ type }) => {
+  enabledGames.forEach(({ type }) => {
     console.log(`  - Creating pane for game type="${type}"`);
     const div = document.createElement('div');
     div.id = `${type}GameContainer`;
@@ -91,11 +93,11 @@ export function renderGameContainers() {
         <div id="arrangeControls" class="game-inline-controls">
           <button
             id="arrangeReturnBtn"
-            class="game-play-btn return-games-btn"
-            data-action="return-games"
+            class="game-play-btn return-ayah-btn game-play-btn-no-shine"
+            data-action="return-ayah"
             type="button"
           >
-            Return to Games
+            Return to Ayah
           </button>
         </div>
       `;

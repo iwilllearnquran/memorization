@@ -8,6 +8,7 @@ const StreakLogicAndUI = (function() {
   const POPUP_ID = 'streakPopup';
   const COUNT_ID = 'streakCount';
   const MSG_ID = 'streakMessage';
+  const HINT_ID = 'streakHint';
   const WEEK_ID = 'streakWeek';
   const CONF_CANVAS_ID = 'confettiCanvas';
   const FLAME = String.fromCodePoint(0x1F525);
@@ -94,7 +95,7 @@ const StreakLogicAndUI = (function() {
       >&times;</button>
 
       <h2 style="text-align:center;color:#0a4d68;margin-bottom:16px;">
-        Quran Reading Streak
+        Quran Streak
       </h2>
 
       <div
@@ -126,6 +127,10 @@ const StreakLogicAndUI = (function() {
 
       <p id="${MSG_ID}"
         style="text-align:center;font-size:1rem;color:#333;margin:10px 0 0;">
+      </p>
+
+      <p id="${HINT_ID}"
+        style="text-align:center;font-size:0.78rem;line-height:1.45;color:#667085;margin:8px 0 0;">
       </p>
 
       <div id="${WEEK_ID}" style="margin-top:10px;"></div>
@@ -188,17 +193,25 @@ const StreakLogicAndUI = (function() {
 
   function renderMessage(streakCount) {
     const msgEl = document.getElementById(MSG_ID);
-    if (!msgEl) return;
+    const hintEl = document.getElementById(HINT_ID);
+    if (!msgEl || !hintEl) return;
 
     let message;
+    let hint;
+
     if (streakCount === 0) {
-      message = 'Read today to start your streak.';
+      message = 'No streak yet.';
+      hint = 'Save Learn progress, Recite progress, or memorize an ayah to start the streak.';
     } else if (streakCount === 1) {
       message = 'Great start - keep going!';
+      hint = 'Save Learn progress, Recite progress, or memorize an ayah to maintain the streak.';
     } else {
       message = 'You are making great progress!';
+      hint = 'Save Learn progress, Recite progress, or memorize an ayah to maintain the streak.';
     }
+
     msgEl.textContent = message;
+    hintEl.textContent = hint;
   }
 
   function getLocalNowParts() {
@@ -326,7 +339,19 @@ const StreakLogicAndUI = (function() {
 
   function updateNavStreak(count) {
     if (!navEl) return;
-    navEl.textContent = `${FLAME}${count}`;
+    const safeCount = Math.max(0, Number(count) || 0);
+    navEl.dataset.streakCount = String(safeCount);
+
+    if (typeof window.renderQuranQuestNavStreak === 'function') {
+      const handled = window.renderQuranQuestNavStreak({
+        navEl,
+        count: safeCount,
+        flame: FLAME
+      });
+      if (handled) return;
+    }
+
+    navEl.textContent = `${FLAME}${safeCount}`;
   }
 
   function handleGuestStreakUpdate(dateStr) {

@@ -24,7 +24,9 @@ const STORAGE_AUTO_NEXT = 'memo_auto_next_v1';
 const STORAGE_AYAH_MISTAKES = 'memo_ayah_mistakes_v1';
 const MAX_ALIGN_EXPECTED_SPAN = 5;
 const MAX_ALIGN_ACTUAL_SPAN = 3;
-const SPEECH_TRANSLIT_ACCEPT_SIMILARITY = 0.5;
+const SPEECH_TRANSLIT_ACCEPT_SIMILARITY = 0.68;
+const SPEECH_ARABIC_ACCEPT_SIMILARITY = 0.7;
+const SPEECH_ARABIC_SHORT_ACCEPT_SIMILARITY = 0.64;
 const SPEECH_DUPLICATE_RUN_LIMIT = 2;
 const SPEECH_PREVIEW_DUPLICATE_RUN_LIMIT = 1;
 const PEEK_DURATION_MS = 1000;
@@ -106,6 +108,8 @@ const els = {
   wordOverlay: document.getElementById('memoWordOverlay'),
   learnNav: document.getElementById('memoNavLearnQuran'),
   playBtn: document.getElementById('memoPlayBtn'),
+  prevAyahBtn: document.getElementById('memoPrevAyahBtn'),
+  nextAyahBtn: document.getElementById('memoNextAyahBtn'),
   playCount: document.getElementById('memoPlayCount'),
   progressFill: document.getElementById('memoProgressFill'),
   progressText: document.getElementById('memoProgressText'),
@@ -137,6 +141,8 @@ const els = {
   welcomeProgressRing: document.getElementById('memoWelcomeProgressRing'),
   welcomeQuranPct: document.getElementById('memoWelcomeQuranPct'),
   welcomeProgressPct: document.getElementById('memoWelcomeProgressPct'),
+  welcomeSurahName: document.getElementById('memoWelcomeSurahName'),
+  welcomeQuranMeta: document.getElementById('memoWelcomeQuranMeta'),
   welcomeMemorized: document.getElementById('memoWelcomeMemorized'),
   welcomeWordsLearnt: document.getElementById('memoWelcomeWordsLearnt'),
   welcomeStreakDays: document.getElementById('memoStreakDays'),
@@ -1039,6 +1045,42 @@ function isValidStoredAyahRef(ref) {
   return isValidAyahRef(Number(ref?.surah), Number(ref?.ayah));
 }
 
+function normalizeStoredAyahRef(ref) {
+  if (!isValidStoredAyahRef(ref)) return null;
+  return {
+    surah: Number(ref.surah),
+    ayah: Number(ref.ayah)
+  };
+}
+
+function isMemoProgressComplete(progress, options = {}) {
+  const progressRef = normalizeStoredAyahRef(progress);
+  if (!progressRef) return false;
+
+  const key = ayahKey(progressRef.surah, progressRef.ayah);
+  const listensMap = options.listensMap && typeof options.listensMap === 'object'
+    ? options.listensMap
+    : listenCounts;
+  const listenCount = Number(listensMap?.[key]) || 0;
+  if (listenCount >= REQUIRED_LISTENS) return true;
+
+  const memorizedKeys = options.memorizedKeys;
+  if (memorizedKeys instanceof Set && memorizedKeys.has(key)) return true;
+  if (Array.isArray(memorizedKeys) && memorizedKeys.includes(key)) return true;
+  if (memoMemorizedAyahSet instanceof Set && memoMemorizedAyahSet.has(key)) return true;
+
+  const lastMemorizedRef = normalizeStoredAyahRef(options.lastMemorized ?? getStoredLastMemorized());
+  if (
+    lastMemorizedRef &&
+    lastMemorizedRef.surah === progressRef.surah &&
+    lastMemorizedRef.ayah === progressRef.ayah
+  ) {
+    return true;
+  }
+
+  return (Number(progress?.percent) || 0) >= 100;
+}
+
 function getPreviousAyahRefFrom(surahRef, ayahRef) {
   const surah = Number(surahRef);
   const ayah = Number(ayahRef);
@@ -1149,10 +1191,25 @@ async function fetchWelcomeLastAyahText(surah, ayah) {
 
 async function getWelcomeSnapshot() {
   const fallbackSurah = Number(current?.surah) || Number(unlocked?.surah) || 1;
-  const effectiveListens = (listenCounts && typeof listenCounts === 'object')
+  let effectiveListens = (listenCounts && typeof listenCounts === 'object')
     ? { ...listenCounts }
     : {};
+  let effectiveMemoState = {
+    unlocked: normalizeStoredAyahRef(unlocked) || getStoredProgress(),
+    listens: effectiveListens,
+    memorizedKeys: Array.from(memoMemorizedAyahSet || []),
+    lastProgress: getStoredLastProgress(),
+    lastMemorized: getStoredLastMemorized(),
+    ayahMistakes: memoAyahMistakeStats
+  };
   const inferredLast = resolveBestLastMemorizedRef(effectiveListens);
+  const initialResumeTarget = getMemoResumeTarget({
+    lastProgress: effectiveMemoState.lastProgress,
+    unlockedRef: effectiveMemoState.unlocked,
+    lastMemorized: effectiveMemoState.lastMemorized,
+    listensMap: effectiveListens,
+    memorizedKeys: effectiveMemoState.memorizedKeys
+  });
 
   const snapshot = {
     fullName: 'Friend',
@@ -1167,7 +1224,10 @@ async function getWelcomeSnapshot() {
     activeSurah: fallbackSurah,
     surahAyahCount: getSurahAyahCount(fallbackSurah),
     surahMemorizedAyahs: 0,
-    totalWordsLearnt: 0
+    totalWordsLearnt: 0,
+    resumeSurah: Number(initialResumeTarget?.surah) || FIRST_MEMO_AYAH.surah,
+    resumeAyah: Number(initialResumeTarget?.ayah) || FIRST_MEMO_AYAH.ayah,
+    canResume: Boolean(isValidStoredAyahRef(effectiveMemoState.lastProgress) || Boolean(inferredLast?.isMemorized))
   };
   snapshot.surahMemorizedAyahs = countMemorizedAyahsInSurah(
     effectiveListens,
@@ -1188,13 +1248,8 @@ async function getWelcomeSnapshot() {
           snapshot.streakDays = data.streakHistory.length;
         }
         const memoData = data.memorization;
-        if (memoData?.listens && typeof memoData.listens === 'object') {
-          Object.entries(memoData.listens).forEach(([key, value]) => {
-            const remoteCount = Number(value) || 0;
-            const localCount = Number(effectiveListens[key]) || 0;
-            effectiveListens[key] = Math.max(localCount, remoteCount);
-          });
-        }
+        effectiveMemoState = mergeMemorizationState(effectiveMemoState, memoData || null);
+        effectiveListens = effectiveMemoState.listens || effectiveListens;
         const remoteLastMem = memoData?.lastMemorized;
         const remoteLast = isValidStoredAyahRef(remoteLastMem)
           ? remoteLastMem
@@ -1249,6 +1304,22 @@ async function getWelcomeSnapshot() {
   snapshot.quranProgressPct = clamp(Number((quranRatio * 100).toFixed(3)), 0, 100);
   snapshot.surahProgressPct = clamp(Number((surahRatio * 100).toFixed(3)), 0, 100);
 
+  const resumeTarget = getMemoResumeTarget({
+    lastProgress: effectiveMemoState.lastProgress,
+    unlockedRef: effectiveMemoState.unlocked,
+    lastMemorized: effectiveMemoState.lastMemorized,
+    listensMap: effectiveListens,
+    memorizedKeys: effectiveMemoState.memorizedKeys
+  });
+  snapshot.resumeSurah = Number(resumeTarget?.surah) || snapshot.resumeSurah || FIRST_MEMO_AYAH.surah;
+  snapshot.resumeAyah = Number(resumeTarget?.ayah) || snapshot.resumeAyah || FIRST_MEMO_AYAH.ayah;
+  snapshot.canResume = Boolean(
+    isValidStoredAyahRef(effectiveMemoState.lastProgress) ||
+    snapshot.hasMemorizedAyah ||
+    Number(snapshot.resumeSurah) !== FIRST_MEMO_AYAH.surah ||
+    Number(snapshot.resumeAyah) !== FIRST_MEMO_AYAH.ayah
+  );
+
   return snapshot;
 }
 
@@ -1256,6 +1327,7 @@ function applyWelcomeSnapshot(snapshot) {
   if (!snapshot) return;
   const hasMemorized = Boolean(snapshot.hasMemorizedAyah) && isValidAyahRef(snapshot.lastSurah, snapshot.lastAyah);
   const startSurahName = getSurahDisplayName(FIRST_MEMO_AYAH.surah);
+  const activeSurahName = getSurahDisplayName(snapshot.activeSurah || FIRST_MEMO_AYAH.surah);
   if (els.welcomeTitle) {
     els.welcomeTitle.textContent = `Assalamu Alaikum, ${snapshot.firstName || 'Friend'}`;
   }
@@ -1279,6 +1351,14 @@ function applyWelcomeSnapshot(snapshot) {
   }
   if (els.welcomeQuranPct) {
     els.welcomeQuranPct.textContent = formatProgressPctLabel(snapshot.quranProgressPct);
+  }
+  if (els.welcomeSurahName) {
+    els.welcomeSurahName.textContent = activeSurahName;
+  }
+  if (els.welcomeQuranMeta) {
+    const memorizedCount = Number(snapshot.memorizedAyahs || 0).toLocaleString('en-US');
+    const totalCount = Number(snapshot.totalAyahs || QURAN_TOTAL_AYAHS).toLocaleString('en-US');
+    els.welcomeQuranMeta.textContent = memorizedCount +  ' ayahs memorized';
   }
   if (els.welcomeLastTitle) {
     els.welcomeLastTitle.textContent = hasMemorized ? 'Last Ayah' : 'Begin your memorization journey';
@@ -1308,9 +1388,18 @@ function applyWelcomeSnapshot(snapshot) {
     els.welcomeLastTranslation.style.display = '';
   }
   if (els.welcomeStartLabel) {
-    els.welcomeStartLabel.textContent = hasMemorized
-      ? `Resume from Surah ${snapshot.lastSurah}:${snapshot.lastAyah}`
+    const resumeSurah = Number(snapshot.resumeSurah) || FIRST_MEMO_AYAH.surah;
+    const resumeAyah = Number(snapshot.resumeAyah) || FIRST_MEMO_AYAH.ayah;
+    els.welcomeStartLabel.textContent = snapshot.canResume
+      ? `Resume from Surah ${resumeSurah}:${resumeAyah}`
       : 'Start Memorizing';
+  }
+  if (els.welcomeStartBtn) {
+    const resumeSurah = Number(snapshot.resumeSurah) || FIRST_MEMO_AYAH.surah;
+    const resumeAyah = Number(snapshot.resumeAyah) || FIRST_MEMO_AYAH.ayah;
+    els.welcomeStartBtn.title = snapshot.canResume
+      ? `Resume memorizing from Surah ${resumeSurah}:${resumeAyah}`
+      : 'Start memorizing from the beginning';
   }
   if (els.drawerName) {
     els.drawerName.textContent = snapshot.fullName || 'Guest';
@@ -1891,6 +1980,8 @@ function updateSketchNavMeta() {
   const next = getAdjacentAyah(1);
   if (els.navPrevBtn) els.navPrevBtn.disabled = !prev;
   if (els.navNextBtn) els.navNextBtn.disabled = !next;
+  if (els.prevAyahBtn) els.prevAyahBtn.disabled = !prev;
+  if (els.nextAyahBtn) els.nextAyahBtn.disabled = !next;
 }
 
 function mergeMemorizationState(localData, remoteData) {
@@ -2566,6 +2657,10 @@ function updateSpokenPreview(text) {
   if (!node) return;
   const spoken = node.querySelector('.memo-spoken');
   if (!spoken) return;
+  if (node.classList.contains('hidden-word')) {
+    spoken.textContent = '';
+    return;
+  }
   spoken.textContent = text || '';
 }
 
@@ -3386,7 +3481,7 @@ function getArabicSpeechSimilarity(expected, candidate) {
 function isSpeechArabicMatch(expected, candidate) {
   if (!expected || !candidate) return false;
   const similarity = getArabicSpeechSimilarity(expected, candidate);
-  return similarity >= 0.48 || (expected.length <= 4 && similarity >= 0.42);
+  return similarity >= SPEECH_ARABIC_ACCEPT_SIMILARITY || (expected.length <= 4 && similarity >= SPEECH_ARABIC_SHORT_ACCEPT_SIMILARITY);
 }
 
 function getSpeechTokenSignature(rawToken) {
@@ -3446,6 +3541,9 @@ function commitRecognitionSessionTranscript() {
 
 function buildFullReciteLiveTokens(finalText, interimText = '') {
   const stableTokens = dedupeSpeechTokens(tokenizeRaw(finalText), SPEECH_DUPLICATE_RUN_LIMIT);
+  if (!isFullAyahReciteMode()) {
+    return stableTokens;
+  }
   let previewTokens = dedupeSpeechTokens(tokenizeRaw(interimText), SPEECH_PREVIEW_DUPLICATE_RUN_LIMIT);
   if (stableTokens.length && previewTokens.length) {
     const stableTailSignature = getSpeechTokenSignature(stableTokens[stableTokens.length - 1]);
@@ -4616,20 +4714,37 @@ function bindMemoSwipeNavigation() {
   }, { passive: true });
 }
 
-function getMemoResumeTarget() {
-  const lastProgress = getStoredLastProgress();
-  if (isValidStoredAyahRef(lastProgress)) {
+function getMemoResumeTarget(options = {}) {
+  const lastProgress = options.lastProgress ?? getStoredLastProgress();
+  const progressRef = normalizeStoredAyahRef(lastProgress);
+  const lastMemorized = options.lastMemorized ?? getStoredLastMemorized();
+  const lastMemorizedRef = normalizeStoredAyahRef(lastMemorized);
+  const progressTimestamp = Number(lastProgress?.timestamp) || 0;
+  const lastMemorizedTimestamp = Number(lastMemorized?.timestamp) || 0;
+  const progressIsComplete = progressRef && isMemoProgressComplete(lastProgress, options);
+  const progressIsStale = Boolean(
+    progressRef &&
+    lastMemorizedRef &&
+    compareAyah(lastMemorizedRef, progressRef) >= 0 &&
+    lastMemorizedTimestamp >= progressTimestamp
+  );
+
+  if (progressRef && !progressIsComplete && !progressIsStale) {
+    return progressRef;
+  }
+
+  const unlockedRef = normalizeStoredAyahRef(options.unlockedRef ?? unlocked) || getStoredProgress();
+  if (isValidStoredAyahRef(unlockedRef)) {
     return {
-      surah: Number(lastProgress.surah),
-      ayah: Number(lastProgress.ayah)
+      surah: Number(unlockedRef.surah),
+      ayah: Number(unlockedRef.ayah)
     };
   }
-  if (isValidStoredAyahRef(unlocked)) {
-    return {
-      surah: Number(unlocked.surah),
-      ayah: Number(unlocked.ayah)
-    };
+
+  if (progressRef) {
+    return progressRef;
   }
+
   return { ...FIRST_MEMO_AYAH };
 }
 
@@ -4883,6 +4998,22 @@ if (els.navPrevBtn) {
 
 if (els.navNextBtn) {
   els.navNextBtn.addEventListener('click', () => {
+    const next = getAdjacentAyah(1);
+    if (!next) return;
+    goMemo({ view: 'ayah', surah: next.surah, ayah: next.ayah }, { historyMode: 'push', animated: true, direction: 1 });
+  });
+}
+
+if (els.prevAyahBtn) {
+  els.prevAyahBtn.addEventListener('click', () => {
+    const prev = getAdjacentAyah(-1);
+    if (!prev) return;
+    goMemo({ view: 'ayah', surah: prev.surah, ayah: prev.ayah }, { historyMode: 'push', animated: true, direction: -1 });
+  });
+}
+
+if (els.nextAyahBtn) {
+  els.nextAyahBtn.addEventListener('click', () => {
     const next = getAdjacentAyah(1);
     if (!next) return;
     goMemo({ view: 'ayah', surah: next.surah, ayah: next.ayah }, { historyMode: 'push', animated: true, direction: 1 });

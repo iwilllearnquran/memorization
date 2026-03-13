@@ -9,13 +9,43 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
   <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
-  <link rel="stylesheet" href="/memorization.css?v=20260310-memo-home-layout3">
+  <link rel="stylesheet" href="/memorization.css?v=20260313-memo-home-layout10">
 </head>
 <body class="memorization-page memo-welcome-mode memo-word-mode">
   <div class="memo-app">
     <div id="memoShell" class="memo-shell">
       <section id="memoWelcome" class="memo-welcome" aria-labelledby="memoWelcomeTitle">
         <main class="memo-home-content">
+          <section class="memo-home-design memo-home-card" aria-labelledby="memoDesignTitle">
+            <div class="memo-home-card-title-row memo-home-design-title-row">
+              <h2 id="memoDesignTitle"> Quran Memorization</h2>
+              <span class="memo-home-design-badge">(Beta)</span>
+            </div>
+            <p class="memo-home-design-copy">This memorization flow is built to help you listen deeply, repeat with focus, recite with confidence, recall without prompts, and write once to lock each ayah in.</p>
+            <div class="memo-home-design-grid" aria-label="Memorization steps">
+              <div class="memo-home-design-step">
+                <span class="material-symbols-outlined" aria-hidden="true">hearing</span>
+                <strong>Listen</strong>
+              </div>
+              <div class="memo-home-design-step">
+                <span class="material-symbols-outlined" aria-hidden="true">replay</span>
+                <strong>Repeat</strong>
+              </div>
+              <div class="memo-home-design-step">
+                <span class="material-symbols-outlined" aria-hidden="true">record_voice_over</span>
+                <strong>Recite</strong>
+              </div>
+              <div class="memo-home-design-step">
+                <span class="material-symbols-outlined" aria-hidden="true">psychology_alt</span>
+                <strong>Recall</strong>
+              </div>
+              <div class="memo-home-design-step">
+                <span class="material-symbols-outlined" aria-hidden="true">edit_note</span>
+                <strong>Write</strong>
+              </div>
+            </div>
+          </section>
+
           <section class="memo-home-hero memo-home-card memo-home-welcome">
             <div class="memo-home-hero-top">
               <div class="memo-home-hello">
@@ -25,24 +55,30 @@
 
               <div class="memo-home-rings" aria-label="Progress rings">
                 <div class="memo-home-ring" title="Surah progress">
-                  <svg class="memo-home-ring-svg" viewBox="0 0 80 80" aria-hidden="true">
-                    <circle class="memo-home-ring-track" cx="40" cy="40" r="30"></circle>
-                    <circle id="memoWelcomeProgressRing" class="memo-home-ring-value memo-home-ring-value-surah" cx="40" cy="40" r="30"></circle>
-                  </svg>
-                  <div class="memo-home-ring-label">
+                  <div class="memo-home-ring-visual">
+                    <svg class="memo-home-ring-svg" viewBox="0 0 80 80" aria-hidden="true">
+                      <circle class="memo-home-ring-track" cx="40" cy="40" r="30"></circle>
+                      <circle id="memoWelcomeProgressRing" class="memo-home-ring-value memo-home-ring-value-surah" cx="40" cy="40" r="30"></circle>
+                    </svg>
                     <span id="memoWelcomeProgressPct" class="memo-home-ring-pct">0%</span>
-                    Surah
+                  </div>
+                  <div class="memo-home-ring-label">
+                    <span class="memo-home-ring-title">Surah</span>
+                    <span id="memoWelcomeSurahName" class="memo-home-ring-meta">Al-Faatiha</span>
                   </div>
                 </div>
 
                 <div class="memo-home-ring" title="Quran progress">
-                  <svg class="memo-home-ring-svg" viewBox="0 0 80 80" aria-hidden="true">
-                    <circle class="memo-home-ring-track" cx="40" cy="40" r="30"></circle>
-                    <circle id="memoWelcomeQuranProgressRing" class="memo-home-ring-value memo-home-ring-value-quran" cx="40" cy="40" r="30"></circle>
-                  </svg>
+                  <div class="memo-home-ring-visual">
+                    <svg class="memo-home-ring-svg" viewBox="0 0 80 80" aria-hidden="true">
+                      <circle class="memo-home-ring-track" cx="40" cy="40" r="30"></circle>
+                      <circle id="memoWelcomeQuranProgressRing" class="memo-home-ring-value memo-home-ring-value-quran" cx="40" cy="40" r="30"></circle>
+                    </svg>
+                    <span id="memoWelcomeQuranPct" class="memo-home-ring-pct" aria-hidden="true">0%</span>
+                  </div>
                   <div class="memo-home-ring-label">
-                    <span id="memoWelcomeQuranPct" class="memo-home-ring-pct" aria-hidden="true"></span>
-                    Quran
+                    <span class="memo-home-ring-title">Quran</span>
+                    <span id="memoWelcomeQuranMeta" class="memo-home-ring-meta">0 of 6,236 ayahs memorized</span>
                   </div>
                 </div>
               </div>
@@ -51,36 +87,14 @@
 
           <div class="memo-home-grid">
 
-                        <section class="memo-home-card">
-              <div class="memo-home-card-title-row">
-                <h2>Your Stats</h2>
-               
-              </div>
-
-              <div class="memo-home-stats">
-                <div class="memo-home-stat">
-                  <div id="memoWelcomeMemorized" class="memo-home-stat-num">0</div>
-                  <div class="memo-home-stat-label">Total ayahs memorized</div>
-                </div>
-                <div class="memo-home-stat">
-                  <div id="memoWelcomeWordsLearnt" class="memo-home-stat-num">0</div>
-                  <div class="memo-home-stat-label">Total words learnt</div>
-                </div>
-                <div class="memo-home-stat">
-                  <div id="memoStreakDays" class="memo-home-stat-num">0</div>
-                  <div class="memo-home-stat-label">Streak days</div>
-                </div>
-              </div>
-
-
-            </section>
+                       
 
             <section class="memo-home-card">
               <div class="memo-home-card-title-row">
                 <h2 id="memoWelcomeLastTitle">Last Ayah</h2>
                  <span id="memoWelcomeLastRef" class="memo-home-badge">Surah 1: Al-Fatihah - Ayah 1</span>
               </div>
-              <p id="memoWelcomeLastWhen" class="memo-home-last-meta"></p>
+ 
 
               
 
@@ -211,6 +225,9 @@
 
     <div id="memoBottomControlStrip" class="memo-transparent-strip memo-transparent-strip-bottom">
       <div class="memo-action-icons">
+        <button id="memoPrevAyahBtn" type="button" class="memo-icon-btn memo-icon-only memo-nav-edge-btn" aria-label="Previous ayah">
+          <span class="material-icons-outlined" aria-hidden="true">chevron_left</span>
+        </button>
         <button id="memoPlayBtn" type="button" class="memo-icon-btn memo-icon-only memo-play-btn" aria-label="Play ayah">
           <span class="material-icons-outlined" aria-hidden="true">play_arrow</span>
         </button>
@@ -222,6 +239,10 @@
         <button id="memoPeekBtn" class="memo-icon-ghost memo-icon-only memo-peek-btn" type="button" aria-label="Peek">
           <span class="material-icons-outlined" aria-hidden="true">visibility</span>
         </button>
+        <button id="memoNextAyahBtn" type="button" class="memo-icon-btn memo-icon-only memo-nav-edge-btn" aria-label="Next ayah">
+          <span class="material-icons-outlined" aria-hidden="true">chevron_right</span>
+        </button>
+
       </div>
     </div>
 

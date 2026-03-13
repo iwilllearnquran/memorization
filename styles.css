@@ -3107,6 +3107,9 @@ body.game-mode #returnToAyah {
 
 #arrangeGameContainer .slots {
   margin: 10px auto 14px auto !important;
+  direction: rtl !important;
+  justify-content: flex-start !important;
+  text-align: right !important;
 }
 
 #verbGameContainer,
@@ -3380,6 +3383,14 @@ body.game-mode #returnToAyah {
 
 #arrangeGameContainer .slots {
   margin: 8px auto 0 !important;
+  direction: rtl !important;
+  justify-content: flex-start !important;
+  text-align: right !important;
+}
+
+#arrangeGameContainer .slot {
+  direction: rtl !important;
+  text-align: center !important;
 }
 
 #arrangeGameContainer .options {
@@ -3543,19 +3554,69 @@ body.game-mode #returnToAyah {
   padding: 0 4px !important;
 }
 
-#arrangeControls .return-games-btn {
+#arrangeControls .return-ayah-btn {
   width: 100% !important;
-  min-height: 38px !important;
+  min-height: 34px !important;
+  padding: 8px 14px !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
   animation: none !important;
 }
 
 #verbGameContainer #verbControls {
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  grid-template-areas:
+    "next finish"
+    "return return" !important;
+  gap: 10px !important;
+  align-items: stretch;
 }
 
-#verbGameContainer #verbControls .return-games-btn {
+#verbGameContainer #verbNextBtn {
+  grid-area: next;
+}
+
+#verbGameContainer #verbEndBtn {
+  grid-area: finish;
+}
+
+#verbGameContainer #verbControls .return-ayah-btn {
+  grid-area: return;
+  width: 100% !important;
+  min-height: 34px !important;
+  padding: 8px 14px !important;
+  font-size: 11px !important;
+  letter-spacing: 0.35px;
   text-transform: uppercase;
-  letter-spacing: 0.45px;
+}
+
+#verbGameContainer #verbControls .return-ayah-btn.game-play-btn-verbs.secondary {
+  background: linear-gradient(180deg, #fff6dc 0%, #f5d795 100%) !important;
+  color: #5b4620 !important;
+  box-shadow:
+    0 4px 0 #d3b16a,
+    0 8px 14px rgba(110, 78, 24, 0.14) !important;
+}
+
+#verbGameContainer #verbControls .return-ayah-btn:active {
+  transform: translateY(1px) !important;
+  box-shadow:
+    0 3px 0 #d3b16a,
+    0 6px 10px rgba(110, 78, 24, 0.12) !important;
+}
+
+#game-mode-content .game-play-btn-no-shine,
+#game-mode-content .return-ayah-btn.game-play-btn {
+  animation: none !important;
+}
+
+#game-mode-content .game-play-btn-no-shine::before,
+#game-mode-content .return-ayah-btn.game-play-btn::before {
+  content: none !important;
+  display: none !important;
+  animation: none !important;
 }
 
 /* ===== Game Section Visibility Lock (2026-02-27) ===== */

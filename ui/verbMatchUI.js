@@ -195,11 +195,11 @@ function _addControls() {
     <button id="verbEndBtn"  class="game-play-btn-verbs disabled-control secondary">Finish</button>
     <button
       id="verbReturnBtn"
-      class="game-play-btn-verbs secondary return-games-btn"
-      data-action="return-games"
+      class="game-play-btn-verbs secondary return-ayah-btn"
+      data-action="return-ayah"
       type="button"
     >
-      Return to Games
+      Return to Ayah
     </button>
   `;
 

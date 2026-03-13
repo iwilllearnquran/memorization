@@ -51,7 +51,7 @@ import { fetchSurahList } from '/services/quranApi.js';
 // ----- Constants & State -----
 const DEFAULT_SURAH = 1;
 const DEFAULT_AYAH  = 1;
-const STORAGE_KEY = 'swipe_hint_shown_v1';
+const STORAGE_KEY = 'swipe_hint_shown_v2';
 const LISTEN_STORAGE_KEY = 'qq_last_listened_auto_swipe_v1';
 const RECITE_PROGRESS_KEY = 'qq_last_recite_progress_v1';
 const MEMO_PROGRESS_KEY = 'memo_last_progress_v1';
@@ -1032,22 +1032,149 @@ function enableNativeTouchGuard() {
   document.addEventListener('selectstart', blockIfNotEditable, { capture: true });
 }
 
-function setNativeGoogleSignInState(isInFlight) {
-  nativeGoogleSignInInFlight = Boolean(isInFlight);
+function readCurrentGuestStreakCount() {
+  try {
+    const raw = localStorage.getItem('guestStreakHistory');
+    const parsed = JSON.parse(raw || '[]');
+    return Array.isArray(parsed) ? parsed.length : 0;
+  } catch (_) {
+    return 0;
+  }
+}
+
+function getRenderedStreakCount() {
+  const raw = Number.parseInt(D.streakEl?.dataset?.streakCount || '', 10);
+  if (Number.isFinite(raw)) return Math.max(0, raw);
+  return readCurrentGuestStreakCount();
+}
+
+const GOOGLE_SIGN_IN_ICON_SVG = "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 48 48\" aria-hidden=\"true\" focusable=\"false\"><path fill=\"#EA4335\" d=\"M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z\"></path><path fill=\"#4285F4\" d=\"M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z\"></path><path fill=\"#FBBC05\" d=\"M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z\"></path><path fill=\"#34A853\" d=\"M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z\"></path><path fill=\"none\" d=\"M0 0h48v48H0z\"></path></svg>";
+
+function renderGoogleSignInIcon(className = '') {
+  if (!className) return GOOGLE_SIGN_IN_ICON_SVG;
+  return GOOGLE_SIGN_IN_ICON_SVG.replace('<svg ', '<svg class="' + className + '" ');
+}
+
+function getDrawerGoogleButtonMarkup(isLoading = false) {
+  const label = isLoading ? 'Signing in...' : 'Continue with Google';
+  const leadingMarkup = isLoading
+    ? '<span class="gsi-material-button-spinner" aria-hidden="true"></span>'
+    : '<span class="gsi-material-button-icon" aria-hidden="true">' + renderGoogleSignInIcon('gsi-material-button-icon-svg') + '</span>';
+
+  return '<div class="gsi-material-button-state"></div>'
+    + '<div class="gsi-material-button-content-wrapper">'
+    + leadingMarkup
+    + '<span class="gsi-material-button-contents">' + label + '</span>'
+    + '<span class="gsi-material-button-hidden" aria-hidden="true">' + label + '</span>'
+    + '</div>';
+}
+
+function renderDrawerGoogleLoginButton() {
   if (!D.drawerLoginBtn) return;
 
-  if (nativeGoogleSignInInFlight) {
-    D.drawerLoginBtn.textContent = 'Signing in...';
-    D.drawerLoginBtn.disabled = true;
-    D.drawerLoginBtn.style.opacity = '0.72';
-    D.drawerLoginBtn.style.pointerEvents = 'none';
+  const isLoading = nativeGoogleSignInInFlight;
+  D.drawerLoginBtn.classList.toggle('is-loading', isLoading);
+  D.drawerLoginBtn.disabled = isLoading;
+  D.drawerLoginBtn.style.opacity = isLoading ? '0.88' : '';
+  D.drawerLoginBtn.style.pointerEvents = isLoading ? 'none' : '';
+  D.drawerLoginBtn.setAttribute('aria-label', isLoading ? 'Signing in with Google' : 'Continue with Google');
+  if (isLoading) {
+    D.drawerLoginBtn.setAttribute('aria-busy', 'true');
+  } else {
+    D.drawerLoginBtn.removeAttribute('aria-busy');
+  }
+  D.drawerLoginBtn.innerHTML = getDrawerGoogleButtonMarkup(isLoading);
+}
+
+function shouldShowGoogleStreakChip(user = auth.currentUser, streakCount = getRenderedStreakCount()) {
+  return !isAuthenticatedUser(user) && Math.max(0, Number(streakCount) || 0) === 0;
+}
+
+function renderTopNavStreakChip(streakCount, user = auth.currentUser) {
+  if (!D.streakEl) return false;
+
+  const safeCount = Math.max(0, Number(streakCount) || 0);
+  const showGoogle = shouldShowGoogleStreakChip(user, safeCount);
+  D.streakEl.dataset.streakCount = String(safeCount);
+
+  if (showGoogle) {
+    D.streakEl.dataset.streakMode = 'google';
+    D.streakEl.classList.add('streak-info-google');
+    D.streakEl.classList.toggle('streak-info-loading', nativeGoogleSignInInFlight);
+    D.streakEl.setAttribute('role', 'button');
+    D.streakEl.setAttribute('tabindex', '0');
+    D.streakEl.setAttribute('aria-busy', nativeGoogleSignInInFlight ? 'true' : 'false');
+    D.streakEl.setAttribute('aria-label', nativeGoogleSignInInFlight ? 'Signing in with Google' : 'Continue with Google');
+    D.streakEl.setAttribute('title', nativeGoogleSignInInFlight ? 'Signing in with Google' : 'Continue with Google');
+    D.streakEl.innerHTML = nativeGoogleSignInInFlight
+      ? '<span class="streak-google-spinner" aria-hidden="true"></span><span class="streak-google-loading-label">Signing in</span>'
+      : '<span class="streak-google-pill-label">Sign in</span><span class="streak-google-mark" aria-hidden="true">' + renderGoogleSignInIcon('streak-google-logo') + '</span>';
+    return true;
+  }
+
+  const flame = String.fromCodePoint(0x1F525);
+  const streakLabel = 'Reading streak ' + safeCount + ' day' + (safeCount === 1 ? '' : 's');
+  D.streakEl.dataset.streakMode = 'streak';
+  D.streakEl.classList.remove('streak-info-google', 'streak-info-loading');
+  D.streakEl.removeAttribute('role');
+  D.streakEl.removeAttribute('tabindex');
+  D.streakEl.removeAttribute('title');
+  D.streakEl.removeAttribute('aria-busy');
+  D.streakEl.setAttribute('aria-label', streakLabel);
+  D.streakEl.textContent = flame + safeCount;
+  return false;
+}
+
+window.renderQuranQuestNavStreak = ({ navEl, count }) => {
+  if (!navEl) return false;
+  if (!D.streakEl && navEl.id === 'streakDisplay') {
+    D.streakEl = navEl;
+  }
+  if (D.streakEl && navEl !== D.streakEl) return false;
+  return renderTopNavStreakChip(count);
+};
+
+function setNativeGoogleSignInState(isInFlight) {
+  nativeGoogleSignInInFlight = Boolean(isInFlight);
+
+  renderDrawerGoogleLoginButton();
+
+  renderTopNavStreakChip(getRenderedStreakCount(), auth.currentUser);
+}
+
+async function launchGoogleSignIn(source = 'drawer') {
+  if (nativeGoogleSignInInFlight) return;
+
+  setNativeGoogleSignInState(true);
+  showInAppToast('Signing in with Google...', '#0a4d68');
+
+  if (IS_NATIVE_WEBVIEW) {
+    const requested = sendNativeGoogleSignInRequest();
+    if (!requested) {
+      setNativeGoogleSignInState(false);
+      showInAppToast('Google sign-in is unavailable right now.', '#dc3545');
+      return;
+    }
     return;
   }
 
-  D.drawerLoginBtn.textContent = 'Continue with Google';
-  D.drawerLoginBtn.disabled = false;
-  D.drawerLoginBtn.style.opacity = '';
-  D.drawerLoginBtn.style.pointerEvents = '';
+  try {
+    const result = await signInWithGoogle();
+    if (result === null) {
+      showInAppToast('Redirecting to Google sign-in...', '#0a4d68');
+      return;
+    }
+  } catch (err) {
+    const code = String(err?.code || '');
+    if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') {
+      setNativeGoogleSignInState(false);
+      return;
+    }
+
+    console.warn('[Auth] Google sign-in failed from', source, err);
+    setNativeGoogleSignInState(false);
+    showInAppToast('Login failed. Please try again.', '#dc3545');
+  }
 }
 
 function isTrustedMessage(e) {
@@ -3322,6 +3449,15 @@ switch (data.type) {
       break;
     }
 
+    case 'SURAH_LIST_HOME': {
+      if (isSurahListMode && typeof toggleSurahListMode === 'function') {
+        toggleSurahListMode(false, { keepCurrentSurface: false });
+      } else if (typeof goLearnHome === 'function') {
+        goLearnHome();
+      }
+      break;
+    }
+
     case 'NAVIGATE_TO_AYAH': {
       const surah = Number(data.surah);
       const ayah = Number(data.ayah);
@@ -5022,6 +5158,11 @@ case 'SAVE_HINT_DONE': {
           if (isSurahListMode) {
             setSurahListMode(false, { keepCurrentSurface: false });
             return;
+          }
+
+          if (isGameMode) {
+            postToViewerIframes({ type: 'RETURN_TO_AYAH', force: true });
+            disableGameMode();
           }
 
           if (D.hero) D.hero.style.display = '';
@@ -6738,27 +6879,24 @@ case 'SAVE_HINT_DONE': {
         }
 
         if (D.drawerLoginBtn) {
-          D.drawerLoginBtn.addEventListener('click', async () => {
-            if (IS_NATIVE_WEBVIEW) {
-              if (nativeGoogleSignInInFlight) return;
-              setNativeGoogleSignInState(true);
-              const requested = sendNativeGoogleSignInRequest();
-              if (!requested) {
-                setNativeGoogleSignInState(false);
-                showInAppToast('Google sign-in is unavailable right now.', '#dc3545');
-                return;
-              }
-              showInAppToast('Choose a Google account to continue.', '#0a4d68');
-              return;
-            }
-
-            try {
-              await signInWithGoogle();
-            } catch (err) {
-              console.warn('[Auth] Google sign-in failed', err);
-              showInAppToast('Login failed. Please try again.', '#dc3545');
-            }
+          D.drawerLoginBtn.addEventListener('click', () => {
+            void launchGoogleSignIn('drawer');
           });
+        }
+
+        if (D.streakEl) {
+          const handleStreakGoogleSignIn = event => {
+            if (D.streakEl.dataset.streakMode !== 'google') return;
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            void launchGoogleSignIn('nav-streak');
+          };
+
+          D.streakEl.addEventListener('click', handleStreakGoogleSignIn, true);
+          D.streakEl.addEventListener('keydown', event => {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+            handleStreakGoogleSignIn(event);
+          }, true);
         }
 
         if (D.drawerLogoutBtn) {
@@ -6837,6 +6975,10 @@ case 'SAVE_HINT_DONE': {
                 return;
               }
               clearPendingAyahUiState();
+              if (isGameMode) {
+                postToViewerIframes({ type: 'RETURN_TO_AYAH', force: true });
+                disableGameMode();
+              }
               if (D.hero) D.hero.style.display = '';
               if (D.surahContainer) D.surahContainer.style.display = '';
               if (D.viewer) D.viewer.style.display = 'none';
@@ -7753,11 +7895,10 @@ case 'SAVE_HINT_DONE': {
               localStorage.getItem('guestPoints') || '0';
           }
 
-          const flame = String.fromCodePoint(0x1F525);
           const guestHistory = JSON.parse(
             localStorage.getItem('guestStreakHistory') || '[]'
           );
-          D.streakEl.textContent = `${flame}${guestHistory.length}`;
+          renderTopNavStreakChip(guestHistory.length, null);
           await loadNamazGoalsWidget();
           await refreshAllProgress(null);
           await initStartButton(null);
@@ -7813,9 +7954,7 @@ case 'SAVE_HINT_DONE': {
         if (D.ptsEl) {
           D.ptsEl.textContent = data.ajrPoints || 0;
         }
-        const flame = String.fromCodePoint(0x1F525);
-        D.streakEl.textContent =
-          `${flame}${(data.streakHistory || []).length}`;
+        renderTopNavStreakChip((data.streakHistory || []).length, activeUser);
         await loadNamazGoalsWidget(data.namazGoalsWidget);
         await refreshAllProgress(activeUser);
         await initStartButton(activeUser);
@@ -8279,7 +8418,7 @@ async function sendAyahToIframe(iframe, surah, ayah) {
           });
         }
 
-        if (localStorage.getItem('swipe_hint_shown_v1') &&
+        if (localStorage.getItem(STORAGE_KEY) &&
             !localStorage.getItem('word_click_hint_shown_v1') &&
             !pendingWordHint) {
           queueWordHintAfterCurrentAyah();

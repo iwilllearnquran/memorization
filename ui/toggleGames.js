@@ -1,4 +1,4 @@
-import { GAME_CONFIG } from '/config/gameConfig.js';
+import { GAME_CONFIG, isGameEnabled } from '/config/gameConfig.js';
 import { hide, show, $ } from '/utils/domHelpers.js';
 import gameSession from '/state/gameSession.js';
 import { renderGameContainers } from '/ui/renderGameContainers.js';
@@ -164,6 +164,10 @@ window.addEventListener('DOMContentLoaded', () => {
  * Main entry: modes are 'selector', 'arrange', or 'verb'
  */
 export function toggleGames(mode = 'selector') {
+  if (mode !== 'selector' && !isGameEnabled(mode)) {
+    mode = 'selector';
+  }
+
   initStats('#game-mode-content');
 
   const container = document.querySelector(gameContainer);
