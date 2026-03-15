@@ -6885,18 +6885,49 @@ case 'SAVE_HINT_DONE': {
         }
 
         if (D.streakEl) {
-          const handleStreakGoogleSignIn = event => {
-            if (D.streakEl.dataset.streakMode !== 'google') return;
+          let lastStreakActionAt = 0;
+          let suppressStreakClickUntil = 0;
+          const handleStreakNavAction = event => {
+            const type = event?.type || '';
+            const now = Date.now();
+            const isKeyboardEvent = type === 'keydown';
+            const key = isKeyboardEvent ? event.key : '';
+            const isGoogleChip = D.streakEl.dataset.streakMode === 'google';
+
+            if (isKeyboardEvent && key !== 'Enter' && key !== ' ') {
+              return;
+            }
+
+            if (!isGoogleChip) {
+              return;
+            }
+
+            if (type === 'click' && now < suppressStreakClickUntil) {
+              event.preventDefault();
+              event.stopImmediatePropagation();
+              return;
+            }
+
+            if (type === 'pointerdown' || type === 'touchstart') {
+              suppressStreakClickUntil = now + 220;
+            }
+
+            if ((now - lastStreakActionAt) < 170) {
+              event.preventDefault();
+              event.stopImmediatePropagation();
+              return;
+            }
+
             event.preventDefault();
             event.stopImmediatePropagation();
+            lastStreakActionAt = now;
             void launchGoogleSignIn('nav-streak');
           };
 
-          D.streakEl.addEventListener('click', handleStreakGoogleSignIn, true);
-          D.streakEl.addEventListener('keydown', event => {
-            if (event.key !== 'Enter' && event.key !== ' ') return;
-            handleStreakGoogleSignIn(event);
-          }, true);
+          D.streakEl.addEventListener('pointerdown', handleStreakNavAction, { passive: false, capture: true });
+          D.streakEl.addEventListener('touchstart', handleStreakNavAction, { passive: false, capture: true });
+          D.streakEl.addEventListener('click', handleStreakNavAction, true);
+          D.streakEl.addEventListener('keydown', handleStreakNavAction, true);
         }
 
         if (D.drawerLogoutBtn) {

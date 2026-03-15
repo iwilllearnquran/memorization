@@ -29,6 +29,7 @@ const SPEECH_ARABIC_ACCEPT_SIMILARITY = 0.7;
 const SPEECH_ARABIC_SHORT_ACCEPT_SIMILARITY = 0.64;
 const SPEECH_DUPLICATE_RUN_LIMIT = 2;
 const SPEECH_PREVIEW_DUPLICATE_RUN_LIMIT = 1;
+const SPEECH_WORD_MODE_PREVIEW_TOKEN_LIMIT = 1;
 const PEEK_DURATION_MS = 1000;
 const EXPECTED_HINT_WRONG_TRIES = 3;
 const QURAN_TOTAL_AYAHS = 6236;
@@ -111,6 +112,7 @@ const els = {
   prevAyahBtn: document.getElementById('memoPrevAyahBtn'),
   nextAyahBtn: document.getElementById('memoNextAyahBtn'),
   playCount: document.getElementById('memoPlayCount'),
+  clearBtn: document.getElementById('memoClearBtn'),
   progressFill: document.getElementById('memoProgressFill'),
   progressText: document.getElementById('memoProgressText'),
   startBtn: document.getElementById('memoStartBtn'),
@@ -307,7 +309,10 @@ function bindBottomNavSystemBarColor() {
 }
 
 function stripArabicDiacritics(text) {
-  return text.replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g, '');
+  return String(text || '')
+    // Quranic dagger alif should normalize to a real alif, not disappear.
+    .replace(/\u0670/g, '\u0627')
+    .replace(/[\u064B-\u065F\u06D6-\u06ED]/g, '');
 }
 
 function normalize(text) {
@@ -2630,6 +2635,60 @@ function resetReveals() {
   }
 }
 
+function clearCurrentPracticeState() {
+  if (!els.practiceContent) return;
+
+  const wordInputs = Array.from(els.practiceContent.querySelectorAll('.translit-input'));
+  wordInputs.forEach(input => {
+    input.value = '';
+    const storageKey = String(input.dataset.key || '').trim();
+    if (storageKey) {
+      try { localStorage.removeItem(storageKey); } catch {}
+    }
+    updateTranslitFeedback(input);
+  });
+
+  const paragraphKey = `memo-translit-paragraph-${current.surah}-${current.ayah}`;
+  try { localStorage.removeItem(paragraphKey); } catch {}
+
+  const paragraphInput = els.practiceContent.querySelector('.memo-paragraph-input');
+  if (paragraphInput) {
+    paragraphInput.textContent = '';
+    paragraphInput.dataset.marked = '0';
+    paragraphInput.classList.add('is-empty');
+  }
+
+  const paragraphSummary = els.practiceContent.querySelector('.memo-validate-summary');
+  if (paragraphSummary) {
+    paragraphSummary.textContent = 'Type the full ayah and validate. Feedback will check each word in order.';
+  }
+
+  const paragraphList = els.practiceContent.querySelector('.memo-validate-list');
+  if (paragraphList) {
+    paragraphList.innerHTML = '';
+    paragraphList.classList.add('is-collapsed');
+  }
+
+  const detailToggleBtn = Array.from(els.practiceContent.querySelectorAll('.memo-paragraph-actions button'))
+    .find(btn => /detailed feedback/i.test(btn.textContent || ''));
+  if (detailToggleBtn) {
+    detailToggleBtn.textContent = 'Show Detailed Feedback';
+    detailToggleBtn.disabled = true;
+  }
+}
+
+function resetCurrentAyahAttempt() {
+  if (!current || !isValidAyahRef(Number(current.surah), Number(current.ayah))) return;
+  stopAllMemoActivity();
+  showModal(false);
+  clearCurrentPracticeState();
+  resetReveals();
+  setStatus('Idle');
+  syncPlaybackControlState();
+  syncSpeechControlState();
+  showMemoToast('Cleared. Start fresh.');
+}
+
 function revealWord(idx) {
   const node = els.wordsWrap.querySelector(`[data-index="${idx}"]`);
   if (!node) return;
@@ -3044,6 +3103,10 @@ function applyRevealFromAlignment(alignment, speechTokens) {
 }
 
 
+function getImmediateWordModeMatchType(alignment, expectedIdx = revealIndex) {
+  return (alignment?.matchedPairs || []).find(pair => pair.expectedIdx === expectedIdx)?.matchType || '';
+}
+
 function commitAlignment(alignment, speechTokens) {
   if (!alignment) return;
 
@@ -3068,15 +3131,26 @@ function commitAlignment(alignment, speechTokens) {
     reciteEngine.stableRepeatCount = 1;
   }
 
-  // Commit when stable index advances and alignment is confirmed stable
-  // Accept on first alignment if all expected words are matched (completion)
+  // Commit when stable index advances and alignment is confirmed stable.
+  // In word mode, allow the immediate next Arabic word to unlock from interim speech
+  // so the UI feels responsive without revealing later words early.
   const isCompletion = stableIndex >= expectedWords.length;
   const hasExactMajority = (alignment.matchedPairs || []).filter(
     p => p.matchType === 'exact-arabic'
   ).length >= Math.floor(stableIndex * 0.5);
+  const immediateWordMatchType = getImmediateWordModeMatchType(alignment, revealIndex);
+  const canCommitImmediateWord =
+    !isFullAyahReciteMode() &&
+    stableIndex === revealIndex + 1 &&
+    (immediateWordMatchType === 'exact-arabic' || immediateWordMatchType === 'fuzzy-arabic');
   const shouldCommit =
     stableIndex > revealIndex &&
-    (reciteEngine.stableRepeatCount >= 2 || isCompletion || (stableIndex === revealIndex + 1 && hasExactMajority));
+    (
+      reciteEngine.stableRepeatCount >= 2 ||
+      isCompletion ||
+      (stableIndex === revealIndex + 1 && hasExactMajority) ||
+      canCommitImmediateWord
+    );
 
   reciteEngine.lastAlignment = alignment;
 
@@ -3117,9 +3191,8 @@ function recomputeSpeechAlignment(finalText, interimText = '') {
   if (!speechTokens.length || !expectedTokenObjects.length) return;
 
   const signature = speechTokens.map(t => getSpeechTokenSignature(t.raw)).join('|');
-  if (signature && signature === reciteEngine.lastSpeechTokensSignature) {
-    return;
-  }
+  // Keep processing repeated interim signatures so stableRepeatCount can confirm
+  // the same next word instead of waiting for a different transcript shape.
   reciteEngine.lastSpeechTokensSignature = signature;
 
   const alignment = alignSpeechTokensToExpected(expectedTokenObjects, speechTokens);
@@ -3541,15 +3614,21 @@ function commitRecognitionSessionTranscript() {
 
 function buildFullReciteLiveTokens(finalText, interimText = '') {
   const stableTokens = dedupeSpeechTokens(tokenizeRaw(finalText), SPEECH_DUPLICATE_RUN_LIMIT);
-  if (!isFullAyahReciteMode()) {
-    return stableTokens;
-  }
   let previewTokens = dedupeSpeechTokens(tokenizeRaw(interimText), SPEECH_PREVIEW_DUPLICATE_RUN_LIMIT);
   if (stableTokens.length && previewTokens.length) {
     const stableTailSignature = getSpeechTokenSignature(stableTokens[stableTokens.length - 1]);
     while (previewTokens.length && getSpeechTokenSignature(previewTokens[0]) === stableTailSignature) {
       previewTokens.shift();
     }
+  }
+  if (!isFullAyahReciteMode()) {
+    if (!previewTokens.length) {
+      return stableTokens;
+    }
+    return dedupeSpeechTokens(
+      stableTokens.concat(previewTokens.slice(0, SPEECH_WORD_MODE_PREVIEW_TOKEN_LIMIT)),
+      SPEECH_DUPLICATE_RUN_LIMIT
+    );
   }
   return dedupeSpeechTokens(stableTokens.concat(previewTokens), SPEECH_DUPLICATE_RUN_LIMIT);
 }
@@ -5086,6 +5165,12 @@ if (els.toggleExpectedAfterWrong) {
 if (els.peekBtn) {
   els.peekBtn.addEventListener('click', () => {
     peekWords();
+  });
+}
+
+if (els.clearBtn) {
+  els.clearBtn.addEventListener('click', () => {
+    resetCurrentAyahAttempt();
   });
 }
 

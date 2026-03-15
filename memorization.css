@@ -1236,13 +1236,9 @@ body.memorization-page.memo-welcome-mode {
 }
 
 .memo-word-grid .memo-spoken {
-  display: block;
-  margin-top: 4px;
-  min-height: 14px;
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 1.3;
-  color: #6b7a86;
+  display: none !important;
+  margin-top: 0;
+  min-height: 0;
 }
 
 .memo-word-grid .translation {
@@ -1744,6 +1740,17 @@ html.hide-grammar .memo-word-grid .pos-tag {
   border-color: rgba(15, 118, 110, 0.32);
 }
 
+#memoClearBtn {
+  background: rgba(255, 247, 232, 0.96);
+  border-color: rgba(213, 170, 72, 0.34);
+  color: #8c6411;
+}
+
+#memoClearBtn .material-icons-outlined {
+  font-size: 20px;
+  line-height: 1;
+}
+
 .memo-nav-edge-btn {
   color: rgba(15, 118, 110, 0.96);
 }
@@ -1799,6 +1806,9 @@ html.hide-grammar .memo-word-grid .pos-tag {
   justify-content: center;
   gap: 2px;
   padding: 8px 6px;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .memo-bottom-nav-btn.active {
@@ -1806,6 +1816,16 @@ html.hide-grammar .memo-word-grid .pos-tag {
   background: rgba(255, 255, 255, 0.18);
   border-color: rgba(255, 255, 255, 0.22);
   font-weight: 900;
+}
+
+.memo-bottom-nav-btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.memo-bottom-nav-btn:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
 }
 
 .memo-bottom-nav-btn .memo-bottom-nav-icon,

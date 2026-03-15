@@ -23,7 +23,8 @@ const StreakLogicAndUI = (function() {
   let auth;
   let db;
   let lastNavOpenAt = 0;
-  const NAV_OPEN_DEBOUNCE_MS = 300;
+  let suppressNavClickUntil = 0;
+  const NAV_OPEN_DEBOUNCE_MS = 180;
 
   function createConfettiCanvas() {
     if (document.getElementById(CONF_CANVAS_ID)) return;
@@ -365,6 +366,41 @@ const StreakLogicAndUI = (function() {
     }
   }
 
+  function openPopupFromNav(event) {
+    if (!navEl || navEl.dataset?.streakMode === 'google') return false;
+
+    const type = event?.type || '';
+    const now = Date.now();
+    const isKeyboardEvent = type === 'keydown';
+    const key = isKeyboardEvent ? event.key : '';
+
+    if (isKeyboardEvent && key !== 'Enter' && key !== ' ') {
+      return false;
+    }
+
+    if (type === 'click' && now < suppressNavClickUntil) {
+      event?.preventDefault?.();
+      return false;
+    }
+
+    if (type === 'pointerdown' || type === 'touchstart') {
+      suppressNavClickUntil = now + 220;
+    }
+
+    const overlay = document.getElementById(OVERLAY_ID);
+    const alreadyOpen = overlay && overlay.style.display === 'flex';
+    if (alreadyOpen || now - lastNavOpenAt < NAV_OPEN_DEBOUNCE_MS) {
+      event?.preventDefault?.();
+      return false;
+    }
+
+    event?.preventDefault?.();
+    lastNavOpenAt = now;
+    createPopup();
+    renderPopup(false, null, history.length);
+    return true;
+  }
+
   const StreakUI = {
     init: function({ navSelector, firebaseApp }) {
       if (initialized) return;
@@ -387,15 +423,10 @@ const StreakLogicAndUI = (function() {
       }
 
       if (navEl) {
-        navEl.addEventListener('click', () => {
-          const overlay = document.getElementById(OVERLAY_ID);
-          const alreadyOpen = overlay && overlay.style.display === 'flex';
-          const now = performance.now();
-          if (alreadyOpen || now - lastNavOpenAt < NAV_OPEN_DEBOUNCE_MS) return;
-          lastNavOpenAt = now;
-          createPopup();
-          renderPopup(false, null, history.length);
-        });
+        navEl.addEventListener('pointerdown', openPopupFromNav, { passive: false });
+        navEl.addEventListener('touchstart', openPopupFromNav, { passive: false });
+        navEl.addEventListener('click', openPopupFromNav);
+        navEl.addEventListener('keydown', openPopupFromNav);
       }
 
       auth.onAuthStateChanged(user => {
@@ -467,6 +498,8 @@ const StreakLogicAndUI = (function() {
     close: function() {
       const overlay = document.getElementById(OVERLAY_ID);
       if (overlay) overlay.remove();
+      lastNavOpenAt = 0;
+      suppressNavClickUntil = 0;
       document.body.classList.remove('modal-open');
     }
   };
