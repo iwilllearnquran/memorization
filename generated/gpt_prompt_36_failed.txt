@@ -1,0 +1,50 @@
+I need you to provide short Quranic Arabic example phrases for each word below.
+
+CRITICAL RULES:
+1. The example MUST be a VERBATIM excerpt from the Quran in Uthmani script — copy-paste directly from a Quran source, do NOT write from memory.
+2. Use Uthmani orthography: ٱلصَّلَوٰةَ (NOT الصَّلَاة), ءَامَنُوا۟ (NOT آمَنُوا), ٱلزَّكَوٰةَ (NOT الزَّكَاة), بِـَٔايَـٰتِنَا (NOT بِآيَاتِنَا), etc.
+3. Each example should be 3-7 Arabic words — a natural phrase from a single verse (do NOT combine words from different verses).
+4. Include the Surah:Verse reference in "chapter:verse" number format (e.g., "2:255" not "Al-Baqarah 2:255").
+5. The example phrase must actually appear IN THAT VERSE. Double-check before including.
+6. Copy the "word" field EXACTLY as I provide it — do not retype or change any characters.
+7. Return valid JSON array format.
+
+COMMON MISTAKES TO AVOID:
+- Do NOT use standard Arabic spelling — use Uthmani script only (e.g., الصلوٰة not الصلاة, الزكوٰة not الزكاة)
+- Do NOT paraphrase or reconstruct from memory — only copy exact text from Quran
+- Do NOT cross verse boundaries — the phrase must come from a single verse
+- Do NOT change the word form (e.g., nominative vs accusative ending must match)
+
+Output format - JSON array:
+[
+  {
+    "word": "<exact word from input - COPY PASTE, do not retype>",
+    "example": "<3-7 word Uthmani Quranic phrase containing the word>",
+    "reference": "chapter:verse"
+  }
+]
+
+Here are the 20 words:
+
+[
+  {"word": "مُّبِينٌ", "meaning": "clear"},
+  {"word": "لِّلَّذِينَ", "meaning": "to those who"},
+  {"word": "رَّبِّهِۦ", "meaning": "his Lord"},
+  {"word": "ٱلصَّلَوٰةَ", "meaning": "the prayer"},
+  {"word": "أُمَّةً", "meaning": "a community"},
+  {"word": "عَمَّا", "meaning": "of what"},
+  {"word": "إِلَيْهِمْ", "meaning": "at them"},
+  {"word": "عَذَابًا", "meaning": "a punishment"},
+  {"word": "رَبُّكُمَا", "meaning": "your Lord"},
+  {"word": "يُؤْمِنَّ", "meaning": "they believe"},
+  {"word": "يُنظَرُونَ", "meaning": "will be reprieved"},
+  {"word": "بِٱلْبَيِّنَٰتِ", "meaning": "with the clear signs"},
+  {"word": "عَنْهَا", "meaning": "from it"},
+  {"word": "ٱلرُّسُلُ", "meaning": "are the Messengers"},
+  {"word": "بَيَّنَّٰهُ", "meaning": "We made clear"},
+  {"word": "ذَاتَ", "meaning": "that"},
+  {"word": "طَّآئِفَةٌ", "meaning": "a group"},
+  {"word": "فَإِنَّهُۥ", "meaning": "then indeed he"},
+  {"word": "ءَاتَيْنَٰهُمُ", "meaning": "We have given them"},
+  {"word": "بِبَعْضِ", "meaning": "in part"}
+]

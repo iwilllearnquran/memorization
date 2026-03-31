@@ -1,0 +1,394 @@
+I need you to provide short Quranic Arabic example phrases for each word below.
+
+CRITICAL RULES:
+1. The example MUST be a VERBATIM excerpt from the Quran in Uthmani script — copy-paste directly from a Quran source, do NOT write from memory.
+2. Use Uthmani orthography: ٱلصَّلَوٰةَ (NOT الصَّلَاة), ءَامَنُوا۟ (NOT آمَنُوا), ٱلزَّكَوٰةَ (NOT الزَّكَاة), بِـَٔايَـٰتِنَا (NOT بِآيَاتِنَا), etc.
+3. Each example should be 3-7 Arabic words — a natural phrase from a single verse (do NOT combine words from different verses).
+4. Include the Surah:Verse reference in "chapter:verse" number format (e.g., "2:255" not "Al-Baqarah 2:255").
+5. The example phrase must actually appear IN THAT VERSE. Double-check before including.
+6. Copy the "word" field EXACTLY as I provide it — do not retype or change any characters.
+7. Return valid JSON array format.
+
+COMMON MISTAKES TO AVOID:
+- Do NOT use standard Arabic spelling — use Uthmani script only (e.g., الصلوٰة not الصلاة, الزكوٰة not الزكاة)
+- Do NOT paraphrase or reconstruct from memory — only copy exact text from Quran
+- Do NOT cross verse boundaries — the phrase must come from a single verse
+- Do NOT change the word form (e.g., nominative vs accusative ending must match)
+
+Output format - JSON array:
+[
+  {
+    "word": "<exact word from input - COPY PASTE, do not retype>",
+    "example": "<3-7 word Uthmani Quranic phrase containing the word>",
+    "reference": "chapter:verse"
+  }
+]
+
+Here are the 91 words:
+
+[
+  {
+    "word": "وَلَئِنِ",
+    "meaning": "And if"
+  },
+  {
+    "word": "ءَايَٰتِنَا",
+    "meaning": "Our verses"
+  },
+  {
+    "word": "أَجْرُ",
+    "meaning": "reward"
+  },
+  {
+    "word": "أَحْسَنُ",
+    "meaning": "is better"
+  },
+  {
+    "word": "أُوتُوا۟",
+    "meaning": "were given"
+  },
+  {
+    "word": "ٱلْأَوْلَيَٰنِ",
+    "meaning": "the former two"
+  },
+  {
+    "word": "ٱلْعَلِيمُ",
+    "meaning": "are the All-Knowing"
+  },
+  {
+    "word": "وَلَمَّا",
+    "meaning": "And when"
+  },
+  {
+    "word": "يَكُنْ",
+    "meaning": "is"
+  },
+  {
+    "word": "ءَايَٰتِهِۦ",
+    "meaning": "His Signs"
+  },
+  {
+    "word": "أَكْثَرَ",
+    "meaning": "most"
+  },
+  {
+    "word": "بَنِىٓ",
+    "meaning": "from the Children"
+  },
+  {
+    "word": "بَيْنِهِمَا",
+    "meaning": "between the two of them"
+  },
+  {
+    "word": "تَرَ",
+    "meaning": "you see"
+  },
+  {
+    "word": "تُكَذِّبَانِ",
+    "meaning": "will you both deny"
+  },
+  {
+    "word": "صَٰدِقِينَ",
+    "meaning": "truthful"
+  },
+  {
+    "word": "فَضْلُ",
+    "meaning": "Grace"
+  },
+  {
+    "word": "مِمَّن",
+    "meaning": "than one who"
+  },
+  {
+    "word": "أَحَدٍ",
+    "meaning": "one"
+  },
+  {
+    "word": "ٱلنَّبِىُّ",
+    "meaning": "the Prophet"
+  },
+  {
+    "word": "سُوٓءَ",
+    "meaning": "horrible"
+  },
+  {
+    "word": "فَإِنَّمَا",
+    "meaning": "so only"
+  },
+  {
+    "word": "وَإِلَى",
+    "meaning": "And to"
+  },
+  {
+    "word": "ٱتَّقَوْا۟",
+    "meaning": "fear Allah"
+  },
+  {
+    "word": "بَيْنَكُم",
+    "meaning": "among yourselves"
+  },
+  {
+    "word": "جَعَلْنَا",
+    "meaning": "We made"
+  },
+  {
+    "word": "حَيْثُ",
+    "meaning": "from wherever"
+  },
+  {
+    "word": "حِينٍ",
+    "meaning": "a period"
+  },
+  {
+    "word": "سَبِيلًا",
+    "meaning": "a way"
+  },
+  {
+    "word": "فَأَمَّا",
+    "meaning": "Then as for"
+  },
+  {
+    "word": "قَالَتِ",
+    "meaning": "she said"
+  },
+  {
+    "word": "لَفِى",
+    "meaning": "are surely in"
+  },
+  {
+    "word": "نَذِيرٍ",
+    "meaning": "a warner"
+  },
+  {
+    "word": "وَجَعَلَ",
+    "meaning": "and made"
+  },
+  {
+    "word": "أَبَدًۢا",
+    "meaning": "ever"
+  },
+  {
+    "word": "أَشَدُّ",
+    "meaning": "stronger"
+  },
+  {
+    "word": "ٱبْنَ",
+    "meaning": "the son"
+  },
+  {
+    "word": "عَلِيمًا",
+    "meaning": "All-Knowing"
+  },
+  {
+    "word": "فَلَن",
+    "meaning": "so never"
+  },
+  {
+    "word": "مَاذَآ",
+    "meaning": "what"
+  },
+  {
+    "word": "نَزَّلَ",
+    "meaning": "revealed"
+  },
+  {
+    "word": "وَإِلَيْهِ",
+    "meaning": "and to Him"
+  },
+  {
+    "word": "وَلَن",
+    "meaning": "and never"
+  },
+  {
+    "word": "يَأْتِىَ",
+    "meaning": "brings"
+  },
+  {
+    "word": "يَعْقِلُونَ",
+    "meaning": "who use their intellect"
+  },
+  {
+    "word": "إِيمَٰنُكُمْ",
+    "meaning": "your faith"
+  },
+  {
+    "word": "إِيمَٰنِهِمْ",
+    "meaning": "their belief"
+  },
+  {
+    "word": "ٱتَّخَذُوا۟",
+    "meaning": "they took"
+  },
+  {
+    "word": "ٱلْفُلْكِ",
+    "meaning": "the ship"
+  },
+  {
+    "word": "بَعْدِهِۦ",
+    "meaning": "after him"
+  },
+  {
+    "word": "تَكُن",
+    "meaning": "be"
+  },
+  {
+    "word": "تَكُونُوٓا۟",
+    "meaning": "be"
+  },
+  {
+    "word": "حَرَّمَ",
+    "meaning": "He has forbidden"
+  },
+  {
+    "word": "خَلَقْنَآ",
+    "meaning": "We have created"
+  },
+  {
+    "word": "سَلَٰمٌ",
+    "meaning": "Peace"
+  },
+  {
+    "word": "سَمِيعٌ",
+    "meaning": "is All-Hearing"
+  },
+  {
+    "word": "عَسَى",
+    "meaning": "perhaps"
+  },
+  {
+    "word": "مُّسَمًّى",
+    "meaning": "fixed"
+  },
+  {
+    "word": "وَقُل",
+    "meaning": "And say"
+  },
+  {
+    "word": "وَكَفَىٰ",
+    "meaning": "And is sufficient"
+  },
+  {
+    "word": "ءَاتَيْنَا",
+    "meaning": "We gave"
+  },
+  {
+    "word": "أَحَدًا",
+    "meaning": "to anyone"
+  },
+  {
+    "word": "أَخَافُ",
+    "meaning": "fear"
+  },
+  {
+    "word": "أَمْوَٰلَهُمْ",
+    "meaning": "their wealth"
+  },
+  {
+    "word": "أَوَّلَ",
+    "meaning": "the first"
+  },
+  {
+    "word": "أَيَّامٍ",
+    "meaning": "days"
+  },
+  {
+    "word": "رَّحِيمًا",
+    "meaning": "Most-Merciful"
+  },
+  {
+    "word": "عَمِلُوا۟",
+    "meaning": "they did"
+  },
+  {
+    "word": "قِبْلَةً",
+    "meaning": "to the direction of prayer"
+  },
+  {
+    "word": "لَءَايَةً",
+    "meaning": "is surely a sign"
+  },
+  {
+    "word": "وَٱلْقَمَرَ",
+    "meaning": "and the moon"
+  },
+  {
+    "word": "يَٰبَنِىٓ",
+    "meaning": "O Children"
+  },
+  {
+    "word": "ذِى",
+    "meaning": "who is"
+  },
+  {
+    "word": "عَمَلَ",
+    "meaning": "deeds"
+  },
+  {
+    "word": "قَوْلًا",
+    "meaning": "the word"
+  },
+  {
+    "word": "لَهُوَ",
+    "meaning": "surely it is"
+  },
+  {
+    "word": "أَرَادَ",
+    "meaning": "intend"
+  },
+  {
+    "word": "جَآءَتْهُمُ",
+    "meaning": "came to them"
+  },
+  {
+    "word": "سِحْرٌ",
+    "meaning": "magic"
+  },
+  {
+    "word": "فَقَالُوٓا۟",
+    "meaning": "for they said"
+  },
+  {
+    "word": "فَقُلْ",
+    "meaning": "then say"
+  },
+  {
+    "word": "قَبْلِكُمْ",
+    "meaning": "before you"
+  },
+  {
+    "word": "نَّشَآءُ",
+    "meaning": "We will"
+  },
+  {
+    "word": "وَأَنِّى",
+    "meaning": "and that I"
+  },
+  {
+    "word": "يَتَّقُونَ",
+    "meaning": "become righteous"
+  },
+  {
+    "word": "يَفْتَرُونَ",
+    "meaning": "inventing"
+  },
+  {
+    "word": "ءَالِهَةً",
+    "meaning": "there are gods"
+  },
+  {
+    "word": "أَفَمَنِ",
+    "meaning": "So is the one who"
+  },
+  {
+    "word": "أَمَّا",
+    "meaning": "or what"
+  },
+  {
+    "word": "ٱتَّبَعَ",
+    "meaning": "pursues"
+  },
+  {
+    "word": "ٱتَّخَذَ",
+    "meaning": "has taken"
+  }
+]

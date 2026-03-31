@@ -1,0 +1,60 @@
+Use your reasoning ability for this task. Think step by step.
+
+For each Arabic word below, find a MEANINGFUL phrase from the Quran that contains this word.
+The phrase can be 1-6 words — choose whatever length makes it meaningful and memorable.
+It should be a well-known or impactful phrase that helps someone remember the word's meaning.
+
+REQUIREMENTS:
+1. Use STANDARD Arabic script (not Uthmani) — e.g. الذين not ٱلَّذِينَ
+2. The phrase MUST be an exact contiguous substring from a single Quran verse
+3. Include full tashkeel/harakat
+4. The reference must be the actual verse containing the phrase
+
+REASONING STEPS (do this for each word):
+1. Think of a well-known verse that contains this word
+2. Write out the full verse text
+3. Pick a meaningful segment (1-6 words) that includes the target word
+4. VERIFY: strip diacritics from your phrase and from the verse — confirm substring match
+5. If it doesn't match, try another verse
+
+Return JSON array: [{"word": "...", "example": "...", "reference": "chapter:verse"}]
+
+Words:
+
+- عَلَيْهِ (ʿalayhi) = towards him
+- لِّلَّذِينَ (lilladhīna) = to those who
+- شَيْـًٔا (shayan) = anything
+- عَلَيْكَ (ʿalayka) = to you
+- إِنَّكُمْ (innakum) = Indeed, you
+- عَذَابًا (ʿadhāban) = a punishment
+- عَنْهُ (ʿanhu) = from it
+- قَوْمُهُۥ (qawmuhu) = his people
+- وَّكَانُوا۟ (wakānū) = and they were
+- ٱلْأَوْلَيَٰنِ (alwlayāni) = the former two
+- ٱلْءَايَٰتِ (alāyāti) = the signs
+- سَبِيلًا (sabīlan) = a way
+- لَفِى (lafī) = are surely in
+- أَعْمَٰلَهُمْ (aʿmālahum) = their deeds
+- فَقَالَ (faqāla) = then He said
+- يُنظَرُونَ (yunẓarūna) = will be reprieved
+- عَنْهَا (ʿanhā) = from it
+- ٱلْبَحْرَ (albaḥra) = the sea
+- ٱلْمُبِينُ (almubīnu) = clearly
+- بَشَرٌ (basharun) = any man
+- ٱلْفُلْكِ (alful'ki) = the ship
+- تَكُن (takun) = be
+- ٱلْجِنَّ (aljina) = jinn
+- ذِى (dhī) = who is
+- لَهُوَ (lahuwa) = surely it is
+- يُشْرِكُونَ (yush'rikūna) = they associate with Him
+- ٱلرُّسُلُ (arrusulu) = are the Messengers
+- فَقَالُوٓا۟ (faqālū) = for they said
+- فَقُلْ (faqul) = then say
+- كَذِبًا (kadhiban) = a lie
+- وَأَنِّى (wa-annī) = and that I
+- بَيَّنَّٰهُ (bayyannāhu) = We made clear
+- طَّآئِفَةٌ (ṭāifatun) = a group
+- ءَاتَيْنَٰهُمُ (ātaynāhumu) = We have given them
+- فِيهِمْ (fīhim) = in them
+- ٱفْتَرَىٰ (if'tarā) = fabricates
+- بَصِيرًا (baṣīran) = All-Seeing

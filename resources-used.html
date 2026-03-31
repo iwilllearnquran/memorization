@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resources Used | My Quran Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-1: #f4fbff;
+      --bg-2: #f9fff9;
+      --card: rgba(255, 255, 255, 0.88);
+      --border: rgba(10, 77, 104, 0.14);
+      --text: #14313f;
+      --muted: #5d7280;
+      --brand: #0a4d68;
+      --brand-2: #0f766e;
+      --gold: #b7791f;
+      --shadow: 0 20px 50px rgba(10, 77, 104, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Inter', system-ui, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(15, 118, 110, 0.12), transparent 34%),
+        radial-gradient(circle at bottom left, rgba(183, 121, 31, 0.10), transparent 28%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+    }
+
+    .shell {
+      width: min(980px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 28px 0 40px;
+    }
+
+    .hero {
+      background: linear-gradient(145deg, rgba(10, 77, 104, 0.98), rgba(15, 118, 110, 0.95));
+      color: #fff;
+      border-radius: 24px;
+      padding: 28px 24px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: auto -60px -70px auto;
+      width: 180px;
+      height: 180px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.82);
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 5vw, 40px);
+      line-height: 1.08;
+    }
+
+    .hero p {
+      margin: 12px 0 0;
+      font-size: 15px;
+      line-height: 1.7;
+      max-width: 720px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 20px 18px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+    }
+
+    .section {
+      margin-top: 22px;
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 20px;
+      color: var(--brand);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--brand-2);
+      margin-bottom: 10px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    li {
+      padding: 12px 13px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.62);
+      border: 1px solid rgba(10, 77, 104, 0.10);
+    }
+
+    .label {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+      word-break: break-word;
+    }
+
+    .desc {
+      display: block;
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(183, 121, 31, 0.10);
+      border: 1px solid rgba(183, 121, 31, 0.18);
+      color: #6f5316;
+      font-size: 13.5px;
+      line-height: 1.65;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background: rgba(10, 77, 104, 0.06);
+      padding: 1px 5px;
+      border-radius: 6px;
+      font-size: 0.92em;
+    }
+
+    a {
+      color: var(--brand);
+      text-decoration: none;
+    }
+
+    a:hover { text-decoration: underline; }
+
+    @media (max-width: 640px) {
+      .shell { width: min(100% - 18px, 980px); padding-top: 18px; }
+      .hero { border-radius: 20px; padding: 22px 18px; }
+      .card { border-radius: 18px; padding: 18px 15px; }
+      li { border-radius: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="eyebrow">My Quran Quest - Sources & Attribution</div>
+      <h1>Resources used to build this app</h1>
+      <p>
+        This page summarizes the main external APIs, reference datasets, and recite attributions used in
+        My Quran Quest. It focuses on the actual Quran, dua, grammar, and recitation sources behind the app.
+      </p>
+    </section>
+
+    <section class="section grid">
+      <article class="card">
+        <div class="tag">APIs used</div>
+        <ul>
+          <li>
+            <span class="label">api.quran.com</span>
+            <span class="desc">IndoPak Arabic ayah text, surah metadata, and recitation lookup.</span>
+          </li>
+          <li>
+            <span class="label">api.alquran.cloud</span>
+            <span class="desc">Surah list data plus English and Urdu translations used in recite mode.</span>
+          </li>
+          <li>
+            <span class="label">verses.quran.com</span>
+            <span class="desc">Arabic recite audio and word-by-word audio.</span>
+          </li>
+          <li>
+            <span class="label">cdn.islamic.network</span>
+            <span class="desc">English and Urdu recite audio URLs.</span>
+          </li>
+          <li>
+            <span class="label">qutrub.arabeyes.org/api</span>
+            <span class="desc">Arabic verb conjugation and form enrichment.</span>
+          </li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <div class="tag">Data sources used</div>
+        <ul>
+          <li>
+            <span class="label">quranwbw.com/duas</span>
+            <span class="desc">Source used for the dua dataset in the app.</span>
+          </li>
+          <li>
+            <span class="label">quranic-corpus-morphology-0.4.txt</span>
+            <span class="desc">Morphology corpus used in grammar and morphology features.</span>
+          </li>
+          <li>
+            <span class="label">CAMeL Tools morphology database</span>
+            <span class="desc">Local morphology analysis used during data building.</span>
+          </li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="section card">
+      <h2>Translation and recitation attribution</h2>
+      <ul>
+        <li>
+          <span class="label">Ayah pages - English translation</span>
+          <span class="desc">Use <code>en.sahih</code> from AlQuran.Cloud. That is the Saheeh International translation used for the ayah pages.</span>
+        </li>
+        <li>
+          <span class="label">Recite mode - English translation</span>
+          <span class="desc">Uses <code>en.asad</code> from AlQuran.Cloud, which is Muhammad Asad's English translation for recite mode.</span>
+        </li>
+        <li>
+          <span class="label">Urdu translation</span>
+          <span class="desc">Both ayah pages and recite mode use <code>ur.jalandhry</code> from AlQuran.Cloud, referring to the Urdu translation by Fateh Muhammad Jalandhry.</span>
+        </li>
+        <li>
+          <span class="label">Arabic recitation</span>
+          <span class="desc">Uses the Alafasy recitation. Quran.com reciter 7 is Mishari Rashid al-Afasy, and AlQuran.Cloud also labels <code>ar.alafasy</code> as Alafasy.</span>
+        </li>
+        <li>
+          <span class="label">Arabic text source</span>
+          <span class="desc">The builder scripts pull IndoPak Arabic text from Quran.com's verse endpoint.</span>
+        </li>
+      </ul>
+    </section>
+
+    <section class="section card">
+      <h2>How recite data is built</h2>
+      <ul>
+        <li>
+          <span class="label">Arabic text</span>
+          <span class="desc">Fetched from <strong>api.quran.com</strong> using the IndoPak verse endpoint.</span>
+        </li>
+        <li>
+          <span class="label">Urdu translation</span>
+          <span class="desc">Fetched from <strong>api.alquran.cloud</strong> using <code>ur.jalandhry</code>.</span>
+        </li>
+        <li>
+          <span class="label">English translation</span>
+          <span class="desc">Fetched from <strong>api.alquran.cloud</strong> using <code>en.asad</code>, which is why recite mode differs from the ayah pages.</span>
+        </li>
+        <li>
+          <span class="label">Audio</span>
+          <span class="desc">Arabic audio comes from <strong>verses.quran.com</strong>, while English and Urdu audio use <strong>cdn.islamic.network</strong> patterns.</span>
+        </li>
+      </ul>
+    </section>
+
+  </main>
+</body>
+</html>

@@ -112,7 +112,8 @@ const AYAH_OF_DAY_POOL = [
   }
 ];
 const iframe = document.getElementById('ayahViewer');
-const aboutBtn = document.getElementById('aboutBtn')
+const aboutBtn = document.getElementById('aboutBtn');
+const resourcesUsedBtn = document.getElementById('resourcesUsedBtn');
 const ring = {cards: [],};
 const D = {};
 const SWIPE_IFRAME = '[SWIPE:IFRAME]';
@@ -7187,6 +7188,63 @@ case 'SAVE_HINT_DONE': {
 
 
 
+      const showInfoFramePopup = ({ title, subtitle, src }) => {
+        const overlay = document.createElement('div');
+        overlay.classList.add('qq-overlay');
+        overlay.style.cssText = `
+          position: fixed;
+          inset: 0;
+          background: rgba(0,0,0,0.62);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 18px 14px;
+          z-index: 10095;
+        `;
+
+        overlay.innerHTML = `
+          <div class="qq-modal" role="dialog" aria-modal="true" aria-label="${title}" style="
+            background: #fff;
+            border-radius: 18px;
+            width: min(940px, 100%);
+            max-height: min(88vh, 900px);
+            overflow: hidden;
+            box-shadow: 0 26px 70px rgba(10, 77, 104, 0.24);
+            display: flex;
+            flex-direction: column;
+          ">
+            <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding:18px 18px 12px; border-bottom:1px solid rgba(10,77,104,0.12);">
+              <div>
+                <h3 style="margin:0; font-size:18px; color:#0a4d68;">${title}</h3>
+                <p style="margin:4px 0 0; font-size:13px; color:#5f6f7c; line-height:1.5;">${subtitle}</p>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <a href="${src}" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; justify-content:center; min-width:92px; padding:9px 12px; border-radius:10px; background:#eef6fb; color:#0a4d68; text-decoration:none; font-size:13px; font-weight:600;">Open page</a>
+                <button type="button" id="closeInfoFramePopup" aria-label="Close popup" style="border:none; background:#0a4d68; color:#fff; width:38px; height:38px; border-radius:10px; cursor:pointer; font-size:18px; line-height:1;">X</button>
+              </div>
+            </div>
+            <iframe src="${src}" title="${title}" style="border:0; width:100%; height:min(72vh, 760px); background:#f7fbfd;"></iframe>
+          </div>
+        `;
+
+        const removeOverlay = () => {
+          document.removeEventListener('keydown', onKeyDown);
+          overlay.remove();
+        };
+
+        const onKeyDown = event => {
+          if (event.key === 'Escape') removeOverlay();
+        };
+
+        document.addEventListener('keydown', onKeyDown);
+        overlay.querySelector('#closeInfoFramePopup').onclick = removeOverlay;
+        overlay.onclick = event => {
+          if (event.target === overlay) removeOverlay();
+        };
+
+        document.body.appendChild(overlay);
+      };
+
       /* ==========================================================
         About Popup
         ========================================================== */
@@ -7316,6 +7374,17 @@ case 'SAVE_HINT_DONE': {
           overlay.onclick = e => {
             if (e.target === overlay) overlay.remove();
           };
+        });
+      }
+
+      if (resourcesUsedBtn) {
+        resourcesUsedBtn.addEventListener('click', () => {
+          closeDrawer();
+          showInfoFramePopup({
+            title: 'Resources Used',
+            subtitle: 'A quick source list covering the APIs and datasets behind My Quran Quest.',
+            src: resolveAppUrl('resources-used.html')
+          });
         });
       }
         /* ------------------------------------------
@@ -7532,7 +7601,7 @@ case 'SAVE_HINT_DONE': {
                 showNamazHistoryPopup();
               } catch (err) {
                 console.error('[NAMAZ] Failed to open history popup', err);
-                showInAppToast('Unable to open Namaz history right now.');
+                showInAppToast('Unable to open Salah history right now.');
               }
             }, 170);
           };
@@ -7574,7 +7643,7 @@ case 'SAVE_HINT_DONE': {
               showNamazHistoryPopup();
             } catch (err) {
               console.error('[NAMAZ] Failed to open quick history popup', err);
-              showInAppToast('Unable to open Namaz history right now.');
+              showInAppToast('Unable to open Salah history right now.');
             }
           });
         }

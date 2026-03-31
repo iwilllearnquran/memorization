@@ -17,9 +17,11 @@
       "firebase.json",
       "**/node_modules/**",
       "**/.git/**",
+      "DataSources/**",
       "_private/**",
       "scripts/**",
       "generated/**",
+      "surah-33-35*.html",
       "Dockerfile.*",
       "cloudbuild.*"
     ],

@@ -1,0 +1,811 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Synced Reel Studio</title>
+  <style>
+    :root {
+      --bg: #08131a;
+      --panel: #10222d;
+      --panel-2: #152c39;
+      --line: #264555;
+      --text: #eef7fb;
+      --muted: #9eb8c6;
+      --accent: #48d7a6;
+      --accent-2: #74c6ff;
+      --danger: #ff8e7d;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(72, 215, 166, 0.12), transparent 28%),
+        radial-gradient(circle at top right, rgba(116, 198, 255, 0.12), transparent 24%),
+        linear-gradient(180deg, #09141b 0%, #08131a 100%);
+      min-height: 100vh;
+    }
+
+    .shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 32px auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.85fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(21, 44, 57, 0.92), rgba(16, 34, 45, 0.96));
+      border: 1px solid rgba(108, 152, 172, 0.18);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .hero {
+      padding: 28px;
+      position: sticky;
+      top: 20px;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+    }
+
+    .lead {
+      margin: 12px 0 0;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .chip {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(116, 198, 255, 0.2);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+      font-size: 12px;
+    }
+
+    .hero .meta {
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(116, 198, 255, 0.12);
+      display: grid;
+      gap: 12px;
+    }
+
+    .meta-row {
+      display: grid;
+      gap: 4px;
+    }
+
+    .meta-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+
+    .meta-value {
+      font-size: 14px;
+      color: var(--text);
+      word-break: break-word;
+    }
+
+    .builder {
+      padding: 28px;
+    }
+
+    .section + .section {
+      margin-top: 24px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(116, 198, 255, 0.12);
+    }
+
+    .section-title {
+      margin: 0 0 14px;
+      font-size: 16px;
+      letter-spacing: 0.02em;
+    }
+
+    .mode-switch {
+      display: inline-grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      padding: 6px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(116, 198, 255, 0.12);
+      gap: 6px;
+    }
+
+    .mode-switch button {
+      border: 0;
+      border-radius: 12px;
+      padding: 10px 16px;
+      color: var(--text);
+      background: transparent;
+      cursor: pointer;
+      font-weight: 700;
+      transition: 150ms ease;
+    }
+
+    .mode-switch button.active {
+      background: linear-gradient(135deg, rgba(72, 215, 166, 0.22), rgba(116, 198, 255, 0.2));
+      box-shadow: inset 0 0 0 1px rgba(116, 198, 255, 0.15);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .field,
+    .span-2 {
+      min-width: 0;
+    }
+
+    .span-2 {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(116, 198, 255, 0.14);
+      background: rgba(6, 16, 23, 0.86);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 11px 12px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: rgba(72, 215, 166, 0.55);
+      box-shadow: 0 0 0 3px rgba(72, 215, 166, 0.12);
+    }
+
+    .helper {
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    textarea {
+      min-height: 132px;
+      resize: vertical;
+      font-family: inherit;
+    }
+
+    .preset-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .preset-btn {
+      border: 1px solid rgba(116, 198, 255, 0.16);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 9px 12px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .preset-btn:hover {
+      border-color: rgba(72, 215, 166, 0.34);
+      background: rgba(72, 215, 166, 0.08);
+    }
+
+    .panel {
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(116, 198, 255, 0.1);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .panel.hidden {
+      display: none;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .primary {
+      border: 0;
+      border-radius: 14px;
+      padding: 13px 18px;
+      background: linear-gradient(135deg, #48d7a6, #4db9ff);
+      color: #062027;
+      font-weight: 800;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      min-width: 180px;
+    }
+
+    .primary:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .status {
+      min-height: 22px;
+      color: var(--muted);
+      font-size: 13px;
+      white-space: pre-wrap;
+    }
+
+    .status.error {
+      color: var(--danger);
+    }
+
+    .result {
+      margin-top: 22px;
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(116, 198, 255, 0.14);
+      display: none;
+      gap: 14px;
+    }
+
+    .result.show {
+      display: grid;
+    }
+
+    .result-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .result-links a {
+      text-decoration: none;
+      color: #061923;
+      background: rgba(255, 255, 255, 0.92);
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .result-meta {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      word-break: break-word;
+    }
+
+    .video-wrap {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(116, 198, 255, 0.12);
+      background: rgba(0, 0, 0, 0.25);
+      min-height: 320px;
+      display: grid;
+      place-items: center;
+    }
+
+    video {
+      width: 100%;
+      max-height: 720px;
+      background: #000;
+      display: block;
+    }
+
+    .placeholder {
+      padding: 28px;
+      text-align: center;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    @media (max-width: 960px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        position: static;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        width: min(100%, calc(100% - 20px));
+        margin: 16px auto;
+      }
+
+      .builder,
+      .hero {
+        padding: 20px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .span-2 {
+        grid-column: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section class="card builder">
+      <h1 class="title">Synced Reel Studio</h1>
+      <p class="lead">Generate a subtitle-burned reel from Quran API content, any audio file, or Arabic + English Quran word TTS using either a still image or a looping background video.</p>
+
+      <form id="generatorForm">
+        <input type="hidden" name="mode" id="modeInput" value="non-quran" />
+
+        <div class="section">
+          <h2 class="section-title">Mode</h2>
+          <div class="mode-switch" role="tablist" aria-label="Generation mode">
+            <button type="button" class="mode-btn active" data-mode="non-quran">Non-Quran</button>
+            <button type="button" class="mode-btn" data-mode="quran">Quran</button>
+            <button type="button" class="mode-btn" data-mode="vocab">Word Reel</button>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">Background</h2>
+          <div class="grid">
+            <div class="span-2">
+              <label for="background_path">Background Path</label>
+              <input id="background_path" name="background_path" placeholder="background\\9999.png or C:\\full\\path\\bg.mp4" />
+              <div class="helper">Use a local file path if the background already exists on this machine.</div>
+            </div>
+            <div class="span-2">
+              <label for="background_upload">Or Upload Background</label>
+              <input id="background_upload" name="background_upload" type="file" accept="image/*,video/*" />
+              <div class="helper">If both are provided, the uploaded file wins.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section panel" id="nonQuranPanel">
+          <h2 class="section-title">Non-Quran Source</h2>
+          <div class="grid">
+            <div class="span-2">
+              <label for="audio_path">Audio Path</label>
+              <input id="audio_path" name="audio_path" placeholder="C:\\full\\path\\voice.mp3" />
+            </div>
+            <div class="span-2">
+              <label for="audio_upload">Or Upload Audio</label>
+              <input id="audio_upload" name="audio_upload" type="file" accept="audio/*" />
+            </div>
+            <div>
+              <label for="language">Language</label>
+              <input id="language" name="language" value="auto" placeholder="auto, ar, en, ur, hi..." />
+            </div>
+            <div>
+              <label for="whisper_model">Whisper Model</label>
+              <input id="whisper_model" name="whisper_model" value="small" placeholder="small or c:\\path\\ggml-small.bin" />
+            </div>
+            <div class="span-2">
+              <label for="whisper_cache_dir">Whisper Cache Dir</label>
+              <input id="whisper_cache_dir" name="whisper_cache_dir" value="generated\\reels\\models" />
+            </div>
+          </div>
+        </div>
+
+        <div class="section panel hidden" id="quranPanel">
+          <h2 class="section-title">Quran Source</h2>
+          <div class="grid">
+            <div>
+              <label for="quran_ref">Quran Ref</label>
+              <input id="quran_ref" name="quran_ref" placeholder="97:1 or 97:1-5" />
+            </div>
+            <div>
+              <label for="quran_audio_edition">Audio Edition</label>
+              <input id="quran_audio_edition" name="quran_audio_edition" value="ar.alafasy" />
+            </div>
+            <div class="span-2">
+              <label for="quran_text_edition">Text Edition</label>
+              <input id="quran_text_edition" name="quran_text_edition" value="quran-uthmani" />
+            </div>
+          </div>
+        </div>
+
+        <div class="section panel hidden" id="vocabPanel">
+          <h2 class="section-title">Word Reel Source</h2>
+          <div class="grid">
+            <div>
+              <label for="vocab_title">Reel Title</label>
+              <input id="vocab_title" name="vocab_title" value="Top Quran Words" placeholder="Top Quran Words" />
+            </div>
+            <div>
+              <label for="vocab_source">Word Source</label>
+              <select id="vocab_source" name="vocab_source">
+                <option value="top-words" selected>Top Quran Words Dataset</option>
+                <option value="custom">Custom Arabic | English List</option>
+              </select>
+            </div>
+            <div id="vocabTopFields" class="span-2">
+              <div class="grid">
+                <div>
+                  <label for="vocab_count">Word Count</label>
+                  <input id="vocab_count" name="vocab_count" type="number" min="1" max="500" value="12" />
+                </div>
+                <div>
+                  <label for="vocab_offset">Start Offset</label>
+                  <input id="vocab_offset" name="vocab_offset" type="number" min="0" max="100000" value="0" />
+                </div>
+                <div class="span-2">
+                  <label for="vocab_dataset_path">Dataset Path</label>
+                  <input id="vocab_dataset_path" name="vocab_dataset_path" value="memo-practice-words.json" />
+                  <div class="helper">Uses the local Quran word frequency dataset. Increase the offset if you want to skip very common words first.</div>
+                </div>
+              </div>
+            </div>
+            <div id="vocabCustomFields" class="span-2 hidden">
+              <label for="vocab_lines">Arabic | English Lines</label>
+              <textarea id="vocab_lines" name="vocab_lines" placeholder="Arabic word | English meaning&#10;rahmah | Mercy&#10;nur | Light"></textarea>
+              <div class="helper">One word per line, formatted like <code>Arabic | English</code>.</div>
+            </div>
+
+            <div class="span-2">
+              <label for="tts_provider">TTS Provider</label>
+              <select id="tts_provider" name="tts_provider">
+                <option value="edge-tts" selected>Edge TTS (Free)</option>
+                <option value="elevenlabs">ElevenLabs (API Key)</option>
+              </select>
+            </div>
+
+            <div id="elevenlabsFields" class="span-2 hidden">
+              <div class="grid">
+                <div class="span-2">
+                  <label for="elevenlabs_api_key">ElevenLabs API Key</label>
+                  <input id="elevenlabs_api_key" name="elevenlabs_api_key" type="password" placeholder="sk_..." autocomplete="off" />
+                  <div class="helper">Get your key from <code>elevenlabs.io/app/settings/api-keys</code>. Also reads <code>ELEVENLABS_API_KEY</code> env var on the server.</div>
+                </div>
+                <div>
+                  <label for="elevenlabs_model">Model</label>
+                  <input id="elevenlabs_model" name="elevenlabs_model" value="eleven_multilingual_v2" />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label for="tts_arabic_voice">Arabic Voice</label>
+              <input id="tts_arabic_voice" name="tts_arabic_voice" value="ar-SA-HamedNeural" />
+              <div class="helper" id="arabicVoiceHelper">Edge voice name, e.g. <code>ar-SA-HamedNeural</code></div>
+            </div>
+            <div>
+              <label for="tts_english_voice">English Voice</label>
+              <input id="tts_english_voice" name="tts_english_voice" value="en-US-ChristopherNeural" />
+              <div class="helper" id="englishVoiceHelper">Edge voice name, e.g. <code>en-US-ChristopherNeural</code></div>
+            </div>
+            <div id="edgeRatePitchFields" class="span-2">
+              <div class="grid">
+                <div>
+                  <label for="tts_arabic_rate">Arabic Rate</label>
+                  <input id="tts_arabic_rate" name="tts_arabic_rate" value="-6%" />
+                </div>
+                <div>
+                  <label for="tts_english_rate">English Rate</label>
+                  <input id="tts_english_rate" name="tts_english_rate" value="-4%" />
+                </div>
+                <div>
+                  <label for="tts_arabic_pitch">Arabic Pitch</label>
+                  <input id="tts_arabic_pitch" name="tts_arabic_pitch" value="-2Hz" />
+                </div>
+                <div>
+                  <label for="tts_english_pitch">English Pitch</label>
+                  <input id="tts_english_pitch" name="tts_english_pitch" value="-2Hz" />
+                </div>
+              </div>
+            </div>
+            <div>
+              <label for="tts_pause_between_languages_ms">Arabic to English Gap (ms)</label>
+              <input id="tts_pause_between_languages_ms" name="tts_pause_between_languages_ms" type="number" min="0" max="10000" value="260" />
+            </div>
+            <div>
+              <label for="tts_pause_between_entries_ms">Gap Between Words (ms)</label>
+              <input id="tts_pause_between_entries_ms" name="tts_pause_between_entries_ms" type="number" min="0" max="10000" value="680" />
+            </div>
+            <div class="span-2">
+              <div class="helper" id="ttsProviderHelper">Recommended defaults use Microsoft Edge neural male voices. This mode needs <code>edge-tts</code> and internet access. Install once with <code>py -3 -m pip install edge-tts</code>.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">Caption Style</h2>
+          <div class="grid">
+            <div>
+              <label for="subtitle_font">Subtitle Font</label>
+              <input id="subtitle_font" name="subtitle_font" value="Tahoma" />
+            </div>
+            <div>
+              <label for="subtitle_size">Subtitle Size</label>
+              <input id="subtitle_size" name="subtitle_size" type="number" min="10" max="120" value="18" />
+            </div>
+            <div>
+              <label for="subtitle_margin_v">Bottom Margin</label>
+              <input id="subtitle_margin_v" name="subtitle_margin_v" type="number" min="0" max="500" value="80" />
+            </div>
+            <div>
+              <label for="subtitle_offset_ms">Subtitle Offset (ms)</label>
+              <input id="subtitle_offset_ms" name="subtitle_offset_ms" type="number" min="-5000" max="5000" value="0" />
+              <div class="preset-actions">
+                <button type="button" class="preset-btn" id="offsetPreset120">Use Recommended +120ms</button>
+                <button type="button" class="preset-btn" id="offsetPresetReset">Reset to 0</button>
+              </div>
+              <div class="helper">Use a positive value if text appears too early. Example: <code>120</code> moves captions 120ms later.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" id="generateBtn" class="primary">Generate Reel</button>
+          <div id="status" class="status">Local server required. Run <code>py -3 scripts\synced_reel_ui.py</code> and keep it open.</div>
+        </div>
+      </form>
+
+      <div id="result" class="result">
+        <div class="result-links" id="resultLinks"></div>
+        <div class="result-meta" id="resultMeta"></div>
+      </div>
+    </section>
+
+    <aside class="card hero">
+      <div class="chip">Local UI</div>
+      <div class="chips">
+        <div class="chip">PNG or Video Background</div>
+        <div class="chip">Any Language Audio</div>
+        <div class="chip">Quran API Mode</div>
+        <div class="chip">Arabic + English Word TTS</div>
+      </div>
+
+      <div class="meta">
+        <div class="meta-row">
+          <div class="meta-label">How It Works</div>
+          <div class="meta-value">Non-Quran mode transcribes audio to SRT with FFmpeg Whisper, then burns the subtitles into a 1080x1920 reel. Quran mode fetches Arabic ayah text and MP3 from API, generates the SRT from those timings, then renders the reel. Word Reel mode generates Arabic + English TTS audio for Quran vocabulary entries, creates matching subtitles, and renders the reel.</div>
+        </div>
+        <div class="meta-row">
+          <div class="meta-label">Inputs</div>
+          <div class="meta-value">You can paste local file paths or upload files directly in the page.</div>
+        </div>
+        <div class="meta-row">
+          <div class="meta-label">Server</div>
+          <div class="meta-value">Open <a href="/api/synced-reel/health" target="_blank" rel="noopener noreferrer" style="color: var(--accent-2);">health check</a> to confirm the local server is running.</div>
+        </div>
+      </div>
+
+      <div class="video-wrap" id="videoWrap">
+        <div class="placeholder" id="videoPlaceholder">Your generated video preview will appear here after a successful run.</div>
+        <video id="previewVideo" controls playsinline style="display:none;"></video>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    const form = document.getElementById('generatorForm');
+    const modeInput = document.getElementById('modeInput');
+    const modeButtons = Array.from(document.querySelectorAll('.mode-btn'));
+    const nonQuranPanel = document.getElementById('nonQuranPanel');
+    const quranPanel = document.getElementById('quranPanel');
+    const vocabPanel = document.getElementById('vocabPanel');
+    const vocabSourceInput = document.getElementById('vocab_source');
+    const vocabTopFields = document.getElementById('vocabTopFields');
+    const vocabCustomFields = document.getElementById('vocabCustomFields');
+    const generateBtn = document.getElementById('generateBtn');
+    const statusEl = document.getElementById('status');
+    const resultEl = document.getElementById('result');
+    const resultLinksEl = document.getElementById('resultLinks');
+    const resultMetaEl = document.getElementById('resultMeta');
+    const previewVideo = document.getElementById('previewVideo');
+    const videoPlaceholder = document.getElementById('videoPlaceholder');
+    const subtitleOffsetInput = document.getElementById('subtitle_offset_ms');
+    const offsetPreset120Btn = document.getElementById('offsetPreset120');
+    const offsetPresetResetBtn = document.getElementById('offsetPresetReset');
+    const ttsProviderInput = document.getElementById('tts_provider');
+    const elevenlabsFields = document.getElementById('elevenlabsFields');
+    const edgeRatePitchFields = document.getElementById('edgeRatePitchFields');
+    const arabicVoiceInput = document.getElementById('tts_arabic_voice');
+    const englishVoiceInput = document.getElementById('tts_english_voice');
+    const arabicVoiceHelper = document.getElementById('arabicVoiceHelper');
+    const englishVoiceHelper = document.getElementById('englishVoiceHelper');
+    const ttsProviderHelper = document.getElementById('ttsProviderHelper');
+
+    const EDGE_DEFAULTS = { arabicVoice: 'ar-SA-HamedNeural', englishVoice: 'en-US-ChristopherNeural' };
+    const EL_DEFAULTS   = { arabicVoice: 'pNInz6obpgDQGcFmaJgB', englishVoice: 'pNInz6obpgDQGcFmaJgB' };
+
+    function setMode(mode) {
+      modeInput.value = mode;
+      modeButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.mode === mode));
+      nonQuranPanel.classList.toggle('hidden', mode !== 'non-quran');
+      quranPanel.classList.toggle('hidden', mode !== 'quran');
+      vocabPanel.classList.toggle('hidden', mode !== 'vocab');
+    }
+
+    function setVocabSource(source) {
+      const normalized = source === 'custom' ? 'custom' : 'top-words';
+      vocabTopFields.classList.toggle('hidden', normalized !== 'top-words');
+      vocabCustomFields.classList.toggle('hidden', normalized !== 'custom');
+    }
+
+    function setTtsProvider(provider) {
+      const isEL = provider === 'elevenlabs';
+      elevenlabsFields.classList.toggle('hidden', !isEL);
+      edgeRatePitchFields.classList.toggle('hidden', isEL);
+
+      // Swap voice defaults when toggling, but only if they still hold the other provider's default
+      const curAr = arabicVoiceInput.value.trim();
+      const curEn = englishVoiceInput.value.trim();
+      if (isEL) {
+        if (!curAr || curAr === EDGE_DEFAULTS.arabicVoice) arabicVoiceInput.value = EL_DEFAULTS.arabicVoice;
+        if (!curEn || curEn === EDGE_DEFAULTS.englishVoice) englishVoiceInput.value = EL_DEFAULTS.englishVoice;
+        arabicVoiceHelper.innerHTML = 'ElevenLabs voice ID from <code>elevenlabs.io/app/voice-library</code>';
+        englishVoiceHelper.innerHTML = 'ElevenLabs voice ID (can be the same for multilingual model)';
+        ttsProviderHelper.innerHTML = 'ElevenLabs mode uses the multilingual v2 model. Install once with <code>py -3 -m pip install elevenlabs</code>.';
+      } else {
+        if (!curAr || curAr === EL_DEFAULTS.arabicVoice) arabicVoiceInput.value = EDGE_DEFAULTS.arabicVoice;
+        if (!curEn || curEn === EL_DEFAULTS.englishVoice) englishVoiceInput.value = EDGE_DEFAULTS.englishVoice;
+        arabicVoiceHelper.innerHTML = 'Edge voice name, e.g. <code>ar-SA-HamedNeural</code>';
+        englishVoiceHelper.innerHTML = 'Edge voice name, e.g. <code>en-US-ChristopherNeural</code>';
+        ttsProviderHelper.innerHTML = 'Recommended defaults use Microsoft Edge neural male voices. This mode needs <code>edge-tts</code> and internet access. Install once with <code>py -3 -m pip install edge-tts</code>.';
+      }
+    }
+
+    modeButtons.forEach(btn => {
+      btn.addEventListener('click', () => setMode(btn.dataset.mode));
+    });
+
+    vocabSourceInput.addEventListener('change', () => {
+      setVocabSource(vocabSourceInput.value);
+    });
+
+    ttsProviderInput.addEventListener('change', () => {
+      setTtsProvider(ttsProviderInput.value);
+    });
+
+    offsetPreset120Btn.addEventListener('click', () => {
+      subtitleOffsetInput.value = '120';
+      subtitleOffsetInput.focus();
+    });
+
+    offsetPresetResetBtn.addEventListener('click', () => {
+      subtitleOffsetInput.value = '0';
+      subtitleOffsetInput.focus();
+    });
+
+    setMode(modeInput.value);
+    setVocabSource(vocabSourceInput.value);
+    setTtsProvider(ttsProviderInput.value);
+
+    function setStatus(message, isError = false) {
+      statusEl.textContent = message;
+      statusEl.classList.toggle('error', isError);
+    }
+
+    function renderResult(data) {
+      resultEl.classList.add('show');
+      resultLinksEl.innerHTML = '';
+
+      const links = [
+        ['Open Video', data.video_url],
+        ['Download SRT', data.srt_url],
+      ];
+      if (data.audio_url) {
+        links.push(['Generated Audio', data.audio_url]);
+      }
+
+      links.forEach(([label, href]) => {
+        if (!href) return;
+        try { const u = new URL(href, location.origin); if (!['http:', 'https:'].includes(u.protocol)) return; } catch { return; }
+        const anchor = document.createElement('a');
+        anchor.href = href;
+        anchor.target = '_blank';
+        anchor.rel = 'noopener noreferrer';
+        anchor.textContent = label;
+        resultLinksEl.appendChild(anchor);
+      });
+
+      const metaLines = [
+        `Mode: ${data.mode}`,
+        `Output Dir: ${data.output_dir}`,
+        `Background: ${data.background}`,
+        `Audio: ${data.audio}`,
+        `SRT: ${data.srt}`,
+      ];
+      if (data.meta) {
+        Object.entries(data.meta).forEach(([key, value]) => {
+          metaLines.push(`${key}: ${value}`);
+        });
+      }
+      resultMetaEl.textContent = '';
+      metaLines.forEach(line => {
+        const div = document.createElement('div');
+        div.textContent = line;
+        resultMetaEl.appendChild(div);
+      });
+
+      previewVideo.src = data.video_url;
+      previewVideo.style.display = 'block';
+      videoPlaceholder.style.display = 'none';
+      previewVideo.load();
+    }
+
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      generateBtn.disabled = true;
+      resultEl.classList.remove('show');
+
+      const statusMessage = modeInput.value === 'vocab'
+        ? 'Generating Arabic + English TTS audio and reel... this can take a little while for voice synthesis and render.'
+        : 'Generating reel... this can take a little while for transcription and render.';
+      setStatus(statusMessage);
+
+      try {
+        const formData = new FormData(form);
+        const response = await fetch('/api/synced-reel/generate', {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await response.json();
+        if (!response.ok || !data.ok) {
+          throw new Error(data.error || `Request failed with ${response.status}`);
+        }
+        renderResult(data);
+        setStatus('Reel generated successfully.');
+      } catch (error) {
+        setStatus(error.message || String(error), true);
+      } finally {
+        generateBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

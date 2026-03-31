@@ -1,0 +1,60 @@
+For each Arabic word below, give me an EXACT phrase from the Quran (2-5 words) that contains this word, plus the verse reference.
+
+YOU HAVE FAILED MULTIPLE TIMES ON THESE WORDS. Please be EXTREMELY careful.
+
+ABSOLUTE RULES:
+1. COPY-PASTE the phrase directly from a Quran text source. Do NOT write from memory.
+2. Use STANDARD Arabic (not Uthmani): الذين not ٱلَّذِينَ
+3. NEVER change word forms. Use the EXACT inflection from the verse:
+   - عَذَابٌ not عَذَابًا, هُدَاهُمْ not هُدَاىَ, شَيْئًا not شَيْـًٔا
+4. NEVER skip/drop words. Every word between start and end must be included.
+5. NEVER span two verses.
+6. The reference MUST be the actual verse that contains your exact phrase.
+
+VERIFICATION PROCEDURE (do this for EVERY entry):
+1. Look up the verse you're citing
+2. Strip ALL diacritics from both your phrase and the verse
+3. Check: is your stripped phrase a contiguous substring of the stripped verse?
+4. If NO → pick a DIFFERENT verse. Do NOT submit it.
+
+Return JSON array: [{"word": "...", "example": "...", "reference": "chapter:verse"}]
+
+Words:
+
+- عَلَيْهِ (ʿalayhi) = towards him [WRONG: فَتَوَكَّلْ عَلَيْهِ @ 11:123]
+- لِّلَّذِينَ (lilladhīna) = to those who [WRONG: هُدًى لِّلَّذِينَ اتَّقَوْا @ 2:2]
+- شَيْـًٔا (shayan) = anything [WRONG: لَا تَمْلِكُ لَهُمْ شَيْـًٔا @ 3:128]
+- عَلَيْكَ (ʿalayka) = to you [WRONG: لَيْسَ عَلَيْكَ هُدَىٰهُمْ @ 2:272]
+- إِنَّكُمْ (innakum) = Indeed, you [WRONG: إِنَّكُمْ لَفِى ضَلَٰلٍ مُّبِينٍ @ 12:8]
+- عَذَابًا (ʿadhāban) = a punishment [WRONG: فَذُوقُوا عَذَابًا @ 32:14]
+- عَنْهُ (ʿanhu) = from it [WRONG: لَا يُدْفَعُ عَنْهُ @ 11:8]
+- قَوْمُهُۥ (qawmuhu) = his people [WRONG: كَذَّبَ قَوْمُهُۥ @ 23:33]
+- وَّكَانُوا۟ (wakānū) = and they were [WRONG: وَّكَانُوا۟ يَكْفُرُونَ @ 2:61]
+- ٱلْأَوْلَيَٰنِ (alwlayāni) = the former two [WRONG: فَٱلْأَوْلَيَٰنِ يَقُومَانِ @ 5:107]
+- ٱلْءَايَٰتِ (alāyāti) = the signs [WRONG: كَذَّبُوا۟ بِٱلْءَايَٰتِ كُلِّهَا @ 54:42]
+- سَبِيلًا (sabīlan) = a way [WRONG: لَا يَجِدُونَ سَبِيلًا @ 4:98]
+- لَفِى (lafī) = are surely in [WRONG: إِنَّكَ لَفِى خُلُقٍ عَظِيمٍ @ 68:4]
+- أَعْمَٰلَهُمْ (aʿmālahum) = their deeds [WRONG: أَضَلَّ أَعْمَٰلَهُمْ @ 47:1]
+- فَقَالَ (faqāla) = then He said [WRONG: فَقَالَ إِنِّى عَبْدُ اللَّهِ @ 19:30]
+- يُنظَرُونَ (yunẓarūna) = will be reprieved [WRONG: فَإِنَّهُمْ مُنظَرُونَ @ 37:172]
+- عَنْهَا (ʿanhā) = from it [WRONG: لَا يَسْأَلُونَ عَنْهَا @ 21:23]
+- ٱلْبَحْرَ (albaḥra) = the sea [WRONG: فَانفَلَقَ الْبَحْرُ @ 26:63]
+- ٱلْمُبِينُ (almubīnu) = clearly [WRONG: هَٰذَا بَلَٰغٌ مُّبِينٌ @ 14:52]
+- بَشَرٌ (basharun) = any man [WRONG: إِنْ أَنتَ إِلَّا بَشَرٌ @ 14:10]
+- ٱلْفُلْكِ (alful'ki) = the ship [WRONG: وَتَجْرِى الْفُلْكِ @ 10:22]
+- تَكُن (takun) = be [WRONG: وَإِن تَكُن حَسَنَةً @ 4:40]
+- ٱلْجِنَّ (aljina) = jinn [WRONG: مِنَ الْجِنَّ وَالنَّاسِ @ 114:6]
+- ذِى (dhī) = who is [WRONG: ذِى الْقُرْبَىٰ حَقَّهُ @ 17:26]
+- لَهُوَ (lahuwa) = surely it is [WRONG: وَإِنَّهُ لَهُوَ الْحَقُّ @ 22:6]
+- يُشْرِكُونَ (yush'rikūna) = they associate with Him [WRONG: وَهُمْ يُشْرِكُونَ @ 6:136]
+- ٱلرُّسُلُ (arrusulu) = are the Messengers [WRONG: كَذَّبَتِ الرُّسُلُ @ 40:5]
+- فَقَالُوٓا۟ (faqālū) = for they said [WRONG: فَقَالُوا سِحْرٌ مُّبِينٌ @ 10:2]
+- فَقُلْ (faqul) = then say [WRONG: فَقُلْ رَبِّ زِدْنِى عِلْمًا @ 20:114]
+- كَذِبًا (kadhiban) = a lie [WRONG: يَفْتَرِى كَذِبًا @ 6:93]
+- وَأَنِّى (wa-annī) = and that I [WRONG: وَأَنِّى لَهُ التَّنَاوُشُ @ 34:52]
+- بَيَّنَّٰهُ (bayyannāhu) = We made clear [WRONG: كَذَٰلِكَ بَيَّنَّٰهُ @ 2:242]
+- طَّآئِفَةٌ (ṭāifatun) = a group [WRONG: وَلْتَكُن مِّنكُمْ طَّآئِفَةٌ @ 3:104]
+- ءَاتَيْنَٰهُمُ (ātaynāhumu) = We have given them [WRONG: وَءَاتَيْنَٰهُمُ الْكِتَابَ @ 28:43]
+- فِيهِمْ (fīhim) = in them [WRONG: رَسُولًا فِيهِمْ @ 62:2]
+- ٱفْتَرَىٰ (if'tarā) = fabricates [WRONG: أَمِ افْتَرَىٰ كَذِبًا @ 34:8]
+- بَصِيرًا (baṣīran) = All-Seeing [WRONG: كَانَ اللَّهُ بَصِيرًا @ 4:58]

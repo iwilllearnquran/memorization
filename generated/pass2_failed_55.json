@@ -1,0 +1,442 @@
+[
+  {
+    "rank": 60,
+    "arabic": "عَلَيْهِ",
+    "transliteration": "ʿalayhi",
+    "meaning": "towards him",
+    "pass2_gpt_example": "تَوَكَّلْتُ عَلَيْهِ وَإِلَيْهِ",
+    "pass2_gpt_reference": "11:88"
+  },
+  {
+    "rank": 92,
+    "arabic": "رَبِّىَ",
+    "transliteration": "rabbiya",
+    "meaning": "My Lord",
+    "pass2_gpt_example": "قَالَ رَبِّيَ الَّذِي يُحْيِي",
+    "pass2_gpt_reference": "2:258"
+  },
+  {
+    "rank": 93,
+    "arabic": "لَمَنِ",
+    "transliteration": "lamani",
+    "meaning": "that whoever",
+    "pass2_gpt_example": "لَمَنِ اتَّبَعَ هُدَايَ",
+    "pass2_gpt_reference": "20:123"
+  },
+  {
+    "rank": 102,
+    "arabic": "مِنْهَا",
+    "transliteration": "min'hā",
+    "meaning": "therefrom",
+    "pass2_gpt_example": "كُلُوا مِنْهَا رَغَدًا",
+    "pass2_gpt_reference": "2:35"
+  },
+  {
+    "rank": 106,
+    "arabic": "الٓمٓ",
+    "transliteration": "alif-lam-meem",
+    "meaning": "Alif Laam Meem",
+    "pass2_gpt_example": "الٓمٓ ذَٰلِكَ الْكِتَابُ",
+    "pass2_gpt_reference": "2:1"
+  },
+  {
+    "rank": 113,
+    "arabic": "لِّلَّذِينَ",
+    "transliteration": "lilladhīna",
+    "meaning": "to those who",
+    "pass2_gpt_example": "هُدًى لِّلَّذِينَ يُؤْمِنُونَ",
+    "pass2_gpt_reference": "2:3"
+  },
+  {
+    "rank": 119,
+    "arabic": "شَيْـًٔا",
+    "transliteration": "shayan",
+    "meaning": "anything",
+    "pass2_gpt_example": "لَا يُغْنِي عَنْهُمْ شَيْئًا",
+    "pass2_gpt_reference": "3:10"
+  },
+  {
+    "rank": 138,
+    "arabic": "ٱلَّتِى",
+    "transliteration": "allatī",
+    "meaning": "whose",
+    "pass2_gpt_example": "الَّتِي أُنزِلَتْ فِيهِ",
+    "pass2_gpt_reference": "2:185"
+  },
+  {
+    "rank": 168,
+    "arabic": "عَلَيْكَ",
+    "transliteration": "ʿalayka",
+    "meaning": "to you",
+    "pass2_gpt_example": "وَأَنزَلْنَا عَلَيْكَ الْكِتَابَ",
+    "pass2_gpt_reference": "16:89"
+  },
+  {
+    "rank": 204,
+    "arabic": "كَثِيرًا",
+    "transliteration": "kathīran",
+    "meaning": "many",
+    "pass2_gpt_example": "وَيُضِلُّ بِهِ كَثِيرًا",
+    "pass2_gpt_reference": "2:26"
+  },
+  {
+    "rank": 207,
+    "arabic": "إِنَّكُمْ",
+    "transliteration": "innakum",
+    "meaning": "Indeed, you",
+    "pass2_gpt_example": "إِنَّكُمْ كُنتُمْ ظَالِمِينَ",
+    "pass2_gpt_reference": "2:35"
+  },
+  {
+    "rank": 215,
+    "arabic": "يَهْدِى",
+    "transliteration": "yahdī",
+    "meaning": "He guides",
+    "pass2_gpt_example": "إِنَّ اللَّهَ يَهْدِي مَن يَشَاءُ",
+    "pass2_gpt_reference": "28:56"
+  },
+  {
+    "rank": 233,
+    "arabic": "هَٰٓؤُلَآءِ",
+    "transliteration": "hāulāi",
+    "meaning": "these",
+    "pass2_gpt_example": "مَا لِهَٰؤُلَاءِ الْقَوْمِ",
+    "pass2_gpt_reference": "4:78"
+  },
+  {
+    "rank": 235,
+    "arabic": "إِلَيْهِمْ",
+    "transliteration": "ilayhim",
+    "meaning": "at them",
+    "pass2_gpt_example": "ثُمَّ إِلَيْهِمْ مَرْجِعُهُمْ",
+    "pass2_gpt_reference": "10:46"
+  },
+  {
+    "rank": 247,
+    "arabic": "عَذَابًا",
+    "transliteration": "ʿadhāban",
+    "meaning": "a punishment",
+    "pass2_gpt_example": "وَلَهُمْ عَذَابًا أَلِيمًا",
+    "pass2_gpt_reference": "2:10"
+  },
+  {
+    "rank": 258,
+    "arabic": "عَنْهُ",
+    "transliteration": "ʿanhu",
+    "meaning": "from it",
+    "pass2_gpt_example": "لَا يُغْنِي عَنْهُ مَالُهُ",
+    "pass2_gpt_reference": "92:11"
+  },
+  {
+    "rank": 263,
+    "arabic": "قَوْمُهُۥ",
+    "transliteration": "qawmuhu",
+    "meaning": "his people",
+    "pass2_gpt_example": "قَالَ قَوْمُهُ إِنَّا",
+    "pass2_gpt_reference": "7:66"
+  },
+  {
+    "rank": 273,
+    "arabic": "وَّكَانُوا۟",
+    "transliteration": "wakānū",
+    "meaning": "and they were",
+    "pass2_gpt_example": "وَكَانُوا يَكْفُرُونَ",
+    "pass2_gpt_reference": "2:61"
+  },
+  {
+    "rank": 297,
+    "arabic": "ٱلْأَوْلَيَٰنِ",
+    "transliteration": "alwlayāni",
+    "meaning": "the former two",
+    "pass2_gpt_example": "فَالْأَوْلَيَانِ يَقُومَانِ",
+    "pass2_gpt_reference": "5:107"
+  },
+  {
+    "rank": 298,
+    "arabic": "ٱلْعَلِيمُ",
+    "transliteration": "alʿalīmu",
+    "meaning": "are the All-Knowing",
+    "pass2_gpt_example": "إِنَّ اللَّهَ هُوَ الْعَلِيمُ",
+    "pass2_gpt_reference": "9:60"
+  },
+  {
+    "rank": 304,
+    "arabic": "ٱلْءَايَٰتِ",
+    "transliteration": "alāyāti",
+    "meaning": "the signs",
+    "pass2_gpt_example": "كَذَّبُوا بِالْآيَاتِ كُلِّهَا",
+    "pass2_gpt_reference": "54:42"
+  },
+  {
+    "rank": 324,
+    "arabic": "سَبِيلًا",
+    "transliteration": "sabīlan",
+    "meaning": "a way",
+    "pass2_gpt_example": "وَلَنْ تَجِدَ لَهُمْ سَبِيلًا",
+    "pass2_gpt_reference": "4:141"
+  },
+  {
+    "rank": 328,
+    "arabic": "لَفِى",
+    "transliteration": "lafī",
+    "meaning": "are surely in",
+    "pass2_gpt_example": "إِنَّهُ لَفِي ضَلَالٍ",
+    "pass2_gpt_reference": "12:8"
+  },
+  {
+    "rank": 333,
+    "arabic": "ٱبْنَ",
+    "transliteration": "ib'na",
+    "meaning": "the son",
+    "pass2_gpt_example": "مَا كَانَ اللَّهُ لِيَتَّخِذَ مِنْ وَلَدٍ",
+    "pass2_gpt_reference": "19:35"
+  },
+  {
+    "rank": 349,
+    "arabic": "أَعْمَٰلَهُمْ",
+    "transliteration": "aʿmālahum",
+    "meaning": "their deeds",
+    "pass2_gpt_example": "وَحَبِطَتْ أَعْمَالُهُمْ",
+    "pass2_gpt_reference": "5:5"
+  },
+  {
+    "rank": 351,
+    "arabic": "فَقَالَ",
+    "transliteration": "faqāla",
+    "meaning": "then He said",
+    "pass2_gpt_example": "فَقَالَ إِنِّي أَعْلَمُ",
+    "pass2_gpt_reference": "2:30"
+  },
+  {
+    "rank": 354,
+    "arabic": "يُؤْمِنَّ",
+    "transliteration": "yu'minna",
+    "meaning": "they believe",
+    "pass2_gpt_example": "حَتَّىٰ يُؤْمِنَّ بِاللَّهِ",
+    "pass2_gpt_reference": "2:221"
+  },
+  {
+    "rank": 379,
+    "arabic": "يُنظَرُونَ",
+    "transliteration": "yunẓarūna",
+    "meaning": "will be reprieved",
+    "pass2_gpt_example": "فَإِنَّهُمْ مُنْتَظَرُونَ",
+    "pass2_gpt_reference": "37:172"
+  },
+  {
+    "rank": 390,
+    "arabic": "عَنْهَا",
+    "transliteration": "ʿanhā",
+    "meaning": "from it",
+    "pass2_gpt_example": "لَا يُفَتَّرُ عَنْهَا",
+    "pass2_gpt_reference": "43:75"
+  },
+  {
+    "rank": 396,
+    "arabic": "ٱلْبَحْرَ",
+    "transliteration": "albaḥra",
+    "meaning": "the sea",
+    "pass2_gpt_example": "وَسَخَّرَ لَكُمُ الْبَحْرَ",
+    "pass2_gpt_reference": "45:12"
+  },
+  {
+    "rank": 416,
+    "arabic": "ٱلْمُبِينُ",
+    "transliteration": "almubīnu",
+    "meaning": "clearly",
+    "pass2_gpt_example": "هَٰذَا بَلَاغٌ مُبِينٌ",
+    "pass2_gpt_reference": "14:52"
+  },
+  {
+    "rank": 417,
+    "arabic": "بَشَرٌ",
+    "transliteration": "basharun",
+    "meaning": "any man",
+    "pass2_gpt_example": "إِنْ أَنَا إِلَّا بَشَرٌ",
+    "pass2_gpt_reference": "18:110"
+  },
+  {
+    "rank": 432,
+    "arabic": "ٱلْفُلْكِ",
+    "transliteration": "alful'ki",
+    "meaning": "the ship",
+    "pass2_gpt_example": "تَجْرِي الْفُلْكِ فِي الْبَحْرِ",
+    "pass2_gpt_reference": "2:164"
+  },
+  {
+    "rank": 435,
+    "arabic": "تَكُن",
+    "transliteration": "takun",
+    "meaning": "be",
+    "pass2_gpt_example": "إِنْ تَكُنْ مِثْقَالَ حَبَّةٍ",
+    "pass2_gpt_reference": "31:16"
+  },
+  {
+    "rank": 479,
+    "arabic": "ٱلْجِنَّ",
+    "transliteration": "aljina",
+    "meaning": "jinn",
+    "pass2_gpt_example": "وَخَلَقَ الْجِنَّ مِنْ",
+    "pass2_gpt_reference": "55:15"
+  },
+  {
+    "rank": 488,
+    "arabic": "ذِى",
+    "transliteration": "dhī",
+    "meaning": "who is",
+    "pass2_gpt_example": "ذِي الْقُرْبَى حَقَّهُ",
+    "pass2_gpt_reference": "17:26"
+  },
+  {
+    "rank": 493,
+    "arabic": "لَهُوَ",
+    "transliteration": "lahuwa",
+    "meaning": "surely it is",
+    "pass2_gpt_example": "وَإِنَّهُ لَهُوَ الْحَقُّ",
+    "pass2_gpt_reference": "22:6"
+  },
+  {
+    "rank": 495,
+    "arabic": "وَٱلْءَاخِرَةِ",
+    "transliteration": "wal-ākhirati",
+    "meaning": "and the Hereafter",
+    "pass2_gpt_example": "وَالْآخِرَةِ هُمْ يُوقِنُونَ",
+    "pass2_gpt_reference": "2:4"
+  },
+  {
+    "rank": 497,
+    "arabic": "يُشْرِكُونَ",
+    "transliteration": "yush'rikūna",
+    "meaning": "they associate with Him",
+    "pass2_gpt_example": "وَهُمْ يُشْرِكُونَ",
+    "pass2_gpt_reference": "12:106"
+  },
+  {
+    "rank": 499,
+    "arabic": "ٱلرُّسُلُ",
+    "transliteration": "arrusulu",
+    "meaning": "are the Messengers",
+    "pass2_gpt_example": "كَذَّبَتْ قَبْلَهُمْ الرُّسُلُ",
+    "pass2_gpt_reference": "50:12"
+  },
+  {
+    "rank": 505,
+    "arabic": "فَقَالُوٓا۟",
+    "transliteration": "faqālū",
+    "meaning": "for they said",
+    "pass2_gpt_example": "فَقَالُوا هَٰذَا سِحْرٌ",
+    "pass2_gpt_reference": "37:15"
+  },
+  {
+    "rank": 506,
+    "arabic": "فَقُلْ",
+    "transliteration": "faqul",
+    "meaning": "then say",
+    "pass2_gpt_example": "فَقُلْ سُبْحَانَ رَبِّي",
+    "pass2_gpt_reference": "17:93"
+  },
+  {
+    "rank": 508,
+    "arabic": "كَذِبًا",
+    "transliteration": "kadhiban",
+    "meaning": "a lie",
+    "pass2_gpt_example": "إِنْ هَٰذَا إِلَّا كَذِبًا",
+    "pass2_gpt_reference": "38:7"
+  },
+  {
+    "rank": 511,
+    "arabic": "وَأَنِّى",
+    "transliteration": "wa-annī",
+    "meaning": "and that I",
+    "pass2_gpt_example": "وَأَنِّي لَهُ التَّنَاوُشُ",
+    "pass2_gpt_reference": "34:52"
+  },
+  {
+    "rank": 517,
+    "arabic": "يَفْتَرُونَ",
+    "transliteration": "yaftarūna",
+    "meaning": "inventing",
+    "pass2_gpt_example": "إِنَّهُمْ يَفْتَرُونَ عَلَى اللَّهِ",
+    "pass2_gpt_reference": "10:69"
+  },
+  {
+    "rank": 535,
+    "arabic": "بَيِّنَٰتٍ",
+    "transliteration": "bayyinātin",
+    "meaning": "clear",
+    "pass2_gpt_example": "جَاءَتْهُمْ بِالْبَيِّنَاتِ",
+    "pass2_gpt_reference": "57:25"
+  },
+  {
+    "rank": 537,
+    "arabic": "بَيَّنَّٰهُ",
+    "transliteration": "bayyannāhu",
+    "meaning": "We made clear",
+    "pass2_gpt_example": "كَذَٰلِكَ بَيَّنَّاهُ",
+    "pass2_gpt_reference": "2:242"
+  },
+  {
+    "rank": 542,
+    "arabic": "ذَاتَ",
+    "transliteration": "dhāta",
+    "meaning": "that",
+    "pass2_gpt_example": "جَنَّاتٍ ذَاتِ أَفْنَانٍ",
+    "pass2_gpt_reference": "55:48"
+  },
+  {
+    "rank": 544,
+    "arabic": "طَّآئِفَةٌ",
+    "transliteration": "ṭāifatun",
+    "meaning": "a group",
+    "pass2_gpt_example": "وَلْتَكُنْ مِنْكُمْ طَائِفَةٌ",
+    "pass2_gpt_reference": "3:104"
+  },
+  {
+    "rank": 546,
+    "arabic": "فَإِنَّهُۥ",
+    "transliteration": "fa-innahu",
+    "meaning": "then indeed he",
+    "pass2_gpt_example": "فَإِنَّهُ عَدُوٌّ لِي",
+    "pass2_gpt_reference": "26:77"
+  },
+  {
+    "rank": 561,
+    "arabic": "ءَاتَيْنَٰهُمُ",
+    "transliteration": "ātaynāhumu",
+    "meaning": "We have given them",
+    "pass2_gpt_example": "وَآتَيْنَاهُمُ الْكِتَابَ",
+    "pass2_gpt_reference": "45:16"
+  },
+  {
+    "rank": 565,
+    "arabic": "أَهْلِهَآ",
+    "transliteration": "ahlihā",
+    "meaning": "her family",
+    "pass2_gpt_example": "إِلَى أَهْلِهَا تَسْعَى",
+    "pass2_gpt_reference": "79:12"
+  },
+  {
+    "rank": 582,
+    "arabic": "فِيهِمْ",
+    "transliteration": "fīhim",
+    "meaning": "in them",
+    "pass2_gpt_example": "رَسُولًا مِنْهُمْ فِيهِمْ",
+    "pass2_gpt_reference": "2:129"
+  },
+  {
+    "rank": 593,
+    "arabic": "ٱفْتَرَىٰ",
+    "transliteration": "if'tarā",
+    "meaning": "fabricates",
+    "pass2_gpt_example": "أَمِ افْتَرَى عَلَى اللَّهِ كَذِبًا",
+    "pass2_gpt_reference": "34:8"
+  },
+  {
+    "rank": 597,
+    "arabic": "بَصِيرًا",
+    "transliteration": "baṣīran",
+    "meaning": "All-Seeing",
+    "pass2_gpt_example": "إِنَّ اللَّهَ كَانَ بَصِيرًا",
+    "pass2_gpt_reference": "4:58"
+  }
+]

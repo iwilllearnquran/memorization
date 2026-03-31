@@ -1,0 +1,2175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Surah Al-Qadr Reel | My Quran Quest</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: "QuestSans";
+      src: url("./Gilroy-Medium.ttf") format("truetype");
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "UthmaniScript";
+      src: url("./PDMS_SALEEM_QURANFONTQESHIP_0.ttf") format("truetype");
+      font-display: swap;
+    }
+
+    :root {
+      color-scheme: dark;
+      --bg-top: #010302;
+      --bg-bottom: #06150f;
+      --panel: rgba(5, 17, 12, 0.84);
+      --panel-border: rgba(114, 255, 166, 0.14);
+      --text-main: #f3fff7;
+      --text-soft: rgba(225, 255, 236, 0.72);
+      --text-faint: rgba(188, 227, 205, 0.54);
+      --word-hidden: rgba(120, 184, 146, 0.2);
+      --word-dim: rgba(176, 227, 196, 0.56);
+      --word-revealed: #4fd77e;
+      --word-current: #99ffc0;
+      --accent: #4fd77e;
+      --accent-strong: #8affc3;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+
+    body {
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top, rgba(28, 97, 60, 0.28), transparent 36%),
+        radial-gradient(circle at bottom, rgba(5, 110, 57, 0.22), transparent 44%),
+        linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+      color: var(--text-main);
+      font-family: "QuestSans", "Segoe UI", sans-serif;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      width: 28rem;
+      height: 28rem;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      opacity: 0.18;
+      z-index: 0;
+    }
+
+    body::before { top: -8rem; right: -10rem; background: #3be97c; }
+    body::after { left: -12rem; bottom: -10rem; background: #12613a; }
+
+    button, input { font: inherit; }
+    button { border: 0; background: none; color: inherit; cursor: pointer; }
+    button:focus-visible, input:focus-visible { outline: 2px solid rgba(138, 255, 195, 0.86); outline-offset: 2px; }
+    [hidden] { display: none !important; }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      width: min(100vw, 780px);
+      height: 100vh;
+      height: 100dvh;
+      margin: 0 auto;
+      padding: clamp(14px, 4vw, 28px) clamp(14px, 4vw, 24px) calc(112px + var(--safe-bottom));
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .qq-navbar,
+    .topbar,
+    .verse-shell,
+    .statusbar,
+    .reel-bottom-nav,
+    .detail-modal,
+    .settings-sheet {
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .qq-navbar { border-radius: 24px; padding: 14px 16px 15px; }
+    .qq-navbar-main { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .qq-brand-wrap { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .qq-icon-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: #d8ffe9;
+      flex: 0 0 auto;
+    }
+    .qq-brand { font-size: clamp(1.05rem, 3vw, 1.28rem); font-weight: 600; letter-spacing: 0.02em; }
+    .qq-subbrand { margin-top: 2px; font-size: 0.78rem; color: var(--text-faint); }
+    .qq-selects { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .qq-select-pill {
+      min-height: 34px;
+      padding: 0 14px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(79, 215, 126, 0.12);
+      border: 1px solid rgba(95, 227, 149, 0.18);
+      color: #d8ffe9;
+      font-size: 0.82rem;
+    }
+    .qq-select-pill-soft { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.06); color: var(--text-soft); }
+
+    .topbar {
+      border-radius: 24px;
+      padding: 18px 18px 16px;
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: flex-start;
+    }
+    .eyebrow { display: inline-block; font-size: 0.72rem; color: var(--text-faint); letter-spacing: 0.18em; text-transform: uppercase; }
+    .title { margin: 10px 0 6px; font-size: clamp(1.2rem, 3.8vw, 1.8rem); line-height: 1.12; }
+    .subtitle { margin: 0; max-width: 42ch; font-size: 0.92rem; line-height: 1.45; color: var(--text-soft); }
+    .meta { text-align: right; font-size: 0.88rem; color: var(--text-soft); display: grid; gap: 7px; }
+
+    .verse-shell {
+      border-radius: 30px;
+      padding: 14px 14px 12px;
+      min-height: 0;
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .progress-track {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      overflow: hidden;
+      flex: 0 0 auto;
+    }
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+      transition: width 260ms ease;
+    }
+    .verse-viewport {
+      min-height: 0;
+      flex: 1 1 auto;
+      overflow-y: auto;
+      padding: 10px 2px 6px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(114,255,166,0.35) transparent;
+    }
+    .verse-viewport::-webkit-scrollbar { width: 6px; }
+    .verse-viewport::-webkit-scrollbar-thumb { background: rgba(114,255,166,0.35); border-radius: 999px; }
+
+    .words {
+      direction: rtl;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-content: flex-start;
+      gap: 18px 14px;
+      padding: 15vh 0 26vh;
+    }
+    .word {
+      min-width: 0;
+      width: auto;
+      max-width: none;
+      flex: 0 0 auto;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 6px;
+      padding: 0 6px;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      color: var(--word-hidden);
+      opacity: 0.22;
+      transform: translateY(14px) scale(0.985);
+      transition: color 320ms ease, opacity 320ms ease, transform 320ms ease, text-shadow 320ms ease;
+      text-align: center;
+    }
+    .word.is-locked { cursor: default; }
+    .word-text {
+      display: block;
+      width: auto;
+      font-family: "UthmaniScript", serif;
+      font-size: clamp(2.4rem, 7.8vw, 4.8rem);
+      line-height: 1.25;
+      color: inherit;
+      white-space: nowrap;
+      word-break: normal;
+    }
+    .word-meta {
+      width: 0;
+      min-width: 0;
+      max-width: 0;
+      max-height: 0;
+      margin-top: -2px;
+      overflow: hidden;
+      opacity: 0;
+      transition: width 260ms ease, max-width 260ms ease, max-height 260ms ease, opacity 260ms ease, margin-top 260ms ease;
+    }
+    .meta-line {
+      display: none;
+      margin-top: 2px;
+      font-size: 0.72rem;
+      line-height: 1.3;
+      color: var(--text-soft);
+      word-break: break-word;
+      text-align: center;
+    }
+    .meta-line strong { color: rgba(230, 255, 238, 0.94); font-weight: 600; }
+    html.show-meaning .meta-meaning,
+    body.practice-mode .meta-meaning,
+    html.show-root .meta-root,
+    body.practice-mode .meta-root,
+    html.show-pos .meta-pos,
+    body.practice-mode .meta-pos { display: block; }
+    .word.has-visible-meta.revealed .word-meta,
+    body.practice-mode .word.has-visible-meta .word-meta { width: min(48vw, 220px); max-width: min(48vw, 220px); max-height: 110px; margin-top: 8px; opacity: 1; }
+    .word.revealed { opacity: 1; transform: translateY(0) scale(1); color: var(--word-revealed); text-shadow: 0 0 18px rgba(79, 215, 126, 0.08); }
+    .word.current { color: var(--word-current); transform: translateY(0) scale(1.04); text-shadow: 0 0 24px rgba(137,255,189,0.34), 0 0 56px rgba(79,215,126,0.18); }
+    body.practice-mode .word { opacity: 1; transform: none; color: var(--word-dim); }
+    body.practice-mode .word.revealed,
+    body.practice-mode .word.current { color: var(--word-current); text-shadow: 0 0 18px rgba(137,255,189,0.24), 0 0 44px rgba(79,215,126,0.14); }
+
+    .statusbar {
+      border-radius: 24px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .status-copy { min-width: 0; }
+    .status { font-size: 0.95rem; color: var(--text-main); }
+    .status-sub { margin-top: 4px; font-size: 0.8rem; color: var(--text-soft); }
+    .status-pill {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(79,215,126,0.12);
+      border: 1px solid rgba(95,227,149,0.18);
+      color: #d8ffe9;
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+
+    .reel-bottom-nav {
+      position: fixed;
+      left: 50%;
+      bottom: max(12px, calc(10px + var(--safe-bottom)));
+      transform: translateX(-50%);
+      z-index: 20;
+      width: min(calc(100vw - 20px), 760px);
+      border-radius: 28px;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+    .reel-nav-item {
+      min-height: 58px;
+      border-radius: 22px;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.05);
+      color: #d8ffe9;
+    }
+    .reel-nav-item.is-active { background: rgba(79,215,126,0.12); border-color: rgba(95,227,149,0.18); }
+    .reel-nav-play {
+      width: 68px;
+      height: 68px;
+      min-height: 68px;
+      margin: -14px auto 0;
+      border-radius: 50%;
+      background: linear-gradient(180deg, rgba(70, 214, 123, 0.98), rgba(42, 161, 91, 0.92));
+      color: #041009;
+      box-shadow: 0 18px 34px rgba(0,0,0,0.28);
+    }
+    .reel-nav-label { font-size: 0.68rem; color: var(--text-soft); }
+
+    .reel-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 24;
+    }
+
+    .detail-modal,
+    .settings-sheet {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 25;
+      width: min(calc(100vw - 20px), 520px);
+      border-radius: 24px;
+      padding: 18px;
+    }
+    .detail-modal { top: 50%; transform: translate(-50%, -50%); }
+    .settings-sheet { bottom: calc(104px + var(--safe-bottom)); }
+    .detail-head,
+    .settings-head { display: flex; justify-content: space-between; gap: 14px; align-items: flex-start; }
+    .detail-kicker,
+    .settings-kicker { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); }
+    .detail-title,
+    .settings-title { margin: 8px 0 0; font-size: 1.2rem; }
+    .modal-close {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      color: #d8ffe9;
+      flex: 0 0 auto;
+    }
+    .detail-word { margin: 18px 0 16px; text-align: center; font-family: "UthmaniScript", serif; font-size: clamp(2.3rem, 7.8vw, 3.7rem); color: var(--word-current); }
+    .detail-grid { display: grid; gap: 10px; }
+    .detail-row { display: flex; justify-content: space-between; gap: 12px; padding: 12px 14px; border-radius: 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); }
+    .detail-label { color: var(--text-soft); font-size: 0.82rem; }
+    .detail-value { text-align: right; }
+
+    .setting-list { display: grid; gap: 10px; margin-top: 16px; }
+    .setting-row { display: grid; gap: 10px; padding: 14px; border-radius: 18px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); }
+    .setting-row input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--accent); justify-self: end; }
+    .setting-name { display: block; font-size: 0.93rem; color: #effff3; }
+    .setting-desc { display: block; margin-top: 4px; font-size: 0.78rem; color: var(--text-soft); line-height: 1.35; }
+    .speed-meta { display: flex; justify-content: space-between; gap: 12px; font-size: 0.82rem; color: var(--text-soft); }
+    .speed-slider { width: 100%; accent-color: var(--accent); }
+    .speed-field-row { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
+    .speed-number {
+      width: 112px;
+      min-height: 42px;
+      padding: 0 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(132,255,190,0.18);
+      background: rgba(8,28,17,0.78);
+      color: var(--text-main);
+      text-align: right;
+    }
+    .speed-unit, .settings-note { font-size: 0.78rem; color: var(--text-soft); }
+    .settings-note { margin-top: 14px; line-height: 1.45; }
+    .settings-action-btn {
+      width: 100%;
+      min-height: 52px;
+      border: 1px solid rgba(132,255,190,0.24);
+      border-radius: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 0 18px;
+      background: linear-gradient(180deg, rgba(42, 134, 69, 0.94), rgba(26, 89, 46, 0.98));
+      color: #f3fff7;
+      box-shadow: 0 18px 30px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.08);
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+    .settings-action-btn:disabled {
+      opacity: 0.7;
+      cursor: wait;
+      box-shadow: none;
+    }
+
+    body.type-reveal-mode .page { padding-bottom: calc(232px + var(--safe-bottom)); }
+    .type-reveal-dock {
+      position: fixed;
+      left: 50%;
+      bottom: calc(96px + var(--safe-bottom));
+      transform: translateX(-50%);
+      z-index: 19;
+      width: min(calc(100vw - 20px), 760px);
+      border-radius: 26px;
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+      background: rgba(5, 17, 12, 0.94);
+      border: 1px solid rgba(114, 255, 166, 0.14);
+      box-shadow: var(--shadow);
+    }
+    .type-reveal-copy { display: grid; gap: 4px; }
+    .type-reveal-title { font-size: 0.92rem; color: #effff3; }
+    .type-reveal-sub { font-size: 0.78rem; line-height: 1.45; color: var(--text-soft); }
+    .type-reveal-input-wrap { display: flex; align-items: center; gap: 10px; }
+    .type-reveal-input {
+      flex: 1 1 auto;
+      min-height: 48px;
+      border-radius: 18px;
+      border: 1px solid rgba(132,255,190,0.18);
+      padding: 0 14px;
+      background: rgba(8,28,17,0.78);
+      color: var(--text-main);
+      font: inherit;
+    }
+    .type-reveal-input::placeholder { color: rgba(225,255,236,0.38); }
+    .type-reveal-submit {
+      min-width: 108px;
+      min-height: 48px;
+      border-radius: 18px;
+      border: 1px solid rgba(132,255,190,0.24);
+      padding: 0 16px;
+      background: linear-gradient(180deg, rgba(42, 134, 69, 0.94), rgba(26, 89, 46, 0.98));
+      color: #f3fff7;
+      font: inherit;
+      font-weight: 600;
+      box-shadow: 0 18px 30px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+    body.type-reveal-mode .page { padding-bottom: calc(112px + var(--safe-bottom)); }
+    body.type-reveal-mode .verse-shell { border: 1px solid rgba(95,227,149,0.18); box-shadow: inset 0 0 0 1px rgba(95,227,149,0.08); }
+    .type-reveal-dock { display: none !important; }
+      min-width: 108px;
+      min-height: 48px;
+      border-radius: 18px;
+      border: 1px solid rgba(132,255,190,0.24);
+      padding: 0 16px;
+      background: linear-gradient(180deg, rgba(42, 134, 69, 0.94), rgba(26, 89, 46, 0.98));
+      color: #f3fff7;
+      font: inherit;
+      font-weight: 600;
+      box-shadow: 0 18px 30px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    .save-toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(108px + var(--safe-bottom));
+      transform: translateX(-50%);
+      z-index: 35;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(8,33,19,0.94);
+      border: 1px solid rgba(132,255,190,0.24);
+      color: #ddffe9;
+      box-shadow: 0 20px 36px rgba(0,0,0,0.22);
+      opacity: 0;
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+    .save-toast.is-visible { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+
+    @media (max-width: 640px) {
+      .page { padding: 12px 12px calc(108px + var(--safe-bottom)); gap: 10px; }
+      .topbar, .statusbar, .qq-navbar { border-radius: 22px; }
+      .topbar, .statusbar { flex-direction: column; align-items: stretch; }
+      .meta { text-align: left; }
+      .subtitle { display: none; }
+      .words { gap: 12px 10px; padding-top: 12vh; justify-content: center; }
+      .word { flex: 0 0 auto; padding-left: 3px; padding-right: 3px; }
+      .word-text { font-size: clamp(2.35rem, 11.6vw, 3.5rem); }
+      .word.has-visible-meta.revealed .word-meta,
+      body.practice-mode .word.has-visible-meta .word-meta { width: min(66vw, 220px); max-width: min(66vw, 220px); }
+      .type-reveal-dock { bottom: calc(88px + var(--safe-bottom)); border-radius: 22px; }
+      .type-reveal-input-wrap { flex-direction: column; align-items: stretch; }
+      .type-reveal-submit {
+      min-width: 108px;
+      min-height: 48px;
+      border-radius: 18px;
+      border: 1px solid rgba(132,255,190,0.24);
+      padding: 0 16px;
+      background: linear-gradient(180deg, rgba(42, 134, 69, 0.94), rgba(26, 89, 46, 0.98));
+      color: #f3fff7;
+      font: inherit;
+      font-weight: 600;
+      box-shadow: 0 18px 30px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+    body.type-reveal-mode .page { padding-bottom: calc(112px + var(--safe-bottom)); }
+    body.type-reveal-mode .verse-shell { border: 1px solid rgba(95,227,149,0.18); box-shadow: inset 0 0 0 1px rgba(95,227,149,0.08); }
+    .type-reveal-dock { display: none !important; } width: 100%; }
+      .speed-field-row { justify-content: space-between; }
+      .reel-bottom-nav { gap: 4px; padding-left: 10px; padding-right: 10px; }
+      .reel-nav-item { min-height: 54px; }
+      .reel-nav-play { width: 60px; height: 60px; min-height: 60px; margin-top: -10px; }
+      .detail-modal, .settings-sheet { width: calc(100vw - 20px); border-radius: 22px; }
+      .settings-sheet { bottom: calc(90px + var(--safe-bottom)); }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="qq-navbar">
+      <div class="qq-navbar-main">
+        <div class="qq-brand-wrap">
+          <button class="qq-icon-btn" type="button" aria-label="Open menu">
+            <span class="material-symbols-outlined" aria-hidden="true">menu_book</span>
+          </button>
+          <div>
+            <div class="qq-brand">My Quran Quest</div>
+            <div class="qq-subbrand">Easy Quran Memorization</div>
+           
+          </div>
+        </div>
+        <button class="qq-icon-btn" id="topSettingsBtn" type="button" aria-label="Open settings">
+          <span class="material-symbols-outlined" aria-hidden="true">tune</span>
+        </button>
+      </div>
+      <div class="qq-selects" aria-label="Current ayah reference">
+        <div class="qq-select-pill">Surah 97</div>
+        <div class="qq-select-pill">Ayahs 1-5</div>
+        <div class="qq-select-pill qq-select-pill-soft">Al-Qadr</div>
+      </div>
+    </header>
+
+
+    <section class="verse-shell">
+      <div class="progress-track">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+      <div class="verse-viewport" id="verseViewport">
+        <div class="words" id="words"></div>
+      </div>
+    </section>
+
+    <section class="statusbar">
+      <div class="status-copy">
+        <div class="status" id="statusText">Auto reveal is running.</div>
+        <div class="status-sub" id="statusSubtext">Tap any revealed word to view its details.</div>
+      </div>
+      <div class="status-pill" id="modePill">Recite mode</div>
+    </section>
+
+    <section class="type-reveal-dock" id="typeRevealDock" hidden aria-label="Tap to reveal">
+      <div class="type-reveal-copy">
+        <div class="type-reveal-title">Tap to reveal</div>
+        <div class="type-reveal-sub" id="typeRevealHint">Tap anywhere in the ayah area to reveal the next ayah word.</div>
+      </div>
+      <div class="type-reveal-input-wrap">
+        <input class="type-reveal-input" id="typeRevealInput" type="text" placeholder="Tap anywhere in the ayah area to reveal" autocomplete="off" spellcheck="false" inputmode="text">
+        <button class="type-reveal-submit" id="typeRevealAdvanceBtn" type="button">Reveal</button>
+      </div>
+    </section>
+  </main>
+
+  <nav class="reel-bottom-nav" aria-label="Ayah controls">
+    <button class="reel-nav-item" id="navPracticeBtn" type="button" aria-label="Open practice view">
+      <span class="material-symbols-outlined" aria-hidden="true">edit</span>
+      <span class="reel-nav-label" id="navPracticeLabel">Practice</span>
+    </button>
+    <button class="reel-nav-item is-active" id="navModeBtn" type="button" aria-label="Return to recite mode">
+      <span class="material-symbols-outlined" aria-hidden="true">menu_book</span>
+      <span class="reel-nav-label">Recite</span>
+    </button>
+    <button class="reel-nav-item reel-nav-play" id="navPlayBtn" type="button" aria-label="Play reel">
+      <span class="material-symbols-outlined" id="navPlayIcon" aria-hidden="true">pause</span>
+    </button>
+    <button class="reel-nav-item" id="navSettingsBtn" type="button" aria-label="Open settings">
+      <span class="material-symbols-outlined" aria-hidden="true">settings</span>
+      <span class="reel-nav-label">Settings</span>
+    </button>
+    <button class="reel-nav-item" id="navSaveBtn" type="button" aria-label="Save reel settings">
+      <span class="material-symbols-outlined" id="navSaveIcon" aria-hidden="true">bookmark_add</span>
+      <span class="reel-nav-label">Save</span>
+    </button>
+  </nav>
+
+  <div class="reel-overlay" id="reelOverlay" hidden></div>
+
+  <section class="detail-modal" id="detailModal" hidden aria-live="polite" aria-label="Word details">
+    <div class="detail-head">
+      <div>
+        <div class="detail-kicker" id="detailKicker">Word detail</div>
+        <h2 class="detail-title">Current Word</h2>
+      </div>
+      <button class="modal-close" id="detailCloseBtn" type="button" aria-label="Close details">
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+      </button>
+    </div>
+    <div class="detail-word" id="detailArabic">--</div>
+    <div class="detail-grid">
+      <div class="detail-row"><span class="detail-label">Meaning</span><span class="detail-value" id="detailMeaning">--</span></div>
+      <div class="detail-row"><span class="detail-label">Root</span><span class="detail-value" id="detailRoot">--</span></div>
+      <div class="detail-row"><span class="detail-label">Grammar Tag</span><span class="detail-value" id="detailPos">--</span></div>
+    </div>
+  </section>
+
+  <section class="settings-sheet" id="settingsSheet" hidden aria-label="Reel settings">
+    <div class="settings-head">
+      <div>
+        <div class="settings-kicker">Ayah controls</div>
+        <h2 class="settings-title">Reel settings</h2>
+      </div>
+      <button class="modal-close" id="settingsCloseBtn" type="button" aria-label="Close settings">
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+      </button>
+    </div>
+
+    <div class="setting-list">
+      <label class="setting-row" for="showMeaningSetting">
+        <span class="setting-copy">
+          <span class="setting-name">Show meaning</span>
+          <span class="setting-desc">Display the English gloss below each revealed word in the five-ayah reel.</span>
+        </span>
+        <input id="showMeaningSetting" type="checkbox">
+      </label>
+
+      <label class="setting-row" for="showRootSetting">
+        <span class="setting-copy">
+          <span class="setting-name">Show root</span>
+          <span class="setting-desc">Reveal the root line like the original ayah page.</span>
+        </span>
+        <input id="showRootSetting" type="checkbox">
+      </label>
+
+      <label class="setting-row" for="showPosSetting">
+        <span class="setting-copy">
+          <span class="setting-name">Show grammar tag</span>
+          <span class="setting-desc">Display the POS or grammar shorthand under each word.</span>
+        </span>
+        <input id="showPosSetting" type="checkbox">
+      </label>
+
+      <label class="setting-row" for="typeRevealSetting">
+        <span class="setting-copy">
+          <span class="setting-name">Tap to reveal</span>
+          <span class="setting-desc">Tap the ayah area to reveal the next word. Finishing all five ayahs saves a reel using your tap timing.</span>
+        </span>
+        <input id="typeRevealSetting" type="checkbox">
+      </label>
+
+      <div class="setting-row">
+        <div class="setting-copy">
+          <span class="setting-name">Reveal speed</span>
+          <span class="setting-desc">Adjust how quickly the words advance during recite mode.</span>
+        </div>
+        <div class="speed-meta">
+          <span>Slower</span>
+          <strong id="speedValue">900 ms / word</strong>
+          <span>Faster</span>
+        </div>
+        <input class="speed-slider" id="speedSetting" type="range" min="100" max="1500" step="50" value="900">
+        <div class="speed-field-row">
+          <label class="sr-only" for="speedNumberSetting">Reveal speed in milliseconds per word</label>
+          <input class="speed-number" id="speedNumberSetting" type="number" min="100" max="1500" step="50" value="900" inputmode="numeric">
+          <span class="speed-unit">ms / word</span>
+        </div>
+      </div>
+      <button class="settings-action-btn" id="downloadHdReelBtn" type="button">
+        <span class="material-symbols-outlined" aria-hidden="true">download</span>
+        <span>Download 1080p Reel</span>
+      </button>
+    </div>
+
+    <div class="settings-note">HD export uses the speed set here in auto mode, or your captured tap timing in tap-to-reveal mode. The saved video keeps the bottom controls visible while rendering Surah Al-Qadr verses 1 to 5 in one reel.</div>
+  </section>
+
+  <div class="save-toast" id="saveToast" hidden>Reel settings saved</div>
+  <audio id="ayahAudio" src="https://verses.quran.com/Alafasy/mp3/097001.mp3" preload="auto" crossorigin="anonymous"></audio>
+
+
+  <script>    const VERSES = [
+      {
+            "ayah": 1,
+            "audio": "https://verses.quran.com/Alafasy/mp3/097001.mp3",
+            "english": "Indeed, We sent the Qur'an down during the Night of Decree.",
+            "words": [
+                  {
+                        "ayah": 1,
+                        "ayahWord": 1,
+                        "arabic": "إِنَّآ",
+                        "meaning": "Indeed, We",
+                        "root": "إِنّ آ",
+                        "pos": "acc+pron"
+                  },
+                  {
+                        "ayah": 1,
+                        "ayahWord": 2,
+                        "arabic": "أَنزَلْنَٰهُ",
+                        "meaning": "revealed it",
+                        "root": "أَنزَلَ نَٰ هُ",
+                        "pos": "verb+pron+pron"
+                  },
+                  {
+                        "ayah": 1,
+                        "ayahWord": 3,
+                        "arabic": "فِى",
+                        "meaning": "in",
+                        "root": "فِى",
+                        "pos": "prep"
+                  },
+                  {
+                        "ayah": 1,
+                        "ayahWord": 4,
+                        "arabic": "لَيْلَةِ",
+                        "meaning": "(the) Night",
+                        "root": "لَيْلَة",
+                        "pos": "noun"
+                  },
+                  {
+                        "ayah": 1,
+                        "ayahWord": 5,
+                        "arabic": "ٱلْقَدْرِ",
+                        "meaning": "(of) Power",
+                        "root": "ٱلْ قَدْر",
+                        "pos": "det+noun"
+                  }
+            ]
+      },
+      {
+            "ayah": 2,
+            "audio": "https://verses.quran.com/Alafasy/mp3/097002.mp3",
+            "english": "And what can make you know what is the Night of Decree?",
+            "words": [
+                  {
+                        "ayah": 2,
+                        "ayahWord": 1,
+                        "arabic": "وَمَآ",
+                        "meaning": "And what",
+                        "root": "وَ مَا",
+                        "pos": "conj+intg"
+                  },
+                  {
+                        "ayah": 2,
+                        "ayahWord": 2,
+                        "arabic": "أَدْرَىٰكَ",
+                        "meaning": "can make you know",
+                        "root": "أَدْرَىٰ كَ",
+                        "pos": "verb+pron"
+                  },
+                  {
+                        "ayah": 2,
+                        "ayahWord": 3,
+                        "arabic": "مَا",
+                        "meaning": "what",
+                        "root": "مَا",
+                        "pos": "intg"
+                  },
+                  {
+                        "ayah": 2,
+                        "ayahWord": 4,
+                        "arabic": "لَيْلَةُ",
+                        "meaning": "(the) Night",
+                        "root": "لَيْلَة",
+                        "pos": "noun"
+                  },
+                  {
+                        "ayah": 2,
+                        "ayahWord": 5,
+                        "arabic": "ٱلْقَدْرِ",
+                        "meaning": "(of) Power (is)",
+                        "root": "ٱلْ قَدْر",
+                        "pos": "det+noun"
+                  }
+            ]
+      },
+      {
+            "ayah": 3,
+            "audio": "https://verses.quran.com/Alafasy/mp3/097003.mp3",
+            "english": "The Night of Decree is better than a thousand months.",
+            "words": [
+                  {
+                        "ayah": 3,
+                        "ayahWord": 1,
+                        "arabic": "لَيْلَةُ",
+                        "meaning": "(The) Night",
+                        "root": "لَيْلَة",
+                        "pos": "noun"
+                  },
+                  {
+                        "ayah": 3,
+                        "ayahWord": 2,
+                        "arabic": "ٱلْقَدْرِ",
+                        "meaning": "(of) Power",
+                        "root": "ٱلْ قَدْر",
+                        "pos": "det+noun"
+                  },
+                  {
+                        "ayah": 3,
+                        "ayahWord": 3,
+                        "arabic": "خَيْرٌ",
+                        "meaning": "(is) better",
+                        "root": "خَيْر",
+                        "pos": "noun"
+                  },
+                  {
+                        "ayah": 3,
+                        "ayahWord": 4,
+                        "arabic": "مِّنْ",
+                        "meaning": "than",
+                        "root": "مِن",
+                        "pos": "prep"
+                  },
+                  {
+                        "ayah": 3,
+                        "ayahWord": 5,
+                        "arabic": "أَلْفِ",
+                        "meaning": "a thousand",
+                        "root": "أَلْف",
+                        "pos": "noun"
+                  },
+                  {
+                        "ayah": 3,
+                        "ayahWord": 6,
+                        "arabic": "شَهْرٍ",
+                        "meaning": "month(s)",
+                        "root": "شَهْر",
+                        "pos": "noun"
+                  }
+            ]
+      },
+      {
+            "ayah": 4,
+            "audio": "https://verses.quran.com/Alafasy/mp3/097004.mp3",
+            "english": "The angels and the Spirit descend therein by permission of their Lord for every matter.",
+            "words": [
+                  {
+                        "ayah": 4,
+                        "ayahWord": 1,
+                        "arabic": "تَنَزَّلُ",
+                        "meaning": "Descend",
+                        "root": "تَنَزَّلَتْ",
+                        "pos": "verb"
+                  },
+                  {
+                        "ayah": 4,
+                        "ayahWord": 2,
+                        "arabic": "ٱلْمَلَٰٓئِكَةُ",
+                        "meaning": "the Angels",
+                        "root": "ٱلْ مَلَك",
+                        "pos": "det+noun"
+                  },
+                  {
+                        "ayah": 4,
+                        "ayahWord": 3,
+                        "arabic": "وَٱلرُّوحُ",
+                        "meaning": "and the Spirit",
+                        "root": "وَ ٱل رُوح",
+                        "pos": "conj+det+noun"
+                  },
+                  {
+                        "ayah": 4,
+                        "ayahWord": 4,
+                        "arabic": "فِيهَا",
+                        "meaning": "therein",
+                        "root": "فِى هَا",
+                        "pos": "prep+pron"
+                  },
+                  {
+                        "ayah": 4,
+                        "ayahWord": 5,
+                        "arabic": "بِإِذْنِ",
+                        "meaning": "by (the) permission",
+                        "root": "بِ إِذْن",
+                        "pos": "prep+noun"
+                  },
+                  {
+                        "ayah": 4,
+                        "ayahWord": 6,
+                        "arabic": "رَبِّهِم",
+                        "meaning": "(of) their Lord",
+                        "root": "رَبّ هِم",
+                        "pos": "noun+pron"
+                  },
+                  {
+                        "ayah": 4,
+                        "ayahWord": 7,
+                        "arabic": "مِّن",
+                        "meaning": "for",
+                        "root": "مِن",
+                        "pos": "prep"
+                  },
+                  {
+                        "ayah": 4,
+                        "ayahWord": 8,
+                        "arabic": "كُلِّ",
+                        "meaning": "every",
+                        "root": "كُلّ",
+                        "pos": "noun"
+                  },
+                  {
+                        "ayah": 4,
+                        "ayahWord": 9,
+                        "arabic": "أَمْرٍ",
+                        "meaning": "affair",
+                        "root": "أَمْر",
+                        "pos": "noun"
+                  }
+            ]
+      },
+      {
+            "ayah": 5,
+            "audio": "https://verses.quran.com/Alafasy/mp3/097005.mp3",
+            "english": "Peace it is until the emergence of dawn.",
+            "words": [
+                  {
+                        "ayah": 5,
+                        "ayahWord": 1,
+                        "arabic": "سَلَٰمٌ",
+                        "meaning": "Peace",
+                        "root": "سَلَٰم",
+                        "pos": "noun"
+                  },
+                  {
+                        "ayah": 5,
+                        "ayahWord": 2,
+                        "arabic": "هِىَ",
+                        "meaning": "it (is)",
+                        "root": "هِىَ",
+                        "pos": "pron"
+                  },
+                  {
+                        "ayah": 5,
+                        "ayahWord": 3,
+                        "arabic": "حَتَّىٰ",
+                        "meaning": "until",
+                        "root": "حَتَّىٰ",
+                        "pos": "prep"
+                  },
+                  {
+                        "ayah": 5,
+                        "ayahWord": 4,
+                        "arabic": "مَطْلَعِ",
+                        "meaning": "(the) emergence",
+                        "root": "مَطْلَع",
+                        "pos": "noun"
+                  },
+                  {
+                        "ayah": 5,
+                        "ayahWord": 5,
+                        "arabic": "ٱلْفَجْرِ",
+                        "meaning": "(of) the dawn",
+                        "root": "ٱلْ فَجْر",
+                        "pos": "det+noun"
+                  }
+            ]
+      }
+];
+
+    const WORDS = [
+      {
+            "ayah": 1,
+            "ayahWord": 1,
+            "arabic": "إِنَّآ",
+            "meaning": "Indeed, We",
+            "root": "إِنّ آ",
+            "pos": "acc+pron"
+      },
+      {
+            "ayah": 1,
+            "ayahWord": 2,
+            "arabic": "أَنزَلْنَٰهُ",
+            "meaning": "revealed it",
+            "root": "أَنزَلَ نَٰ هُ",
+            "pos": "verb+pron+pron"
+      },
+      {
+            "ayah": 1,
+            "ayahWord": 3,
+            "arabic": "فِى",
+            "meaning": "in",
+            "root": "فِى",
+            "pos": "prep"
+      },
+      {
+            "ayah": 1,
+            "ayahWord": 4,
+            "arabic": "لَيْلَةِ",
+            "meaning": "(the) Night",
+            "root": "لَيْلَة",
+            "pos": "noun"
+      },
+      {
+            "ayah": 1,
+            "ayahWord": 5,
+            "arabic": "ٱلْقَدْرِ",
+            "meaning": "(of) Power",
+            "root": "ٱلْ قَدْر",
+            "pos": "det+noun"
+      },
+      {
+            "ayah": 2,
+            "ayahWord": 1,
+            "arabic": "وَمَآ",
+            "meaning": "And what",
+            "root": "وَ مَا",
+            "pos": "conj+intg"
+      },
+      {
+            "ayah": 2,
+            "ayahWord": 2,
+            "arabic": "أَدْرَىٰكَ",
+            "meaning": "can make you know",
+            "root": "أَدْرَىٰ كَ",
+            "pos": "verb+pron"
+      },
+      {
+            "ayah": 2,
+            "ayahWord": 3,
+            "arabic": "مَا",
+            "meaning": "what",
+            "root": "مَا",
+            "pos": "intg"
+      },
+      {
+            "ayah": 2,
+            "ayahWord": 4,
+            "arabic": "لَيْلَةُ",
+            "meaning": "(the) Night",
+            "root": "لَيْلَة",
+            "pos": "noun"
+      },
+      {
+            "ayah": 2,
+            "ayahWord": 5,
+            "arabic": "ٱلْقَدْرِ",
+            "meaning": "(of) Power (is)",
+            "root": "ٱلْ قَدْر",
+            "pos": "det+noun"
+      },
+      {
+            "ayah": 3,
+            "ayahWord": 1,
+            "arabic": "لَيْلَةُ",
+            "meaning": "(The) Night",
+            "root": "لَيْلَة",
+            "pos": "noun"
+      },
+      {
+            "ayah": 3,
+            "ayahWord": 2,
+            "arabic": "ٱلْقَدْرِ",
+            "meaning": "(of) Power",
+            "root": "ٱلْ قَدْر",
+            "pos": "det+noun"
+      },
+      {
+            "ayah": 3,
+            "ayahWord": 3,
+            "arabic": "خَيْرٌ",
+            "meaning": "(is) better",
+            "root": "خَيْر",
+            "pos": "noun"
+      },
+      {
+            "ayah": 3,
+            "ayahWord": 4,
+            "arabic": "مِّنْ",
+            "meaning": "than",
+            "root": "مِن",
+            "pos": "prep"
+      },
+      {
+            "ayah": 3,
+            "ayahWord": 5,
+            "arabic": "أَلْفِ",
+            "meaning": "a thousand",
+            "root": "أَلْف",
+            "pos": "noun"
+      },
+      {
+            "ayah": 3,
+            "ayahWord": 6,
+            "arabic": "شَهْرٍ",
+            "meaning": "month(s)",
+            "root": "شَهْر",
+            "pos": "noun"
+      },
+      {
+            "ayah": 4,
+            "ayahWord": 1,
+            "arabic": "تَنَزَّلُ",
+            "meaning": "Descend",
+            "root": "تَنَزَّلَتْ",
+            "pos": "verb"
+      },
+      {
+            "ayah": 4,
+            "ayahWord": 2,
+            "arabic": "ٱلْمَلَٰٓئِكَةُ",
+            "meaning": "the Angels",
+            "root": "ٱلْ مَلَك",
+            "pos": "det+noun"
+      },
+      {
+            "ayah": 4,
+            "ayahWord": 3,
+            "arabic": "وَٱلرُّوحُ",
+            "meaning": "and the Spirit",
+            "root": "وَ ٱل رُوح",
+            "pos": "conj+det+noun"
+      },
+      {
+            "ayah": 4,
+            "ayahWord": 4,
+            "arabic": "فِيهَا",
+            "meaning": "therein",
+            "root": "فِى هَا",
+            "pos": "prep+pron"
+      },
+      {
+            "ayah": 4,
+            "ayahWord": 5,
+            "arabic": "بِإِذْنِ",
+            "meaning": "by (the) permission",
+            "root": "بِ إِذْن",
+            "pos": "prep+noun"
+      },
+      {
+            "ayah": 4,
+            "ayahWord": 6,
+            "arabic": "رَبِّهِم",
+            "meaning": "(of) their Lord",
+            "root": "رَبّ هِم",
+            "pos": "noun+pron"
+      },
+      {
+            "ayah": 4,
+            "ayahWord": 7,
+            "arabic": "مِّن",
+            "meaning": "for",
+            "root": "مِن",
+            "pos": "prep"
+      },
+      {
+            "ayah": 4,
+            "ayahWord": 8,
+            "arabic": "كُلِّ",
+            "meaning": "every",
+            "root": "كُلّ",
+            "pos": "noun"
+      },
+      {
+            "ayah": 4,
+            "ayahWord": 9,
+            "arabic": "أَمْرٍ",
+            "meaning": "affair",
+            "root": "أَمْر",
+            "pos": "noun"
+      },
+      {
+            "ayah": 5,
+            "ayahWord": 1,
+            "arabic": "سَلَٰمٌ",
+            "meaning": "Peace",
+            "root": "سَلَٰم",
+            "pos": "noun"
+      },
+      {
+            "ayah": 5,
+            "ayahWord": 2,
+            "arabic": "هِىَ",
+            "meaning": "it (is)",
+            "root": "هِىَ",
+            "pos": "pron"
+      },
+      {
+            "ayah": 5,
+            "ayahWord": 3,
+            "arabic": "حَتَّىٰ",
+            "meaning": "until",
+            "root": "حَتَّىٰ",
+            "pos": "prep"
+      },
+      {
+            "ayah": 5,
+            "ayahWord": 4,
+            "arabic": "مَطْلَعِ",
+            "meaning": "(the) emergence",
+            "root": "مَطْلَع",
+            "pos": "noun"
+      },
+      {
+            "ayah": 5,
+            "ayahWord": 5,
+            "arabic": "ٱلْفَجْرِ",
+            "meaning": "(of) the dawn",
+            "root": "ٱلْ فَجْر",
+            "pos": "det+noun"
+      }
+];
+
+    const SURAH_LABEL = "Surah 97";
+    const AYAH_LABEL = "Ayahs 1-5";
+    const SURAH_NAME = "Al-Qadr";
+    const DOWNLOAD_BASENAME = "surah-97-1-5-reel";
+    const STORAGE_KEY = "surah_97_1_5_reel_settings_v1";
+    const DEFAULT_PREFS = { showMeaning: false, showRoot: false, showPos: false, typeReveal: false, speed: 900 };
+    const AYAH_AUDIO_SRCS = VERSES.map(verse => verse.audio).filter(Boolean);
+    const EXPORT_CONFIG = { width: 1080, height: 1920, fps: 15, leadInMs: 650, endHoldMs: 1400 };
+
+    function clamp(value, min, max) { return Math.min(max, Math.max(min, value)); }
+
+    function loadPrefs() {
+      try {
+        const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+        return {
+          showMeaning: Boolean(raw?.showMeaning),
+          showRoot: Boolean(raw?.showRoot),
+          showPos: Boolean(raw?.showPos),
+          typeReveal: Boolean(raw?.typeReveal),
+          speed: clamp(Number(raw?.speed) || DEFAULT_PREFS.speed, 100, 1500)
+        };
+      } catch (_error) {
+        return { ...DEFAULT_PREFS };
+      }
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const requestedSpeed = Number(params.get("speed"));
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const prefs = loadPrefs();
+    if (Number.isFinite(requestedSpeed)) { prefs.speed = clamp(requestedSpeed, 100, 1500); }
+
+    let revealDelay = prefs.speed;
+    let currentIndex = -1;
+    let timerId = null;
+    let isPlaying = false;
+    let practiceMode = false;
+    let manualRevealMode = prefs.typeReveal;
+    let manualSessionActive = false;
+    let manualSessionStartedAt = 0;
+    let manualRevealMomentsMs = [];
+    let lastManualRevealMomentsMs = null;
+    let activePanel = null;
+    let resumeAfterPanel = false;
+    let saveToastTimer = null;
+    let exportInProgress = false;
+
+    const wordsEl = document.getElementById("words");
+    const viewportEl = document.getElementById("verseViewport");
+    const progressBarEl = document.getElementById("progressBar");
+    const counterEl = document.getElementById("counter");
+    const speedBadgeEl = document.getElementById("speedBadge");
+    const statusTextEl = document.getElementById("statusText");
+    const statusSubtextEl = document.getElementById("statusSubtext");
+    const modePillEl = document.getElementById("modePill");
+    const navPracticeBtnEl = document.getElementById("navPracticeBtn");
+    const navPracticeLabelEl = document.getElementById("navPracticeLabel");
+    const navModeBtnEl = document.getElementById("navModeBtn");
+    const navPlayBtnEl = document.getElementById("navPlayBtn");
+    const navPlayIconEl = document.getElementById("navPlayIcon");
+    const navSettingsBtnEl = document.getElementById("navSettingsBtn");
+    const topSettingsBtnEl = document.getElementById("topSettingsBtn");
+    const navSaveBtnEl = document.getElementById("navSaveBtn");
+    const navSaveIconEl = document.getElementById("navSaveIcon");
+    const overlayEl = document.getElementById("reelOverlay");
+    const detailModalEl = document.getElementById("detailModal");
+    const detailKickerEl = document.getElementById("detailKicker");
+    const detailArabicEl = document.getElementById("detailArabic");
+    const detailMeaningEl = document.getElementById("detailMeaning");
+    const detailRootEl = document.getElementById("detailRoot");
+    const detailPosEl = document.getElementById("detailPos");
+    const detailCloseBtnEl = document.getElementById("detailCloseBtn");
+    const settingsSheetEl = document.getElementById("settingsSheet");
+    const settingsCloseBtnEl = document.getElementById("settingsCloseBtn");
+    const showMeaningSettingEl = document.getElementById("showMeaningSetting");
+    const showRootSettingEl = document.getElementById("showRootSetting");
+    const showPosSettingEl = document.getElementById("showPosSetting");
+    const typeRevealSettingEl = document.getElementById("typeRevealSetting");
+    const speedSettingEl = document.getElementById("speedSetting");
+    const speedNumberSettingEl = document.getElementById("speedNumberSetting");
+    const speedValueEl = document.getElementById("speedValue");
+    const typeRevealDockEl = document.getElementById("typeRevealDock");
+    const typeRevealHintEl = document.getElementById("typeRevealHint");
+    const typeRevealInputEl = document.getElementById("typeRevealInput");
+    const typeRevealAdvanceBtnEl = document.getElementById("typeRevealAdvanceBtn");
+    const verseShellEl = document.querySelector(".verse-shell");
+    const saveToastEl = document.getElementById("saveToast");
+    const ayahAudioEl = document.getElementById("ayahAudio");
+    const downloadHdReelBtnEl = document.getElementById("downloadHdReelBtn");
+    const saveToastDefaultText = saveToastEl.textContent;
+
+    function renderWords() {
+      wordsEl.innerHTML = "";
+      WORDS.forEach((entry, index) => {
+        const wordEl = document.createElement("button");
+        wordEl.type = "button";
+        wordEl.className = "word";
+        wordEl.dataset.index = String(index);
+        wordEl.setAttribute("aria-label", `Ayah ${entry.ayah}, word ${entry.ayahWord}: ${entry.meaning}`);
+
+        const wordTextEl = document.createElement("span");
+        wordTextEl.className = "word-text";
+        wordTextEl.textContent = entry.arabic;
+
+        const wordMetaEl = document.createElement("span");
+        wordMetaEl.className = "word-meta";
+
+        const meaningEl = document.createElement("span");
+        meaningEl.className = "meta-line meta-meaning";
+        meaningEl.innerHTML = `<strong>Meaning:</strong> ${entry.meaning}`;
+
+        const rootEl = document.createElement("span");
+        rootEl.className = "meta-line meta-root";
+        rootEl.innerHTML = `<strong>Root:</strong> ${entry.root}`;
+
+        const posEl = document.createElement("span");
+        posEl.className = "meta-line meta-pos";
+        posEl.innerHTML = `<strong>Tag:</strong> ${entry.pos}`;
+
+        wordMetaEl.append(meaningEl, rootEl, posEl);
+        wordEl.append(wordTextEl, wordMetaEl);
+        wordEl.addEventListener("click", () => handleWordClick(index));
+        wordsEl.appendChild(wordEl);
+      });
+    }
+
+    function applyPreferenceClasses() {
+      document.documentElement.classList.toggle("show-meaning", prefs.showMeaning);
+      document.documentElement.classList.toggle("show-root", prefs.showRoot);
+      document.documentElement.classList.toggle("show-pos", prefs.showPos);
+      document.body.classList.toggle("practice-mode", practiceMode);
+      document.body.classList.toggle("type-reveal-mode", manualRevealMode);
+      showMeaningSettingEl.checked = prefs.showMeaning;
+      showRootSettingEl.checked = prefs.showRoot;
+      showPosSettingEl.checked = prefs.showPos;
+      if (typeRevealSettingEl) typeRevealSettingEl.checked = manualRevealMode;
+      speedSettingEl.value = String(revealDelay);
+      speedNumberSettingEl.value = String(revealDelay);
+      if (speedValueEl) speedValueEl.textContent = `${revealDelay} ms / word`;
+      if (speedBadgeEl) speedBadgeEl.textContent = `${revealDelay} ms / word`;
+      const shouldShowMeta = practiceMode || prefs.showMeaning || prefs.showRoot || prefs.showPos;
+      wordsEl.querySelectorAll(".word").forEach(wordEl => wordEl.classList.toggle("has-visible-meta", shouldShowMeta));
+      if (typeRevealDockEl) typeRevealDockEl.hidden = !manualRevealMode;
+    }
+
+    function updateSavedState(saved) {
+      navSaveBtnEl.classList.toggle("is-saved", saved);
+      navSaveIconEl.textContent = saved ? "bookmark_added" : "bookmark_add";
+    }
+
+    function updatePanels() {
+      overlayEl.hidden = !activePanel;
+      detailModalEl.hidden = activePanel !== "detail";
+      settingsSheetEl.hidden = activePanel !== "settings";
+    }
+
+    function getCurrentEntry() {
+      if (currentIndex < 0 || currentIndex >= WORDS.length) return null;
+      return WORDS[currentIndex];
+    }
+
+    function updateUi() {
+      const revealedCount = practiceMode ? WORDS.length : Math.max(0, currentIndex + 1);
+      const currentEntry = getCurrentEntry();
+      const isTypingComplete = manualRevealMode && currentIndex >= WORDS.length - 1;
+      wordsEl.querySelectorAll(".word").forEach((wordEl, index) => {
+        const isRevealed = practiceMode || index <= currentIndex;
+        const isCurrent = !practiceMode && index === currentIndex;
+        const canOpen = practiceMode || index <= currentIndex;
+        wordEl.classList.toggle("revealed", isRevealed);
+        wordEl.classList.toggle("current", isCurrent);
+        wordEl.classList.toggle("is-locked", !canOpen);
+        wordEl.setAttribute("aria-disabled", String(!canOpen));
+      });
+      if (progressBarEl) progressBarEl.style.width = `${(revealedCount / WORDS.length) * 100}%`;
+      if (counterEl) counterEl.textContent = `${revealedCount} / ${WORDS.length} revealed`;
+      if (modePillEl) modePillEl.textContent = practiceMode ? "Practice mode" : (manualRevealMode ? "Tap reveal" : "Recite mode");
+      if (navPracticeLabelEl) navPracticeLabelEl.textContent = practiceMode ? "Go Back" : "Practice";
+      if (navPracticeBtnEl) navPracticeBtnEl.classList.toggle("is-active", practiceMode);
+      if (navModeBtnEl) navModeBtnEl.classList.toggle("is-active", !practiceMode && !manualRevealMode);
+      if (navPlayBtnEl) navPlayBtnEl.classList.toggle("is-active", !manualRevealMode && isPlaying);
+      if (navPlayIconEl) navPlayIconEl.textContent = manualRevealMode ? (isTypingComplete ? "replay" : "mic") : (currentIndex >= WORDS.length - 1 && !practiceMode ? "replay" : (isPlaying ? "pause" : "play_arrow"));
+
+      if (typeRevealHintEl) {
+        if (isTypingComplete) typeRevealHintEl.textContent = "Tap reveal finished. Your Surah Al-Qadr reel is being saved with the timing you created.";
+        else if (manualRevealMode) typeRevealHintEl.textContent = `Tap anywhere in the ayah area to reveal word ${Math.min(currentIndex + 2, WORDS.length)} of ${WORDS.length}.`;
+        else typeRevealHintEl.textContent = "Tap anywhere in the ayah area to reveal the next Surah Al-Qadr word.";
+      }
+
+      if (practiceMode) {
+        if (statusTextEl) statusTextEl.textContent = "Practice view is open.";
+        if (statusSubtextEl) statusSubtextEl.textContent = "All words are visible. Tap any word to inspect its meaning, root, and grammar tag.";
+      } else if (manualRevealMode) {
+        if (statusTextEl) statusTextEl.textContent = isTypingComplete ? "Tap reel finished." : "Tap-to-reveal is ready.";
+        if (statusSubtextEl) statusSubtextEl.textContent = isTypingComplete ? "The reel is being exported with your tap timing." : `Tap anywhere in the ayah area to reveal word ${Math.min(currentIndex + 2, WORDS.length)} of ${WORDS.length}.`;
+      } else if (currentIndex >= WORDS.length - 1) {
+        if (statusTextEl) statusTextEl.textContent = "Finished. You can replay or save this setup.";
+        if (statusSubtextEl) statusSubtextEl.textContent = currentEntry ? `Last word meaning: ${currentEntry.meaning}` : "Tap any revealed word to inspect it.";
+      } else if (isPlaying) {
+        if (statusTextEl) statusTextEl.textContent = "Auto reveal is running.";
+        if (statusSubtextEl) statusSubtextEl.textContent = currentEntry ? `Current word meaning: ${currentEntry.meaning}` : "Tap Settings to show meanings, roots, or grammar tags.";
+      } else {
+        if (statusTextEl) statusTextEl.textContent = "Paused on the current word.";
+        if (statusSubtextEl) statusSubtextEl.textContent = currentEntry ? `Current word meaning: ${currentEntry.meaning}` : "Use Play to start the reel.";
+      }
+      applyPreferenceClasses();
+    }
+    function clearPlaybackTimer() {
+      if (timerId) {
+        window.clearInterval(timerId);
+        timerId = null;
+      }
+    }
+
+    function scrollToCurrentWord() {
+      if (practiceMode || currentIndex < 0) return;
+      const currentWordEl = wordsEl.querySelector(`[data-index="${currentIndex}"]`);
+      if (!currentWordEl) return;
+      currentWordEl.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "center", inline: "center" });
+    }
+
+    function stepReveal() {
+      if (practiceMode) {
+        clearPlaybackTimer();
+        isPlaying = false;
+        updateUi();
+        return;
+      }
+      if (currentIndex >= WORDS.length - 1) {
+        clearPlaybackTimer();
+        isPlaying = false;
+        updateUi();
+        return;
+      }
+      currentIndex += 1;
+      updateUi();
+      scrollToCurrentWord();
+      if (currentIndex >= WORDS.length - 1) {
+        clearPlaybackTimer();
+        isPlaying = false;
+        updateUi();
+      }
+    }
+
+    function syncPlaybackTimer() {
+      clearPlaybackTimer();
+      timerId = window.setInterval(stepReveal, revealDelay);
+    }
+
+    function stopPlayback() { clearPlaybackTimer(); isPlaying = false; updateUi(); }
+
+    function startPlayback() {
+      if (manualRevealMode) {
+        clearPlaybackTimer();
+        isPlaying = false;
+        practiceMode = false;
+        if (currentIndex >= WORDS.length - 1) {
+          currentIndex = -1;
+          manualSessionActive = false;
+          manualSessionStartedAt = 0;
+          manualRevealMomentsMs = [];
+          lastManualRevealMomentsMs = null;
+          viewportEl.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
+          updateUi();
+        }
+        focusTypeRevealInput();
+        return;
+      }
+      if (practiceMode) practiceMode = false;
+      if (currentIndex >= WORDS.length - 1) { restartPlayback(true); return; }
+      if (currentIndex < 0) stepReveal();
+      if (timerId) return;
+      isPlaying = true;
+      updateUi();
+      syncPlaybackTimer();
+    }
+
+    function restartPlayback(autostart = true) {
+      clearPlaybackTimer();
+      isPlaying = false;
+      practiceMode = false;
+      currentIndex = -1;
+      manualSessionActive = false;
+      manualSessionStartedAt = 0;
+      manualRevealMomentsMs = [];
+      lastManualRevealMomentsMs = null;
+      if (typeRevealInputEl) typeRevealInputEl.value = "";
+      viewportEl.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
+      updateUi();
+      if (!autostart || manualRevealMode) {
+        if (manualRevealMode) focusTypeRevealInput();
+        return;
+      }
+      window.setTimeout(() => startPlayback(), prefersReducedMotion ? 0 : 220);
+    }
+
+    function handleWordClick(index) { if (manualRevealMode) return; if (!practiceMode && index > currentIndex) return; openDetail(index); }
+
+    function pauseForPanel() {
+      resumeAfterPanel = !practiceMode && isPlaying;
+      if (isPlaying) stopPlayback();
+    }
+
+    function closePanel() {
+      activePanel = null;
+      updatePanels();
+      if (resumeAfterPanel && !practiceMode && currentIndex < WORDS.length - 1) {
+        resumeAfterPanel = false;
+        startPlayback();
+        return;
+      }
+      resumeAfterPanel = false;
+      updateUi();
+      if (manualRevealMode) focusTypeRevealInput();
+    }
+
+    function openDetail(index) {
+      const entry = WORDS[index];
+      pauseForPanel();
+      detailKickerEl.textContent = `Ayah ${entry.ayah} ? Word ${entry.ayahWord} of ${WORDS.length}`;
+      detailArabicEl.textContent = entry.arabic;
+      detailMeaningEl.textContent = entry.meaning;
+      detailRootEl.textContent = entry.root;
+      detailPosEl.textContent = entry.pos;
+      activePanel = "detail";
+      updatePanels();
+    }
+
+    function openSettings() {
+      pauseForPanel();
+      activePanel = "settings";
+      updatePanels();
+      applyPreferenceClasses();
+    }
+
+    function focusTypeRevealInput() {
+      return;
+    }
+
+    function resetManualRevealSession(resetIndex = false) {
+      manualSessionActive = false;
+      manualSessionStartedAt = 0;
+      manualRevealMomentsMs = [];
+      if (typeRevealInputEl) typeRevealInputEl.value = "";
+      if (resetIndex) {
+        currentIndex = -1;
+        lastManualRevealMomentsMs = null;
+      }
+    }
+
+    function setManualRevealMode(enabled) {
+      const nextEnabled = Boolean(enabled);
+      if (manualRevealMode === nextEnabled) {
+        updateUi();
+        if (manualRevealMode) focusTypeRevealInput();
+        return;
+      }
+      clearPlaybackTimer();
+      isPlaying = false;
+      practiceMode = false;
+      manualRevealMode = nextEnabled;
+      prefs.typeReveal = manualRevealMode;
+      resetManualRevealSession(true);
+      viewportEl.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
+      updateUi();
+      if (manualRevealMode) {
+        showToast("Tap-to-reveal is ready.", 1800);
+        focusTypeRevealInput();
+      }
+    }
+
+    function submitTypeRevealWord() {
+      if (!manualRevealMode) return;
+      if (currentIndex >= WORDS.length - 1) {
+        restartPlayback(false);
+        return;
+      }
+      if (!manualSessionActive) {
+        manualSessionActive = true;
+        manualSessionStartedAt = performance.now();
+        manualRevealMomentsMs = [];
+        lastManualRevealMomentsMs = null;
+      }
+      const nextIndex = currentIndex + 1;
+      const elapsedMs = nextIndex === 0 ? 0 : Math.max(0, Math.round(performance.now() - manualSessionStartedAt));
+      manualRevealMomentsMs.push(elapsedMs);
+      currentIndex = nextIndex;
+      if (typeRevealInputEl) typeRevealInputEl.value = "";
+      updateUi();
+      scrollToCurrentWord();
+      if (currentIndex >= WORDS.length - 1) {
+        manualSessionActive = false;
+        lastManualRevealMomentsMs = manualRevealMomentsMs.slice();
+        showToast("Saving tap reel...", 0);
+        window.setTimeout(() => downloadHdReel({ manualRevealMomentsMs: lastManualRevealMomentsMs.slice() }), prefersReducedMotion ? 0 : 180);
+      }
+    }
+
+    function enterPracticeMode() {
+      activePanel = null;
+      updatePanels();
+      resumeAfterPanel = false;
+      clearPlaybackTimer();
+      isPlaying = false;
+      if (manualRevealMode) {
+        manualRevealMode = false;
+        prefs.typeReveal = false;
+        resetManualRevealSession(true);
+      }
+      practiceMode = true;
+      viewportEl.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
+      updateUi();
+    }
+
+    function exitPracticeMode(resume) {
+      practiceMode = false;
+      updateUi();
+      scrollToCurrentWord();
+      if (resume && currentIndex < WORDS.length - 1) startPlayback();
+      else if (manualRevealMode) focusTypeRevealInput();
+    }
+
+    function showToast(message, duration = 1800) {
+      window.clearTimeout(saveToastTimer);
+      saveToastEl.textContent = message;
+      saveToastEl.hidden = false;
+      saveToastEl.classList.add("is-visible");
+      if (duration <= 0) return;
+      saveToastTimer = window.setTimeout(() => {
+        saveToastEl.classList.remove("is-visible");
+        saveToastEl.hidden = true;
+        saveToastEl.textContent = saveToastDefaultText;
+      }, duration);
+    }
+
+    function persistPrefs() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(prefs));
+      updateSavedState(true);
+      showToast(saveToastDefaultText);
+    }
+
+    function setRevealSpeed(value) {
+      revealDelay = clamp(Number(value) || DEFAULT_PREFS.speed, 100, 1500);
+      prefs.speed = revealDelay;
+      applyPreferenceClasses();
+      if (isPlaying) syncPlaybackTimer();
+      updateUi();
+    }
+
+    function wait(ms) { return new Promise(resolve => window.setTimeout(resolve, ms)); }
+
+    function waitForMetadata(audioEl, timeoutMs = 12000) {
+      return new Promise((resolve, reject) => {
+        if (audioEl.readyState >= 1 && Number.isFinite(audioEl.duration)) { resolve(); return; }
+        const timeoutId = window.setTimeout(() => { cleanup(); reject(new Error("Ayah audio metadata could not be loaded in time.")); }, timeoutMs);
+        function cleanup() {
+          window.clearTimeout(timeoutId);
+          audioEl.removeEventListener("loadedmetadata", handleLoaded);
+          audioEl.removeEventListener("error", handleError);
+        }
+        function handleLoaded() { cleanup(); resolve(); }
+        function handleError() { cleanup(); reject(new Error("Ayah audio could not be loaded for export.")); }
+        audioEl.addEventListener("loadedmetadata", handleLoaded, { once: true });
+        audioEl.addEventListener("error", handleError, { once: true });
+        audioEl.load();
+      });
+    }
+
+    function getExportMimeType() {
+      if (!window.MediaRecorder) return "";
+      const candidates = ["video/mp4;codecs=h264,aac", "video/webm;codecs=vp9,opus", "video/webm;codecs=vp8,opus", "video/webm"];
+      return candidates.find(type => MediaRecorder.isTypeSupported(type)) || "";
+    }
+
+    function drawRoundedRect(ctx, x, y, width, height, radius) {
+      const r = Math.max(0, Math.min(radius, width / 2, height / 2));
+      ctx.beginPath();
+      if (typeof ctx.roundRect === "function") { ctx.roundRect(x, y, width, height, r); return; }
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + width, y, x + width, y + height, r);
+      ctx.arcTo(x + width, y + height, x, y + height, r);
+      ctx.arcTo(x, y + height, x, y, r);
+      ctx.arcTo(x, y, x + width, y, r);
+      ctx.closePath();
+    }
+
+    function drawWrappedText(ctx, text, x, y, maxWidth, lineHeight, maxLines) {
+      const parts = text.split(/\s+/);
+      const lines = [];
+      let line = "";
+      parts.forEach(part => {
+        const next = line ? `${line} ${part}` : part;
+        if (ctx.measureText(next).width <= maxWidth || !line) line = next;
+        else { lines.push(line); line = part; }
+      });
+      if (line) lines.push(line);
+      const limited = typeof maxLines === "number" ? lines.slice(0, maxLines) : lines;
+      limited.forEach((lineText, index) => ctx.fillText(lineText, x, y + (index * lineHeight)));
+      return limited.length;
+    }
+
+    function getExportState(elapsedMs, exportPrefs, audioDurationMs = 0) {
+      const revealStartMs = EXPORT_CONFIG.leadInMs;
+      const revealMoments = Array.isArray(exportPrefs.manualRevealMomentsMs) && exportPrefs.manualRevealMomentsMs.length ? exportPrefs.manualRevealMomentsMs.map(ms => revealStartMs + Math.max(0, ms)) : null;
+      const revealWindowMs = revealMoments ? Math.max(0, revealMoments[revealMoments.length - 1] - revealStartMs) : WORDS.length * exportPrefs.speed;
+      const completionMs = revealMoments ? revealMoments[revealMoments.length - 1] : (revealStartMs + revealWindowMs);
+      const totalDurationMs = Math.max(completionMs, revealStartMs + audioDurationMs) + EXPORT_CONFIG.endHoldMs;
+      if (elapsedMs < revealStartMs) return { currentIndex: -1, revealedCount: 0, progress: 0, totalDurationMs };
+      const revealedCount = revealMoments
+        ? revealMoments.filter(moment => elapsedMs >= moment).length
+        : clamp(Math.floor((elapsedMs - revealStartMs) / exportPrefs.speed) + 1, 0, WORDS.length);
+      return {
+        currentIndex: revealedCount <= 0 ? -1 : Math.min(revealedCount - 1, WORDS.length - 1),
+        revealedCount,
+        progress: revealedCount / WORDS.length,
+        totalDurationMs
+      };
+    }
+
+    function createExportWordLayout(ctx, exportPrefs, viewportWidth) {
+      const sidePadding = 46;
+      const gapX = 18;
+      const gapY = 28;
+      const availableWidth = viewportWidth - (sidePadding * 2);
+      const visibleMetaKinds = [exportPrefs.showMeaning, exportPrefs.showRoot, exportPrefs.showPos].filter(Boolean).length;
+      const items = [];
+      let cursorX = sidePadding + availableWidth;
+      let cursorY = 0;
+      let rowHeight = 0;
+      WORDS.forEach(entry => {
+        ctx.font = '78px "UthmaniScript", serif';
+        const arabicWidth = Math.ceil(ctx.measureText(entry.arabic).width);
+        ctx.font = '500 22px "QuestSans", "Segoe UI", sans-serif';
+        const metaWidths = [];
+        if (exportPrefs.showMeaning) metaWidths.push(ctx.measureText(`Meaning: ${entry.meaning}`).width);
+        if (exportPrefs.showRoot) metaWidths.push(ctx.measureText(`Root: ${entry.root}`).width);
+        if (exportPrefs.showPos) metaWidths.push(ctx.measureText(`Tag: ${entry.pos}`).width);
+        const metaWidth = metaWidths.length ? Math.ceil(Math.max(...metaWidths)) : 0;
+        const itemWidth = Math.ceil(Math.max(arabicWidth + 18, metaWidth + 22));
+        const itemHeight = 104 + (visibleMetaKinds ? (visibleMetaKinds * 28) + 14 : 0);
+        if ((cursorX - itemWidth) < sidePadding) { cursorX = sidePadding + availableWidth; cursorY += rowHeight + gapY; rowHeight = 0; }
+        const x = cursorX - itemWidth;
+        items.push({ x, y: cursorY, width: itemWidth, height: itemHeight });
+        cursorX = x - gapX;
+        rowHeight = Math.max(rowHeight, itemHeight);
+      });
+      return { items, contentHeight: cursorY + rowHeight };
+    }
+    function createExportAudioElements() {
+      const sources = AYAH_AUDIO_SRCS.length ? AYAH_AUDIO_SRCS : [ayahAudioEl?.currentSrc].filter(Boolean);
+      return sources.map(src => {
+        const audioEl = new Audio(src);
+        audioEl.crossOrigin = "anonymous";
+        audioEl.preload = "auto";
+        audioEl.playsInline = true;
+        return audioEl;
+      });
+    }
+
+    async function getExportAudioSequenceDuration(audioEls) {
+      let totalDurationMs = 0;
+      for (const audioEl of audioEls) {
+        await waitForMetadata(audioEl);
+        if (Number.isFinite(audioEl.duration)) totalDurationMs += audioEl.duration * 1000;
+      }
+      return totalDurationMs;
+    }
+
+    async function getExportAudioCapture(audioEls) {
+      if (!audioEls.length) return { stream: null, audioContext: null };
+      const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextCtor) return { stream: null, audioContext: null };
+      const audioContext = new AudioContextCtor();
+      const destination = audioContext.createMediaStreamDestination();
+      audioEls.forEach(audioEl => {
+        const source = audioContext.createMediaElementSource(audioEl);
+        source.connect(destination);
+        source.connect(audioContext.destination);
+      });
+      await audioContext.resume();
+      return { stream: destination.stream, audioContext };
+    }
+
+    function createExportAudioSequencePlayer(audioEls) {
+      let stopped = false;
+      const cleanupFns = [];
+
+      async function playAt(index) {
+        if (stopped || index >= audioEls.length) return;
+        const audioEl = audioEls[index];
+        const handleEnded = () => {
+          if (stopped) return;
+          void playAt(index + 1);
+        };
+        audioEl.addEventListener("ended", handleEnded, { once: true });
+        cleanupFns.push(() => audioEl.removeEventListener("ended", handleEnded));
+        audioEl.currentTime = 0;
+        await audioEl.play();
+      }
+
+      return {
+        async play() {
+          if (!audioEls.length) return;
+          await playAt(0);
+        },
+        stop() {
+          stopped = true;
+          cleanupFns.splice(0).forEach(fn => fn());
+          audioEls.forEach(audioEl => {
+            try { audioEl.pause(); } catch (_error) {}
+            try { audioEl.currentTime = 0; } catch (_error) {}
+            audioEl.src = "";
+          });
+        }
+      };
+    }
+
+    function drawExportBottomNav(ctx, pageX, pageWidth, bottomNavY) {
+      const slotGap = 8;
+      const slotX = pageX + 12;
+      const slotY = bottomNavY + 12;
+      const slotWidth = (pageWidth - 24 - (slotGap * 4)) / 5;
+      const regularHeight = 92;
+      const playSize = 68;
+      const items = [
+        { label: "Practice", icon: "edit", active: false },
+        { label: "Recite", icon: "menu_book", active: true },
+        { label: "", icon: "mic", play: true },
+        { label: "Settings", icon: "settings", active: false },
+        { label: "Save", icon: "bookmark_add", active: false }
+      ];
+
+      ctx.save();
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      items.forEach((item, index) => {
+        const x = slotX + (index * (slotWidth + slotGap));
+        if (item.play) {
+          const circleX = x + (slotWidth / 2) - (playSize / 2);
+          const circleY = slotY - 10;
+          const gradient = ctx.createLinearGradient(0, circleY, 0, circleY + playSize);
+          gradient.addColorStop(0, "rgba(70, 214, 123, 0.98)");
+          gradient.addColorStop(1, "rgba(42, 161, 91, 0.92)");
+          ctx.fillStyle = gradient;
+          ctx.shadowColor = "rgba(0,0,0,0.28)";
+          ctx.shadowBlur = 24;
+          drawRoundedRect(ctx, circleX, circleY, playSize, playSize, playSize / 2); ctx.fill();
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = "#041009";
+          ctx.font = '400 34px "Material Symbols Outlined", sans-serif';
+          ctx.fillText(item.icon, x + (slotWidth / 2), circleY + 16);
+          return;
+        }
+        ctx.fillStyle = item.active ? "rgba(79,215,126,0.12)" : "rgba(255,255,255,0.035)";
+        ctx.strokeStyle = item.active ? "rgba(95,227,149,0.18)" : "rgba(255,255,255,0.05)";
+        drawRoundedRect(ctx, x, slotY, slotWidth, regularHeight, 22); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = "#d8ffe9";
+        ctx.font = '400 28px "Material Symbols Outlined", sans-serif';
+        ctx.fillText(item.icon, x + (slotWidth / 2), slotY + 14);
+        ctx.fillStyle = "rgba(225,255,236,0.72)";
+        ctx.font = '500 18px "QuestSans", "Segoe UI", sans-serif';
+        ctx.fillText(item.label, x + (slotWidth / 2), slotY + 54);
+      });
+      ctx.restore();
+    }
+
+    function drawExportChrome(ctx, exportPrefs, exportState) {
+      const width = EXPORT_CONFIG.width;
+      const pageX = 54;
+      const pageWidth = width - 108;
+      const navbarY = 58;
+      const verseShellY = 248;
+      const verseShellHeight = 1318;
+      const bottomNavY = 1620;
+      const panels = [
+        [pageX, navbarY, pageWidth, 160, 34],
+        [pageX, verseShellY, pageWidth, verseShellHeight, 34],
+        [pageX, bottomNavY, pageWidth, 140, 32]
+      ];
+      ctx.save();
+      ctx.fillStyle = "rgba(5, 17, 12, 0.84)";
+      ctx.strokeStyle = "rgba(114, 255, 166, 0.14)";
+      ctx.lineWidth = 2;
+      panels.forEach(panel => { drawRoundedRect(ctx, ...panel); ctx.fill(); ctx.stroke(); });
+      ctx.textBaseline = "top";
+      ctx.textAlign = "left";
+      ctx.fillStyle = "#f3fff7";
+      ctx.font = '600 36px "QuestSans", "Segoe UI", sans-serif';
+      ctx.fillText("My Quran Quest", pageX + 118, navbarY + 34);
+      ctx.fillStyle = "rgba(225,255,236,0.72)";
+      ctx.font = '500 22px "QuestSans", "Segoe UI", sans-serif';
+      ctx.fillText("Easy Quran Memorization", pageX + 118, navbarY + 82);
+      ctx.fillStyle = "rgba(255,255,255,0.04)";
+      ctx.strokeStyle = "rgba(255,255,255,0.06)";
+      [[pageX + 28, navbarY + 34], [pageX + pageWidth - 70, navbarY + 34]].forEach(pair => { drawRoundedRect(ctx, pair[0], pair[1], 42, 42, 21); ctx.fill(); ctx.stroke(); });
+      ctx.fillStyle = "#d8ffe9";
+      ctx.font = '400 24px "Material Symbols Outlined", sans-serif';
+      ctx.fillText("menu_book", pageX + 39, navbarY + 44);
+      ctx.fillText("tune", pageX + pageWidth - 59, navbarY + 44);
+      const pills = [{ label: SURAH_LABEL, width: 144 }, { label: AYAH_LABEL, width: 152 }, { label: SURAH_NAME, width: 148, soft: true }];
+      let pillX = pageX + 28;
+      pills.forEach(pill => {
+        ctx.fillStyle = pill.soft ? "rgba(255,255,255,0.03)" : "rgba(79,215,126,0.12)";
+        ctx.strokeStyle = pill.soft ? "rgba(255,255,255,0.06)" : "rgba(95,227,149,0.18)";
+        drawRoundedRect(ctx, pillX, navbarY + 112, pill.width, 38, 19); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = pill.soft ? "rgba(225,255,236,0.72)" : "#d8ffe9";
+        ctx.font = '500 20px "QuestSans", "Segoe UI", sans-serif';
+        ctx.fillText(pill.label, pillX + 20, navbarY + 121);
+        pillX += pill.width + 12;
+      });
+      const progressX = pageX + 28;
+      const progressWidth = pageWidth - 56;
+      ctx.fillStyle = "rgba(255,255,255,0.05)";
+      drawRoundedRect(ctx, progressX, verseShellY + 24, progressWidth, 10, 5); ctx.fill();
+      ctx.fillStyle = "#4fd77e";
+      drawRoundedRect(ctx, progressX, verseShellY + 24, progressWidth * exportState.progress, 10, 5); ctx.fill();
+      drawExportBottomNav(ctx, pageX, pageWidth, bottomNavY);
+      ctx.restore();
+    }
+
+    function drawExportWords(ctx, exportPrefs, exportState) {
+      const pageX = 54;
+      const verseShellY = 248;
+      const viewportX = pageX + 28;
+      const viewportY = verseShellY + 56;
+      const viewportWidth = EXPORT_CONFIG.width - ((pageX + 28) * 2);
+      const viewportHeight = 1230;
+      const layout = createExportWordLayout(ctx, exportPrefs, viewportWidth);
+      const currentItem = exportState.currentIndex >= 0 ? layout.items[exportState.currentIndex] : null;
+      const rawScrollTop = currentItem ? (currentItem.y + (currentItem.height / 2)) - (viewportHeight / 2) : 0;
+      const maxScroll = Math.max(0, layout.contentHeight - viewportHeight);
+      const scrollTop = clamp(rawScrollTop, 0, maxScroll);
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(viewportX, viewportY, viewportWidth, viewportHeight);
+      ctx.clip();
+      layout.items.forEach((item, index) => {
+        const wordTop = viewportY + item.y - scrollTop;
+        const isRevealed = index < exportState.revealedCount;
+        const isCurrent = index === exportState.currentIndex;
+        if (wordTop + item.height < viewportY - 40 || wordTop > viewportY + viewportHeight + 40) return;
+        ctx.save();
+        ctx.globalAlpha = isRevealed ? 1 : 0.24;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
+        ctx.fillStyle = isCurrent ? "#99ffc0" : (isRevealed ? "#4fd77e" : "rgba(120,184,146,0.18)");
+        ctx.font = '78px "UthmaniScript", serif';
+        if (isCurrent) { ctx.shadowColor = "rgba(137,255,189,0.42)"; ctx.shadowBlur = 24; }
+        else if (isRevealed) { ctx.shadowColor = "rgba(79,215,126,0.12)"; ctx.shadowBlur = 12; }
+        ctx.fillText(WORDS[index].arabic, viewportX + item.x + (item.width / 2), wordTop, item.width);
+        const metaLines = [];
+        if (exportPrefs.showMeaning) metaLines.push(`Meaning: ${WORDS[index].meaning}`);
+        if (exportPrefs.showRoot) metaLines.push(`Root: ${WORDS[index].root}`);
+        if (exportPrefs.showPos) metaLines.push(`Tag: ${WORDS[index].pos}`);
+        if (isRevealed && metaLines.length) {
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = "rgba(225,255,236,0.72)";
+          ctx.font = '500 22px "QuestSans", "Segoe UI", sans-serif';
+          metaLines.forEach((lineText, metaIndex) => ctx.fillText(lineText, viewportX + item.x + (item.width / 2), wordTop + 92 + (metaIndex * 28), Math.max(item.width + 16, 180)));
+        }
+        ctx.restore();
+      });
+      ctx.restore();
+    }
+
+    function drawExportFrame(ctx, elapsedMs, exportPrefs, audioDurationMs = 0) {
+      const width = EXPORT_CONFIG.width;
+      const height = EXPORT_CONFIG.height;
+      const exportState = getExportState(elapsedMs, exportPrefs, audioDurationMs);
+      ctx.clearRect(0, 0, width, height);
+      const bgGradient = ctx.createLinearGradient(0, 0, 0, height);
+      bgGradient.addColorStop(0, "#010302");
+      bgGradient.addColorStop(1, "#06150f");
+      ctx.fillStyle = bgGradient;
+      ctx.fillRect(0, 0, width, height);
+      const topGlow = ctx.createRadialGradient(width * 0.72, 180, 0, width * 0.72, 180, 460);
+      topGlow.addColorStop(0, "rgba(28,97,60,0.28)");
+      topGlow.addColorStop(1, "rgba(28,97,60,0)");
+      ctx.fillStyle = topGlow;
+      ctx.fillRect(0, 0, width, height);
+      const bottomGlow = ctx.createRadialGradient(width * 0.28, height - 180, 0, width * 0.28, height - 180, 540);
+      bottomGlow.addColorStop(0, "rgba(5,110,57,0.22)");
+      bottomGlow.addColorStop(1, "rgba(5,110,57,0)");
+      ctx.fillStyle = bottomGlow;
+      ctx.fillRect(0, 0, width, height);
+      drawExportChrome(ctx, exportPrefs, exportState);
+      drawExportWords(ctx, exportPrefs, exportState);
+    }
+
+    function triggerBlobDownload(blob, filename) {
+      const downloadUrl = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = downloadUrl;
+      anchor.download = filename;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      window.setTimeout(() => URL.revokeObjectURL(downloadUrl), 1000);
+    }
+
+    async function downloadHdReel(options = {}) {
+      const manualExportMoments = Array.isArray(options.manualRevealMomentsMs) ? options.manualRevealMomentsMs.slice() : (manualRevealMode ? lastManualRevealMomentsMs?.slice?.() : null);
+      if (manualRevealMode && (!manualExportMoments || manualExportMoments.length !== WORDS.length)) {
+        showToast("Finish the full tap reveal before exporting this reel.", 2600);
+        return null;
+      }
+      if (exportInProgress) { showToast("An HD reel export is already running.", 2200); return null; }
+      if (!window.MediaRecorder) { showToast("This browser cannot record the HD reel export.", 2800); return null; }
+      exportInProgress = true;
+      if (downloadHdReelBtnEl) downloadHdReelBtnEl.disabled = true;
+      const canvas = document.createElement("canvas");
+      canvas.width = EXPORT_CONFIG.width;
+      canvas.height = EXPORT_CONFIG.height;
+      const ctx = canvas.getContext("2d");
+      const exportPrefs = { showMeaning: prefs.showMeaning, showRoot: prefs.showRoot, showPos: prefs.showPos, speed: revealDelay, manualRevealMomentsMs: manualExportMoments };
+      const mimeType = getExportMimeType();
+      const extension = mimeType.startsWith("video/mp4") ? "mp4" : "webm";
+      const canvasStream = canvas.captureStream(EXPORT_CONFIG.fps);
+      let audioEls = [];
+      let audioSequencePlayer = null;
+      let audioContext = null;
+      let renderTimer = null;
+      let audioStarted = false;
+      const chunks = [];
+      showToast("Preparing 1080p reel export...", 0);
+      try {
+        if (document.fonts?.ready) await document.fonts.ready;
+        audioEls = createExportAudioElements();
+        let audioDurationMs = 0;
+        try {
+          audioDurationMs = await getExportAudioSequenceDuration(audioEls);
+          const capture = await getExportAudioCapture(audioEls);
+          audioContext = capture.audioContext;
+          capture.stream?.getAudioTracks().forEach(track => canvasStream.addTrack(track));
+          audioSequencePlayer = createExportAudioSequencePlayer(audioEls);
+        } catch (_error) {
+          showToast("Audio capture failed. Exporting video only.", 2200);
+          audioEls = [];
+        }
+        const durationMs = typeof options.debugDurationMs === "number" ? options.debugDurationMs : getExportState(0, exportPrefs, audioDurationMs).totalDurationMs;
+        drawExportFrame(ctx, 0, exportPrefs, audioDurationMs);
+        const recorderOptions = mimeType ? { mimeType, videoBitsPerSecond: 5000000 } : { videoBitsPerSecond: 5000000 };
+        if (canvasStream.getAudioTracks().length) recorderOptions.audioBitsPerSecond = 192000;
+        const recorder = new MediaRecorder(canvasStream, recorderOptions);
+        const stopPromise = new Promise((resolve, reject) => {
+          recorder.addEventListener("dataavailable", event => { if (event.data && event.data.size) chunks.push(event.data); });
+          recorder.addEventListener("stop", resolve, { once: true });
+          recorder.addEventListener("error", event => reject(event.error || new Error("The HD reel recording failed.")), { once: true });
+        });
+        recorder.start(500);
+        const startTime = performance.now();
+        renderTimer = window.setInterval(() => {
+          const elapsedMs = Math.min(performance.now() - startTime, durationMs);
+          drawExportFrame(ctx, elapsedMs, exportPrefs, audioDurationMs);
+        }, 1000 / EXPORT_CONFIG.fps);
+        if (!options.skipAudio && audioSequencePlayer) {
+          window.setTimeout(async () => {
+            if (!audioSequencePlayer || audioStarted) return;
+            try {
+              if (audioContext && audioContext.state === "suspended") await audioContext.resume();
+              await audioSequencePlayer.play();
+              audioStarted = true;
+            } catch (_error) {
+              showToast("The reel is exporting, but audio playback was blocked.", 2200);
+            }
+          }, EXPORT_CONFIG.leadInMs);
+        }
+        showToast("Recording HD reel...", 0);
+        await wait(durationMs + 240);
+        window.clearInterval(renderTimer);
+        drawExportFrame(ctx, durationMs, exportPrefs, audioDurationMs);
+audioSequencePlayer?.stop?.();
+        if (typeof recorder.requestData === "function") recorder.requestData();
+        recorder.stop();
+        await stopPromise;
+        const blob = new Blob(chunks, { type: recorder.mimeType || mimeType || "video/webm" });
+        if (!blob.size) throw new Error("The HD reel export finished without a video file.");
+        if (!options.skipDownload) {
+          triggerBlobDownload(blob, `${DOWNLOAD_BASENAME}-1080p.${extension}`);
+          showToast(`HD reel downloaded as ${extension.toUpperCase()}.`, 2600);
+        }
+        return { blob, extension, durationMs };
+      } catch (error) {
+        console.error(error);
+        showToast(error?.message || "HD reel export failed.", 3400);
+        return null;
+      } finally {
+        exportInProgress = false;
+        if (downloadHdReelBtnEl) downloadHdReelBtnEl.disabled = false;
+        window.clearInterval(renderTimer);
+        audioSequencePlayer?.stop?.();
+        audioEls = [];
+        audioContext?.close?.();
+        canvasStream.getTracks().forEach(track => track.stop());
+      }
+    }
+
+    showMeaningSettingEl.addEventListener("change", event => { prefs.showMeaning = event.target.checked; updateUi(); });
+    showRootSettingEl.addEventListener("change", event => { prefs.showRoot = event.target.checked; updateUi(); });
+    showPosSettingEl.addEventListener("change", event => { prefs.showPos = event.target.checked; updateUi(); });
+    typeRevealSettingEl.addEventListener("change", event => setManualRevealMode(event.target.checked));
+    speedSettingEl.addEventListener("input", event => setRevealSpeed(event.target.value));
+    speedNumberSettingEl.addEventListener("input", event => { if (event.target.value !== "") setRevealSpeed(event.target.value); });
+    speedNumberSettingEl.addEventListener("change", event => setRevealSpeed(event.target.value));
+    speedNumberSettingEl.addEventListener("blur", () => { speedNumberSettingEl.value = String(revealDelay); });
+    typeRevealAdvanceBtnEl.addEventListener("click", submitTypeRevealWord);
+    typeRevealInputEl.addEventListener("keydown", event => {
+      if (!manualRevealMode) return;
+      if ((event.key === "Enter" || event.key === " ") && typeRevealInputEl.value.trim()) {
+        event.preventDefault();
+        submitTypeRevealWord();
+      }
+    });
+    verseShellEl.addEventListener("pointerup", event => {
+      if (!manualRevealMode || activePanel) return;
+      if (event.pointerType === "mouse" && event.button !== 0) return;
+      submitTypeRevealWord();
+    });
+
+    navPracticeBtnEl.addEventListener("click", () => { if (practiceMode) exitPracticeMode(true); else enterPracticeMode(); });
+    navModeBtnEl.addEventListener("click", () => {
+      if (practiceMode) { exitPracticeMode(true); return; }
+      if (manualRevealMode) {
+        setManualRevealMode(false);
+        startPlayback();
+        return;
+      }
+      startPlayback();
+    });
+    navPlayBtnEl.addEventListener("click", () => {
+      if (practiceMode) practiceMode = false;
+      if (manualRevealMode) {
+        if (currentIndex >= WORDS.length - 1) restartPlayback(false);
+        focusTypeRevealInput();
+        return;
+      }
+      if (currentIndex >= WORDS.length - 1) { restartPlayback(true); return; }
+      if (isPlaying) stopPlayback(); else startPlayback();
+    });
+    navSettingsBtnEl.addEventListener("click", openSettings);
+    topSettingsBtnEl.addEventListener("click", openSettings);
+    navSaveBtnEl.addEventListener("click", persistPrefs);
+    downloadHdReelBtnEl.addEventListener("click", () => downloadHdReel());
+    overlayEl.addEventListener("click", closePanel);
+    detailCloseBtnEl.addEventListener("click", closePanel);
+    settingsCloseBtnEl.addEventListener("click", closePanel);
+
+    document.addEventListener("keydown", event => {
+      if (event.altKey && event.shiftKey && event.key.toLowerCase() === "d") { event.preventDefault(); downloadHdReel(); return; }
+      if (event.key === "Escape" && activePanel) closePanel();
+    });
+
+    renderWords();
+    updateSavedState(Boolean(localStorage.getItem(STORAGE_KEY)));
+    updateUi();
+    window.downloadHdReel = downloadHdReel;
+    window.setTimeout(() => {
+      if (manualRevealMode) focusTypeRevealInput();
+      else startPlayback();
+    }, 500);
+  </script>
+</body>
+</html>

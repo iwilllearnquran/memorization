@@ -1,0 +1,77 @@
+I have a list of Quran vocabulary words. For each word, provide a SHORT Arabic phrase (2-5 words) from the Quran that contains this word, along with the verse reference (chapter:verse).
+
+CRITICAL RULES:
+1. The phrase MUST be an EXACT, CONTIGUOUS substring copied directly from a SINGLE Quran verse — do NOT paraphrase, reorder, or change any word forms
+2. Use standard Arabic script (NOT Uthmani) — e.g. use الذين not ٱلَّذِينَ
+3. Include full harakat/tashkeel on every word
+4. Do NOT combine text from two different verses (e.g. الم + next verse is WRONG)
+5. Do NOT change word forms — if the verse says وَكَلَا use that, not كُلُوا; if it says عَذَابٌ use that, not عَذَابًا
+6. Verify: strip all diacritics from your phrase and from the verse — the stripped phrase MUST appear as a substring in the stripped verse
+7. The verse reference MUST be the verse that actually contains the phrase
+
+COMMON MISTAKES TO AVOID:
+- Writing إِنِّي when the verse says إِنَّنِي
+- Writing كُلُوا when the verse says وَكَلَا
+- Writing عَذَابًا when the verse says عَذَابٌ
+- Citing verse 2:1 for الم ذلك الكتاب (الم is verse 2:1 alone, ذلك الكتاب is verse 2:2)
+- Dropping words from the middle of a phrase
+
+Return as JSON array: [{"word": "...", "example": "...", "reference": "chapter:verse"}]
+
+Words:
+
+- عَلَيْهِ (ʿalayhi) = towards him
+- رَبِّىَ (rabbiya) = My Lord
+- لَمَنِ (lamani) = that whoever
+- مِنْهَا (min'hā) = therefrom
+- الٓمٓ (alif-lam-meem) = Alif Laam Meem
+- لِّلَّذِينَ (lilladhīna) = to those who
+- شَيْـًٔا (shayan) = anything
+- ٱلَّتِى (allatī) = whose
+- عَلَيْكَ (ʿalayka) = to you
+- كَثِيرًا (kathīran) = many
+- إِنَّكُمْ (innakum) = Indeed, you
+- يَهْدِى (yahdī) = He guides
+- هَٰٓؤُلَآءِ (hāulāi) = these
+- إِلَيْهِمْ (ilayhim) = at them
+- عَذَابًا (ʿadhāban) = a punishment
+- عَنْهُ (ʿanhu) = from it
+- قَوْمُهُۥ (qawmuhu) = his people
+- وَّكَانُوا۟ (wakānū) = and they were
+- ٱلْأَوْلَيَٰنِ (alwlayāni) = the former two
+- ٱلْعَلِيمُ (alʿalīmu) = are the All-Knowing
+- ٱلْءَايَٰتِ (alāyāti) = the signs
+- سَبِيلًا (sabīlan) = a way
+- لَفِى (lafī) = are surely in
+- ٱبْنَ (ib'na) = the son
+- أَعْمَٰلَهُمْ (aʿmālahum) = their deeds
+- فَقَالَ (faqāla) = then He said
+- يُؤْمِنَّ (yu'minna) = they believe
+- يُنظَرُونَ (yunẓarūna) = will be reprieved
+- عَنْهَا (ʿanhā) = from it
+- ٱلْبَحْرَ (albaḥra) = the sea
+- ٱلْمُبِينُ (almubīnu) = clearly
+- بَشَرٌ (basharun) = any man
+- ٱلْفُلْكِ (alful'ki) = the ship
+- تَكُن (takun) = be
+- ٱلْجِنَّ (aljina) = jinn
+- ذِى (dhī) = who is
+- لَهُوَ (lahuwa) = surely it is
+- وَٱلْءَاخِرَةِ (wal-ākhirati) = and the Hereafter
+- يُشْرِكُونَ (yush'rikūna) = they associate with Him
+- ٱلرُّسُلُ (arrusulu) = are the Messengers
+- فَقَالُوٓا۟ (faqālū) = for they said
+- فَقُلْ (faqul) = then say
+- كَذِبًا (kadhiban) = a lie
+- وَأَنِّى (wa-annī) = and that I
+- يَفْتَرُونَ (yaftarūna) = inventing
+- بَيِّنَٰتٍ (bayyinātin) = clear
+- بَيَّنَّٰهُ (bayyannāhu) = We made clear
+- ذَاتَ (dhāta) = that
+- طَّآئِفَةٌ (ṭāifatun) = a group
+- فَإِنَّهُۥ (fa-innahu) = then indeed he
+- ءَاتَيْنَٰهُمُ (ātaynāhumu) = We have given them
+- أَهْلِهَآ (ahlihā) = her family
+- فِيهِمْ (fīhim) = in them
+- ٱفْتَرَىٰ (if'tarā) = fabricates
+- بَصِيرًا (baṣīran) = All-Seeing

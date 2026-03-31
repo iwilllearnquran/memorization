@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quran Word Image Generator</title>
+  <style>
+    :root {
+      --bg: #08131a;
+      --panel: #10222d;
+      --text: #eef7fb;
+      --muted: #9eb8c6;
+      --accent: #48d7a6;
+      --accent-2: #74c6ff;
+      --danger: #ff8e7d;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: Arial, sans-serif; color: var(--text);
+      background: linear-gradient(180deg, #09141b, #08131a); min-height: 100vh;
+    }
+    .shell { max-width: 960px; margin: 32px auto; padding: 0 16px; }
+    h1 { font-size: 26px; margin: 0 0 6px; }
+    .lead { color: var(--muted); font-size: 14px; margin: 0 0 24px; line-height: 1.5; }
+    .controls {
+      background: rgba(21,44,57,.92); border: 1px solid rgba(116,198,255,.18);
+      border-radius: 18px; padding: 24px; display: grid; gap: 16px;
+    }
+    .row { display: flex; flex-wrap: wrap; gap: 14px; align-items: end; }
+    .field { display: grid; gap: 4px; }
+    .field label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+    input, select, textarea {
+      border: 1px solid rgba(116,198,255,.14); background: rgba(6,16,23,.86);
+      color: var(--text); border-radius: 10px; padding: 10px 12px; font-size: 14px; outline: none;
+    }
+    input:focus, select:focus, textarea:focus { border-color: rgba(72,215,166,.55); }
+    textarea { min-height: 100px; resize: vertical; font-family: inherit; width: 100%; }
+    .helper { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .btn {
+      border: 0; border-radius: 12px; padding: 12px 20px; font-weight: 800; cursor: pointer;
+      letter-spacing: .02em; font-size: 14px;
+    }
+    .btn-primary { background: linear-gradient(135deg, #48d7a6, #4db9ff); color: #062027; }
+    .btn-primary:disabled { opacity: .5; cursor: wait; }
+    .btn-outline {
+      background: transparent; border: 1px solid rgba(116,198,255,.2); color: var(--text);
+    }
+    .btn-danger { background: rgba(255,142,125,.15); border: 1px solid rgba(255,142,125,.3); color: var(--danger); }
+    .status { color: var(--muted); font-size: 13px; min-height: 20px; white-space: pre-wrap; }
+    .status.error { color: var(--danger); }
+    .progress-bar {
+      height: 6px; border-radius: 3px; background: rgba(255,255,255,.06); overflow: hidden; display: none;
+    }
+    .progress-bar.show { display: block; }
+    .progress-fill {
+      height: 100%; background: linear-gradient(90deg, #48d7a6, #4db9ff);
+      border-radius: 3px; transition: width .3s;
+    }
+    .gallery {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px; margin-top: 24px;
+    }
+    .card {
+      background: rgba(21,44,57,.8); border: 1px solid rgba(116,198,255,.12);
+      border-radius: 14px; overflow: hidden; position: relative;
+    }
+    .card img {
+      width: 100%; aspect-ratio: 9/16; object-fit: cover; display: block; background: #000;
+    }
+    .card .label {
+      padding: 10px 12px; font-size: 13px; line-height: 1.4;
+    }
+    .card .label .ar { font-size: 22px; direction: rtl; }
+    .card .label .en { color: var(--muted); font-size: 12px; }
+    .card .actions { padding: 0 12px 10px; display: flex; gap: 6px; }
+    .card .actions button {
+      font-size: 11px; padding: 5px 10px; border-radius: 8px; cursor: pointer;
+      border: 1px solid rgba(116,198,255,.15); background: rgba(255,255,255,.04); color: var(--text);
+    }
+    .card .badge {
+      position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,.6);
+      color: var(--accent); font-size: 11px; padding: 3px 8px; border-radius: 8px;
+    }
+    .card.generating img { opacity: .3; }
+    .card.error { border-color: rgba(255,142,125,.3); }
+    .prompt-section { margin-top: 8px; }
+    .prompt-section summary { cursor: pointer; font-size: 12px; color: var(--accent-2); }
+  </style>
+</head>
+<body>
+<div class="shell">
+  <h1>Quran Word Image Generator</h1>
+  <p class="lead">Generate reel-sized (1080&times;1920) AI images for top Quran words using Pollinations.ai.<br>Get a free API key at <a href="https://enter.pollinations.ai/" target="_blank" rel="noopener noreferrer" style="color:var(--accent-2)">enter.pollinations.ai</a></p>
+
+  <div class="controls">
+    <div class="row">
+      <div class="field" style="flex:1 1 300px">
+        <label>Pollinations API Key</label>
+        <input id="apiKey" type="password" placeholder="pk_... or sk_..." />
+        <div class="helper">Free key from <a href="https://enter.pollinations.ai/" target="_blank" rel="noopener noreferrer" style="color:var(--accent-2)">enter.pollinations.ai</a></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>Word Count</label>
+        <input id="wordCount" type="number" min="1" max="200" value="12" style="width:90px" />
+      </div>
+      <div class="field">
+        <label>Start Offset</label>
+        <input id="wordOffset" type="number" min="0" max="100000" value="0" style="width:90px" />
+      </div>
+      <div class="field">
+        <label>Model</label>
+        <select id="model">
+          <option value="flux" selected>Flux (Pollinations)</option>
+          <option value="flux-realism">Flux Realism</option>
+          <option value="flux-anime">Flux Anime</option>
+          <option value="flux-3d">Flux 3D</option>
+          <option value="turbo">Turbo</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Style</label>
+        <select id="style">
+          <option value="dark-islamic" selected>Dark Islamic</option>
+          <option value="light-minimal">Light Minimal</option>
+          <option value="neon-glow">Neon Glow</option>
+          <option value="gold-luxury">Gold Luxury</option>
+          <option value="nature">Nature Background</option>
+          <option value="custom">Custom Prompt</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="prompt-section" id="customPromptSection" style="display:none">
+      <label style="font-size:12px;color:var(--muted)">Custom Prompt Template</label>
+      <textarea id="customPrompt" placeholder="Use {arabic} and {english} as placeholders...">A vertical 9:16 reel image. Large Arabic calligraphy &quot;{arabic}&quot; centered, meaning &quot;{english}&quot; below in clean English. Dark background, elegant Islamic geometric patterns, gold and teal accents. High detail, no watermark.</textarea>
+      <div class="helper">Use <code>{arabic}</code>, <code>{english}</code>, <code>{transliteration}</code>, <code>{occurrences}</code> as placeholders.</div>
+    </div>
+
+    <div class="row">
+      <button class="btn btn-primary" id="generateBtn">Generate All Images</button>
+      <button class="btn btn-outline" id="downloadAllBtn" style="display:none">Download All as ZIP</button>
+      <button class="btn btn-danger" id="stopBtn" style="display:none">Stop</button>
+    </div>
+
+    <div class="progress-bar" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="status" id="status">Load the word dataset to begin.</div>
+  </div>
+
+  <div class="gallery" id="gallery"></div>
+</div>
+
+<script>
+  const STYLE_PROMPTS = {
+    'dark-islamic': 'Arabic calligraphy {arabic} centered, meaning {english} below. Dark navy teal background, Islamic geometric patterns, gold emerald accents. Cinematic, no watermark.',
+    'light-minimal': 'Arabic calligraphy {arabic} centered, meaning {english} below. Clean white background, thin modern font, minimal, soft shadow. No watermark.',
+    'neon-glow': 'Arabic text {arabic} in glowing neon teal, meaning {english} in white below. Dark background, reflective floor, cinematic. No watermark.',
+    'gold-luxury': 'Arabic calligraphy {arabic} in gold leaf, meaning {english} below in serif font. Dark burgundy background, golden Islamic borders. No watermark.',
+    'nature': 'Arabic calligraphy {arabic} in white, meaning {english} below. Out of focus nature background, mountains sky water, serene. No watermark.',
+  };
+
+  let words = [];
+  let stopRequested = false;
+  let generatedBlobs = new Map();
+
+  const wordCountEl = document.getElementById('wordCount');
+  const wordOffsetEl = document.getElementById('wordOffset');
+  const modelEl = document.getElementById('model');
+  const styleEl = document.getElementById('style');
+  const customPromptSection = document.getElementById('customPromptSection');
+  const customPromptEl = document.getElementById('customPrompt');
+  const generateBtn = document.getElementById('generateBtn');
+  const downloadAllBtn = document.getElementById('downloadAllBtn');
+  const stopBtn = document.getElementById('stopBtn');
+  const progressBar = document.getElementById('progressBar');
+  const progressFill = document.getElementById('progressFill');
+  const statusEl = document.getElementById('status');
+  const gallery = document.getElementById('gallery');
+
+  styleEl.addEventListener('change', () => {
+    customPromptSection.style.display = styleEl.value === 'custom' ? 'block' : 'none';
+  });
+
+  async function loadWords() {
+    const paths = ['../memo-practice-words.json', '/memo-practice-words.json', 'memo-practice-words.json'];
+    for (const p of paths) {
+      try {
+        const resp = await fetch(p);
+        if (!resp.ok) continue;
+        const data = await resp.json();
+        words = data.words || [];
+        if (words.length) {
+          statusEl.textContent = 'Loaded ' + words.length + ' words. Set count/offset and click Generate.';
+          statusEl.className = 'status';
+          return;
+        }
+      } catch (_) {}
+    }
+    statusEl.textContent = 'Could not load memo-practice-words.json. Serve via: py -3 -m http.server 8765';
+    statusEl.className = 'status error';
+  }
+
+  function getPrompt(entry) {
+    const style = styleEl.value;
+    const template = style === 'custom'
+      ? customPromptEl.value
+      : (STYLE_PROMPTS[style] || STYLE_PROMPTS['dark-islamic']);
+    return template
+      .replace(/\{arabic\}/g, entry.arabic)
+      .replace(/\{english\}/g, entry.meaning || entry.english || '')
+      .replace(/\{transliteration\}/g, entry.transliteration || '')
+      .replace(/\{occurrences\}/g, String(entry.occurrences || 0));
+  }
+
+  function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str || '';
+    return d.innerHTML;
+  }
+
+  function createCard(entry, index) {
+    const card = document.createElement('div');
+    card.className = 'card generating';
+    card.id = 'card-' + index;
+    card.innerHTML =
+      '<div class="badge">#' + (index + 1) + '</div>' +
+      '<img id="img-' + index + '" src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'1080\' height=\'1920\'%3E%3Crect fill=\'%23111\' width=\'1080\' height=\'1920\'/%3E%3C/svg%3E" alt="' + escapeHtml(entry.arabic) + '" />' +
+      '<div class="label">' +
+        '<div class="ar">' + escapeHtml(entry.arabic) + '</div>' +
+        '<div class="en">' + escapeHtml(entry.meaning) + ' &middot; ' + escapeHtml(entry.transliteration || '') + '</div>' +
+      '</div>' +
+      '<div class="actions">' +
+        '<button onclick="downloadSingle(' + index + ')">Download</button>' +
+        '<button onclick="regenerateSingle(' + index + ')">Retry</button>' +
+      '</div>';
+    return card;
+  }
+
+  async function generateImage(entry, index) {
+    const card = document.getElementById('card-' + index);
+    const img = document.getElementById('img-' + index);
+    card.className = 'card generating';
+
+    const prompt = getPrompt(entry);
+    const seed = Date.now() + index;
+    const apiKey = document.getElementById('apiKey').value.trim();
+    const model = modelEl.value;
+    const encoded = encodeURIComponent(prompt);
+    const url = 'https://gen.pollinations.ai/image/' + encoded + '?model=' + model;
+
+    const controller = new AbortController();
+    const timer = setTimeout(function() { controller.abort(); }, 120000);
+
+    const headers = {};
+    if (apiKey) headers['Authorization'] = 'Bearer ' + apiKey;
+
+    try {
+      const resp = await fetch(url, { headers: headers, signal: controller.signal });
+      clearTimeout(timer);
+
+      if (!resp.ok) {
+        card.className = 'card error';
+        if (resp.status === 401 || resp.status === 403) {
+          throw new Error('Auth error (' + resp.status + '). Check your API key at enter.pollinations.ai');
+        }
+        var errText = '';
+        try { errText = await resp.text(); } catch(_){}
+        throw new Error('HTTP ' + resp.status + (errText ? ': ' + errText.slice(0, 200) : ''));
+      }
+
+      const blob = await resp.blob();
+      if (!blob.type || !blob.type.startsWith('image')) {
+        card.className = 'card error';
+        throw new Error('Response was not an image (got ' + (blob.type || 'unknown') + ')');
+      }
+
+      const objectUrl = URL.createObjectURL(blob);
+      img.src = objectUrl;
+      card.className = 'card';
+      generatedBlobs.set(index, { blob: blob, entry: entry });
+    } catch (err) {
+      clearTimeout(timer);
+      card.className = 'card error';
+      if (err.name === 'AbortError') throw new Error('Timeout after 120s');
+      throw err;
+    }
+  }
+
+  async function run() {
+    var apiKey = document.getElementById('apiKey').value.trim();
+    if (!apiKey) {
+      statusEl.textContent = 'Enter your Pollinations API key first (free at enter.pollinations.ai)';
+      statusEl.className = 'status error';
+      document.getElementById('apiKey').focus();
+      return;
+    }
+
+    if (words.length === 0) await loadWords();
+    if (words.length === 0) return;
+
+    var count = Math.max(1, Math.min(200, parseInt(wordCountEl.value) || 12));
+    var offset = Math.max(0, parseInt(wordOffsetEl.value) || 0);
+    var selected = words.slice(offset, offset + count);
+
+    if (!selected.length) {
+      statusEl.textContent = 'No words at offset ' + offset + ' with count ' + count;
+      statusEl.className = 'status error';
+      return;
+    }
+
+    stopRequested = false;
+    generatedBlobs.clear();
+    gallery.innerHTML = '';
+    generateBtn.disabled = true;
+    stopBtn.style.display = '';
+    downloadAllBtn.style.display = 'none';
+    progressBar.classList.add('show');
+
+    selected.forEach(function(entry, i) { gallery.appendChild(createCard(entry, i)); });
+
+    var done = 0;
+    var total = selected.length;
+
+    for (var i = 0; i < total; i++) {
+      if (stopRequested) {
+        statusEl.textContent = 'Stopped after ' + done + '/' + total + ' images.';
+        break;
+      }
+
+      statusEl.textContent = 'Generating ' + (i + 1) + '/' + total + ': ' + selected[i].arabic + ' (' + selected[i].meaning + ')...';
+      statusEl.className = 'status';
+
+      try {
+        await generateImage(selected[i], i);
+        done++;
+      } catch (err) {
+        statusEl.textContent = 'Error on word ' + (i + 1) + ' "' + selected[i].arabic + '": ' + err.message + '. Continuing...';
+        statusEl.className = 'status error';
+        await new Promise(function(r) { setTimeout(r, 2000); });
+      }
+
+      progressFill.style.width = (((i + 1) / total) * 100) + '%';
+      if (i < total - 1) await new Promise(function(r) { setTimeout(r, 1500); });
+    }
+
+    if (!stopRequested) {
+      statusEl.textContent = 'Done! Generated ' + done + '/' + total + ' images.';
+      statusEl.className = 'status';
+    }
+
+    generateBtn.disabled = false;
+    stopBtn.style.display = 'none';
+    if (generatedBlobs.size > 0) downloadAllBtn.style.display = '';
+  }
+
+  function downloadSingle(index) {
+    var data = generatedBlobs.get(index);
+    if (!data) {
+      var img = document.getElementById('img-' + index);
+      if (img && img.src && !img.src.startsWith('data:')) {
+        window.open(img.src, '_blank');
+      }
+      return;
+    }
+    var url = URL.createObjectURL(data.blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'quran_word_' + (index + 1) + '_' + (data.entry.transliteration || 'word').replace(/\s+/g, '_') + '.png';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  async function regenerateSingle(index) {
+    var count = Math.max(1, Math.min(200, parseInt(wordCountEl.value) || 12));
+    var offset = Math.max(0, parseInt(wordOffsetEl.value) || 0);
+    var entry = words[offset + index];
+    if (!entry) return;
+    statusEl.textContent = 'Regenerating: ' + entry.arabic + '...';
+    try {
+      await generateImage(entry, index);
+      statusEl.textContent = 'Regenerated: ' + entry.arabic;
+      statusEl.className = 'status';
+    } catch (err) {
+      statusEl.textContent = 'Error: ' + err.message;
+      statusEl.className = 'status error';
+    }
+  }
+
+  async function downloadAll() {
+    statusEl.textContent = 'Packing ZIP...';
+    if (typeof JSZip === 'undefined') {
+      await new Promise(function(resolve, reject) {
+        var s = document.createElement('script');
+        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
+      });
+    }
+    var zip = new JSZip();
+    generatedBlobs.forEach(function(val, index) {
+      var name = 'quran_word_' + String(index + 1).padStart(3, '0') + '_' + (val.entry.transliteration || 'word').replace(/\s+/g, '_') + '.png';
+      zip.file(name, val.blob);
+    });
+    var content = await zip.generateAsync({ type: 'blob' });
+    var url = URL.createObjectURL(content);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'quran_word_images.zip';
+    a.click();
+    URL.revokeObjectURL(url);
+    statusEl.textContent = 'ZIP downloaded!';
+  }
+
+  generateBtn.addEventListener('click', async function() {
+    try { await run(); } catch (err) {
+      statusEl.textContent = 'Error: ' + (err.message || err);
+      statusEl.className = 'status error';
+      generateBtn.disabled = false;
+    }
+  });
+  stopBtn.addEventListener('click', function() { stopRequested = true; });
+  downloadAllBtn.addEventListener('click', downloadAll);
+
+  loadWords();
+</script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+For each Arabic word below, give me an EXACT phrase from the Quran (2-5 words) that contains this word, plus the verse reference.
+
+STRICT RULES — read carefully, your previous attempts had these exact errors:
+
+1. COPY-PASTE from the Quran. Do NOT write from memory. Every word in your phrase must appear consecutively in the verse.
+2. Use STANDARD Arabic (not Uthmani). Example: write الذين not ٱلَّذِينَ
+3. Do NOT change word forms:
+   - If the verse says عَذَابٌ أَلِيمٌ do NOT write عَذَابًا أَلِيمًا
+   - If the verse says وَنَزَّلْنَا do NOT write وَأَنزَلْنَا
+   - If the verse says إِنَّنِي do NOT write إِنِّي
+   - If the verse says وَكَلَا do NOT write كُلُوا
+   - If the verse says شَيْئًا keep the hamza, do NOT drop it
+4. Do NOT skip words from the middle of a phrase. If the verse says 'قال ابراهيم ربي' do NOT write 'قال ربي'
+5. Do NOT span two verses. الم is verse 2:1 ALONE. ذلك الكتاب is verse 2:2.
+6. The verse reference must be the ACTUAL verse containing your phrase
+7. Include harakat/tashkeel
+
+SELF-CHECK before submitting each entry:
+- Remove all diacritics from your phrase AND from the actual verse text
+- Confirm your stripped phrase is a contiguous substring of the stripped verse
+- If it fails, pick a DIFFERENT verse where the word actually appears as-is
+
+Return JSON array: [{"word": "...", "example": "...", "reference": "chapter:verse"}]
+
+Words:
+
+- عَلَيْهِ (ʿalayhi) = towards him (previous wrong attempt: تَوَكَّلْتُ عَلَيْهِ @ 11:88)
+- رَبِّىَ (rabbiya) = My Lord (previous wrong attempt: قَالَ رَبِّىَ الَّذِى يُحْيِى @ 2:258)
+- لَمَنِ (lamani) = that whoever (previous wrong attempt: لَمَنِ اتَّبَعَ هُدَاىَ @ 20:123)
+- لِّلَّذِينَ (lilladhīna) = to those who (previous wrong attempt: هُدًى لِّلَّذِينَ يُؤْمِنُونَ @ 2:3)
+- شَيْـًٔا (shayan) = anything (previous wrong attempt: لَا يُغْنِى عَنْهُمْ شَيْـًٔا @ 3:10)
+- عَلَيْكَ (ʿalayka) = to you (previous wrong attempt: وَأَنزَلْنَا عَلَيْكَ الْكِتَٰبَ @ 16:89)
+- كَثِيرًا (kathīran) = many (previous wrong attempt: وَيُضِلُّ بِهِ كَثِيرًا @ 2:26)
+- إِنَّكُمْ (innakum) = Indeed, you (previous wrong attempt: إِنَّكُمْ كُنتُمْ ظَٰلِمِينَ @ 2:35)
+- يَهْدِى (yahdī) = He guides (previous wrong attempt: إِنَّ اللَّهَ يَهْدِى مَن يَشَآءُ @ 28:56)
+- هَٰٓؤُلَآءِ (hāulāi) = these (previous wrong attempt: مَا لِهَٰٓؤُلَآءِ الْقَوْمِ @ 4:78)
+- إِلَيْهِمْ (ilayhim) = at them (previous wrong attempt: ثُمَّ إِلَيْهِمْ مَرْجِعُهُمْ @ 10:46)
+- عَذَابًا (ʿadhāban) = a punishment (previous wrong attempt: وَلَهُمْ عَذَابًا أَلِيمًا @ 2:10)
+- عَنْهُ (ʿanhu) = from it (previous wrong attempt: لَا يُغْنِى عَنْهُ مَالُهُ @ 92:11)
+- قَوْمُهُۥ (qawmuhu) = his people (previous wrong attempt: قَالَ قَوْمُهُۥ إِنَّا @ 7:66)
+- وَّكَانُوا۟ (wakānū) = and they were (previous wrong attempt: وَّكَانُوا۟ يَكْفُرُونَ @ 2:61)
+- ٱلْأَوْلَيَٰنِ (alwlayāni) = the former two (previous wrong attempt: فَٱلْأَوْلَيَٰنِ يَقُومَانِ @ 5:107)
+- ٱلْعَلِيمُ (alʿalīmu) = are the All-Knowing (previous wrong attempt: إِنَّ اللَّهَ هُوَ الْعَلِيمُ @ 9:60)
+- ٱلْءَايَٰتِ (alāyāti) = the signs (previous wrong attempt: كَذَّبُوا۟ بِٱلْءَايَٰتِ كُلِّهَا @ 54:42)
+- سَبِيلًا (sabīlan) = a way (previous wrong attempt: وَلَن تَجِدَ لَهُمْ سَبِيلًا @ 4:141)
+- لَفِى (lafī) = are surely in (previous wrong attempt: إِنَّهُۥ لَفِى ضَلَٰلٍ @ 12:8)
+- أَعْمَٰلَهُمْ (aʿmālahum) = their deeds (previous wrong attempt: وَحَبِطَتْ أَعْمَٰلَهُمْ @ 5:5)
+- فَقَالَ (faqāla) = then He said (previous wrong attempt: فَقَالَ إِنِّىٓ أَعْلَمُ @ 2:30)
+- يُؤْمِنَّ (yu'minna) = they believe (previous wrong attempt: حَتَّىٰ يُؤْمِنَّ بِاللَّهِ @ 2:221)
+- يُنظَرُونَ (yunẓarūna) = will be reprieved (previous wrong attempt: فَإِنَّهُمْ مُنظَرُونَ @ 37:172)
+- عَنْهَا (ʿanhā) = from it (previous wrong attempt: لَا يُفَتَّرُ عَنْهَا @ 43:75)
+- ٱلْبَحْرَ (albaḥra) = the sea (previous wrong attempt: وَسَخَّرَ لَكُمُ الْبَحْرَ @ 45:12)
+- ٱلْمُبِينُ (almubīnu) = clearly (previous wrong attempt: هَٰذَا بَلَٰغٌ مُّبِينٌ @ 14:52)
+- بَشَرٌ (basharun) = any man (previous wrong attempt: إِنْ أَنَا إِلَّا بَشَرٌ @ 18:110)
+- ٱلْفُلْكِ (alful'ki) = the ship (previous wrong attempt: تَجْرِى الْفُلْكِ فِى الْبَحْرِ @ 2:164)
+- تَكُن (takun) = be (previous wrong attempt: إِن تَكُن مِّثْقَالَ حَبَّةٍ @ 31:16)
+- ٱلْجِنَّ (aljina) = jinn (previous wrong attempt: وَخَلَقَ الْجِنَّ مِن مَّارِجٍ @ 55:15)
+- ذِى (dhī) = who is (previous wrong attempt: ذِى الْقُرْبَىٰ حَقَّهُ @ 17:26)
+- لَهُوَ (lahuwa) = surely it is (previous wrong attempt: وَإِنَّهُۥ لَهُوَ الْحَقُّ @ 22:6)
+- يُشْرِكُونَ (yush'rikūna) = they associate with Him (previous wrong attempt: وَهُمْ يُشْرِكُونَ @ 12:106)
+- ٱلرُّسُلُ (arrusulu) = are the Messengers (previous wrong attempt: كَذَّبَتْ قَبْلَهُمْ الرُّسُلُ @ 50:12)
+- فَقَالُوٓا۟ (faqālū) = for they said (previous wrong attempt: فَقَالُوٓا۟ هَٰذَا سِحْرٌ @ 37:15)
+- فَقُلْ (faqul) = then say (previous wrong attempt: فَقُلْ سُبْحَٰنَ رَبِّى @ 17:93)
+- كَذِبًا (kadhiban) = a lie (previous wrong attempt: إِنْ هَٰذَا إِلَّا كَذِبًا @ 38:7)
+- وَأَنِّى (wa-annī) = and that I (previous wrong attempt: وَأَنِّى لَهُ التَّنَاوُشُ @ 34:52)
+- يَفْتَرُونَ (yaftarūna) = inventing (previous wrong attempt: إِنَّهُمْ يَفْتَرُونَ عَلَى اللَّهِ @ 10:69)
+- بَيِّنَٰتٍ (bayyinātin) = clear (previous wrong attempt: جَآءَتْهُمْ بِالْبَيِّنَٰتِ @ 57:25)
+- بَيَّنَّٰهُ (bayyannāhu) = We made clear (previous wrong attempt: كَذَٰلِكَ بَيَّنَّٰهُ @ 2:242)
+- ذَاتَ (dhāta) = that (previous wrong attempt: جَنَّٰتٍ ذَاتِ أَفْنَانٍ @ 55:48)
+- طَّآئِفَةٌ (ṭāifatun) = a group (previous wrong attempt: وَلْتَكُن مِّنكُمْ طَّآئِفَةٌ @ 3:104)
+- فَإِنَّهُۥ (fa-innahu) = then indeed he (previous wrong attempt: فَإِنَّهُۥ عَدُوٌّ لِّى @ 26:77)
+- ءَاتَيْنَٰهُمُ (ātaynāhumu) = We have given them (previous wrong attempt: وَءَاتَيْنَٰهُمُ الْكِتَٰبَ @ 45:16)
+- أَهْلِهَآ (ahlihā) = her family (previous wrong attempt: إِلَىٰ أَهْلِهَا تَسْعَىٰ @ 79:12)
+- فِيهِمْ (fīhim) = in them (previous wrong attempt: رَسُولًا مِّنْهُمْ فِيهِمْ @ 2:129)
+- ٱفْتَرَىٰ (if'tarā) = fabricates (previous wrong attempt: أَمِ افْتَرَىٰ عَلَى اللَّهِ @ 34:8)
+- بَصِيرًا (baṣīran) = All-Seeing (previous wrong attempt: إِنَّ اللَّهَ كَانَ بَصِيرًا @ 4:58)
