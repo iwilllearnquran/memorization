@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Generate YouTube HD (1920×1080) Quran vocabulary word videos — V2 (No TTS).
+Generate YouTube HD (1920×1080) Quran vocabulary word videos — V2.
 
-Uses FREE audio only — zero API keys required:
+Audio sources:
   - Arabic word:     quran.com word-by-word recitation
   - English word:    reuses ElevenLabs pronunciation from v1 output (if available)
   - Arabic example:  Al-Husary recitation trimmed via API segment timestamps
-  - English example: Ibrahim Walk recitation (alquran.cloud), Sahih Intl text
+  - English example: ElevenLabs TTS (--api-key), falls back to Edge-TTS if omitted
 
 Data source:  generated/reel_words_top600.json
 
@@ -14,11 +14,12 @@ Flow per word:
   1) Arabic word on screen  + quran.com wbw audio
   2) English word on screen + v1 TTS pronunciation (or silence)
   3) Arabic example         + Al-Husary trimmed recitation
-  4) English example (Sahih) + Ibrahim Walk English recitation
+  4) English example (Sahih) + ElevenLabs TTS (or Edge-TTS fallback)
 
 Usage:
-  py yt_word_video_v2.py --rank 1
-  py yt_word_video_v2.py --rank 1 --count 5
+  py yt_word_video_v2.py --rank 1 --api-key sk_...
+  py yt_word_video_v2.py --rank 1 --count 5 --api-key sk_...
+  py yt_word_video_v2.py --rank 1              # falls back to Edge-TTS
 """
 from __future__ import annotations
 
@@ -49,7 +50,7 @@ LEARN_QURAN_ROOT = MEMORIZATION_ROOT.parent / "learnqurandaily"
 
 FONTS_DIR = LEARN_QURAN_ROOT / "fonts"
 DATASET_PATH = MEMORIZATION_ROOT / "generated" / "reel_words_top600.json"
-OUTPUT_DIR = MEMORIZATION_ROOT / "output" / "yt_word_videos_v2"
+OUTPUT_DIR = MEMORIZATION_ROOT / "output" / "new_folder"
 V1_OUTPUT_DIR = MEMORIZATION_ROOT / "output" / "yt_word_videos"   # reuse TTS
 BG_PATH = MEMORIZATION_ROOT / "background" / "yt_background.png"
 
@@ -61,20 +62,28 @@ FFMPEG = shutil.which("ffmpeg") or "ffmpeg"
 FFPROBE = shutil.which("ffprobe") or "ffprobe"
 
 VID_W, VID_H = 1920, 1080
-TASHKEEL_RE = re.compile(r'[\u064B-\u065F\u0670\u06D6-\u06ED\u0640]')
+# Strip tashkeel marks — but NOT U+0670 (superscript alef), handled in ALEF_MAP
+TASHKEEL_RE = re.compile(r'[\u064B-\u065F\u06D6-\u06ED\u0640]')
 
 ALEF_MAP = str.maketrans({
     '\u0622': '\u0627',   # آ → ا
     '\u0623': '\u0627',   # أ → ا
     '\u0625': '\u0627',   # إ → ا
     '\u0671': '\u0627',   # ٱ → ا
+    '\u0670': '\u0627',   # ٰ  (superscript/dagger alef) → ا
+    '\u0621': '',          # ء (standalone hamza) → remove
     '\u0654': '',          # hamza above
     '\u0655': '',          # hamza below
     '\u0674': '',          # high hamza
+    '\u0653': '',          # madda above
     '\u0649': '\u064A',   # ى (alef maqsura) → ي (ya)
     '\u0629': '\u0647',   # ة (taa marbuta) → ه (ha)
     '\u0624': '\u0648',   # ؤ (waw+hamza)   → و (waw)
     '\u0626': '\u064A',   # ئ (ya+hamza)    → ي (ya)
+    '\u06E1': '',          # ۡ (small high dotless head of khah)
+    '\u06DF': '',          # ۟ (small high rounded zero)
+    '\u06E5': '',          # ۥ (small waw)
+    '\u06E6': '',          # ۦ (small ya)
 })
 
 REQUEST_DELAY = 0.35      # polite delay between API calls
@@ -216,7 +225,60 @@ def find_v1_example_english_audio(slug: str) -> Path | None:
 
 
 # ---------------------------------------------------------------------------
-# Edge-TTS (free Microsoft TTS — no API key)
+# ElevenLabs TTS
+# ---------------------------------------------------------------------------
+EL_VOICE = "MFZUKuGQUsGJPQjTS4wC"
+EL_MODEL = "eleven_v3"
+EL_TONE_EXAMPLE = {
+    "stability": 0.75, "similarity_boost": 0.85,
+    "style": 0.15, "use_speaker_boost": True, "speed": 0.85,
+}
+
+_EL_API_KEY: str | None = None   # set from CLI --api-key
+_AR_TTS_MODE: str = "quran"       # "quran" or "elevenlabs"
+
+
+def tts_elevenlabs(text: str, out_path: Path, *, voice: str = EL_VOICE,
+                   api_key: str = "", model: str = EL_MODEL,
+                   tone: dict | None = None) -> Path:
+    """Synthesize text via ElevenLabs TTS."""
+    from elevenlabs.client import ElevenLabs
+    from elevenlabs.types import VoiceSettings
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    client = ElevenLabs(api_key=api_key or _EL_API_KEY)
+
+    vs_kwargs: dict = {"speed": 0.9}
+    if tone:
+        vs_kwargs["stability"] = tone.get("stability", 0.5)
+        vs_kwargs["similarity_boost"] = tone.get("similarity_boost", 0.75)
+        vs_kwargs["style"] = tone.get("style", 0.0)
+        vs_kwargs["speed"] = tone.get("speed", 0.9)
+        if tone.get("use_speaker_boost") is not None:
+            vs_kwargs["use_speaker_boost"] = tone["use_speaker_boost"]
+
+    audio_gen = client.text_to_speech.convert(
+        text=text, voice_id=voice, model_id=model,
+        output_format="mp3_44100_128",
+        voice_settings=VoiceSettings(**vs_kwargs),
+    )
+    with open(out_path, "wb") as f:
+        for chunk in audio_gen:
+            f.write(chunk)
+    if not out_path.exists() or out_path.stat().st_size == 0:
+        raise RuntimeError(f"TTS produced no audio: {out_path}")
+    # Boost volume + pad to prevent clipping
+    boosted = out_path.with_suffix(".loud.mp3")
+    subprocess.run([
+        FFMPEG, "-y", "-i", str(out_path),
+        "-af", "volume=1.8,apad=pad_dur=0.3",
+        "-c:a", "libmp3lame", "-q:a", "2", str(boosted),
+    ], check=True, capture_output=True)
+    boosted.replace(out_path)
+    return out_path
+
+
+# ---------------------------------------------------------------------------
+# Edge-TTS (free fallback — no API key)
 # ---------------------------------------------------------------------------
 EDGE_TTS_VOICE = "en-US-GuyNeural"
 
@@ -288,11 +350,18 @@ def fetch_ayah_words(verse_key: str) -> list[dict]:
     return words
 
 
+def _strip_alef(text: str) -> str:
+    """Remove all alefs — for skeleton comparison of Uthmani vs simplified."""
+    return text.replace('\u0627', '')
+
+
 def _fuzzy_tok_eq(ex_tok: str, ay_tok: str) -> bool:
     """Fuzzy compare two normalized Arabic tokens.
 
-    Handles common prefix differences: the API may attach وَ، فَ، بِ، لِ، كَ، أَ
-    to a word that the dataset lists without the prefix.
+    Handles:
+    - Exact match
+    - Prefix differences (وَ، فَ، بِ، etc. attached)
+    - Alef-count differences between Uthmani and simplified scripts
     """
     if ex_tok == ay_tok:
         return True
@@ -300,6 +369,16 @@ def _fuzzy_tok_eq(ex_tok: str, ay_tok: str) -> bool:
     if ay_tok.endswith(ex_tok) and len(ex_tok) >= 2:
         return True
     if ex_tok.endswith(ay_tok) and len(ay_tok) >= 2:
+        return True
+    # Alef-skeleton: Uthmani may omit/add alefs vs simplified Arabic
+    ex_skel = _strip_alef(ex_tok)
+    ay_skel = _strip_alef(ay_tok)
+    if ex_skel and ex_skel == ay_skel:
+        return True
+    # Alef-skeleton + prefix check
+    if ay_skel.endswith(ex_skel) and len(ex_skel) >= 2:
+        return True
+    if ex_skel.endswith(ay_skel) and len(ay_skel) >= 2:
         return True
     return False
 
@@ -521,18 +600,106 @@ def _draw_text_with_highlight(draw, img, text: str, y: int,
     full_w = draw.get_font_metrics(img, text, True).text_width
 
     def _find(txt, fw):
-        idx = txt.find(fw)
-        if idx >= 0:
-            return idx, fw
-        idx = txt.lower().find(fw.lower())
-        if idx >= 0:
-            return idx, txt[idx:idx + len(fw)]
-        stripped = TASHKEEL_RE.sub('', fw)
+        """Find focus word in text, always returning a full space-delimited token
+        so the gold highlight aligns properly (no partial-token overlap)."""
+        # 1) Exact full-token match
         for w in txt.split():
-            if stripped in TASHKEEL_RE.sub('', w):
+            if w == fw:
                 i = txt.find(w)
                 if i >= 0:
                     return i, w
+        # 2) Substring match — but snap to the enclosing full token
+        idx = txt.find(fw)
+        if idx >= 0:
+            start = txt.rfind(' ', 0, idx)
+            start = start + 1 if start >= 0 else 0
+            end = txt.find(' ', idx + len(fw))
+            end = end if end >= 0 else len(txt)
+            return start, txt[start:end]
+        # 2b) Case-insensitive token match (English: "Not" matches "not")
+        fw_ci = fw.lower()
+        for w in txt.split():
+            if w.lower().strip('.,;:!?()') == fw_ci:
+                i = txt.find(w)
+                if i >= 0:
+                    return i, w
+        # 2c) Case-insensitive substring match
+        txt_lo = txt.lower()
+        idx_ci = txt_lo.find(fw_ci)
+        if idx_ci >= 0:
+            start = txt.rfind(' ', 0, idx_ci)
+            start = start + 1 if start >= 0 else 0
+            end = txt.find(' ', idx_ci + len(fw))
+            end = end if end >= 0 else len(txt)
+            return start, txt[start:end]
+        # 3) Normalized match (strip tashkeel + normalize alef variants)
+        norm_fw = _norm_ar(fw)
+        for w in txt.split():
+            if norm_fw in _norm_ar(w):
+                i = txt.find(w)
+                if i >= 0:
+                    return i, w
+        # 3b) Try with trailing alef stripped (handles ىٰ → يا vs ى → ي)
+        norm_fw_trimmed = norm_fw.rstrip('\u0627')
+        if norm_fw_trimmed != norm_fw and len(norm_fw_trimmed) >= 2:
+            for w in txt.split():
+                if norm_fw_trimmed in _norm_ar(w):
+                    i = txt.find(w)
+                    if i >= 0:
+                        return i, w
+        # 4) Strip ال prefix from word and retry (handles ال vs لل/ول prefixes)
+        bare = norm_fw.lstrip('و')  # strip leading waw conjunction
+        if bare.startswith('ال'):
+            bare = bare[2:]  # strip definite article
+        if len(bare) >= 2:
+            for w in txt.split():
+                nw = _norm_ar(w)
+                nw_bare = nw.lstrip('و')
+                # strip any single-char preposition prefix (ل، ب، ف، ك) + optional ال
+                for pfx in ('لل', 'بال', 'فال', 'كال', 'ل', 'ب', 'ف', 'ك', 'وال', 'ول', 'وب', ''):
+                    if nw_bare.startswith(pfx) and nw_bare[len(pfx):] == bare:
+                        i = txt.find(w)
+                        if i >= 0:
+                            return i, w
+                    if nw_bare.startswith(pfx) and bare in nw_bare[len(pfx):]:
+                        i = txt.find(w)
+                        if i >= 0:
+                            return i, w
+        # 5) Split by '/' and try each part (handles meanings like "is/was")
+        if '/' in fw:
+            for part in fw.split('/'):
+                part = re.sub(r'[()]', '', part).strip()
+                if not part or len(part) < 2:
+                    continue
+                # Try as substring in text (for multi-word parts like "in it")
+                part_low = part.lower()
+                txt_low = txt.lower()
+                si = txt_low.find(part_low)
+                if si >= 0:
+                    # Snap to enclosing token boundaries
+                    start = txt.rfind(' ', 0, si)
+                    start = start + 1 if start >= 0 else 0
+                    end = txt.find(' ', si + len(part))
+                    end = end if end >= 0 else len(txt)
+                    return start, txt[start:end]
+                # Single-word part: try exact token match
+                for w in txt.split():
+                    if w.lower().strip('.,;:!?()') == part_low:
+                        i = txt.find(w)
+                        if i >= 0:
+                            return i, w
+        # 6) Stem-prefix match: "wronged" matches "wrong", "destroyed" matches "destroy"
+        fw_low = re.sub(r'[()]', '', fw).lower().strip()
+        fw_words = fw_low.split()
+        if fw_words:
+            stem = fw_words[-1]  # use last word as stem (e.g. "We destroyed" → "destroyed")
+            if len(stem) >= 4:
+                for w in txt.split():
+                    wl = w.lower().strip('.,;:!?()')
+                    if wl.startswith(stem) or stem.startswith(wl):
+                        i = txt.find(w)
+                        if i >= 0:
+                            return i, w
         return None, None
 
     iw = img.width
@@ -559,7 +726,9 @@ def _draw_text_with_highlight(draw, img, text: str, y: int,
         draw.fill_color = default_color
         return _draw_centered(draw, img, text, y, max_w)
 
-    focus_low = focus_word.lower().strip('.,;:!?()') if focus_word else ''
+    focus_low = re.sub(r'[()]', '', focus_word).lower().strip() if focus_word else ''
+    focus_parts = [p.strip() for p in focus_low.split('/')] if '/' in focus_low else []
+    focus_stem = focus_low.split()[-1] if focus_low and len(focus_low.split()[-1]) >= 4 else ''
     words = text.split()
     lines: list[list[str]] = []
     cur: list[str] = []
@@ -581,7 +750,12 @@ def _draw_text_with_highlight(draw, img, text: str, y: int,
         draw.fill_color = default_color
         draw.text(lx, y + total_h, lt)
         for w in line_words:
-            if w.lower().strip('.,;:!?()') == focus_low:
+            wl = w.lower().strip('.,;:!?()')
+            # Match exact word, /‑parts, or stem prefix
+            matched_w = (wl == focus_low
+                         or (focus_parts and wl in focus_parts)
+                         or (focus_stem and len(wl) >= 4 and (wl.startswith(focus_stem) or focus_stem.startswith(wl))))
+            if matched_w:
                 pfx = lt[:lt.find(w)]
                 pw = draw.get_font_metrics(img, pfx, True).text_width if pfx else 0
                 draw.fill_color = gold_color
@@ -638,7 +812,7 @@ def create_yt_poster(
         draw.font = ENGLISH_FONT
         draw.font_size = 32 * S
         draw.fill_color = Color("#FFFFFF")
-        title = "Learn the meaning of frequently appearing words in the Quran"
+        title = "Learn These 600 Words & Understand 56% of the Qur’an"
         _draw_centered(draw, img, title, 80 * S)
 
         if rank:
@@ -737,20 +911,14 @@ def make_segment(image_path: Path, audio_path: Path, out_path: Path) -> Path:
 # ---------------------------------------------------------------------------
 def generate_yt_word_v2(word_entry: dict, *, total_words: int = 600) -> dict:
     arabic = word_entry["arabic"]
-    english = word_entry["meaning"]
+    english = word_entry["meaning"].lower()
     translit = word_entry.get("transliteration", "")
     occurrences = word_entry.get("occurrences", 0)
     rank = word_entry.get("rank", 0)
     audio_url = word_entry.get("audio_url", "")
-    example_ar = (word_entry.get("short_example_ar", "")
-                  or word_entry.get("example_ar", "")
-                  or word_entry.get("pass2_gpt_example", ""))
-    example_en = (word_entry.get("short_example_en", "")
-                  or word_entry.get("example_en", "")
-                  or word_entry.get("QURAN_TRANSLATION", "")
-                  or word_entry.get("API_TRANSLATION", ""))
-    example_ref = (word_entry.get("example_ref", "")
-                   or word_entry.get("pass2_gpt_reference", ""))
+    example_ar = word_entry.get("example_ar", "")
+    example_en = word_entry.get("example_en", "")
+    example_ref = word_entry.get("example_ref", "")
 
     slug = translit or f"word{rank}"
     slug = unicodedata.normalize("NFD", slug)
@@ -796,56 +964,81 @@ def generate_yt_word_v2(word_entry: dict, *, total_words: int = 600) -> dict:
         print(f"  ! No v1 English pronunciation for '{slug}' — using 1s silence")
         en_word_audio = silence_clip(1000, parts / "english_word.mp3")
 
-    # ── 2) Arabic example (trimmed Al-Husary recitation) ─────────
+    # ── 2) Arabic example audio ──────────────────────────────────
     ar_example_audio = None
     ar_start_ratio, ar_end_ratio = 0.0, 1.0
     start_idx, end_idx, total_ayah_words = None, None, 0
     ayah_words = []
 
     if example_ar and example_ref:
-        print(f"  Fetching Arabic example (Al-Husary)...")
-        try:
-            segments, full_ar_url = fetch_ayah_segments(example_ref)
-            full_ar_audio = parts / "ayah_arabic_full.mp3"
-            download_audio(full_ar_url, full_ar_audio)
+        if _AR_TTS_MODE == "elevenlabs" and _EL_API_KEY:
+            # ── ElevenLabs TTS for Arabic example ──
+            print(f"  ElevenLabs Arabic: \"{example_ar[:60]}...\"")
+            try:
+                ar_example_audio = tts_elevenlabs(
+                    example_ar, parts / "example_arabic.mp3",
+                    model="eleven_v3", tone=EL_TONE_EXAMPLE)
+                print(f"  ElevenLabs Arabic example: {audio_duration(ar_example_audio):.2f}s")
+            except Exception as exc:
+                print(f"  ! ElevenLabs Arabic failed: {exc}, falling back to Quran API")
 
-            ayah_words = fetch_ayah_words(example_ref)
-            total_ayah_words = len(ayah_words)
-            start_idx, end_idx = match_example_to_word_range(example_ar, ayah_words)
+        if ar_example_audio is None:
+            # ── Al-Husary recitation from Quran API (default) ──
+            print(f"  Fetching Arabic example (Al-Husary)...")
+            try:
+                segments, full_ar_url = fetch_ayah_segments(example_ref)
+                full_ar_audio = parts / "ayah_arabic_full.mp3"
+                download_audio(full_ar_url, full_ar_audio)
 
-            if start_idx is not None and end_idx < len(segments):
-                ar_start_ratio = start_idx / total_ayah_words
-                ar_end_ratio = (end_idx + 1) / total_ayah_words
+                ayah_words = fetch_ayah_words(example_ref)
+                total_ayah_words = len(ayah_words)
+                start_idx, end_idx = match_example_to_word_range(example_ar, ayah_words)
 
-                # Use exact segment boundaries — no offset before start
-                # to avoid capturing tail of previous word
-                start_ms = segments[start_idx][2]
-                end_ms = segments[end_idx][3] + 100
-                print(f"    Matched words {start_idx}–{end_idx}/{total_ayah_words}")
-                print(f"    Trimming: {start_ms}ms – {end_ms}ms")
+                if start_idx is not None and end_idx is not None:
+                    # Clamp end_idx to last available segment
+                    end_idx = min(end_idx, len(segments) - 1)
+                    ar_start_ratio = start_idx / total_ayah_words
+                    ar_end_ratio = (end_idx + 1) / total_ayah_words
 
-                ar_example_audio = trim_audio(
-                    full_ar_audio, start_ms, end_ms,
-                    parts / "example_arabic_trimmed.mp3",
-                    speed=1.5)
-                print(f"    -> {audio_duration(ar_example_audio):.2f}s")
-            else:
-                print(f"    ! Word matching failed, using full ayah")
-                ar_example_audio = full_ar_audio
-                print(f"    -> {audio_duration(ar_example_audio):.2f}s")
-        except Exception as exc:
-            print(f"    ! Arabic example failed: {exc}")
+                    # Use exact segment boundaries — no offset before start
+                    # to avoid capturing tail of previous word
+                    start_ms = segments[start_idx][2]
+                    end_ms = segments[end_idx][3] + 100
+                    print(f"    Matched words {start_idx}–{end_idx}/{total_ayah_words}")
+                    print(f"    Trimming: {start_ms}ms – {end_ms}ms")
 
-    # ── 3) English example audio (edge-tts from Sahih translation) ──
+                    ar_example_audio = trim_audio(
+                        full_ar_audio, start_ms, end_ms,
+                        parts / "example_arabic_trimmed.mp3",
+                        speed=1.5)
+                    print(f"    -> {audio_duration(ar_example_audio):.2f}s")
+                else:
+                    print(f"    ! Word matching failed, using full ayah")
+                    ar_example_audio = full_ar_audio
+                    print(f"    -> {audio_duration(ar_example_audio):.2f}s")
+            except Exception as exc:
+                print(f"    ! Arabic example failed: {exc}")
+
+    # ── 3) English example audio (ElevenLabs or Edge-TTS fallback) ──
     en_example_audio = None
     if example_en:
-        print(f"  Edge-TTS: \"{example_en[:80]}{'...' if len(example_en) > 80 else ''}\"")
-        try:
-            en_example_audio = tts_edge(
-                example_en, parts / "example_english.mp3")
-            print(f"  Edge-TTS English example: {audio_duration(en_example_audio):.2f}s")
-        except Exception as exc:
-            print(f"  ! Edge-TTS failed: {exc}")
+        if _EL_API_KEY:
+            print(f"  ElevenLabs: \"{example_en[:80]}{'...' if len(example_en) > 80 else ''}\"")
+            try:
+                en_example_audio = tts_elevenlabs(
+                    example_en, parts / "example_english.mp3",
+                    tone=EL_TONE_EXAMPLE)
+                print(f"  ElevenLabs English example: {audio_duration(en_example_audio):.2f}s")
+            except Exception as exc:
+                print(f"  ! ElevenLabs failed: {exc}, falling back to Edge-TTS")
+        if en_example_audio is None:
+            print(f"  Edge-TTS: \"{example_en[:80]}{'...' if len(example_en) > 80 else ''}\"")
+            try:
+                en_example_audio = tts_edge(
+                    example_en, parts / "example_english.mp3")
+                print(f"  Edge-TTS English example: {audio_duration(en_example_audio):.2f}s")
+            except Exception as exc:
+                print(f"  ! Edge-TTS failed: {exc}")
     if en_example_audio is None:
         print(f"  ! No English example audio generated")
 
@@ -922,13 +1115,25 @@ def main():
                         help="Concatenate all videos into one MP4")
     parser.add_argument("--skip-existing", action="store_true",
                         help="Skip words that already have a video")
+    parser.add_argument("--api-key", default=None,
+                        help="ElevenLabs API key (uses ElevenLabs for English example; falls back to Edge-TTS if omitted)")
+    parser.add_argument("--ar-tts", choices=["quran", "elevenlabs"], default="quran",
+                        help="Arabic example source: 'quran' = Al-Husary recitation (default), 'elevenlabs' = ElevenLabs TTS (needs --api-key)")
     args = parser.parse_args()
+
+    global _EL_API_KEY, _AR_TTS_MODE
+    _EL_API_KEY = args.api_key
+    _AR_TTS_MODE = args.ar_tts
+    if _AR_TTS_MODE == "elevenlabs" and not _EL_API_KEY:
+        print("Error: --ar-tts elevenlabs requires --api-key")
+        sys.exit(1)
 
     data = json.loads(DATASET_PATH.read_text(encoding="utf-8"))
     all_words = data["words"]
     print(f"Loaded {len(all_words)} words from {DATASET_PATH.name}")
     print(f"Output dir: {OUTPUT_DIR}")
-    print(f"Mode: {'poster-only' if args.poster_only else 'full video (NO TTS)'}")
+    tts_label = 'ElevenLabs' if _EL_API_KEY else 'Edge-TTS (no --api-key)'
+    print(f"Mode: {'poster-only' if args.poster_only else f'full video ({tts_label})'}")
 
     start_idx = args.rank - 1
     end_idx = min(start_idx + args.count, len(all_words))
@@ -960,8 +1165,8 @@ def main():
                     word.get("transliteration", ""), str(BG_PATH), poster,
                     occurrences=word.get("occurrences", 0),
                     rank=word.get("rank", 0), total_words=len(all_words),
-                    example_ar=(word.get("example_ar", "") or word.get("pass2_gpt_example", "")),
-                    example_en=(word.get("example_en", "") or word.get("QURAN_TRANSLATION", "") or word.get("API_TRANSLATION", "")),
+                    example_ar=word.get("example_ar", ""),
+                    example_en=word.get("example_en", ""),
                     focus_word_ar=word["arabic"])
                 print(f"  [OK] Poster: {poster}")
                 results.append({"rank": word.get("rank"), "poster": str(poster)})
