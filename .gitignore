@@ -70,7 +70,14 @@ node_modules/
 
 # Local generated artifacts and test folders
 artifacts/
+output/
+output/new_folder/
+output\
+output_videos_urdu/
+temp_urdu/
 test/
+scripts/
+_private/
 test-results/
 # Reel generator output
 generated/reels/*

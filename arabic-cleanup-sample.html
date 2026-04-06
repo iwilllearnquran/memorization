@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Arabic Cleanup + Font Comparison</title>
   <link rel="preload" href="/fonts/PDMS_SALEEM_QURANFONTQESHIP_0.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/fonts/UthmanicHafs1Ver18.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/UthmanicHafs1v18p3.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/indopak-nastaleeq-waqf-lazim-v4.2.1.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/p106.woff2" as="font" type="font/woff2" crossorigin>
   <style>
@@ -41,7 +41,13 @@
 
     @font-face {
       font-family: 'UthmanicHafs';
-      src: url('/fonts/UthmanicHafs1Ver18.woff2') format('woff2');
+      src: url('/fonts/UthmanicHafs1v18p3.woff2') format('woff2');
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'UthmanicHafs_v2';
+      src: url('/fonts/UthmanicHafs1v18p3.woff2') format('woff2');
       font-display: swap;
     }
 
@@ -146,6 +152,11 @@
 
     .ar-uthmanic-hafs {
       font-family: 'UthmanicHafs', 'CustomArabic', 'Scheherazade New', serif;
+      font-weight: 400;
+    }
+
+    .ar-uthmanic-hafs-v2 {
+      font-family: 'UthmanicHafs_v2', 'CustomArabic', 'Scheherazade New', serif;
       font-weight: 400;
     }
 
@@ -329,7 +340,7 @@
   </table>
 
   <h2>Ayah Font Comparison, Word by Word</h2>
-  <p class="note">Per-word rendering across CustomArabic, IndoPakQWBW, PDMS alt TTF, MUHAMMADIBold, AlQuran IndoPak QuranWBW, UthmanicHafs, IndoPak Waqf Lazim, and P106.</p>
+  <p class="note">Per-word rendering across CustomArabic, IndoPakQWBW, PDMS alt TTF, MUHAMMADIBold, AlQuran IndoPak QuranWBW, UthmanicHafs, UthmanicHafs_v2, IndoPak Waqf Lazim, and P106.</p>
 
   <div class="controls">
     <label>
@@ -385,12 +396,49 @@
         <th>MUHAMMADIBold</th>
         <th>AlQuran IndoPak QuranWBW</th>
         <th>UthmanicHafs</th>
+        <th>UthmanicHafs_v2</th>
         <th>IndoPak Waqf Lazim</th>
         <th>P106</th>
       </tr>
     </thead>
     <tbody id="longestRows"></tbody>
   </table>
+
+  <h2>Full Ayah Comparison (IndoPak vs Uthmani)</h2>
+  <p class="note">
+    Your local JSON uses <strong>IndoPak</strong> script. UthmanicHafs is designed for <strong>Uthmani</strong> script.
+    <br>The circles in UthmanicHafs are caused by <strong>5 IndoPak-specific characters</strong> that the font doesn't have glyphs for:
+    <br><code>ۡ</code> U+06E1 (IndoPak sukoon, 22× per ayah — biggest offender!) ·
+    <code>ؕ</code> U+0615 (waqf mark) ·
+    <code>ۙ</code> U+06D9 (waqf mark) ·
+    <code>ڪ</code> U+06AA (swash kaf, should be ك) ·
+    <code>U+E01C</code> (Private Use Area)
+    <br>Uthmani script uses <code>ْ</code> U+0652 for sukoon, <code>ك</code> U+0643 for kaf, and different waqf marks.
+    <br><strong>Note:</strong> All three font files (local, v2, quran.com's) are byte-identical (MD5: c06c3d61).
+  </p>
+
+  <div class="controls">
+    <label>
+      Surah
+      <input id="fullSurah" type="number" min="1" max="114" value="2">
+    </label>
+    <label>
+      Ayah
+      <input id="fullAyah" type="number" min="1" value="25">
+    </label>
+    <button id="fullLoadBtn" type="button">Load Full Ayah</button>
+    <label>
+      <input id="fullStripMarks" type="checkbox">
+      Strip Quranic annotation marks (۟ ۢ ۭ ۖ ۙ ۦ etc.)
+    </label>
+    <label>
+      <input id="fullStripDiacritics" type="checkbox">
+      Strip all diacritics (tashkeel)
+    </label>
+    <span class="hint" id="fullStatus">Not loaded yet.</span>
+  </div>
+
+  <div id="fullAyahContainer"></div>
 
   <script>
     const AR = {
@@ -653,6 +701,7 @@
             <td><div class="ar ar-word ar-muhammadi">${renderedWord}</div></td>
             <td><div class="ar ar-word ar-alquran-indopak">${renderedWord}</div></td>
             <td><div class="ar ar-word ar-uthmanic-hafs">${renderedWord}</div></td>
+            <td><div class="ar ar-word ar-uthmanic-hafs-v2">${renderedWord}</div></td>
             <td><div class="ar ar-word ar-indopak-waqf-lazim">${renderedWord}</div></td>
             <td><div class="ar ar-word ar-p106">${renderedWord}</div></td>
           `;
@@ -702,6 +751,133 @@
     renderCleanupTrace();
     applyStyleControls();
     renderLongestAyahWordByWord(ctrlSurah.value, ctrlAyah.value);
+
+    /* ── Full Ayah Comparison (IndoPak vs Uthmani) ── */
+    const fullSurah         = document.getElementById('fullSurah');
+    const fullAyah          = document.getElementById('fullAyah');
+    const fullLoadBtn       = document.getElementById('fullLoadBtn');
+    const fullStripMarks    = document.getElementById('fullStripMarks');
+    const fullStripDiacritics = document.getElementById('fullStripDiacritics');
+    const fullStatus        = document.getElementById('fullStatus');
+    const fullContainer     = document.getElementById('fullAyahContainer');
+
+    const FONT_LIST = [
+      { css: 'ar-prev',               label: 'CustomArabic' },
+      { css: 'ar-new',                label: 'IndoPakQWBW' },
+      { css: 'ar-pdms-alt',           label: 'PDMS Alt' },
+      { css: 'ar-muhammadi',          label: 'MuhammadiBold' },
+      { css: 'ar-alquran-indopak',    label: 'AlQuran IndoPak' },
+      { css: 'ar-uthmanic-hafs',      label: 'UthmanicHafs' },
+      { css: 'ar-uthmanic-hafs-v2',   label: 'UthmanicHafs_v2' },
+      { css: 'ar-indopak-waqf-lazim', label: 'IndoPak Waqf Lazim' },
+      { css: 'ar-p106',               label: 'P106' }
+    ];
+
+    // For optional UI toggles only (not applied by default)
+    const ALL_MARKS_RE = /[\u0615\u0656\u06D6-\u06ED\u200B\u200F\uE000-\uF8FF]/g;
+    const DIACRITICS_RE = /[\u064B-\u065F\u0670\u0652\u06E1]/g;
+
+    // Which fonts are UthmanicHafs (need Uthmani text)?
+    const UTHMANI_FONT_CSS = new Set(['ar-uthmanic-hafs', 'ar-uthmanic-hafs-v2']);
+
+    function applyOptionalCleanup(text) {
+      let t = String(text || '');
+      if (fullStripMarks.checked) t = t.replace(ALL_MARKS_RE, '');
+      if (fullStripDiacritics.checked) t = t.replace(DIACRITICS_RE, '');
+      return t;
+    }
+
+    // Verse-end: ornate parentheses ﴿N﴾
+    function verseEndHTML(ayah) {
+      const num = String(ayah);
+      const arNum = num.replace(/[0-9]/g, d => String.fromCharCode(0x0660 + Number(d)));
+      return ` \uFD3F${arNum}\uFD3E`;
+    }
+
+    function renderFullAyahBlock(title, sourceText, uthmaniText, surah, ayah) {
+      let html = `<h3 style="margin:18px 0 6px;font-size:15px;">${escapeHtml(title)}</h3>`;
+      html += `<table><thead><tr><th style="width:160px">Font</th><th>Full Ayah</th></tr></thead><tbody>`;
+      const endHTML = verseEndHTML(ayah);
+      FONT_LIST.forEach(f => {
+        let text;
+        if (UTHMANI_FONT_CSS.has(f.css) && uthmaniText) {
+          text = applyOptionalCleanup(uthmaniText);
+        } else {
+          text = applyOptionalCleanup(sourceText);
+        }
+        const isSwapped = UTHMANI_FONT_CSS.has(f.css) && uthmaniText && sourceText !== uthmaniText;
+        html += `<tr><td>${escapeHtml(f.label)}${isSwapped ? ' <span style="color:#0a4d68;font-size:11px">(API)</span>' : ''}</td><td><div class="ar ${f.css}" style="font-size:var(--cmp-font-size);font-weight:var(--cmp-font-weight);font-style:var(--cmp-font-style);line-height:2">${text}${endHTML}</div></td></tr>`;
+      });
+      html += `</tbody></table>`;
+      return html;
+    }
+
+    let _cachedIndoPak = null;
+    let _cachedUthmani = null;
+    let _cachedKey = '';
+
+    function renderFullAyahFromCache() {
+      const s = Number(fullSurah.value);
+      const a = Number(fullAyah.value);
+      let out = '';
+      if (_cachedIndoPak) {
+        out += renderFullAyahBlock(`IndoPak Script (local JSON) — ${s}:${a}`, _cachedIndoPak, _cachedUthmani, s, a);
+        out += `<details style="margin:4px 0 12px"><summary style="cursor:pointer;font-size:12px;color:#445">IndoPak Codepoints (${Array.from(_cachedIndoPak).length} chars)</summary><code style="font-size:11px;word-break:break-all">${codepoints(_cachedIndoPak)}</code></details>`;
+      }
+      if (_cachedUthmani) {
+        out += renderFullAyahBlock(`Uthmani Script (quran.com API) — ${s}:${a}`, _cachedUthmani, _cachedUthmani, s, a);
+        out += `<details style="margin:4px 0 12px"><summary style="cursor:pointer;font-size:12px;color:#445">Uthmani Codepoints (${Array.from(_cachedUthmani).length} chars)</summary><code style="font-size:11px;word-break:break-all">${codepoints(_cachedUthmani)}</code></details>`;
+      }
+      if (!_cachedIndoPak && !_cachedUthmani) {
+        out = `<p class="note" style="color:#b33">No cached ayah. Click "Load Full Ayah".</p>`;
+      }
+      fullContainer.innerHTML = out;
+    }
+
+    async function loadFullAyah() {
+      const s = Number(fullSurah.value);
+      const a = Number(fullAyah.value);
+      if (!s || s < 1 || s > 114 || !a || a < 1) {
+        fullStatus.textContent = 'Invalid surah/ayah.';
+        return;
+      }
+      fullStatus.textContent = 'Loading…';
+      fullContainer.innerHTML = '';
+      _cachedIndoPak = null;
+      _cachedUthmani = null;
+      _cachedKey = `${s}:${a}`;
+
+      // 1. IndoPak from local JSON
+      try {
+        const path = `build/recite/surahs/surah_${pad3(s)}.json`;
+        const res = await fetch(path, { cache: 'no-store' });
+        if (res.ok) {
+          const payload = await res.json();
+          const ayah = payload?.surah?.ayahs?.find(x => Number(x?.ayah) === a);
+          if (ayah?.arabic) _cachedIndoPak = String(ayah.arabic).trim();
+        }
+      } catch (_) { /* ignore */ }
+
+      // 2. Uthmani from quran.com API
+      try {
+        const apiUrl = `https://api.quran.com/api/v4/quran/verses/uthmani?verse_key=${s}:${a}`;
+        const res = await fetch(apiUrl);
+        if (res.ok) {
+          const data = await res.json();
+          if (data?.verses?.[0]?.text_uthmani) _cachedUthmani = data.verses[0].text_uthmani;
+        }
+      } catch (_) { /* ignore */ }
+
+      renderFullAyahFromCache();
+      fullStatus.textContent = `Loaded ${s}:${a} — IndoPak: ${_cachedIndoPak ? 'yes' : 'no'}, Uthmani: ${_cachedUthmani ? 'yes' : 'no'}`;
+    }
+
+    fullLoadBtn.addEventListener('click', loadFullAyah);
+    fullSurah.addEventListener('keydown', e => { if (e.key === 'Enter') loadFullAyah(); });
+    fullAyah.addEventListener('keydown', e => { if (e.key === 'Enter') loadFullAyah(); });
+    fullStripMarks.addEventListener('change', renderFullAyahFromCache);
+    fullStripDiacritics.addEventListener('change', renderFullAyahFromCache);
+    loadFullAyah();
   </script>
 </body>
 </html>

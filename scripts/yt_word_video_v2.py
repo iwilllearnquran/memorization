@@ -35,6 +35,7 @@ import time
 import unicodedata
 import urllib.parse
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 if sys.stdout.encoding != "utf-8":
@@ -50,8 +51,11 @@ LEARN_QURAN_ROOT = MEMORIZATION_ROOT.parent / "learnqurandaily"
 
 FONTS_DIR = LEARN_QURAN_ROOT / "fonts"
 DATASET_PATH = MEMORIZATION_ROOT / "generated" / "reel_words_top600.json"
-OUTPUT_DIR = MEMORIZATION_ROOT / "output" / "new_folder"
+OUTPUT_DIR = MEMORIZATION_ROOT / "output" / "folder2"
+SOURCE_DIR = MEMORIZATION_ROOT / "output" / "new_folder"   # reuse assets from here
 V1_OUTPUT_DIR = MEMORIZATION_ROOT / "output" / "yt_word_videos"   # reuse TTS
+AR_EXAMPLE_SPEED = 0.9
+AR_EXAMPLE_REVERB = 3
 BG_PATH = MEMORIZATION_ROOT / "background" / "yt_background.png"
 
 ARABIC_FONT = str(FONTS_DIR / "ScheherazadeNew-Bold.ttf")
@@ -163,7 +167,7 @@ def concat_audio(parts: list[Path], out_path: Path) -> Path:
 
 
 def trim_audio(input_path: Path, start_ms: int, end_ms: int,
-               out_path: Path, *, fade_ms: int = 350,
+               out_path: Path, *, fade_ms: int = 20,
                speed: float = 1.0) -> Path:
     """Trim audio with strong fade in/out to eliminate bleed from adjacent words.
 
@@ -241,10 +245,13 @@ _AR_TTS_MODE: str = "quran"       # "quran" or "elevenlabs"
 def tts_elevenlabs(text: str, out_path: Path, *, voice: str = EL_VOICE,
                    api_key: str = "", model: str = EL_MODEL,
                    tone: dict | None = None) -> Path:
-    """Synthesize text via ElevenLabs TTS."""
+    """Synthesize text via ElevenLabs TTS.  Skips API call if file exists."""
     from elevenlabs.client import ElevenLabs
     from elevenlabs.types import VoiceSettings
     out_path.parent.mkdir(parents=True, exist_ok=True)
+    # ── Cache: skip API call if file already exists ──
+    if out_path.exists() and out_path.stat().st_size > 1000:
+        return out_path
     client = ElevenLabs(api_key=api_key or _EL_API_KEY)
 
     vs_kwargs: dict = {"speed": 0.9}
@@ -274,6 +281,48 @@ def tts_elevenlabs(text: str, out_path: Path, *, voice: str = EL_VOICE,
         "-c:a", "libmp3lame", "-q:a", "2", str(boosted),
     ], check=True, capture_output=True)
     boosted.replace(out_path)
+    return out_path
+
+
+def process_audio_effects(input_path: Path, out_path: Path, *,
+                          speed: float = 1.0, reverb: int = 0) -> Path:
+    """Apply speed change and/or reverb to an audio file.
+
+    reverb 0-10 → two chained aecho filters for a rich hall-like reverb.
+    Decays are kept ≤ 1.0 and out_gain ≤ 1.0 to avoid ffmpeg overflow.
+    """
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    if speed == 1.0 and reverb == 0:
+        shutil.copy2(input_path, out_path)
+        return out_path
+    af_parts = []
+    if speed != 1.0:
+        af_parts.append(f"atempo={speed:.2f}")
+    if reverb > 0:
+        # Scale reverb 0-10 to decay strength 0.0-0.7
+        strength = min(reverb / 10, 1.0) * 0.7
+        # Two aecho layers: early reflections + late tail
+        af_parts.append(
+            f"aecho=0.8:0.88:60|150:{strength:.2f}|{strength * 0.5:.2f}"
+        )
+        af_parts.append(
+            f"aecho=0.8:0.88:200|400:{strength * 0.4:.2f}|{strength * 0.2:.2f}"
+        )
+    af = ",".join(af_parts)
+    result = subprocess.run([
+        FFMPEG, "-y", "-i", str(input_path),
+        "-af", af,
+        "-c:a", "libmp3lame", "-q:a", "2", str(out_path),
+    ], capture_output=True)
+    if result.returncode != 0:
+        print(f"    ! ffmpeg reverb failed (rc={result.returncode}): {result.stderr[-300:]}")
+        # Fallback: just apply speed, skip reverb
+        af_fallback = f"atempo={speed:.2f}" if speed != 1.0 else "anull"
+        subprocess.run([
+            FFMPEG, "-y", "-i", str(input_path),
+            "-af", af_fallback,
+            "-c:a", "libmp3lame", "-q:a", "2", str(out_path),
+        ], check=True, capture_output=True)
     return out_path
 
 
@@ -310,6 +359,7 @@ def build_translation_from_words(
 # Arabic audio pipeline  (quran.com recitation + Al-Husary segments)
 # ---------------------------------------------------------------------------
 DEFAULT_RECITER = 6   # Mahmoud Khalil Al-Husary
+SELECTED_RECITER = "shuraym"  # default reciter for pre-trimmed audio
 
 
 def fetch_ayah_segments(verse_key: str, reciter_id: int = DEFAULT_RECITER) -> tuple[list, str]:
@@ -927,6 +977,14 @@ def generate_yt_word_v2(word_entry: dict, *, total_words: int = 600) -> dict:
     word_dir = OUTPUT_DIR / slug
     parts = word_dir / "parts"
     parts.mkdir(parents=True, exist_ok=True)
+    source_word = SOURCE_DIR / slug if SOURCE_DIR else None
+
+    # ── Copy audio/ folder from source ────────────────────────
+    if source_word and (source_word / "audio").is_dir():
+        dest_audio = word_dir / "audio"
+        if not dest_audio.is_dir():
+            shutil.copytree(source_word / "audio", dest_audio)
+            print(f"  Copied audio/ folder from source")
 
     bg = str(BG_PATH)
     print(f"\n{'=' * 60}")
@@ -934,9 +992,14 @@ def generate_yt_word_v2(word_entry: dict, *, total_words: int = 600) -> dict:
     print(f"  Example: {example_ref} | {example_ar}")
     print(f"           {example_en}")
 
-    # ── 1) Arabic word audio (quran.com word-by-word) ────────────
+    # ── 1) Arabic word audio — reuse from source if available ────
     ar_word_audio = None
-    if audio_url:
+    _src_ar_word = source_word / "parts" / "arabic_word.mp3" if source_word else None
+    if _src_ar_word and _src_ar_word.exists():
+        shutil.copy2(_src_ar_word, parts / "arabic_word.mp3")
+        ar_word_audio = parts / "arabic_word.mp3"
+        print(f"  Arabic word (from source): {audio_duration(ar_word_audio):.2f}s")
+    elif audio_url:
         print(f"  Downloading Arabic word audio...")
         try:
             full_url = (audio_url if audio_url.startswith("http")
@@ -951,18 +1014,43 @@ def generate_yt_word_v2(word_entry: dict, *, total_words: int = 600) -> dict:
         print("  ! No Arabic word audio — using 0.5s silence")
         ar_word_audio = silence_clip(500, parts / "arabic_word.mp3")
 
-    # ── 1b) English word pronunciation (reuse v1 TTS) ────────────
-    en_word_audio = find_v1_english_audio(slug)
-    if en_word_audio:
-        # Copy to parts so concat paths are local
+    # ── 1b) English word pronunciation (ElevenLabs → v1 → Edge-TTS) ──
+    en_word_audio = None
+    _en_word_11 = word_dir / "11_english_word.mp3"
+    if _en_word_11.exists() and _en_word_11.stat().st_size > 500:
+        en_word_audio = _en_word_11
+        print(f"  ElevenLabs English word (cached 11_): {audio_duration(en_word_audio):.2f}s")
+    elif _EL_API_KEY:
         local_en = parts / "english_word.mp3"
-        if not local_en.exists():
-            shutil.copy2(en_word_audio, local_en)
-        en_word_audio = local_en
-        print(f"  Reusing v1 English pronunciation: {audio_duration(en_word_audio):.2f}s")
-    else:
-        print(f"  ! No v1 English pronunciation for '{slug}' — using 1s silence")
-        en_word_audio = silence_clip(1000, parts / "english_word.mp3")
+        print(f"  ElevenLabs English word: \"{english}\"")
+        try:
+            en_word_audio = tts_elevenlabs(english, local_en)
+            shutil.copy2(en_word_audio, _en_word_11)
+            print(f"  ElevenLabs English word: {audio_duration(en_word_audio):.2f}s")
+            print(f"    -> Saved: {_en_word_11}")
+        except Exception as exc:
+            print(f"  ! ElevenLabs word failed: {exc}, trying v1/Edge-TTS")
+    if en_word_audio is None:
+        v1_audio = find_v1_english_audio(slug)
+        if v1_audio:
+            local_en = parts / "english_word.mp3"
+            if not local_en.exists():
+                shutil.copy2(v1_audio, local_en)
+            en_word_audio = local_en
+            print(f"  Reusing v1 English pronunciation: {audio_duration(en_word_audio):.2f}s")
+        else:
+            local_en = parts / "english_word.mp3"
+            if local_en.exists() and local_en.stat().st_size > 500:
+                en_word_audio = local_en
+                print(f"  Reusing cached English word: {audio_duration(en_word_audio):.2f}s")
+            else:
+                print(f"  Edge-TTS English word: \"{english}\"")
+                try:
+                    en_word_audio = tts_edge(english, local_en)
+                    print(f"  Edge-TTS English word: {audio_duration(en_word_audio):.2f}s")
+                except Exception as exc:
+                    print(f"  ! Edge-TTS word failed: {exc} — using 1s silence")
+                    en_word_audio = silence_clip(1000, local_en)
 
     # ── 2) Arabic example audio ──────────────────────────────────
     ar_example_audio = None
@@ -971,19 +1059,30 @@ def generate_yt_word_v2(word_entry: dict, *, total_words: int = 600) -> dict:
     ayah_words = []
 
     if example_ar and example_ref:
-        if _AR_TTS_MODE == "elevenlabs" and _EL_API_KEY:
+        # ── Try pre-trimmed reciter audio from audio/ folder + apply speed/reverb ──
+        reciter_audio = word_dir / "audio" / f"{SELECTED_RECITER}.mp3"
+        if reciter_audio.exists() and reciter_audio.stat().st_size > 1000:
+            processed = parts / "example_arabic_processed.mp3"
+            process_audio_effects(reciter_audio, processed,
+                                  speed=AR_EXAMPLE_SPEED, reverb=AR_EXAMPLE_REVERB)
+            boost_volume(processed, 1.8)
+            ar_example_audio = processed
+            print(f"  Using pre-trimmed {SELECTED_RECITER} (speed={AR_EXAMPLE_SPEED}, reverb={AR_EXAMPLE_REVERB}): {audio_duration(ar_example_audio):.2f}s")
+        elif _AR_TTS_MODE == "elevenlabs" and _EL_API_KEY:
             # ── ElevenLabs TTS for Arabic example ──
-            print(f"  ElevenLabs Arabic: \"{example_ar[:60]}...\"")
+            _ar_tts_path = parts / "example_arabic.mp3"
+            _ar_cached = _ar_tts_path.exists() and _ar_tts_path.stat().st_size > 1000
+            print(f"  ElevenLabs Arabic{' (cached)' if _ar_cached else ''}: \"{example_ar[:60]}...\"")
             try:
                 ar_example_audio = tts_elevenlabs(
-                    example_ar, parts / "example_arabic.mp3",
+                    example_ar, _ar_tts_path,
                     model="eleven_v3", tone=EL_TONE_EXAMPLE)
                 print(f"  ElevenLabs Arabic example: {audio_duration(ar_example_audio):.2f}s")
             except Exception as exc:
                 print(f"  ! ElevenLabs Arabic failed: {exc}, falling back to Quran API")
 
         if ar_example_audio is None:
-            # ── Al-Husary recitation from Quran API (default) ──
+            # ── Quran API recitation (fallback) ──
             print(f"  Fetching Arabic example (Al-Husary)...")
             try:
                 segments, full_ar_url = fetch_ayah_segments(example_ref)
@@ -1000,8 +1099,6 @@ def generate_yt_word_v2(word_entry: dict, *, total_words: int = 600) -> dict:
                     ar_start_ratio = start_idx / total_ayah_words
                     ar_end_ratio = (end_idx + 1) / total_ayah_words
 
-                    # Use exact segment boundaries — no offset before start
-                    # to avoid capturing tail of previous word
                     start_ms = segments[start_idx][2]
                     end_ms = segments[end_idx][3] + 100
                     print(f"    Matched words {start_idx}–{end_idx}/{total_ayah_words}")
@@ -1019,23 +1116,38 @@ def generate_yt_word_v2(word_entry: dict, *, total_words: int = 600) -> dict:
             except Exception as exc:
                 print(f"    ! Arabic example failed: {exc}")
 
-    # ── 3) English example audio (ElevenLabs or Edge-TTS fallback) ──
+    # ── 3) English example audio (ElevenLabs → save 11_ copy → Edge-TTS fallback) ──
     en_example_audio = None
     if example_en:
         if _EL_API_KEY:
-            print(f"  ElevenLabs: \"{example_en[:80]}{'...' if len(example_en) > 80 else ''}\"")
-            try:
-                en_example_audio = tts_elevenlabs(
-                    example_en, parts / "example_english.mp3",
-                    tone=EL_TONE_EXAMPLE)
-                print(f"  ElevenLabs English example: {audio_duration(en_example_audio):.2f}s")
-            except Exception as exc:
-                print(f"  ! ElevenLabs failed: {exc}, falling back to Edge-TTS")
+            _en_tts_path = parts / "example_english.mp3"
+            _en_11_path = word_dir / "11_example_english.mp3"
+            # Try the 11_ cached copy first, then parts/ cache
+            if _en_11_path.exists() and _en_11_path.stat().st_size > 1000:
+                en_example_audio = _en_11_path
+                print(f"  ElevenLabs English example (cached 11_): {audio_duration(en_example_audio):.2f}s")
+            else:
+                print(f"  ElevenLabs: \"{example_en[:80]}{'...' if len(example_en) > 80 else ''}\"")
+                try:
+                    en_example_audio = tts_elevenlabs(
+                        example_en, _en_tts_path,
+                        tone=EL_TONE_EXAMPLE)
+                    # Save 11_ copy in the word folder
+                    shutil.copy2(en_example_audio, _en_11_path)
+                    print(f"  ElevenLabs English example: {audio_duration(en_example_audio):.2f}s")
+                    print(f"    -> Saved: {_en_11_path}")
+                except Exception as exc:
+                    print(f"  ! ElevenLabs failed: {exc}, falling back to Edge-TTS")
         if en_example_audio is None:
+            _edge_path = parts / "example_english.mp3"
+            # If API key provided, don't reuse old Edge-TTS cached file — always prefer ElevenLabs
+            if _EL_API_KEY and _edge_path.exists():
+                print(f"  Skipping old Edge-TTS cache (API key set), will regenerate if needed")
+                _edge_path.unlink()
             print(f"  Edge-TTS: \"{example_en[:80]}{'...' if len(example_en) > 80 else ''}\"")
             try:
                 en_example_audio = tts_edge(
-                    example_en, parts / "example_english.mp3")
+                    example_en, _edge_path)
                 print(f"  Edge-TTS English example: {audio_duration(en_example_audio):.2f}s")
             except Exception as exc:
                 print(f"  ! Edge-TTS failed: {exc}")
@@ -1043,13 +1155,13 @@ def generate_yt_word_v2(word_entry: dict, *, total_words: int = 600) -> dict:
         print(f"  ! No English example audio generated")
 
     # ── Build combined audio ─────────────────────────────────────
-    gap_short = silence_clip(400, parts / "gap_short.mp3")
+    gap_short = silence_clip(50, parts / "gap_short.mp3")
     gap_medium = silence_clip(800, parts / "gap_medium.mp3")
 
     # Flow: word → gap → english word → gap → arabic example → gap → english example
     audio_parts: list[Path] = [
         ar_word_audio, gap_short,
-        en_word_audio, gap_medium,
+        en_word_audio, gap_short,
     ]
     if ar_example_audio:
         audio_parts.extend([ar_example_audio, gap_short])
@@ -1071,14 +1183,19 @@ def generate_yt_word_v2(word_entry: dict, *, total_words: int = 600) -> dict:
     ], check=True, capture_output=True)
     print(f"  MP3: {final_mp3}")
 
-    # ── Create poster ────────────────────────────────────────────
-    print("  Creating poster...")
+    # ── Create poster — reuse from source if available ────────
     poster = word_dir / f"poster_{slug}.png"
-    create_yt_poster(
-        arabic, english, translit, bg, poster,
-        occurrences=occurrences, rank=rank, total_words=total_words,
-        example_ar=example_ar, example_en=example_en,
-        focus_word_ar=arabic)
+    _src_poster = source_word / f"poster_{slug}.png" if source_word else None
+    if _src_poster and _src_poster.exists():
+        shutil.copy2(_src_poster, poster)
+        print(f"  Poster (from source): {poster.name}")
+    else:
+        print("  Creating poster...")
+        create_yt_poster(
+            arabic, english, translit, bg, poster,
+            occurrences=occurrences, rank=rank, total_words=total_words,
+            example_ar=example_ar, example_en=example_en,
+            focus_word_ar=arabic)
 
     # ── Render video ─────────────────────────────────────────────
     print("  Rendering video...")
@@ -1119,11 +1236,30 @@ def main():
                         help="ElevenLabs API key (uses ElevenLabs for English example; falls back to Edge-TTS if omitted)")
     parser.add_argument("--ar-tts", choices=["quran", "elevenlabs"], default="quran",
                         help="Arabic example source: 'quran' = Al-Husary recitation (default), 'elevenlabs' = ElevenLabs TTS (needs --api-key)")
+    parser.add_argument("--reciter", choices=["alafasy", "husary", "shuraym"], default="shuraym",
+                        help="Reciter for Arabic example audio (uses pre-trimmed files from audio/ folders)")
+    parser.add_argument("--output-dir", default=None,
+                        help="Output folder name under output/ (default: folder2)")
+    parser.add_argument("--source-dir", default=None,
+                        help="Source folder to reuse assets from (default: new_folder)")
+    parser.add_argument("--ar-speed", type=float, default=0.9,
+                        help="Arabic example playback speed (default: 0.9)")
+    parser.add_argument("--ar-reverb", type=int, default=10,
+                        help="Arabic example reverb 0-100 (default: 10)")
+    parser.add_argument("--workers", type=int, default=1,
+                        help="Parallel workers (default 1). Use 4-6 for faster batch runs.")
     args = parser.parse_args()
 
-    global _EL_API_KEY, _AR_TTS_MODE
+    global _EL_API_KEY, _AR_TTS_MODE, SELECTED_RECITER, OUTPUT_DIR, SOURCE_DIR, AR_EXAMPLE_SPEED, AR_EXAMPLE_REVERB
     _EL_API_KEY = args.api_key
     _AR_TTS_MODE = args.ar_tts
+    SELECTED_RECITER = args.reciter
+    if args.output_dir:
+        OUTPUT_DIR = MEMORIZATION_ROOT / "output" / args.output_dir
+    if args.source_dir:
+        SOURCE_DIR = MEMORIZATION_ROOT / "output" / args.source_dir
+    AR_EXAMPLE_SPEED = args.ar_speed
+    AR_EXAMPLE_REVERB = args.ar_reverb
     if _AR_TTS_MODE == "elevenlabs" and not _EL_API_KEY:
         print("Error: --ar-tts elevenlabs requires --api-key")
         sys.exit(1)
@@ -1143,9 +1279,12 @@ def main():
 
     results = []
     skipped = 0
+    total_words_count = len(all_words)
+
+    # ── Build work list (skip existing first) ──
+    work_items: list[tuple[int, dict]] = []
     for i in range(start_idx, end_idx):
         word = all_words[i]
-
         if args.skip_existing and not args.poster_only:
             s = _make_slug(word, i)
             if (OUTPUT_DIR / s / f"word_{s}.mp4").exists():
@@ -1153,7 +1292,10 @@ def main():
                 results.append({"rank": word.get("rank"), "video": str(OUTPUT_DIR / s / f"word_{s}.mp4")})
                 print(f"  [SKIP] #{word.get('rank')} {word['arabic']} (exists)")
                 continue
+        work_items.append((i, word))
 
+    def _do_one(idx_word: tuple[int, dict]) -> dict | None:
+        i, word = idx_word
         try:
             if args.poster_only:
                 slug = _make_slug(word, i)
@@ -1164,17 +1306,51 @@ def main():
                     word["arabic"], word["meaning"],
                     word.get("transliteration", ""), str(BG_PATH), poster,
                     occurrences=word.get("occurrences", 0),
-                    rank=word.get("rank", 0), total_words=len(all_words),
+                    rank=word.get("rank", 0), total_words=total_words_count,
                     example_ar=word.get("example_ar", ""),
                     example_en=word.get("example_en", ""),
                     focus_word_ar=word["arabic"])
                 print(f"  [OK] Poster: {poster}")
-                results.append({"rank": word.get("rank"), "poster": str(poster)})
+                return {"rank": word.get("rank"), "poster": str(poster)}
             else:
-                res = generate_yt_word_v2(word, total_words=len(all_words))
-                results.append(res)
+                return generate_yt_word_v2(word, total_words=total_words_count)
         except Exception as exc:
             print(f"  [FAIL] rank {word.get('rank', i + 1)}: {exc}")
+            return None
+
+    workers = max(1, args.workers)
+    if workers == 1 or len(work_items) <= 1:
+        # Sequential (original behaviour)
+        for item in work_items:
+            res = _do_one(item)
+            if res:
+                results.append(res)
+    else:
+        print(f"\nParallel mode: {workers} workers, {len(work_items)} items to generate")
+        t0 = time.time()
+        futures = {}
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            for item in work_items:
+                fut = pool.submit(_do_one, item)
+                futures[fut] = item[1].get("rank", 0)
+            done_count = 0
+            for fut in as_completed(futures):
+                done_count += 1
+                rank_num = futures[fut]
+                try:
+                    res = fut.result()
+                    if res:
+                        results.append(res)
+                except Exception as exc:
+                    print(f"  [FAIL] rank {rank_num}: {exc}")
+                if done_count % 10 == 0 or done_count == len(work_items):
+                    elapsed = time.time() - t0
+                    rate = done_count / elapsed if elapsed else 0
+                    eta = (len(work_items) - done_count) / rate if rate else 0
+                    print(f"  ... {done_count}/{len(work_items)} done  "
+                          f"({elapsed:.0f}s elapsed, ~{eta:.0f}s remaining)")
+        # Sort results by rank for consistent combine order
+        results.sort(key=lambda r: r.get("rank", 0))
 
     print(f"\n{'=' * 60}")
     print(f"Done! Generated {len(results)}/{end_idx - start_idx} items.  Skipped: {skipped}")

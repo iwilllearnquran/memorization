@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+@font-face {
+  font-family: 'UthmanicHafs';
+  src: url('/fonts/UthmanicHafs1v18p3.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'UthmanicOld';
+  src: url('/fonts/UthmanicHafs1Ver18.woff2') format('woff2');
+}
+.test { font-size: 48px; direction: rtl; margin: 20px; line-height: 2; }
+</style>
+</head>
+<body>
+<h2>Font Debug: U+06DD verse-end</h2>
+
+<h3>Patched font (UthmanicHafs1v18p2.woff2)</h3>
+<div class="test" style="font-family: UthmanicHafs">
+  خَـٰلِدُونَ ۝٢٥
+</div>
+
+<h3>Original font (UthmanicHafs1Ver18.woff2)</h3>
+<div class="test" style="font-family: UthmanicOld">
+  خَـٰلِدُونَ ۝٢٥
+</div>
+
+<h3>Just U+06DD alone (patched)</h3>
+<div class="test" style="font-family: UthmanicHafs">۝</div>
+
+<h3>U+06DD + single digit (patched)</h3>
+<div class="test" style="font-family: UthmanicHafs">۝٥</div>
+
+<h3>U+06DD + two digits (patched)</h3>
+<div class="test" style="font-family: UthmanicHafs">۝٢٥</div>
+
+<h3>U+06DD + three digits (patched)</h3>
+<div class="test" style="font-family: UthmanicHafs">۝١٢٣</div>
+
+<h3>Codepoint check</h3>
+<pre id="info"></pre>
+<script>
+const t = "خَـٰلِدُونَ \u06DD٢٥";
+let s = "";
+for (const ch of t) {
+  s += `U+${ch.codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} `;
+}
+document.getElementById("info").textContent = s;
+</script>
+</body>
+</html>
